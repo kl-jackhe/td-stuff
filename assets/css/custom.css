@@ -1,0 +1,275 @@
+.nopadding{
+    padding: 0px!important;
+}
+
+.nomargin{
+    margin: 0px!important;
+}
+
+.color-221814 {
+    color: #221814!important;
+}
+
+.color-595757 {
+    color: #595757!important;
+}
+
+.color-717071 {
+    color: #717071!important;
+}
+
+.color-white {
+    color: #fefefe!important;
+}
+
+.color-00BFD5 {
+    color: #00BFD5!important;
+}
+
+.font-normal {
+    font-weight: normal!important;
+}
+
+.bold {
+    font-weight: bold!important;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.order-modal-btn{
+    color: #00A0E8;
+    text-decoration: underline;
+}
+
+.register-btn:hover{
+    background: transparent;
+    color: #25c6da;
+    border-bottom: 1px solid #25c6da!important;
+}
+
+#my-address-table [type="radio"]:checked+label:before,
+#my-address-table [type="radio"]:not(:checked)+label:before {
+    border-radius: 50px;
+}
+
+#my-address-table [type="radio"]:checked+label:after,
+#my-address-table [type="radio"]:not(:checked)+label:after {
+    background: orange;
+}
+
+#my-address-table .table>tbody>tr>td {
+    vertical-align: middle;
+}
+
+#my-address-table td {
+    border-top: none !important;
+}
+#my-address-table select.county {
+    width: 48%;
+    float: left;
+}
+
+#my-address-table select.district {
+    width: 48%;
+    float: left;
+    margin-left: 4%;
+}
+
+#my-address-table input.zipcode {
+    width: 33%;
+    display: none;
+}
+
+@media (min-width: 993px) {
+    .fs-10 {
+        font-size: 10pt!important;
+    }
+
+    .fs-12 {
+        font-size: 12pt!important;
+    }
+
+    .fs-13 {
+        font-size: 13pt!important;
+    }
+
+    .fs-15 {
+        font-size: 15pt!important;
+    }
+
+    .fs-16 {
+        font-size: 16pt!important;
+    }
+
+    .fs-18 {
+        font-size: 18pt!important;
+    }
+
+    .fs-20 {
+        font-size: 20pt!important;
+    }
+
+    .fs-22 {
+        font-size: 22pt!important;
+    }
+
+    .fs-24 {
+        font-size: 24pt!important;
+    }
+
+    .sm-margin{
+        margin: 20px;
+    }
+
+    .md-margin{
+        margin: 40px;
+    }
+
+    .lg-margin{
+        margin: 60px;
+    }
+
+    #store_list_area {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    #store_list_area .col-md-4 {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .fs-10 {
+        font-size: 8pt!important;
+    }
+
+    .fs-12 {
+        font-size: 9.6pt!important;
+    }
+
+    .fs-13 {
+        font-size: 10.4pt!important;
+    }
+
+    .fs-15 {
+        font-size: 12pt!important;
+    }
+
+    .fs-16 {
+        font-size: 12.8pt!important;
+    }
+
+    .fs-18 {
+        font-size: 14.4pt!important;
+    }
+
+    .fs-20 {
+        font-size: 16pt!important;
+    }
+
+    .fs-22 {
+        font-size: 17.6pt!important;
+    }
+
+    .fs-24 {
+        font-size: 19.2pt!important;
+    }
+
+    .sm-margin{
+        margin: 10px;
+    }
+
+    .md-margin{
+        margin: 20px;
+    }
+
+    .lg-margin{
+        margin: 30px;
+    }
+
+    .delivery_place_distance_text_area{
+        padding-left: 50px;
+        margin-top: -25px;
+    }
+
+    #store_list_area {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+@media (max-width: 768px) {
+    .fs-10 {
+        font-size: 8pt!important;
+    }
+
+    .fs-12 {
+        font-size: 9.6pt!important;
+    }
+
+    .fs-13 {
+        font-size: 10.4pt!important;
+    }
+
+    .fs-15 {
+        font-size: 12pt!important;
+    }
+
+    .fs-16 {
+        font-size: 12pt!important;
+    }
+
+    .fs-18 {
+        font-size: 14.4pt!important;
+    }
+
+    .fs-20 {
+        font-size: 16pt!important;
+    }
+
+    .fs-22 {
+        font-size: 17.6pt!important;
+    }
+
+    .fs-24 {
+        font-size: 19.2pt!important;
+    }
+
+    .sm-margin{
+        margin: 10px;
+    }
+
+    .md-margin{
+        margin: 20px;
+    }
+
+    .lg-margin{
+        margin: 30px;
+    }
+
+    .delivery_place_distance_text_area{
+        padding-left: 50px;
+        margin-top: -25px;
+    }
+
+    #store_list_area {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-sidebar p {
+        line-height: 0px;
+    }
+}
