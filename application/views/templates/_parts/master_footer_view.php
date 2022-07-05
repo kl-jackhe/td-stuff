@@ -1,27 +1,15 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
   <footer id="footer">
-    <!-- 電腦板footer -->
-    <div class="footer-sidebar visible-md visible-lg">
+    <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
       <div class="container-fluid">
-      </div>
-    </div>
-    <!-- End 電腦板footer -->
-    <!-- 手機板footer -->
-    <div class="footer-sidebar visible-xs visible-sm" style="padding-top: 0px;">
-      <div class="container-fluid">
-      </div>
-    </div>
-    <!-- End 手機板footer -->
-    <div class="footer-copyright">
-      <div class="container">
-        <div class="row">
+        <div class="row justify-content-center text-center">
           <div class="col-md-6">
-            <p>Bytheway順便一提© Copyright 2018. All Rights Reserved.</p>
+            <span style="color: #fff;">Copyright © 2022  龍寶嚴選. All rights reserved.</span>
           </div>
         </div>
       </div>
     </div>
-    <div class="server-area" id="server-area">
+    <!-- <div class="server-area" id="server-area">
       <a href="https://www.facebook.com/bythewaytaiwan" target="_blank">
         <img src="/assets/images/home/server-message.png" class="img-responsive" id="server-message" style="display: none;">
       </a>
@@ -32,7 +20,7 @@
         <img src="/assets/images/home/server-email.png" class="img-responsive" id="server-email" style="display: none;">
       </a>
       <img src="/assets/images/home/server-up.png" class="img-responsive" onclick="close_server()" style="cursor: pointer;">
-    </div>
+    </div> -->
   </footer>
 
   <?php if (!$this->ion_auth->logged_in() && $this->uri->segment(1) != 'login' && $this->uri->segment(1) != 'register') {
@@ -133,37 +121,32 @@
   <?php }?>
 
 </div>
-  <!-- Bootstrap -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  <!-- Vendor -->
   <!-- <script src="/node_modules/jquery/dist/jquery.min.js"></script> -->
   <!-- <script src="/node_modules/jquery.appear/jquery.appear.min.js')}}script> -->
-  <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>
+  <!-- <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>
   <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
   <script src="/node_modules/common/common.min.js"></script>
-  <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
+  <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script> -->
   <!-- <script src="/node_modules/jquery.easy-pie-chart/jquery.easy-pie-chart.min.js')}}script> -->
   <!-- <script src="/node_modules/jquery.gmap/jquery.gmap.min.js')}}script> -->
-  <script src="/node_modules/jquery-lazyload/jquery.lazyload.js"></script>
+  <!-- <script src="/node_modules/jquery-lazyload/jquery.lazyload.js"></script> -->
   <!-- <script src="/node_modules/isotope/jquery.isotope.min.js"></script> -->
-  <script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
+  <!-- <script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
   <script src="/node_modules/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
-  <script src="/node_modules/vide/vide.min.js"></script>
+  <script src="/node_modules/vide/vide.min.js"></script> -->
 
   <!-- Theme Base, Components and Settings -->
-  <script src="/assets/js/theme.js"></script>
+  <!-- <script src="/assets/js/theme.js"></script> -->
 
   <!-- Current Page Vendor and Views -->
-  <script src="/node_modules/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
+  <!-- <script src="/node_modules/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
   <script src="/node_modules/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
   <script src="/node_modules/circle-flip-slideshow/js/jquery.flipshow.min.js"></script>
-  <script src="/assets/js/views/view.home.js"></script>
+  <script src="/assets/js/views/view.home.js"></script> -->
 
   <!-- Theme Initialization Files -->
-  <script src="/assets/js/theme.init.js"></script>
-  <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
+  <!-- <script src="/assets/js/theme.init.js"></script>
+  <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script> -->
 
   <script>
     <?php if ($this->input->get('ajax_register') == 'yes') {?>

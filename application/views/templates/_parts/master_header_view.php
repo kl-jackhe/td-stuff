@@ -17,47 +17,43 @@
     <meta name="twitter:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />
     <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" />
-    <!-- <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" /> -->
-    <!-- <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png"> -->
+    <!-- <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" /> -->
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- Vendor CSS -->
-    <!-- <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css?v=3.3.7"> -->
-    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css?v=4.7.0">
+    <!-- <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css?v=4.7.0">
     <link rel="stylesheet" href="/node_modules/animate.css/animate.min.css">
     <link rel="stylesheet" href="/node_modules/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.carousel.css">
     <link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.theme.default.css">
     <link rel="stylesheet" href="/node_modules/magnific-popup/dist/magnific-popup.css">
-    <link rel="stylesheet" href="/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"> -->
     <!-- Theme CSS -->
-    <link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="stylesheet" href="/assets/css/theme-elements.css?v=201909062146">
-    <!-- <link rel="stylesheet" href="css/theme-blog.css">
-
-    <link rel="stylesheet" href="css/theme-shop.css"> -->
+    <!-- <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/css/theme-elements.css?v=201909062146"> -->
     <!-- Current Page CSS -->
-    <link rel="stylesheet" href="/node_modules/rs-plugin/css/settings.css">
+    <!-- <link rel="stylesheet" href="/node_modules/rs-plugin/css/settings.css">
     <link rel="stylesheet" href="/node_modules/rs-plugin/css/layers.css">
-    <link rel="stylesheet" href="/node_modules/rs-plugin/css/navigation.css">
+    <link rel="stylesheet" href="/node_modules/rs-plugin/css/navigation.css"> -->
     <!-- Theme Custom CSS -->
-    <link rel="stylesheet" href="/assets/css/custom.css?v=201912091409">
+    <!-- <link rel="stylesheet" href="/assets/css/custom.css?v=201912091409"> -->
     <!-- Head Libs -->
-    <script src="/node_modules/modernizr/modernizr.min.js"></script>
+    <!-- <script src="/node_modules/modernizr/modernizr.min.js"></script>
     <link rel="stylesheet" href="/assets/admin/jqueryui/1.12.1/jquery-ui.min.css">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"> -->
-    <!-- jquery因為bootstrap的關係，所以只能匯入v2的最新版 -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
-    <!-- <script src="/node_modules/jquery-migrate/dist/jquery-migrate.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script> -->
     <script src="/assets/admin/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js?v=3.3.7"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js?v=3.3.7"></script> -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <!-- Fontawesome -->
+    <link href="/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
+    <link href="/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
+    <link href="/fontawesome-free-6.1.1-web/css/brands.css" rel="stylesheet">
+    <link href="/fontawesome-free-6.1.1-web/css/solid.css" rel="stylesheet">
+    <script defer src="/fontawesome-free-6.1.1-web/js/all.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127821887-2"></script>
     <script>
@@ -67,20 +63,18 @@
         gtag('config', 'UA-127821887-2');
     </script>
     <!-- End Global site tag (gtag.js) - Google Analytics -->
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=149439059133093&ev=PageView&noscript=1" /></noscript>
 </head>
 
 <body>
     <div class="body">
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
-                <div class="header-container" style="width: 100%; padding-left: 4%; padding-right: 1%;">
+                <div class="header-container" style="width: 100%;">
                     <div class="header-row">
                         <div class="header-column hidden-xs">
-                            <div class="header-logo">
+                            <div class="header-logo text-center">
                                 <a href="<?php echo base_url() ?>">
-                                    <!--<span class="logo-word">Bytheway</span>-->
-                                    <img alt="BTW" width="150" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
+                                    <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                                 </a>
                             </div>
                         </div>
@@ -91,11 +85,6 @@
                                     <button type="button" class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main">
                                         <i class="fa fa-navicon"></i>
                                     </button>
-                                    <div class="header-logo visible-xs">
-                                        <a href="<?php echo base_url() ?>">
-                                            <img src="/assets/images/m_logo@3x.png" width="60" alt="Bytheway">
-                                        </a>
-                                    </div>
                                     <!-- mobiletype END -->
                                     <div class="header-nav-main collapse" aria-expanded="true">
                                         <nav>

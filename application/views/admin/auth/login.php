@@ -30,21 +30,21 @@
         <img src="/assets/uploads/<?php echo get_setting_general('logo') ?>" class="img-responsive" style="margin: 0 auto;">
         <!-- <h3>登入您的帳號</h3> -->
         <hr/>
-        <?php if($this->session->flashdata('message')) { ?>
+        <?php if ($this->session->flashdata('message')) {?>
           <div class="alert alert-danger" role="alert">
-            <?php echo $this->session->flashdata('message');?>
+            <?php echo $this->session->flashdata('message'); ?>
           </div>
-        <?php } ?>
+        <?php }?>
         <div class="input-group">
           <!-- <div class="controls"> -->
             <?php $identity = array(
-            'type'        => 'text',
-            'name'        => 'identity',
-            'id'          => 'identity',
-            'value'       => '',
-            'class'       => 'form-control',
-            'placeholder' => '使用者名稱'
-            ); ?>
+	'type' => 'text',
+	'name' => 'identity',
+	'id' => 'identity',
+	'value' => '',
+	'class' => 'form-control',
+	'placeholder' => '使用者名稱',
+);?>
             <?php echo form_input($identity); ?>
             <span class="input-group-addon" id="identity_keyboard" style="border:none; color: #555;"><i class="fa fa-keyboard-o"></i></span>
           <!-- </div> -->
@@ -52,13 +52,13 @@
         <div class="input-group">
           <!-- <div class="controls"> -->
           <?php $password = array(
-          'type'        => 'password',
-          'name'        => 'password',
-          'id'          => 'password',
-          'value'       => '',
-          'class'       => 'form-control',
-          'placeholder' => '密碼'
-          ); ?>
+	'type' => 'password',
+	'name' => 'password',
+	'id' => 'password',
+	'value' => '',
+	'class' => 'form-control',
+	'placeholder' => '密碼',
+);?>
           <?php echo form_input($password); ?>
           <span class="input-group-addon" id="password_keyboard" style="border:none; color: #555;"><i class="fa fa-keyboard-o"></i></span>
           <!-- </div> -->
@@ -66,7 +66,7 @@
         <div class="form-group">
           <div class="controls">
               <label class="checkbox">
-                  <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?> 記住我的登入資訊
+                  <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"'); ?> 記住我的登入資訊
               </label>
           </div>
         </div>
@@ -76,7 +76,7 @@
           </div>
         </div>
         <hr>
-        <h5 class="text-center">Copyright © 2018. All rights reserved.</h5>
+        <h5 class="text-center">Copyright © 2022  龍寶嚴選.<br>All rights reserved.</h5>
       <?php echo form_close(); ?>
       <script src="/node_modules/jquery/dist/jquery.min.js"></script>
       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
