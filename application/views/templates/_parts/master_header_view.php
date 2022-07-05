@@ -22,8 +22,10 @@
     <!-- <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png"> -->
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- Vendor CSS -->
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css?v=3.3.7">
+    <!-- <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css?v=3.3.7"> -->
     <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css?v=4.7.0">
     <link rel="stylesheet" href="/node_modules/animate.css/animate.min.css">
     <link rel="stylesheet" href="/node_modules/simple-line-icons/css/simple-line-icons.css">
@@ -65,53 +67,7 @@
         gtag('config', 'UA-127821887-2');
     </script>
     <!-- End Global site tag (gtag.js) - Google Analytics -->
-    <!-- Facebook Pixel Code -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-
-      n.queue=[];t=b.createElement(e);t.async=!0;
-
-      t.src=v;s=b.getElementsByTagName(e)[0];
-
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-
-      'https://connect.facebook.net/en_US/fbevents.js');
-
-      fbq('init', '149439059133093');
-
-      fbq('track', 'PageView');
-
-    </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=149439059133093&ev=PageView&noscript=1" /></noscript>
-    <!-- End Facebook Pixel Code -->
-
-    <!-- liff -->
-    <!-- <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script> -->
-    <!-- <script src="/assets/js/StreamInitLiffWithGtm.js?v=202001090144"></script> -->
-    <!-- <script src="https://ad.sstrm.net/public/SDK/tracking/StreamInitLiffWithGtm.min.js"></script> -->
-
-    <!-- 2020-03-06 -->
-    <!-- <script src="https://www.stream-lab.net/public/SDK/utility/streamLiff.js?v=202003091542"></script> -->
-    <!-- <script src="https://intra.sstrm.net/public/SDK/tracking/StreamInitLiffWithGtm.2.0.min.js?v=202003091542"></script> -->
-    <!-- <script src="/assets/js/streamLiff.js"></script>
-    <script src="/assets/js/StreamInitLiffWithGtm.2.0.min.js"></script> -->
-    <script>
-        // LIFF_init();
-        // function get_liff_user_id(){
-        //     if (LIFF_userID != "") {
-        //         $('#liff_user_id').html(LIFF_userID);
-        //     } else {
-        //         setTimeout("get_liff_user_id()", 100);
-        //     }
-        // }
-    </script>
-    <!-- End liff -->
 </head>
 
 <body>
@@ -154,13 +110,13 @@
                                                         店家合作
                                                     </a>
                                                 </li>
-                                                <?php if ($this->ion_auth->logged_in()) { ?>
+                                                <?php if ($this->ion_auth->logged_in()) {?>
                                                 <li class="worker">
                                                     <a href="javascript:;" onclick="my_addess_model();">
                                                         常用地址
                                                     </a>
                                                 </li>
-                                                <?php } ?>
+                                                <?php }?>
                                                 <li class="message">
                                                     <a href="/posts">
                                                         最新活動
@@ -172,7 +128,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="dropdown">
-                                                    <?php  if(!empty($this->session->userdata('user_id'))){ ?>
+                                                    <?php if (!empty($this->session->userdata('user_id'))) {?>
                                                     <div id="bbb" class="btn btn-block mb-sm" data-toggle="collapse" data-target=".dropdown-menu" aria-expanded="true">
                                                         <i class="fa fa-angle-up pull-left visible-xs"></i>
                                                         <?php echo $this->ion_auth->user()->row()->full_name; ?>
@@ -192,23 +148,23 @@
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                <?php } else { ?>
-                                                <?php if($this->uri->segment(1)=='' || $this->uri->segment(1)=='login' || $this->uri->segment(1)=='register') { ?>
+                                                <?php } else {?>
+                                                <?php if ($this->uri->segment(1) == '' || $this->uri->segment(1) == 'login' || $this->uri->segment(1) == 'register') {?>
                                                 <li>
                                                     <a href="/login" class="btn" style="border: 1px solid #00BFD5; color: #00BFD5; margin-bottom: 10px;">登入</a>
                                                 </li>
                                                 <li style="margin-left: 0px;">
                                                     <a href="/register" class="btn register-btn" style="background: #00BFD5; color: #fefefe;">註冊</a>
                                                 </li>
-                                                <?php } else { ?>
+                                                <?php } else {?>
                                                 <li>
                                                     <a href="#" class="btn" onclick="login_model()" style="border: 1px solid #00BFD5; color: #00BFD5; margin-bottom: 10px;">登入</a>
                                                 </li>
                                                 <li style="margin-left: 0px;">
                                                     <a href="#" class="btn register-btn" onclick="register_model()" style="background: #00BFD5; color: #fefefe;">註冊</a>
                                                 </li>
-                                                <?php } ?>
-                                                <?php } ?>
+                                                <?php }?>
+                                                <?php }?>
                                             </ul>
                                         </nav>
                                     </div>

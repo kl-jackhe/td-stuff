@@ -45,11 +45,11 @@
 	<section class="page-header no-padding sm-slide-fix" style="padding-left: 4%; padding-right: 4%;">
         <div class="row">
             <div class="col-md-12 owl-carousel owl-theme item-slide" data-plugin-options='{"items":1, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}'>
-                <?php if(!empty($banner)) { foreach($banner as $data) { ?>
-                    <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link']=='#')?('_self'):('_new') ?>" class="banner slidebanner">
+                <?php if (!empty($banner)) {foreach ($banner as $data) {?>
+                    <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
                         <img src="/assets/uploads/<?php echo $data['banner_image'] ?>">
                     </a>
-                <?php }} ?>
+                <?php }}?>
             </div>
         </div>
     </section>
@@ -58,8 +58,8 @@
 
             <div class="row" id="home_main_area">
                 <div class="searchbox collapse in " id="essearch">
-                    <?php $attributes = array('class' => 'store_form', 'id' => 'store_form', 'method' => 'get'); ?>
-                    <?php echo form_open('store#main_area' , $attributes); ?>
+                    <?php $attributes = array('class' => 'store_form', 'id' => 'store_form', 'method' => 'get');?>
+                    <?php echo form_open('store#main_area', $attributes); ?>
                     <div class="row">
                         <div class="col-md-4 border-box">
                             <div class="row">
@@ -80,7 +80,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-control-custom dropdown-toggle">
-                                                <input type="text" id="address" name="address" class="form-control" placeholder="請輸入地址" value="<?php if(!empty($users_address)){ echo $users_address['address']; } else {  echo $this->input->get('address'); } ?>" required>
+                                                <input type="text" id="address" name="address" class="form-control" placeholder="請輸入地址" value="<?php if (!empty($users_address)) {echo $users_address['address'];} else {echo $this->input->get('address');}?>" required>
                                             </div>
                                         </div>
                                     </div>
@@ -226,14 +226,14 @@
             setTimeout("getLiffUserID()", 300);
         }
     };
-    
+
     $('#twzipcode').twzipcode({
         // 'detect': true, // 預設值為 false
         'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-        'countySel'   : '<?php if(!empty($users_address)){ echo $users_address['county']; } else {  echo $this->input->get('county'); } ?>',
-        'districtSel' : '<?php if(!empty($users_address)){ echo $users_address['district']; } else {  echo $this->input->get('district'); } ?>',
-        'hideCounty' : [<?php if(!empty($hide_county)){ foreach($hide_county as $hc){ echo '"'.$hc.'",'; }} ?>],
-        'hideDistrict': [<?php if(!empty($hide_district)){ foreach($hide_district as $hd){ echo '"'.$hd.'",'; }} ?>]
+        'countySel'   : '<?php if (!empty($users_address)) {echo $users_address['county'];} else {echo $this->input->get('county');}?>',
+        'districtSel' : '<?php if (!empty($users_address)) {echo $users_address['district'];} else {echo $this->input->get('district');}?>',
+        'hideCounty' : [<?php if (!empty($hide_county)) {foreach ($hide_county as $hc) {echo '"' . $hc . '",';}}?>],
+        'hideDistrict': [<?php if (!empty($hide_district)) {foreach ($hide_district as $hd) {echo '"' . $hd . '",';}}?>]
     });
 </script>
 

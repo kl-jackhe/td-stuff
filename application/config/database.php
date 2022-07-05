@@ -69,28 +69,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
-*/
+ */
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'          => '',
-	'hostname'     => 'localhost',
-	'username'     => 'root',
-	'password'     => '555asd**',
-	'database'     => 'bytheway',
-	'dbdriver'     => 'mysqli',
-	'dbprefix'     => '',
-	'pconnect'     => FALSE,
-	'db_debug'     => (ENVIRONMENT !== 'production'),
-	'cache_on'     => FALSE,
-	'cachedir'     => '',
-	'char_set'     => 'utf8',
-	'dbcollat'     => 'utf8_general_ci',
-	'swap_pre'     => '',
-	'encrypt'      => FALSE,
-	'compress'     => FALSE,
-	'stricton'     => FALSE,
-	'failover'     => array(),
-	'save_queries' => TRUE
+	'dsn' => '',
+	'hostname' => 'localhost',
+	'username' => 'veistar-tmp',
+	'password' => 'Veistar-tmp.123!@#',
+	'database' => 'veistar-tmp',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE,
 );
