@@ -5,7 +5,6 @@
         </div>
 		    <footer class="hidden-print">
             <p>Copyright © 2022  龍寶嚴選. All rights reserved.</p>
-            <?php echo $include_script; ?>
         </footer>
         <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
     </div>
@@ -27,11 +26,10 @@
               <!-- <button type="submit" class="btn btn-primary">Save changes</button> -->
           </div>
         </div>
-
       </div>
     </div>
   </div>
 <!-- END Container -->
-
+<?php echo $include_script; ?>
 </body>
 </html>

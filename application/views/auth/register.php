@@ -2,16 +2,16 @@
     <section>
         <div class="container">
             <div class="box mt-md">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px;">
-                        <?php $attributes = array('id' => 'register'); ?>
-                        <?php echo form_open('register' , $attributes); ?>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 my-5" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px;">
+                        <?php $attributes = array('id' => 'register');?>
+                        <?php echo form_open('register', $attributes); ?>
                         <div class="form-content">
                             <div class="form-group">
                               <a href="/login">←返回登入</a>
-                              <?php echo $message;?>
+                              <?php echo $message; ?>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-sm-6">
                                     <h4>行動電話</h4>
                                     <div class="form-group">
@@ -21,7 +21,6 @@
                                       </div>
                                       <small>以行動電話作為登入帳號</small>
                                     </div>
-                                    <!-- <label id="identity-error" class="error" for="identity"></label> -->
                                 </div>
                                 <div class="col-sm-6">
                                     <h4>驗證碼</h4>
@@ -34,7 +33,7 @@
                                       <small id="sms_code_text"></small>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -64,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php if(get_setting_general('coupon_active')=='y'){ ?>
+                            <?php if (get_setting_general('coupon_active') == 'y') {?>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -73,9 +72,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php } else { ?>
+                            <?php } else {?>
                                 <input type="hidden" id="recommend_code" name="recommend_code" value="">
-                            <?php } ?>
+                            <?php }?>
                             <!-- <div class="row">
                               <div class="form-group">
                                   <h4>LINE User ID</h4>
@@ -97,7 +96,7 @@
                         <input type="hidden" id="email_ok" value="0">
                         <input type="hidden" id="identity_ok" value="0">
                         <input type="hidden" id="line_id" name="line_id" value="">
-                        <input type="hidden" name="now_url" value="<?php echo base_url().$_SERVER['REQUEST_URI'] ?>">
+                        <input type="hidden" name="now_url" value="<?php echo base_url() . $_SERVER['REQUEST_URI'] ?>">
                         <div class="form-action clearfix">
                             <span class="btn btn-info btn-lg btn-block mt-xl mr-lg" onclick="form_check()">免費註冊</span>
                             <!-- <input type="submit" value="免費註冊" class="btn btn-info btn-lg btn-block mt-xl mr-lg"> -->

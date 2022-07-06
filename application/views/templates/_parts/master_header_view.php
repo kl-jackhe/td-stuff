@@ -78,6 +78,9 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="px-5">
+                            <hr>
+                        </div>
                         <div class="header-column">
                             <div class="header-row">
                                 <div class="header-nav">

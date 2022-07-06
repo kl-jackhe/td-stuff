@@ -30,15 +30,15 @@
             <h3><?php echo $page_title; ?></h3>
           </div>
           <div class="box-content">
-            <?php if ($this->session->flashdata('message')) { ?>
+            <?php if ($this->session->flashdata('message')) {?>
               <div class="alert alert-warning alert-dismissible hidden-print" role="alert" style="position: fixed; right: 10px; top: 45px; z-index: 9;">
                 <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
                 <h3 style="margin: 0; padding: 0;"><?php echo $this->session->flashdata('message'); ?></h3>
               </div>
-            <?php } ?>
-            <?php if($this->session->flashdata('error_message')) { ?>
+            <?php }?>
+            <?php if ($this->session->flashdata('error_message')) {?>
               <div class="alert alert-danger alert-dismissible hidden-print" role="alert" style="position: fixed; right: 10px; top: 45px; z-index: 9;">
                 <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
                 <h3 style="margin: 0; padding: 0;"><?php echo $this->session->flashdata('error_message'); ?></h3>
               </div>
-            <?php } ?>
+            <?php }?>

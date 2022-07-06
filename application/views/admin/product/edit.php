@@ -35,7 +35,10 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="product_description">備註 *</label>
-          <input type="text" class="form-control" id="product_description" name="product_description" value="<?php echo $product['product_description']; ?>">
+          <!-- <input type="text" class="form-control" id="product_description" name="product_description" value="<?php echo $product['product_description']; ?>"> -->
+          <textarea id="product_description" name="product_description" class="form-control">
+              <?php echo $product['product_description']; ?>
+          </textarea>
         </div>
       </div>
       <div class="col-md-6">
@@ -44,11 +47,11 @@
           <div class="form-group">
             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
           </div>
-          <?php if(!empty($product['product_image'])) { ?>
+          <?php if (!empty($product['product_image'])) {?>
           <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';}?>">
-          <?php } else { ?>
+          <?php } else {?>
             <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
-          <?php } ?>
+          <?php }?>
           <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>"/>
         </div>
       </div>
@@ -75,7 +78,7 @@
             更新時間
           </th>
         </tr>
-      <?php if(!empty($change_log)) { foreach($change_log as $cl) { ?>
+      <?php if (!empty($change_log)) {foreach ($change_log as $cl) {?>
         <tr>
           <td>
             <?php echo $this->lang->line($cl['change_log_key']); ?>
@@ -90,14 +93,13 @@
             <?php echo $cl['change_log_created_at'] ?>
           </td>
         </tr>
-      <?php }} ?>
+      <?php }}?>
       </table>
     </div>
   </div>
 </div>
 
 <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
 <script>
 $.validator.setDefaults({

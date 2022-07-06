@@ -4,27 +4,15 @@
 <div id="sidebar" class="navbar-collapse collapse sidebar-fixed">
   <!-- BEGIN Navlist -->
   <ul class="nav nav-list hidden-print">
-    <!-- <li class="<?php if (($current == "admin")) {echo "active";}?>">
+    <li class="<?php if (($current == "admin")) {echo "active";}?>">
       <a href="/admin">
         <span>控制台</span>
       </a>
-    </li> -->
-    <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
-      <a href="#" class="dropdown-toggle">
-        <span>帳號管理</span>
-        <b class="arrow fa fa-angle-right"></b>
+    </li>
+    <li class="<?php if ($current == "product") {echo "active";}?>">
+      <a href="/admin/product">
+        <span>商品管理</span>
       </a>
-      <ul class="submenu">
-        <li <?php if ($current == "user") {echo 'class="active"';}?>>
-          <a href="/admin/user">使用者管理</a>
-        </li>
-        <!-- <li <?php if ($current == "driver") {echo 'class="active"';}?>>
-          <a href="/admin/driver">司機管理</a>
-        </li> -->
-        <li <?php if ($current == "auth") {echo 'class="active"';}?>>
-          <a href="/admin/auth">管理員系統</a>
-        </li>
-      </ul>
     </li>
     <li class="<?php if ($current == "order") {echo "active";}?>">
       <a href="/admin/order">
@@ -41,11 +29,11 @@
         <span>可訂購時段管理</span>
       </a>
     </li>
-    <!-- <li class="<?php if ($current == "store_order_time") {echo "active";}?>">
+    <li class="<?php if ($current == "store_order_time") {echo "active";}?>">
       <a href="/admin/store_order_time">
         <span>可訂購時段管理</span>
       </a>
-    </li> -->
+    </li>
     <li <?php if ($current == "delivery_place" || $current == "service_area" || $current == "meal_time") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <span>取餐管理</span>
@@ -86,18 +74,18 @@
         </li>
       </ul>
     </li>
-    <!-- <li class="<?php if ($current == "posts") {echo "active";}?>">
+    <li class="<?php if ($current == "posts") {echo "active";}?>">
       <a href="/admin/posts">
         <span>最新消息管理</span>
       </a>
-    </li> -->
+    </li>
     <li <?php if ($current == "about") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <span>頁面管理</span>
         <b class="arrow fa fa-angle-right"></b>
       </a>
       <ul class="submenu">
-        <li <?php if (($this->uri->segment(3) == "brand")) {echo 'class="active"';}?>>
+        <!-- <li <?php if (($this->uri->segment(3) == "brand")) {echo 'class="active"';}?>>
           <a href="/admin/about/brand">品牌介紹</a>
         </li>
         <li <?php if (($this->uri->segment(3) == "history")) {echo 'class="active"';}?>>
@@ -114,7 +102,7 @@
         </li>
         <li <?php if (($this->uri->segment(3) == "how_to_buy")) {echo 'class="active"';}?>>
           <a href="/admin/about/how_to_buy">收費方式</a>
-        </li>
+        </li> -->
         <li <?php if (($this->uri->segment(3) == "privacy_policy")) {echo 'class="active"';}?>>
           <a href="/admin/about/privacy_policy">隱私權保護政策</a>
         </li>
@@ -123,7 +111,7 @@
         </li>
       </ul>
     </li>
-    <li <?php if ($current == "shop_alliance" || $current == "cross_industry_alliance") {echo "class='active'";}?>>
+    <!-- <li <?php if ($current == "shop_alliance" || $current == "cross_industry_alliance") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <span>表單回應管理</span>
         <b class="arrow fa fa-angle-right"></b>
@@ -135,6 +123,23 @@
         <li <?php if (($current == "cross_industry_alliance")) {echo 'class="active"';}?>>
           <a href="/admin/cross_industry_alliance">異業合作</a>
         <li>
+      </ul>
+    </li> -->
+    <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
+      <a href="#" class="dropdown-toggle">
+        <span>帳號管理</span>
+        <b class="arrow fa fa-angle-right"></b>
+      </a>
+      <ul class="submenu">
+        <li <?php if ($current == "user") {echo 'class="active"';}?>>
+          <a href="/admin/user">使用者管理</a>
+        </li>
+        <!-- <li <?php if ($current == "driver") {echo 'class="active"';}?>>
+          <a href="/admin/driver">司機管理</a>
+        </li> -->
+        <li <?php if ($current == "auth") {echo 'class="active"';}?>>
+          <a href="/admin/auth">管理員系統</a>
+        </li>
       </ul>
     </li>
     <li>

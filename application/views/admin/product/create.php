@@ -1,9 +1,9 @@
 <div class="row">
-  <?php $attributes = array('class' => 'create_product', 'id' => 'create_product'); ?>
-  <?php echo form_open('admin/product/insert' , $attributes); ?>
+  <?php $attributes = array('class' => 'create_product', 'id' => 'create_product');?>
+  <?php echo form_open('admin/product/insert', $attributes); ?>
   	<div class="col-md-12">
       	<div class="form-group">
-      		<input type="hidden" name="store_id" value="<?php echo $store_id; ?>">
+      		<!-- <input type="hidden" name="store_id" value="<?php echo $store_id; ?>"> -->
         	<button type="submit" class="btn btn-primary">建立</button>
       	</div>
     </div>
@@ -37,9 +37,11 @@
         <div class="col-md-6">
           <div class="form-group">
             <label for="product_description">備註 *</label>
-            <input type="text" class="form-control" id="product_description" name="product_description">
+            <!-- <input type="text" class="form-control" id="product_description" name="product_description"> -->
+            <textarea id="product_description" name="product_description" class="form-control"></textarea>
           </div>
         </div>
+
         <div class="col-md-6">
           <div class="form-group">
             <label for="product_image" class="control-label">圖片</label>
@@ -56,7 +58,6 @@
 </div>
 
 <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
 <script>
 $.validator.setDefaults({

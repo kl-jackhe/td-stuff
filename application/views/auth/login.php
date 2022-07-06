@@ -2,16 +2,16 @@
     <section>
         <div class="container">
             <div class="box mt-md">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px; margin-bottom: 60px;">
-                        <?php $attributes = array('id' => 'login'); ?>
-                        <?php echo form_open('login' , $attributes); ?>
-                            <?php if ($this->session->flashdata('message')) { ?>
+                <div class="row justify-content-center">
+                    <div class="col-md-6 my-5" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px; margin-bottom: 60px;">
+                        <?php $attributes = array('id' => 'login');?>
+                        <?php echo form_open('login', $attributes); ?>
+                            <?php if ($this->session->flashdata('message')) {?>
                                 <div class="alert alert-info">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <?php echo $this->session->flashdata('message'); ?>
                                 </div>
-                            <?php } ?>
+                            <?php }?>
                             <div class="form-group">
                                 <h4>行動電話</h4>
                                 <input type="number" class="form-control" id="identity" name="identity" placeholder="請輸入行動電話..." required>
