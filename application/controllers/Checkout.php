@@ -10,8 +10,7 @@ class Checkout extends Public_Controller {
 
 	public function index() {
 		$this->load->helper('cookie');
-		$this->data['page_title'] = '產品';
-		$this->data['banner'] = $this->home_model->GetBanner();
+		$this->data['page_title'] = '結帳';
 		$this->data['hide_county'] = $this->service_area_model->get_hide_county();
 		$this->data['hide_district'] = $this->service_area_model->get_hide_district();
 		// 取得客戶地址
@@ -33,6 +32,6 @@ class Checkout extends Public_Controller {
 			);
 			$this->session->set_userdata($data);
 		}
-		$this->render('product/index');
+		$this->render('checkout/index');
 	}
 }

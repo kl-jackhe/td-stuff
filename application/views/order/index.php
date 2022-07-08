@@ -1,6 +1,7 @@
 <style>
 .bs-wizard {
     margin-top: 20px;
+    height:
 }
 
 .bs-wizard {
@@ -213,15 +214,15 @@ tr:last-child td:last-child {
                             </div>
                         </div>
                         <div class="col-md-12" style="margin-top: 40px;">
-                            <?php if(wp_is_mobile()){ ?>
-
-                                <?php $status=''; ?>
-                                <?php $step=''; ?>
-                                <?php if(!empty($orders)) { foreach($orders as $data) { ?>
-                                <?php if($data['order_pay_status']=='not_paid'){$status='not_paid';} ?>
-                                <?php if($data['order_pay_status']=='paid'){$status='paid';} ?>
-                                <?php if($data['order_step']=='picked'){$step='picked';} ?>
-                                <?php if($data['order_step']=='picked'){$style='color: #fefefe; background: #A0A0A0;';}else{$style='color: #fefefe; background: #FFB718;';} ?>
+                            <?php if (wp_is_mobile()) {
+	$status = '';
+	$step = '';
+	if (!empty($orders)) {
+		foreach ($orders as $data) {
+			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+			if ($data['order_step'] == 'picked') {$step = 'picked';}
+			if ($data['order_step'] == 'picked') {$style = 'color: #fefefe; background: #A0A0A0;';} else { $style = 'color: #fefefe; background: #FFB718;';}?>
                                 <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
                                     <tr >
                                         <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂購時間</td>
@@ -245,73 +246,27 @@ tr:last-child td:last-child {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">送達地點</td>
+                                        <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送地址</td>
                                         <td colspan="3" class="fs-11 color-595757">
-                                            <?php if(!empty($data['order_delivery_address'])){
-                                                echo $data['order_delivery_address'];
-                                            } else {
-                                                echo get_delivery_place_name($data['order_delivery_place']);
-                                            } ?>
-                                        </td>
-                                    </tr>
-                                        
-                                    <tr>
-                                        <td colspan="6">
-                                            <div class="bs-wizard" style="border-bottom:0;">
-                                                <div class="col-xs-2 col-xs-offset-1 col-md-2 col-md-offset-1 bs-wizard-step <?php if($data['order_step']=='accept' || $data['order_step']=='prepare' || $data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">接收訂單</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='prepare' || $data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">餐點準備</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">餐點運送</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">司機抵達</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">您已取餐</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                            </div>
+                                            <?php if (!empty($data['order_delivery_address'])) {
+				echo $data['order_delivery_address'];
+			} else {
+				echo get_delivery_place_name($data['order_delivery_place']);}?>
                                         </td>
                                     </tr>
                                 </table>
-                                <?php }} ?>
-
-                            <?php } else { ?>
-
-                                <?php $status=''; ?>
-                                <?php $step=''; ?>
-                                <?php if(!empty($orders)) { foreach($orders as $data) { ?>
-                                <?php if($data['order_pay_status']=='not_paid'){$status='not_paid';} ?>
-                                <?php if($data['order_pay_status']=='paid'){$status='paid';} ?>
-                                <?php if($data['order_step']=='picked'){$step='picked';} ?>
+                                <?php }}} else {
+	$status = '';
+	$step = '';
+	if (!empty($orders)) {
+		foreach ($orders as $data) {
+			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+			if ($data['order_step'] == 'picked') {$step = 'picked';}?>
                                 <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
-                                    <tr style="color: #fefefe; background: <?php if($data['order_step']=='picked'){echo '#A0A0A0';}else{echo '#FFB718;';} ?>">
+                                    <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {echo '#A0A0A0';} else {echo '#FFB718;';}?>">
                                         <td class="text-center fs-12" style="width: 12%;">訂購時間</td>
-                                        <!-- <td class="text-center fs-12" style="width: 12%;">送達時間</td> -->
-                                        <td class="text-center fs-12" style="width: 40%;">送達地點</td>
+                                        <td class="text-center fs-12" style="width: 40%;">配送地址</td>
                                         <td class="text-center fs-12" style="width: 12%;">付款期限</td>
                                         <td class="text-center fs-12" style="width: 12%;">付款狀態</td>
                                         <td class="text-center fs-12" style="width: 12%;">訂單狀態</td>
@@ -323,11 +278,11 @@ tr:last-child td:last-child {
                                         </td>
                                         <!-- <td class="fs-11 color-595757"><?php echo $data['created_at'] ?></td> -->
                                         <td class="fs-11 color-595757">
-                                            <?php if(!empty($data['order_delivery_address'])){
-                                                echo $data['order_delivery_address'];
-                                            } else {
-                                                echo get_delivery_place_name($data['order_delivery_place']);
-                                            } ?>
+                                            <?php if (!empty($data['order_delivery_address'])) {
+				echo $data['order_delivery_address'];
+			} else {
+				echo get_delivery_place_name($data['order_delivery_place']);
+			}?>
                                         </td>
                                         <td class="fs-11 color-595757">
                                             <?php echo substr($data['created_at'], 0, 10) ?>
@@ -340,52 +295,8 @@ tr:last-child td:last-child {
                                         </td>
                                         <td class="fs-11 color-595757"><a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a></td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="6">
-                                            <div class="bs-wizard" style="border-bottom:0;">
-                                                <div class="col-xs-2 col-xs-offset-1 col-md-2 col-md-offset-1 bs-wizard-step <?php if($data['order_step']=='accept' || $data['order_step']=='prepare' || $data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">接收訂單</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='prepare' || $data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">餐點準備</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='shipping' || $data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">餐點運送</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='arrive' || $data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">司機抵達</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                                <div class="col-xs-2 col-md-2 bs-wizard-step <?php if($data['order_step']=='picked'){echo 'complete';}else{echo 'disabled';} ?>">
-                                                    <div class="text-center bs-wizard-stepnum">您已取餐</div>
-                                                    <div class="progress">
-                                                        <div class="progress-bar"></div>
-                                                    </div>
-                                                    <a href="#" class="bs-wizard-dot"></a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
                                 </table>
-                                <?php }} ?>
-
-                            <?php } ?>
-                            
+                            <?php }}}?>
                         </div>
                     </div>
                 </div>
@@ -397,17 +308,9 @@ tr:last-child td:last-child {
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
-            <!-- <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"></h4>
-            </div> -->
             <div class="modal-body" style="padding: 15px;">
                 <p>讀取中...</p>
             </div>
-            <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div> -->
         </div>
     </div>
 </div>

@@ -9,18 +9,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="server-area" id="server-area">
-      <a href="https://www.facebook.com/bythewaytaiwan" target="_blank">
-        <img src="/assets/images/home/server-message.png" class="img-responsive" id="server-message" style="display: none;">
-      </a>
-      <a href="tel:02-27419628">
-        <img src="/assets/images/home/server-call.png" class="img-responsive" id="server-call" style="display: none;">
-      </a>
-      <a href="mailto:service1@bythewaytaiwan.com">
-        <img src="/assets/images/home/server-email.png" class="img-responsive" id="server-email" style="display: none;">
-      </a>
-      <img src="/assets/images/home/server-up.png" class="img-responsive" onclick="close_server()" style="cursor: pointer;">
-    </div> -->
   </footer>
 
   <?php if (!$this->ion_auth->logged_in() && $this->uri->segment(1) != 'login' && $this->uri->segment(1) != 'register') {
@@ -138,15 +126,13 @@
   <!-- Theme Base, Components and Settings -->
   <!-- <script src="/assets/js/theme.js"></script> -->
 
-  <!-- Current Page Vendor and Views -->
-  <!-- <script src="/node_modules/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
-  <script src="/node_modules/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-  <script src="/node_modules/circle-flip-slideshow/js/jquery.flipshow.min.js"></script>
-  <script src="/assets/js/views/view.home.js"></script> -->
-
   <!-- Theme Initialization Files -->
   <!-- <script src="/assets/js/theme.init.js"></script>
   <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script> -->
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
   <script>
     <?php if ($this->input->get('ajax_register') == 'yes') {?>
@@ -154,5 +140,23 @@
     <?php }?>
   </script>
 
+  <script>
+  $(function(){
+    var h = $(window).height();
+    var header_h = $("#header").height();
+    var footer_h = $("#footer").height();
+    var main_h = $(".main").height();
+    // $("#window_h").html(w+":"+h);
+    if (h > main_h) {
+      var h_sum = h - header_h - footer_h;
+      $(".main").css('height',h_sum);
+      // $(".mian").css({
+      // padding-right: '30px',
+      // padding-left: '30px',
+      // height: h_sum
+      // });
+    }
+  });
+  </script>
 </body>
 </html>

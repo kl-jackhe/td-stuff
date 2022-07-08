@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,400italic,300italic' rel='stylesheet' type='text/css'>
+  <link rel='stylesheet' type='text/css' href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.carousel.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/assets/owl.theme.default.min.css">
+</head>
+<body> 
+ 
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-body">
+      <div class="owl-carousel owl-theme video-slider-1">
+          <video onplay="pauseSlider();" onpause="playSlider();" onended="playSlider();" controls="" style="width:100%;">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/ogg">
+          </video>
+          <img id="player1" src="http://hk.hdwall365.com/wallpapers/1601/Planet-sky-mountains-clouds_1920x1080_wallpaper.jpg" class="d-block w-100">
+          <video onplay="pauseSlider();" onpause="playSlider();" onended="playSlider();" controls="" style="width:100%;">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/ogg">
+          </video>
+          <img id="player1" src="http://hk.hdwall365.com/wallpapers/1601/Planet-sky-mountains-clouds_1920x1080_wallpaper.jpg" class="d-block w-100">
+          <video onplay="pauseSlider();" onpause="playSlider();" onended="playSlider();" controls="" style="width:100%;">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" type="video/mp4">
+            <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" type="video/ogg">
+          </video>
+          <img id="player1" src="http://hk.hdwall365.com/wallpapers/1601/Planet-sky-mountains-clouds_1920x1080_wallpaper.jpg" class="d-block w-100">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://owlcarousel2.github.io/OwlCarousel2/assets/owlcarousel/owl.carousel.js"></script>
+
+<script type="text/javascript">
+  
+//owlCarousel slider  
+var owl = $(".video-slider-1").owlCarousel({
+    rtl: true,
+    items: 1,
+    loop: true,
+    margin: 10,
+    autoplay: true,
+    autoplayTimeout: 4000,
+    autoplayHoverPause: true,
+    singleItem: true,
+    video:true,
+    lazyLoad: true,
+    dots: true,
+    onTranslate: function () {
+        // $('.owl-item').find('video').each(function () {
+        //   console.log('5555');
+        //     this.pause();
+        // });
+        $(".owl-item").find('video').each(function() {
+          console.log('44444');
+          this.pause();
+          this.currentTime = 0;
+          this.play();
+      });
+      }
+});
+
+// Play slider when video pause
+function playSlider(){
+  console.log('777');
+    window.owl.trigger('play.owl.autoplay')
+}
+// Pause slider when video play
+function pauseSlider(){
+  console.log('999');
+    window.owl.trigger('stop.owl.autoplay')
+}
+
+</script>
+</body>
+</html>

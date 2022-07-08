@@ -20,14 +20,6 @@
     <!-- <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" /> -->
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-    <!-- Vendor CSS -->
-    <!-- <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css?v=4.7.0">
-    <link rel="stylesheet" href="/node_modules/animate.css/animate.min.css">
-    <link rel="stylesheet" href="/node_modules/simple-line-icons/css/simple-line-icons.css">
-    <link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.carousel.css">
-    <link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.theme.default.css">
-    <link rel="stylesheet" href="/node_modules/magnific-popup/dist/magnific-popup.css">
-    <link rel="stylesheet" href="/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"> -->
     <!-- Theme CSS -->
     <!-- <link rel="stylesheet" href="/assets/css/theme.css">
     <link rel="stylesheet" href="/assets/css/theme-elements.css?v=201909062146"> -->
@@ -45,9 +37,6 @@
     <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js?v=3.3.7"></script> -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <!-- Fontawesome -->
     <link href="/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
     <link href="/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
@@ -66,30 +55,91 @@
 </head>
 
 <body>
-    <div class="body">
+    <div class="body h-100">
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
                 <div class="header-container" style="width: 100%;">
                     <div class="header-row">
-                        <div class="header-column hidden-xs">
+                        <!-- <div class="header-column hidden-xs">
                             <div class="header-logo text-center">
                                 <a href="<?php echo base_url() ?>">
                                     <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                                 </a>
                             </div>
-                        </div>
+                        </div> -->
+                        <nav class="navbar navbar-expand-lg navbar-light">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <a href="<?php echo base_url() ?>" style="position: absolute;transform: translate(-50%, -50%);left: 50%;top: 50%;">
+                                <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
+                            </a>
+                            <div class="collapse navbar-collapse" id="navbarToggler">
+                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">我的帳戶</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">聯絡我們＋LINE＠</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#">商城</a>
+                                    </li>
+                                    <div class="dropdown">
+                                    <?php if (!empty($this->session->userdata('user_id'))) {?>
+                                        <div id="bbb" class="btn btn-secondary dropdown-toggle" data-toggle="collapse" data-target=".dropdown-menu" aria-expanded="false">
+                                            <?php echo $this->ion_auth->user()->row()->full_name; ?>
+                                        </div>
+                                        <ul class="dropdown-menu collapse">
+                                            <li>
+                                                <a href="/auth/edit_user">個人資料</a>
+                                            </li>
+                                            <li>
+                                                <a href="/coupon">優惠券管理</a>
+                                            </li>
+                                            <li>
+                                                <a href="/order">訂單管理</a>
+                                            </li>
+                                            <li class="worker">
+                                                <a href="javascript:;" onclick="my_addess_model();">常用地址</a>
+                                            </li>
+                                            <li>
+                                                <a href="/logout">登出</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <?php } else {?>
+                                    <?php if ($this->uri->segment(1) == '' || $this->uri->segment(1) == 'login' || $this->uri->segment(1) == 'register') {?>
+                                    <li>
+                                        <a href="/login" class="btn" style="border: 1px solid #00BFD5; color: #00BFD5; margin-bottom: 10px;">登入</a>
+                                    </li>
+                                    <li style="margin-left: 0px;">
+                                        <a href="/register" class="btn register-btn" style="background: #00BFD5; color: #fefefe;">註冊</a>
+                                    </li>
+                                    <?php }}?>
+                                </ul>
+                                <!-- <form class="form-inline my-2 my-lg-0">
+                                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                                </form> -->
+                            </div>
+                        </nav>
                         <div class="px-5">
                             <hr>
                         </div>
                         <div class="header-column">
                             <div class="header-row">
                                 <div class="header-nav">
+
                                     <!-- mobiletype -->
-                                    <button type="button" class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main">
+                                    <!-- <button type="button" class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main">
                                         <i class="fa fa-navicon"></i>
-                                    </button>
+                                    </button> -->
                                     <!-- mobiletype END -->
-                                    <div class="header-nav-main collapse" aria-expanded="true">
+                                    <!-- <div class="header-nav-main collapse" aria-expanded="true">
                                         <nav>
                                             <ul class="nav nav-pills" id="mainNav">
                                                 <li class="worker">
@@ -159,7 +209,7 @@
                                                 <?php }?>
                                             </ul>
                                         </nav>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

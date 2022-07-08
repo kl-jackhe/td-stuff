@@ -42,30 +42,30 @@
     }
 </style>
 <div role="main" class="main">
-	<section class="page-header no-padding sm-slide-fix">
+	<section class="page-header no-padding sm-slide-fix" style="padding-left: 30px;padding-right: 30px;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12 owl-carousel owl-theme item-slide" data-plugin-options='{"items":1, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}'>
                     <?php if (!empty($banner)) {foreach ($banner as $data) {?>
                         <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
-                            <img class="img-fluid" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
+                            <img class="img-fluid" style="width: 100%;" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
                         </a>
                     <?php }}?>
                 </div>
             </div>
         </div>
-    </section>
-    <section class="form-section">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12 text-center">
+                <div class="col-md-12 text-center py-5">
                     <h1>熱銷商品</h1>
                 </div>
                 <div class="col-md-12 text-center">
-                    <div class="col-md-4">
-                        <img class="img-fluid" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
-                        <p>test</p>
-                        <p>$50</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img class="img-fluid" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
+                            <p>test</p>
+                            <p>$50</p>
+                        </div>
                     </div>
                 </div>
             </div>
