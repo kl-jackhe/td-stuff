@@ -4,14 +4,14 @@ class Product extends Public_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('home_model');
+		$this->load->model('product_model');
 		$this->load->model('service_area_model');
 	}
 
 	public function index() {
 		$this->load->helper('cookie');
-		$this->data['page_title'] = '產品';
-		$this->data['banner'] = $this->home_model->GetBanner();
+		$this->data['products'] = $this->product_model->getProductPage();
+		$this->data['page_title'] = '商品';
 		$this->data['hide_county'] = $this->service_area_model->get_hide_county();
 		$this->data['hide_district'] = $this->service_area_model->get_hide_district();
 		// 取得客戶地址

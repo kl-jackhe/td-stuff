@@ -39,6 +39,28 @@ class Product_model extends CI_Model {
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
+	function getHomeProducts() {
+		// $this->db->where('product_category_parent', '0');
+		$query = $this->db->get('product');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+		// return ($query->num_rows() > 0)?$query->result_array():false;
+	}
+
+	function getProductPage() {
+		// $this->db->where('product_category_parent', '0');
+		$query = $this->db->get('product');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+		// return ($query->num_rows() > 0)?$query->result_array():false;
+	}
+
 	function getTopCategory() {
 		$this->db->where('product_category_parent', '0');
 		$query = $this->db->get('product_category');

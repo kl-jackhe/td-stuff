@@ -85,9 +85,9 @@ class Product extends Admin_Controller {
 		$data = array(
 			// 'store_id' => $this->input->post('store_id'),
 			'product_name' => $this->input->post('product_name'),
-			'product_price' => $this->input->post('product_price'),
-			'product_daily_stock' => $this->input->post('product_daily_stock'),
-			'product_person_buy' => $this->input->post('product_person_buy'),
+			// 'product_price' => $this->input->post('product_price'),
+			// 'product_daily_stock' => $this->input->post('product_daily_stock'),
+			// 'product_person_buy' => $this->input->post('product_person_buy'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
 			'creator_id' => $this->ion_auth->user()->row()->id,
@@ -102,7 +102,9 @@ class Product extends Admin_Controller {
 	public function edit($id) {
 		$this->data['page_title'] = '編輯商品';
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
+		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id, 'row');
 		$this->data['change_log'] = get_change_log('product', $id);
+		// print_r($this->data['product_specification']);
 		// $this->load->view('admin/product/edit', $this->data);
 		$this->render('admin/product/edit');
 	}
@@ -147,6 +149,22 @@ class Product extends Admin_Controller {
 
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
+
+		$data = array(
+			'product_id' => $id,
+			'unit' => $this->input->post('unit'),
+			'price' => $this->input->post('price'),
+			'quantity' => $this->input->post('quantity'),
+			'picture' => $this->input->post('picture'),
+			'description' => $this->input->post('description'),
+			'specification' => $this->input->post('specification'),
+		);
+		if (expr) {
+
+		}
+		$this->mysql_model->_insert('product_specification', $data);
+		// $this->db->where('product_id', $id);
+		// $this->db->update('product_specification', $data);
 
 		$this->session->set_flashdata('message', '商品更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);

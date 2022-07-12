@@ -146,15 +146,9 @@
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var main_h = $(".main").height();
-    // $("#window_h").html(w+":"+h);
     if (h > main_h) {
       var h_sum = h - header_h - footer_h;
       $(".main").css('height',h_sum);
-      // $(".mian").css({
-      // padding-right: '30px',
-      // padding-left: '30px',
-      // height: h_sum
-      // });
     }
   });
   </script>
