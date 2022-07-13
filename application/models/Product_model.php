@@ -50,15 +50,42 @@ class Product_model extends CI_Model {
 		// return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
-	function getProductPage() {
-		// $this->db->where('product_category_parent', '0');
+	function getSingleProduct($id) {
+		$this->db->select('*');
+		$this->db->where('product_id', $id);
 		$query = $this->db->get('product');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	function getProductName($id) {
+		$this->db->select('*');
+		$this->db->where('product_id', $id);
+		$query = $this->db->get('product');
+		if ($query->num_rows() > 0) {
+			$row = $query->row_array();
+			if (isset($row)) {
+				// echo $row['title'];
+				return $row['product_name'];
+			}
+			// return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
+	function getProduct_Specification($id) {
+		$this->db->select('*');
+		$this->db->where('product_id', $id);
+		$query = $this->db->get('product_specification');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
 		} else {
 			return false;
 		}
-		// return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
 	function getTopCategory() {

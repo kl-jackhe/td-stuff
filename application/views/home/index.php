@@ -76,7 +76,7 @@ input.zipcode {
                             foreach ($products as $product){
                         ?>
                         <div class="col-md-4">
-                            <a href="/product?id=<?=$product['product_id']?>">
+                            <a href="/product/view/<?=$product['product_id']?>">
                                 <img style="border-radius: 15px;" class="img-fluid" src="/assets/uploads/<?=$product['product_image'];?>">
                                 <p>
                                     <?=$product['product_name'];?>
