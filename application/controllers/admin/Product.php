@@ -76,7 +76,7 @@ class Product extends Admin_Controller {
 	public function create($id) {
 		$this->data['page_title'] = '新增商品';
 		$this->data['store_id'] = $id;
-
+		$this->data['product'] = $this->product_model->getRows(array('limit' => $this->perPage));
 		// $this->load->view('admin/product/create', $this->data);
 		$this->render('admin/product/create');
 	}
@@ -102,10 +102,8 @@ class Product extends Admin_Controller {
 	public function edit($id) {
 		$this->data['page_title'] = '編輯商品';
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
-		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id, 'row');
+		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
 		$this->data['change_log'] = get_change_log('product', $id);
-		// print_r($this->data['product_specification']);
-		// $this->load->view('admin/product/edit', $this->data);
 		$this->render('admin/product/edit');
 	}
 
@@ -149,23 +147,94 @@ class Product extends Admin_Controller {
 
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
-
-		$data = array(
-			'product_id' => $id,
-			'unit' => $this->input->post('unit'),
-			'price' => $this->input->post('price'),
-			'quantity' => $this->input->post('quantity'),
-			'picture' => $this->input->post('picture'),
-			'description' => $this->input->post('description'),
-			'specification' => $this->input->post('specification'),
-		);
-		if (expr) {
-
+		// 多規格
+		$this_product_specification = $this->product_model->getProduct_Specification($id);
+		$unit = $this->input->post('unit');
+		$price = $this->input->post('price');
+		$quantity = $this->input->post('quantity');
+		$picture = $this->input->post('picture');
+		$description = $this->input->post('description');
+		$specification = $this->input->post('specification');
+		$only_id = $this->input->post('id');
+		$count = count($unit);
+		if (!empty($this_product_specification)) {
+			for ($i = 0; $i < $count; $i++) {
+				$this_product_specification = $this->product_model->getProduct_Specification($id);
+				foreach ($this_product_specification as $row) {
+					echo '商品編號：' . $only_id[$i] . '<br>';
+					if ($row['id'] == $only_id[$i]) {
+						$data = array(
+							'type' => '2',
+							'unit' => $unit[$i],
+							'price' => $price[$i],
+							'quantity' => $quantity[$i],
+							'picture' => $picture[$i],
+							'description' => $description[$i],
+							'specification' => $specification[$i],
+						);
+						$this->db->where('id', $row['id']);
+						$this->db->update('product_specification', $data);
+						echo $row['type'] . ' YES<br>';
+					} else {
+						if ($row['type'] != '2') {
+							echo '現有比數少於資料庫比數<br>';
+							$data = array(
+								'type' => '1',
+							);
+							$this->db->where('id', $row['id']);
+							$this->db->update('product_specification', $data);
+							echo $row['type'] . ' NO<br>';
+						}
+					}
+					if ($only_id[$i] == '0') {
+						echo '現有比數多於資料庫比數<br>';
+						$data = array(
+							'product_id' => $id,
+							'type' => '3',
+							'unit' => $unit[$i],
+							'price' => $price[$i],
+							'quantity' => $quantity[$i],
+							'picture' => $picture[$i],
+							'description' => $description[$i],
+							'specification' => $specification[$i],
+						);
+						$this->mysql_model->_insert('product_specification', $data);
+						echo 'NEW<br>';
+						break;
+					}
+				}
+			}
+		} else {
+			for ($i = 0; $i < $count; $i++) {
+				if ($only_id[$i] == '0') {
+					echo '沒有資料時直接新增<br>';
+					$data = array(
+						'product_id' => $id,
+						'type' => '3',
+						'unit' => $unit[$i],
+						'price' => $price[$i],
+						'quantity' => $quantity[$i],
+						'picture' => $picture[$i],
+						'description' => $description[$i],
+						'specification' => $specification[$i],
+					);
+					$this->mysql_model->_insert('product_specification', $data);
+				}
+			}
 		}
-		$this->mysql_model->_insert('product_specification', $data);
-		// $this->db->where('product_id', $id);
-		// $this->db->update('product_specification', $data);
-
+		$this_product_specification = $this->product_model->getProduct_Specification($id);
+		foreach ($this_product_specification as $row) {
+			if ($row['type'] > 1) {
+				$data = array(
+					'type' => '0',
+				);
+				$this->db->where('id', $row['id']);
+				$this->db->update('product_specification', $data);
+			} else {
+				$this->db->delete('product_specification', array('id' => $row['id']));
+			}
+		}
+		// 多規格
 		$this->session->set_flashdata('message', '商品更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);
 	}

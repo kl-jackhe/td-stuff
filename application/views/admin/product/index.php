@@ -8,7 +8,7 @@
 </style>
 <div class="row">
   <div class="col-md-6">
-    <a href="/admin/product/create/0" class="btn btn-primary modal-btn">新增商品</a>
+    <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
   </div>
   <div class="col-md-6">
@@ -54,7 +54,7 @@ $count = 0;
               <td class="text-right"><?php echo $data['product_person_buy'] ?></td>
               <!-- <td><?php echo $data['product_description'] ?></td> -->
               <td>
-                <a href="/admin/product/edit/<?php echo $data['product_id'] ?>" class="btn btn-primary modal-btn">編輯</a>
+                <a target="_blank" href="/admin/product/edit/<?php echo $data['product_id'] ?>" class="btn btn-primary">編輯</a>
                 <a href="/admin/product/delete/<?php echo $data['product_id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
               </td>
             </tr>

@@ -16,13 +16,12 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="product_price">價格 *</label>
+                    <label for="product_price">預設價格 *</label>
                     <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
                 </div>
             </div>
             <div class="col-md-12">
                 <table id="paramsFields" class="table">
-                    <!-- <div><td scope="row"><label for="paramFieldName">規格</label></td></div> -->
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">單位</th>
@@ -35,15 +34,43 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?if (!empty($product_specification)) {foreach ($product_specification as $row) {?>
                         <tr id="paramsFields_input">
-                            <td><input type="text" class="code" id="unit" name="unit" value="<?php echo $product_specification['unit']; ?>" /></td>
-                            <td><input type="number" class="code" id="price" name="price" value="<?php echo $product_specification['price']; ?>" /></td>
-                            <td><input type="number" class="code" id="quantity" name="quantity" value="<?php echo $product_specification['quantity']; ?>" /></td>
-                            <td><input type="text" class="code" id="picture" name="picture" value="<?php echo $product_specification['picture']; ?>" /></td>
-                            <td><input type="text" class="code" id="description" name="description" value="<?php echo $product_specification['description']; ?>" /></td>
-                            <td><input type="text" class="code" id="specification" name="specification" value="<?php echo $product_specification['specification']; ?>" /></td>
+                            <td><input type="text" class="code" name="unit[]" value="<?=$row['unit'];?>" /></td>
+                            <td><input type="number" class="code" name="price[]" value="<?=$row['price'];?>" /></td>
+                            <td><input type="number" class="code" name="quantity[]" value="<?=$row['quantity'];?>" /></td>
+                            <td><input type="text" class="code" name="picture[]" value="<?=$row['picture'];?>" /></td>
+                            <td><input type="text" class="code" name="description[]" value="<?=$row['description'];?>" /></td>
+                            <td><input type="text" class="code" name="specification[]" value="<?=$row['specification'];?>" /></td>
+                            <input type="hidden" name="id[]" value="<?=$row['id'];?>" />
                             <td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td>
                         </tr>
+                        <?}}?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12">
+                <table id="paramsFields" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">名稱</th>
+                            <th scope="col">單位</th>
+                            <th scope="col">價格</th>
+                            <th scope="col">數量</th>
+                            <th scope="col"><a href="javascript:void(0);" class="addCF btn btn-primary">新增</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?if (!empty($product_specification)) {foreach ($product_specification as $row) {?>
+                        <tr id="paramsFields_input">
+                            <td><input type="text" class="code" name="name[]" value="<?=$row['unit'];?>" /></td>
+                            <td><input type="text" class="code" name="unit[]" value="<?=$row['unit'];?>" /></td>
+                            <td><input type="number" class="code" name="price[]" value="<?=$row['price'];?>" /></td>
+                            <td><input type="number" class="code" name="quantity[]" value="<?=$row['quantity'];?>" /></td>
+                            <input type="hidden" name="id[]" value="<?=$row['id'];?>" />
+                            <td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td>
+                        </tr>
+                        <?}}?>
                     </tbody>
                 </table>
             </div>
@@ -154,7 +181,7 @@ function responsive_filemanager_callback(field_id) {
 <script>
 $(document).ready(function() {
     $(".addCF").click(function() {
-        $("#paramsFields").append('<tr><td><input type="text" class="code" name="unit[]" value="" /></td><td><input type="number" class="code" name="price[]" value="" /></td><td><input type="number" class="code" name="quantity[]" value="" /></td><td><input type="text" class="code" name="picture[]" value="" /></td><td><input type="text" class="code" name="description[]" value="" /></td><td><input type="text" class="code" name="specification[]" value="" /></td><td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td></tr>');
+        $("#paramsFields").append('<tr><td><input type="text" class="code" name="unit[]" value="" /></td><td><input type="number" class="code" name="price[]" value="" /></td><td><input type="number" class="code" name="quantity[]" value="" /></td><td><input type="text" class="code" name="picture[]" value="" /></td><td><input type="text" class="code" name="description[]" value="" /></td><td><input type="text" class="code" name="specification[]" value="" /></td><input type="hidden" name="id[]" value="0" /><td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td></tr>');
     });
     $("#paramsFields").on('click', '.remCF', function() {
         $(this).parent().parent().remove();
