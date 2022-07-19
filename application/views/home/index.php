@@ -1,20 +1,4 @@
 <style>
-select.county {
-    width: 48% !important;
-    float: left;
-}
-
-select.district {
-    width: 48% !important;
-    float: left;
-    margin-left: 4%;
-}
-
-input.zipcode {
-    width: 33%;
-    display: none;
-}
-
 .owl-theme .owl-nav [class*='owl-']:hover {
     background: transparent;
 }
@@ -46,9 +30,32 @@ input.zipcode {
 }
 
 .owl-dots {
-    /*left: 50%!important;*/
-    /*margin-left: -35px;*/
     width: 100%;
+}
+
+#home_product {
+    font-size: 18px;
+    line-height: 20px;
+    align-items: end;
+}
+
+#home_product a {
+    text-decoration: none;
+    color: black;
+    transition: 600ms ease 0s;
+}
+
+#home_product a:hover {
+    color: blue;
+}
+
+#home_product .product_name {
+    line-height: 35px;
+}
+
+#home_product .product_price {
+    color: red;
+    line-height: 35px;
 }
 </style>
 <div role="main" class="main">
@@ -70,20 +77,31 @@ input.zipcode {
                     <h1>熱銷商品</h1>
                 </div>
                 <div class="col-md-12 text-center">
-                    <div class="row">
+                    <div class="row justify-content-center" id="home_product">
                         <?
                         if (!empty($products)) {
                             foreach ($products as $product){
                         ?>
-                        <div class="col-md-4">
+                        <div class="col-md-4 pb-5">
                             <a href="/product/view/<?=$product['product_id']?>">
-                                <img style="border-radius: 15px;" class="img-fluid" src="/assets/uploads/<?=$product['product_image'];?>">
-                                <p>
-                                    <?=$product['product_name'];?>
-                                </p>
-                                <p>$
-                                    <?=$product['product_price'];?>
-                                </p>
+                                <?if (!empty($product['product_image'])) {?>
+                                <img style="border-radius: 15px;max-width: 900px;max-height: 900px;width: 100%" src="/assets/uploads/<?=$product['product_image'];?>">
+                                <?}else{?>
+                                <img style="border-radius: 15px;max-width: 900px;max-height: 900px;width: 100%;" src="/assets/uploads/Product/img-600x600.png">
+                                <?}?>
+                                <div class="product_name">
+                                    <span>
+                                        <?=$product['product_name'];?></span>
+                                </div>
+                            </a>
+                            <div class="product_price">
+                                <span>$
+                                    <?=$product['product_price'];?></span>
+                            </div>
+                            <a href="/product/view/<?=$product['product_id']?>">
+                                <div style="border-radius: 30px;margin-left: 15%;margin-right: 15%;padding-bottom: 10px;padding-top: 10px;border: 1px solid gray;">
+                                    <span><i class="fa-solid fa-cart-shopping"></i> 立即選購</span>
+                                </div>
                             </a>
                         </div>
                         <?}
@@ -94,46 +112,3 @@ input.zipcode {
         </div>
     </section>
 </div>
-<!-- <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script> -->
-<script>
-// $(document).ready(function() {
-//     if (LIFF_userID != "") {
-//         setTimeout("store_form_submit()", 50);
-//     } else {
-//         setTimeout("store_form_submit()", 50);
-//     }
-// });
-
-// function store_form_submit(){
-//     if (LIFF_userID != "") {
-//         $('#store_form').submit();
-//     } else {
-//         // alert('xxx');
-//         store_form_submit();
-//     }
-// }
-
-// $('#store_form').submit();
-
-function getLiffUserID() {
-    if (LIFF_userID != "") {
-        alert(LIFF_userID);
-    } else {
-        console.log("等候LIFF加載...");
-        setTimeout("getLiffUserID()", 300);
-    }
-};
-
-$('#twzipcode').twzipcode({
-    // 'detect': true, // 預設值為 false
-    'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-    'countySel': '<?php if (!empty($users_address)) {echo $users_address['
-    county '];} else {echo $this->input->get('
-    county ');}?>',
-    'districtSel': '<?php if (!empty($users_address)) {echo $users_address['
-    district '];} else {echo $this->input->get('
-    district ');}?>',
-    'hideCounty': [<?php if (!empty($hide_county)) {foreach ($hide_county as $hc) {echo '"' . $hc . '",';}}?>],
-    'hideDistrict': [<?php if (!empty($hide_district)) {foreach ($hide_district as $hd) {echo '"' . $hd . '",';}}?>]
-});
-</script>
