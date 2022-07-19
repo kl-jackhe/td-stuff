@@ -1,3 +1,8 @@
+<?php $subtotal = 0;
+$count = 0;
+foreach ($this->cart->contents() as $items) {
+	$count++;
+}?>
 <style>
     label.error {
         color: red;
@@ -13,8 +18,8 @@
                     <h3 class="fs-18 color-595757">Hi <?php echo $this->ion_auth->user()->row()->full_name ?></h3>
                 </div>
                 <div class="col-md-7" style="margin-bottom: 30px;">
-                    <?php $attributes = array('id' => 'checkout_form'); ?>
-                    <?php echo form_open('store/save_order?botID='.$this->session->userdata('botID'), $attributes); ?>
+                    <?php $attributes = array('id' => 'checkout_form');?>
+                    <?php echo form_open('store/save_order?botID=' . $this->session->userdata('botID'), $attributes); ?>
                     <div class="form-content" style="border: 3px solid #DCDEDD; border-radius: 8px; padding: 22px 15px;">
                         <div id="pay">
                             <h3 class="pb-md fs-16 color-595757 bold">1. 收件人資訊</h3>
@@ -126,7 +131,7 @@
                                     </tr>
                                 </table>
                                 <ul id="load_cart_price" style="border: none;">
-                                    
+
                                 </ul>
                                 <ul style="border: none;">
                                     <li>

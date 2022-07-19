@@ -4,7 +4,12 @@ class Product extends Public_Controller {
 
 	function __construct() {
 		parent::__construct();
+		$this->load->library('cart');
 		$this->load->model('product_model');
+		$this->load->model('home_model');
+		$this->load->model('store_model');
+		$this->load->model('coupon_model');
+		$this->load->model('service_area_model');
 	}
 
 	public function index() {

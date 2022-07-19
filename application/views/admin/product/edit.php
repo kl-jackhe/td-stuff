@@ -1,3 +1,25 @@
+<style>
+.add-to-links {
+    display: none;
+}
+.featured-products-grid .item {
+    padding-bottom: 30px;
+    padding-top: 30px i !important;
+}
+.featured-products-grid .item .product-info {
+    min-height: 200px;
+    position: relative;
+}
+.featured-products-grid .item .product-info .price-box{
+    position: absolute;
+    bottom: 40px;
+}
+.featured-products-grid .item .product-info .actions{
+    position: absolute;
+    bottom: 0px;
+}
+</style>
+
 <div class="row">
     <?php $attributes = array('class' => 'product', 'id' => 'product');?>
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
@@ -35,13 +57,13 @@
                     </thead>
                     <tbody>
                         <?if (!empty($product_specification)) {foreach ($product_specification as $row) {?>
-                        <tr id="paramsFields_input">
-                            <td><input type="text" class="code" name="unit[]" value="<?=$row['unit'];?>" /></td>
-                            <td><input type="number" class="code" name="price[]" value="<?=$row['price'];?>" /></td>
-                            <td><input type="number" class="code" name="quantity[]" value="<?=$row['quantity'];?>" /></td>
-                            <td><input type="text" class="code" name="picture[]" value="<?=$row['picture'];?>" /></td>
-                            <td><input type="text" class="code" name="description[]" value="<?=$row['description'];?>" /></td>
-                            <td><input type="text" class="code" name="specification[]" value="<?=$row['specification'];?>" /></td>
+                        <tr>
+                            <td><input type="text" name="unit[]" value="<?=$row['unit'];?>" /></td>
+                            <td><input type="number" name="price[]" value="<?=$row['price'];?>" /></td>
+                            <td><input type="number" name="quantity[]" value="<?=$row['quantity'];?>" /></td>
+                            <td><input type="text" name="picture[]" value="<?=$row['picture'];?>" /></td>
+                            <td><input type="text" name="description[]" value="<?=$row['description'];?>" /></td>
+                            <td><input type="text" name="specification[]" value="<?=$row['specification'];?>" /></td>
                             <input type="hidden" name="id[]" value="<?=$row['id'];?>" />
                             <td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td>
                         </tr>
@@ -50,25 +72,25 @@
                 </table>
             </div>
             <div class="col-md-12">
-                <table id="paramsFields" class="table">
+                <table id="plan_paramsFields" class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">名稱</th>
                             <th scope="col">單位</th>
                             <th scope="col">價格</th>
                             <th scope="col">數量</th>
-                            <th scope="col"><a href="javascript:void(0);" class="addCF btn btn-primary">新增</a></th>
+                            <th scope="col"><a href="javascript:void(0);" class="PlanAddCF btn btn-primary">新增</a></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?if (!empty($product_specification)) {foreach ($product_specification as $row) {?>
-                        <tr id="paramsFields_input">
-                            <td><input type="text" class="code" name="name[]" value="<?=$row['unit'];?>" /></td>
-                            <td><input type="text" class="code" name="unit[]" value="<?=$row['unit'];?>" /></td>
-                            <td><input type="number" class="code" name="price[]" value="<?=$row['price'];?>" /></td>
-                            <td><input type="number" class="code" name="quantity[]" value="<?=$row['quantity'];?>" /></td>
-                            <input type="hidden" name="id[]" value="<?=$row['id'];?>" />
-                            <td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td>
+                        <?if (!empty($product_combine)) {foreach ($product_combine as $row) {?>
+                        <tr>
+                            <td><input type="text" name="plan_name[]" value="<?=$row['name'];?>" /></td>
+                            <td><input type="text" name="plan_unit[]" value="<?=$row['unit'];?>" /></td>
+                            <td><input type="number" name="plan_price[]" value="<?=$row['price'];?>" /></td>
+                            <td><input type="number" name="plan_quantity[]" value="<?=$row['quantity'];?>" /></td>
+                            <input type="hidden" name="plan_id[]" value="<?=$row['id'];?>" />
+                            <td><a href="javascript:void(0);" class="PlanRemCF btn btn-danger">移除</a></td>
                         </tr>
                         <?}}?>
                     </tbody>
@@ -181,9 +203,19 @@ function responsive_filemanager_callback(field_id) {
 <script>
 $(document).ready(function() {
     $(".addCF").click(function() {
-        $("#paramsFields").append('<tr><td><input type="text" class="code" name="unit[]" value="" /></td><td><input type="number" class="code" name="price[]" value="" /></td><td><input type="number" class="code" name="quantity[]" value="" /></td><td><input type="text" class="code" name="picture[]" value="" /></td><td><input type="text" class="code" name="description[]" value="" /></td><td><input type="text" class="code" name="specification[]" value="" /></td><input type="hidden" name="id[]" value="0" /><td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td></tr>');
+        $("#paramsFields").append('<tr><td><input type="text" name="unit[]" value="" /></td><td><input type="number" name="price[]" value="" /></td><td><input type="number" name="quantity[]" value="" /></td><td><input type="text" name="picture[]" value="" /></td><td><input type="text" name="description[]" value="" /></td><td><input type="text" name="specification[]" value="" /></td><input type="hidden" name="id[]" value="0" /><td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td></tr>');
     });
     $("#paramsFields").on('click', '.remCF', function() {
+        $(this).parent().parent().remove();
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $(".PlanAddCF").click(function() {
+        $("#plan_paramsFields").append('<tr><td><input type="text" name="plan_name[]" value="" /></td><td><input type="text" name="plan_unit[]" value="" /></td><td><input type="number" name="plan_price[]" value="" /></td><td><input type="number" name="plan_quantity[]" value="" /></td><input type="hidden" name="plan_id[]" value="0" /><td><a href="javascript:void(0);" class="PlanRemCF btn btn-danger">移除</a></td></tr>');
+    });
+    $("#plan_paramsFields").on('click', '.PlanRemCF', function() {
         $(this).parent().parent().remove();
     });
 });

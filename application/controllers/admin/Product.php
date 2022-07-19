@@ -103,6 +103,7 @@ class Product extends Admin_Controller {
 		$this->data['page_title'] = '編輯商品';
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
+		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
 		$this->data['change_log'] = get_change_log('product', $id);
 		$this->render('admin/product/edit');
 	}
@@ -147,7 +148,7 @@ class Product extends Admin_Controller {
 
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
-		// 多規格
+		// POST資料及資料查詢
 		$this_product_specification = $this->product_model->getProduct_Specification($id);
 		$unit = $this->input->post('unit');
 		$price = $this->input->post('price');
@@ -157,6 +158,15 @@ class Product extends Admin_Controller {
 		$specification = $this->input->post('specification');
 		$only_id = $this->input->post('id');
 		$count = count($unit);
+		$this_product_combine = $this->product_model->getProduct_Combine($id);
+		$plan_name = $this->input->post('plan_name');
+		$plan_unit = $this->input->post('plan_unit');
+		$plan_price = $this->input->post('plan_price');
+		$plan_quantity = $this->input->post('plan_quantity');
+		$plan_only_id = $this->input->post('plan_id');
+		$plan_count = count($plan_unit);
+		// POST資料及資料查詢
+		// 規格
 		if (!empty($this_product_specification)) {
 			for ($i = 0; $i < $count; $i++) {
 				$this_product_specification = $this->product_model->getProduct_Specification($id);
@@ -223,18 +233,96 @@ class Product extends Admin_Controller {
 			}
 		}
 		$this_product_specification = $this->product_model->getProduct_Specification($id);
-		foreach ($this_product_specification as $row) {
-			if ($row['type'] > 1) {
-				$data = array(
-					'type' => '0',
-				);
-				$this->db->where('id', $row['id']);
-				$this->db->update('product_specification', $data);
-			} else {
-				$this->db->delete('product_specification', array('id' => $row['id']));
+		if (!empty($this_product_specification)) {
+			foreach ($this_product_specification as $row) {
+				if ($row['type'] > 1) {
+					$data = array(
+						'type' => '0',
+					);
+					$this->db->where('id', $row['id']);
+					$this->db->update('product_specification', $data);
+				} else {
+					$this->db->delete('product_specification', array('id' => $row['id']));
+				}
 			}
 		}
-		// 多規格
+		// 規格
+		// 方案s
+		if (!empty($this_product_combine)) {
+			for ($i = 0; $i < $plan_count; $i++) {
+				$this_product_combine = $this->product_model->getProduct_Combine($id);
+				foreach ($this_product_combine as $row) {
+					echo '商品編號：' . $plan_only_id[$i] . '<br>';
+					if ($row['id'] == $plan_only_id[$i]) {
+						$data = array(
+							'type' => '2',
+							'product_id' => $id,
+							'name' => $plan_name[$i],
+							'unit' => $plan_unit[$i],
+							'price' => $plan_price[$i],
+							'quantity' => $plan_quantity[$i],
+						);
+						$this->db->where('id', $row['id']);
+						$this->db->update('product_combine', $data);
+						echo $row['type'] . ' YES<br>';
+					} else {
+						if ($row['type'] != '2') {
+							echo '現有比數少於資料庫比數<br>';
+							$data = array(
+								'type' => '1',
+							);
+							$this->db->where('id', $row['id']);
+							$this->db->update('product_combine', $data);
+							echo $row['type'] . ' NO<br>';
+						}
+					}
+					if ($plan_only_id[$i] == '0') {
+						echo '現有比數多於資料庫比數<br>';
+						$data = array(
+							'product_id' => $id,
+							'type' => '3',
+							'name' => $plan_name[$i],
+							'unit' => $plan_unit[$i],
+							'price' => $plan_price[$i],
+							'quantity' => $plan_quantity[$i],
+						);
+						$this->mysql_model->_insert('product_combine', $data);
+						echo 'NEW<br>';
+						break;
+					}
+				}
+			}
+		} else {
+			for ($i = 0; $i < $plan_count; $i++) {
+				if ($plan_only_id[$i] == '0') {
+					echo '沒有資料時直接新增<br>';
+					$data = array(
+						'product_id' => $id,
+						'type' => '3',
+						'name' => $plan_name[$i],
+						'unit' => $plan_unit[$i],
+						'price' => $plan_price[$i],
+						'quantity' => $plan_quantity[$i],
+					);
+					$this->mysql_model->_insert('product_combine', $data);
+				}
+			}
+		}
+		$this_product_combine = $this->product_model->getProduct_Combine($id);
+		if (!empty($this_product_combine)) {
+			foreach ($this_product_combine as $row) {
+				if ($row['type'] > 1) {
+					$data = array(
+						'type' => '0',
+					);
+					$this->db->where('id', $row['id']);
+					$this->db->update('product_combine', $data);
+				} else {
+					$this->db->delete('product_combine', array('id' => $row['id']));
+				}
+			}
+		}
+		// 方案
 		$this->session->set_flashdata('message', '商品更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);
 	}
