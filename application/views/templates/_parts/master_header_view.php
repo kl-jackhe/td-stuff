@@ -76,19 +76,35 @@
     #fa-bag-shopping a:hover {
         color: #FF8F59;
     }
+    #cart-qty {
+        position: absolute;
+        right: -5px;
+        background: #FFD2D2;
+        border-radius: 50px;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+    }
 </style>
 
 <body>
     <div class="body h-100">
         <div class="fixed-bottom" style="left: auto;right: 25px;bottom: 60px;">
             <div id="fa-facebook-square" class="py-1">
-                <a href="#"><i class="fa-brands fa-facebook-square" style="font-size: 48px;"></i></a>
+                <a href="#">
+                    <i class="fa-brands fa-facebook-square" style="font-size: 48px;"></i>
+                </a>
             </div>
             <div id="fa-line" class="py-1">
-                <a target="_blank" href="https://line.me/R/ti/p/@504bdron"><i class="fa-brands fa-line" style="font-size: 48px;"></i></a>
+                <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
+                    <i class="fa-brands fa-line" style="font-size: 48px;"></i>
+                </a>
             </div>
             <div id="fa-bag-shopping" class="py-1">
-                <a href="/cart"><i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i></a>
+                <a href="/cart">
+                    <div id="cart-qty"><span style="color: #000;">1</span></div>
+                    <i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i>
+                </a>
             </div>
         </div>
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
