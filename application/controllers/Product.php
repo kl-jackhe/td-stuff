@@ -14,7 +14,7 @@ class Product extends Public_Controller {
 
 	public function index() {
 		$this->load->helper('cookie');
-		$this->data['product'] = $this->product_model->getProductPage();
+		$this->data['product'] = $this->product_model->getHomeProducts();
 		$this->data['page_title'] = '商品';
 		$this->render('product/index');
 	}
