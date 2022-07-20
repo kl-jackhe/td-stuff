@@ -104,6 +104,7 @@ class Product extends Admin_Controller {
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
 		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
+		$this->data['product_comb_and_spec'] = $this->product_model->getProduct_Comb_and_Spec($id);
 		$this->data['change_log'] = get_change_log('product', $id);
 		$this->render('admin/product/edit');
 	}
@@ -165,6 +166,7 @@ class Product extends Admin_Controller {
 		$plan_quantity = $this->input->post('plan_quantity');
 		$plan_only_id = $this->input->post('plan_id');
 		$plan_count = count($plan_unit);
+		$this_product_comb_and_spec = $this->product_model->getProduct_Comb_and_Spec($id);
 		// POST資料及資料查詢
 		// 規格
 		if (!empty($this_product_specification)) {
@@ -176,11 +178,11 @@ class Product extends Admin_Controller {
 						$data = array(
 							'type' => '2',
 							'unit' => $unit[$i],
+							'specification' => $specification[$i],
 							'price' => $price[$i],
 							'quantity' => $quantity[$i],
-							'picture' => $picture[$i],
-							'description' => $description[$i],
-							'specification' => $specification[$i],
+							// 'picture' => $picture[$i],
+							// 'description' => $description[$i],
 						);
 						$this->db->where('id', $row['id']);
 						$this->db->update('product_specification', $data);
@@ -202,11 +204,11 @@ class Product extends Admin_Controller {
 							'product_id' => $id,
 							'type' => '3',
 							'unit' => $unit[$i],
+							'specification' => $specification[$i],
 							'price' => $price[$i],
 							'quantity' => $quantity[$i],
-							'picture' => $picture[$i],
-							'description' => $description[$i],
-							'specification' => $specification[$i],
+							// 'picture' => $picture[$i],
+							// 'description' => $description[$i],
 						);
 						$this->mysql_model->_insert('product_specification', $data);
 						echo 'NEW<br>';
@@ -222,11 +224,11 @@ class Product extends Admin_Controller {
 						'product_id' => $id,
 						'type' => '3',
 						'unit' => $unit[$i],
+						'specification' => $specification[$i],
 						'price' => $price[$i],
 						'quantity' => $quantity[$i],
-						'picture' => $picture[$i],
-						'description' => $description[$i],
-						'specification' => $specification[$i],
+						// 'picture' => $picture[$i],
+						// 'description' => $description[$i],
 					);
 					$this->mysql_model->_insert('product_specification', $data);
 				}
@@ -247,7 +249,7 @@ class Product extends Admin_Controller {
 			}
 		}
 		// 規格
-		// 方案s
+		// 方案
 		if (!empty($this_product_combine)) {
 			for ($i = 0; $i < $plan_count; $i++) {
 				$this_product_combine = $this->product_model->getProduct_Combine($id);
@@ -255,12 +257,14 @@ class Product extends Admin_Controller {
 					echo '商品編號：' . $plan_only_id[$i] . '<br>';
 					if ($row['id'] == $plan_only_id[$i]) {
 						$data = array(
-							'type' => '2',
 							'product_id' => $id,
+							'type' => '2',
 							'name' => $plan_name[$i],
 							'unit' => $plan_unit[$i],
 							'price' => $plan_price[$i],
 							'quantity' => $plan_quantity[$i],
+							'picture' => $picture[$i],
+							'description' => $description[$i],
 						);
 						$this->db->where('id', $row['id']);
 						$this->db->update('product_combine', $data);
@@ -285,6 +289,8 @@ class Product extends Admin_Controller {
 							'unit' => $plan_unit[$i],
 							'price' => $plan_price[$i],
 							'quantity' => $plan_quantity[$i],
+							'picture' => $picture[$i],
+							'description' => $description[$i],
 						);
 						$this->mysql_model->_insert('product_combine', $data);
 						echo 'NEW<br>';
@@ -303,6 +309,8 @@ class Product extends Admin_Controller {
 						'unit' => $plan_unit[$i],
 						'price' => $plan_price[$i],
 						'quantity' => $plan_quantity[$i],
+						'picture' => $picture[$i],
+						'description' => $description[$i],
 					);
 					$this->mysql_model->_insert('product_combine', $data);
 				}
