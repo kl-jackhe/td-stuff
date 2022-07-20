@@ -1,7 +1,8 @@
 <style>
-.product_description img {
+    .product_description img {
     width: 100%;
-    max-width: 700px;
+    max-width: 900px;
+    height: 100%;
 }
 </style>
 <div role="main" class="main">
@@ -12,41 +13,43 @@
                         if (!empty($product)) {
                         ?>
                 <div class="col-md-12 text-center">
-                    <h1>描述</h1>
+                    <h1>商品描述</h1>
                 </div>
                 <div class="col-md-8 text-center product_description">
-                    <div>
                         <?=$product['product_description']?>
                     </div>
                 </div>
-                <div class="col-md-12 text-center">
+                <div class="col-md-12 text-center py-5">
                     <h1>商品選購</h1>
                 </div>
                 <div class="col-md-8 text-center">
+                    <form id="form1" name="form1" method="post" action="">
+                        <div class="row">
                     <?foreach  ( $specification as  $row ){?>
-                        <form id="form1" name="form1" method="post" action="">
-                    <div class="col-md-6">
-                        <img class="img-fluid" src="/assets/uploads/<?=$product['product_image'];?>">
-                        <div>
-                            <?=$product['product_name'];?>
-                        </div>
-                        <div>規格：
-                            <?=$row['quantity'];?>
-                            <?=$row['unit'];?>
-                        </div>
-                        <div>金額：
-                            <?=$row['price'];?>元</div>
-                        <div class="text-center">
-                             <div><?php
+                        <div class="col-md-3">
+                            <img style="max-width: 300px;max-height: 300px;width: 100%;border-radius: 15px;" src="/assets/uploads/<?=$product['product_image'];?>">
+                            <div>
+                                <?=$product['product_name'];?>
+                            </div>
+                            <div>規格：
+                                <?=$row['quantity'];?>
+                                <?=$row['unit'];?>
+                            </div>
+                            <div>金額：
+                                <?=$row['price'];?>元</div>
+                            <div class="text-center">
+                                <div>
+                                    <?php
 $cart_qty = 0;
 foreach ($this->cart->contents() as $items) {
 	if ($items["id"] == $product['product_id']) {
 		$cart_qty = $items["qty"];
 	}
 }
-?></div>
-                            <div>
-                            <?php $get_product_remaining_qty = get_product_remaining_qty($product['product_id'], $cart_qty);
+?>
+                                </div>
+                                <div>
+                                    <?php $get_product_remaining_qty = get_product_remaining_qty($product['product_id'], $cart_qty);
 if ($product['product_person_buy'] != 0) {
 	if ($get_product_remaining_qty > $product['product_person_buy']) {
 		$max = $product['product_person_buy'];
@@ -57,16 +60,18 @@ if ($product['product_person_buy'] != 0) {
 	$max = 999;
 }
 ?>
-</div>
-                            <input type="text" id="qty_<?php echo $product['product_id'] ?>" class="form-control input-number" min="1" max="999" value="1" style="background: #fff;" readonly>
-                            <!-- <span class="input-group-btn" onclick="add_cart(<?php echo $product['product_id'] ?>)"> -->
+                                </div>
+                                <input type="text" id="qty_<?php echo $product['product_id'] ?>" class="form-control input-number" min="1" max="999" value="1" style="background: #fff;" readonly>
+                                <!-- <span class="input-group-btn" onclick="add_cart(<?php echo $product['product_id'] ?>)"> -->
                                 <button onclick="add_cart(<?php echo $product['product_id'] ?>)" type="button" class="btn btn-default btn-number" style="border: 1px solid red;background-color: red;border-radius: 15px;padding: 5px 10px 5px 10px;"><i class="fa-solid fa-cart-shopping"></i> 選購</button>
-                            <!-- </span> -->
-                            <input type="hidden" id="product_<?php echo $product['product_id'] ?>" value="<?php echo $product['product_id'] ?>">
+                                <!-- </span> -->
+                                <input type="hidden" id="product_<?php echo $product['product_id'] ?>" value="<?php echo $product['product_id'] ?>">
+                            </div>
                         </div>
-                    </div>
-                </form>
+
                     <?}?>
+                    </div>
+                    </form>
                 </div>
                 <?}?>
             </div>
@@ -151,7 +156,7 @@ function add_cart(id) {
     $.ajax({
         url: "<?php echo base_url(); ?>cart/add",
         method: "POST",
-        data: { id: id, qty: qty},
+        data: { id: id, qty: qty },
         success: function(data) {
             // $('#cart_details').load("<?php echo base_url(); ?>store/load_cart");
             // $('#load_cart_price').load("<?php echo base_url(); ?>store/load_cart_price");
@@ -219,8 +224,7 @@ function select_delivery_time() {
         url: "<?php echo base_url(); ?>cart/add_delivery_time",
         method: "POST",
         data: { delivery_time: delivery_time },
-        success: function(data) {
-        }
+        success: function(data) {}
     });
 }
 
