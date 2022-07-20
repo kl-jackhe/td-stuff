@@ -1,6 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +16,10 @@
     <meta property="og:image" content="<?php echo base_url() ?>assets/uploads/<?php echo get_setting_general('logo') ?>" />
     <meta name="twitter:card" content="<?php echo base_url() ?>assets/uploads/<?php echo get_setting_general('logo') ?>" />
     <meta name="twitter:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />
-    <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
+    <title>
+        <?php echo $page_title; ?> |
+        <?php echo get_setting_general('name') ?>
+    </title>
     <!-- Favicon -->
     <!-- <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" /> -->
     <!-- Web Fonts  -->
@@ -53,20 +57,44 @@
     </script>
     <!-- End Global site tag (gtag.js) - Google Analytics -->
 </head>
+<style>
+    #fa-facebook-square a {
+        color: blue;
+    }
+    #fa-facebook-square a:hover {
+        color: #0080FF;
+    }
+    #fa-line a {
+        color: green;
+    }
+    #fa-line a:hover {
+        color: #00BB00;
+    }
+    #fa-bag-shopping a {
+        color: #FF5809;
+    }
+    #fa-bag-shopping a:hover {
+        color: #FF8F59;
+    }
+</style>
 
 <body>
     <div class="body h-100">
+        <div class="fixed-bottom" style="left: auto;right: 25px;bottom: 60px;">
+            <div id="fa-facebook-square" class="py-1">
+                <a href="#"><i class="fa-brands fa-facebook-square" style="font-size: 48px;"></i></a>
+            </div>
+            <div id="fa-line" class="py-1">
+                <a target="_blank" href="https://line.me/R/ti/p/@504bdron"><i class="fa-brands fa-line" style="font-size: 48px;"></i></a>
+            </div>
+            <div id="fa-bag-shopping" class="py-1">
+                <a href="/cart"><i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i></a>
+            </div>
+        </div>
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
                 <div class="header-container" style="width: 100%;">
-                    <div class="header-row">
-                        <!-- <div class="header-column hidden-xs">
-                            <div class="header-logo text-center">
-                                <a href="<?php echo base_url() ?>">
-                                    <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
-                                </a>
-                            </div>
-                        </div> -->
+                    <div class="header-row" style="padding-left:25px;padding-right:25px;">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
@@ -80,16 +108,28 @@
                                         <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">我的帳戶</a>
+                                        <a class="nav-link" href="/product">商城</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">聯絡我們＋LINE＠</a>
+                                        <a class="nav-link" href="/checkout">結帳</a>
+                                    </li>
+                                    <?php if (empty($this->session->userdata('user_id'))) {?>
+                                    <li class="nav-item">
+                                        <a href="/login" class="btn nav-link" style="border: 1px solid #00BFD5; color: #00BFD5; margin-bottom: 10px;">登入</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">商城</a>
+                                        <a href="/register" class="btn register-btn nav-link" style="background: #00BFD5; color: #fefefe;">註冊</a>
                                     </li>
-                                    <div class="dropdown">
-                                    <?php if (!empty($this->session->userdata('user_id'))) {?>
+                                    <?}else{?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/auth/edit_user">我的帳戶</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/logout">登出</a>
+                                    </li>
+                                    <?}?>
+                                    <!-- <div class="dropdown">
+                                        <?php if (!empty($this->session->userdata('user_id'))) {?>
                                         <div id="bbb" class="btn btn-secondary dropdown-toggle" data-toggle="collapse" data-target=".dropdown-menu" aria-expanded="false">
                                             <?php echo $this->ion_auth->user()->row()->full_name; ?>
                                         </div>
@@ -113,13 +153,13 @@
                                     </div>
                                     <?php } else {?>
                                     <?php if ($this->uri->segment(1) == '' || $this->uri->segment(1) == 'login' || $this->uri->segment(1) == 'register') {?>
-                                    <li>
+                                    <li class="nav-item">
                                         <a href="/login" class="btn" style="border: 1px solid #00BFD5; color: #00BFD5; margin-bottom: 10px;">登入</a>
                                     </li>
-                                    <li style="margin-left: 0px;">
+                                    <li class="nav-item" style="margin-left: 0px;">
                                         <a href="/register" class="btn register-btn" style="background: #00BFD5; color: #fefefe;">註冊</a>
                                     </li>
-                                    <?php }}?>
+                                    <?php }}?> -->
                                 </ul>
                                 <!-- <form class="form-inline my-2 my-lg-0">
                                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -127,19 +167,16 @@
                                 </form> -->
                             </div>
                         </nav>
-                        <div class="px-5">
+                        <div class="px-4">
                             <hr>
                         </div>
-                        <div class="header-column">
+                        <!--  <div class="header-column">
                             <div class="header-row">
                                 <div class="header-nav">
-
-                                    <!-- mobiletype -->
-                                    <!-- <button type="button" class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main">
+                        <button type="button" class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main">
                                         <i class="fa fa-navicon"></i>
-                                    </button> -->
-                                    <!-- mobiletype END -->
-                                    <!-- <div class="header-nav-main collapse" aria-expanded="true">
+                                    </button>
+                        <div class="header-nav-main collapse" aria-expanded="true">
                                         <nav>
                                             <ul class="nav nav-pills" id="mainNav">
                                                 <li class="worker">
@@ -209,10 +246,10 @@
                                                 <?php }?>
                                             </ul>
                                         </nav>
-                                    </div> -->
-                                </div>
+                                    </div>
                             </div>
-                        </div>
+                            </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
