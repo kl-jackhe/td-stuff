@@ -1,3 +1,8 @@
+<style>
+.product_description iframe {
+    height: 600px!important;
+}
+</style>
 <div class="row">
     <?php $attributes = array('class' => 'create_product', 'id' => 'create_product');?>
     <?php echo form_open('admin/product/insert', $attributes); ?>
@@ -16,32 +21,32 @@
                     <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
                 </div>
             </div>
-            <!-- <div class="col-md-6">
+            <div class="col-md-6">
           <div class="form-group">
-            <label for="product_price">價格 *</label>
+            <label for="product_price">預設價格 *</label>
             <input type="text" class="form-control" id="product_price" name="product_price" required>
           </div>
-        </div> -->
+        </div>
             <!-- <div class="col-md-6">
           <div class="form-group">
             <label for="product_daily_stock">每日庫存</label>
             <input type="text" class="form-control" id="product_daily_stock" name="product_daily_stock">
           </div>
         </div> -->
-            <div class="col-md-6">
+            <!-- <div class="col-md-6">
                 <div class="form-group">
                     <label for="product_person_buy">限購數量</label>
                     <input type="text" class="form-control" id="product_person_buy" name="product_person_buy">
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="product_description">描述 *</label>
+            </div> -->
+            <div class="col-md-8">
+                <div class="form-group product_description">
+                    <label for="product_description">商品描述 *</label>
                     <!-- <input type="text" class="form-control" id="product_description" name="product_description"> -->
                     <textarea id="product_description" name="product_description" class="form-control"></textarea>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="product_image" class="control-label">封面圖片</label>
                     <div class="form-group">
