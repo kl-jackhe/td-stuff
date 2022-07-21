@@ -63,6 +63,8 @@ foreach ($this->cart->contents() as $items) {
                     <div class=""></div>
                     <h3>確認訂單內容</h3>
                     <section>
+                        <h3>您共選擇 (
+                        <?=$count?> 個項目 )</h3>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
