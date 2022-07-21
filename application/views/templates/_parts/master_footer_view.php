@@ -140,7 +140,17 @@
         headerTag: "h3",
         bodyTag: "section",
         transitionEffect: "slideLeft",
-        autoFocus: true
+        enableFinishButton: false,
+        labels: {
+          cancel: "取消",
+          current: "current step:",
+          pagination: "Pagination",
+          finish: "完成",
+          next: "下一步",
+          previous: "上一步",
+          loading: "載入中..."
+        }
+        // autoFocus: true
     });
   </script>
   <!-- purchase-steps -->
@@ -149,7 +159,6 @@
         $('#ajax-register-Modal').modal('show');
     <?php }?>
   </script>
-
   <script>
   $(function(){
     var h = $(window).height();
@@ -160,6 +169,7 @@
       var h_sum = h - header_h - footer_h;
       $(".main").css('height',h_sum);
     }
+    $(".wizard > .content").css('min-height',h_sum * 0.55);
   });
   </script>
 </body>
