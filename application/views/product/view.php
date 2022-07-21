@@ -4,39 +4,63 @@
     max-width: 900px;
     height: 100%;
 }
+.qty {
+  width: 40px;
+  height: 35px;
+  text-align: center;
+  border: 0;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+}
+
+
+input.qtyplus {
+  width: 25px;
+  height: 35px;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+}
+
+input.qtyminus {
+  width: 25px;
+  height: 35px;
+  border: 1px solid #aaa;
+  background: #f8f8f8;
+}
 </style>
 <div role="main" class="main">
     <section class="form-section">
         <div class="container-fluid" style="padding-bottom: 30px;padding-top: 30px;">
             <div class="row justify-content-center">
-                <?
-                        if (!empty($product)) {
-                        ?>
-                <div class="col-md-12 text-center">
+                <?if (!empty($product)) {?>
+                <!-- <div class="col-md-12 text-center">
                     <h1>商品描述</h1>
-                </div>
+                </div> -->
                 <div class="col-md-8 text-center product_description">
-                        <?=$product['product_description']?>
-                    </div>
+                    <?if (!empty($product['product_description'])) {
+                        echo $product['product_description'];
+                    }else {?>
+                        <h3>暫無商品描述</h3>
+                    <?}?>
                 </div>
-                <div class="col-md-12 text-center py-5">
-                    <h1>商品選購</h1>
+                <div class="col-md-12 text-center">
+                    <h3>商品選購</h3>
                 </div>
-                <div class="col-md-8 text-center">
+                <div class="col-md-8 text-center py-5">
                     <form id="form1" name="form1" method="post" action="">
                         <div class="row">
                     <?foreach  ( $specification as  $row ){?>
-                        <div class="col-md-3">
+                        <div class="col-md-3 py-2">
                             <img style="max-width: 300px;max-height: 300px;width: 100%;border-radius: 15px;" src="/assets/uploads/<?=$product['product_image'];?>">
                             <div>
-                                <?=$product['product_name'];?>
+                                <span><?=$product['product_name'];?></span>
                             </div>
-                            <div>規格：
-                                <?=$row['quantity'];?>
-                                <?=$row['unit'];?>
+                            <div>
+                                <span>描述：</span>
                             </div>
-                            <div>金額：
-                                <?=$row['price'];?>元</div>
+                            <div>
+                                <span>金額：<?=$row['price'];?> 元</span>
+                            </div>
                             <div class="text-center">
                                 <div>
                                     <?php
@@ -62,9 +86,9 @@ if ($product['product_person_buy'] != 0) {
 ?>
                                 </div>
                                 <input type="text" id="qty_<?php echo $product['product_id'] ?>" class="form-control input-number" min="1" max="999" value="1" style="background: #fff;" readonly>
-                                <!-- <span class="input-group-btn" onclick="add_cart(<?php echo $product['product_id'] ?>)"> -->
-                                <button onclick="add_cart(<?php echo $product['product_id'] ?>)" type="button" class="btn btn-default btn-number" style="border: 1px solid red;background-color: red;border-radius: 15px;padding: 5px 10px 5px 10px;"><i class="fa-solid fa-cart-shopping"></i> 選購</button>
-                                <!-- </span> -->
+                                <button onclick="add_cart(<?php echo $product['product_id'] ?>)" type="button" class="btn btn-default btn-number" style="border: 1px solid red;background-color: red;border-radius: 15px;padding: 5px 10px 5px 10px;">
+                                    <i class="fa-solid fa-cart-shopping"></i> 選購
+                                </button>
                                 <input type="hidden" id="product_<?php echo $product['product_id'] ?>" value="<?php echo $product['product_id'] ?>">
                             </div>
                         </div>

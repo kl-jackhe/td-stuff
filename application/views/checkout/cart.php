@@ -8,10 +8,10 @@ foreach ($this->cart->contents() as $items) {
         <div class="container-fluid">
             <?php $attributes = array('class' => 'view', 'id' => 'view_form');?>
             <?php echo form_open('checkout', $attributes); ?>
-            <div class="row">
-                <div class="col-12 col-md-8 px-4">
-                    <h1>您共選擇 (
-                        <?=$count?> 項目 )</h1>
+            <div class="row" style="padding-left: 25px;padding-right: 25px;">
+                <div class="col-12 col-md-9 px-4">
+                    <h4>您共選擇 (
+                        <?=$count?> 項目 )</h4>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
@@ -29,7 +29,7 @@ foreach ($this->cart->contents() as $items) {
                                 <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
                                 <tr>
                                     <td>
-                                        <?=$i?>
+                                        <i class="fa-solid fa-trash-can"></i>
                                     </td>
                                     <td>
                                         <?php echo $items['name']; ?>
@@ -43,13 +43,13 @@ foreach ($this->cart->contents() as $items) {
                                         </p>
                                         <?php endif;?>
                                     </td>
-                                    <td style="text-align:center;">
+                                    <td>
                                         <?php echo $this->cart->format_number($items['price']); ?>
                                     </td>
                                     <td>
                                         <?php echo form_input(array('name' => $i . '[qty]', 'value' => $items['qty'], 'maxlength' => '3', 'size' => '5')); ?>
                                     </td>
-                                    <td style="text-align:center">$
+                                    <td>$
                                         <?php echo $this->cart->format_number($items['subtotal']); ?>
                                     </td>
                                 </tr>
@@ -60,43 +60,48 @@ foreach ($this->cart->contents() as $items) {
                         </table>
                     </div>
                     <div class="row justify-content-end">
-                        <button class="btn-primary btn font-weight-bold">清除全部</button>
-                        <button class="btn-primary btn mx-4 font-weight-bold">更新購物車</button>
+                        <button class="btn-danger btn font-weight-bold">清除全部</button>
+                        <button class="btn-success btn mx-4 font-weight-bold">更新購物車</button>
                     </div>
                 </div>
-                <div class="col-12 col-md-4 px-5">
-                    <h1>購物車總計</h1>
-                    <!-- <div class="row">
-                        <hr style="border-top: 1px solid gray;width: 100%;">
-                        <div class="col-6">
-                            小計
-                        </div>
-                        <div class="col-6 text-right text-danger">
-                            <?=$subtotal?>
-                        </div>
-                        <hr style="border-top: 1px solid gray;width: 100%;">
-                    </div> -->
-                    <!-- <div class="row">
-                        <div class="col-12">
-                            運送方式
-                        </div>
-                        <div class="col-12">
-                            超商取貨
-                        </div>
-                    </div> -->
+                <div class="col-12 col-md-3 px-4">
+                    <h4>購物車總計</h4>
                     <div class="row">
                         <hr style="border-top: 1px solid gray;width: 100%;">
                         <div class="col-6">
-                            總計
+                            <label class="col-form-label">小計</label>
                         </div>
                         <div class="col-6 text-right text-danger">
+                            $
+                            <?=$subtotal?>
+                        </div>
+                        <hr style="border-top: 1px solid gray;width: 100%;">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="col-form-label">運送方式</label>
+                        </div>
+                        <div class="col-6">
+                            <select class="form-control" name="" id="">
+                                <option value="">超商取貨</option>
+                                <option value="">宅配</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr style="border-top: 1px solid gray;width: 100%;">
+                        <div class="col-6">
+                            <label class="col-form-label">總計</label>
+                        </div>
+                        <div class="col-6 text-right text-danger">
+                            $
                             <?=$subtotal?>
                         </div>
                         <hr style="border-top: 1px solid gray;width: 100%;">
                     </div>
                     <span class="btn btn-info btn-block mt-md" onclick="view_form_check()">前往結帳</span>
                     <!-- <div class="col-12 btn-primary btn font-weight-bold">前往結帳</div> -->
-                    <div class="col-12 btn-primary btn my-4 font-weight-bold">繼續選購商品 <i class="fa-solid fa-arrow-right-long"></i></div>
+                    <a href="/product" class="col-12 btn-dark btn my-4 font-weight-bold">繼續選購商品 <i class="fa-solid fa-arrow-right-long"></i></a>
                 </div>
             </div>
             <?php echo form_close() ?>

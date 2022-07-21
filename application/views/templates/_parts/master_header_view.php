@@ -42,20 +42,17 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- Fontawesome -->
-    <link href="/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
-    <link href="/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
-    <link href="/fontawesome-free-6.1.1-web/css/brands.css" rel="stylesheet">
-    <link href="/fontawesome-free-6.1.1-web/css/solid.css" rel="stylesheet">
-    <script defer src="/fontawesome-free-6.1.1-web/js/all.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127821887-2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'UA-127821887-2');
-    </script>
-    <!-- End Global site tag (gtag.js) - Google Analytics -->
+    <link href="/assets/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
+    <link href="/assets/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
+    <link href="/assets/fontawesome-free-6.1.1-web/css/brands.css" rel="stylesheet">
+    <link href="/assets/fontawesome-free-6.1.1-web/css/solid.css" rel="stylesheet">
+    <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
+    <!-- Fontawesome -->
+    <!-- purchase-steps -->
+    <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
+    <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
+    <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
+    <!-- purchase-steps -->
 </head>
 <style>
     #fa-facebook-square a {
