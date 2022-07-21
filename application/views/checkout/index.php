@@ -138,6 +138,9 @@ foreach ($this->cart->contents() as $items) {
                                     <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
                                     <p>2. 超商取貨者，請務必確認手機號碼是否正確。</p>
                                 </div>
+                                <div class="col-12">
+                                    <hr>
+                                </div>
                                 <!-- <div class="col-12">
                                     <h3>優惠卷/折扣卷</h3>
                                     <div class="row">
@@ -202,7 +205,7 @@ foreach ($this->cart->contents() as $items) {
                     <h3>填寫收件資料</h3>
                     <section>
                         <div class="container-fluid">
-                            <div class="form-group row p-3" style="padding-bottom:50px !important;">
+                            <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
@@ -222,7 +225,7 @@ foreach ($this->cart->contents() as $items) {
                                     <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="範例：test@test.com.tw" required>
                                 </div>
                                 <div class="col-12"></div>
-                                <div class="input-group mb-3 col-12 col-sm-3">
+                                <div class="input-group mb-3 col-12 col-sm-4">
                                   <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">縣 / 市</label>
                                   </div>
@@ -231,7 +234,7 @@ foreach ($this->cart->contents() as $items) {
                                     <option value="1">台中</option>
                                   </select>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-3">
+                                <div class="input-group mb-3 col-12 col-sm-4">
                                   <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">區域</label>
                                   </div>
