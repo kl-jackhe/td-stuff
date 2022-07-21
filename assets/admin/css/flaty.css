@@ -877,7 +877,6 @@ hr.margin-0 {
     text-shadow: none!important;
     font-size: 16px;
     text-decoration: none;
-    text-align: center;
 }
 
 .nav-list .search-pan button>i,
@@ -963,8 +962,7 @@ hr.margin-0 {
 .nav-list>li .submenu>li>ul>li>a {
     display: block;
     position: relative;
-    padding: 13px 20px 13px 0px;
-    text-align: center;
+    padding: 13px 0 13px 42px;
     margin: 0;
 }
 
@@ -1652,7 +1650,7 @@ hr.margin-0 {
    Form
 ======================================================== */
 
-select,
+/*select,
 textarea,
 input[type="text"],
 input[type="password"],
@@ -1716,7 +1714,7 @@ input.search-query,
     -webkit-box-shadow: none;
     box-shadow: none;
     border: 1px solid #888;
-}
+}*/
 
 .form-control:focus,
 .has-error .form-control:focus,
@@ -1758,7 +1756,7 @@ select:focus:invalid:focus {
     box-shadow: none;
 }
 
-select,
+/*select,
 textarea,
 input[type="text"],
 input[type="password"],
@@ -1780,9 +1778,9 @@ input[type="color"],
 .input-group .input-group-addon {
     border-color: #888;
     color: #888;
-}
+}*/
 
-select:focus,
+/*select:focus,
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -1802,7 +1800,7 @@ input[type="color"]:focus,
 .uneditable-textarea:focus,
 .form-control:focus {
     border-color: #bbb;
-}
+}*/
 
 input[disabled],
 select[disabled],
@@ -2103,7 +2101,7 @@ Bordered form layout
 
 /* Button ------------------------------------------ */
 
-.btn {
+/*.btn {
     background-image: none;
     filter: none;
     border: 0;
@@ -2111,7 +2109,7 @@ Bordered form layout
     -webkit-box-shadow: none;
     box-shadow: none;
     border-radius: 0!important;
-}
+}*/
 
 .btn.active,
 .btn:active,
@@ -2130,9 +2128,9 @@ Bordered form layout
     font-size: 26px;
 }
 
-a.btn {
+/*a.btn {
     color: #000;
-}
+}*/
 
 .btn.btn-link {
     color: #428bca;
@@ -2223,9 +2221,9 @@ a.btn {
     margin-right: 5px;
 }
 
-.btn {
+/*.btn {
     background-color: #ebebeb;
-}
+}*/
 
 .btn:hover,
 .btn:active,
@@ -2234,9 +2232,9 @@ a.btn {
     background-color: #dcdcdc;
 }
 
-.btn.btn-primary {
+/*.btn.btn-primary {
     background-color: #0090ff;
-}
+}*/
 
 .btn.btn-primary:active,
 .btn.btn-primary.active,
@@ -2245,9 +2243,9 @@ a.btn {
     background-color: #017cdb;
 }
 
-.btn.btn-info {
+/*.btn.btn-info {
     background-color: #5ab4da;
-}
+}*/
 
 .btn.btn-info:active,
 .btn.btn-info.active,
@@ -2256,9 +2254,9 @@ a.btn {
     background-color: #50a1c3;
 }
 
-.btn.btn-warning {
+/*.btn.btn-warning {
     background-color: #ff863d;
-}
+}*/
 
 .btn.btn-warning:active,
 .btn.btn-warning.active,
@@ -2267,9 +2265,9 @@ a.btn {
     background-color: #fe6c14;
 }
 
-.btn.btn-danger {
+/*.btn.btn-danger {
     background-color: #fb3838;
-}
+}*/
 
 .btn.btn-danger:active,
 .btn.btn-danger.active,
@@ -2278,9 +2276,9 @@ a.btn {
     background-color: #dc2a2a;
 }
 
-.btn.btn-success {
+/*.btn.btn-success {
     background-color: #15b74e;
-}
+}*/
 
 .btn.btn-success:active,
 .btn.btn-success.active,
@@ -2289,9 +2287,9 @@ a.btn {
     background-color: #11943f;
 }
 
-.btn.btn-inverse {
+/*.btn.btn-inverse {
     background-color: #595959;
-}
+}*/
 
 .btn.btn-inverse:active,
 .btn.btn-inverse.active,
@@ -4539,13 +4537,14 @@ a.tile:hover {
     filter: none !important;
     -webkit-box-shadow: none!important;
     box-shadow: none!important;
-    border-radius: 0!important;
-    height: 34px!important;
-    line-height: 24px!important;
-    padding: 4px 6px!important;
-    border-color: #e5e5e5!important;
+    /*border-radius: 0!important;*/
+    height: 32px!important;
+    line-height: 1.42857143!important;
+    padding: 6px 12px!important;
+    /*border-color: #e5e5e5!important;*/
     margin: 0!important;
-    color: #555!important;
+    /*color: #555!important;*/
+    border: none;
 }
 
 .chosen-container-single .chosen-single b,
@@ -6298,7 +6297,7 @@ div.tagsinput .not_valid {
 .nav-list>li .submenu>li>a:focus,
 .nav-list>li .submenu>li>a:hover,
 .nav-list>li .submenu>li.active>a {
-    background-color: #3294c8;
+    background-color: #0e6390;
 }
 
 
@@ -8684,11 +8683,11 @@ input.pos_stock {
     position: absolute;
     padding: 2px 2px;
     right: 2px;
-    bottom: 2px;
+    bottom: 4px;
     background: red;
     color: white;
     border: none;
-    width: 30px;
+    width: 50px;
     height: 20px;
     text-align: center;
     border-radius: 5px;
@@ -8706,8 +8705,8 @@ span.stock {
 
 .product-image-thumbnail {
     width: 100%;
-    height: 85px;
-    border-radius: 10px;
+    min-height: 60px;
+    border-radius: 4px;
     background-size: cover!important;
     background-repeat: no-repeat!important;
     background-position: center center!important;
@@ -8745,9 +8744,9 @@ span.stock {
 
 .single-product {
     padding: 0px;
-    background-color: black;
-    box-shadow: 5px 5px 3px grey;
-    border-radius: 10px;
+    background-color: #222;
+    box-shadow: 2px 2px 4px grey;
+    border-radius: 4px;
 }
 
 .pos_price {
@@ -8767,7 +8766,7 @@ span.stock {
     background-color: white;
     padding: 15px;
     border: 3px solid black;
-    border-radius: 10px;
+    border-radius: 4px;
     /*box-shadow: 2px 2px 4px #999;*/
 }
 
@@ -8825,7 +8824,8 @@ label.error {
 
 .chosen-container{
     background: white;
-    border: 1px solid #888
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 table.table{
@@ -8857,6 +8857,19 @@ form label{
     padding-top: 30px;
 }
 
+.with-img-product-name{
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    top: 25%;
+    padding: 5px 0px;
+    max-height: 36px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 #pos_product_category div {
     /*display: inline-block;*/
     /*float: left;*/
@@ -8868,8 +8881,8 @@ form label{
     color: white;
     /*margin-right: 1%;*/
     margin-bottom: 10px;
-    border-radius: 10px;
-    box-shadow: 3px 3px 3px black;
+    border-radius: 4px;
+    box-shadow: 2px 2px 4px gray;
     font-size: 18px;
 }
 #pos_product_category div:hover{
@@ -8882,7 +8895,7 @@ form label{
     color: black;
     font-weight: bold;
     box-shadow: 2px 2px 4px #999;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .btn-pay:hover{
@@ -8900,7 +8913,7 @@ form label{
     color: white;
     font-weight: bold;
     box-shadow: 2px 2px 4px #999;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .btn-cash-drawer:hover{
@@ -8918,7 +8931,7 @@ form label{
     color: black;
     font-weight: bold;
     box-shadow: 2px 2px 4px #999;
-    border-radius: 10px;
+    border-radius: 4px;
 }
 
 .btn-features:hover{
@@ -8926,22 +8939,6 @@ form label{
     background-color: #F6892C;
     /*border-bottom: 5px solid #EEC995;*/
     color: black;
-    font-weight: bold;
-    box-shadow: 2px 2px 4px #999;
-}
-
-.btn-clear-cart{
-    background-color: #C72928;
-    color: white;
-    font-weight: bold;
-    box-shadow: 2px 2px 4px #999;
-    border-radius: 10px;
-}
-
-.btn-clear-cart:hover{
-    opacity: 0.8;
-    background-color: #C72928;
-    color: white;
     font-weight: bold;
     box-shadow: 2px 2px 4px #999;
 }
@@ -8972,7 +8969,11 @@ form label{
 }
 
 .btn{
-    box-shadow: 2px 2px 4px grey;
+    box-shadow: 2px 2px 4px gray;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 @media print {
