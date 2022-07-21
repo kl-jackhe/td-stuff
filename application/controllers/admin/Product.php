@@ -12,10 +12,8 @@ class Product extends Admin_Controller {
 
 		$data = array();
 		//total rows count
-		$totalRec = 0;
-		if ($this->product_model->getRows() != false) {
-			$totalRec = count($this->product_model->getRows());
-		}
+		$conditions['returnType'] = 'count';
+		$totalRec = $this->product_model->getRows($conditions);
 		//pagination configuration
 		$config['target'] = '#datatable';
 		$config['base_url'] = base_url() . 'product/ajaxData';
@@ -56,10 +54,11 @@ class Product extends Admin_Controller {
 			$conditions['search']['status'] = $status;
 		}
 		//total rows count
-		$totalRec = count($this->product_model->getRows($conditions));
+		$conditions['returnType'] = 'count';
+		$totalRec = $this->product_model->getRows($conditions);
 		//pagination configuration
 		$config['target'] = '#datatable';
-		$config['base_url'] = base_url() . 'product/ajaxData';
+		$config['base_url'] = base_url() . 'admin/product/ajaxData';
 		$config['total_rows'] = $totalRec;
 		$config['per_page'] = $this->perPage;
 		$config['link_func'] = 'searchFilter';
@@ -68,16 +67,15 @@ class Product extends Admin_Controller {
 		$conditions['start'] = $offset;
 		$conditions['limit'] = $this->perPage;
 		//get posts data
+		$conditions['returnType'] = '';
 		$this->data['product'] = $this->product_model->getRows($conditions);
 		//load the view
-		$this->load->view('product/ajax-data', $this->data, false);
+		$this->load->view('admin/product/ajax-data', $this->data, false);
 	}
 
-	public function create($id) {
+	public function create() {
 		$this->data['page_title'] = '新增商品';
-		$this->data['store_id'] = $id;
-		$this->data['product'] = $this->product_model->getRows(array('limit' => $this->perPage));
-		// $this->load->view('admin/product/create', $this->data);
+
 		$this->render('admin/product/create');
 	}
 
@@ -139,16 +137,14 @@ class Product extends Admin_Controller {
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
-			'product_daily_stock' => $this->input->post('product_daily_stock'),
-			'product_person_buy' => $this->input->post('product_person_buy'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
 			'updater_id' => $this->ion_auth->user()->row()->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
-
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
+
 		// POST資料及資料查詢
 		$this_product_specification = $this->product_model->getProduct_Specification($id);
 		$unit = $this->input->post('unit');
@@ -336,8 +332,8 @@ class Product extends Admin_Controller {
 	}
 
 	public function delete($id) {
-		$this->db->where('product_id', $id);
-		$this->db->delete('product');
+		// $this->db->where('product_id', $id);
+		// $this->db->delete('product');
 
 		redirect($_SERVER['HTTP_REFERER']);
 	}

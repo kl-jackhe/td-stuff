@@ -20,13 +20,10 @@
     position: absolute;
     bottom: 0px;
 }
-.product_description iframe {
-    height: 600px!important;
-}
 </style>
 
 <div class="row">
-    <?php $attributes = array('class' => 'product', 'id' => 'product');?>
+    <?php $attributes = array('class' => 'submit_form', 'id' => 'submit_form');?>
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
@@ -41,12 +38,28 @@
                     <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="product_price">預設價格 *</label>
                     <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
                 </div>
             </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="product_image" class="control-label">封面圖片</label>
+                    <div class="form-group">
+                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+                    </div>
+                    <?php if (!empty($product['product_image'])) {?>
+                    <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';}?>max-width: 450px;max-height: 450px;">
+                    <?php } else {?>
+                    <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
+                    <?php }?>
+                    <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <table id="paramsFields" class="table">
                     <thead class="thead-dark">
@@ -113,38 +126,12 @@
                     </tbody>
                 </table>
             </div>
-            <!-- <div class="col-md-6">
-          <div class="form-group">
-            <label for="product_daily_stock">每日庫存</label>
-            <input type="text" class="form-control" id="product_daily_stock" name="product_daily_stock" value="<?php echo $product['product_daily_stock']; ?>">
-          </div>
-      </div>
-      <div class="col-md-6">
-          <div class="form-group">
-            <label for="product_person_buy">限購份數</label>
-            <input type="text" class="form-control" id="product_person_buy" name="product_person_buy" value="<?php echo $product['product_person_buy']; ?>">
-          </div>
-      </div> -->
-            <div class="col-md-8">
-                <div class="form-group product_description">
-                    <label for="product_description">商品描述 *</label>
-                    <textarea id="product_description" name="product_description" class="form-control">
-              <?php echo $product['product_description']; ?>
-          </textarea>
-                </div>
-            </div>
-            <div class="col-md-4">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
-                    <label for="product_image" class="control-label">封面圖片</label>
-                    <div class="form-group">
-                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
-                    </div>
-                    <?php if (!empty($product['product_image'])) {?>
-                    <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';}?>max-width: 450px;max-height: 450px;">
-                    <?php } else {?>
-                    <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
-                    <?php }?>
-                    <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>" />
+                    <label for="product_description">商品描述 *</label>
+                    <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="10"><?php echo $product['product_description']; ?></textarea>
                 </div>
             </div>
         </div>
@@ -189,38 +176,6 @@
         </div>
     </div>
 </div>
-<script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
-<script src="/chosen_v1.8.7/chosen.jquery.min.js"></script>
-<script>
-    $(".chosen-select").chosen({no_results_text: "尚無規格"});
-</script>
-<script>
-$.validator.setDefaults({
-    submitHandler: function() {
-        document.getElementById("product").submit();
-        //alert("submitted!");
-    }
-});
-$(document).ready(function() {
-    $("#product").validate({});
-});
-$('.fancybox').fancybox({
-    'width': 1920,
-    'height': 1080,
-    'type': 'iframe',
-    'autoScale': false
-});
-
-function responsive_filemanager_callback(field_id) {
-    if (field_id) {
-        //console.log(field_id);
-        var url = jQuery('#' + field_id).val();
-        document.getElementById(field_id + '_preview').src = '<?php echo base_url(); ?>assets/uploads/' + url;
-        $('#' + field_id + '_preview').show();
-    }
-}
-</script>
 <script>
 $(document).ready(function() {
     $(".addCF").click(function() {
@@ -229,10 +184,7 @@ $(document).ready(function() {
     $("#paramsFields").on('click', '.remCF', function() {
         $(this).parent().parent().remove();
     });
-});
-</script>
-<script>
-$(document).ready(function() {
+    // 
     $(".PlanAddCF").click(function() {
         $("#plan_paramsFields").append('<tr><td><input type="text" name="plan_name[]" value="" /></td><td><input type="text" name="plan_unit[]" value="" /></td><td><input type="number" name="plan_price[]" value="" /></td><td><input type="number" name="plan_quantity[]" value="" /></td><input type="hidden" name="plan_id[]" value="0" /><td><a href="javascript:void(0);" class="PlanRemCF btn btn-danger">移除</a></td></tr>');
     });
