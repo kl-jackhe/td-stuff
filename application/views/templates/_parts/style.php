@@ -47,4 +47,7 @@
 	.dataTables_paginate{
 		float: right;
 	}
+	.tabbable {
+		margin-top: 0px;
+	}
 </style>

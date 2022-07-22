@@ -81,20 +81,17 @@ class Product extends Admin_Controller {
 
 	public function insert() {
 		$data = array(
-			// 'store_id' => $this->input->post('store_id'),
 			'product_name' => $this->input->post('product_name'),
-			// 'product_price' => $this->input->post('product_price'),
-			// 'product_daily_stock' => $this->input->post('product_daily_stock'),
-			// 'product_person_buy' => $this->input->post('product_person_buy'),
+			'product_price' => $this->input->post('product_price'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
 			'creator_id' => $this->ion_auth->user()->row()->id,
 			'created_at' => date('Y-m-d H:i:s'),
 		);
-		$this->mysql_model->_insert('product', $data);
+		$product_id = $this->mysql_model->_insert('product', $data);
 
 		$this->session->set_flashdata('message', '商品建立成功！');
-		redirect($_SERVER['HTTP_REFERER']);
+		redirect('admin/product/edit/'.$product_id);
 	}
 
 	public function edit($id) {
@@ -155,16 +152,8 @@ class Product extends Admin_Controller {
 		$specification = $this->input->post('specification');
 		$only_id = $this->input->post('id');
 		$count = count($unit);
-		$this_product_combine = $this->product_model->getProduct_Combine($id);
-		$plan_name = $this->input->post('plan_name');
-		$plan_unit = $this->input->post('plan_unit');
-		$plan_price = $this->input->post('plan_price');
-		$plan_quantity = $this->input->post('plan_quantity');
-		$plan_only_id = $this->input->post('plan_id');
-		$plan_count = count($plan_unit);
-		$this_product_comb_and_spec = $this->product_model->getProduct_Comb_and_Spec($id);
 		// POST資料及資料查詢
-		// 規格
+		// Start 規格
 		if (!empty($this_product_specification)) {
 			for ($i = 0; $i < $count; $i++) {
 				$this_product_specification = $this->product_model->getProduct_Specification($id);
@@ -177,8 +166,6 @@ class Product extends Admin_Controller {
 							'specification' => $specification[$i],
 							'price' => $price[$i],
 							'quantity' => $quantity[$i],
-							// 'picture' => $picture[$i],
-							// 'description' => $description[$i],
 						);
 						$this->db->where('id', $row['id']);
 						$this->db->update('product_specification', $data);
@@ -203,10 +190,8 @@ class Product extends Admin_Controller {
 							'specification' => $specification[$i],
 							'price' => $price[$i],
 							'quantity' => $quantity[$i],
-							// 'picture' => $picture[$i],
-							// 'description' => $description[$i],
 						);
-						$this->mysql_model->_insert('product_specification', $data);
+						$this->db->insert('product_specification', $data);
 						echo 'NEW<br>';
 						break;
 					}
@@ -223,10 +208,8 @@ class Product extends Admin_Controller {
 						'specification' => $specification[$i],
 						'price' => $price[$i],
 						'quantity' => $quantity[$i],
-						// 'picture' => $picture[$i],
-						// 'description' => $description[$i],
 					);
-					$this->mysql_model->_insert('product_specification', $data);
+					$this->db->insert('product_specification', $data);
 				}
 			}
 		}
@@ -244,89 +227,8 @@ class Product extends Admin_Controller {
 				}
 			}
 		}
-		// 規格
-		// 方案
-		if (!empty($this_product_combine)) {
-			for ($i = 0; $i < $plan_count; $i++) {
-				$this_product_combine = $this->product_model->getProduct_Combine($id);
-				foreach ($this_product_combine as $row) {
-					echo '商品編號：' . $plan_only_id[$i] . '<br>';
-					if ($row['id'] == $plan_only_id[$i]) {
-						$data = array(
-							'product_id' => $id,
-							'type' => '2',
-							'name' => $plan_name[$i],
-							'unit' => $plan_unit[$i],
-							'price' => $plan_price[$i],
-							'quantity' => $plan_quantity[$i],
-							'picture' => $picture[$i],
-							'description' => $description[$i],
-						);
-						$this->db->where('id', $row['id']);
-						$this->db->update('product_combine', $data);
-						echo $row['type'] . ' YES<br>';
-					} else {
-						if ($row['type'] != '2') {
-							echo '現有比數少於資料庫比數<br>';
-							$data = array(
-								'type' => '1',
-							);
-							$this->db->where('id', $row['id']);
-							$this->db->update('product_combine', $data);
-							echo $row['type'] . ' NO<br>';
-						}
-					}
-					if ($plan_only_id[$i] == '0') {
-						echo '現有比數多於資料庫比數<br>';
-						$data = array(
-							'product_id' => $id,
-							'type' => '3',
-							'name' => $plan_name[$i],
-							'unit' => $plan_unit[$i],
-							'price' => $plan_price[$i],
-							'quantity' => $plan_quantity[$i],
-							'picture' => $picture[$i],
-							'description' => $description[$i],
-						);
-						$this->mysql_model->_insert('product_combine', $data);
-						echo 'NEW<br>';
-						break;
-					}
-				}
-			}
-		} else {
-			for ($i = 0; $i < $plan_count; $i++) {
-				if ($plan_only_id[$i] == '0') {
-					echo '沒有資料時直接新增<br>';
-					$data = array(
-						'product_id' => $id,
-						'type' => '3',
-						'name' => $plan_name[$i],
-						'unit' => $plan_unit[$i],
-						'price' => $plan_price[$i],
-						'quantity' => $plan_quantity[$i],
-						'picture' => $picture[$i],
-						'description' => $description[$i],
-					);
-					$this->mysql_model->_insert('product_combine', $data);
-				}
-			}
-		}
-		$this_product_combine = $this->product_model->getProduct_Combine($id);
-		if (!empty($this_product_combine)) {
-			foreach ($this_product_combine as $row) {
-				if ($row['type'] > 1) {
-					$data = array(
-						'type' => '0',
-					);
-					$this->db->where('id', $row['id']);
-					$this->db->update('product_combine', $data);
-				} else {
-					$this->db->delete('product_combine', array('id' => $row['id']));
-				}
-			}
-		}
-		// 方案
+		// End 規格
+
 		$this->session->set_flashdata('message', '商品更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);
 	}
@@ -342,9 +244,9 @@ class Product extends Admin_Controller {
 		if (!empty($this->input->post('product_id'))) {
 			foreach ($this->input->post('product_id') as $product_id) {
 				if ($this->input->post('action') == 'delete') {
-					$this->db->where('product_id', $product_id);
-					$this->db->delete('product');
-					$this->session->set_flashdata('message', '商品刪除成功！');
+					// $this->db->where('product_id', $product_id);
+					// $this->db->delete('product');
+					// $this->session->set_flashdata('message', '商品刪除成功！');
 				} elseif ($this->input->post('action') == 'on_the_shelf') {
 					$data = array(
 						'product_status' => '1',
@@ -365,13 +267,46 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'product');
 	}
 
-	// 其他功能
+	function create_plan($id) {
+		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
+		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
 
-	public function get_product_price() {
+		$this->load->view('admin/product/create_plan', $this->data);
+	}
+
+	function insert_plan() {
+		$data = array(
+			'product_id' => $this->input->post('product_id'),
+			'name' => $this->input->post('product_combine_name'),
+			'price' => $this->input->post('product_combine_price'),
+			'picture' => $this->input->post('product_combine_image'),
+			'description' => $this->input->post('product_combine_description'),
+		);
+		$this->mysql_model->_insert('product_combine', $data);
+	}
+
+	function edit_plan() {
+
+	}
+
+	function update_plan() {
+
+	}
+
+	function delete_plan($id) {
+		$this->db->where('id', $id);
+		$this->db->delete('product_combine');
+
+		$this->db->where('product_combine_id', $id);
+		$this->db->delete('product_comb_and_spec');
+	}
+
+	// 其他功能
+	public function get_product_info() {
 		$data = $this->input->post('product_id');
-		$this->db->like('product_name', $data);
+		$this->db->where('product_id', $data);
+		$this->db->limit(1);
 		$query = $this->db->get('product');
-		//$query = $this->db->get_where('manufacturer', array('manufacturer_name' => $data));
 		if ($query->num_rows() > 0) {
 			$row = $query->row();
 			echo json_encode($row, JSON_UNESCAPED_UNICODE);

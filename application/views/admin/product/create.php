@@ -7,36 +7,55 @@
         </div>
     </div>
     <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="product_name">商品名稱 *</label>
-                    <input type="text" class="form-control" id="product_name" name="product_name" required>
-                    <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="product_price">預設價格 *</label>
-                    <input type="text" class="form-control" id="product_price" name="product_price" required>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label for="product_image" class="control-label">封面圖片</label>
-                    <div class="form-group">
-                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+        <div class="content-box-large">
+            <div class="tabbable">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#general" aria-controls="general" role="tab" data-toggle="tab">基本資料</a>
+                    </li>
+                    <!-- <li role="presentation">
+                        <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">方案</a>
+                    </li> -->
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="general">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="product_name">商品名稱</label>
+                                    <input type="text" class="form-control" id="product_name" name="product_name" required>
+                                    <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="product_price">預設價格</label>
+                                    <input type="text" class="form-control" id="product_price" name="product_price" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="product_image" class="control-label">封面圖片</label>
+                                    <div class="form-group">
+                                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+                                    </div>
+                                    <img src="" id="add_product_image_preview" class="img-responsive" style="display: none;">
+                                    <input type="hidden" id="add_product_image" name="product_image" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="product_description">商品描述</label>
+                                    <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <img src="" id="add_product_image_preview" class="img-responsive" style="display: none;">
-                    <input type="hidden" id="add_product_image" name="product_image" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="product_description">商品描述 *</label>
-                    <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="10"></textarea>
                 </div>
             </div>
         </div>
