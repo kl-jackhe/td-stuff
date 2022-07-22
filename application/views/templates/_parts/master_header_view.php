@@ -98,7 +98,7 @@
                 </a>
             </div>
             <div id="fa-bag-shopping" class="py-1">
-                <a href="/cart">
+                <a href="#" data-toggle="modal" data-target="#my_cart">
                     <div id="cart-qty"><span style="color: #000;">1</span></div>
                     <i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i>
                 </a>
