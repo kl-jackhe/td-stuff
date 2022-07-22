@@ -151,7 +151,7 @@
                                                             <i class="fa-solid fa-minus"></i>
                                                         </button>
                                                     </span>
-                                                    <input type="text" name="quant[2]" style="padding: 0px;height: 26px;text-align: center;" class="form-control input-number" value="1" min="1" max="100">
+                                                    <input type="text" name="quant[2]" style="padding: 0px;height: 26px;text-align: center;" class="form-control input-number" value="1" min="1" max="100" disabled>
                                                     <span class="input-group-btn">
                                                         <button type="button" style="padding: 0px 5px 0px 5px;    border-radius: 0px 5px 5px 0px;" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
                                                             <i class="fa-solid fa-plus"></i>
