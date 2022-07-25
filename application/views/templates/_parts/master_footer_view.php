@@ -218,6 +218,7 @@ $("#wizard").steps({
     bodyTag: "section",
     transitionEffect: "slideLeft",
     enableFinishButton: false,
+    titleTemplate: '<div class="number row"><i></i><p>#index#</p></div><span class="wizard_section_title">#title#</span>',
     labels: {
         cancel: "取消",
         current: "current step:",
@@ -231,12 +232,13 @@ $("#wizard").steps({
 });
 </script>
 <!-- purchase-steps -->
+
 <script>
 <?php if ($this->input->get('ajax_register') == 'yes') {?>
 $('#ajax-register-Modal').modal('show');
 <?php }?>
 </script>
-<!-- purchase-steps -->
+
 <!-- Window Height -->
 <script>
 $(function() {
@@ -244,11 +246,12 @@ $(function() {
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var main_h = $(".main").height();
+    var h_sum = h - header_h - footer_h;
+    var h_checkout = h_sum * 0.6;
     if (h > main_h) {
-        var h_sum = h - header_h - footer_h;
         $(".main").css('height', h_sum);
     }
-    $(".wizard > .content").css('min-height', h_sum * 0.55);
+    $(".wizard > .content").css('min-height', h_checkout);
 });
 </script>
 <!-- Window Height -->
@@ -348,6 +351,7 @@ $(".input-number").keydown(function(e) {
 });
 </script>
 <!-- NumberBtn -->
+<!-- scrollTop -->
 <script>
 $(function() {
     var $win = $(window);
@@ -363,6 +367,7 @@ $(function() {
     });
 });
 </script>
+<!-- scrollTop -->
 </body>
 
 </html>

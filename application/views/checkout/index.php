@@ -43,11 +43,49 @@ foreach ($this->cart->contents() as $items) {
         padding: 10px 10px;
         font-size: 20px;
     }
+
+    .wizard > .steps .current a, .wizard > .steps .current a:hover, .wizard > .steps .current a:active {
+        background: none;
+        color: #fff;
+        cursor: auto;
+    }
+    .wizard > .steps .disabled a, .wizard > .steps .disabled a:hover, .wizard > .steps .disabled a:active {
+        background: none;
+        color: #fff;
+        cursor: auto;
+    }
+    .wizard > .steps .done a, .wizard > .steps .done a:hover, .wizard > .steps .done a:active {
+        background: none;
+        color: #fff;
+    }
+
+    .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
+        background: #420452;
+    }
+
+    .wizard ul li a div p{
+        background: #420452;
+        border-radius: 50%;
+        width: 25%;
+    }
+
+    .wizard .row {
+        justify-content: center;
+        margin: 0px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wizard_section_title {
+        color: #524431;
+    }
+    #wizard {
+        margin-bottom: 20px;
+    }
     @media (max-width: 767.98px) {
-        /*.right-box {
-            position: static;
-            padding: 0px;
-        }*/
+        .wizard ul li a div p{
+            width: 100%;
+        }
     }
 </style>
 <div role="main" class="main">
@@ -60,15 +98,15 @@ foreach ($this->cart->contents() as $items) {
                     <p style="font-size:30px;">訂購只要四步驟</p>
                 </div> -->
                 <div id="wizard" class="wizard">
-                    <div class=""></div>
-                    <h3>確認訂單內容</h3>
+                    <h3>確認訂單</h3>
                     <section>
-                        <h3>您共選擇 (
+                        <h3 style="margin-top: 0px;">您共選擇 (
                         <?=$count?> 個項目 )</h3>
-                        <table class="table table-hover">
+                        <table class="table table-hover m_table_none">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col" class="text-nowrap">圖片</th>
                                     <th scope="col" class="text-nowrap">商品</th>
                                     <th scope="col" class="text-nowrap">價格</th>
                                     <th scope="col" class="text-nowrap">數量</th>
@@ -82,6 +120,11 @@ foreach ($this->cart->contents() as $items) {
                                 <tr style="border-top:1px solid dimgray;">
                                     <th scope="row">
                                         <?=$i?>
+                                    </th>
+                                    <th scope="row">
+                                        <a href="#">
+                                            <img src="" alt="">
+                                        </a>
                                     </th>
                                     <td>
                                         <?php echo $items['name']; ?>
@@ -108,9 +151,9 @@ foreach ($this->cart->contents() as $items) {
                                 <?php $subtotal = $subtotal + $this->cart->format_number($items['subtotal']);?>
                                 <?php endforeach;?>
                                 <tr style="border-top:1px solid dimgray;">
-                                    <td colspan="3"></td>
+                                    <td colspan="4"></td>
                                     <td>總計</td>
-                                    <td><span>
+                                    <td><span style="color: #dd0606;font-weight: bold;">
                                             <?=$subtotal?></span></td>
                                 </tr>
                             </tbody>
@@ -125,7 +168,7 @@ foreach ($this->cart->contents() as $items) {
                           </div>
                         </div> -->
                     </section>
-                    <h3>選擇付款方式</h3>
+                    <h3>付款方式</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="row">
@@ -204,7 +247,7 @@ foreach ($this->cart->contents() as $items) {
                             </div>
                         </div>
                     </section>
-                    <h3>填寫收件資料</h3>
+                    <h3>收件資訊</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
@@ -254,7 +297,7 @@ foreach ($this->cart->contents() as $items) {
                             </div>
                         </div>
                     </section>
-                    <h3>其他補充資訊</h3>
+                    <h3>訂單備註</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="row p-3">
@@ -277,46 +320,3 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_close() ?>
     </section>
 </div>
-<!-- <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script> -->
-<!-- <script>
-function checkout_step_1() {
-    var checkout_name = $('#checkout_name').val();
-    var checkout_phone = $('#checkout_phone').val();
-    if (checkout_name != '' && checkout_phone != '') {
-        // $('#received').removeClass('in');
-        // $('#pay').addClass('in');
-        $('#received').slideUp();
-        $('#pay').slideDown();
-        $('#step1_btn').fadeIn();
-        $('#checkout_name_notice').fadeOut();
-        $('#checkout_phone_notice').fadeOut();
-    } else {
-        $('#checkout_name_notice').fadeIn();
-        $('#checkout_phone_notice').fadeIn();
-    }
-}
-
-function checkout_step_2() {
-    $('#received').slideDown();
-    $('#pay').slideUp();
-    $('#step1_btn').fadeOut();
-    // $('#received').addClass('in');
-    // $('#pay').removeClass('in');
-}
-function form_check() {
-    $.ajax({
-        url: "<?php echo base_url(); ?>checkout/form_check",
-        method: "GET",
-        data: {},
-        success: function(data) {
-            // if(data=='yes'){
-            //     $('#checkout_form').submit();
-            // } else {
-            //     alert('配送時間已經超過當前時間，情重新選擇配送時間。');
-            // }
-            $('#checkout_form').submit();
-        }
-    });
-}
-</script> -->
