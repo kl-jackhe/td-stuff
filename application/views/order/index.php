@@ -185,7 +185,7 @@ tr:last-child td:last-child {
 
 }
 </style>
-<div role="main" class="main pt-signinfo h-100">
+<div role="main" class="main pt-signinfo">
     <section>
         <div class="container pd-5">
             <div class="box row">

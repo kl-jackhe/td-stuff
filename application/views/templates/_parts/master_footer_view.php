@@ -22,7 +22,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+
             </div>
             <div class="modal-footer">
                 <div class="container-fluid">
@@ -126,7 +126,7 @@ $(function() {
     var main_h = $(".main").height();
     var h_sum = h - header_h - footer_h;
     var h_checkout = h_sum * 0.6;
-    if (h > main_h) {
+    if (h > h_sum) {
         $(".main").css('height', h_sum);
     }
     $(".wizard > .content").css('min-height', h_checkout);

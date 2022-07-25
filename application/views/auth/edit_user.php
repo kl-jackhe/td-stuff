@@ -27,7 +27,7 @@ input.zipcode{
     }
 }
 </style>
-<div role="main" class="main h-100 pt-signinfo">
+<div role="main" class="main pt-signinfo">
     <section>
         <div class="container py-5">
             <div class="box">
@@ -105,7 +105,7 @@ input.zipcode{
                         <?php // echo form_hidden('id', $user->id);?>
                         <input type="hidden" id="id" name="id" value="<?php echo $user->id ?>">
                         <?php echo form_hidden($csrf); ?>
-                        <span class="btn btn-primary pull-right" onclick="form_submit()">儲存</span>
+                        <span class="btn btn-primary pull-right mb-5" onclick="form_submit()">儲存</span>
                         <?php echo form_close() ?>
                     </div>
                 </div>
