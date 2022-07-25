@@ -40,46 +40,6 @@
     </div>
 </div>
 </div>
-<!-- <script src="/node_modules/jquery/dist/jquery.min.js"></script> -->
-<!-- <script src="/node_modules/jquery.appear/jquery.appear.min.js')}}script> -->
-<!-- <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>
-  <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
-  <script src="/node_modules/common/common.min.js"></script>
-  <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script> -->
-<!-- <script src="/node_modules/jquery.easy-pie-chart/jquery.easy-pie-chart.min.js')}}script> -->
-<!-- <script src="/node_modules/jquery.gmap/jquery.gmap.min.js')}}script> -->
-<!-- <script src="/node_modules/jquery-lazyload/jquery.lazyload.js"></script> -->
-<!-- <script src="/node_modules/isotope/jquery.isotope.min.js"></script> -->
-<!-- <script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
-  <script src="/node_modules/magnific-popup/dist/jquery.magnific-popup.min.js"></script>
-  <script src="/node_modules/vide/vide.min.js"></script> -->
-<!-- Theme Base, Components and Settings -->
-<!-- <script src="/assets/js/theme.js"></script> -->
-<!-- Theme Initialization Files -->
-<!-- <script src="/assets/js/theme.init.js"></script> -->
-<script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
-<!-- purchase-steps -->
-<script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
-<script>
-$("#wizard").steps({
-    headerTag: "h3",
-    bodyTag: "section",
-    transitionEffect: "slideLeft",
-    enableFinishButton: false,
-    titleTemplate: '<div class="number row"><i></i><p>#index#</p></div><span class="wizard_section_title">#title#</span>',
-    labels: {
-        cancel: "取消",
-        current: "current step:",
-        pagination: "Pagination",
-        finish: "完成",
-        next: "下一步",
-        previous: "上一步",
-        loading: "載入中..."
-    }
-    // autoFocus: true
-});
-</script>
-<!-- purchase-steps -->
 <script>
 $(document).ready(function() {
     get_cart_qty();
