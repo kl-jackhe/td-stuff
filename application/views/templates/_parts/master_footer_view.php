@@ -348,6 +348,21 @@ $(".input-number").keydown(function(e) {
 });
 </script>
 <!-- NumberBtn -->
+<script>
+$(function() {
+    var $win = $(window);
+    $win.scroll(function() {
+        if ($win.scrollTop() > 100) {
+            $('#fa-angles-up').show();
+        } else {
+            $('#fa-angles-up').hide();
+        }
+    });
+    $('#fa-angles-up').click(function() {
+        $('html, body').animate({ scrollTop: 0 }, 200);
+    });
+});
+</script>
 </body>
 
 </html>

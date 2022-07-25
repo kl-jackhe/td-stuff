@@ -103,6 +103,11 @@
                     <i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i>
                 </a>
             </div>
+            <div id="fa-angles-up" class="py-1 text-center" style="display:none;">
+                <a href="#" style="color:black;">
+                    <i class="fa-solid fa-angles-up" style="font-size: 48px;"></i>
+                </a>
+            </div>
         </div>
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
