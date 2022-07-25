@@ -185,26 +185,26 @@ tr:last-child td:last-child {
 
 }
 </style>
-<div role="main" class="main pt-signinfo">
+<div role="main" class="main pt-signinfo h-100">
     <section>
-        <div class="container">
+        <div class="container pd-5">
             <div class="box row">
                 <div class="col-md-12" id="sub_menu">
-                    <h3 class="fs-18 color-595757">Hi
+                    <!-- <h3 class="fs-18 color-595757">Hi
                         <?php echo $this->ion_auth->user()->row()->full_name ?>
-                    </h3>
+                    </h3> -->
                     <div class="form-group">
-                        <a href="/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id ?>" class="btn fs-13" style="border: 1px solid gray; color: gray;">個人資料</a>
-                        <a href="/coupon" class="btn fs-13" style="border: 1px solid gray; color: gray;">優惠券管理</a>
-                        <a href="/order" class="btn fs-13" style="background: gray; color: white;">訂單管理</a>
-                        <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray;">常用地址</a>
+                        <a href="/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id ?>" class="btn fs-13" style="border: 1px solid #420252; color: gray;">個人資料</a>
+                        <!-- <a href="/coupon" class="btn fs-13" style="border: 1px solid gray; color: gray;">優惠券管理</a> -->
+                        <a href="/order" class="btn fs-13" style="background: #420252; color: white;">訂單管理</a>
+                        <!-- <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray;">常用地址</a> -->
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6" style="margin-top: 20px;">
                             <div class="form-inline text-left">
-                                <label class="fs-13 color-595757">訂單狀態</label>
+                                <label class="fs-13 color-595757">訂單狀態：</label>
                                 <select id="order_status" class="form-control" onchange="get_order()">
                                     <option value="all">全部</option>
                                     <option value="not_paid">未付款</option>
@@ -222,11 +222,12 @@ tr:last-child td:last-child {
 			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
 			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
 			if ($data['order_step'] == 'picked') {$step = 'picked';}
-			if ($data['order_step'] == 'picked') {$style = 'color: #fefefe; background: #A0A0A0;';} else { $style = 'color: #fefefe; background: #FFB718;';}?>
+			if ($data['order_step'] == 'picked') {$style = 'color: #fefefe; background: #A0A0A0;';} else { $style = 'color: #fefefe; background: #420252;';}?>
                                 <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
                                     <tr >
+                                        <td>訂單編號</td>
                                         <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂購時間</td>
-                                         <td class="fs-11 color-595757" style="width: 24%;">
+                                        <td class="fs-11 color-595757" style="width: 24%;">
                                             <?php echo $data['order_date'] ?>
                                         </td>
                                         <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
@@ -308,8 +309,26 @@ tr:last-child td:last-child {
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title m-0" id="my_cart_title">訂單編號：#202201030001</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="modal-body" style="padding: 15px;">
                 <p>讀取中...</p>
+            </div>
+            <div class="modal-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-7 col-sm-6">
+                            <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
+                        </div>
+                        <div class="col-5 col-sm-6">
+                            <a href="https://line.me/R/ti/p/@504bdron"><span class="btn btn-info btn-block mt-md">聯繫客服</span></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
