@@ -17,6 +17,9 @@ input.zipcode{
   width:33%;
   display: none;
 }
+#twzipcode {
+    width: 65%;
+}
 @media (max-width: 480px) {
     #sub_menu a {
         width: 24%;
@@ -24,87 +27,86 @@ input.zipcode{
     }
 }
 </style>
-<div role="main" class="main pt-signinfo">
+<div role="main" class="main h-100 pt-signinfo">
     <section>
-        <div class="container">
+        <div class="container py-5">
             <div class="box">
-                <div class="" id="sub_menu">
-                    <h3 class="fs-18 color-595757">Hi
+                <div class="col-md-12" id="sub_menu">
+                    <!-- <h3 class="fs-18 color-595757">Hi
                         <?php echo $this->ion_auth->user()->row()->full_name ?>
-                    </h3>
-                    <a href="/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id ?>" class="btn fs-13" style="background: gray; color: white;">個人資料</a>
+                    </h3> -->
+                    <a href="/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id ?>" class="btn fs-13" style="background: #420252; color: white;">個人資料</a>
                     <!-- <a href="/coupon" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">優惠券管理</a> -->
-                    <a href="/order" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">訂單管理</a>
+                    <a href="/order" class="btn fs-13" style="border: 1px solid #420252; color: gray; border-bottom: none;">訂單管理</a>
                     <!-- <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">常用地址</a> -->
                 </div>
-                <div class="col-md-12">
-                    <div class="row" style="border: 2px solid gray;">
-                        <div class="col-md-6 col-md-offset-3">
-                            <?php $att = "class='form-horizontal' id='edit_user_form'"; ?>
-                            <?php echo form_open(uri_string(), $att);?>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">姓名</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="full_name" id="full_name" value="<?php echo $user->full_name; ?>">
-                                </div>
+                <div class="row justify-content-center" style="border: 2px solid #420252;border-radius: 15px;">
+                    <div class="col-12 col-md-6">
+                        <?php $att = "class='form-horizontal' id='edit_user_form'";?>
+                        <?php echo form_open(uri_string(), $att); ?>
+                        <h3>基本資料&ensp;<i class="fas fa-users-cog"></i></h3>
+                        <hr>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">姓名</span>
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">電子信箱</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">行動電話</label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user->phone ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">地址</label>
-                                <div class="col-md-9">
-                                    <div id="twzipcode"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label"></label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">生日</label>
-                                <div class="col-md-9">
-                                    <?php if($user->birthday=='0000-00-00'){ ?>
-                                        <input type="text" class="form-control datepicker" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
-                                    <?php } else { ?>
-                                        <input type="text" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">更改密碼</label>
-                                <div class="col-md-9">
-                                    <?php echo form_input($password);?>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">確認密碼</label>
-                                <div class="col-md-9">
-                                    <?php echo form_input($password_confirm);?>
-                                </div>
-                            </div>
-                            <?php // echo form_hidden('id', $user->id);?>
-                            <input type="hidden" id="id" name="id" value="<?php echo $user->id ?>">
-                            <?php echo form_hidden($csrf); ?>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <!-- <button type="submit" class="btn btn-info pull-right">儲存</button> -->
-                                    <span class="btn btn-info pull-right" onclick="form_submit()">儲存</span>
-                                </div>
-                            </div>
-                            <?php echo form_close() ?>
+                            <input type="text" class="form-control" name="full_name" id="full_name" value="<?php echo $user->full_name; ?>">
                         </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">電子郵件</span>
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email ?>" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">聯絡電話</span>
+                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user->phone ?>">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">地址</span>
+                                <span class="input-group-text"><i class="fas fa-street-view"></i></span>
+                            </div>
+                            <div id="twzipcode"></div>
+                            <div class="col-12 p-0">
+                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address ?>">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">生日</span>
+                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                            </div>
+                            <?php if ($user->birthday == '0000-00-00') {?>
+                            <input type="text" class="form-control datepicker" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
+                            <?php } else {?>
+                            <input type="text" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
+                            <?php }?>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">密碼</span>
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <?php echo form_input($password); ?>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">確認密碼</span>
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            <?php echo form_input($password_confirm); ?>
+                        </div>
+                        <?php // echo form_hidden('id', $user->id);?>
+                        <input type="hidden" id="id" name="id" value="<?php echo $user->id ?>">
+                        <?php echo form_hidden($csrf); ?>
+                        <span class="btn btn-primary pull-right" onclick="form_submit()">儲存</span>
+                        <?php echo form_close() ?>
                     </div>
                 </div>
             </div>
@@ -140,25 +142,25 @@ function isOS() {
     return navigator.userAgent.match(/ipad|iphone/i);
 }
 
-function form_submit(){
+function form_submit() {
     var id = document.getElementById("id").value;
     var phone = document.getElementById("phone").value;
 
-    if(phone!='<?php echo $user->phone ?>'){
+    if (phone != '<?php echo $user->phone ?>') {
         $.ajax({
             url: "<?php echo base_url(); ?>auth/identity_check_with_id",
             method: "get",
             data: { id: id, identity: phone },
             success: function(data) {
-                if(data=='1'){
+                if (data == '1') {
                     alert('此電話號碼已存在');
                 } else {
                     var code_num = document.getElementById("code_num").value;
                     var sms_code = document.getElementById("sms_code").value;
-                    if(code_num==''){
+                    if (code_num == '') {
                         alert('修改手機號碼需要重新驗證。');
                     } else {
-                        if(code_num==sms_code){
+                        if (code_num == sms_code) {
                             // alert('OOO');
                             $('#edit_user_form').submit();
                         } else {
