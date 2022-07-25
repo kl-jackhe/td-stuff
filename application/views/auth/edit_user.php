@@ -33,9 +33,9 @@ input.zipcode{
                         <?php echo $this->ion_auth->user()->row()->full_name ?>
                     </h3>
                     <a href="/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id ?>" class="btn fs-13" style="background: gray; color: white;">個人資料</a>
-                    <a href="/coupon" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">優惠券管理</a>
+                    <!-- <a href="/coupon" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">優惠券管理</a> -->
                     <a href="/order" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">訂單管理</a>
-                    <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">常用地址</a>
+                    <!-- <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">常用地址</a> -->
                 </div>
                 <div class="col-md-12">
                     <div class="row" style="border: 2px solid gray;">
@@ -43,45 +43,9 @@ input.zipcode{
                             <?php $att = "class='form-horizontal' id='edit_user_form'"; ?>
                             <?php echo form_open(uri_string(), $att);?>
                             <div class="form-group">
-                                <div class="col-md-12">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">邀請碼</label>
-                                <div class="col-md-7">
-                                    <input type="text" class="form-control" id="recommend_code" value="<?php echo trim($user->recommend_code); ?>" readonly>
-                                </div>
-                                <div class="col-md-2">
-                                    <span class="btn btn-info" id="getrandombtn" onclick="copyFunction();" style="background: #3bccde; color: white; cursor: pointer;">複製</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-md-3 control-label">姓名</label>
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" name="full_name" id="full_name" value="<?php echo $user->full_name; ?>">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">性別</label>
-                                <div class="col-md-9">
-                                    <label class="radio-inline">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" name="gender" id="gender1" value="Male" <?php if($user->gender=='Male'){echo 'checked';} ?>>
-                                            <label class="form-check-label fs-13 color-59757 font-normal" for="gender1">男</label>
-                                        </div>
-                                    </label>
-                                    <label class="radio-inline">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" name="gender" id="gender2" value="Female" <?php if($user->gender=='Female'){echo 'checked';} ?>>
-                                            <label class="form-check-label fs-13 color-59757 font-normal" for="gender2">女</label>
-                                        </div>
-                                    </label>
-                                    <label class="radio-inline">
-                                        <div class="form-check">
-                                            <input type="radio" class="form-check-input" name="gender" id="gender3" value="Other" <?php if($user->gender=='Other'){echo 'checked';} ?>>
-                                            <label class="form-check-label fs-13 color-59757 font-normal" for="gender3">其他</label>
-                                        </div>
-                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -92,23 +56,9 @@ input.zipcode{
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">行動電話</label>
-                                <div class="col-md-6">
+                                <div class="col-md-9">
                                     <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user->phone ?>">
-                                    <input type="hidden" name="code_num" id="code_num" value="">
-                                    <small style="font-size: 7.5pt; color: #FFB718">欲<span style="color: #00BFD5;">更改手機號碼</span>，需重新驗證</small>
                                 </div>
-                                <div class="col-md-3">
-                                    <span class="btn btn-info" id="getrandombtn" onclick="random_number(this.id)" style="background: #3bccde; color: white; cursor: pointer;">取得驗證碼</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label"></label>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" id="sms_code" name="sms_code" value="" placeholder="請輸入手機驗證碼">
-                                </div>
-                                <!-- <div class="col-md-3">
-                                    <span class="btn btn-default btn-block">驗證</span>
-                                </div> -->
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">地址</label>
@@ -130,7 +80,6 @@ input.zipcode{
                                     <?php } else { ?>
                                         <input type="text" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
                                     <?php } ?>
-                                    <small style="color: #00BFD5; font-size: 7.5pt">*輸入生日即可獲得生日驚喜</small>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -187,81 +136,8 @@ $('#twzipcode').twzipcode({
     'districtSel': '<?php echo $user->district ?>'
 });
 
-function random_number(objid) {
-    if (document.getElementById("phone").value != '') {
-        var rand_code = Math.floor((Math.random() * 100000) + 1);
-        var phone = document.getElementById("phone").value;
-        document.getElementById("code_num").value = rand_code;
-        $.ajax({
-            url: "<?php echo base_url(); ?>store/send_sms",
-            method: "post",
-            data: { phone: phone, code: rand_code },
-            success: function(data) {
-                waiting(30,objid);
-                alert('請接收簡訊。');
-            }
-        });
-        return false;
-    } else {
-        alert('請輸入手機號碼。');
-    }
-}
-
-var currentsecond;
-
-function waiting(countdownfrom, objid) {
-    currentsecond = countdownfrom + 1;
-    setTimeout("countredirect('" + objid + "')", 1000);
-    return;
-}
-
-function countredirect(objid) {
-    if (currentsecond != 1) {
-        currentsecond -= 1;
-        $('#' + objid).css("pointer-events", "none");
-        $('#' + objid).html(currentsecond) + '秒後重新獲取';
-    } else {
-        $('#' + objid).html('重新獲取');
-        $('#' + objid).css("pointer-events", "auto");
-        return;
-    }
-    setTimeout("countredirect('" + objid + "')", 1000);
-}
-
 function isOS() {
     return navigator.userAgent.match(/ipad|iphone/i);
-}
-
-function copyFunction() {
-    if (isOS()) {
-        // var copyEmailBtn = document.querySelector('#getrandombtn');
-        // copyEmailBtn.addEventListener('click', function(event) {
-            // Select the email link anchor text
-            var emailLink = document.querySelector('#recommend_code');
-            var range = document.createRange();
-            range.selectNode(emailLink);
-            window.getSelection().addRange(range);
-
-            try {  
-                // Now that we've selected the anchor text, execute the copy command  
-                var successful = document.execCommand('copy');
-                var msg = successful ? 'successful' : 'unsuccessful';
-                // console.log('Copy email command was ' + msg);
-                alert("已複製邀請碼。");
-            } catch(err) {  
-                // console.log('Oops, unable to copy');
-            }
-
-            // Remove the selections - NOTE: Should use
-            // removeRange(range) when it is supported  
-            window.getSelection().removeAllRanges();  
-        // });
-    } else {
-        var copyText = $("#recommend_code");
-        copyText.select();
-        document.execCommand("Copy");
-        alert("已複製邀請碼。");
-    }
 }
 
 function form_submit(){
@@ -289,7 +165,6 @@ function form_submit(){
                             alert('驗證碼不正確');
                         }
                     }
-                    
                 }
             }
         });
@@ -297,7 +172,6 @@ function form_submit(){
         // alert('same phone.');
         $('#edit_user_form').submit();
     }
-    
 }
 
 $.validator.setDefaults({

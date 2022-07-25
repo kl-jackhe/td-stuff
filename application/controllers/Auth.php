@@ -689,7 +689,7 @@ class Auth extends Public_Controller {
 				$data = array(
 					'username'   => $this->input->post('phone'),
 					'full_name'  => $this->input->post('full_name'),
-					'gender'     => $this->input->post('gender'),
+					// 'gender'     => $this->input->post('gender'),
 					'email'      => $this->input->post('email'),
 					'phone'      => $this->input->post('phone'),
 					'county'     => $this->input->post('county'),
