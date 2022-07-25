@@ -204,8 +204,8 @@
 <!-- Theme Base, Components and Settings -->
 <!-- <script src="/assets/js/theme.js"></script> -->
 <!-- Theme Initialization Files -->
-<!-- <script src="/assets/js/theme.init.js"></script>
-  <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script> -->
+<!-- <script src="/assets/js/theme.init.js"></script> -->
+<script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
