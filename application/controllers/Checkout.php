@@ -23,8 +23,8 @@ class Checkout extends Public_Controller {
 		$y = substr($date, 0, 4);
     	$m = substr($date, 5, 2);
     	$d = substr($date, 8, 2);
-		$CI->db->select('MAX(order_number) as last_number');
-    	$CI->db->like('order_number', $y.$m.$d, 'after');
+		$this->db->select('MAX(order_number) as last_number');
+    	$this->db->like('order_number', $y.$m.$d, 'after');
 		$query = $this->db->get('orders');
 		if ($query->num_rows() > 0) {
 			$row = $query->row();
@@ -38,69 +38,69 @@ class Checkout extends Public_Controller {
 
 		$created_at = date("Y-m-d H:i:s");
 
-		// 判斷是否滿%元免運
-		// $delivery_cost = ((get_setting_general('is_no_delivery_cost') == '1' && get_setting_general('is_no_delivery_cost_number') != '' && get_setting_general('is_no_delivery_cost_number') != '0' && $this->cart->total() >= get_setting_general('is_no_delivery_cost_number')) ? ('0') : ($this->session->userdata('delivery_cost')));
+		$delivery_cost = 0;
 
-		// 判斷是否全站免運
-		// if ($delivery_cost != 0) {
-		// 	$delivery_cost = (get_setting_general('all_no_delivery_cost') == '') ? ($this->session->userdata('delivery_cost')) : ('0');
-		// }
+		$order_delivery_address = '';
+		if($this->input->post('county')!=''){
+			$order_delivery_address .= $this->input->post('county');
+		}
+		if($this->input->post('district')!=''){
+			$order_delivery_address .= $this->input->post('district');
+		}
+		if($this->input->post('address')!=''){
+			$order_delivery_address .= $this->input->post('address');
+		}
 
-		// 服務費
-		// $service_cost = ((get_setting_general('no_service_cost')=='')?(round($this->cart->total()*0.1)):('0'));
-		// $service_cost = 0;
+		$order_total = intval($this->cart->total() + $delivery_cost);
 
-		// $discount_price = 0;
-		// if ($this->session->userdata('coupon_method') == 'cash') {
-		// 	$discount_price += $this->session->userdata('coupon_price');
-		// }
-
-		// if ($this->session->userdata('coupon_method') == 'percent') {
-		// 	$discount_price += $this->cart->total() * (1 - $this->session->userdata('coupon_price'));
-		// }
-
-		// if ($this->session->userdata('coupon_method') == 'free_shipping') {
-		// 	$delivery_cost = 0;
-		// }
-
-		// $order_total = intval((($this->cart->total() + $delivery_cost) + $service_cost) - $discount_price);
-
-		$order = array(
+		$insert_data = array(
 			'order_number' => $order_number,
-			// 'order_date' => $this->session->userdata('delivery_date'),
-			// 'store_id' => $this->session->userdata('store'),
-			// 'customer_id' => $this->ion_auth->user()->row()->id,
-			'customer_name' => $this->input->post('checkout_name'),
-			'customer_phone' => $this->input->post('checkout_phone'),
-			'customer_email' => $this->input->post('checkout_email'),
-			'order_total' => $this->input->post('order_total'),
-			// 'order_total' => (($this->cart->total() + $delivery_cost) + $service_cost),
+			'order_date' => date("Y-m-d"),
+			'customer_name' => $this->input->post('name'),
+			'customer_phone' => $this->input->post('phone'),
+			'customer_email' => $this->input->post('email'),
+			'order_total' => $order_total,
 			// 'order_discount_total' => $order_total,
 			// 'order_discount_price' => get_empty($discount_price),
-			// 'order_delivery_cost' => get_empty($delivery_cost),
+			'order_delivery_cost' => $delivery_cost,
 			// 'order_delivery_place' => get_empty($this->session->userdata('delivery_place')),
-			// 'order_delivery_address' => get_empty($this->session->userdata('custom_address')),
+			'order_delivery_address' => $order_delivery_address,
 			// 'order_delivery_time' => get_empty($this->session->userdata('delivery_time')),
+			'order_delivery' => $this->input->post('checkout_delivery'),
 			'order_payment' => $this->input->post('checkout_payment'),
 			'order_pay_status' => 'not_paid',
 			// 'order_coupon' => get_empty($this->session->userdata('coupon_id')),
 			// 'order_step' => 'accept',
-			// 'order_remark' => $this->input->post('checkout_remark'),
+			'order_remark' => $this->input->post('remark'),
 			// 'creator_id' => $this->ion_auth->user()->row()->id,
-			// 'created_at' => $created_at,
+			'created_at' => $created_at,
 		);
-		$order_id = $this->mysql_model->_insert('orders', $order);
+		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
 		if ($cart = $this->cart->contents()):
-			foreach ($cart as $item):
+			foreach ($cart as $cart_item):
 				$order_item = array(
 					'order_id' => $order_id,
-					'product_id' => $item['id'],
-					'order_item_qty' => $item['qty'],
-					'order_item_price' => $item['price'],
+					'product_combine_id' => $cart_item['id'],
+					'product_id' => 0,
+					'order_item_qty' => $cart_item['qty'],
+					'order_item_price' => $cart_item['price'],
 					'created_at' => $created_at,
 				);
 				$this->db->insert('order_item', $order_item);
+
+				$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
+				if(!empty($this_product_combine_item)) { foreach($this_product_combine_item as $items) {
+					$order_item = array(
+						'order_id' => $order_id,
+						'product_combine_id' => $items['product_combine_id'],
+						'product_id' => $items['product_id'],
+						'order_item_qty' => ($cart_item['qty']*$items['qty']),
+						'order_item_price' => 0,
+						'created_at' => $created_at,
+					);
+					$this->db->insert('order_item', $order_item);
+				}}
 			endforeach;
 
 		endif;

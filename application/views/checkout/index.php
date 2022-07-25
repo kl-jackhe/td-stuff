@@ -93,12 +93,11 @@ foreach ($this->cart->contents() as $items) {
         <?php $attributes = array('id' => 'checkout_form');?>
         <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
-            <div class="row justify-content-center" style="padding-left: 25px;padding-right: 25px;">
+            <div class="row justify-content-center" style="padding-left: 25px; padding-right: 25px;">
                 <div id="wizard" class="wizard">
                     <h3>確認訂單</h3>
                     <section>
-                        <h3 style="margin-top: 0px;">您共選擇 (
-                        <?=$count?> 個項目 )</h3>
+                        <h3 style="margin-top: 0px;">您共選擇 (<?=$count?> 個項目)</h3>
                         <table class="table table-hover m_table_none">
                             <thead>
                                 <tr>
@@ -131,7 +130,12 @@ foreach ($this->cart->contents() as $items) {
                             </tbody>
                         </table>
                         <hr>
-                        <span style="text-align:right;">購物車小計：<span style="color: #dd0606;font-weight: bold;"> $<?php echo $this->cart->total() ?></span></span>
+                        <span style="text-align:right;">購物車小計：
+                            <span style="color: #dd0606;font-weight: bold;"> $<?php echo $this->cart->total() ?></span>
+                        </span>
+                        <br>
+                        <br>
+                        <br>
                     </section>
                     <h3>付款方式</h3>
                     <section>
@@ -151,56 +155,38 @@ foreach ($this->cart->contents() as $items) {
                                 <div class="col-12">
                                     <hr>
                                 </div>
-                                <!-- <div class="col-12">
-                                    <h3>優惠卷/折扣卷</h3>
-                                    <div class="row">
-                                        <label for="inputPassword" class="col-3 col-form-label">輸入優惠碼</label>
-                                        <div class="col-3">
-                                            <input type="password" class="form-control" id="inputPassword">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <label for="exampleFormControlSelect1" class="col-3 col-form-label">選擇優惠卷</label>
-                                        <div class="col-3">
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>1</option>
-                                                <option>2</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 <div class="col-12 col-md-6 py-2">
                                     <h3>運送方式</h3>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment" value="option1" checked>
-                                        <label class="form-check-label" for="checkout_payment">
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery1" value="home_delivery_frozen" checked>
+                                        <label class="form-check-label" for="checkout_delivery1">
                                             宅配(冷凍)(台灣本島)+150
                                         </label>
-                                        <p>文字描述</p>
+                                        <!-- <p>文字描述</p> -->
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="payment-method" id="payment-method2" value="option2">
-                                        <label class="form-check-label" for="payment-method2">
-                                            全家(冷凍)超商取貨+150
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="family_pickup__frozen">
+                                        <label class="form-check-label" for="checkout_delivery2">
+                                            全家(冷凍)(超商取貨)+150
                                         </label>
-                                        <p>文字描述</p>
+                                        <!-- <p>文字描述</p> -->
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 py-2">
                                     <h3>付款方式</h3>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment" value="option1" checked>
-                                        <label class="form-check-label" for="checkout_payment">
+                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment1" value="bank_transfer" checked>
+                                        <label class="form-check-label" for="checkout_payment1">
                                             銀行匯款
                                         </label>
-                                        <span>文字描述</span>
+                                        <!-- <p>文字描述</p> -->
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="payment-method" id="payment-method2" value="option2">
-                                        <label class="form-check-label" for="payment-method2">
+                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment2" value="credit">
+                                        <label class="form-check-label" for="checkout_payment2">
                                             信用卡
                                         </label>
-                                        <span>文字描述</span>
+                                        <!-- <p>文字描述</p> -->
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -220,45 +206,33 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="範例：王小明" required>
+                                    <input type="text" class="form-control" name="name" placeholder="範例：王小明" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">電話</span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="範例：0987654321" required>
+                                    <input type="text" class="form-control" name="phone" placeholder="範例：0987654321" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Email</span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="範例：test@test.com.tw" required>
+                                    <input type="text" class="form-control" name="email" placeholder="範例：test@test.com.tw" required>
                                 </div>
-                                <div class="col-12"></div>
-                                <div class="input-group mb-3 col-12 col-sm-4">
-                                  <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">縣 / 市</label>
-                                  </div>
-                                  <div class="twzipcode"></div>
-                                  <!-- <select class="custom-select" id="inputGroupSelect01">
-                                    <option selected>選擇 縣/市</option>
-                                    <option value="1">台中</option>
-                                  </select> -->
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-4">
-                                  <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">區域</label>
-                                  </div>
-                                  <!-- <select class="custom-select" id="inputGroupSelect01">
-                                    <option selected>選擇 區域</option>
-                                    <option value="1">401 東區</option>
-                                  </select> -->
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">縣/市</label>
+                                        </div>
+                                        <div style="width: 89.9%;">
+                                            <div id="twzipcode"></div>
+                                        </div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" placeholder="可不用輸入縣市及區域" required>
+                                    <input type="text" class="form-control" name="address" placeholder="請輸入詳細地址" required>
                                 </div>
                             </div>
                         </div>
@@ -269,13 +243,14 @@ foreach ($this->cart->contents() as $items) {
                             <div class="row p-3">
                                 <div class="form-group col-12">
                                     <label class="col-form-label">訂單備註</label>
-                                    <textarea name="remark" style="width:100%;" class="form-control" rows="3"></textarea>
+                                    <textarea class="form-control" name="remark" rows="3"></textarea>
                                 </div>
                                 <div class="col-12 py-5">
-                                <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
+                                    <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div>
                                 <div class="col-12">
-                                    <a href="#" type="button" id="One-click-checkout" onclick="form_check()" class="btn btn-primary w-100">下單購買</a>
+                                    <!-- <a href="#" type="button" id="One-click-checkout" onclick="form_check()" class="btn btn-primary w-100">下單購買</a> -->
+                                    <button type="submit" class="btn btn-primary w-100">下單購買</button>
                                 </div>
                             </div>
                         </div>
@@ -286,14 +261,36 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_close() ?>
     </section>
 </div>
+
+<!-- purchase-steps -->
+<script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
+<script>
+$("#wizard").steps({
+    headerTag: "h3",
+    bodyTag: "section",
+    transitionEffect: "slideLeft",
+    enableFinishButton: false,
+    titleTemplate: '<div class="number row"><i></i><p>#index#</p></div><span class="wizard_section_title">#title#</span>',
+    labels: {
+        cancel: "取消",
+        current: "current step:",
+        pagination: "Pagination",
+        finish: "完成",
+        next: "下一步",
+        previous: "上一步",
+        loading: "載入中..."
+    }
+    // autoFocus: true
+});
+</script>
+<!-- purchase-steps -->
 <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
 <script>
     $('#twzipcode').twzipcode({
-    // 'detect': true, // 預設值為 false
-    'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-    'countySel'   : '<?php if (!empty($this->input->get('county'))) {echo $this->input->get('county');} else {echo $users_address['county'];}?>',
-    'districtSel' : '<?php if (!empty($this->input->get('district'))) {echo $this->input->get('district');} else {echo $users_address['district'];}?>',
-    'hideCounty' : [<?php if (!empty($hide_county)) {foreach ($hide_county as $hc) {echo '"' . $hc . '",';}}?>],
-    'hideDistrict': [<?php if (!empty($hide_district)) {foreach ($hide_district as $hd) {echo '"' . $hd . '",';}}?>]
-});
+        // 'detect': true, // 預設值為 false
+        zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+        'css': ['form-control county', 'form-control district', 'form-control zipcode'],
+        // 'countySel': '<?php // echo $user->county ?>',
+        // 'districtSel': '<?php // echo $user->district ?>'
+    });
 </script>
