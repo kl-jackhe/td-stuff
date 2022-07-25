@@ -464,112 +464,16 @@ class Auth extends Public_Controller {
             $full_name = $this->input->post('name');
             $group = array('2');
 
-            $old_recommend_code='';
-            $new_recommend_code='';
-            for ($i=0; $i <=100 ; $i++) {
-
-            	$old_recommend_code .= get_random_string(10);
-	            $this->db->where('recommend_code', $old_recommend_code);
-	            $this->db->limit(1);
-	            $query = $this->db->get('users');
-	            if($query->num_rows()>0){
-	            	$new_recommend_code = get_random_string(10);
-	            } else {
-	            	$new_recommend_code = $old_recommend_code;
-	            	break;
-	            }
-
-            }
-
             $additional_data = array(
 				'oauth_uid'           => $this->input->post('line_id'),
 				'full_name'           => $full_name,
 				'phone'               => $this->input->post('identity'),
-				'recommend_code'      => $new_recommend_code,
-				'used_recommend_code' => $this->input->post('recommend_code'),
 				'creator_id'          => 0,
 				'created_at'          => date('Y-m-d H:i:s'),
             );
         }
         if ($this->form_validation->run() == true && $id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group))
         {
-        	if(get_setting_general('coupon_active')=='y'){
-	        	$data = array(
-		            'coupon_type'                  => 'recommend',
-		            'coupon_method'                => get_setting_general('coupon_method'),
-		            'coupon_name'                  => '推薦碼 '.$new_recommend_code,
-		            'coupon_code'                  => $new_recommend_code,
-		            'coupon_number'                => get_setting_general('coupon_number'),
-		            'coupon_use_limit'             => get_setting_general('coupon_use_limit'),
-		            'coupon_amount_limit'          => get_setting_general('coupon_amount_limit'),
-		            'coupon_amount_limit_number'   => get_setting_general('coupon_amount_limit_number'),
-		            'coupon_localtion_limit'       => get_setting_general('coupon_localtion_limit'),
-		            'coupon_localtion_county'      => get_setting_general('coupon_localtion_county'),
-		            'coupon_localtion_district'    => get_setting_general('coupon_localtion_district'),
-		            'coupon_product_limit'         => get_setting_general('coupon_product_limit'),
-		            'coupon_product_limit_product' => get_setting_general('coupon_product_limit_product'),
-		            'coupon_product_limit_type'    => get_setting_general('coupon_product_limit_type'),
-		            'coupon_product_limit_number'  => get_setting_general('coupon_product_limit_number'),
-		            'coupon_birthday_only'         => get_setting_general('coupon_birthday_only'),
-		            'coupon_on_date'               => get_setting_general('coupon_on_date'),
-		            'coupon_off_date'              => get_setting_general('coupon_off_date'),
-		            'creator_id'                   => $id,
-		            'created_at'                   => date('Y-m-d H:i:s'),
-		        );
-		        $this->db->insert('coupon', $data);
-
-		        // 給新註冊會員折扣券
-		        // $this->db->where('coupon_id', 1);
-		        $this->db->where('coupon_code', 'bytheway888');
-		        $this->db->limit(1);
-		        $query = $this->db->get('coupon');
-		        if ($query->num_rows() > 0) {
-            		$row = $query->row_array();
-
-			        $insert_data = array(
-						'user_id'            => $id,
-						'coupon_name'        => $row['coupon_name'],
-						'coupon_code'        => $row['coupon_code'],
-						// 'coupon_expiry_date' => date('Y-m-d H:i:s', strtotime('+1 years')),
-						'coupon_expiry_date' => $row['coupon_off_date'],
-						'creator_id'         => $id,
-						'created_at'         => date('Y-m-d H:i:s'),
-	                );
-	                $this->db->insert('user_coupon', $insert_data);
-            	}
-
-		        $this->db->where('recommend_code', $this->input->post('recommend_code'));
-		        $this->db->limit(1);
-		        $query2 = $this->db->get('users');
-		        if ($query2->num_rows() > 0) {
-            		$row2 = $query2->row_array();
-
-	                // 提供推薦碼的客戶取得優惠券
-	                $insert_data2 = array(
-	                    'user_id'            => $row2['id'],
-	                    'coupon_name'        => '推薦碼使用 '.get_user_full_name($id),
-	                    'coupon_code'        => $this->input->post('recommend_code'),
-	                    'coupon_expiry_date' => get_setting_general('coupon_off_date'),
-	                    'creator_id'         => $id,
-	                    'created_at'         => date('Y-m-d H:i:s'),
-	                );
-	                $this->db->insert('user_coupon', $insert_data2);
-
-	                // 使用推薦碼的客戶取得優惠券
-			        $insert_data = array(
-	                    'user_id'            => $id,
-	                    'coupon_name'        => '推薦碼使用 '.get_user_full_name($row2['id']),
-	                    'coupon_code'        => $this->input->post('recommend_code'),
-	                    'coupon_expiry_date' => get_setting_general('coupon_off_date'),
-	                    'creator_id'         => $id,
-	                    'created_at'         => date('Y-m-d H:i:s'),
-	                );
-	                $this->db->insert('user_coupon', $insert_data);
-
-            	}
-
-	        }
-
 			// 註冊成功時，登入
 	        $remember = true;
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))

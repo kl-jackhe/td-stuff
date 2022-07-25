@@ -8,38 +8,15 @@
                         <?php echo form_open('register', $attributes); ?>
                         <div class="form-content">
                             <div class="form-group">
-                              <a href="/login">←返回登入</a>
-                              <?php echo $message; ?>
+                                <a href="/login">←返回登入</a>
+                                <?php echo $message; ?>
                             </div>
-                            <!-- <div class="row">
-                                <div class="col-sm-6">
-                                    <h4>行動電話</h4>
-                                    <div class="form-group">
-                                      <div class="input-group">
-                                          <input type="number" class="form-control" id="identity" name="identity" placeholder="09xxxxxxxx" required>
-                                          <span class="input-group-addon" id="getrandombtn" onclick="random_number(this.id)" style="background: #3bccde; color: white; cursor: pointer;">傳送</span>
-                                      </div>
-                                      <small>以行動電話作為登入帳號</small>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h4>驗證碼</h4>
-                                    <div class="form-group">
-                                      <div class="input-group">
-                                          <input type="number" class="form-control" id="sms_code" name="sms_code" placeholder="請輸入驗證碼" onchange="check_identity_code()" required>
-                                          <input type="hidden" class="form-control" name="code_num" id="code_num">
-                                          <span class="input-group-addon" id="getrandombtn" onclick="check_identity_code()" style="background: #3bccde; color: white; cursor: pointer;">驗證</span>
-                                      </div>
-                                      <small id="sms_code_text"></small>
-                                    </div>
-                                </div>
-                            </div> -->
                             <div class="row">
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                    <h4>姓名</h4>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" required>
-                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <h4>姓名</h4>
+                                        <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" required>
+                                    </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
@@ -63,24 +40,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php if (get_setting_general('coupon_active') == 'y') {?>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <h4>推薦碼</h4>
-                                        <input type="text" class="form-control" id="recommend_code" name="recommend_code" value="<?php echo $this->session->userdata('recommend_code') ?>">
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } else {?>
-                                <input type="hidden" id="recommend_code" name="recommend_code" value="">
-                            <?php }?>
-                            <!-- <div class="row">
-                              <div class="form-group">
-                                  <h4>LINE User ID</h4>
-                                  <input type="text" class="form-control" id="line_id" name="line_id" value="" readonly="">
-                              </div>
-                            </div> -->
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="checkbox">
@@ -95,13 +54,10 @@
                         <span id="error_text" style="color: red; font-weight: bold;"></span>
                         <input type="hidden" id="email_ok" value="0">
                         <input type="hidden" id="identity_ok" value="0">
-                        <input type="hidden" id="line_id" name="line_id" value="">
                         <input type="hidden" name="now_url" value="<?php echo base_url() . $_SERVER['REQUEST_URI'] ?>">
                         <div class="form-action clearfix">
                             <span class="btn btn-info btn-lg btn-block mt-xl mr-lg" onclick="form_check()">免費註冊</span>
                             <!-- <input type="submit" value="免費註冊" class="btn btn-info btn-lg btn-block mt-xl mr-lg"> -->
-                            <!-- <a href="/line/binding" class="btn btn-info btn-lg btn-block mt-xl mr-lg visible-xs visible-sm">已註冊, 綁定LINE</a> -->
-                            <a href="line://app/1653916968-qzXZEm7Y" class="btn btn-info btn-lg btn-block mt-xl mr-lg visible-xs visible-sm">已註冊, 綁定LINE</a>
                         </div>
                         <?php echo form_close() ?>
                     </div>
@@ -112,66 +68,12 @@
 </div>
 
 <script>
-  function random_number(objid) {
-    if(document.getElementById("identity").value!=''){
-      var identity = document.getElementById("identity").value;
-      $.ajax({
-        url: "<?php echo base_url(); ?>auth/identity_check",
-        method: "get",
-        data: { identity: identity },
-        success: function(data) {
-          if(data=='0'){
-            var rand_code = Math.floor((Math.random() * 100000) + 1);
-            document.getElementById("code_num").value = rand_code;
-            $.ajax({
-              url: "<?php echo base_url(); ?>store/send_sms",
-              method: "post",
-              data: { phone: identity, code: rand_code },
-              success: function(data) {
-                waiting(30,objid);
-                alert('請接收簡訊。');
-              }
-            });
-          } else {
-            $('#identity').val('');
-            $('#identity').focus();
-            alert('此行動電話已註冊。');
-          }
-        }
-      });
-      return false;
-    } else {
-      alert('請輸入手機號碼。');
-    }
-  }
-
-  var currentsecond;
-  function waiting(countdownfrom,objid)
-  {
-    currentsecond=countdownfrom+1;
-    setTimeout("countredirect('"+objid+"')",1000);
-    return;
-  }
-
-  function countredirect(objid){
-    if (currentsecond!=1){
-      currentsecond-=1;
-      $('#'+objid).css("pointer-events", "none");
-      $('#'+objid).html(currentsecond)+'秒後重新獲取';
-    } else {
-      $('#'+objid).html('重新獲取');
-      $('#'+objid).css("pointer-events", "auto");
-      return;
-    }
-    setTimeout("countredirect('"+objid+"')",1000)  ;
-  }
-
   function check_email(){
     var email = document.getElementById("email").value;
     $.ajax({
-      url: "<?php echo base_url(); ?>auth/email_check",
+      url: "/auth/email_check",
       method: "get",
-      data: { email:email },
+      data: { email: email },
       success: function(data) {
         if(data==0){
           // alert('可以使用');
@@ -185,22 +87,8 @@
       }
     });
   }
-  function check_identity_code(){
-    var code_num = document.getElementById("code_num").value;
-    var sms_code = document.getElementById("sms_code").value;
-    if(code_num != "" && sms_code != "" && code_num==sms_code){
-      // alert('驗證碼正確');
-      $('#sms_code_text').html('驗證碼正確');
-      $('#identity_ok').val('1');
-    } else {
-      // alert('錯誤，驗證碼不正確');
-      $('#sms_code_text').html('錯誤，驗證碼不正確');
-      $('#identity_ok').val('0');
-    }
-  }
   function form_check(){
     var email_ok = $('#email_ok').val();
-    var identity_ok = $('#identity_ok').val();
     var password = $('#password').val();
     var password_confirm = $('#password_confirm').val();
     var agree = $('#agree:checkbox:checked').length;
@@ -209,15 +97,11 @@
       } else {
         $('#error_text').html('請勾選');
       }
-      if(identity_ok==1){
-      } else {
-        $('#error_text').html('手機驗證不通過。');
-      }
       if(email_ok==1){
       } else {
         $('#error_text').html('電子郵件不正確。');
       }
-      if(email_ok==1 && identity_ok==1 && agree>0){
+      if(email_ok==1 && agree>0){
         // alert('Submit');
         document.getElementById("register").submit();
       }
