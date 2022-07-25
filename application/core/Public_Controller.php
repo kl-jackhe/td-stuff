@@ -30,13 +30,6 @@ class Public_Controller extends MY_Controller
         // }
         $this->perPage = get_setting_general('per_page');
 
-        if($this->input->get('botID')){
-	        $data = array(
-	           'botID' => $this->input->get('botID'),
-	        );
-	        $this->session->set_userdata($data);
-        }
-
 		$this->data['include_style'] = $this->load->view('templates/_parts/style.php', NULL, TRUE);
 		$this->data['include_script'] = $this->load->view('templates/_parts/script.php', NULL, TRUE);
 	}

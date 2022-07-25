@@ -66,22 +66,6 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getProductName($id) {
-		$this->db->select('*');
-		$this->db->where('product_id', $id);
-		$query = $this->db->get('product');
-		if ($query->num_rows() > 0) {
-			$row = $query->row_array();
-			if (isset($row)) {
-				// echo $row['title'];
-				return $row['product_name'];
-			}
-			// return $query->row_array();
-		} else {
-			return false;
-		}
-	}
-
 	function getProduct_Specification($id) {
 		$this->db->select('*');
 		$this->db->where('product_id', $id);

@@ -53,6 +53,10 @@
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <!-- purchase-steps -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </head>
 <style>
     #fa-facebook-square a {
@@ -98,8 +102,8 @@
                 </a>
             </div>
             <div id="fa-bag-shopping" class="py-1">
-                <a href="#" data-toggle="modal" data-target="#my_cart">
-                    <div id="cart-qty"><span style="color: #000;">1</span></div>
+                <a href="#" data-toggle="modal" data-target="#my_cart" onclick="get_mini_cart();">
+                    <div id="cart-qty"><span style="color: #000;">0</span></div>
                     <i class="fa-solid fa-bag-shopping" style="font-size: 48px;"></i>
                 </a>
             </div>

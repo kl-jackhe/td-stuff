@@ -1,4 +1,4 @@
-<?php $subtotal = 0;
+<?php
 $count = 0;
 foreach ($this->cart->contents() as $items) {
 	$count++;
@@ -91,7 +91,7 @@ foreach ($this->cart->contents() as $items) {
 <div role="main" class="main">
     <section class="form-section">
         <?php $attributes = array('id' => 'checkout_form');?>
-        <?php echo form_open('checkout/save_order?botID=' . $this->session->userdata('botID'), $attributes); ?>
+        <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
             <div class="row justify-content-center" style="padding-left: 25px;padding-right: 25px;">
                 <!-- <div class="col-12 text-center">
@@ -106,7 +106,7 @@ foreach ($this->cart->contents() as $items) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col" class="text-nowrap">圖片</th>
+                                    <th scope="col" class="text-nowrap" style="width: 100px;">圖片</th>
                                     <th scope="col" class="text-nowrap">商品</th>
                                     <th scope="col" class="text-nowrap">價格</th>
                                     <th scope="col" class="text-nowrap">數量</th>
@@ -116,45 +116,38 @@ foreach ($this->cart->contents() as $items) {
                             <tbody>
                                 <?php $i = 1;?>
                                 <?php foreach ($this->cart->contents() as $items): ?>
-                                <?php echo form_hidden($i . '[rowid]', $items['rowid']); ?>
                                 <tr style="border-top:1px solid dimgray;">
                                     <th scope="row">
                                         <?=$i?>
                                     </th>
                                     <th scope="row">
                                         <a href="#">
-                                            <img src="" alt="">
+                                            <?php if($items['image']!='') { ?>
+                                                <img style="width: 100%;" src="/assets/uploads/<?php echo $items['image']; ?>" alt="<?php echo $items['name']; ?>">
+                                            <?php } ?>
                                         </a>
                                     </th>
                                     <td>
                                         <?php echo $items['name']; ?>
-                                        <?php if ($this->cart->has_options($items['rowid']) == TRUE): ?>
-                                        <p>
-                                            <?php foreach ($this->cart->product_options($items['rowid']) as $option_name => $option_value): ?>
-                                            <strong>
-                                                <?php echo $option_name; ?>:</strong>
-                                            <?php echo $option_value; ?><br />
-                                            <?php endforeach;?>
-                                        </p>
-                                        <?php endif;?>
                                     </td>
                                     <td>
-                                        <?php echo $this->cart->format_number($items['price']); ?>
+                                        <?php echo $items['price']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $this->cart->format_number($items['qty']); ?>
+                                        <?php echo $items['qty']; ?>
                                     </td>
-                                    <td><span>
-                                            <?php echo $this->cart->format_number($items['subtotal']); ?></span></td>
+                                    <td>
+                                        <span><?php echo $items['subtotal']; ?></span>
+                                    </td>
                                 </tr>
                                 <?php $i++;?>
-                                <?php $subtotal = $subtotal + $this->cart->format_number($items['subtotal']);?>
                                 <?php endforeach;?>
-                                <tr style="border-top:1px solid dimgray;">
+                                <tr style="border-top: 1px solid dimgray;">
                                     <td colspan="4"></td>
                                     <td>總計</td>
-                                    <td><span style="color: #dd0606;font-weight: bold;">
-                                            <?=$subtotal?></span></td>
+                                    <td>
+                                        <span style="color: #dd0606;font-weight: bold;"><?php echo $this->cart->total() ?></span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -173,7 +166,7 @@ foreach ($this->cart->contents() as $items) {
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-12 py-2">
-                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: red;">NT$ <?=$subtotal?></span></h3>
+                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -242,7 +235,7 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3>總計：<span style="font-size:24px;color: red;">NT$ <?=$subtotal?></span></h3>
+                                    <h3>總計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                             </div>
                         </div>
