@@ -66,10 +66,10 @@ foreach ($this->cart->contents() as $items) {
     .wizard ul li a div p{
         background: #420452;
         border-radius: 50%;
-        width: 25%;
+        padding: 3px 15px 3px 15px;
     }
 
-    .wizard .row {
+    .wizard .steps .row {
         justify-content: center;
         margin: 0px;
         margin-top: 20px;
@@ -94,9 +94,6 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
             <div class="row justify-content-center" style="padding-left: 25px;padding-right: 25px;">
-                <!-- <div class="col-12 text-center">
-                    <p style="font-size:30px;">訂購只要四步驟</p>
-                </div> -->
                 <div id="wizard" class="wizard">
                     <h3>確認訂單</h3>
                     <section>
@@ -106,26 +103,29 @@ foreach ($this->cart->contents() as $items) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
+<<<<<<< Updated upstream
                                     <th scope="col" class="text-nowrap" style="width: 100px;">圖片</th>
+=======
+                                    <th scope="col">圖片</th>
+>>>>>>> Stashed changes
                                     <th scope="col" class="text-nowrap">商品</th>
-                                    <th scope="col" class="text-nowrap">價格</th>
-                                    <th scope="col" class="text-nowrap">數量</th>
-                                    <th scope="col" class="text-nowrap">小計</th>
                                 </tr>
                             </thead>
                             <tbody>
+<<<<<<< Updated upstream
                                 <?php $i = 1;?>
                                 <?php foreach ($this->cart->contents() as $items): ?>
+=======
+>>>>>>> Stashed changes
                                 <tr style="border-top:1px solid dimgray;">
-                                    <th scope="row">
-                                        <?=$i?>
-                                    </th>
-                                    <th scope="row">
+                                    <td>1</td>
+                                    <td>
                                         <a href="#">
                                             <?php if($items['image']!='') { ?>
                                                 <img style="width: 100%;" src="/assets/uploads/<?php echo $items['image']; ?>" alt="<?php echo $items['name']; ?>">
                                             <?php } ?>
                                         </a>
+<<<<<<< Updated upstream
                                     </th>
                                     <td>
                                         <?php echo $items['name']; ?>
@@ -148,18 +148,20 @@ foreach ($this->cart->contents() as $items) {
                                     <td>
                                         <span style="color: #dd0606;font-weight: bold;"><?php echo $this->cart->total() ?></span>
                                     </td>
+=======
+                                    </td>
+                                    <td>
+                                        <p>保溫杯</p>
+                                        <p>金額：$150</p>
+                                        <p>數量：1</p>
+                                        <p>小計：$150</p>
+                                    </td>
+>>>>>>> Stashed changes
                                 </tr>
                             </tbody>
                         </table>
-                        <!-- <div class="dropdown text-center">
-                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            不會訂購嗎？
-                          </button>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <h5>直接私訊我，也可以幫你下單哦!</h5>
-                            <a class="dropdown-item btn" href="https://line.me/R/ti/p/@504bdron">請洽 LINE 客服</a>
-                          </div>
-                        </div> -->
+                        <hr>
+                        <span style="text-align:right;">購物車小計：<span style="color: #dd0606;font-weight: bold;"> $150</span></span>
                     </section>
                     <h3>付款方式</h3>
                     <section>
@@ -267,19 +269,20 @@ foreach ($this->cart->contents() as $items) {
                                   <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">縣 / 市</label>
                                   </div>
-                                  <select class="custom-select" id="inputGroupSelect01">
+                                  <div class="twzipcode"></div>
+                                  <!-- <select class="custom-select" id="inputGroupSelect01">
                                     <option selected>選擇 縣/市</option>
                                     <option value="1">台中</option>
-                                  </select>
+                                  </select> -->
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                   <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">區域</label>
                                   </div>
-                                  <select class="custom-select" id="inputGroupSelect01">
+                                  <!-- <select class="custom-select" id="inputGroupSelect01">
                                     <option selected>選擇 區域</option>
                                     <option value="1">401 東區</option>
-                                  </select>
+                                  </select> -->
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
@@ -313,3 +316,14 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_close() ?>
     </section>
 </div>
+<script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
+<script>
+    $('#twzipcode').twzipcode({
+    // 'detect': true, // 預設值為 false
+    'css': ['form-control county', 'form-control district', 'form-control zipcode'],
+    'countySel'   : '<?php if (!empty($this->input->get('county'))) {echo $this->input->get('county');} else {echo $users_address['county'];}?>',
+    'districtSel' : '<?php if (!empty($this->input->get('district'))) {echo $this->input->get('district');} else {echo $users_address['district'];}?>',
+    'hideCounty' : [<?php if (!empty($hide_county)) {foreach ($hide_county as $hc) {echo '"' . $hc . '",';}}?>],
+    'hideDistrict': [<?php if (!empty($hide_district)) {foreach ($hide_district as $hd) {echo '"' . $hd . '",';}}?>]
+});
+</script>
