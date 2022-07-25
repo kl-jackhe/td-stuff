@@ -103,65 +103,35 @@ foreach ($this->cart->contents() as $items) {
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-<<<<<<< Updated upstream
                                     <th scope="col" class="text-nowrap" style="width: 100px;">圖片</th>
-=======
-                                    <th scope="col">圖片</th>
->>>>>>> Stashed changes
                                     <th scope="col" class="text-nowrap">商品</th>
                                 </tr>
                             </thead>
                             <tbody>
-<<<<<<< Updated upstream
                                 <?php $i = 1;?>
                                 <?php foreach ($this->cart->contents() as $items): ?>
-=======
->>>>>>> Stashed changes
                                 <tr style="border-top:1px solid dimgray;">
-                                    <td>1</td>
+                                    <td><?=$i?></td>
                                     <td>
                                         <a href="#">
-                                            <?php if($items['image']!='') { ?>
+                                            <?php if ($items['image'] != '') {?>
                                                 <img style="width: 100%;" src="/assets/uploads/<?php echo $items['image']; ?>" alt="<?php echo $items['name']; ?>">
-                                            <?php } ?>
+                                            <?php }?>
                                         </a>
-<<<<<<< Updated upstream
-                                    </th>
-                                    <td>
-                                        <?php echo $items['name']; ?>
                                     </td>
                                     <td>
-                                        <?php echo $items['price']; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $items['qty']; ?>
-                                    </td>
-                                    <td>
-                                        <span><?php echo $items['subtotal']; ?></span>
+                                        <p><?php echo $items['name']; ?></p>
+                                        <p>金額：$<?php echo $items['price']; ?></p>
+                                        <p>數量：<?php echo $items['qty']; ?></p>
+                                        <p>小計：$<?php echo $items['subtotal']; ?></p>
                                     </td>
                                 </tr>
                                 <?php $i++;?>
                                 <?php endforeach;?>
-                                <tr style="border-top: 1px solid dimgray;">
-                                    <td colspan="4"></td>
-                                    <td>總計</td>
-                                    <td>
-                                        <span style="color: #dd0606;font-weight: bold;"><?php echo $this->cart->total() ?></span>
-                                    </td>
-=======
-                                    </td>
-                                    <td>
-                                        <p>保溫杯</p>
-                                        <p>金額：$150</p>
-                                        <p>數量：1</p>
-                                        <p>小計：$150</p>
-                                    </td>
->>>>>>> Stashed changes
-                                </tr>
                             </tbody>
                         </table>
                         <hr>
-                        <span style="text-align:right;">購物車小計：<span style="color: #dd0606;font-weight: bold;"> $150</span></span>
+                        <span style="text-align:right;">購物車小計：<span style="color: #dd0606;font-weight: bold;"> $<?php echo $this->cart->total() ?></span></span>
                     </section>
                     <h3>付款方式</h3>
                     <section>
