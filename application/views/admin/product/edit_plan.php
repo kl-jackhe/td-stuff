@@ -1,9 +1,9 @@
 <div class="row">
-    <?php $attributes = array('class' => 'plan_insert_submit_form', 'id' => 'plan_insert_submit_form');?>
-    <?php echo form_open('admin/product/insert_plan', $attributes); ?>
+    <?php $attributes = array('class' => 'plan_update_submit_form', 'id' => 'plan_update_submit_form');?>
+    <?php echo form_open('admin/product/update_plan/'.$product_combine['id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
-            <span id="quick-save-btn" class="btn btn-primary">建立</span>
+            <span id="quick-update-btn" class="btn btn-primary">更新</span>
         </div>
     </div>
     <div class="col-md-12">
@@ -26,14 +26,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="product_combine_name">方案名稱</label>
-                                    <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" required>
+                                    <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<?php echo $product_combine['name'] ?>" required>
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_combine_price">方案售價</label>
-                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" required>
+                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<?php echo $product_combine['price'] ?>" required>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -42,8 +42,12 @@
                                     <div class="form-group">
                                         <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_combine_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
                                     </div>
-                                    <img src="" id="add_product_combine_image_preview" class="img-responsive" style="display: none;">
-                                    <input type="hidden" id="add_product_combine_image" name="product_combine_image" />
+                                    <?php if(!empty($product_combine['picture'])) {?>
+                                        <img src="/assets/uploads/<?php echo $product_combine['picture']; ?>" id="add_product_combine_image<?php echo $product_combine['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product_combine['picture'])) {echo 'display: none';}?>">
+                                    <?php } else { ?>
+                                        <img src="" id="add_product_combine_image<?php echo $product_combine['product_id']; ?>_preview" class="img-responsive">
+                                    <?php } ?>
+                                    <input type="hidden" id="add_product_combine_image" name="product_combine_image" value="<?php echo $product_combine['picture'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -51,7 +55,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_combine_description">方案描述</label>
-                                    <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"></textarea>
+                                    <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"><?php echo $product_combine['description'] ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -69,7 +73,34 @@
                                             </tr>
                                         </thead>
                                         <tbody id="plan-item-list">
-
+                                            <?php if(!empty($product_combine_item)) { foreach($product_combine_item as $item) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <input type="text" name="plan_qty[]" class="form-control" value="<?php echo $item['qty'] ?>">
+                                                    </td>
+                                                    <td>
+                                                        <?php $att = 'class="form-control"';
+                                                        $options = array();
+                                                        // $options = array("" => "單位");
+                                                        if (!empty($product_unit)) { foreach ($product_unit as $pu) {
+                                                            $options[$pu['unit']] = $pu['unit'];
+                                                        }}
+                                                        echo form_dropdown('plan_unit[]', $options, $item['product_unit'], $att); ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php $att = 'class="form-control"';
+                                                        $options = array();
+                                                        // $options = array("" => "規格");
+                                                        if (!empty($product_specification)) { foreach ($product_specification as $ps) {
+                                                            $options[$ps['specification']] = $ps['specification'];
+                                                        }}
+                                                        echo form_dropdown('plan_specification[]', $options, $item['product_specification'], $att); ?>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <i class="fa fa-trash-o x"></i>
+                                                    </td>
+                                                </tr>
+                                            <?php }} ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -116,9 +147,9 @@ $('.fancybox').fancybox({
     'type': 'iframe',
     'autoScale': false
 });
-$('#quick-save-btn').click(function(e){
+$('#quick-update-btn').click(function(e){
     e.preventDefault();
-    var form = $('#plan_insert_submit_form');
+    var form = $('#plan_update_submit_form');
     var url = form.attr('action');
     // console.log( $('#submit_form').serialize() );
     $.ajax({

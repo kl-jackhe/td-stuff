@@ -62,14 +62,3 @@
     </div>
     <?php echo form_close() ?>
 </div>
-
-<script>
-$(document).ready(function() {
-    $(".addCF").click(function() {
-        $("#paramsFields").append('<tr><td><input type="text" class="code" name="unit[]" value="" /></td><td><input type="number" class="code" name="price[]" value="" /></td><td><input type="number" class="code" name="quantity[]" value="" /></td><td><input type="text" class="code" name="picture[]" value="" /></td><td><input type="text" class="code" name="description[]" value="" /></td><td><input type="text" class="code" name="specification[]" value="" /></td><td><a href="javascript:void(0);" class="remCF btn btn-danger">移除</a></td></tr>');
-    });
-    $("#paramsFields").on('click', '.remCF', function() {
-        $(this).parent().parent().remove();
-    });
-});
-</script>
