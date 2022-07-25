@@ -86,10 +86,12 @@ $(function() {
     var main_h = $(".main").height();
     var h_sum = h - header_h - footer_h;
     var h_checkout = h_sum * 0.6;
-    if (h > h_sum) {
+    if (h >= main_h) {
         $(".main").css('height', h_sum);
-        $(".wizard > .content").css('min-height', h_checkout);
+    } else {
+        $(".main").css('height', '100%');
     }
+    $(".wizard > .content").css('min-height', h_checkout);
 });
 </script>
 <!-- Window Height -->
