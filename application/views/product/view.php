@@ -5,26 +5,24 @@
     height: 100%;
 }
 .qty {
-  width: 40px;
-  height: 35px;
-  text-align: center;
-  border: 0;
-  border-top: 1px solid #aaa;
-  border-bottom: 1px solid #aaa;
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
 }
-
 input.qtyplus {
-  width: 25px;
-  height: 35px;
-  border: 1px solid #aaa;
-  background: #f8f8f8;
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
 }
-
 input.qtyminus {
-  width: 25px;
-  height: 35px;
-  border: 1px solid #aaa;
-  background: #f8f8f8;
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
 }
 </style>
 <div role="main" class="main product-view">

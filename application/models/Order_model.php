@@ -92,7 +92,7 @@ class Order_model extends CI_Model {
 
     public function get_customer_order($id)
     {
-        $this->db->where('customer_id', $id);
+        // $this->db->where('customer_id', $id);
         $this->db->order_by('order_id','desc');
         $query = $this->db->get('orders');
         return ($query->num_rows() > 0)?$query->result_array():false;
