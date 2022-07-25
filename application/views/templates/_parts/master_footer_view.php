@@ -128,8 +128,8 @@ $(function() {
     var h_checkout = h_sum * 0.6;
     if (h > h_sum) {
         $(".main").css('height', h_sum);
+        $(".wizard > .content").css('min-height', h_checkout);
     }
-    $(".wizard > .content").css('min-height', h_checkout);
 });
 </script>
 <!-- Window Height -->

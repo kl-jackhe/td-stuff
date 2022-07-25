@@ -40,7 +40,7 @@ input.zipcode{
                     <a href="/order" class="btn fs-13" style="border: 1px solid #420252; color: gray; border-bottom: none;">訂單管理</a>
                     <!-- <a href="/my_address" class="btn fs-13" style="border: 1px solid gray; color: gray; border-bottom: none;">常用地址</a> -->
                 </div>
-                <div class="row justify-content-center" style="border: 2px solid #420252;border-radius: 15px;">
+                <div class="row justify-content-center py-3" style="border: 2px solid #420252;border-radius: 15px;">
                     <div class="col-12 col-md-6">
                         <?php $att = "class='form-horizontal' id='edit_user_form'";?>
                         <?php echo form_open(uri_string(), $att); ?>
@@ -105,7 +105,7 @@ input.zipcode{
                         <?php // echo form_hidden('id', $user->id);?>
                         <input type="hidden" id="id" name="id" value="<?php echo $user->id ?>">
                         <?php echo form_hidden($csrf); ?>
-                        <span class="btn btn-primary pull-right mb-5" onclick="form_submit()">儲存</span>
+                        <span class="btn btn-primary pull-right" onclick="form_submit()">儲存</span>
                         <?php echo form_close() ?>
                     </div>
                 </div>
