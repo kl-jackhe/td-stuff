@@ -1,5 +1,5 @@
 <style>
-    .product_description img {
+.product_description img {
     width: 100%;
     max-width: 900px;
     height: 100%;
@@ -12,7 +12,6 @@
   border-top: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
 }
-
 
 input.qtyplus {
   width: 25px;
@@ -65,18 +64,18 @@ input.qtyminus {
                                 <!-- <input type="text" id="qty_<?php echo $combine['product_id'] ?>" class="form-control input-number" min="1" max="999" value="1" style="background: #fff;" readonly> -->
                                 <div class="input-group my-3">
                                     <span class="input-group-btn">
-                                        <button type="button" style="padding: 0px 5px 0px 5px;border-radius: 5px 0px 0px 5px;" class="btn btn-danger btn-number" data-type="minus" data-field="quant[2]">
+                                        <button type="button" style="padding: 0px 5px 0px 5px;border-radius: 5px 0px 0px 5px;" class="btn btn-danger btn-number" data-type="minus" data-field="quant[<?php echo $combine['id'] ?>]">
                                             <i class="fa-solid fa-minus"></i>
                                         </button>
                                     </span>
-                                    <input type="text" name="quant[2]" id="qty_<?php echo $combine['id'] ?>" style="padding: 0px;height: 26px;text-align: center;" class="form-control input-number" value="1" min="1" max="100" disabled>
+                                    <input type="text" name="quant[<?php echo $combine['id'] ?>]" id="qty_<?php echo $combine['id'] ?>" style="padding: 0px;height: 26px;text-align: center;" class="form-control input-number" value="1" min="1" max="100" disabled>
                                     <span class="input-group-btn">
-                                        <button type="button" style="padding: 0px 5px 0px 5px; border-radius: 0px 5px 5px 0px;" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+                                        <button type="button" style="padding: 0px 5px 0px 5px; border-radius: 0px 5px 5px 0px;" class="btn btn-success btn-number" data-type="plus" data-field="quant[<?php echo $combine['id'] ?>]">
                                             <i class="fa-solid fa-plus"></i>
                                         </button>
                                     </span>
                                 </div>
-                                <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn btn-primary btn-number" style="border-radius: 10px;padding: 3px 10px 3px 10px;width: 100%;">
+                                <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn btn-primary" style="border-radius: 10px;padding: 3px 10px 3px 10px;width: 100%;">
                                     <i class="fa-solid fa-cart-shopping"></i> 選購
                                 </button>
                             </div>
