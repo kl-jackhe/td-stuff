@@ -24,18 +24,6 @@
             <div class="modal-body">
 
             </div>
-            <div class="modal-footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-5 col-sm-6">
-                            <span class="btn btn-info btn-block mt-md" onclick="view_form_check()">前往結帳</span>
-                        </div>
-                        <div class="col-7 col-sm-6">
-                            <spna class="btn btn-dark btn-block mt-md" data-dismiss="modal">繼續選購商品 <i class="fa-solid fa-arrow-right-long"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
