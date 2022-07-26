@@ -60,7 +60,7 @@ class Checkout extends Public_Controller {
 			'customer_phone' => $this->input->post('phone'),
 			'customer_email' => $this->input->post('email'),
 			'order_total' => $order_total,
-			// 'order_discount_total' => $order_total,
+			'order_discount_total' => $order_total,
 			// 'order_discount_price' => get_empty($discount_price),
 			'order_delivery_cost' => $delivery_cost,
 			// 'order_delivery_place' => get_empty($this->session->userdata('delivery_place')),

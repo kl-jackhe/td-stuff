@@ -64,12 +64,12 @@
         </li>
       </ul>
     </li>
-    <li>
+    <!-- <li>
       <a href="/assets/admin/ckfinder/samples/full-page-open.html" target="_blank">
         <i class="fa fa-dashboard"></i>
         <span>檔案管理</span>
       </a>
-    </li>
+    </li> -->
     <li class="<?php if ($current == "setting") {echo "active";}?>">
       <a href="/admin/setting/general">
         <i class="fa fa-dashboard"></i>

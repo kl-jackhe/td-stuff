@@ -8,17 +8,11 @@ select.district {
 </style>
 <div class="row">
   <div class="col-md-6">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button>
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
   </div>
   <div class="col-md-6">
-    <div class="form-inline text-right">
-      <input type="text" id="keywords" class="form-control" placeholder="訂單編號、訂購人..." onkeyup="searchFilter()"/>
-      <!-- <select id="category" class="form-control" onchange="searchFilter()">
-        <option value="">---取餐點---</option>
-        <?php foreach ($delivery_place as $data) {
-          echo '<option value='.$data['delivery_place_id'].'>'.$data['delivery_place_name'].'</option>';
-        } ?>
-      </select> -->
+    <div class="form-inline form-group text-right">
+      <input type="text" id="keywords" class="form-control" placeholder="訂單編號..." onkeyup="searchFilter()"/>
       <select id="category" class="form-control" onchange="searchFilter()">
         <option value="">付款狀態</option>
         <option value="not_paid">未付款</option>
@@ -45,6 +39,7 @@ select.district {
         <option value="1">啟用的</option>
         <option value="2">無效的</option>
       </select> -->
+      <button onclick="searchFilter()" class="btn btn-primary"><i class="fa fa-search"></i> 搜尋</button>
     </div>
   </div>
 </div>

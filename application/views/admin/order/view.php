@@ -3,8 +3,6 @@
     <?php // echo form_open('admin/order/update/' . $order['order_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
-            <a href="/admin/order/dompdf/<?php echo $order['order_id'] ?>" target="_blank" class="btn btn-danger hidden-print">查看PDF</a>
-            <a href="/admin/order/dompdf_download/<?php echo $order['order_id'] ?>" target="_blank" class="btn btn-danger hidden-print">下載PDF</a>
             <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
         </div>
         <div class="content-box-large">

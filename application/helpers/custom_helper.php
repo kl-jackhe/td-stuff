@@ -149,169 +149,180 @@ function get_void($data) {
 
 function get_order_eat_type($data) {
 	switch ($data) {
-	case 'in':
-		return "內用";
-		break;
-	case 'out':
-		return "外帶";
-		break;
-	case 'call':
-		return "電話";
-		break;
-	case 'delivery':
-		return "外送";
-		break;
+		case 'in':
+			return "內用";
+			break;
+		case 'out':
+			return "外帶";
+			break;
+		case 'call':
+			return "電話";
+			break;
+		case 'delivery':
+			return "外送";
+			break;
 	}
 }
 
 function get_offer_item_type($data) {
 	switch ($data) {
-	case 'single':
-		return "單一商品";
-		break;
-	case 'category':
-		return "商品分類";
-		break;
-	case 'cart':
-		return "購物車";
-		break;
+		case 'single':
+			return "單一商品";
+			break;
+		case 'category':
+			return "商品分類";
+			break;
+		case 'cart':
+			return "購物車";
+			break;
 	}
 }
 
 function get_contact_person_address_type($data) {
 	switch ($data) {
-	case 'r':
-		return "登記地址";
-		break;
-	case 's':
-		return "配送地址";
-		break;
-	case 'i':
-		return "發票地址";
-		break;
+		case 'r':
+			return "登記地址";
+			break;
+		case 's':
+			return "配送地址";
+			break;
+		case 'i':
+			return "發票地址";
+			break;
 	}
 }
 
 function get_coupon_use_limit($data) {
 	switch ($data) {
-	case 'once':
-		return "一次性";
-		break;
-	case 'repeat':
-		return "可重複使用";
-		break;
+		case 'once':
+			return "一次性";
+			break;
+		case 'repeat':
+			return "可重複使用";
+			break;
 	}
 }
 
 function get_coupon_is_uesd($data) {
 	switch ($data) {
-	case 'y':
-		return "已使用";
-		break;
-	case 'n':
-		return "未使用";
-		break;
+		case 'y':
+			return "已使用";
+			break;
+		case 'n':
+			return "未使用";
+			break;
 	}
 }
 
 function get_stock_type($data) {
 	switch ($data) {
-	case '1':
-		return "生產";
-		break;
-	case '2':
-		return "進貨";
-		break;
-	case '3':
-		return "銷貨";
-		break;
-	case '4':
-		return "POS";
-		break;
-	case '5':
-		return "調撥";
-		break;
-	case '6':
-		return "報廢";
-		break;
-	case '7':
-		return "盤點";
-		break;
-	case '8':
-		return "銷貨退回";
-		break;
-	case '9':
-		return "進貨退出";
-		break;
-	case '10':
-		return "調整";
-		break;
-	case '11':
-		return "分裝";
-		break;
+		case '1':
+			return "生產";
+			break;
+		case '2':
+			return "進貨";
+			break;
+		case '3':
+			return "銷貨";
+			break;
+		case '4':
+			return "POS";
+			break;
+		case '5':
+			return "調撥";
+			break;
+		case '6':
+			return "報廢";
+			break;
+		case '7':
+			return "盤點";
+			break;
+		case '8':
+			return "銷貨退回";
+			break;
+		case '9':
+			return "進貨退出";
+			break;
+		case '10':
+			return "調整";
+			break;
+		case '11':
+			return "分裝";
+			break;
 	}
 }
 
 function get_pay_status($data) {
 	switch ($data) {
-	case 'not_paid':
-		return "未付款";
-		break;
-	case 'paid':
-		return "已付款";
-		break;
-	case 'finish':
-		return "已完成";
-		break;
-	case 'return':
-		return "已退款";
-		break;
-	case 'cancel':
-		return "取消";
-		break;
+		case 'not_paid':
+			return "未付款";
+			break;
+		case 'paid':
+			return "已付款";
+			break;
+		case 'finish':
+			return "已完成";
+			break;
+		case 'return':
+			return "已退款";
+			break;
+		case 'cancel':
+			return "取消";
+			break;
 	}
 }
 
 function get_order_step($data) {
 	switch ($data) {
-	case 'accept':
-		return "接收訂單";
-		break;
-	case 'prepare':
-		return "餐點準備中";
-		break;
-	case 'shipping':
-		return "餐點運送中";
-		break;
-	case 'arrive':
-		return "司機抵達";
-		break;
-	case 'picked':
-		return "已取餐";
-		break;
-	case 'cancel':
-		return "取消訂單";
-		break;
-	case 'void':
-		return "已退單";
-		break;
+		case 'accept':
+			return "接收訂單";
+			break;
+		case 'prepare':
+			return "餐點準備中";
+			break;
+		case 'shipping':
+			return "餐點運送中";
+			break;
+		case 'arrive':
+			return "司機抵達";
+			break;
+		case 'picked':
+			return "已取餐";
+			break;
+		case 'cancel':
+			return "取消訂單";
+			break;
+		case 'void':
+			return "已退單";
+			break;
+	}
+}
+
+function get_delivery($data) {
+	switch ($data) {
+		case 'home_delivery_frozen':
+			return "冷凍宅配";
+			break;
+		case '711_pickup_frozen':
+			return "7-11 超商取貨";
+			break;
 	}
 }
 
 function get_payment($data) {
 	switch ($data) {
-	case 'credit':
-		return "信用卡";
-		break;
-	case 'cash_on_delivery':
-		return "餐到付款";
-		break;
-	case 'line_pay':
-		return "Line Pay";
-		break;
-	case 'after_pay':
-		return "後支付";
-		break;
+		case 'credit':
+			return "信用卡";
+			break;
+		case 'cash_on_delivery':
+			return "餐到付款";
+			break;
+		case 'line_pay':
+			return "Line Pay";
+			break;
+		case 'after_pay':
+			return "後支付";
+			break;
 	}
 }
 
@@ -356,30 +367,6 @@ function get_en_date($data) {
 	}
 }
 
-function get_road_turn($string) {
-	$string = str_replace("路一段", "路1段", $string);
-	$string = str_replace("路二段", "路2段", $string);
-	$string = str_replace("路三段", "路3段", $string);
-	$string = str_replace("路四段", "路4段", $string);
-	$string = str_replace("路五段", "路5段", $string);
-	$string = str_replace("路六段", "路6段", $string);
-	$string = str_replace("路七段", "路7段", $string);
-	$string = str_replace("路八段", "路8段", $string);
-	$string = str_replace("路九段", "路9段", $string);
-	$string = str_replace("路十段", "路10段", $string);
-	$string = str_replace("路十一段", "路11段", $string);
-	$string = str_replace("路十二段", "路12段", $string);
-	$string = str_replace("路十三段", "路13段", $string);
-	$string = str_replace("路十四段", "路14段", $string);
-	$string = str_replace("路十五段", "路15段", $string);
-	$string = str_replace("路十六段", "路16段", $string);
-	$string = str_replace("路十七段", "路17段", $string);
-	$string = str_replace("路十八段", "路18段", $string);
-	$string = str_replace("路十九段", "路19段", $string);
-	$string = str_replace("路二十段", "路20段", $string);
-	return $string;
-}
-
 function get_null($data) {
 	if (empty($data)) {
 		return null;
@@ -417,114 +404,6 @@ function get_image($data) {
 		$result = '<img src="/assets/images/no-image.jpg" class="img-responsive" />';
 	}
 	return $result;
-}
-
-function get_delivery_place_name($data) {
-	$CI = &get_instance();
-	$CI->db->select('delivery_place_name');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('delivery_place', array('delivery_place_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['delivery_place_name'];
-		return $data;
-	}
-}
-
-function get_delivery_time_name($data) {
-	$CI = &get_instance();
-	$CI->db->select('delivery_time_name');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('delivery_time', array('delivery_time_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['delivery_time_name'];
-		return $data;
-	}
-}
-
-function get_store_name($data) {
-	$CI = &get_instance();
-	$CI->db->select('store_name');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_name'];
-		return $data;
-	}
-}
-
-function get_store_address($data) {
-	$CI = &get_instance();
-	// $CI->db->select('store_address');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_county'] . $row['store_district'] . $row['store_address'];
-		return $data;
-	}
-}
-
-function get_store_image($data) {
-	$CI = &get_instance();
-	$CI->db->select('store_image');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_image'];
-		return $data;
-	}
-}
-
-function get_store_banner($data) {
-	$CI = &get_instance();
-	$CI->db->select('store_banner');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_banner'];
-		return $data;
-	}
-}
-
-function get_store_link($data) {
-	$CI = &get_instance();
-	$CI->db->select('store_link');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_link'];
-		return $data;
-	}
-}
-
-function get_store_delivery_cost($data) {
-	$CI = &get_instance();
-	$CI->db->select('store_delivery_cost');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store', array('store_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_delivery_cost'];
-		return $data;
-	}
-}
-
-function get_petty_cash_content($data) {
-	$CI = &get_instance();
-	$CI->db->select('petty_cash_content');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('petty_cash_content', array('petty_cash_content_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['petty_cash_content'];
-		return $data;
-	}
 }
 
 function check_delivery_time($store_order_time_id, $delivery_time) {
@@ -634,58 +513,6 @@ function get_post_category_name($id) {
 	}
 }
 
-function get_store_id_by_store_order_time($id) {
-	$CI = &get_instance();
-	$CI->db->select('store_id');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('store_order_time', array('store_order_time_id' => $id));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['store_id'];
-		return $data;
-	}
-}
-
-function get_cart_offer($price) {
-	$is_offer = 0;
-	$CI = &get_instance();
-	$CI->db->where('offer_item_type', 'cart');
-	$CI->db->order_by('offer_condition', 'DESC');
-	$query = $CI->db->get('offer');
-	if ($query->num_rows() > 0) {
-		foreach ($query->result_array() as $data) {
-			if ($is_offer == 0) {
-				if ($data['offer_condition'] != '0') {
-					if ($price >= $data['offer_condition']) {
-						if ($data['offer_type'] == 'percent') {
-							$price = round($price * $data['offer_price']);
-							$is_offer = 1;
-							//return $price;
-						} elseif ($data['offer_type'] == 'cash') {
-							$price = $price - $data['offer_price'];
-							$is_offer = 1;
-							//return $price;
-						}
-					}
-				} else {
-					if ($data['offer_type'] == 'percent') {
-						$price = round($price * $data['offer_price']);
-						$is_offer = 1;
-						//return $price;
-					} elseif ($data['offer_type'] == 'cash') {
-						$price = $price - $data['offer_price'];
-						$is_offer = 1;
-						//return $price;
-					}
-				}
-			}
-		}
-		return $price;
-	} else {
-		return $price;
-	}
-}
-
 function get_user_username($id) {
 	$CI = &get_instance();
 	$CI->db->select('username');
@@ -745,62 +572,9 @@ function get_user_address($id) {
 	}
 }
 
-function get_sales_item_excel($id) {
-	$CI = &get_instance();
-	$CI->db->where('sales_id', $id);
-	$query = $CI->db->get('sales_order_item');
-	if ($query->num_rows() > 0) {
-		$result = "";
-		foreach ($query->result_array() as $data) {
-			$result .= get_product_name($data['product_id']) . $data['sales_item_qty'] . '$' . $data['sales_item_price'] . '，';
-		}
-		return $result;
-	}
-	return false;
-}
-
-function get_warehouse_stock_excel($id) {
-	$CI = &get_instance();
-	$query = $CI->db->get('warehouse');
-	if ($query->num_rows() > 0) {
-		$html = '';
-		foreach ($query->result_array() as $data) {
-			$html .= $data['warehouse_name'] . get_stock_qty_by_warehouse($id, $data['warehouse_id']) . ',';
-		}
-		return $html;
-	}
-	return false;
-}
-
 function get_setting_general($name) {
 	$CI = &get_instance();
 	$CI->db->where('setting_general_name', $name);
-	$CI->db->select('setting_general_value');
-	$CI->db->limit(1);
-	$query = $CI->db->get('setting_general');
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['setting_general_value'];
-		return $data;
-	}
-}
-
-function get_decimal_point() {
-	$CI = &get_instance();
-	$CI->db->where('setting_general_name', 'decimal_point');
-	$CI->db->select('setting_general_value');
-	$CI->db->limit(1);
-	$query = $CI->db->get('setting_general');
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['setting_general_value'];
-		return $data;
-	}
-}
-
-function get_tax() {
-	$CI = &get_instance();
-	$CI->db->where('setting_general_name', 'tax');
 	$CI->db->select('setting_general_value');
 	$CI->db->limit(1);
 	$query = $CI->db->get('setting_general');
@@ -819,17 +593,6 @@ function get_tw_date($data) {
 	$m = substr($result, 3, 2);
 	$d = substr($result, 5, 2);
 	return $y . '年' . $m . '月' . $d . '日';
-}
-
-function get_contact_person($id, $type) {
-	$CI = &get_instance();
-	$CI->db->select($type);
-	$query = $CI->db->get_where('contact_person', array('contact_person_id' => $id));
-	if ($query->num_rows() > 0) {
-		$result = $query->row_array();
-		$data = $result[$type];
-		return $data;
-	}
 }
 
 function get_expatriate_name($id) {
@@ -1084,41 +847,4 @@ function utf8_to_big5_array($array) {
 		}
 	});
 	return $array;
-}
-
-function positive_integer($num, $positive = true, $int = true) {
-/**
- * $num         字符串判断
- * $positive    正负判断
- * $int         整数/小数判断
- */
-	if ($num) {
-		if (is_numeric($num)) {
-			if ($positive && $num > 0 && !$int) {
-				return true; //正数
-			} elseif ($int && floor($num) == $num && !$positive) {
-				return true; //整数
-			} elseif ($positive && $int && $num > 0 && floor($num) == $num) {
-				return true; //正整数
-			} elseif ($positive && $int && $num > 0 && floor($num) != $num) {
-				return true; //正小数
-			} elseif ($positive && $num < 0 && !$int) {
-				return false; //负数
-			} elseif ($int && floor($num) != $num && !$positive) {
-				return false; //小数
-			} elseif ($positive && $int && $num < 0 && floor($num) != $num) {
-				return false; //负小数
-			} elseif ($positive && $int && $num < 0 && floor($num) == $num) {
-				return false; //负整数
-			} else {
-				return false; //未知类型的数字
-			}
-		} else {
-			return false; //不是数字
-		}
-	} elseif ($num === '0') {
-		return false;
-	} else {
-		return true; //表单未填写
-	}
 }

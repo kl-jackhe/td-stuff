@@ -23,7 +23,7 @@
 		      		<a href="#coupon" aria-controls="coupon" role="tab" data-toggle="tab">推薦碼優惠券設定</a>
 		      	</li> -->
 		    	<li role="presentation" class="active">
-		      		<a href="#company" aria-controls="company" role="tab" data-toggle="tab">公司設定</a>
+		      		<a href="#company" aria-controls="company" role="tab" data-toggle="tab">全站設定</a>
 		      	</li>
 		  	</ul>
 
@@ -33,7 +33,7 @@
 			    <div role="tabpanel" class="tab-pane active" id="company">
 
 			      	<div class="form-group">
-						<label class="col-md-2" for="name">公司名稱</label>
+						<label class="col-md-2" for="name">網站名稱</label>
 						<div class="col-md-4">
 							<input type="text" name="name" id="name" class="form-control" value="<?php echo get_setting_general('name') ?>"/>
 						</div>

@@ -521,20 +521,4 @@ class Order extends Admin_Controller {
         }
     }
 
-    public function dompdf($id)
-    {
-        $this->data['order'] = $this->mysql_model->_select('orders','order_id',$id,'row');
-        // $this->data['order_item'] = $this->mysql_model->_select('order_item','order_id',$id);
-        $this->data['order_item'] = $this->order_model->get_order_item_with_product($id);
-        $this->load->view('admin/order/dompdf', $this->data);
-    }
-
-    public function dompdf_download($id)
-    {
-        $this->data['order'] = $this->mysql_model->_select('orders','order_id',$id,'row');
-        // $this->data['order_item'] = $this->mysql_model->_select('order_item','order_id',$id);
-        $this->data['order_item'] = $this->order_model->get_order_item_with_product($id);
-        $this->load->view('admin/order/dompdf-download', $this->data);
-    }
-
 }
