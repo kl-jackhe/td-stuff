@@ -158,18 +158,16 @@ foreach ($this->cart->contents() as $items) {
                                 <div class="col-12 col-md-6 py-2">
                                     <h3>運送方式</h3>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery1" value="home_delivery_frozen" checked>
-                                        <label class="form-check-label" for="checkout_delivery1">
-                                            宅配(冷凍)(台灣本島)+150
-                                        </label>
-                                        <!-- <p>文字描述</p> -->
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="family_pickup__frozen">
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="711_pickup_frozen" checked>
                                         <label class="form-check-label" for="checkout_delivery2">
-                                            全家(冷凍)(超商取貨)+150
+                                            7-11-超商取貨
                                         </label>
-                                        <!-- <p>文字描述</p> -->
+                                    </div>
+                                    <div class="form-check d-none">
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="family_pickup_frozen">
+                                        <label class="form-check-label" for="checkout_delivery2">
+                                            全家-超商取貨
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 py-2">
@@ -179,15 +177,13 @@ foreach ($this->cart->contents() as $items) {
                                         <label class="form-check-label" for="checkout_payment1">
                                             銀行匯款
                                         </label>
-                                        <!-- <p>文字描述</p> -->
                                     </div>
-                                    <div class="form-check">
+                                    <!-- <div class="form-check">
                                         <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment2" value="credit">
                                         <label class="form-check-label" for="checkout_payment2">
                                             信用卡
                                         </label>
-                                        <!-- <p>文字描述</p> -->
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -220,19 +216,29 @@ foreach ($this->cart->contents() as $items) {
                                     </div>
                                     <input type="text" class="form-control" name="email" placeholder="範例：test@test.com.tw" required>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
-                                        <div class="input-group-prepend">
-                                            <label class="input-group-text" for="inputGroupSelect01">縣/市</label>
-                                        </div>
-                                        <div style="width: 89.9%;">
-                                            <div id="twzipcode"></div>
-                                        </div>
+                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">縣/市</label>
+                                    </div>
+                                    <div style="width: 89.9%;">
+                                        <div id="twzipcode"></div>
+                                    </div>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
+                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" placeholder="請輸入詳細地址" required>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">取貨門市</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="storename" value="<?php echo $this->input->post('storename') ?>" placeholder="門市名稱" readonly>
+                                    <input type="text" class="form-control" name="storeaddress" value="<?php echo $this->input->post('storeaddress') ?>" placeholder="門市地址" readonly>
+                                    <div style="width: 100%; margin-top: 15px;">
+                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -293,4 +299,10 @@ $("#wizard").steps({
         // 'countySel': '<?php // echo $user->county ?>',
         // 'districtSel': '<?php // echo $user->district ?>'
     });
+</script>
+
+<script>
+    function select_store_info() {
+        $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout' ?>');
+    }
 </script>
