@@ -62,7 +62,7 @@
         </div>
         <div class="col-5">
             <div class="row">
-                <div class="col-12 py-2">
+                <div class="col-12 py-2 px-0">
                     <span style="font-weight: bold; font-size: 16px;">
                         <?php echo $items['name']; ?></span>
                     <!-- <ul class="pl-3 m-0" style="color:gray;">
