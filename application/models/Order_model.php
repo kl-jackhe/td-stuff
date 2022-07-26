@@ -7,9 +7,11 @@ class Order_model extends CI_Model {
         $this->db->from('orders');
         //filter data by searched keywords
         if(!empty($params['search']['keywords'])){
+            $this->db->group_start();
             $this->db->like('order_number',$params['search']['keywords']);
             $this->db->or_like('customer_name',$params['search']['keywords']);
             $this->db->or_like('customer_phone',$params['search']['keywords']);
+            $this->db->group_end();
         }
         if(!empty($params['search']['category'])){
             $this->db->where('order_pay_status',$params['search']['category']);
@@ -24,7 +26,6 @@ class Order_model extends CI_Model {
             $this->db->order_by('order_date', $params['search']['sortBy']);
         } else {
             $this->db->order_by('order_date', 'desc');
-            $this->db->order_by('order_id', 'desc');
         }
         // if(!empty($params['search']['status'])){
         //     $this->db->where('order_status',$params['search']['status']);
@@ -37,10 +38,15 @@ class Order_model extends CI_Model {
         }elseif(!array_key_exists("start",$params) && array_key_exists("limit",$params)){
             $this->db->limit($params['limit']);
         }
-        //get records
-        $query = $this->db->get();
-        //return fetched data
-        return ($query->num_rows() > 0)?$query->result_array():false;
+        if(array_key_exists("returnType",$params) && $params['returnType'] == 'count'){
+            $result = $this->db->count_all_results();
+        }else{
+            //get records
+            $query = $this->db->get();
+            //return fetched data
+            $result = ($query->num_rows() > 0)?$query->result_array():false;
+        }
+        return $result;
     }
 
     function find_all_order($params = array()){

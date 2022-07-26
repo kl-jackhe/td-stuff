@@ -13,13 +13,13 @@ select.district {
   <div class="col-md-6">
     <div class="form-inline form-group text-right">
       <input type="text" id="keywords" class="form-control" placeholder="訂單編號..." onkeyup="searchFilter()"/>
-      <select id="category" class="form-control" onchange="searchFilter()">
+      <select id="category" class="form-control hide" onchange="searchFilter()">
         <option value="">付款狀態</option>
         <option value="not_paid">未付款</option>
         <option value="paid">已付款</option>
         <!-- <option value="finish">已完成</option> -->
       </select>
-      <select id="category2" class="form-control" onchange="searchFilter()">
+      <select id="category2" class="form-control hide" onchange="searchFilter()">
         <option value="">訂單狀態</option>
         <option value="accept">接收訂單</option>
         <option value="prepare">餐點準備中</option>

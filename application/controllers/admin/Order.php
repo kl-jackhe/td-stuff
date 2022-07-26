@@ -14,7 +14,8 @@ class Order extends Admin_Controller {
 
         $data = array();
         //total rows count
-        $totalRec = count($this->order_model->getRows());
+        $conditions['returnType'] = 'count';
+        $totalRec = $this->order_model->getRows($conditions);
         //pagination configuration
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/order/ajaxData';
@@ -61,7 +62,8 @@ class Order extends Admin_Controller {
         //     $conditions['search']['status'] = $status;
         // }
         //total rows count
-        $totalRec = count($this->order_model->getRows($conditions));
+        $conditions['returnType'] = 'count';
+        $totalRec = $this->order_model->getRows($conditions);
         //pagination configuration
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/order/ajaxData';
@@ -73,6 +75,7 @@ class Order extends Admin_Controller {
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;
         //get posts data
+        $conditions['returnType'] = '';
         $this->data['orders'] = $this->order_model->getRows($conditions);
         //load the view
         $this->load->view('admin/order/ajax-data', $this->data, false);
