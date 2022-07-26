@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="row justify-content-center text-center">
                 <div class="col-md-6">
-                    <span style="color: #fff;">Copyright © 2022 龍寶嚴選. All rights reserved.</span>
+                    <span style="color: #fff;">Copyright © 2022 <?php echo get_setting_general('name'); ?>. All rights reserved.</span>
                 </div>
             </div>
         </div>

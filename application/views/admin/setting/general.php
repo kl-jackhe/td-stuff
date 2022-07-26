@@ -75,37 +75,19 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2" for="email">寄件電子郵件</label>
+						<label class="col-md-2" for="email">電子郵件</label>
 						<div class="col-md-4">
 							<input type="text" name="email" id="email" class="form-control" value="<?php echo get_setting_general('email') ?>"/>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2" for="email1">收件電子郵件1</label>
-						<div class="col-md-4">
-							<input type="text" name="email1" id="email1" class="form-control" value="<?php echo get_setting_general('email1') ?>"/>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-2" for="email2">收件電子郵件2</label>
-						<div class="col-md-4">
-							<input type="text" name="email2" id="email2" class="form-control" value="<?php echo get_setting_general('email2') ?>"/>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="col-md-2" for="email3">收件電子郵件3</label>
-						<div class="col-md-4">
-							<input type="text" name="email3" id="email3" class="form-control" value="<?php echo get_setting_general('email3') ?>"/>
-						</div>
-					</div>
-					<div class="form-group hide">
 						<label class="col-md-2" for="atm_bank_code">銀行代碼</label>
 						<div class="col-md-4">
 							<input type="text" name="atm_bank_code" id="atm_bank_code" class="form-control" value="<?php echo get_setting_general('atm_bank_code') ?>"/>
 						</div>
 					</div>
-					<div class="form-group hide">
-						<label class="col-md-2" for="atm_bank_account">銀行付款帳號</label>
+					<div class="form-group">
+						<label class="col-md-2" for="atm_bank_account">銀行帳號</label>
 						<div class="col-md-4">
 							<input type="text" name="atm_bank_account" id="atm_bank_account" class="form-control" value="<?php echo get_setting_general('atm_bank_account') ?>"/>
 						</div>
@@ -162,14 +144,3 @@
 		<?php echo form_close() ?>
 	</div>
 </div>
-
-<script>
-	$('#twzipcode').twzipcode({
-      	// 'detect': true, // 預設值為 false
-      	'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-      	'countySel'   : '<?php echo get_setting_general('coupon_localtion_county') ?>',
-      	'districtSel' : '<?php echo get_setting_general('coupon_localtion_district') ?>',
-      	'hideCounty' : [<?php if(!empty($hide_county)){ foreach($hide_county as $hc){ echo '"'.$hc.'",'; }} ?>],
-      	'hideDistrict': [<?php if(!empty($hide_district)){ foreach($hide_district as $hd){ echo '"'.$hd.'",'; }} ?>]
-  	});
-</script>

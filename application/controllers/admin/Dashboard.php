@@ -10,7 +10,7 @@ class Dashboard extends Admin_Controller {
     public function index()
     {
         $this->data['page_title'] = '控制台';
-        $this->render('dashboard/index');
+        $this->render('admin/dashboard/index');
     }
 
     public function get_today_order_income()
