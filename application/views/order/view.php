@@ -1,19 +1,29 @@
+<style>
+    .front_title {
+        font-size: 18px;
+    }
+    .money_size {
+        color: #dd0606;
+        font-weight: bold;
+        font-size: 24px;
+    }
+</style>
 <div class="checkout-list" style="border: none; box-shadow: none; margin-bottom: 0px;">
     <div class="row">
         <div class="col-md-12">
             <h3 class="m-0">下單日期：2022-07-06 16:24:32</h3>
             <h3 class="m-0 py-2">訂單狀態：已寄貨</h3>
             <h3 class="m-0 pb-2">訂單內容</h3>
-            <table class="table table-hover m_table_none">
+            <table class="table table-hover m_table_none m-0">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col" class="text-nowrap" style="width: 100px;">圖片</th>
+                        <th scope="col" class="text-nowrap">圖片</th>
                         <th scope="col" class="text-nowrap">商品</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="border-top:1px solid dimgray;">
+                    <tr>
                         <td>1</td>
                         <td>
                             <a href="#">
@@ -30,22 +40,22 @@
                 </tbody>
             </table>
             <hr>
-            <span>購物車小計：<span style="color: #dd0606;font-weight: bold;"> $150</span></span>
+            <span class="front_title">購物車小計：<span class="money_size"> $150</span></span>
             <hr>
             <h3>配送 / 取貨方式：7-11超商取貨</h3>
-            <p>配送 / 取貨地點：東英門市</p>
-            <span>運費：<span style="color: #dd0606;font-weight: bold;"> $0</span></span>
+            <h3>配送 / 取貨地點：東英門市</h3>
+            <span class="front_title">運費：<span class="money_size"> $0</span></span>
             <hr>
-            <span>總計：<span style="color: #dd0606;font-weight: bold;"> $150</span></span>
+            <span class="front_title">總計：<span class="money_size"> $150</span></span>
             <hr>
             <h3>付款方式：銀行匯款</h3>
-            <p>付款狀態：已付款</p>
+            <h3>付款狀態：已付款</h3>
             <hr>
             <h3>訂購人資訊</h3>
-            <p>姓名：</p>
-            <p>聯絡電話：</p>
-            <p>E-mail：</p>
-            <p>地址：</p>
+            <p>姓名：XXX</p>
+            <p>聯絡電話：0987654321</p>
+            <p>E-mail：asdfghh@kuangli.tw</p>
+            <p>地址：台中市</p>
             <hr>
             <h3>訂單備註</h3>
             <p>fsdafsadfasdf</p>

@@ -1,9 +1,12 @@
 <link rel="stylesheet" href="/node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"> -->
 <style>
-    .form-horizontal .control-label{
+.fixed-bottom {
+    display: none;
+}
+.form-horizontal .control-label {
     text-align: left;
-  }
+}
 select.county {
   width: 48%;
   float: left;
