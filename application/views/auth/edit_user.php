@@ -76,7 +76,7 @@ input.zipcode{
                                 <span class="input-group-text"><i class="fas fa-street-view"></i></span>
                             </div>
                             <div id="twzipcode"></div>
-                            <div class="col-12 p-0">
+                            <div class="col-12 p-0" style="margin-top: 15px;">
                                 <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address ?>">
                             </div>
                         </div>
@@ -158,18 +158,7 @@ function form_submit() {
                 if (data == '1') {
                     alert('此電話號碼已存在');
                 } else {
-                    var code_num = document.getElementById("code_num").value;
-                    var sms_code = document.getElementById("sms_code").value;
-                    if (code_num == '') {
-                        alert('修改手機號碼需要重新驗證。');
-                    } else {
-                        if (code_num == sms_code) {
-                            // alert('OOO');
-                            $('#edit_user_form').submit();
-                        } else {
-                            alert('驗證碼不正確');
-                        }
-                    }
+                    $('#edit_user_form').submit();
                 }
             }
         });
