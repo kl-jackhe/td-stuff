@@ -110,9 +110,6 @@
         padding: 2px 12px 2px 12px !important;
     }
     .fixed_icon_style {
-        left: auto;right: 25px;bottom: 60px;
-    }
-    .fixed_icon_style i {
         font-size: 48px;
     }
     @media (min-width: 768px) and (max-width: 991.98px) {
@@ -159,26 +156,26 @@
 
 <body>
     <div class="body h-100">
-        <div class="fixed-bottom fixed_icon_style">
+        <div class="fixed-bottom" style="left: auto;right: 25px;bottom: 60px;">
             <div id="fa-facebook-square" class="py-1">
                 <a href="#">
-                    <i class="fa-brands fa-facebook-square"></i>
+                    <i class="fa-brands fa-facebook-square fixed_icon_style"></i>
                 </a>
             </div>
             <div id="fa-line" class="py-1">
                 <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
-                    <i class="fa-brands fa-line"></i>
+                    <i class="fa-brands fa-line fixed_icon_style"></i>
                 </a>
             </div>
             <div id="fa-bag-shopping" class="py-1">
                 <a href="#" data-toggle="modal" data-target="#my_cart" onclick="get_mini_cart();">
                     <div id="cart-qty"><span style="color: #000;">0</span></div>
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-solid fa-bag-shopping fixed_icon_style"></i>
                 </a>
             </div>
             <div id="fa-angles-up" class="py-1 text-center" style="display:none;">
                 <a href="#" style="color:black;">
-                    <i class="fa-solid fa-angles-up"></i>
+                    <i class="fa-solid fa-angles-up fixed_icon_style"></i>
                 </a>
             </div>
         </div>
@@ -228,7 +225,7 @@
                             </div>
                         </nav>
                         <div class="px-4 m_hr_border">
-                            <hr>
+                            <hr style="border-top: 1px solid #988B7A;">
                         </div>
                     </div>
                 </div>

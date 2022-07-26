@@ -13,8 +13,8 @@
                                 </div>
                             <?php }?>
                             <div class="form-group">
-                                <h4>行動電話</h4>
-                                <input type="number" class="form-control" id="identity" name="identity" placeholder="請輸入行動電話..." required>
+                                <h4>信箱</h4>
+                                <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入信箱..." required>
                             </div>
                             <div class="form-group">
                                 <h4>密碼</h4>
