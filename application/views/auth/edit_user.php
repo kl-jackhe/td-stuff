@@ -77,7 +77,7 @@ input.zipcode{
                             </div>
                             <div id="twzipcode"></div>
                             <div class="col-12 p-0" style="margin-top: 15px;">
-                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address ?>">
+                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address ?>" placeholder="詳細地址">
                             </div>
                         </div>
                         <div class="input-group mb-3">
