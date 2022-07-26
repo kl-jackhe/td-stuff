@@ -217,17 +217,18 @@ tr:last-child td:last-child {
                         </div>
                         <div class="col-md-12" style="margin-top: 40px;">
                             <?php if (wp_is_mobile()) {
-                            	$status = '';
-                            	$step = '';
-                            	if (!empty($orders)) { foreach ($orders as $data) {
-                            		if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-                            		if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-                            		if ($data['order_step'] == 'picked') {$step = 'picked';}
-                            		if ($data['order_step'] == 'picked') {
-                                        $style = 'color: #fefefe; background: #A0A0A0;';
-                                    } else {
-                                        $style = 'color: #fefefe; background: #420252;';
-                                    } ?>
+	$status = '';
+	$step = '';
+	if (!empty($orders)) {
+		foreach ($orders as $data) {
+			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+			if ($data['order_step'] == 'picked') {$step = 'picked';}
+			if ($data['order_step'] == 'picked') {
+				$style = 'color: #fefefe; background: #A0A0A0;';
+			} else {
+				$style = 'color: #fefefe; background: #420252;';
+			}?>
                                     <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
                                         <tr>
                                             <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單編號</td>
@@ -238,11 +239,11 @@ tr:last-child td:last-child {
                                         <tr>
                                             <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送地址</td>
                                             <td colspan="3" class="fs-11 color-595757">
-                                                <?php if(!empty($data['order_store_address'])){
-                                                    echo $data['order_store_address'];
-                                                } else {
-                                                    echo $data['order_delivery_address'];
-                                                } ?>
+                                                <?php if (!empty($data['order_store_address'])) {
+				echo $data['order_store_address'];
+			} else {
+				echo $data['order_delivery_address'];
+			}?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -260,14 +261,15 @@ tr:last-child td:last-child {
                                             </td>
                                         </tr>
                                     </table>
-                                <?php }} ?>
+                                <?php }}?>
                             <?php } else {
-                            	$status = '';
-                            	$step = '';
-                            	if (!empty($orders)) { foreach ($orders as $data) {
-                                	if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-                                	if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-                                	if ($data['order_step'] == 'picked') {$step = 'picked'; }?>
+	$status = '';
+	$step = '';
+	if (!empty($orders)) {
+		foreach ($orders as $data) {
+			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+			if ($data['order_step'] == 'picked') {$step = 'picked';}?>
                                     <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
                                         <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {echo '#A0A0A0';} else {echo '#420252;';}?>">
                                             <td class="text-center fs-12" style="width: 12%;">訂單編號/日期</td>
@@ -287,11 +289,11 @@ tr:last-child td:last-child {
                                                 <?php echo format_number($data['order_discount_total']) ?>
                                             </td>
                                             <td class="fs-11 color-595757">
-                                                <?php if(!empty($data['order_store_address'])){
-                                                    echo $data['order_store_name'].' '.$data['order_store_address'];
-                                                } else {
-                                                    echo $data['order_delivery_address'];
-                                                } ?>
+                                                <?php if (!empty($data['order_store_address'])) {
+				echo $data['order_store_name'] . ' ' . $data['order_store_address'];
+			} else {
+				echo $data['order_delivery_address'];
+			}?>
                                             </td>
                                             <td class="fs-11 color-595757">
                                                 <?php echo get_delivery($data['order_delivery']) ?>
@@ -305,8 +307,8 @@ tr:last-child td:last-child {
                                             <td class="fs-11 color-595757"><a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a></td>
                                         </tr>
                                     </table>
-                                <?php }} ?>
-                            <?php } ?>
+                                <?php }}?>
+                            <?php }?>
                         </div>
                     </div>
                 </div>
@@ -328,9 +330,14 @@ tr:last-child td:last-child {
                 <p>讀取中...</p>
             </div>
             <div class="modal-footer">
-                <div class="row">
-                    <div class="col-12">
-                        <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-6">
+                            <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
+                        </div>
+                        <div class="col-6">
+                            <a href="https://line.me/R/ti/p/@504bdron"><span class="btn btn-info btn-block mt-md">聯繫客服</span></a>
+                        </div>
                     </div>
                 </div>
             </div>
