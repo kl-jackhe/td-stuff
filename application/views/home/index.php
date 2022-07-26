@@ -57,20 +57,53 @@
     line-height: 35px;
 }
 #zoomA {
-  /* (A) OPTIONAL DIMENSIONS */
-  /*width: 600px;*/
-  /*height: auto;*/
-  /* (B) ANIMATE ZOOM */
-  /* ease | ease-in | ease-out | linear */
   transition: transform ease-in-out 0s;
 }
-/* (C) ZOOM ON HOVER */
-#zoomA:hover { transform: scale(1.1); }
+#zoomA:hover {
+    transform: scale(1.1);
+}
+
+.select_product {
+    background-color: #68396D;
+    color: #fff !important;
+    width: 50%;
+    line-height: 1.8;
+    padding: 0;
+}
+.product_img_style {
+    border-radius: 15px;
+    max-width: 900px;
+    max-height: 900px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+.product_box {
+    padding: 25px;
+}
+.carousel_box {
+    padding: 0px 25px 0px 25px;
+}
+.page-header {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+@media (max-width: 767px) {
+    .product_box {
+        padding: 0px;
+    }
+    .carousel_box {
+        padding: 0px;
+    }
+    .page-header {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
 </style>
 <div role="main" class="main">
-    <section class="page-header no-padding sm-slide-fix" style="padding-left: 30px;padding-right: 30px;">
+    <section class="page-header no-padding sm-slide-fix">
         <div class="container">
-            <div class="row" style="padding: 0px 25px 0px 25px;">
+            <div class="row carousel_box">
                 <div class="col-md-12 owl-carousel owl-theme item-slide" data-plugin-options='{"items":1, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}'>
                     <?php if (!empty($banner)) {foreach ($banner as $data) {?>
                     <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
@@ -81,7 +114,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="row" style="padding:25px">
+            <div class="row product_box">
                 <div class="col-md-12 text-center">
                     <span style="font-size:24px;">熱銷商品</span>
                     <hr style="border-top: 1px solid #988B7A;margin: 10px 0px 25px 0px;">
@@ -95,9 +128,9 @@
                         <div class="col-md-4 pb-5">
                             <a href="/product/view/<?=$product['product_id']?>">
                                 <?if (!empty($product['product_image'])) {?>
-                                <img id="zoomA" style="border-radius: 15px;max-width: 900px;max-height: 900px;width: 100%;margin-bottom: 15px;" src="/assets/uploads/<?=$product['product_image'];?>">
+                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
                                 <?}else{?>
-                                <img style="border-radius: 15px;max-width: 900px;max-height: 900px;width: 100%;margin-bottom: 15px;" src="/assets/uploads/Product/img-600x600.png">
+                                <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
                                 <?}?>
                                 <div class="product_name">
                                     <span>
@@ -108,7 +141,7 @@
                                 $<span style="color:#68396D">
                                     <?=$product['product_price'];?></span>
                             </div>
-                            <a class="btn" style="background-color: #68396D;color: #fff;width: 50%;line-height: 1.8;padding: 0;" href="/product/view/<?=$product['product_id']?>">
+                            <a class="btn select_product" href="/product/view/<?=$product['product_id']?>">
                                 <span>選購</span>
                             </a>
                         </div>
