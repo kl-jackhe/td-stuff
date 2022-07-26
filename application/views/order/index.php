@@ -204,7 +204,7 @@ tr:last-child td:last-child {
                 </div>
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-6" style="margin-top: 20px;">
+                        <div class="col-md-6 d-none" style="margin-top: 20px;">
                             <div class="form-inline text-left">
                                 <label class="fs-13 color-595757">訂單狀態：</label>
                                 <select id="order_status" class="form-control" onchange="get_order()">
@@ -217,96 +217,96 @@ tr:last-child td:last-child {
                         </div>
                         <div class="col-md-12" style="margin-top: 40px;">
                             <?php if (wp_is_mobile()) {
-	$status = '';
-	$step = '';
-	if (!empty($orders)) {
-		foreach ($orders as $data) {
-			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-			if ($data['order_step'] == 'picked') {$step = 'picked';}
-			if ($data['order_step'] == 'picked') {$style = 'color: #fefefe; background: #A0A0A0;';} else { $style = 'color: #fefefe; background: #420252;';}?>
-                            <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
-                                <tr>
-                                    <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單編號</td>
-                                    <td class="fs-11 color-595757" style="width: 24%;">#202206010001</td>
-                                    <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂購時間</td>
-                                    <td class="fs-11 color-595757" style="width: 24%;">
-                                        <?php echo $data['order_date'] ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送/取貨地點</td>
-                                    <td colspan="3" class="fs-11 color-595757">
-                                        <?php if (!empty($data['order_delivery_address'])) {
-				echo $data['order_delivery_address'];
-			} else {
-				echo get_delivery_place_name($data['order_delivery_place']);}?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center fs-12" style="<?php echo $style ?>">付款狀態</td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo get_pay_status($data['order_pay_status']) ?>
-                                        <?php // echo get_order_step($data['order_step']) ?>
-                                    </td>
-                                    <td class="text-center fs-12" style="<?php echo $style ?>">付款期限</td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo substr($data['created_at'], 0, 10) ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單狀態</td>
-                                    <td class="fs-11 color-595757" style="width: 24%;">已付款</td>
-                                    <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
-                                    <td class="fs-11 color-595757" style="width: 24%;">
-                                        <a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a>
-                                    </td>
-                                </tr>
-                            </table>
-                            <?php }}} else {
-	$status = '';
-	$step = '';
-	if (!empty($orders)) {
-		foreach ($orders as $data) {
-			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-			if ($data['order_step'] == 'picked') {$step = 'picked';}?>
-                            <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
-                                <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {echo '#A0A0A0';} else {echo '#420252;';}?>">
-                                    <td>訂單編號</td>
-                                    <td class="text-center fs-12" style="width: 12%;">訂購時間</td>
-                                    <td class="text-center fs-12" style="width: 40%;">配送/取貨地點</td>
-                                    <td class="text-center fs-12" style="width: 12%;">付款期限</td>
-                                    <td class="text-center fs-12" style="width: 12%;">付款狀態</td>
-                                    <td class="text-center fs-12" style="width: 12%;">訂單狀態</td>
-                                    <td class="text-center fs-12" style="width: 12%;">訂單明細</td>
-                                </tr>
-                                <tr>
-                                    <td>#202206010001</td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo $data['order_date'] ?>
-                                    </td>
-                                    <!-- <td class="fs-11 color-595757"><?php echo $data['created_at'] ?></td> -->
-                                    <td class="fs-11 color-595757">
-                                        <?php if (!empty($data['order_delivery_address'])) {
-				echo $data['order_delivery_address'];
-			} else {
-				echo get_delivery_place_name($data['order_delivery_place']);
-			}?>
-                                    </td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo substr($data['created_at'], 0, 10) ?>
-                                    </td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo get_pay_status($data['order_pay_status']) ?>
-                                    </td>
-                                    <td class="fs-11 color-595757">
-                                        <?php echo get_order_step($data['order_step']) ?>
-                                    </td>
-                                    <td class="fs-11 color-595757"><a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a></td>
-                                </tr>
-                            </table>
-                            <?php }}}?>
+                            	$status = '';
+                            	$step = '';
+                            	if (!empty($orders)) { foreach ($orders as $data) {
+                            		if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+                            		if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+                            		if ($data['order_step'] == 'picked') {$step = 'picked';}
+                            		if ($data['order_step'] == 'picked') {
+                                        $style = 'color: #fefefe; background: #A0A0A0;';
+                                    } else {
+                                        $style = 'color: #fefefe; background: #420252;';
+                                    } ?>
+                                    <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
+                                        <tr>
+                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單編號</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_number'] ?></td>
+                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單日期</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_date'] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送地址</td>
+                                            <td colspan="3" class="fs-11 color-595757">
+                                                <?php if(!empty($data['order_store_address'])){
+                                                    echo $data['order_store_address'];
+                                                } else {
+                                                    echo $data['order_delivery_address'];
+                                                } ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">配送方式</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_delivery($data['order_delivery']) ?></td>
+                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">付款方式</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_payment($data['order_payment']) ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單狀態</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_order_step($data['order_step']) ?></td>
+                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
+                                            <td class="fs-11 color-595757" style="width: 24%;">
+                                                <a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                <?php }} ?>
+                            <?php } else {
+                            	$status = '';
+                            	$step = '';
+                            	if (!empty($orders)) { foreach ($orders as $data) {
+                                	if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
+                                	if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
+                                	if ($data['order_step'] == 'picked') {$step = 'picked'; }?>
+                                    <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
+                                        <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {echo '#A0A0A0';} else {echo '#420252;';}?>">
+                                            <td class="text-center fs-12" style="width: 12%;">訂單編號/日期</td>
+                                            <td class="text-center fs-12" style="width: 12%;">訂單金額</td>
+                                            <td class="text-center fs-12" style="width: auto;">配送地址</td>
+                                            <td class="text-center fs-12" style="width: 12%;">配送方式</td>
+                                            <td class="text-center fs-12" style="width: 12%;">付款方式</td>
+                                            <td class="text-center fs-12" style="width: 12%;">訂單狀態</td>
+                                            <td class="text-center fs-12" style="width: 12%;">訂單明細</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fs-11 color-595757">
+                                                <?php echo $data['order_number'] ?><br>
+                                                <?php echo $data['order_date'] ?>
+                                            </td>
+                                            <td class="fs-11 color-595757">
+                                                <?php echo format_number($data['order_discount_total']) ?>
+                                            </td>
+                                            <td class="fs-11 color-595757">
+                                                <?php if(!empty($data['order_store_address'])){
+                                                    echo $data['order_store_name'].' '.$data['order_store_address'];
+                                                } else {
+                                                    echo $data['order_delivery_address'];
+                                                } ?>
+                                            </td>
+                                            <td class="fs-11 color-595757">
+                                                <?php echo get_delivery($data['order_delivery']) ?>
+                                            </td>
+                                            <td class="fs-11 color-595757">
+                                                <?php echo get_payment($data['order_payment']) ?>
+                                            </td>
+                                            <td class="fs-11 color-595757">
+                                                <?php echo get_order_step($data['order_step']) ?>
+                                            </td>
+                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a></td>
+                                        </tr>
+                                    </table>
+                                <?php }} ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -319,7 +319,7 @@ tr:last-child td:last-child {
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title m-0" id="my_cart_title">訂單編號：#202201030001</h3>
+                <h3 class="modal-title m-0"></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -328,14 +328,9 @@ tr:last-child td:last-child {
                 <p>讀取中...</p>
             </div>
             <div class="modal-footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-6">
-                            <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
-                        </div>
-                        <div class="col-6">
-                            <a href="https://line.me/R/ti/p/@504bdron"><span class="btn btn-info btn-block mt-md">聯繫客服</span></a>
-                        </div>
+                <div class="row">
+                    <div class="col-12">
+                        <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
                     </div>
                 </div>
             </div>

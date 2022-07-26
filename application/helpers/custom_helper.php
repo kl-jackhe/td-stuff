@@ -274,26 +274,14 @@ function get_pay_status($data) {
 
 function get_order_step($data) {
 	switch ($data) {
-		case 'accept':
-			return "接收訂單";
-			break;
-		case 'prepare':
-			return "餐點準備中";
+		case 'confirm':
+			return "訂單確認";
 			break;
 		case 'shipping':
-			return "餐點運送中";
+			return "已出貨";
 			break;
-		case 'arrive':
-			return "司機抵達";
-			break;
-		case 'picked':
-			return "已取餐";
-			break;
-		case 'cancel':
-			return "取消訂單";
-			break;
-		case 'void':
-			return "已退單";
+		case 'complete':
+			return "完成";
 			break;
 	}
 }
@@ -331,42 +319,42 @@ function get_payment($data) {
 
 function get_en_date($data) {
 	switch ($data) {
-	case 'Jan':
-		return "01";
-		break;
-	case 'Feb':
-		return "02";
-		break;
-	case 'Mar':
-		return "03";
-		break;
-	case 'Apr':
-		return "04";
-		break;
-	case 'May':
-		return "05";
-		break;
-	case 'Jun':
-		return "06";
-		break;
-	case 'Jul':
-		return "07";
-		break;
-	case 'Aug':
-		return "08";
-		break;
-	case 'Sep':
-		return "09";
-		break;
-	case 'Oct':
-		return "10";
-		break;
-	case 'Nov':
-		return "11";
-		break;
-	case 'Dec':
-		return "12";
-		break;
+		case 'Jan':
+			return "01";
+			break;
+		case 'Feb':
+			return "02";
+			break;
+		case 'Mar':
+			return "03";
+			break;
+		case 'Apr':
+			return "04";
+			break;
+		case 'May':
+			return "05";
+			break;
+		case 'Jun':
+			return "06";
+			break;
+		case 'Jul':
+			return "07";
+			break;
+		case 'Aug':
+			return "08";
+			break;
+		case 'Sep':
+			return "09";
+			break;
+		case 'Oct':
+			return "10";
+			break;
+		case 'Nov':
+			return "11";
+			break;
+		case 'Dec':
+			return "12";
+			break;
 	}
 }
 
@@ -394,6 +382,13 @@ function get_empty_remark($data) {
 	}
 }
 
+function format_number($number, $n = 0){
+	if($n==''){
+		$n = 0;
+	}
+	return ($number == 0) ? '0' : number_format( $number, $n );
+}
+
 function get_chinese_weekday($datetime) {
 	$weekday = date('w', strtotime($datetime));
 	$weeklist = array('日', '一', '二', '三', '四', '五', '六');
@@ -405,6 +400,13 @@ function get_image($data) {
 		$result = '<a href="/assets/uploads/' . $data . '" data-fancybox data-caption="' . $data . '"><img src="/assets/uploads/' . $data . '" class="img-responsive" /></a>';
 	} else {
 		$result = '<img src="/assets/images/no-image.jpg" class="img-responsive" />';
+	}
+	return $result;
+}
+
+function get_front_image($data) {
+	if (!empty($data)) {
+		$result = '<img src="/assets/uploads/' . $data . '" class="img-fluid">';
 	}
 	return $result;
 }

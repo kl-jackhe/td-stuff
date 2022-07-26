@@ -109,61 +109,6 @@ function get_product_id_by_name($data) {
 	}
 }
 
-function get_product_daily_stock($store_order_time_id, $product_id) {
-	$CI = &get_instance();
-	$CI->db->select('product_daily_stock');
-	$CI->db->where('store_order_time_id', $store_order_time_id);
-	$CI->db->where('product_id', $product_id);
-	$CI->db->limit(1);
-	$query = $CI->db->get('store_order_time_item');
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['product_daily_stock'];
-		return $data;
-	}
-}
-
-function get_product_person_buy($store_order_time_id, $product_id) {
-	$CI = &get_instance();
-	$CI->db->select('product_person_buy');
-	$CI->db->where('store_order_time_id', $store_order_time_id);
-	$CI->db->where('product_id', $product_id);
-	$CI->db->where('product_person_buy!=', 0);
-	$CI->db->limit(1);
-	$query = $CI->db->get('store_order_time_item');
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['product_person_buy'];
-		return $data;
-	} else {
-		return 999;
-	}
-}
-
-function get_product_type($data) {
-	$CI = &get_instance();
-	$CI->db->select('product_type');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('product', array('product_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['product_type'];
-		return $data;
-	}
-}
-
-function get_product_cost($data) {
-	$CI = &get_instance();
-	$CI->db->select('product_cost');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('product', array('product_id' => $data));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['product_cost'];
-		return $data;
-	}
-}
-
 function get_product_name($id) {
 	$CI = &get_instance();
 	$CI->db->select('product_name');
@@ -172,18 +117,6 @@ function get_product_name($id) {
 	if ($query->num_rows() > 0) {
 		$row = $query->row_array();
 		$data = $row['product_name'];
-		return $data;
-	}
-}
-
-function get_product_warehouse($id) {
-	$CI = &get_instance();
-	$CI->db->select('product_warehouse');
-	$CI->db->limit(1);
-	$query = $CI->db->get_where('product', array('product_id' => $id));
-	if ($query->num_rows() > 0) {
-		$row = $query->row_array();
-		$data = $row['product_warehouse'];
 		return $data;
 	}
 }
@@ -416,4 +349,16 @@ function get_cart_product_qty($product_id) {
 		}
 	}
 	return $qty;
+}
+
+function get_product_combine_name($data) {
+	$CI = &get_instance();
+	$CI->db->select('name');
+	$CI->db->limit(1);
+	$query = $CI->db->get_where('product_combine', array('id' => $data));
+	if ($query->num_rows() > 0) {
+		$row = $query->row_array();
+		$data = $row['name'];
+		return $data;
+	}
 }

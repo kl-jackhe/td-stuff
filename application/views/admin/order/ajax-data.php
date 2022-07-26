@@ -21,7 +21,7 @@
     <tr>
       <td><?php echo $order['order_number'] ?></td>
       <td><?php echo $order['order_date'] ?></td>
-      <td class="text-center"><?php echo $order['order_discount_total'] ?></td>
+      <td class="text-center"><?php echo format_number($order['order_discount_total']) ?></td>
       <td><?php echo $order['customer_name'] ?></td>
       <td><?php echo $order['order_store_name'] ?></td>
       <td>
@@ -41,12 +41,8 @@
           <?php $att = 'class="form-control"';
           $options = array(
             'confirm'  => '訂單確認',
-            // 'prepare'  => '準備中',
             'shipping' => '已出貨',
-            // 'picked'   => '已取貨',
             'complete' => '完成',
-            // 'cancel'   => '取消訂單',
-            // 'void'     => '退單',
           );
           echo form_dropdown('order_step', $options, $order['order_step'], $att); ?>
           <button type="submit" class="btn btn-primary btn-sm">修改</button>

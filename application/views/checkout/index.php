@@ -228,7 +228,7 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
-                                    <input type="text" class="form-control" name="address" placeholder="請輸入詳細地址" required>
+                                    <input type="text" class="form-control" name="address" placeholder="請輸入詳細地址">
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
