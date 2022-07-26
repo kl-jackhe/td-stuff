@@ -70,7 +70,7 @@ input.qtyminus {
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>
                 </div>
-                <div class="col-md-8 py-5">
+                <div class="col-md-8 py-3">
                     <div class="row">
                         <?php if(!empty($product_combine)) { foreach ($product_combine as $combine) { ?>
                         <div class="col-md-4 py-2 text-center">
