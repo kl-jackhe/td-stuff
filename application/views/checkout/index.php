@@ -202,19 +202,19 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
                                     </div>
-                                    <input type="text" class="form-control" name="name" placeholder="範例：王小明" required>
+                                    <input type="text" class="form-control" name="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">電話</span>
                                     </div>
-                                    <input type="text" class="form-control" name="phone" placeholder="範例：0987654321" required>
+                                    <input type="text" class="form-control" name="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Email</span>
                                     </div>
-                                    <input type="text" class="form-control" name="email" placeholder="範例：test@test.com.tw" required>
+                                    <input type="text" class="form-control" name="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 d-none">
                                     <div class="input-group-prepend">
