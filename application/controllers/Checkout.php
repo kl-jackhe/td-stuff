@@ -53,6 +53,8 @@ class Checkout extends Public_Controller {
 
 		$order_total = intval($this->cart->total() + $delivery_cost);
 
+		$order_pay_status = 'not_paid';
+
 		$insert_data = array(
 			'order_number' => $order_number,
 			'order_date' => date("Y-m-d"),
@@ -70,7 +72,7 @@ class Checkout extends Public_Controller {
 			'order_store_address' => get_empty($this->session->userdata('storeaddress')),
 			'order_delivery' => $this->input->post('checkout_delivery'),
 			'order_payment' => $this->input->post('checkout_payment'),
-			'order_pay_status' => 'not_paid',
+			'order_pay_status' => $order_pay_status,
 			// 'order_coupon' => get_empty($this->session->userdata('coupon_id')),
 			// 'order_step' => 'accept',
 			'order_remark' => $this->input->post('remark'),

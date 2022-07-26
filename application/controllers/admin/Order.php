@@ -91,7 +91,7 @@ class Order extends Admin_Controller {
     // {
     //     $data = array(
     //         'order_step' => $this->input->post('order_step'),
-    //         'updater_id' => $this->ion_auth->user()->row()->id,
+    //         'updater_id' => $this->current_user->id,
     //         'updated_at' => date('Y-m-d H:i:s'),
     //     );
 
@@ -112,7 +112,7 @@ class Order extends Admin_Controller {
             $data = array(
                 'order_step'       => $step,
                 'order_pay_status' => 'paid',
-                'updater_id'       => $this->ion_auth->user()->row()->id,
+                'updater_id'       => $this->current_user->id,
                 'updated_at'       => date('Y-m-d H:i:s'),
             );
             $this->db->where('order_id', $id);
@@ -128,7 +128,7 @@ class Order extends Admin_Controller {
                 'order_step' => 'cancel',
                 'order_pay_status' => 'cancel',
                 'order_void' => '1',
-                'updater_id' => $this->ion_auth->user()->row()->id,
+                'updater_id' => $this->current_user->id,
                 'updated_at' => date('Y-m-d H:i:s'),
             );
             $this->db->where('order_id', $id);
@@ -150,7 +150,7 @@ class Order extends Admin_Controller {
                 'order_step' => 'void',
                 'order_pay_status' => 'return',
                 'order_void' => '1',
-                'updater_id' => $this->ion_auth->user()->row()->id,
+                'updater_id' => $this->current_user->id,
                 'updated_at' => date('Y-m-d H:i:s'),
             );
             $this->db->where('order_id', $id);
@@ -165,7 +165,7 @@ class Order extends Admin_Controller {
         } else {
             $data = array(
                 'order_step' => $step,
-                'updater_id' => $this->ion_auth->user()->row()->id,
+                'updater_id' => $this->current_user->id,
                 'updated_at' => date('Y-m-d H:i:s'),
             );
             $this->db->where('order_id', $id);

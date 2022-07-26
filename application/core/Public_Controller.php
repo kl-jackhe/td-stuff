@@ -15,19 +15,13 @@ class Public_Controller extends MY_Controller
 			    exit;
 			}
 		}
-		// if (!$this->ion_auth->logged_in())
-		// {
-		// 	$this->session->sess_destroy();
-		// 	redirect('login', 'refresh');
-		// }
-        // $this->data['current_user'] = $this->ion_auth->user()->row();
+
         $this->load->library('Ajax_pagination');
+        $this->data['current_user'] = $this->ion_auth->user()->row();
         $this->data['admin_user_menu'] = '';
-        // if ($this->ion_auth->logged_in()) {
-        if(!empty($this->session->userdata('user_id'))){
-        	$this->data['address'] = $this->mysql_model->_select('users_address', 'user_id', $this->session->userdata('user_id'));
-        }
-        // }
+
+        $this->current_user = $this->data['current_user'];
+
         $this->perPage = get_setting_general('per_page');
 
 		$this->data['include_style'] = $this->load->view('templates/_parts/style.php', NULL, TRUE);

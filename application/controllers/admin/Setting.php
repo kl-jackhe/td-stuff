@@ -19,33 +19,6 @@ class Setting extends Admin_Controller {
 
     public function update_general()
     {
-        if($this->input->get('type')=='all_coupon' || $this->input->get('type')=='recommend_coupon'){
-            $updated_at = date('Y-m-d H:i:s');
-            $query = $this->db->get('setting_general');
-            foreach($query->result_array() as $value){
-                // echo "欄位: ".($key)." 的值: ".($value)."<br>";
-                foreach ($_POST as $post_key => $post_value) {
-                    if( !is_array( $post_value ) ){
-                        // echo "欄位: ".($post_key)." 的值: ".($post_value)."<br>";
-                        if($value['setting_general_name']==$post_key){
-                            if($value['setting_general_value']!=$post_value){
-                                echo $post_key." [值] ".$post_value."<br>";
-                                $insert_data = array(
-                                    'change_log_column'     => 'recommend_coupon',
-                                    'change_log_column_id'  => 0,
-                                    'change_log_key'        => $post_key,
-                                    'change_log_value'      => $post_value,
-                                    'change_log_creator_id' => $this->ion_auth->user()->row()->id,
-                                    'change_log_created_at' => $updated_at,
-                                );
-                                $this->db->insert('change_log', $insert_data);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         $query = $this->db->get('setting_general');
         foreach($query->result_array() as $result){
             // if(!empty($this->input->post($result['setting_general_name']))){
@@ -111,7 +84,7 @@ class Setting extends Admin_Controller {
 
         $data = array(
             'unit_name'  => $this->input->post('unit_name'),
-            'creator_id' => $this->ion_auth->user()->row()->id,
+            'creator_id' => $this->current_user->id,
             'created_at' => date('Y-m-d H:i:s'),
         );
 
@@ -131,7 +104,7 @@ class Setting extends Admin_Controller {
     {
         $data = array(
             'unit_name'  => $this->input->post('unit_name'),
-            'updater_id' => $this->ion_auth->user()->row()->id,
+            'updater_id' => $this->current_user->id,
             'updated_at' => date('Y-m-d H:i:s'),
         );
         $this->db->where('unit_id', $id);
@@ -163,7 +136,7 @@ class Setting extends Admin_Controller {
 
         $data = array(
             'delivery_name' => $this->input->post('delivery_name'),
-            'creator_id'    => $this->ion_auth->user()->row()->id,
+            'creator_id'    => $this->current_user->id,
             'created_at'    => date('Y-m-d H:i:s'),
         );
 
@@ -183,7 +156,7 @@ class Setting extends Admin_Controller {
     {
         $data = array(
             'delivery_name' => $this->input->post('delivery_name'),
-            'updater_id'    => $this->ion_auth->user()->row()->id,
+            'updater_id'    => $this->current_user->id,
             'updated_at'    => date('Y-m-d H:i:s'),
         );
         $this->db->where('delivery_id', $id);
@@ -215,7 +188,7 @@ class Setting extends Admin_Controller {
 
         $data = array(
             'payment_name' => $this->input->post('payment_name'),
-            'creator_id'   => $this->ion_auth->user()->row()->id,
+            'creator_id'   => $this->current_user->id,
             'created_at'   => date('Y-m-d H:i:s'),
         );
 
@@ -235,7 +208,7 @@ class Setting extends Admin_Controller {
     {
         $data = array(
             'payment_name' => $this->input->post('payment_name'),
-            'updater_id'   => $this->ion_auth->user()->row()->id,
+            'updater_id'   => $this->current_user->id,
             'updated_at'   => date('Y-m-d H:i:s'),
         );
         $this->db->where('payment_id', $id);
@@ -268,7 +241,7 @@ class Setting extends Admin_Controller {
         $data = array(
             'country_code' => $this->input->post('country_code'),
             'country_name' => $this->input->post('country_name'),
-            'creator_id'   => $this->ion_auth->user()->row()->id,
+            'creator_id'   => $this->current_user->id,
             'created_at'   => date('Y-m-d H:i:s'),
         );
 
@@ -289,7 +262,7 @@ class Setting extends Admin_Controller {
         $data = array(
             'country_code' => $this->input->post('country_code'),
             'country_name' => $this->input->post('country_name'),
-            'updater_id'   => $this->ion_auth->user()->row()->id,
+            'updater_id'   => $this->current_user->id,
             'updated_at'   => date('Y-m-d H:i:s'),
         );
         $this->db->where('country_id', $id);
@@ -321,7 +294,7 @@ class Setting extends Admin_Controller {
 
         $data = array(
             'delivery_time_name' => $this->input->post('delivery_time_name'),
-            'creator_id'         => $this->ion_auth->user()->row()->id,
+            'creator_id'         => $this->current_user->id,
             'created_at'         => date('Y-m-d H:i:s'),
         );
 
@@ -341,7 +314,7 @@ class Setting extends Admin_Controller {
     {
         $data = array(
             'delivery_time_name' => $this->input->post('delivery_time_name'),
-            'updater_id'         => $this->ion_auth->user()->row()->id,
+            'updater_id'         => $this->current_user->id,
             'updated_at'         => date('Y-m-d H:i:s'),
         );
         $this->db->where('delivery_time_id', $id);

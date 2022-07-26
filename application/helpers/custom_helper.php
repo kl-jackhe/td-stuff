@@ -311,6 +311,9 @@ function get_delivery($data) {
 
 function get_payment($data) {
 	switch ($data) {
+		case 'bank_transfer':
+			return "銀行匯款";
+			break;
 		case 'credit':
 			return "信用卡";
 			break;

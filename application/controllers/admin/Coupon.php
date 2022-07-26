@@ -126,7 +126,7 @@ class Coupon extends Admin_Controller {
                 'coupon_birthday_month'        => $coupon_birthday_month,
                 'coupon_on_date'               => $this->input->post('coupon_on_date'),
                 'coupon_off_date'              => $this->input->post('coupon_off_date'),
-                'creator_id'                   => $this->ion_auth->user()->row()->id,
+                'creator_id'                   => $this->current_user->id,
                 'created_at'                   => date('Y-m-d H:i:s'),
             );
 
@@ -167,7 +167,7 @@ class Coupon extends Admin_Controller {
                                 'change_log_column_id'  => $id,
                                 'change_log_key'        => $post_key,
                                 'change_log_value'      => $post_value,
-                                'change_log_creator_id' => $this->ion_auth->user()->row()->id,
+                                'change_log_creator_id' => $this->current_user->id,
                                 'change_log_created_at' => $updated_at,
                             );
                             $this->db->insert('change_log', $insert_data);
@@ -212,7 +212,7 @@ class Coupon extends Admin_Controller {
                 'coupon_birthday_month'        => $coupon_birthday_month,
                 'coupon_on_date'               => $this->input->post('coupon_on_date'),
                 'coupon_off_date'              => $this->input->post('coupon_off_date'),
-                'updater_id'                   => $this->ion_auth->user()->row()->id,
+                'updater_id'                   => $this->current_user->id,
                 'updated_at'                   => date('Y-m-d H:i:s'),
             );
             $this->db->where('coupon_id', $id);

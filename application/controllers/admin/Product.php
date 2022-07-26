@@ -85,7 +85,7 @@ class Product extends Admin_Controller {
 			'product_price' => $this->input->post('product_price'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
-			'creator_id' => $this->ion_auth->user()->row()->id,
+			'creator_id' => $this->current_user->id,
 			'created_at' => date('Y-m-d H:i:s'),
 		);
 		$product_id = $this->mysql_model->_insert('product', $data);
@@ -121,7 +121,7 @@ class Product extends Admin_Controller {
 								'change_log_column_id' => $id,
 								'change_log_key' => $post_key,
 								'change_log_value' => $post_value,
-								'change_log_creator_id' => $this->ion_auth->user()->row()->id,
+								'change_log_creator_id' => $this->current_user->id,
 								'change_log_created_at' => $updated_at,
 							);
 							$this->db->insert('change_log', $insert_data);
@@ -136,7 +136,7 @@ class Product extends Admin_Controller {
 			'product_price' => $this->input->post('product_price'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
-			'updater_id' => $this->ion_auth->user()->row()->id,
+			'updater_id' => $this->current_user->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
 		$this->db->where('product_id', $id);

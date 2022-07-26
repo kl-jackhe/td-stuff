@@ -88,7 +88,7 @@ class Posts extends Admin_Controller {
             'post_title'    => $this->input->post('post_title'),
             'post_content'  => $this->input->post('post_content'),
             'post_image'    => $this->input->post('post_image'),
-            'creator_id'    => $this->ion_auth->user()->row()->id,
+            'creator_id'    => $this->current_user->id,
             'created_at'    => date('Y-m-d H:i:s'),
         );
 
@@ -113,7 +113,7 @@ class Posts extends Admin_Controller {
             'post_title'    => $this->input->post('post_title'),
             'post_content'  => $this->input->post('post_content'),
             'post_image'    => $this->input->post('post_image'),
-            'updater_id'    => $this->ion_auth->user()->row()->id,
+            'updater_id'    => $this->current_user->id,
             'updated_at'    => date('Y-m-d H:i:s'),
         );
 
@@ -162,7 +162,7 @@ class Posts extends Admin_Controller {
 
         $data = array(
             'post_category_name'      => $this->input->post('post_category_name'),
-            'creator_id'              => $this->ion_auth->user()->row()->id,
+            'creator_id'              => $this->current_user->id,
             'created_at'              => date('Y-m-d H:i:s'),
         );
 
@@ -182,7 +182,7 @@ class Posts extends Admin_Controller {
     {
         $data = array(
             'post_category_name'      => $this->input->post('post_category_name'),
-            'updater_id'              => $this->ion_auth->user()->row()->id,
+            'updater_id'              => $this->current_user->id,
             'updated_at'              => date('Y-m-d H:i:s'),
         );
         $this->db->where('post_category_id', $id);
