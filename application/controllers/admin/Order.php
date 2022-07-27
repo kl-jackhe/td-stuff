@@ -46,6 +46,8 @@ class Order extends Admin_Controller {
         $category = $this->input->get('category');
         $category2 = $this->input->get('category2');
         // $status = $this->input->get('status');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
         if(!empty($keywords)){
             $conditions['search']['keywords'] = $keywords;
         }
@@ -61,6 +63,14 @@ class Order extends Admin_Controller {
         // if(!empty($status)){
         //     $conditions['search']['status'] = $status;
         // }
+        if(!empty($start_date)){
+            $conditions['search']['start_date'] = $start_date;
+        } else {
+        }
+        if(!empty($end_date)){
+            $conditions['search']['end_date'] = $end_date;
+        } else {
+        }
         //total rows count
         $conditions['returnType'] = 'count';
         $totalRec = $this->order_model->getRows($conditions);

@@ -14,12 +14,17 @@ class Order_model extends CI_Model {
             $this->db->group_end();
         }
         if(!empty($params['search']['category'])){
-            $this->db->where('order_pay_status',$params['search']['category']);
-            // $this->db->where('order_delivery_place',$params['search']['category']);
+            $this->db->where('order_step',$params['search']['category']);
         }
         if(!empty($params['search']['category2'])){
-            $this->db->where('order_step',$params['search']['category2']);
+            // $this->db->where('order_step',$params['search']['category2']);
             // $this->db->where('order_delivery_place',$params['search']['category']);
+        }
+        if(!empty($params['search']['start_date'])){
+            $this->db->where('order_date >=', $params['search']['start_date']);
+        }
+        if(!empty($params['search']['end_date'])){
+            $this->db->where('order_date <=', $params['search']['end_date']);
         }
         //sort data by ascending or desceding order
         if(!empty($params['search']['sortBy'])){

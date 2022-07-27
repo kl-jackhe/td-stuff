@@ -277,6 +277,9 @@ function get_order_step($data) {
 		case 'confirm':
 			return "訂單確認";
 			break;
+		case 'process':
+			return "處理中";
+			break;
 		case 'shipping':
 			return "已出貨";
 			break;
