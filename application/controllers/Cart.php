@@ -136,7 +136,7 @@ class Cart extends Public_Controller {
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
 
 		$name = $this_product['product_name'] .' - '. $this_product_combine['name'];
-		$price = $this_product_combine['price'];
+		$price = $this_product_combine['current_price'];
 		$image = '';
 		if($this_product['product_image']!=''){
 			$image = $this_product['product_image'];
