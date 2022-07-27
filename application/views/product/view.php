@@ -104,7 +104,15 @@ input.qtyminus {
                                 </span>
                             </div>
                             <div>
-                                <span style="color:red; font-size: 18px; font-weight: bold;">$<?php echo $combine['price'] ?></span>
+                                <?php if ($combine['price'] != $combine['current_price'] && $combine['price'] != 0) {?>
+                                <span style="color:red; font-size: 18px; font-weight: bold;">$
+                                        <?=$combine['price'];?>
+                                </span>
+                                <br>
+                                <?}?>
+                                <span style="color:red; font-size: 18px; font-weight: bold;">$
+                                    <?=$combine['current_price'];?>
+                                </span>
                             </div>
                             <div class="text-center" style="padding-left: 25%;padding-right: 25%;">
                                 <!-- <input type="text" id="qty_<?php echo $combine['product_id'] ?>" class="form-control input-number" min="1" max="999" value="1" style="background: #fff;" readonly> -->
