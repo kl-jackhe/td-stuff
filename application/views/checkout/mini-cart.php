@@ -34,7 +34,8 @@
         right: 0;
     }
 </style>
-<?php $i = 0;if (!empty($this->cart->contents())) {foreach ($this->cart->contents() as $items) {$i++;?>
+<?php $i = 0;if (!empty($this->cart->contents())) {
+	foreach ($this->cart->contents() as $items) {$i++;?>
 <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
     <div class="row">
         <div class="col-4">
@@ -46,7 +47,7 @@
                                 <span><?=$i?></span>
                             </div>
                             <div class="col" style="position: absolute;bottom: 5px;left: 0px;">
-                                <span class="mini-cart-x delete_button_style align-text-bottom" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
+                                <span class="mini-cart-x delete_button_style align-text-bottom" style="cursor: pointer;" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                         </div>
                     </div>
@@ -67,16 +68,16 @@
                         <?php echo $items['name']; ?>
                     </span>
                     <?php
-                    $this->db->where('product_combine_id', $items['id']);
-                    $query = $this->db->get('product_combine_item');
-                    if ($query->num_rows() > 0) {
-                        echo '<ul class="pl-3 m-0" style="color: gray;">';
-                        foreach ($query->result_array() as $item) {
-                            echo '<li style="list-style-type: circle;">'.get_product_name($item['product_id']).' '.$item['product_unit'].' '.$item['product_specification'].'</li>';
-                        }
-                        echo '</ul>';
-                    }
-                    ?>
+$this->db->where('product_combine_id', $items['id']);
+		$query = $this->db->get('product_combine_item');
+		if ($query->num_rows() > 0) {
+			echo '<ul class="pl-3 m-0" style="color: gray;">';
+			foreach ($query->result_array() as $item) {
+				echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
+			}
+			echo '</ul>';
+		}
+		?>
                 </div>
             </div>
         </div>

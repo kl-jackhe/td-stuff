@@ -101,6 +101,9 @@
         right: 25px;
         bottom: 60px;
     }
+    .icon_pointer {
+        cursor: pointer;
+    }
     @media (min-width: 768px) and (max-width: 991.98px) {
         .top_logo_style {
             position: relative;
@@ -152,23 +155,23 @@
 <body>
     <div class="body h-100">
         <div class="fixed-bottom header_fixed_icon">
-            <div id="fa-facebook-square" class="py-2">
+            <div id="fa-facebook-square" class="my-2 icon_pointer">
                 <a href="#">
                     <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
                 </a>
             </div>
-            <div id="fa-line" class="py-2">
+            <div id="fa-line" class="my-2 icon_pointer">
                 <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
                     <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
                 </a>
             </div>
-            <div id="fa-bag-shopping" class="py-2">
+            <div id="fa-bag-shopping" class="my-2 icon_pointer">
                 <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
                     <div id="cart-qty"><span>0</span></div>
                     <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
                 </a>
             </div>
-            <div id="fa-angles-up" class="py-2 text-center" style="display: none;">
+            <div id="fa-angles-up" class="my-2 icon_pointer" style="display: none;">
                 <a href="#" style="color:black;">
                     <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
                 </a>

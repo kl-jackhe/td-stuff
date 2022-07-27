@@ -68,7 +68,7 @@ input.qtyminus {
 </style>
 <div role="main" class="main product-view">
     <section class="form-section">
-        <div class="container-fluid" style="padding-bottom: 30px;padding-top: 30px;">
+        <div class="container-fluid pb-5">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
@@ -85,24 +85,24 @@ input.qtyminus {
                 <div class="col-md-8 py-3">
                     <div class="row">
                         <?php if(!empty($product_combine)) { foreach ($product_combine as $combine) { ?>
-                        <div class="col-md-4 py-2 text-center">
+                        <div class="col-md-4 py-2 mb-5 text-center">
                             <?php if(!empty($combine['picture'])) { ?>
                                 <img id="zoomA" class="product_view_img_style" src="/assets/uploads/<?php echo $combine['picture']; ?>">
                             <?}else{?>
                                 <img id="zoomA" class="product_view_img_style" src="/assets/uploads/Product/img-600x600.png">
                              <?}?>
-                            <div class="pt-3">
+                            <div class="pt-2">
                                 <span style="font-size: 16px;">
                                     <?php echo $combine['name']; ?>
                                 </span>
                             </div>
+                            <?if (!empty($combine['description'])) {?>
                             <div class="py-2">
                                 <span style="font-size: 12px;">
-                                    <?if (!empty($combine['description'])) {
-                                        echo $combine['description'];
-                                    }?>
+                                    <? echo $combine['description'];?>
                                 </span>
                             </div>
+                            <?}?>
                             <div>
                                 <?php if ($combine['price'] != $combine['current_price'] && $combine['price'] != 0) {?>
                                 <span style="color:red; font-size: 18px; font-weight: bold;">$
