@@ -18,7 +18,7 @@
         <?php echo lang('create_user_email_label', 'email');?>
         <?php echo form_input($email);?>
       </div>
-      <div class="form-group">s
+      <div class="form-group">
         <?php echo lang('create_user_password_label', 'password');?>
         <?php echo form_input($password);?>
       </div>
