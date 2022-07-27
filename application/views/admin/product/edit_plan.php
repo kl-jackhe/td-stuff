@@ -23,17 +23,23 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="product_combine_name">方案名稱</label>
                                     <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<?php echo $product_combine['name'] ?>" required>
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="product_combine_price">方案售價</label>
+                                    <label for="product_combine_price">方案原價</label>
                                     <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<?php echo $product_combine['price'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="product_combine_current_price">方案售價</label>
+                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<?php echo $product_combine['price'] ?>" required>
                                 </div>
                             </div>
                             <div class="col-md-2">

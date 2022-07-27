@@ -224,6 +224,7 @@ class Product extends Admin_Controller {
 			'product_id' => $this->input->post('product_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
+			'current_price' => $this->input->post('product_combine_current_price'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
 		);
@@ -265,6 +266,7 @@ class Product extends Admin_Controller {
 			'product_id' => $this->input->post('product_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
+			'current_price' => $this->input->post('product_combine_current_price'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
 		);
