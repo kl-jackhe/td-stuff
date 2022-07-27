@@ -129,11 +129,13 @@ class Checkout extends Public_Controller {
 		// );
 		// $this->session->set_userdata($session_data);
 
+		// Start 寄信給買家、賣家
+		$this->send_order_email($order_id);
+
 		// 取貨付款
 		if ($this->input->post('checkout_payment') == 'cash_on_delivery') {
 
-			// Start 寄信給買家、賣家
-			// $this->send_order_email($order_number);
+			
 
 			redirect('store/order_success');
 
@@ -254,11 +256,11 @@ class Checkout extends Public_Controller {
 		echo 'yes';
 	}
 
-	public function send_order_email($order_number)
+	public function send_order_email($order_id)
     {
         // 查詢訂單資訊
-        $this->db->join('users', 'users.id = orders.customer_id');
-        $this->db->where('order_number', $order_number);
+        // $this->db->join('users', 'users.id = orders.customer_id');
+        $this->db->where('order_id', $order_id);
         $this->db->limit(1);
         $query = $this->db->get('orders');
         if($query->num_rows()>0){
@@ -278,11 +280,6 @@ class Checkout extends Public_Controller {
         $message = '<table style="width:100%;background:#fafaf8;padding:15px;">
         <tr style="border-bottom:2px solid #e41c10;">
             <td><h3>【訂購明細】</h3><hr></td>
-        </tr>
-        <tr>
-            <td>
-                店家名稱 : '.get_store_name($row['store_id']).'
-            </td>
         </tr>
         <tr>
             <td>
@@ -340,11 +337,6 @@ class Checkout extends Public_Controller {
         $content .= '<td colspan="2"> </td>';
         $content .= '<td style="text-align:right"><strong>運費</strong></td>';
         $content .= '<td style="text-align:right">NT$ '.number_format($row['order_delivery_cost']).'</td>';
-        $content .= '</tr>';
-        $content .= '<tr>';
-        $content .= '<td colspan="2"> </td>';
-        $content .= '<td style="text-align:right"><strong>優惠券折抵</strong></td>';
-        $content .= '<td style="text-align:right">NT$ -'.number_format($row['order_discount_price']).'</td>';
         $content .= '</tr>';
         $content .= '<tr>';
         $content .= '<td colspan="2"> </td>';
@@ -427,9 +419,9 @@ class Checkout extends Public_Controller {
         $this->load->library('email');
 
         // 寄信給賣家
-        $this->email->set_smtp_host("mail.kuangli.tw");
-        $this->email->set_smtp_user("btw@kuangli.tw");
-        $this->email->set_smtp_pass("Btw@admin");
+        $this->email->set_smtp_host("mail.td-stuff.com");
+        $this->email->set_smtp_user("service@td-stuff.com");
+        $this->email->set_smtp_pass("Td-stuff@admin");
         $this->email->set_smtp_port("587");
         $this->email->set_smtp_crypto("");
 
@@ -442,26 +434,36 @@ class Checkout extends Public_Controller {
         } else {
             // echo "<h4>Send Mail is Fail.</h4>";
         }
+    }
 
-        // 寄信給店家
-        $subject = '有新的訂單 - 單號：'.$row['order_number'];
-        $this->email->set_smtp_host("mail.kuangli.tw");
-        $this->email->set_smtp_user("btw@kuangli.tw");
-        $this->email->set_smtp_pass("Btw@admin");
+    public function test_send_email()
+    {
+    	echo 'ccc___';
+        //Load email library
+        $this->load->library('email');
+
+        $this->email->set_smtp_host("mail.td-stuff.com");
+        $this->email->set_smtp_user("service@td-stuff.com");
+        $this->email->set_smtp_pass("Td-stuff@admin");
         $this->email->set_smtp_port("587");
         $this->email->set_smtp_crypto("");
 
-        // $this->email->to(get_setting_general('email'));
-        // $this->email->to('shung.lung@haohuagroup.com.tw','peizhen@haohuagroup.com.tw','carina.fan@haohuagroup.com.tw');
-        $list = array(get_setting_general('email1'), get_setting_general('email2'), get_setting_general('email3'));
+        //Email content
+        $htmlContent = '<h1>Sending email via SMTP server</h1>';
+        $htmlContent .= '<p>This email has sent via SMTP server from CodeIgniter application.</p>';
+
+        $list = array('a0935756869@gmail.com', 'sianming30@gmail.com', 'sianming31@gmail.com');
+        $list = array('a0935756869@gmail.com');
         $this->email->to($list);
-        $this->email->from(get_setting_general('email'), get_setting_general('name'));
-        $this->email->subject($subject);
-        $this->email->message($body);
-        if ($this->email->send()){
-            // echo "<h4>Send Mail is Success.</h4>";
+        $this->email->from('service@td-stuff.com', get_setting_general('name'));
+        $this->email->subject('How to send email via SMTP server in CodeIgniter');
+        $this->email->message($htmlContent);
+
+        //Send email
+        if($this->email->send()){
+            echo '1';
         } else {
-            // echo "<h4>Send Mail is Fail.</h4>";
+            echo '0';
         }
     }
 
