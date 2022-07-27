@@ -234,8 +234,8 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
-                                    <input type="text" class="form-control" name="storename" value="<?php echo $this->input->post('storename') ?>" placeholder="門市名稱" readonly>
-                                    <input type="text" class="form-control" name="storeaddress" value="<?php echo $this->input->post('storeaddress') ?>" placeholder="門市地址" readonly>
+                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->post('storename') ?>" placeholder="門市名稱" readonly>
+                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->post('storeaddress') ?>" placeholder="門市地址" readonly>
                                     <div style="width: 100%; margin-top: 15px;">
                                         <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
                                     </div>
@@ -303,6 +303,13 @@ $("#wizard").steps({
 
 <script>
     function select_store_info() {
-        $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout' ?>');
+        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout' ?>');
+
+        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout/get_store_info' ?>", "選擇門市", "width=1024,height=768");
+    }
+
+    function set_store_info(storename = '', storeaddress = '') {
+        $("#storename").val(storename);
+        $("#storeaddress").val(storeaddress);
     }
 </script>
