@@ -13,11 +13,11 @@
                                 </div>
                             <?php }?>
                             <div class="form-group">
-                                <h4>信箱</h4>
-                                <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入信箱..." required>
+                                <label>行動電話</label>
+                                <input type="text" class="form-control" id="identity" name="identity" placeholder="09xxxxxxxx" required>
                             </div>
                             <div class="form-group">
-                                <h4>密碼</h4>
+                                <label>密碼</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="6-15個字元" required>
                             </div>
                             <div class="form-group">

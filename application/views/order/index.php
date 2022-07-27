@@ -257,7 +257,7 @@ tr:last-child td:last-child {
                                             <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_order_step($data['order_step']) ?></td>
                                             <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
                                             <td class="fs-11 color-595757" style="width: 24%;">
-                                                <a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a>
+                                                <a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12">查看</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -304,7 +304,7 @@ tr:last-child td:last-child {
                                             <td class="fs-11 color-595757">
                                                 <?php echo get_order_step($data['order_step']) ?>
                                             </td>
-                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo $data['order_id'] ?>" class="order-modal-btn fs-12">查看</a></td>
+                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12">查看</a></td>
                                         </tr>
                                     </table>
                                 <?php }}?>

@@ -17,12 +17,17 @@ class Order extends Public_Controller {
     public function index()
     {
         $this->data['page_title'] = '訂單';
-        $this->data['orders'] = $this->order_model->get_customer_order($this->ion_auth->user()->row()->id);
+
+        $this->data['orders'] = array();
+        if(isset($this->current_user->id)){
+            $this->data['orders'] = $this->order_model->get_customer_order($this->current_user->id);
+        }
         $this->render('order/index');
     }
 
     public function view($id)
     {
+        $id = decode($id);
         $this->data['page_title'] = '查看訂單';
         $this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
         $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);

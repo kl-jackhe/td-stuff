@@ -12,35 +12,44 @@
                                 <?php echo $message; ?>
                             </div>
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>行動電話</label>
+                                        <input type="text" class="form-control" id="identity" name="identity" placeholder="09xxxxxxxx" required>
+                                    </div>
+                                    <small>以行動電話作為登入帳號</small>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <h4>姓名</h4>
+                                        <label>姓名</label>
                                         <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" required>
                                     </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                    <h4>電子信箱</h4>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="請輸入E-Mail" onchange="check_email()" required>
-                                    <small id="email_text"></small>
                                 </div>
-                              </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>電子信箱</label>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="請輸入E-Mail" onchange="check_email()" required>
+                                        <small id="email_text"></small>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <h4>密碼</h4>
+                                        <label>密碼</label>
                                         <input type="password" class="form-control" id="password" name="password" placeholder="6-15 個字元" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <h4>確認密碼</h4>
+                                        <label>確認密碼</label>
                                         <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="請再輸入一次密碼" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row d-none">
                                 <div class="col-sm-12">
                                     <div class="checkbox">
                                         <label>
@@ -96,15 +105,17 @@
       if(agree>0){
       } else {
         $('#error_text').html('請勾選');
+        return false;
       }
       if(email_ok==1){
       } else {
         $('#error_text').html('電子郵件不正確。');
+        return false;
       }
-      if(email_ok==1 && agree>0){
+      // if(email_ok==1 && agree>0){
         // alert('Submit');
         document.getElementById("register").submit();
-      }
+      // }
     } else {
       $('#error_text').html('密碼與確認密碼不符。');
     }

@@ -394,16 +394,14 @@ class Auth extends Public_Controller {
 			$email = strtolower($this->input->post('email'));
 			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
 			$password = $this->input->post('password');
-			// $full_name = strstr($email, '@', true);
 			$full_name = $this->input->post('name');
 			$group = array('2');
 
 			$additional_data = array(
-				// 'oauth_uid'           => $this->input->post('line_id'),
-				'full_name' => $full_name,
-				// 'phone'               => $this->input->post('identity'),
-				'creator_id' => 0,
-				'created_at' => date('Y-m-d H:i:s'),
+				'full_name'    => $full_name,
+				'phone'        => $this->input->post('identity'),
+				'creator_id'   => 0,
+				'created_at'   => date('Y-m-d H:i:s'),
 			);
 		}
 		if ($this->form_validation->run() == true && $id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group)) {
@@ -437,14 +435,6 @@ class Auth extends Public_Controller {
 			}
 
 		} else {
-			// 儲存推薦碼
-			if (!empty($this->input->get('recommend_code'))) {
-				$data = array(
-					'recommend_code' => $this->input->get('recommend_code'),
-				);
-				$this->session->set_userdata($data);
-			}
-
 			// display the create user form
 			// set the flash data error message if there is one
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
@@ -515,9 +505,7 @@ class Auth extends Public_Controller {
 			// if ($this->form_validation->run() === TRUE)
 			// {
 			$data = array(
-				'username' => $this->input->post('phone'),
 				'full_name' => $this->input->post('full_name'),
-				// 'gender'     => $this->input->post('gender'),
 				'email' => $this->input->post('email'),
 				'phone' => $this->input->post('phone'),
 				'county' => $this->input->post('county'),
