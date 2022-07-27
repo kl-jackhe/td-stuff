@@ -173,7 +173,7 @@
                     <i class="fa-solid fa-bag-shopping fixed_icon_style"></i>
                 </a>
             </div>
-            <div id="fa-angles-up" class="py-1 text-center" style="display:none;">
+            <div id="fa-angles-up" class="py-1 text-center" style="display: none;">
                 <a href="#" style="color:black;">
                     <i class="fa-solid fa-angles-up fixed_icon_style"></i>
                 </a>
@@ -196,7 +196,7 @@
                                         <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#">關於龍寶</a>
+                                        <a class="nav-link" href="<?php echo base_url() ?>about">關於龍寶</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="#">商品分類</a>
@@ -205,21 +205,21 @@
                                         <a class="nav-link" href="/product">全商品</a>
                                     </li>
                                     <div class="row nav_user_style">
-                                        <?php if (empty($this->session->userdata('user_id'))) {?>
+                                        <?php if (!$this->ion_auth->logged_in()){ ?>
                                         <li class="nav-item">
                                             <a href="/login" class="btn nav-link nav_user_login_edit">登入</a>
                                         </li>
                                         <li class="nav-item" >
                                             <a href="/register" class="btn register-btn nav-link nav_user_register_logout">註冊</a>
                                         </li>
-                                        <?}else{?>
+                                        <? } else { ?>
                                         <li class="nav-item" >
                                             <a class="btn nav-link nav_user_login_edit" href="/auth/edit_user">我的帳戶</a>
                                         </li>
                                         <li class="nav-item" >
                                             <a class="btn nav-link nav_user_register_logout" href="/logout">登出</a>
                                         </li>
-                                        <?}?>
+                                        <? } ?>
                                     </div>
                                 </ul>
                             </div>
