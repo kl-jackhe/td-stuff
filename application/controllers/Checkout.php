@@ -48,7 +48,10 @@ class Checkout extends Public_Controller {
 	        }
 		}
 
-		$created_at = date("Y-m-d H:i:s");
+		$customer_id = 0;
+		if(isset($this->current_user->id)){
+			$customer_id = $this->current_user->id;
+		}
 
 		$delivery_cost = 0;
 
@@ -67,9 +70,11 @@ class Checkout extends Public_Controller {
 
 		$order_pay_status = 'not_paid';
 
+		$created_at = date("Y-m-d H:i:s");
 		$insert_data = array(
 			'order_number' => $order_number,
 			'order_date' => date("Y-m-d"),
+			'customer_id' => $customer_id,
 			'customer_name' => $this->input->post('name'),
 			'customer_phone' => $this->input->post('phone'),
 			'customer_email' => $this->input->post('email'),
@@ -135,15 +140,10 @@ class Checkout extends Public_Controller {
 		// 取貨付款
 		if ($this->input->post('checkout_payment') == 'cash_on_delivery') {
 
-			
-
 			redirect('store/order_success');
 
 			// 綠界-信用卡
 		} elseif ($this->input->post('checkout_payment') == 'credit') {
-
-			// Start 寄信給買家、賣家
-			// $this->send_order_email($order_number);
 
 			/**
 			 *    Credit信用卡付款產生訂單範例
@@ -273,7 +273,7 @@ class Checkout extends Public_Controller {
         $subject = '非常感謝您，您的訂單已接收 - '.get_setting_general('name');
 
         $header = '<img src="'.base_url().'assets/uploads/'.get_setting_general('logo').'" height="100px">
-        <h3>'.$row['full_name'].' 您好：</h3>
+        <h3>'.$row['customer_name'].' 您好：</h3>
         <h3>您在 '.get_setting_general('name').' 的訂單已完成訂購，以下是您的訂單明細：</h3>';
 
 
@@ -426,13 +426,13 @@ class Checkout extends Public_Controller {
         $this->email->set_smtp_crypto("");
 
         $this->email->to($row['customer_email']);
-        $this->email->from(get_setting_general('email'), get_setting_general('name'));
+        $this->email->from('service@td-stuff.com', get_setting_general('name'));
         $this->email->subject($subject);
         $this->email->message($body);
         if ($this->email->send()){
-            // echo "<h4>Send Mail is Success.</h4>";
+            echo "1";
         } else {
-            // echo "<h4>Send Mail is Fail.</h4>";
+            echo "0";
         }
     }
 
