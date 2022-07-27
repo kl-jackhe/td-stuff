@@ -113,8 +113,9 @@ foreach ($this->cart->contents() as $items) {
                                     <td><?=$i?></td>
                                     <td>
                                         <a href="#">
-                                            <?php if ($items['image'] != '') {?>
-                                                <img style="width: 100%;" src="/assets/uploads/<?php echo $items['image']; ?>" alt="<?php echo $items['name']; ?>">
+                                            <?php $image = get_product_combine($items['id'], 'picture'); ?>
+                                            <?php if ($image != '') {?>
+                                                <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                                             <?php }?>
                                         </a>
                                     </td>

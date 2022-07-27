@@ -351,6 +351,21 @@ function get_cart_product_qty($product_id) {
 	return $qty;
 }
 
+function get_product_combine($data, $key = '') {
+	if($key==''){
+		return '';
+	}
+	$CI = &get_instance();
+	$CI->db->select($key);
+	$CI->db->limit(1);
+	$query = $CI->db->get_where('product_combine', array('id' => $data));
+	if ($query->num_rows() > 0) {
+		$row = $query->row_array();
+		$data = $row[$key];
+		return $data;
+	}
+}
+
 function get_product_combine_name($data) {
 	$CI = &get_instance();
 	$CI->db->select('name');

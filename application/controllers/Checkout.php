@@ -25,10 +25,6 @@ class Checkout extends Public_Controller {
 	}
 
 	public function save_order() {
-		// if (!$this->ion_auth->logged_in()) {
-		// 	redirect('login', 'refresh');
-		// }
-
 		$this->data['page_title'] = '結帳';
 
 		$date = date('Y-m-d');
@@ -95,33 +91,30 @@ class Checkout extends Public_Controller {
 		);
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
-		if ($cart = $this->cart->contents()):
-			foreach ($cart as $cart_item):
+		foreach ($this->cart->contents() as $cart_item):
+			$order_item = array(
+				'order_id' => $order_id,
+				'product_combine_id' => $cart_item['id'],
+				'product_id' => 0,
+				'order_item_qty' => $cart_item['qty'],
+				'order_item_price' => $cart_item['price'],
+				'created_at' => $created_at,
+			);
+			$this->db->insert('order_item', $order_item);
+
+			$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
+			if(!empty($this_product_combine_item)) { foreach($this_product_combine_item as $items) {
 				$order_item = array(
 					'order_id' => $order_id,
-					'product_combine_id' => $cart_item['id'],
-					'product_id' => 0,
-					'order_item_qty' => $cart_item['qty'],
-					'order_item_price' => $cart_item['price'],
+					'product_combine_id' => $items['product_combine_id'],
+					'product_id' => $items['product_id'],
+					'order_item_qty' => ($cart_item['qty']*$items['qty']),
+					'order_item_price' => 0,
 					'created_at' => $created_at,
 				);
 				$this->db->insert('order_item', $order_item);
-
-				$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
-				if(!empty($this_product_combine_item)) { foreach($this_product_combine_item as $items) {
-					$order_item = array(
-						'order_id' => $order_id,
-						'product_combine_id' => $items['product_combine_id'],
-						'product_id' => $items['product_id'],
-						'order_item_qty' => ($cart_item['qty']*$items['qty']),
-						'order_item_price' => 0,
-						'created_at' => $created_at,
-					);
-					$this->db->insert('order_item', $order_item);
-				}}
-			endforeach;
-
-		endif;
+			}}
+		endforeach;
 
 		// 儲存訂單其他資訊
 		// $session_data = array(
@@ -139,8 +132,6 @@ class Checkout extends Public_Controller {
 
 		// 取貨付款
 		if ($this->input->post('checkout_payment') == 'cash_on_delivery') {
-
-			redirect('store/order_success');
 
 			// 綠界-信用卡
 		} elseif ($this->input->post('checkout_payment') == 'credit') {
@@ -228,6 +219,7 @@ class Checkout extends Public_Controller {
 	public function success()
 	{
 		$this->data['page_title'] = '訂單完成';
+		$this->cart->destroy();
 		$this->render('checkout/checkout_success');
 	}
 
