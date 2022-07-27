@@ -28,23 +28,22 @@
         <span>店家管理</span>
       </a>
     </li> -->
-    <!-- <li class="<?php if ($current == "store_order_time_area") {echo "active";}?>">
-      <a href="/admin/store_order_time_area">
-        <i class="fa fa-dashboard"></i>
-        <span>可訂購時段管理</span>
-      </a>
-    </li> -->
-    <!-- <li class="<?php if ($current == "store_order_time") {echo "active";}?>">
-      <a href="/admin/store_order_time">
-        <i class="fa fa-dashboard"></i>
-        <span>可訂購時段管理</span>
-      </a>
-    </li> -->
     <li class="<?php if ($current == "posts") {echo "active";}?>">
       <a href="/admin/posts">
         <i class="fa fa-dashboard"></i>
         <span>最新消息管理</span>
       </a>
+    </li>
+    <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>
+      <a href="#" class="dropdown-toggle">
+        <span>活動行銷管理</span>
+        <b class="arrow fa fa-angle-right"></b>
+      </a>
+      <ul class="submenu">
+        <li <?php if ($current == "banner") {echo 'class="active"';}?>>
+          <a href="/admin/banner">首頁Banner</a>
+        </li>
+      </ul>
     </li>
     <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
