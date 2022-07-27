@@ -12,13 +12,18 @@ select.district {
   </div>
   <div class="col-md-6">
     <div class="form-inline form-group text-right">
-      <input type="text" id="keywords" class="form-control" placeholder="訂單編號..." onkeyup="searchFilter()"/>
-      <select id="category" class="form-control hide" onchange="searchFilter()">
-        <option value="">付款狀態</option>
-        <option value="not_paid">未付款</option>
-        <option value="paid">已付款</option>
-        <!-- <option value="finish">已完成</option> -->
-      </select>
+      <input type="text" id="keywords" class="form-control" placeholder="訂單編號..." size="10">
+      <input type="text" id="start_date" class="form-control datepicker" value="" placeholder="起始日期" size="9" autocomplete="off">
+      <input type="text" id="end_date" class="form-control datepicker" value="" placeholder="終止日期" size="9" autocomplete="off">
+      <?php $att = 'class="form-control" id="category" onchange="searchFilter()"';
+      $options = array(
+        ''         => '訂單狀態',
+        'confirm'  => '訂單確認',
+        'process'  => '處理中',
+        'shipping' => '已出貨',
+        'complete' => '完成',
+      );
+      echo form_dropdown('category', $options, '', $att); ?>
       <select id="category2" class="form-control hide" onchange="searchFilter()">
         <option value="">訂單狀態</option>
         <option value="accept">接收訂單</option>
@@ -65,11 +70,11 @@ select.district {
             </select>
           </div>
           <div class="form-group">
-            <label for="store_birthday">起始日期:</label>
+            <label>起始日期</label>
              <input type="text" class="form-control datepicker" name="start_date" id="start_date" autocomplete="off">
           </div>
           <div class="form-group">
-            <label for="store_birthday">終止日期:</label>
+            <label>終止日期</label>
              <input type="text" class="form-control datepicker" name="end_date" id="end_date" autocomplete="off">
           </div>
           <button type="submit" name="import" class="btn btn-primary">匯出</button>

@@ -7,7 +7,6 @@
       <th>訂單日期</th>
       <th class="text-center">訂單金額</th>
       <th>客戶名稱</th>
-      <th>配送店名</th>
       <th>配送地址</th>
       <th class="text-center">配送方式</th>
       <th class="text-center">付款方式</th>
@@ -21,11 +20,11 @@
     <tr>
       <td><?php echo $order['order_number'] ?></td>
       <td><?php echo $order['order_date'] ?></td>
-      <td class="text-center"><?php echo format_number($order['order_discount_total']) ?></td>
+      <td class="text-right"><?php echo format_number($order['order_discount_total']) ?></td>
       <td><?php echo $order['customer_name'] ?></td>
-      <td><?php echo $order['order_store_name'] ?></td>
       <td>
         <?php if(!empty($order['order_store_address'])){
+            echo $order['order_store_name'].'<br>';
             echo $order['order_store_address'];
         } else {
             echo $order['order_delivery_address'];
@@ -41,6 +40,7 @@
           <?php $att = 'class="form-control"';
           $options = array(
             'confirm'  => '訂單確認',
+            'process'  => '處理中',
             'shipping' => '已出貨',
             'complete' => '完成',
           );

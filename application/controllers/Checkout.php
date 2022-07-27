@@ -15,7 +15,7 @@ class Checkout extends Public_Controller {
         $this->data['user_data']['phone'] = '';
         $this->data['user_data']['email'] = '';
         $this->data['user_data']['address'] = '';
-        if ($this->ion_auth->logged_in()){
+        if ($this->ion_auth->logged_in() && !empty($this->current_user)){
         	$this->data['user_data']['name'] = $this->current_user->full_name;
         	$this->data['user_data']['phone'] = $this->current_user->phone;
         	$this->data['user_data']['email'] = $this->current_user->email;
@@ -220,8 +220,20 @@ class Checkout extends Public_Controller {
 
 			// $this->render('store/checkout-credit-callback');
 		}
-		redirect(base_url() . 'order');
+		redirect(base_url() . 'checkout/success');
 	}
+
+	public function success()
+	{
+		$this->data['page_title'] = '訂單完成';
+		$this->render('checkout/checkout_success');
+	}
+
+	public function get_store_info()
+	{
+		$this->load->view('checkout/get_store_info');
+	}
+
 	public function form_check() {
 		// 如果是今天的話
 		// $delivery_date = $this->session->userdata('delivery_date');
@@ -241,4 +253,216 @@ class Checkout extends Public_Controller {
 		// }
 		echo 'yes';
 	}
+
+	public function send_order_email($order_number)
+    {
+        // 查詢訂單資訊
+        $this->db->join('users', 'users.id = orders.customer_id');
+        $this->db->where('order_number', $order_number);
+        $this->db->limit(1);
+        $query = $this->db->get('orders');
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+
+            $this->db->where('order_id', $row['order_id']);
+            $query2 = $this->db->get('order_item');
+        }
+
+        $subject = '非常感謝您，您的訂單已接收 - '.get_setting_general('name');
+
+        $header = '<img src="'.base_url().'assets/uploads/'.get_setting_general('logo').'" height="100px">
+        <h3>'.$row['full_name'].' 您好：</h3>
+        <h3>您在 '.get_setting_general('name').' 的訂單已完成訂購，以下是您的訂單明細：</h3>';
+
+
+        $message = '<table style="width:100%;background:#fafaf8;padding:15px;">
+        <tr style="border-bottom:2px solid #e41c10;">
+            <td><h3>【訂購明細】</h3><hr></td>
+        </tr>
+        <tr>
+            <td>
+                店家名稱 : '.get_store_name($row['store_id']).'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                訂單編號 : '.$row['order_number'].'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                付款方式 : '.get_payment($row['order_payment']).'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                訂單狀況 : 接收訂單
+            </td>
+        </tr>
+        <tr>
+            <td>
+                訂購日期 : '.$row['order_date'].'
+            </td>
+        </tr>
+        </table>
+        ';
+
+        $content = '<table cellpadding="6" cellspacing="1" style="width:100%" border="0">';
+
+        $content .= '<tr>';
+                $content .= '<th style="text-align:left;">商品名稱</th>';
+                $content .= '<th style="text-align:right;">價格</th>';
+                $content .= '<th style="text-align:center;">數量</th>';
+                $content .= '<th style="text-align:right">小計</th>';
+        $content .= '</tr>';
+
+        $i = 1;
+        $total=0;
+        if ($query2->num_rows() > 0) { foreach($query2->result_array() as $items){
+            $content .= '<tr>';
+                $content .= '<td>'.get_product_name($items['product_id']);
+                $content .= '</td>';
+                $content .= '<td style="text-align:right">NT$ '.number_format($items['order_item_price']).'</td>';
+                $content .= '<td style="text-align:center">'.$items['order_item_qty'].'</td>';
+                $content .= '<td style="text-align:right">NT$ '.number_format($items['order_item_price']*$items['order_item_qty']).'</td>';
+            $content .= '</tr>';
+            $total+=$items['order_item_qty']*$items['order_item_price'];
+        $i++;
+        }};
+
+        $content .= '<tr><td colspan="4"><hr></td></tr>';
+        $content .= '<tr>';
+        $content .= '<td colspan="2"> </td>';
+        $content .= '<td style="text-align:right"><strong>小計</strong></td>';
+        $content .= '<td style="text-align:right">NT$ '.number_format($total).'</td>';
+        $content .= '</tr>';
+        $content .= '<tr>';
+        $content .= '<td colspan="2"> </td>';
+        $content .= '<td style="text-align:right"><strong>運費</strong></td>';
+        $content .= '<td style="text-align:right">NT$ '.number_format($row['order_delivery_cost']).'</td>';
+        $content .= '</tr>';
+        $content .= '<tr>';
+        $content .= '<td colspan="2"> </td>';
+        $content .= '<td style="text-align:right"><strong>優惠券折抵</strong></td>';
+        $content .= '<td style="text-align:right">NT$ -'.number_format($row['order_discount_price']).'</td>';
+        $content .= '</tr>';
+        $content .= '<tr>';
+        $content .= '<td colspan="2"> </td>';
+        $content .= '<td style="text-align:right"><strong>總計</strong></td>';
+        $content .= '<td style="text-align:right">NT$ '.number_format($row['order_discount_total']).'</td>';
+        $content .= '</tr>';
+        $content .= '<tr><td colspan="4" text-align="center"><a href="'.base_url().'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
+
+        $content .= '</table>';
+
+        $information = '<table style="width:100%;background:#fafaf8;padding:15px;">
+        <tr style="border-bottom:2px solid #e41c10;">
+            <td><h3>【收件資訊】</h3><hr></td>
+        </tr>
+        <tr>
+            <td>
+                收件姓名 : '.$row['customer_name'].'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                聯絡電話 : '.$row['customer_phone'].'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                收件地址 : '.$row['order_delivery_address'].'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="width:100%;background:#fff;padding:15px 0px 15px 10px;border:1px dashed #979797;">
+                    備註 : '.$row['order_remark'].'
+                </div>
+            </td>
+        </tr>
+        </table>
+        ';
+
+        $footer = '<div style="width:750px;height:70px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
+
+        // Get full html:
+        $body = '<html>
+          <head>
+            <style>
+                #main-div{
+                    font-family: Microsoft JhengHei;
+                    color : #222;
+                }
+                .right{
+                    text-align: right;
+                }
+                .order-check-btn{
+                    display:block;
+                    margin:10px auto;
+                    width:180px;
+                    height:40px;
+                    line-height:40px;
+                    background:#e7462b;
+                    border-bottom:3px solid #cf3020;
+                    border-radius:5px;
+                    font-size:16px;
+                    text-align:center;
+                    text-decoration:none;
+                    color:#fff;
+                }
+            </style>
+          </head>
+          <body>
+            <div id="main-div" style="max-width:750px;font-size:14px;border:1px solid #979797; padding:20px;">
+                '.$header.'
+                '.$message.'
+                '.$content.'
+                '.$information.'
+                '.$footer.'
+            </div>
+          </body>
+        </html>';
+
+        $this->load->library('email');
+
+        // 寄信給賣家
+        $this->email->set_smtp_host("mail.kuangli.tw");
+        $this->email->set_smtp_user("btw@kuangli.tw");
+        $this->email->set_smtp_pass("Btw@admin");
+        $this->email->set_smtp_port("587");
+        $this->email->set_smtp_crypto("");
+
+        $this->email->to($row['customer_email']);
+        $this->email->from(get_setting_general('email'), get_setting_general('name'));
+        $this->email->subject($subject);
+        $this->email->message($body);
+        if ($this->email->send()){
+            // echo "<h4>Send Mail is Success.</h4>";
+        } else {
+            // echo "<h4>Send Mail is Fail.</h4>";
+        }
+
+        // 寄信給店家
+        $subject = '有新的訂單 - 單號：'.$row['order_number'];
+        $this->email->set_smtp_host("mail.kuangli.tw");
+        $this->email->set_smtp_user("btw@kuangli.tw");
+        $this->email->set_smtp_pass("Btw@admin");
+        $this->email->set_smtp_port("587");
+        $this->email->set_smtp_crypto("");
+
+        // $this->email->to(get_setting_general('email'));
+        // $this->email->to('shung.lung@haohuagroup.com.tw','peizhen@haohuagroup.com.tw','carina.fan@haohuagroup.com.tw');
+        $list = array(get_setting_general('email1'), get_setting_general('email2'), get_setting_general('email3'));
+        $this->email->to($list);
+        $this->email->from(get_setting_general('email'), get_setting_general('name'));
+        $this->email->subject($subject);
+        $this->email->message($body);
+        if ($this->email->send()){
+            // echo "<h4>Send Mail is Success.</h4>";
+        } else {
+            // echo "<h4>Send Mail is Fail.</h4>";
+        }
+    }
+
 }
