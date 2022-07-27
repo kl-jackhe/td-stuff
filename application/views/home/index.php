@@ -87,9 +87,21 @@
     padding-left: 30px;
     padding-right: 30px;
 }
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .ipad_w {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
 @media (max-width: 767px) {
+    #home_product .product_name {
+        line-height: 20px;
+    }
+    .product_box_list {
+        padding: 0px 30px 0px 30px;
+    }
     .product_box {
-        padding: 0px;
+        padding: 30px 0px 0px 0px;;
     }
     .carousel_box {
         padding: 0px;
@@ -120,12 +132,12 @@
                     <hr style="border-top: 1px solid #988B7A;margin: 10px 0px 25px 0px;">
                 </div>
                 <div class="col-md-12 text-center">
-                    <div class="row justify-content-center" id="home_product">
+                    <div class="row justify-content-center product_box_list" id="home_product">
                         <?
                         if (!empty($products)) {
                             foreach ($products as $product){
                         ?>
-                        <div class="col-md-4 pb-5">
+                        <div class="col-md-4 pb-5 ipad_w">
                             <a href="/product/view/<?=$product['product_id']?>">
                                 <?if (!empty($product['product_image'])) {?>
                                 <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
@@ -137,11 +149,11 @@
                                         <?=$product['product_name'];?></span>
                                 </div>
                             </a>
-                            <div class="product_price">
+                            <!-- <div class="product_price">
                                 $<span style="color:#68396D">
                                     <?=$product['product_price'];?></span>
-                            </div>
-                            <a class="btn select_product" href="/product/view/<?=$product['product_id']?>">
+                            </div> -->
+                            <a class="btn select_product my-2" href="/product/view/<?=$product['product_id']?>">
                                 <span>選購</span>
                             </a>
                         </div>
