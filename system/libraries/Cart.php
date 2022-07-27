@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ * Copyright (c) 2019 - 2022, CodeIgniter Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,9 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @copyright	Copyright (c) 2019 - 2022, CodeIgniter Foundation (https://codeigniter.com/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
@@ -44,7 +45,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @subpackage	Libraries
  * @category	Shopping Cart
  * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/libraries/cart.html
+ * @link		https://codeigniter.com/userguide3/libraries/cart.html
  * @deprecated	3.0.0	This class is too specific for CI.
  */
 class CI_Cart {
@@ -371,7 +372,9 @@ class CI_Cart {
 		}
 
 		// product id & name shouldn't be changed
-		foreach (array_diff($keys, array('id', 'name')) as $key)
+		// 2021-04-06 修改購物車商品名
+		foreach (array_diff($keys, array('id')) as $key)
+		// foreach (array_diff($keys, array('id', 'name')) as $key)
 		{
 			$this->_cart_contents[$items['rowid']][$key] = $items[$key];
 		}
@@ -401,6 +404,7 @@ class CI_Cart {
 			$this->_cart_contents['cart_total'] += ($val['price'] * $val['qty']);
 			$this->_cart_contents['total_items'] += $val['qty'];
 			$this->_cart_contents[$key]['subtotal'] = ($this->_cart_contents[$key]['price'] * $this->_cart_contents[$key]['qty']);
+			// $this->_cart_contents[$key]['subtotal'] = round($this->_cart_contents[$key]['price'] * $this->_cart_contents[$key]['qty']);
 		}
 
 		// Is our cart empty? If so we delete it from the session
