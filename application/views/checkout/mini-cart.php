@@ -35,7 +35,8 @@
     }
 </style>
 <?php $i = 0;if (!empty($this->cart->contents())) {
-	foreach ($this->cart->contents() as $items) {$i++;?>
+	foreach ($this->cart->contents() as $items) {
+		$i++;?>
 <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
     <div class="row">
         <div class="col-4">
@@ -111,7 +112,6 @@ $this->db->where('product_combine_id', $items['id']);
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
