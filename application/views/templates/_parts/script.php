@@ -52,10 +52,6 @@ $(document).ready(function() {
     // $("input[type='text']").on("click", function () {
     // 	$(this).select();
     // });
-    // $('.select2').select2();
-    $(".select2").select2({
-        matcher: matcher
-    });
     $("form input").keypress(function(e) {
         if (e.keyCode == 13) {
             e.preventDefault();

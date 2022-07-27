@@ -195,22 +195,6 @@
                         更新時間
                     </th>
                 </tr>
-                <?php if (!empty($change_log)) {foreach ($change_log as $cl) {?>
-                <tr>
-                    <td>
-                        <?php echo $this->lang->line($cl['change_log_key']); ?>
-                    </td>
-                    <td>
-                        <?php echo $cl['change_log_value'] ?>
-                    </td>
-                    <td>
-                        <?php echo get_user_full_name($cl['change_log_creator_id']) ?>
-                    </td>
-                    <td>
-                        <?php echo $cl['change_log_created_at'] ?>
-                    </td>
-                </tr>
-                <?php }}?>
             </table>
         </div>
     </div>
