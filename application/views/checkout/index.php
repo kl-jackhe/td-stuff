@@ -4,6 +4,9 @@ foreach ($this->cart->contents() as $items) {
 	$count++;
 }?>
 <style>
+    .m_padding {
+        padding-bottom: 0!important;
+    }
     select.county {
         width: 48%!important;
         float: left;
@@ -63,13 +66,28 @@ foreach ($this->cart->contents() as $items) {
         background: #420452;
     }
 
+    .wizard > .steps .disabled p {
+        background: #B5ABB6;
+    }
+    .wizard > .steps .current p {
+        background: #420452;
+    }
+    .wizard > .steps .done p {
+        background: #420452;
+    }
+
+    .wizard a {
+        outline: none;
+    }
+
     .wizard ul li a div p{
         background: #420452;
         border-radius: 50%;
-        padding: 3px 15px 3px 15px;
+        width: 45px;
     }
 
     .wizard .steps .row {
+        position: relative;
         justify-content: center;
         margin: 0px;
         margin-top: 20px;
@@ -82,10 +100,16 @@ foreach ($this->cart->contents() as $items) {
     #wizard {
         margin-bottom: 20px;
     }
+
+    .progress_box {
+        background-color:#B5ABB6;
+        height: 1.5px;
+    }
+    .progress_box_bar {
+        width:0%;
+        background:#420452;
+    }
     @media (max-width: 767.98px) {
-        .wizard ul li a div p{
-            width: 100%;
-        }
     }
 </style>
 <div role="main" class="main">
@@ -93,7 +117,13 @@ foreach ($this->cart->contents() as $items) {
         <?php $attributes = array('id' => 'checkout_form');?>
         <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
-            <div class="row justify-content-center" style="padding-left: 25px; padding-right: 25px;">
+            <div class="row justify-content-center" style="padding-left: 25px; padding-right: 25px;position: relative;">
+                <div class="stpes" style="width: 70%;position: absolute;top: 52px;">
+                    <div class="progress progress_box">
+                      <div class="progress-bar progress_box_bar">
+                      </div>
+                    </div>
+                </div>
                 <div id="wizard" class="wizard">
                     <h3>確認訂單</h3>
                     <section>
@@ -268,7 +298,6 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_close() ?>
     </section>
 </div>
-
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
 <script>
@@ -277,6 +306,7 @@ $("#wizard").steps({
     bodyTag: "section",
     transitionEffect: "slideLeft",
     enableFinishButton: false,
+    saveState: true,
     titleTemplate: '<div class="number row"><i></i><p>#index#</p></div><span class="wizard_section_title">#title#</span>',
     labels: {
         cancel: "取消",
@@ -304,9 +334,9 @@ $("#wizard").steps({
 
 <script>
     function select_store_info() {
-        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout' ?>');
+        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout' ?>');
 
-        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url().'checkout/get_store_info' ?>", "選擇門市", "width=1024,height=768");
+        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout/get_store_info' ?>", "選擇門市", "width=1024,height=768");
     }
 
     function set_store_info(storename = '', storeaddress = '') {
