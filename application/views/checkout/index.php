@@ -336,7 +336,7 @@ $("#wizard").steps({
     function select_store_info() {
         // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout' ?>');
 
-        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout/get_store_info' ?>", "選擇門市", "width=1024,height=768");
+        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
     }
 
     function set_store_info(storename = '', storeaddress = '') {
