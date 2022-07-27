@@ -59,31 +59,15 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </head>
 <style>
-    #fa-facebook-square a {
-        color: blue;
-    }
-    #fa-facebook-square a:hover {
-        color: #0080FF;
-    }
-    #fa-line a {
-        color: green;
-    }
-    #fa-line a:hover {
-        color: #00BB00;
-    }
-    #fa-bag-shopping a {
-        color: #FF5809;
-    }
-    #fa-bag-shopping a:hover {
-        color: #FF8F59;
-    }
     #cart-qty {
+        color: #BE2633;
         position: absolute;
-        right: -5px;
-        background: #FFD2D2;
+        top: -10px;
+        right: 20px;
+        background: #D1D1D1;
         border-radius: 50px;
-        width: 25px;
-        height: 25px;
+        width: 23px;
+        height: 23px;
         text-align: center;
     }
     .top_logo_style {
@@ -110,7 +94,6 @@
         padding: 2px 12px 2px 12px !important;
     }
     .fixed_icon_style {
-        font-size: 48px;
         max-width: 40px;
     }
     .header_fixed_icon {
@@ -161,7 +144,6 @@
             right: 9px;
         }
         .fixed_icon_style {
-            font-size: 36px;
             max-width: 30px;
         }
     }
@@ -173,25 +155,22 @@
             <div id="fa-facebook-square" class="py-2">
                 <a href="#">
                     <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
-                    <!-- <i class="fa-brands fa-facebook-square fixed_icon_style"></i> -->
                 </a>
             </div>
             <div id="fa-line" class="py-2">
                 <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
                     <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
-                    <!-- <i class="fa-brands fa-line fixed_icon_style"></i> -->
                 </a>
             </div>
             <div id="fa-bag-shopping" class="py-2">
-                <a href="#" data-toggle="modal" data-target="#my_cart" onclick="get_mini_cart();">
-                    <div id="cart-qty"><span style="color: #000;">0</span></div>
+                <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
+                    <div id="cart-qty"><span>0</span></div>
                     <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
-                    <!-- <i class="fa-solid fa-bag-shopping fixed_icon_style"></i> -->
                 </a>
             </div>
             <div id="fa-angles-up" class="py-2 text-center" style="display: none;">
                 <a href="#" style="color:black;">
-                    <i class="fa-solid fa-angles-up fixed_icon_style"></i>
+                    <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
                 </a>
             </div>
         </div>
@@ -213,9 +192,6 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="<?php echo base_url() ?>about">關於龍寶</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">商品分類</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="/product">全商品</a>
