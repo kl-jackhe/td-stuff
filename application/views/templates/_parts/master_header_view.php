@@ -111,6 +111,12 @@
     }
     .fixed_icon_style {
         font-size: 48px;
+        max-width: 40px;
+    }
+    .header_fixed_icon {
+        left: auto;
+        right: 25px;
+        bottom: 60px;
     }
     @media (min-width: 768px) and (max-width: 991.98px) {
         .top_logo_style {
@@ -151,29 +157,39 @@
             padding-right: 15px !important;
             padding-left: 15px !important;
         }
+        .header_fixed_icon {
+            right: 9px;
+        }
+        .fixed_icon_style {
+            font-size: 36px;
+            max-width: 30px;
+        }
     }
 </style>
 
 <body>
     <div class="body h-100">
-        <div class="fixed-bottom" style="left: auto;right: 25px;bottom: 60px;">
-            <div id="fa-facebook-square" class="py-1">
+        <div class="fixed-bottom header_fixed_icon">
+            <div id="fa-facebook-square" class="py-2">
                 <a href="#">
-                    <i class="fa-brands fa-facebook-square fixed_icon_style"></i>
+                    <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
+                    <!-- <i class="fa-brands fa-facebook-square fixed_icon_style"></i> -->
                 </a>
             </div>
-            <div id="fa-line" class="py-1">
+            <div id="fa-line" class="py-2">
                 <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
-                    <i class="fa-brands fa-line fixed_icon_style"></i>
+                    <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
+                    <!-- <i class="fa-brands fa-line fixed_icon_style"></i> -->
                 </a>
             </div>
-            <div id="fa-bag-shopping" class="py-1">
+            <div id="fa-bag-shopping" class="py-2">
                 <a href="#" data-toggle="modal" data-target="#my_cart" onclick="get_mini_cart();">
                     <div id="cart-qty"><span style="color: #000;">0</span></div>
-                    <i class="fa-solid fa-bag-shopping fixed_icon_style"></i>
+                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
+                    <!-- <i class="fa-solid fa-bag-shopping fixed_icon_style"></i> -->
                 </a>
             </div>
-            <div id="fa-angles-up" class="py-1 text-center" style="display: none;">
+            <div id="fa-angles-up" class="py-2 text-center" style="display: none;">
                 <a href="#" style="color:black;">
                     <i class="fa-solid fa-angles-up fixed_icon_style"></i>
                 </a>
@@ -187,7 +203,7 @@
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            <a href="<?php echo base_url() ?>" class="top_logo_style">
+                            <a href="<?php echo base_url() ?>" class="top_logo_style" style="max-width: 130px;">
                                 <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                             </a>
                             <div class="collapse navbar-collapse" id="navbarToggler">
