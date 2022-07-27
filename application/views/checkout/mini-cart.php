@@ -64,11 +64,19 @@
             <div class="row">
                 <div class="col-12 py-2 px-0">
                     <span style="font-weight: bold; font-size: 16px;">
-                        <?php echo $items['name']; ?></span>
-                    <!-- <ul class="pl-3 m-0" style="color:gray;">
-                        <li style="list-style-type: circle;">黑色保溫杯</li>
-                        <li style="list-style-type: circle;">黃色保溫杯</li>
-                    </ul> -->
+                        <?php echo $items['name']; ?>
+                    </span>
+                    <?php
+                    $this->db->where('product_combine_id', $items['id']);
+                    $query = $this->db->get('product_combine_item');
+                    if ($query->num_rows() > 0) {
+                        echo '<ul class="pl-3 m-0" style="color: gray;">';
+                        foreach ($query->result_array() as $item) {
+                            echo '<li style="list-style-type: circle;">'.get_product_name($item['product_id']).' '.$item['product_unit'].' '.$item['product_specification'].'</li>';
+                        }
+                        echo '</ul>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
