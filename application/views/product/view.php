@@ -53,6 +53,18 @@ input.qtyminus {
     line-height: 1.8;
     padding: 0;
 }
+#zoomA {
+  transition: transform ease-in-out 0s;
+}
+#zoomA:hover {
+    transform: scale(1.1);
+}
+.product_view_img_style {
+    border-radius: 15px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+}
 </style>
 <div role="main" class="main product-view">
     <section class="form-section">
@@ -75,15 +87,21 @@ input.qtyminus {
                         <?php if(!empty($product_combine)) { foreach ($product_combine as $combine) { ?>
                         <div class="col-md-4 py-2 text-center">
                             <?php if(!empty($combine['picture'])) { ?>
-                                <img style="max-width: 300px; max-height: 300px; width: 100%; border-radius: 15px;" src="/assets/uploads/<?php echo $combine['picture']; ?>">
-                            <?php } ?>
+                                <img id="zoomA" class="product_view_img_style" src="/assets/uploads/<?php echo $combine['picture']; ?>">
+                            <?}else{?>
+                                <img id="zoomA" class="product_view_img_style" src="/assets/uploads/Product/img-600x600.png">
+                             <?}?>
                             <div class="pt-3">
                                 <span style="font-size: 16px;">
                                     <?php echo $combine['name']; ?>
                                 </span>
                             </div>
                             <div class="py-2">
-                                <span style="font-size: 12px;">特好用</span>
+                                <span style="font-size: 12px;">
+                                    <?if (!empty($combine['description'])) {
+                                        echo $combine['description'];
+                                    }?>
+                                </span>
                             </div>
                             <div>
                                 <span style="color:red; font-size: 18px; font-weight: bold;">$<?php echo $combine['price'] ?></span>
