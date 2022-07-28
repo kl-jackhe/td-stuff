@@ -105,13 +105,17 @@ input.qtyminus {
                             <?}?>
                             <div>
                                 <?php if ($combine['price'] != $combine['current_price'] && $combine['price'] != 0) {?>
-                                <span style="color:red; font-size: 18px; font-weight: bold;">$
-                                        <?=$combine['price'];?>
+                                <span style="color: gray;font-size: 14px;font-style: oblique;text-decoration: line-through;">原價
+                                    <span style="color: gray;font-size: 14px;font-style: oblique;"> $
+                                            <?=$combine['price'];?>
+                                    </span>
                                 </span>
                                 <br>
                                 <?}?>
-                                <span style="color:red; font-size: 18px; font-weight: bold;">$
-                                    <?=$combine['current_price'];?>
+                                <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">方案價
+                                    <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">$
+                                        <?=$combine['current_price'];?>
+                                    </span>
                                 </span>
                             </div>
                             <div class="text-center" style="padding-left: 25%;padding-right: 25%;">
