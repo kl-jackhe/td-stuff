@@ -123,13 +123,13 @@
                             <div class="col">
                                 <div class="input-group">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[2]" id="<?php echo $items["rowid"] ?>">
+                                        <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
                                             <i class="fa-solid fa-minus"></i>
                                         </button>
                                     </span>
-                                    <input type="text" name="quant[2]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" disabled>
+                                    <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" disabled>
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="quant[2]" id="<?php echo $items["rowid"] ?>">
+                                        <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
                                             <i class="fa-solid fa-plus"></i>
                                         </button>
                                     </span>
