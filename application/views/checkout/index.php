@@ -142,7 +142,7 @@ foreach ($this->cart->contents() as $items) {
                                 <tr style="border-top:1px solid dimgray;">
                                     <td><?=$i?></td>
                                     <td>
-                                        <a href="#">
+                                        <a href="product/view/<?=$items['product_id']?>">
                                             <?php $image = get_product_combine($items['id'], 'picture'); ?>
                                             <?php if ($image != '') {?>
                                                 <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
@@ -153,7 +153,7 @@ foreach ($this->cart->contents() as $items) {
                                         <p><?php echo $items['name']; ?></p>
                                         <p>金額：$<?php echo $items['price']; ?></p>
                                         <p>數量：<?php echo $items['qty']; ?></p>
-                                        <p>小計：$<?php echo $items['subtotal']; ?></p>
+                                        <p>小計：$<span style="color: #dd0606"><?php echo $items['subtotal']; ?></span></p>
                                     </td>
                                 </tr>
                                 <?php $i++;?>
