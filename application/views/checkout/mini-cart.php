@@ -2,7 +2,7 @@
     .delete_button_style {
         color: #fff;
         background-color: #CECECE;
-        padding: 0px 4px 0px 4px;
+        padding: 0px 5px 0px 5px;
         border-radius: 50%;
     }
     .button_border_style_l {

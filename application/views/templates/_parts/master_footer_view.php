@@ -2,23 +2,23 @@
 
     <div class="fixed-bottom header_fixed_icon">
         <div id="fa-facebook-square" class="my-2 icon_pointer">
-            <a href="#">
+            <a href="#" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
             </a>
         </div>
         <div id="fa-line" class="my-2 icon_pointer">
-            <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
+            <a href="https://line.me/R/ti/p/@504bdron" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
             </a>
         </div>
-        <div id="fa-bag-shopping" class="my-2 icon_pointer">
-            <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
+        <div id="fa-bag-shopping" class="my-2 icon_pointer" style="position: ;">
+            <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
                 <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
             </a>
         </div>
         <div id="fa-angles-up" class="my-2 icon_pointer" style="display: none;">
-            <a href="#" style="color:black;">
+            <a href="#" style="color:black;outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
             </a>
         </div>
