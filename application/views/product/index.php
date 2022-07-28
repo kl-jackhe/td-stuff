@@ -73,8 +73,8 @@
             <div class="row product_box">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-12 text-left">
-                            <span style="font-size: 15px;font-weight: bold;">商品分類</span>
+                        <div class="col-12 text-left pb-2">
+                            <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div>
                         <div class="col-3">
                             <span class="product_category btn">午睡先生<span>-寢具類-</span></span>
