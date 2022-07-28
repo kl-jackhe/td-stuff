@@ -96,13 +96,16 @@ $(function() {
     var h = $(window).height();
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
+    var content_auto_h = $(".content_auto_h").height();
+    // alert(content_auto_h);
+    // alert(h);
     var main_h = $(".main").height();
     var h_sum = h - header_h - footer_h;
     var h_checkout = h_sum * 0.6;
-    if (h >= main_h) {
-        $(".main").css('height', h_sum);
+    if (h_sum >= content_auto_h) {
+        $(".content_auto_h").css('height', h_sum);
     } else {
-        $(".main").css('height', '100%');
+        $(".content_auto_h").css('height', '100%');
     }
     $(".wizard > .content").css('min-height', h_checkout);
 });

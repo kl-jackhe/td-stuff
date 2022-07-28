@@ -113,7 +113,7 @@ foreach ($this->cart->contents() as $items) {
     }
 </style>
 <div role="main" class="main">
-    <section class="form-section">
+    <section class="form-section content_auto_h">
         <?php $attributes = array('id' => 'checkout_form');?>
         <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
@@ -277,15 +277,15 @@ foreach ($this->cart->contents() as $items) {
                     <h3>訂單備註</h3>
                     <section>
                         <div class="container-fluid">
-                            <div class="row p-3">
+                            <div class="row p-3 justify-content-center">
                                 <div class="form-group col-12">
                                     <label class="col-form-label">訂單備註</label>
                                     <textarea class="form-control" name="remark" rows="3"></textarea>
                                 </div>
-                                <div class="col-12 py-5">
+                                <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
-                                </div>
-                                <div class="col-12">
+                                </div> -->
+                                <div class="col-6">
                                     <!-- <button type="submit" class="btn btn-primary w-100">下單購買</button> -->
                                     <span onclick="form_check()" class="btn btn-primary w-100">下單購買</span>
                                 </div>
