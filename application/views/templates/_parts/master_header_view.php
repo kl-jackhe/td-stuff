@@ -174,9 +174,9 @@
                                     <li class="nav-item <?php echo ($current==''?'active':'') ?>">
                                         <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
                                     </li>
-                                    <li class="nav-item <?php echo ($current=='about'?'active':'') ?>">
+                                    <!-- <li class="nav-item <?php echo ($current=='about'?'active':'') ?>">
                                         <a class="nav-link" href="/about">關於龍寶</a>
-                                    </li>
+                                    </li> -->
                                     <li class="nav-item <?php echo ($current=='product'?'active':'') ?>">
                                         <a class="nav-link" href="/product">全商品</a>
                                     </li>
