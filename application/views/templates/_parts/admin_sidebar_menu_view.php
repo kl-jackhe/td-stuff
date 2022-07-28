@@ -36,6 +36,7 @@
     </li>
     <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
+        <i class="fa fa-dashboard"></i>
         <span>活動行銷管理</span>
         <b class="arrow fa fa-angle-right"></b>
       </a>
