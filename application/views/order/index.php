@@ -188,7 +188,7 @@ tr:last-child td:last-child {
 }
 </style>
 <div role="main" class="main pt-signinfo">
-    <section>
+    <section class="content_auto_h">
         <div class="container pd-5">
             <div class="box row">
                 <div class="col-md-12" id="sub_menu">
@@ -304,7 +304,7 @@ tr:last-child td:last-child {
                                             <td class="fs-11 color-595757">
                                                 <?php echo get_order_step($data['order_step']) ?>
                                             </td>
-                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12">查看</a></td>
+                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12" style="outline: none;text-decoration: none;">查看</a></td>
                                         </tr>
                                     </table>
                                 <?php }}?>
@@ -336,7 +336,7 @@ tr:last-child td:last-child {
                             <spna class="btn btn-primary btn-block mt-md" data-dismiss="modal">確認</span>
                         </div>
                         <div class="col-6">
-                            <a href="https://line.me/R/ti/p/@504bdron"><span class="btn btn-info btn-block mt-md">聯繫客服</span></a>
+                            <a href="https://line.me/R/ti/p/@504bdron" style="text-decoration: none;"><span class="btn btn-info btn-block mt-md">聯繫客服</span></a>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 <div role="main" class="main pt-xlg-main">
-    <section>
+    <section class="content_auto_h">
         <div class="container">
             <div class="box mt-md">
                 <div class="row justify-content-center">

@@ -113,7 +113,7 @@
 }
 </style>
 <div role="main" class="main">
-    <section class="page-header no-padding sm-slide-fix">
+    <section class="page-header no-padding sm-slide-fix content_auto_h">
         <div class="container">
             <div class="row carousel_box">
                 <div class="col-md-12 owl-carousel owl-theme item-slide" data-plugin-options='{"items":1, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}'>
