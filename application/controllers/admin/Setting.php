@@ -11,9 +11,6 @@ class Setting extends Admin_Controller {
     {
         $this->data['page_title'] = '全站設定';
         $this->data['product'] = $this->mysql_model->_select('product');
-        $this->load->model('service_area_model');
-        $this->data['hide_county'] = $this->service_area_model->get_hide_county();
-        $this->data['hide_district'] = $this->service_area_model->get_hide_district();
         $this->render('admin/setting/general');
     }
 
