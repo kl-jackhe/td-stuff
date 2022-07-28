@@ -16,7 +16,7 @@
 }
 
 #product_index .product_name {
-    line-height: 35px;
+    padding-bottom: 10px;
 }
 
 #product_index .product_price {
@@ -65,6 +65,12 @@
         padding-left: 0px;
         padding-right: 0px;
     }
+    .product_category {
+        padding: 10px 10px 10px 10px;
+    }
+    #product_index {
+        padding: 0px 30px 0px 30px;
+    }
 }
 </style>
 <div role="main" class="main">
@@ -77,10 +83,10 @@
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div>
                         <div class="col-3">
-                            <span class="product_category btn">午睡先生<span>-寢具類-</span></span>
+                            <span class="product_category btn">午睡先生<br><span style="font-size: 12px;">-寢具類-</span></span>
                         </div>
                         <div class="col-3">
-                            <span class="product_category btn">禾食禾日<span>食品類</span></span>
+                            <span class="product_category btn">禾食禾日<br><span style="font-size: 12px;">-食品類-</span></span>
                         </div>
                         <div class="col-3">
                             <span class="product_category btn">日用選品</span>
@@ -106,10 +112,10 @@
                                     <span><?=$product['product_name'];?></span>
                                 </div>
                             </a>
-                            <div class="product_price">
+                            <!-- <div class="product_price">
                                 $<span style="color:#68396D">
                                     <?=$product['product_price'];?></span>
-                            </div>
+                            </div> -->
                             <a href="/product/view/<?=$product['product_id']?>">
                                 <div class="btn select_product">
                                     <span>選購</span>

@@ -29,42 +29,75 @@
     }
     .border_right {
         border-right: 1px solid #D1D1D1;
-        position: absolute;
-        top: 0;
-        right: 0;
     }
+    .num_box {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+    }
+    .delete_box {
+        position: absolute;
+        bottom: 5px;
+        left: 0px;
+    }
+    .subtotal_box {
+        position: absolute; 
+        bottom: 0px; 
+        right: 0px;
+    }
+    .subtotal_box span {
+        color: #BE2633;
+        text-align: right; 
+        font-size: 22px;
+    }
+@media (max-width: 767px) {
+    .num_box {
+        position: absolute;
+        top: 5px;
+        left: 0px;
+    }
+    .delete_box {
+        position: absolute;
+        bottom: 5px;
+        left: -5px;
+    }
+    .subtotal_box span {
+        color: #BE2633;
+        text-align: right; 
+        font-size: 16px;
+    }
+}
 </style>
 <?php $i = 0;if (!empty($this->cart->contents())) {
 	foreach ($this->cart->contents() as $items) {
 		$i++;?>
 <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
     <div class="row">
-        <div class="col-4">
+        <div class="col-4 border_right">
             <div class="row">
                 <div class="col-3 py-2">
                     <div class="container h-100">
                         <div class="row h-100">
-                            <div class="col" style="position: absolute;top: 5px;left: 5px;">
+                            <div class="col num_box">
                                 <span><?=$i?></span>
                             </div>
-                            <div class="col" style="position: absolute;bottom: 5px;left: 0px;">
+                            <div class="col delete_box">
                                 <span class="mini-cart-x delete_button_style align-text-bottom" style="cursor: pointer;" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-8 py-2 pl-0">
+                <div class="col-8 py-2 px-0">
                     <?php $image = get_product_combine($items['id'], 'picture'); ?>
                     <?php if ($image != '') { ?>
                         <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                     <?php } ?>
-                    <div class="container h-100 border_right"></div>
                 </div>
             </div>
         </div>
         <div class="col-5">
             <div class="row">
-                <div class="col-12 py-2 px-0">
+                <div class="col-12 p-2">
                     <span style="font-weight: bold; font-size: 16px;">
                         <?php echo $items['name']; ?>
                     </span>
@@ -102,8 +135,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col text-right" style="position: absolute; bottom: 0px; right: 0px;">
-                                <span style="color: #BE2633;text-align: right; font-size: 22px;">
+                            <div class="col text-right subtotal_box">
+                                <span>
                                     $
                                     <?php echo $items['price']; ?>
                                     <!-- $<?php echo $items['subtotal']; ?> -->
