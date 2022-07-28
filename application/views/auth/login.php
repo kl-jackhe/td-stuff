@@ -3,7 +3,7 @@
         <div class="container">
             <div class="box mt-md">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 my-5" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px; margin-bottom: 60px;">
+                    <div class="col-md-6" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px;">
                         <?php $attributes = array('id' => 'login');?>
                         <?php echo form_open('login', $attributes); ?>
                             <?php if ($this->session->flashdata('message')) {?>

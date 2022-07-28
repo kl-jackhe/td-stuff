@@ -3,7 +3,7 @@
         <div class="container">
             <div class="box mt-md">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 my-5" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px;">
+                    <div class="col-md-6" style="box-shadow: 6px 6px 20px grey; padding: 30px 60px;">
                         <?php $attributes = array('id' => 'register');?>
                         <?php echo form_open('register', $attributes); ?>
                         <div class="form-content">
@@ -14,10 +14,9 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>行動電話</label>
+                                        <label>行動電話  <small style="color: #C52B29;">以行動電話作為登入帳號</small></label>
                                         <input type="text" class="form-control" id="identity" name="identity" placeholder="09xxxxxxxx" required>
                                     </div>
-                                    <small>以行動電話作為登入帳號</small>
                                 </div>
                             </div>
                             <div class="row">
@@ -27,11 +26,10 @@
                                         <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>電子信箱</label>
+                                        <label>電子信箱  <small id="email_text" style="color: #C52B29;"></small></label>
                                         <input type="email" class="form-control" id="email" name="email" placeholder="請輸入E-Mail" onchange="check_email()" required>
-                                        <small id="email_text"></small>
                                     </div>
                                 </div>
                             </div>
@@ -49,21 +47,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row d-none">
+                            <!-- <div class="row d-none">
                                 <div class="col-sm-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" id="agree" name="agree" required> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>及<a href="/about/privacy_policy" class="use-modal-btn">隱私政策</a>
+                                            <input type="checkbox" id="agree" name="agree"> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>及<a href="/about/privacy_policy" class="use-modal-btn">隱私政策</a>
                                         </label>
                                     </div>
-                                    <!-- <label id="agree-error" class="error" for="agree"></label> -->
+                                    <label id="agree-error" class="error" for="agree"></label>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <span id="error_text" style="color: red; font-weight: bold;"></span>
                         <input type="hidden" id="email_ok" value="0">
                         <input type="hidden" id="identity_ok" value="0">
-                        <input type="hidden" name="now_url" value="<?php echo base_url() . $_SERVER['REQUEST_URI'] ?>">
+                        <!-- <input type="hidden" name="now_url" value="<?php echo base_url() . $_SERVER['REQUEST_URI'] ?>"> -->
                         <div class="form-action clearfix">
                             <span class="btn btn-info btn-lg btn-block mt-xl mr-lg" onclick="form_check()">免費註冊</span>
                             <!-- <input type="submit" value="免費註冊" class="btn btn-info btn-lg btn-block mt-xl mr-lg"> -->
@@ -100,13 +98,13 @@
     var email_ok = $('#email_ok').val();
     var password = $('#password').val();
     var password_confirm = $('#password_confirm').val();
-    var agree = $('#agree:checkbox:checked').length;
+    // var agree = $('#agree:checkbox:checked').length;
     if(password==password_confirm){
-      if(agree>0){
-      } else {
-        $('#error_text').html('請勾選');
-        return false;
-      }
+      // if(agree>0){
+      // } else {
+      //   $('#error_text').html('請勾選');
+      //   return false;
+      // }
       if(email_ok==1){
       } else {
         $('#error_text').html('電子郵件不正確。');
