@@ -286,8 +286,8 @@ class Product extends Admin_Controller {
 					'product_id' => $this->input->post('product_id'),
 					'product_combine_id' => $id,
 					'qty' => $qty[$i],
-					'product_unit' => $unit[$i],
-					'product_specification' => $specification[$i],
+					'product_unit' => get_empty($unit[$i]),
+					'product_specification' => get_empty($specification[$i]),
 				);
 				$this->db->insert('product_combine_item', $insert_data);
 			}
