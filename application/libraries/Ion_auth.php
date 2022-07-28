@@ -164,17 +164,17 @@ class Ion_auth
 				else
 				{
 					$this->load->library('email');
-					$this->email->set_smtp_host("mail.kuangli.tw");
-        			$this->email->set_smtp_user("btw@kuangli.tw");
-        			$this->email->set_smtp_pass("Btw@admin");
-        			$this->email->set_smtp_port("587");
+					$this->email->set_smtp_host("mail.td-stuff.com");
+			        $this->email->set_smtp_user("service@td-stuff.com");
+			        $this->email->set_smtp_pass("Td-stuff@admin");
+			        $this->email->set_smtp_port("587");
         			$this->email->set_smtp_crypto("");
 
 					$message = $this->load->view($this->config->item('email_templates', 'ion_auth') . $this->config->item('email_forgot_password', 'ion_auth'), $data, TRUE);
 					// $this->email->clear();
 					// $this->email->from($this->config->item('admin_email', 'ion_auth'), $this->config->item('site_title', 'ion_auth'));
 					// $this->email->from('service1@bythewaytaiwan.com', get_setting_general('name'));
-					$this->email->from(get_setting_general('email'), get_setting_general('name'));
+					$this->email->from('service@td-stuff.com', get_setting_general('name'));
 					$this->email->to($user->email);
 					$this->email->subject(get_setting_general('name').' - ' . $this->lang->line('email_forgotten_password_subject'));
 					$this->email->message($message);

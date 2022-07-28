@@ -1,6 +1,6 @@
-<div class="main pt-signinfo">
-	<div class="row">
-		<div class="col-md-4 col-md-offset-4">
+<div role="main" class="main pt-signinfo">
+  	<div class="row">
+	    <div class="col-md-4 col-md-offset-4">
 			<h3><?php echo lang('reset_password_heading');?></h3>
 			<div id="infoMessage"><?php echo $message;?></div>
 			<?php echo form_open('auth/reset_password/' . $code);?>

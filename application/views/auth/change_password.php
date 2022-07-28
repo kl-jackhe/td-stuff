@@ -1,6 +1,6 @@
-<div class="main pt-signinfo">
+<div role="main" class="main pt-signinfo">
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4 col-md-offset-4">
       <h1><?php echo lang('change_password_heading');?></h1>
       <div id="infoMessage"><?php echo $message;?></div>
       <?php echo form_open("auth/change_password");?>
