@@ -4,6 +4,15 @@ foreach ($this->cart->contents() as $items) {
 	$count++;
 }?>
 <style>
+    #footer {
+        margin-top: 0px;
+    }
+    #zoomA {
+        transition: transform ease-in-out 0s;
+    }
+    #zoomA:hover {
+        transform: scale(1.1);
+    }
     .m_padding {
         padding-bottom: 0!important;
     }
@@ -145,7 +154,7 @@ foreach ($this->cart->contents() as $items) {
                                         <a href="product/view/<?=$items['product_id']?>">
                                             <?php $image = get_product_combine($items['id'], 'picture'); ?>
                                             <?php if ($image != '') {?>
-                                                <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
+                                                <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                                             <?php }?>
                                         </a>
                                     </td>
@@ -170,24 +179,24 @@ foreach ($this->cart->contents() as $items) {
                     </section>
                     <h3>付款方式</h3>
                     <section>
-                        <div class="container-fluid">
+                        <div class="container-fluid py-3">
                             <div class="row">
-                                <div class="col-12 py-2">
+                                <div class="col-12">
                                     <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                                 <div class="col-12">
                                     <hr>
                                 </div>
-                                <div class="col-12 py-2">
-                                    <h3>購物須知</h3>
+                                <div class="col-12">
+                                    <h3 class="mt-0">購物須知</h3>
                                     <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
                                     <p>2. 超商取貨者，請務必確認手機號碼是否正確。</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
                                 </div>
-                                <div class="col-12 col-md-6 py-2">
-                                    <h3>運送方式</h3>
+                                <div class="col-12 col-md-6">
+                                    <h3 class="mt-0">運送方式</h3>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="711_pickup_frozen" checked>
                                         <label class="form-check-label" for="checkout_delivery2">
@@ -201,8 +210,8 @@ foreach ($this->cart->contents() as $items) {
                                         </label>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-6 py-2">
-                                    <h3>付款方式</h3>
+                                <div class="col-12 col-md-6">
+                                    <h3 class="mt-0">付款方式</h3>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment1" value="bank_transfer" checked>
                                         <label class="form-check-label" for="checkout_payment1">
@@ -220,7 +229,7 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3>總計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
+                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                             </div>
                         </div>

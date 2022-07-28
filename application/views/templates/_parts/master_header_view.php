@@ -87,11 +87,13 @@
         border: 1px solid #534431;
         color: #808080 !important;
         padding: 2px 12px 2px 12px !important;
+        outline: none;
     }
     .nav_user_register_logout {
         background: #534431;
         color: #fff !important;
         padding: 2px 12px 2px 12px !important;
+        outline: none;
     }
     .fixed_icon_style {
         max-width: 40px;
@@ -172,13 +174,13 @@
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                                     <?php $current = $this->uri->segment(1); ?>
                                     <li class="nav-item <?php echo ($current==''?'active':'') ?>">
-                                        <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
+                                        <a class="nav-link" style="outline: none;" href="<?php echo base_url() ?>">首頁</a>
                                     </li>
                                     <!-- <li class="nav-item <?php echo ($current=='about'?'active':'') ?>">
-                                        <a class="nav-link" href="/about">關於龍寶</a>
+                                        <a class="nav-link" style="outline: none;" href="/about">關於龍寶</a>
                                     </li> -->
                                     <li class="nav-item <?php echo ($current=='product'?'active':'') ?>">
-                                        <a class="nav-link" href="/product">全商品</a>
+                                        <a class="nav-link" style="outline: none;" href="/product">全館商品</a>
                                     </li>
                                     <div class="row nav_user_style">
                                         <?php if (!$this->ion_auth->logged_in()){ ?>
