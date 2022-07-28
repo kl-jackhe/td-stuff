@@ -16,10 +16,7 @@
     <meta property="og:image" content="<?php echo base_url() ?>assets/uploads/<?php echo get_setting_general('logo') ?>" />
     <meta name="twitter:card" content="<?php echo base_url() ?>assets/uploads/<?php echo get_setting_general('logo') ?>" />
     <meta name="twitter:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />
-    <title>
-        <?php echo $page_title; ?> |
-        <?php echo get_setting_general('name') ?>
-    </title>
+    <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
     <!-- Favicon -->
     <!-- <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" /> -->
     <!-- Web Fonts  -->
@@ -59,6 +56,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </head>
 <style>
+    body {
+        font-family: Open Sans, "Microsoft JhengHei";
+    }
     #cart-qty {
         color: #BE2633;
         position: absolute;
@@ -103,6 +103,9 @@
     }
     .icon_pointer {
         cursor: pointer;
+    }
+    #footer {
+        margin-top: 30px;
     }
     @media (min-width: 768px) and (max-width: 991.98px) {
         .top_logo_style {
@@ -154,29 +157,6 @@
 
 <body>
     <div class="body h-100">
-        <div class="fixed-bottom header_fixed_icon">
-            <div id="fa-facebook-square" class="my-2 icon_pointer">
-                <a href="#">
-                    <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
-                </a>
-            </div>
-            <div id="fa-line" class="my-2 icon_pointer">
-                <a target="_blank" href="https://line.me/R/ti/p/@504bdron">
-                    <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
-                </a>
-            </div>
-            <div id="fa-bag-shopping" class="my-2 icon_pointer">
-                <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
-                    <div id="cart-qty"><span>0</span></div>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
-                </a>
-            </div>
-            <div id="fa-angles-up" class="my-2 icon_pointer" style="display: none;">
-                <a href="#" style="color:black;">
-                    <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
-                </a>
-            </div>
-        </div>
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
                 <div class="header-container container m_padding">
@@ -190,30 +170,31 @@
                             </a>
                             <div class="collapse navbar-collapse" id="navbarToggler">
                                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                    <li class="nav-item active">
+                                    <?php $current = $this->uri->segment(1); ?>
+                                    <li class="nav-item <?php echo ($current==''?'active':'') ?>">
                                         <a class="nav-link" href="<?php echo base_url() ?>">首頁</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="<?php echo base_url() ?>about">關於龍寶</a>
+                                    <li class="nav-item <?php echo ($current=='about'?'active':'') ?>">
+                                        <a class="nav-link" href="/about">關於龍寶</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item <?php echo ($current=='product'?'active':'') ?>">
                                         <a class="nav-link" href="/product">全商品</a>
                                     </li>
                                     <div class="row nav_user_style">
                                         <?php if (!$this->ion_auth->logged_in()){ ?>
-                                        <li class="nav-item">
-                                            <a href="/login" class="btn nav-link nav_user_login_edit">登入</a>
-                                        </li>
-                                        <li class="nav-item" >
-                                            <a href="/register" class="btn register-btn nav-link nav_user_register_logout">註冊</a>
-                                        </li>
-                                        <? } else { ?>
-                                        <li class="nav-item" >
-                                            <a class="btn nav-link nav_user_login_edit" href="/auth/edit_user">我的帳戶</a>
-                                        </li>
-                                        <li class="nav-item" >
-                                            <a class="btn nav-link nav_user_register_logout" href="/logout">登出</a>
-                                        </li>
+                                            <li class="nav-item">
+                                                <a href="/login" class="btn nav-link nav_user_login_edit">登入</a>
+                                            </li>
+                                            <li class="nav-item" >
+                                                <a href="/register" class="btn register-btn nav-link nav_user_register_logout">註冊</a>
+                                            </li>
+                                            <? } else { ?>
+                                            <li class="nav-item" >
+                                                <a class="btn nav-link nav_user_login_edit" href="/auth/edit_user">我的帳戶</a>
+                                            </li>
+                                            <li class="nav-item" >
+                                                <a class="btn nav-link nav_user_register_logout" href="/logout">登出</a>
+                                            </li>
                                         <? } ?>
                                     </div>
                                 </ul>

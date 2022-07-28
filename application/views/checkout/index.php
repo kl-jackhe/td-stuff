@@ -233,19 +233,19 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
                                     </div>
-                                    <input type="text" class="form-control" name="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" required>
+                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">電話</span>
                                     </div>
-                                    <input type="text" class="form-control" name="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" required>
+                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Email</span>
                                     </div>
-                                    <input type="text" class="form-control" name="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" required>
+                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 d-none">
                                     <div class="input-group-prepend">
@@ -286,8 +286,8 @@ foreach ($this->cart->contents() as $items) {
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div>
                                 <div class="col-12">
-                                    <!-- <a href="#" type="button" id="One-click-checkout" onclick="form_check()" class="btn btn-primary w-100">下單購買</a> -->
-                                    <button type="submit" class="btn btn-primary w-100">下單購買</button>
+                                    <!-- <button type="submit" class="btn btn-primary w-100">下單購買</button> -->
+                                    <span onclick="form_check()" class="btn btn-primary w-100">下單購買</span>
                                 </div>
                             </div>
                         </div>
@@ -331,8 +331,21 @@ $("#wizard").steps({
         // 'districtSel': '<?php // echo $user->district ?>'
     });
 </script>
-
 <script>
+    $(document).ready(function() {
+        // $('#phone').keyup(function () {
+        //     if (/[^0-9\.-]/g.test(this.value)) {
+        //         this.value = this.value.replace(/[^0-9\.-]/g, '');
+        //         $(this).val($(this).val().replace(/[^\d].+/, ""));
+        //     }
+        // };
+        $("#phone").on("keypress keyup blur",function (event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+    });
     function select_store_info() {
         // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout' ?>');
 
@@ -342,5 +355,24 @@ $("#wizard").steps({
     function set_store_info(storename = '', storeaddress = '') {
         $("#storename").val(storename);
         $("#storeaddress").val(storeaddress);
+    }
+
+    function form_check() {
+        var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+        if($('#name').val()==''){
+            alert('請輸入收件姓名');
+            return false;
+        }
+        if($('#phone').val()==''){
+            alert('請輸入收件電話');
+            return false;
+        }
+        if(delivery=='711_pickup_frozen') {
+            if($('#storename').val()=='' || $('#storeaddress').val()==''){
+                alert('請選擇取貨門市');
+                return false;
+            }
+        }
+        $('#checkout_form').submit();
     }
 </script>

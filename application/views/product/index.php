@@ -65,20 +65,16 @@
             <div class="row product_box">
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center" id="product_index">
-                        <?
-                        if (!empty($products)) {
-                            foreach ($products as $product){
-                        ?>
+                        <? if (!empty($products)) { foreach ($products as $product) { ?>
                         <div class="col-md-4 pb-5">
                             <a href="/product/view/<?=$product['product_id']?>">
                                 <?if (!empty($product['product_image'])) {?>
-                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
+                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
                                 <?}else{?>
-                                <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
+                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
                                 <?}?>
                                 <div class="product_name">
-                                    <span>
-                                        <?=$product['product_name'];?></span>
+                                    <span><?=$product['product_name'];?></span>
                                 </div>
                             </a>
                             <div class="product_price">
@@ -91,8 +87,7 @@
                                 </div>
                             </a>
                         </div>
-                        <?}
-                    }?>
+                        <? }} ?>
                     </div>
                 </div>
             </div>

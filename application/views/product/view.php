@@ -68,7 +68,7 @@ input.qtyminus {
 </style>
 <div role="main" class="main product-view">
     <section class="form-section">
-        <div class="container-fluid pb-5">
+        <div class="container-fluid">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
