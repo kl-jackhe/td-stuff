@@ -24,7 +24,6 @@ class Order extends Admin_Controller {
         $config['link_func']   = 'searchFilter';
         $this->ajax_pagination_admin->initialize($config);
         //get the posts data
-        $this->data['delivery_place'] = $this->mysql_model->_select('delivery_place');
         $this->data['orders'] = $this->order_model->getRows(array('limit'=>$this->perPage));
 
         $this->render('admin/order/index');

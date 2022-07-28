@@ -417,16 +417,16 @@ class Auth extends Public_Controller {
 				$this->db->insert('login_log', $data);
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				// redirect('/', 'refresh');
-				if ($this->input->post('now_url') != '') {
-					if ($this->input->post('now_url') == base_url() . '/register' || $this->input->post('now_url') == base_url() . '/register/') {
-						redirect(base_url(), 'refresh');
-					} else {
-						redirect($this->input->post('now_url') . '?ajax_register=yes');
-					}
-				} else {
-					redirect($_SERVER['HTTP_REFERER']);
-				}
+				redirect('/', 'refresh');
+				// if ($this->input->post('now_url') != '') {
+				// 	if ($this->input->post('now_url') == base_url() . '/register' || $this->input->post('now_url') == base_url() . '/register/') {
+				// 		redirect(base_url(), 'refresh');
+				// 	} else {
+				// 		redirect($this->input->post('now_url') . '?ajax_register=yes');
+				// 	}
+				// } else {
+				// 	redirect($_SERVER['HTTP_REFERER']);
+				// }
 			} else {
 				// if the login was un-successful
 				// redirect them back to the login page
