@@ -152,7 +152,7 @@ foreach ($this->cart->contents() as $items) {
                                     <td><?=$i?></td>
                                     <td>
                                         <a href="product/view/<?=$items['product_id']?>">
-                                            <?php $image = get_product_combine($items['id'], 'picture'); ?>
+                                            <?php $image = get_product_combine($items['id'], 'picture');?>
                                             <?php if ($image != '') {?>
                                                 <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                                             <?php }?>
@@ -160,9 +160,9 @@ foreach ($this->cart->contents() as $items) {
                                     </td>
                                     <td>
                                         <p><?php echo $items['name']; ?></p>
-                                        <p>金額：$<?php echo $items['price']; ?></p>
+                                        <p>金額：$ <?php echo $items['price']; ?></p>
                                         <p>數量：<?php echo $items['qty']; ?></p>
-                                        <p>小計：$<span style="color: #dd0606"><?php echo $items['subtotal']; ?></span></p>
+                                        <p>小計：<span style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
                                     </td>
                                 </tr>
                                 <?php $i++;?>
@@ -316,6 +316,43 @@ $("#wizard").steps({
     transitionEffect: "slideLeft",
     enableFinishButton: false,
     saveState: true,
+    onStepChanging: function (event, currentIndex, newIndex) {
+        console.log(currentIndex)
+        console.log(event)
+        console.log(newIndex)
+        if (currentIndex == 2) {
+            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            if($('#name').val()==''){
+                alert('請輸入收件姓名');
+                return false;
+            }
+            if($('#phone').val()==''){
+                alert('請輸入收件電話');
+                return false;
+            }
+            if(delivery=='711_pickup_frozen') {
+                if($('#storename').val()=='' || $('#storeaddress').val()==''){
+                    alert('請選擇取貨門市');
+                    return false;
+                }
+            }
+        }
+        return true;
+    },
+    onStepChanged: function (event, currentIndex, priorIndex) {
+        if (currentIndex == 0) {
+            $('.progress_box_bar').css('width', '0%');
+        }
+        if (currentIndex == 1) {
+            $('.progress_box_bar').css('width', '33.5%');
+        }
+        if (currentIndex == 2) {
+            $('.progress_box_bar').css('width', '67%');
+        }
+        if (currentIndex == 3) {
+            $('.progress_box_bar').css('width', '100%');
+        }
+    },
     titleTemplate: '<div class="number row"><i></i><p>#index#</p></div><span class="wizard_section_title">#title#</span>',
     labels: {
         cancel: "取消",
