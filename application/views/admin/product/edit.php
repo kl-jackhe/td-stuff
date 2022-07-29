@@ -63,11 +63,11 @@
                                     <div class="form-group">
                                         <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
                                     </div>
-                                    <?php if(!empty($product['product_image'])) {?>
+                                    <?php if (!empty($product['product_image'])) {?>
                                         <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';}?>">
-                                    <?php } else { ?>
+                                    <?php } else {?>
                                         <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
-                                    <?php } ?>
+                                    <?php }?>
                                     <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>" />
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                                         <th class="text-center"></th>
                                     </tr>
                                     <tbody id="product-specification-list">
-                                        <?php if (!empty($product_specification)) { foreach ($product_specification as $row) { ?>
+                                        <?php if (!empty($product_specification)) {foreach ($product_specification as $row) {?>
                                         <tr>
                                             <td>
                                                 <input type="hidden" class="form-control" name="id[]" value="<?php echo $row['id']; ?>">
@@ -116,7 +116,7 @@
                                             </td>
                                             <td class="text-center"><i class="fa fa-trash-o x"></i></td>
                                         </tr>
-                                        <?php }} ?>
+                                        <?php }}?>
                                     </tbody>
                                 </table>
                                 <hr>
@@ -131,27 +131,29 @@
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
                                         <th style="width: 20%;">名稱</th>
-                                        <th style="width: 20%;">價格</th>
+                                        <th style="width: 20%;">原價</th>
+                                        <th style="width: 20%;">方案價</th>
                                         <th style="width: 20%;">描述</th>
                                         <th style="width: 20%;">圖片</th>
                                         <th style="width: 20%;">操作</th>
                                     </tr>
-                                    <?php if(!empty($product_combine)) { foreach ($product_combine as $row) { ?>
+                                    <?php if (!empty($product_combine)) {foreach ($product_combine as $row) {?>
                                         <tr>
                                             <td><?php echo $row['name']; ?></td>
                                             <td><?php echo $row['price']; ?></td>
+                                            <td><?php echo $row['current_price']; ?></td>
                                             <td><?php echo $row['description']; ?></td>
                                             <td>
-                                                <?php if(!empty($row['picture'])) {?>
+                                                <?php if (!empty($row['picture'])) {?>
                                                     <img src="/assets/uploads/<?php echo $row['picture']; ?>"  class="img-responsive">
-                                                <?php } ?>
+                                                <?php }?>
                                             </td>
                                             <td>
                                                 <a href="/admin/product/edit_plan/<?php echo $row['id'] ?>" class="btn btn-primary modal-btn">編輯</a>
                                                 <a href="/admin/product/delete_plan/<?php echo $row['id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
                                             </td>
                                         </tr>
-                                    <?php }} ?>
+                                    <?php }}?>
                                 </table>
                             </div>
                         </div>
@@ -167,7 +169,7 @@
                     <div role="tabpanel" class="tab-pane" id="plan">
                         <div class="row">
                             <div class="col-md-12">
-                                
+
                             </div>
                         </div>
                     </div>
