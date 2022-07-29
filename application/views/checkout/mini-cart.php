@@ -41,13 +41,13 @@
         left: 0px;
     }
     .subtotal_box {
-        position: absolute; 
-        bottom: 0px; 
+        position: absolute;
+        bottom: 0px;
         right: 0px;
     }
     .subtotal_box span {
         color: #BE2633;
-        text-align: right; 
+        text-align: right;
         font-size: 22px;
     }
 @media (max-width: 767px) {
@@ -63,7 +63,7 @@
     }
     .subtotal_box span {
         color: #BE2633;
-        text-align: right; 
+        text-align: right;
         font-size: 16px;
     }
 }
@@ -82,16 +82,16 @@
                                 <span><?=$i?></span>
                             </div>
                             <div class="col delete_box">
-                                <span class="mini-cart-x delete_button_style align-text-bottom" style="cursor: pointer;" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
+                                <span class="mini-cart-x delete_button_style align-text-bottom" style="cursor: pointer;font-size: 12px;" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-8 py-2 px-0">
-                    <?php $image = get_product_combine($items['id'], 'picture'); ?>
-                    <?php if ($image != '') { ?>
+                    <?php $image = get_product_combine($items['id'], 'picture');?>
+                    <?php if ($image != '') {?>
                         <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
-                    <?php } ?>
+                    <?php }?>
                 </div>
             </div>
         </div>
@@ -102,16 +102,16 @@
                         <?php echo $items['name']; ?>
                     </span>
                     <?php
-                    $this->db->where('product_combine_id', $items['id']);
-            		$query = $this->db->get('product_combine_item');
-            		if ($query->num_rows() > 0) {
-            			echo '<ul class="pl-3 m-0" style="color: gray;">';
-            			foreach ($query->result_array() as $item) {
-            				echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
-            			}
-            			echo '</ul>';
-            		}
-            		?>
+$this->db->where('product_combine_id', $items['id']);
+		$query = $this->db->get('product_combine_item');
+		if ($query->num_rows() > 0) {
+			echo '<ul class="pl-3 m-0" style="color: gray;">';
+			foreach ($query->result_array() as $item) {
+				echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
+			}
+			echo '</ul>';
+		}
+		?>
                 </div>
             </div>
         </div>
