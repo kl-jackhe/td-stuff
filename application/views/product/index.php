@@ -26,7 +26,7 @@
   transition: transform ease-in-out 0s;
 }
 #zoomA:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 .select_product {
     background-color: #68396D;
@@ -80,7 +80,7 @@
     <section class="form-section content_auto_h">
         <div class="container">
             <div class="row product_box">
-                <div class="col-12">
+                <!-- <div class="col-12">
                     <div class="row justify-content-center text-center">
                         <div class="col-12 pb-3">
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     <hr class="py-2" style="border-top: 1px solid #988B7A;">
-                </div>
+                </div> -->
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center" id="product_index">
                         <? if (!empty($products)) { foreach ($products as $product) { ?>

@@ -60,7 +60,7 @@
   transition: transform ease-in-out 0s;
 }
 #zoomA:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .select_product {
