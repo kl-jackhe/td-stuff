@@ -151,9 +151,9 @@
         .header_fixed_icon {
             right: 9px;
         }
-        .fixed_icon_style {
+        ./*fixed_icon_style {
             max-width: 30px;
-        }
+        }*/
     }
 </style>
 

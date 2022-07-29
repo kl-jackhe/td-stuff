@@ -66,6 +66,7 @@
         padding-right: 0px;
     }
     .product_category {
+        margin: 10px 0px 10px 0px;
         padding: 10px 10px 10px 10px;
     }
     #product_index {
@@ -78,20 +79,20 @@
         <div class="container">
             <div class="row product_box">
                 <div class="col-12">
-                    <div class="row">
-                        <div class="col-12 text-left pb-2">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-12 pb-2">
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div>
-                        <div class="col-3">
-                            <span class="product_category btn">午睡先生<br><span style="font-size: 12px;">-寢具類-</span></span>
+                        <div class="col-6 col-md-3">
+                            <span class="product_category btn">午睡先生</span>
                         </div>
-                        <div class="col-3">
-                            <span class="product_category btn">禾食禾日<br><span style="font-size: 12px;">-食品類-</span></span>
+                        <div class="col-6 col-md-3">
+                            <span class="product_category btn">禾食禾日</span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-md-3">
                             <span class="product_category btn">日用選品</span>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-md-3">
                             <span class="product_category btn">健康保健</span>
                         </div>
                     </div>
@@ -99,7 +100,7 @@
                 </div>
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center" id="product_index">
-                        
+
                         <? if (!empty($products)) { foreach ($products as $product) { ?>
                         <div class="col-md-4 pb-5">
                             <a href="/product/view/<?=$product['product_id']?>">
