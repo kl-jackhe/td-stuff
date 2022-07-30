@@ -5,7 +5,6 @@ class Home extends Public_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model('home_model');
-		$this->load->model('service_area_model');
 		$this->load->model('product_model');
 	}
 
@@ -15,39 +14,6 @@ class Home extends Public_Controller {
 		$this->data['products'] = $this->product_model->getHomeProducts();
 		$this->data['banner'] = $this->home_model->GetBanner();
 		$this->render('home/index');
-	}
-
-	public function shop_alliance() {
-		$data = array(
-			'shop_alliance_name' => $this->input->post('shop_alliance_name'),
-			'shop_alliance_county' => $this->input->post('county'),
-			'shop_alliance_district' => $this->input->post('district'),
-			'shop_alliance_address' => $this->input->post('shop_alliance_address'),
-			'shop_alliance_contact_name' => $this->input->post('shop_alliance_contact_name'),
-			'shop_alliance_email' => $this->input->post('shop_alliance_email'),
-			'shop_alliance_phone' => $this->input->post('shop_alliance_phone'),
-			'created_at' => date('Y-m-d H:i:s'),
-		);
-
-		$this->db->insert('shop_alliance', $data);
-		$this->session->set_flashdata('message', '店家合作表單送出成功！');
-		redirect('about/shop_alliance?send=yes');
-	}
-
-	public function cross_industry_alliance() {
-		$data = array(
-			'cross_industry_alliance_name' => $this->input->post('cross_industry_alliance_name'),
-			'cross_industry_alliance_number' => $this->input->post('cross_industry_alliance_number'),
-			'cross_industry_alliance_contact_name' => $this->input->post('cross_industry_alliance_contact_name'),
-			'cross_industry_alliance_email' => $this->input->post('cross_industry_alliance_email'),
-			'cross_industry_alliance_phone' => $this->input->post('cross_industry_alliance_phone'),
-			'cross_industry_alliance_content' => $this->input->post('cross_industry_alliance_content'),
-			'created_at' => date('Y-m-d H:i:s'),
-		);
-
-		$this->db->insert('cross_industry_alliance', $data);
-		$this->session->set_flashdata('message', '異業合作表單送出成功！');
-		redirect('about/cross_industry_alliance?send=yes');
 	}
 
 	function send_email() {
@@ -70,15 +36,6 @@ class Home extends Public_Controller {
 		} else {
 			echo '無法發送通知信件。';
 		}
-	}
-
-	function test() {
-		$this->data['hide_county'] = $this->service_area_model->get_hide_county();
-		$this->data['hide_district'] = $this->service_area_model->get_hide_district();
-		// header('Content-Type: application/json');
-		// echo '<pre>';
-		echo json_encode($this->data['hide_district'], JSON_UNESCAPED_UNICODE);
-		// echo '</pre>';
 	}
 
 }
