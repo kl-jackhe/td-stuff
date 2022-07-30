@@ -14,7 +14,8 @@ user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
 /node_modules/
 /vendor/
-/assets/uploads/invoice_xml/
+/assets/uploads/
+/assets/thumbs/
 
 # IDE Files
 #-------------------------
