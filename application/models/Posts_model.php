@@ -27,15 +27,20 @@ class Posts_model extends CI_Model {
             $this->db->order_by('post_id','desc');
         }
         //set start and limit
-        // if(array_key_exists("start",$params) && array_key_exists("limit",$params)){
-        //     $this->db->limit($params['limit'],$params['start']);
-        // }elseif(!array_key_exists("start",$params) && array_key_exists("limit",$params)){
-        //     $this->db->limit($params['limit']);
-        // }
-        //get posts
-        $query = $this->db->get();
-        //return fetched data
-        return ($query->num_rows() > 0)?$query->result_array():FALSE;
+        if(array_key_exists("start",$params) && array_key_exists("limit",$params)){
+            $this->db->limit($params['limit'],$params['start']);
+        }elseif(!array_key_exists("start",$params) && array_key_exists("limit",$params)){
+            $this->db->limit($params['limit']);
+        }
+        if(array_key_exists("returnType",$params) && $params['returnType'] == 'count'){
+            $result = $this->db->count_all_results();
+        }else{
+            //get records
+            $query = $this->db->get();
+            //return fetched data
+            $result = ($query->num_rows() > 0)?$query->result_array():false;
+        }
+        return $result;
     }
 
     function getPosts($params = array()){

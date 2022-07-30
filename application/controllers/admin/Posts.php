@@ -14,7 +14,8 @@ class Posts extends Admin_Controller {
 
         $data = array();
         //total rows count
-        $totalRec = count($this->posts_model->getRows());
+        $conditions['returnType'] = 'count';
+        $totalRec = $this->posts_model->getRows($conditions);
         //pagination configuration
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/posts/ajaxData';
@@ -24,6 +25,7 @@ class Posts extends Admin_Controller {
         $this->ajax_pagination_admin->initialize($config);
         //get the posts data
         $this->data['category'] = $this->mysql_model->_select('post_category');
+        $conditions['returnType'] = '';
         $this->data['posts'] = $this->posts_model->getRows(array('limit'=>$this->perPage));
 
         $this->render('admin/posts/index');
@@ -57,7 +59,8 @@ class Posts extends Admin_Controller {
         //     $conditions['search']['status'] = $status;
         // }
         //total rows count
-        $totalRec = count($this->posts_model->getRows($conditions));
+        $conditions['returnType'] = 'count';
+        $totalRec = $this->posts_model->getRows($conditions);
         //pagination configuration
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/posts/ajaxData';
@@ -69,6 +72,7 @@ class Posts extends Admin_Controller {
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;
         //get posts data
+        $conditions['returnType'] = '';
         $this->data['posts'] = $this->posts_model->getRows($conditions);
         //load the view
         $this->load->view('admin/posts/ajax-data', $this->data, false);
