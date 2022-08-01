@@ -160,6 +160,18 @@ foreach ($this->cart->contents() as $items) {
                                     </td>
                                     <td>
                                         <p><?php echo $items['name']; ?></p>
+                                        <?php
+                                        $this->db->where('product_combine_id', $items['id']);
+                                        $query = $this->db->get('product_combine_item');
+                                        if ($query->num_rows() > 0) {
+                                        	foreach ($query->result_array() as $item) {?>
+                                                <p><? echo $item['qty'] . ' ' . $item['product_unit'];
+                                        		if (!empty($item['product_specification'])) {
+                                        		  echo ' - ' . $item['product_specification'];
+                                                }?>
+                                        	 </p><?}
+                                        }
+                                        ?>
                                         <p>金額：$ <?php echo $items['price']; ?></p>
                                         <p>數量：<?php echo $items['qty']; ?></p>
                                         <p>小計：<span style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
@@ -182,7 +194,7 @@ foreach ($this->cart->contents() as $items) {
                         <div class="container-fluid py-3">
                             <div class="row">
                                 <div class="col-12">
-                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
+                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -190,7 +202,7 @@ foreach ($this->cart->contents() as $items) {
                                 <div class="col-12">
                                     <h3 class="mt-0">購物須知</h3>
                                     <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
-                                    <p>2. 超商取貨者，請務必確認手機號碼是否正確。</p>
+                                    <p style="color:#dd0606;">2. 超商取貨者，請務必確認手機號碼是否正確。</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -229,7 +241,7 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: red;">NT$ <?php echo $this->cart->total() ?></span></h3>
+                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo $this->cart->total() ?></span></h3>
                                 </div>
                             </div>
                         </div>

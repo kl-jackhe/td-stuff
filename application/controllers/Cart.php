@@ -12,8 +12,7 @@ class Cart extends Public_Controller {
 		$this->render('checkout/cart');
 	}
 
-	public function mini_cart()
-	{
+	public function mini_cart() {
 		$this->load->view('checkout/mini-cart');
 	}
 
@@ -24,7 +23,7 @@ class Cart extends Public_Controller {
 		$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $combine_id, 'row');
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
 
-		$name = $this_product['product_name'] .' - '. $this_product_combine['name'];
+		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
 		$price = $this_product_combine['current_price'];
 		$image = '';
 		// if($this_product['product_image']!=''){
@@ -42,12 +41,12 @@ class Cart extends Public_Controller {
 			'qty' => $qty,
 			// 'image' => $image,
 			'options' => array(
-                'time' => get_random_string(15),
-            )
+				'time' => get_random_string(15),
+			),
 		);
 		echo $price;
 		$rowid = $this->cart->insert($insert_data);
-		if($rowid){
+		if ($rowid) {
 			return true;
 		} else {
 			return false;
@@ -94,12 +93,11 @@ class Cart extends Public_Controller {
 
 	/////////////////////////////////////////
 
-	public function view()
-    {
-        $array = $this->cart->contents();
-        header('Content-Type: application/json');
-        echo json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-        exit;
-    }
+	public function view() {
+		$array = $this->cart->contents();
+		header('Content-Type: application/json');
+		echo json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		exit;
+	}
 
 }

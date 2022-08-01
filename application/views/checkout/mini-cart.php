@@ -37,7 +37,7 @@
     }
     .delete_box {
         position: absolute;
-        bottom: 5px;
+        bottom: 7px;
         left: 0px;
     }
     .subtotal_box {
@@ -58,7 +58,7 @@
     }
     .delete_box {
         position: absolute;
-        bottom: 5px;
+        bottom: 7px;
         left: -5px;
     }
     .subtotal_box span {
@@ -107,8 +107,17 @@ $this->db->where('product_combine_id', $items['id']);
 		if ($query->num_rows() > 0) {
 			echo '<ul class="pl-3 m-0" style="color: gray;">';
 			foreach ($query->result_array() as $item) {
-				echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
-			}
+				// echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
+                ?>
+                <li style="list-style-type: circle;">
+                    <?
+                    echo $item['qty'] . ' ' . $item['product_unit'];
+                    if (!empty($item['product_specification'])) {
+                        echo ' - '.$item['product_specification'];
+                    }
+                    ?>
+                </li>
+			<?}
 			echo '</ul>';
 		}
 		?>
