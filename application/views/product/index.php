@@ -80,26 +80,22 @@
     <section class="form-section content_auto_h">
         <div class="container">
             <div class="row product_box">
-                <!-- <div class="col-12">
+                <div class="col-12">
                     <div class="row justify-content-center text-center">
-                        <div class="col-12 pb-3">
+                        <!-- <div class="col-12 pb-3">
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
-                        </div>
-                        <div class="col-3 col-md-2">
-                            <span class="product_category btn">午睡先生</span>
-                        </div>
-                        <div class="col-3 col-md-2">
-                            <span class="product_category btn">禾食禾日</span>
-                        </div>
-                        <div class="col-3 col-md-2">
-                            <span class="product_category btn">日用選品</span>
-                        </div>
-                        <div class="col-3 col-md-2">
-                            <span class="product_category btn">健康保健</span>
-                        </div>
+                        </div> -->
+                        <?if (!empty($product_category)) {
+                            foreach ($product_category as $row) {?>
+                                <div class="col-3 col-md-2">
+                                    <span class="product_category btn"><?echo $row['product_category_name'];?></span>
+                                    <input type="hidden" name="" value="<?echo $row['product_category_id'];?>">
+                                </div>
+                            <?}
+                        }?>
                     </div>
                     <hr class="py-2" style="border-top: 1px solid #988B7A;">
-                </div> -->
+                </div>
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center" id="product_index">
                         <? if (!empty($products)) { foreach ($products as $product) { ?>

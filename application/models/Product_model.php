@@ -55,6 +55,16 @@ class Product_model extends CI_Model {
 		// return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
+	function get_product_category() {
+		$this->db->select('*');
+		$query = $this->db->get('product_category');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
 	function get_product_category_name($id) {
 		$this->db->select('product_category_name');
 		$this->db->limit(1);

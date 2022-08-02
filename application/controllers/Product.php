@@ -9,14 +9,15 @@ class Product extends Public_Controller {
 		$this->load->model('product_model');
 	}
 
-	public function index() {
+	public function index($id = 0) {
 		$this->data['page_title'] = '商品';
 		$this->data['products'] = $this->product_model->getHomeProducts();
+		$this->data['product_category'] = $this->product_model->get_product_category();
 		$this->render('product/index');
 	}
 
 	public function view($id = 0) {
-		if ($id==0) {
+		if ($id == 0) {
 			redirect(base_url() . 'product');
 		}
 		$this->data['product'] = $this->product_model->getSingleProduct($id);
