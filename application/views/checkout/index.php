@@ -254,19 +254,19 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
                                     </div>
-                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" required>
+                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">電話</span>
                                     </div>
-                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" required>
+                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Email</span>
                                     </div>
-                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" required>
+                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 d-none">
                                     <div class="input-group-prepend">
@@ -286,8 +286,8 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
-                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->post('storename') ?>" placeholder="門市名稱" readonly>
-                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->post('storeaddress') ?>" placeholder="門市地址" readonly>
+                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
                                     <div style="width: 100%; margin-top: 15px;">
                                         <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
                                     </div>
@@ -405,14 +405,28 @@ $("#wizard").steps({
         });
     });
     function select_store_info() {
-        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'checkout' ?>');
-
-        var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+        set_user_data();
+        <?php if(wp_is_mobile()){ ?>
+            $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
+        <?php } else { ?>
+            var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+        <?php } ?>
     }
 
     function set_store_info(storename = '', storeaddress = '') {
         $("#storename").val(storename);
         $("#storeaddress").val(storeaddress);
+    }
+
+    function set_user_data() {
+        $.ajax({
+            url: "/checkout/set_user_daa",
+            method: "POST",
+            data: { name: $('#name').val(), phone: $('#phone').val(), email: $('#email').val() },
+            success: function(data) {
+                // 
+            }
+        });
     }
 
     function form_check() {
