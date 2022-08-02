@@ -22,6 +22,7 @@ class Product extends Admin_Controller {
 		$config['link_func'] = 'searchFilter';
 		$this->ajax_pagination_admin->initialize($config);
 		//get the posts data
+		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		$this->data['product'] = $this->product_model->getRows(array('limit' => $this->perPage));
 
 		$this->render('admin/product/index');
@@ -75,7 +76,7 @@ class Product extends Admin_Controller {
 
 	public function create() {
 		$this->data['page_title'] = '新增商品';
-
+		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		$this->render('admin/product/create');
 	}
 
@@ -83,6 +84,7 @@ class Product extends Admin_Controller {
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
+			'product_category_id' => $this->input->post('product_category'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
 			'creator_id' => $this->current_user->id,
@@ -91,7 +93,7 @@ class Product extends Admin_Controller {
 		$product_id = $this->mysql_model->_insert('product', $data);
 
 		$this->session->set_flashdata('message', '商品建立成功！');
-		redirect('admin/product/edit/'.$product_id);
+		redirect('admin/product/edit/' . $product_id);
 	}
 
 	public function edit($id) {
@@ -100,6 +102,7 @@ class Product extends Admin_Controller {
 		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $id);
 		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id);
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
+		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		$this->data['change_log'] = get_change_log('product', $id);
 		$this->render('admin/product/edit');
 	}
@@ -134,6 +137,7 @@ class Product extends Admin_Controller {
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
+			'product_category_id' => $this->input->post('product_category'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
 			'updater_id' => $this->current_user->id,
@@ -317,5 +321,51 @@ class Product extends Admin_Controller {
 		} else {
 			echo 0;
 		}
+	}
+
+	// 商品分類 ---------------------------------------------------------------------------------
+	public function category() {
+		$this->data['page_title'] = '商品分類';
+		$this->data['category'] = $this->mysql_model->_select('product_category');
+
+		$this->render('admin/product/category/index');
+	}
+
+	public function insert_category() {
+		$this->data['page_title'] = '新增商品分類';
+
+		$data = array(
+			'product_category_name' => $this->input->post('product_category_name'),
+			'creator_id' => $this->current_user->id,
+		);
+
+		$this->db->insert('product_category', $data);
+		redirect(base_url() . 'admin/product/category');
+	}
+
+	public function edit_category($id) {
+		$this->data['page_title'] = '編輯商品分類';
+		$this->data['category'] = $this->mysql_model->_select('product_category', 'product_category_id', $id, 'row');
+
+		$this->render('admin/product/category/edit');
+	}
+
+	public function update_category($id) {
+		$data = array(
+			'product_category_name' => $this->input->post('product_category_name'),
+			'updater_id' => $this->current_user->id,
+			'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('product_category_id', $id);
+		$this->db->update('product_category', $data);
+
+		redirect(base_url() . 'admin/product/category');
+	}
+
+	public function delete_category($id) {
+		$this->db->where('product_category_id', $id);
+		$this->db->delete('product_category');
+
+		redirect(base_url() . 'admin/product/category');
 	}
 }

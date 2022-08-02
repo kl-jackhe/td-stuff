@@ -33,15 +33,15 @@ class Product_model extends CI_Model {
 		} elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
 			$this->db->limit($params['limit']);
 		}
-		if(array_key_exists("returnType",$params) && $params['returnType'] == 'count'){
-            $result = $this->db->count_all_results();
-        }else{
-            //get records
-            $query = $this->db->get();
-            //return fetched data
-            $result = ($query->num_rows() > 0)?$query->result_array():false;
-        }
-        return $result;
+		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
+			$result = $this->db->count_all_results();
+		} else {
+			//get records
+			$query = $this->db->get();
+			//return fetched data
+			$result = ($query->num_rows() > 0) ? $query->result_array() : false;
+		}
+		return $result;
 	}
 
 	function getHomeProducts() {
@@ -53,6 +53,18 @@ class Product_model extends CI_Model {
 			return false;
 		}
 		// return ($query->num_rows() > 0)?$query->result_array():false;
+	}
+
+	function get_product_category_name($id) {
+		$this->db->select('product_category_name');
+		$this->db->limit(1);
+		$this->db->where('product_category_id', $id);
+		$query = $this->db->get('product_category');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
 	}
 
 	function getSingleProduct($id) {

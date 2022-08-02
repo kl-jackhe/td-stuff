@@ -149,215 +149,215 @@ function get_void($data) {
 
 function get_order_eat_type($data) {
 	switch ($data) {
-		case 'in':
-			return "內用";
-			break;
-		case 'out':
-			return "外帶";
-			break;
-		case 'call':
-			return "電話";
-			break;
-		case 'delivery':
-			return "外送";
-			break;
+	case 'in':
+		return "內用";
+		break;
+	case 'out':
+		return "外帶";
+		break;
+	case 'call':
+		return "電話";
+		break;
+	case 'delivery':
+		return "外送";
+		break;
 	}
 }
 
 function get_offer_item_type($data) {
 	switch ($data) {
-		case 'single':
-			return "單一商品";
-			break;
-		case 'category':
-			return "商品分類";
-			break;
-		case 'cart':
-			return "購物車";
-			break;
+	case 'single':
+		return "單一商品";
+		break;
+	case 'category':
+		return "商品分類";
+		break;
+	case 'cart':
+		return "購物車";
+		break;
 	}
 }
 
 function get_contact_person_address_type($data) {
 	switch ($data) {
-		case 'r':
-			return "登記地址";
-			break;
-		case 's':
-			return "配送地址";
-			break;
-		case 'i':
-			return "發票地址";
-			break;
+	case 'r':
+		return "登記地址";
+		break;
+	case 's':
+		return "配送地址";
+		break;
+	case 'i':
+		return "發票地址";
+		break;
 	}
 }
 
 function get_coupon_use_limit($data) {
 	switch ($data) {
-		case 'once':
-			return "一次性";
-			break;
-		case 'repeat':
-			return "可重複使用";
-			break;
+	case 'once':
+		return "一次性";
+		break;
+	case 'repeat':
+		return "可重複使用";
+		break;
 	}
 }
 
 function get_coupon_is_uesd($data) {
 	switch ($data) {
-		case 'y':
-			return "已使用";
-			break;
-		case 'n':
-			return "未使用";
-			break;
+	case 'y':
+		return "已使用";
+		break;
+	case 'n':
+		return "未使用";
+		break;
 	}
 }
 
 function get_stock_type($data) {
 	switch ($data) {
-		case '1':
-			return "生產";
-			break;
-		case '2':
-			return "進貨";
-			break;
-		case '3':
-			return "銷貨";
-			break;
-		case '4':
-			return "POS";
-			break;
-		case '5':
-			return "調撥";
-			break;
-		case '6':
-			return "報廢";
-			break;
-		case '7':
-			return "盤點";
-			break;
-		case '8':
-			return "銷貨退回";
-			break;
-		case '9':
-			return "進貨退出";
-			break;
-		case '10':
-			return "調整";
-			break;
-		case '11':
-			return "分裝";
-			break;
+	case '1':
+		return "生產";
+		break;
+	case '2':
+		return "進貨";
+		break;
+	case '3':
+		return "銷貨";
+		break;
+	case '4':
+		return "POS";
+		break;
+	case '5':
+		return "調撥";
+		break;
+	case '6':
+		return "報廢";
+		break;
+	case '7':
+		return "盤點";
+		break;
+	case '8':
+		return "銷貨退回";
+		break;
+	case '9':
+		return "進貨退出";
+		break;
+	case '10':
+		return "調整";
+		break;
+	case '11':
+		return "分裝";
+		break;
 	}
 }
 
 function get_pay_status($data) {
 	switch ($data) {
-		case 'not_paid':
-			return "未付款";
-			break;
-		case 'paid':
-			return "已付款";
-			break;
-		case 'finish':
-			return "已完成";
-			break;
-		case 'return':
-			return "已退款";
-			break;
-		case 'cancel':
-			return "取消";
-			break;
+	case 'not_paid':
+		return "未付款";
+		break;
+	case 'paid':
+		return "已付款";
+		break;
+	case 'finish':
+		return "已完成";
+		break;
+	case 'return':
+		return "已退款";
+		break;
+	case 'cancel':
+		return "取消";
+		break;
 	}
 }
 
 function get_order_step($data) {
 	switch ($data) {
-		case 'confirm':
-			return "訂單確認";
-			break;
-		case 'process':
-			return "處理中";
-			break;
-		case 'shipping':
-			return "已出貨";
-			break;
-		case 'complete':
-			return "完成";
-			break;
+	case 'confirm':
+		return "訂單確認";
+		break;
+	case 'process':
+		return "處理中";
+		break;
+	case 'shipping':
+		return "已出貨";
+		break;
+	case 'complete':
+		return "完成";
+		break;
 	}
 }
 
 function get_delivery($data) {
 	switch ($data) {
-		case 'home_delivery_frozen':
-			return "冷凍宅配";
-			break;
-		case '711_pickup_frozen':
-			return "7-11 超商取貨";
-			break;
+	case 'home_delivery_frozen':
+		return "冷凍宅配";
+		break;
+	case '711_pickup_frozen':
+		return "7-11 超商取貨";
+		break;
 	}
 }
 
 function get_payment($data) {
 	switch ($data) {
-		case 'bank_transfer':
-			return "銀行匯款";
-			break;
-		case 'credit':
-			return "信用卡";
-			break;
-		case 'cash_on_delivery':
-			return "餐到付款";
-			break;
-		case 'line_pay':
-			return "Line Pay";
-			break;
-		case 'after_pay':
-			return "後支付";
-			break;
+	case 'bank_transfer':
+		return "銀行匯款";
+		break;
+	case 'credit':
+		return "信用卡";
+		break;
+	case 'cash_on_delivery':
+		return "餐到付款";
+		break;
+	case 'line_pay':
+		return "Line Pay";
+		break;
+	case 'after_pay':
+		return "後支付";
+		break;
 	}
 }
 
 function get_en_date($data) {
 	switch ($data) {
-		case 'Jan':
-			return "01";
-			break;
-		case 'Feb':
-			return "02";
-			break;
-		case 'Mar':
-			return "03";
-			break;
-		case 'Apr':
-			return "04";
-			break;
-		case 'May':
-			return "05";
-			break;
-		case 'Jun':
-			return "06";
-			break;
-		case 'Jul':
-			return "07";
-			break;
-		case 'Aug':
-			return "08";
-			break;
-		case 'Sep':
-			return "09";
-			break;
-		case 'Oct':
-			return "10";
-			break;
-		case 'Nov':
-			return "11";
-			break;
-		case 'Dec':
-			return "12";
-			break;
+	case 'Jan':
+		return "01";
+		break;
+	case 'Feb':
+		return "02";
+		break;
+	case 'Mar':
+		return "03";
+		break;
+	case 'Apr':
+		return "04";
+		break;
+	case 'May':
+		return "05";
+		break;
+	case 'Jun':
+		return "06";
+		break;
+	case 'Jul':
+		return "07";
+		break;
+	case 'Aug':
+		return "08";
+		break;
+	case 'Sep':
+		return "09";
+		break;
+	case 'Oct':
+		return "10";
+		break;
+	case 'Nov':
+		return "11";
+		break;
+	case 'Dec':
+		return "12";
+		break;
 	}
 }
 
@@ -385,11 +385,11 @@ function get_empty_remark($data) {
 	}
 }
 
-function format_number($number, $n = 0){
-	if($n==''){
+function format_number($number, $n = 0) {
+	if ($n == '') {
 		$n = 0;
 	}
-	return ($number == 0) ? '0' : number_format( $number, $n );
+	return ($number == 0) ? '0' : number_format($number, $n);
 }
 
 function get_chinese_weekday($datetime) {
@@ -807,7 +807,8 @@ function userAgent($ua) {
 		//Find out if it is a tablet
 		if (strstr(strtolower($ua), 'android')) {
 			//Search for android in user-agent
-			if (!strstr(strtolower($ua), 'mobile')) { //If there is no ''mobile' in user-agent (Android have that on their phones, but not tablets)
+			if (!strstr(strtolower($ua), 'mobile')) {
+				//If there is no ''mobile' in user-agent (Android have that on their phones, but not tablets)
 				return true;
 			}
 		}
@@ -867,11 +868,13 @@ function utf8_to_big5_array($array) {
  * @return String
  */
 function encode($string = '', $skey = 'KUANGLIP') {
-    $strArr = str_split(base64_encode($string));
-    $strCount = count($strArr);
-    foreach (str_split($skey) as $key => $value)
-        $key < $strCount && $strArr[$key].=$value;
-    return str_replace(array('=', '+', '/'), array('O0O0O', 'o000o', 'oo00o'), join('', $strArr));
+	$strArr = str_split(base64_encode($string));
+	$strCount = count($strArr);
+	foreach (str_split($skey) as $key => $value) {
+		$key < $strCount && $strArr[$key] .= $value;
+	}
+
+	return str_replace(array('=', '+', '/'), array('O0O0O', 'o000o', 'oo00o'), join('', $strArr));
 }
 /**
  * 簡單對稱加密演算法之解密
@@ -883,9 +886,11 @@ function encode($string = '', $skey = 'KUANGLIP') {
  * @return String
  */
 function decode($string = '', $skey = 'KUANGLIP') {
-    $strArr = str_split(str_replace(array('O0O0O', 'o000o', 'oo00o'), array('=', '+', '/'), $string), 2);
-    $strCount = count($strArr);
-    foreach (str_split($skey) as $key => $value)
-        $key <= $strCount  && isset($strArr[$key]) && $strArr[$key][1] === $value && $strArr[$key] = $strArr[$key][0];
-    return base64_decode(join('', $strArr));
+	$strArr = str_split(str_replace(array('O0O0O', 'o000o', 'oo00o'), array('=', '+', '/'), $string), 2);
+	$strCount = count($strArr);
+	foreach (str_split($skey) as $key => $value) {
+		$key <= $strCount && isset($strArr[$key]) && $strArr[$key][1] === $value && $strArr[$key] = $strArr[$key][0];
+	}
+
+	return base64_decode(join('', $strArr));
 }

@@ -45,19 +45,34 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <?if (!empty($product_category)) {?>
+                                    <label for="product_category">分類</label>
+                                    <?php $att = 'id="product_category" class="form-control chosen" data-rule-required="true"';
+                                        $data = array();
+                                        foreach ($product_category as $c) {
+                                            $data[$c['product_category_id']] = $c['product_category_name'];
+                                        }
+                                        echo form_dropdown('product_category', $data, $product['product_category_id'], $att);
+                                    } else {
+                                        echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
+                                    }?>
+                                  </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_name">商品名稱</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_price">預設價格</label>
                                     <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_image" class="control-label">封面圖片</label>
                                     <div class="form-group">

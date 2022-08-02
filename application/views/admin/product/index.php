@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col-md-4">
     <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
+    <a href="/admin/product/category" class="btn btn-success">商品分類</a>
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
   </div>
   <div class="col-md-8">
@@ -15,7 +16,7 @@
   </div>
 </div>
 <div class="table-responsive" id="datatable">
-  <?php require('ajax-data.php'); ?>
+  <?php require 'ajax-data.php';?>
 </div>
 
 <!-- Modal -->
