@@ -20,8 +20,20 @@ class Checkout extends Public_Controller {
         	$this->data['user_data']['phone'] = $this->current_user->phone;
         	$this->data['user_data']['email'] = $this->current_user->email;
         	$this->data['user_data']['address'] = $this->current_user->address;
+        } else {
+			$this->data['user_data']['name'] = get_cookie("user_name", true);
+			$this->data['user_data']['phone'] = get_cookie("user_phone", true);
+			$this->data['user_data']['email'] = get_cookie("user_email", true);
+			$this->data['user_data']['address'] = get_cookie("user_address", true);
         }
 		$this->render('checkout/index');
+	}
+
+	function set_user_daa() {
+		set_cookie("user_name", $this->input->post('name'), 30*86400);
+		set_cookie("user_phone", $this->input->post('phone'), 30*86400);
+		set_cookie("user_email", $this->input->post('email'), 30*86400);
+		set_cookie("user_address", $this->input->post('address'), 30*86400);
 	}
 
 	public function save_order() {
