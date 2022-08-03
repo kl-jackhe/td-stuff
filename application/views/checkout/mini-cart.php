@@ -68,8 +68,8 @@
     }
 }
 </style>
-<?php $i = 0;if (!empty($this->cart->contents())) {
-	foreach ($this->cart->contents() as $items) {
+<?php $i = 0;if (!empty($this->my_cart['items'])) {
+	foreach ($this->my_cart['items'] as $items) {
 		$i++;?>
 <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
     <div class="row">
@@ -162,7 +162,7 @@ $this->db->where('product_combine_id', $items['id']);
 <div class="col-12 text-right p-0">
     <hr>
     <span style="font-size: 24px;">總計：<span style="color: #BE2633;">$
-            <?php echo $this->cart->total() ?></span></span>
+            <?php echo $this->my_cart['subtotal'] ?></span></span>
     <hr>
 </div>
 <div class="row">

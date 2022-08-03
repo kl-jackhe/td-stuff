@@ -24,6 +24,30 @@ class Public_Controller extends MY_Controller
 
         $this->perPage = get_setting_general('per_page');
 
+        $this->session_id = '';
+        if(!empty(get_cookie("session_id", true)) || get_cookie("session_id", true)!=''){
+            $this->session_id = get_cookie("session_id", true);
+		} else {
+			$session_id = get_random_string(10);
+			set_cookie("session_id", $session_id, 30 * 86400);
+			$this->session_id = $session_id;
+		}
+
+		$this->my_cart = array(
+			'items' => array(),
+			'subtotal' => 0
+		);
+		$total=0;
+		$this->db->where('session_id', $this->session_id);
+		$query = $this->db->get('cart');
+		if ($query->num_rows() > 0) {
+			$this->my_cart['items'] = $query->result_array();
+			foreach ($query->result_array() as $item) {
+				$total+=$item['qty']*$item['price'];
+			}
+		}
+		$this->my_cart['subtotal'] = $total;
+
 		$this->data['include_style'] = $this->load->view('templates/_parts/style.php', NULL, TRUE);
 		$this->data['include_script'] = $this->load->view('templates/_parts/script.php', NULL, TRUE);
 	}

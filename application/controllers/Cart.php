@@ -32,19 +32,32 @@ class Cart extends Public_Controller {
 		// 	$image = $this_product_combine['picture'];
 		// }
 
+		// $insert_data = array(
+		// 	'product_id' => $this_product_combine['product_id'],
+		// 	'id' => $this_product_combine['id'],
+		// 	'name' => $name,
+		// 	'price' => $price,
+		// 	'qty' => $qty,
+		// 	// 'image' => $image,
+		// 	'options' => array(
+		// 		'time' => get_random_string(15),
+		// 	),
+		// );
+		// $rowid = $this->cart->insert($insert_data);
+
+		$rowid = get_random_string(15);
 		$insert_data = array(
+			'session_id' => $this->session_id,
+			'rowid' => $rowid,
 			'product_id' => $this_product_combine['product_id'],
 			'id' => $this_product_combine['id'],
 			'name' => $name,
 			'price' => $price,
 			'qty' => $qty,
-			// 'image' => $image,
-			'options' => array(
-				'time' => get_random_string(15),
-			),
+			'subtotal' => $price*$qty,
+			'time' => get_random_string(15),
 		);
-		echo $price;
-		$rowid = $this->cart->insert($insert_data);
+		$this->mysql_model->_insert('cart', $insert_data);
 		if ($rowid) {
 			return true;
 		} else {
@@ -53,11 +66,24 @@ class Cart extends Public_Controller {
 	}
 
 	public function update_qty() {
-		$data = array(
-			'rowid' => $this->input->post('rowid'),
-			'qty' => $this->input->post('qty'),
-		);
-		$this->cart->update($data);
+		// $data = array(
+		// 	'rowid' => $this->input->post('rowid'),
+		// 	'qty' => $this->input->post('qty'),
+		// );
+		// $this->cart->update($data);
+
+		if($this->input->post('qty')>0){
+			$data = array(
+	            'qty' => $this->input->post('qty'),
+	        );
+	        $this->db->where('session_id', $this->session_id);
+	        $this->db->where('rowid ', $this->input->post('rowid'));
+	        $this->db->update('cart', $data);
+        } else {
+        	$this->db->where('session_id', $this->session_id);
+			$this->db->where('rowid ', $this->input->post('rowid'));
+			$this->db->delete('cart');
+        }
 	}
 
 	public function update_price() {
@@ -69,21 +95,36 @@ class Cart extends Public_Controller {
 	}
 
 	public function remove() {
-		$data = array(
-			'rowid' => $this->input->post('rowid'),
-			'qty' => 0,
-		);
-		$this->cart->update($data);
+		// $data = array(
+		// 	'rowid' => $this->input->post('rowid'),
+		// 	'qty' => 0,
+		// );
+		// $this->cart->update($data);
+
+		$this->db->where('session_id', $this->session_id);
+		$this->db->where('rowid ', $this->input->post('rowid'));
+		$this->db->delete('cart');
 	}
 
 	public function remove_all() {
-		$this->cart->destroy();
+		// $this->cart->destroy();
+
+		$this->db->where('session_id', $this->session_id);
+		$this->db->delete('cart');
 	}
 
 	public function check_cart_is_empty() {
 		$count = 0;
-		if (!empty($this->cart->contents())) {
-			foreach ($this->cart->contents() as $items) {
+		// if (!empty($this->cart->contents())) {
+		// 	foreach ($this->cart->contents() as $items) {
+		// 		$count++;
+		// 	}
+		// }
+
+		$this->db->where('session_id', $this->session_id);
+		$query = $this->db->get('cart');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result_array() as $row) {
 				$count++;
 			}
 		}
