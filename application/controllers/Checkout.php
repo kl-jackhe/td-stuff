@@ -11,28 +11,28 @@ class Checkout extends Public_Controller {
 
 		//
 		$this->data['user_data']['name'] = '';
-        $this->data['user_data']['phone'] = '';
-        $this->data['user_data']['email'] = '';
-        $this->data['user_data']['address'] = '';
-        if ($this->ion_auth->logged_in() && !empty($this->current_user)){
-        	$this->data['user_data']['name'] = $this->current_user->full_name;
-        	$this->data['user_data']['phone'] = $this->current_user->phone;
-        	$this->data['user_data']['email'] = $this->current_user->email;
-        	$this->data['user_data']['address'] = $this->current_user->address;
-        } else {
+		$this->data['user_data']['phone'] = '';
+		$this->data['user_data']['email'] = '';
+		$this->data['user_data']['address'] = '';
+		if ($this->ion_auth->logged_in() && !empty($this->current_user)) {
+			$this->data['user_data']['name'] = $this->current_user->full_name;
+			$this->data['user_data']['phone'] = $this->current_user->phone;
+			$this->data['user_data']['email'] = $this->current_user->email;
+			$this->data['user_data']['address'] = $this->current_user->address;
+		} else {
 			$this->data['user_data']['name'] = get_cookie("user_name", true);
 			$this->data['user_data']['phone'] = get_cookie("user_phone", true);
 			$this->data['user_data']['email'] = get_cookie("user_email", true);
 			$this->data['user_data']['address'] = get_cookie("user_address", true);
-        }
+		}
 		$this->render('checkout/index');
 	}
 
 	function set_user_data() {
-		set_cookie("user_name", $this->input->post('name'), 30*86400);
-		set_cookie("user_phone", $this->input->post('phone'), 30*86400);
-		set_cookie("user_email", $this->input->post('email'), 30*86400);
-		set_cookie("user_address", $this->input->post('address'), 30*86400);
+		set_cookie("user_name", $this->input->post('name'), 30 * 86400);
+		set_cookie("user_phone", $this->input->post('phone'), 30 * 86400);
+		set_cookie("user_email", $this->input->post('email'), 30 * 86400);
+		set_cookie("user_address", $this->input->post('address'), 30 * 86400);
 	}
 
 	public function save_order() {
@@ -40,36 +40,36 @@ class Checkout extends Public_Controller {
 
 		$date = date('Y-m-d');
 		$y = substr($date, 0, 4);
-    	$m = substr($date, 5, 2);
-    	$d = substr($date, 8, 2);
+		$m = substr($date, 5, 2);
+		$d = substr($date, 8, 2);
 		$this->db->select('MAX(order_number) as last_number');
-    	$this->db->like('order_number', $y.$m.$d, 'after');
+		$this->db->like('order_number', $y . $m . $d, 'after');
 		$query = $this->db->get('orders');
 		if ($query->num_rows() > 0) {
 			$row = $query->row();
-	        if($row->last_number==null){
-	            $order_number = $y.$m.$d.'001';
-	        } else {
-	            $order_number = preg_replace('/[^\d]/', '', $row->last_number);
-	            $order_number++;
-	        }
+			if ($row->last_number == null) {
+				$order_number = $y . $m . $d . '001';
+			} else {
+				$order_number = preg_replace('/[^\d]/', '', $row->last_number);
+				$order_number++;
+			}
 		}
 
 		$customer_id = 0;
-		if(isset($this->current_user->id)){
+		if (isset($this->current_user->id)) {
 			$customer_id = $this->current_user->id;
 		}
 
 		$delivery_cost = 0;
 
 		$order_delivery_address = '';
-		if($this->input->post('county')!=''){
+		if ($this->input->post('county') != '') {
 			$order_delivery_address .= $this->input->post('county');
 		}
-		if($this->input->post('district')!=''){
+		if ($this->input->post('district') != '') {
 			$order_delivery_address .= $this->input->post('district');
 		}
-		if($this->input->post('address')!=''){
+		if ($this->input->post('address') != '') {
 			$order_delivery_address .= $this->input->post('address');
 		}
 
@@ -114,17 +114,18 @@ class Checkout extends Public_Controller {
 			$this->db->insert('order_item', $order_item);
 
 			$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
-			if(!empty($this_product_combine_item)) { foreach($this_product_combine_item as $items) {
-				$order_item = array(
-					'order_id' => $order_id,
-					'product_combine_id' => $items['product_combine_id'],
-					'product_id' => $items['product_id'],
-					'order_item_qty' => ($cart_item['qty']*$items['qty']),
-					'order_item_price' => 0,
-					'created_at' => $created_at,
-				);
-				$this->db->insert('order_item', $order_item);
-			}}
+			if (!empty($this_product_combine_item)) {
+				foreach ($this_product_combine_item as $items) {
+					$order_item = array(
+						'order_id' => $order_id,
+						'product_combine_id' => $items['product_combine_id'],
+						'product_id' => $items['product_id'],
+						'order_item_qty' => ($cart_item['qty'] * $items['qty']),
+						'order_item_price' => 0,
+						'created_at' => $created_at,
+					);
+					$this->db->insert('order_item', $order_item);
+				}}
 		endforeach;
 
 		// 儲存訂單其他資訊
@@ -224,18 +225,18 @@ class Checkout extends Public_Controller {
 
 			// $this->render('store/checkout-credit-callback');
 		}
-		redirect(base_url() . 'checkout/success');
+		redirect(base_url() . 'checkout/success/' . $order_id);
 	}
 
-	public function success()
-	{
+	public function success($id) {
 		$this->data['page_title'] = '訂單完成';
 		$this->cart->destroy();
+		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
+		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
 		$this->render('checkout/checkout_success');
 	}
 
-	public function get_store_info()
-	{
+	public function get_store_info() {
 		$this->load->view('checkout/get_store_info');
 	}
 
@@ -259,39 +260,37 @@ class Checkout extends Public_Controller {
 		echo 'yes';
 	}
 
-	public function send_order_email($order_id)
-    {
-        // 查詢訂單資訊
-        // $this->db->join('users', 'users.id = orders.customer_id');
-        $this->db->where('order_id', $order_id);
-        $this->db->limit(1);
-        $query = $this->db->get('orders');
-        if($query->num_rows()>0){
-            $row = $query->row_array();
+	public function send_order_email($order_id) {
+		// 查詢訂單資訊
+		// $this->db->join('users', 'users.id = orders.customer_id');
+		$this->db->where('order_id', $order_id);
+		$this->db->limit(1);
+		$query = $this->db->get('orders');
+		if ($query->num_rows() > 0) {
+			$row = $query->row_array();
 
-            $this->db->where('order_id', $row['order_id']);
-            $query2 = $this->db->get('order_item');
-        }
+			$this->db->where('order_id', $row['order_id']);
+			$query2 = $this->db->get('order_item');
+		}
 
-        $subject = '非常感謝您，您的訂單已接收 - '.get_setting_general('name');
+		$subject = '非常感謝您，您的訂單已接收 - ' . get_setting_general('name');
 
-        $header = '<img src="'.base_url().'assets/uploads/'.get_setting_general('logo').'" height="100px">
-        <h3>'.$row['customer_name'].' 您好：</h3>
-        <h3>您在 '.get_setting_general('name').' 的訂單已完成訂購，以下是您的訂單明細：</h3>';
+		$header = '<img src="' . base_url() . 'assets/uploads/' . get_setting_general('logo') . '" height="100px">
+        <h3>' . $row['customer_name'] . ' 您好：</h3>
+        <h3>您在 ' . get_setting_general('name') . ' 的訂單已完成訂購，以下是您的訂單明細：</h3>';
 
-
-        $message = '<table style="width:100%;background:#fafaf8;padding:15px;">
+		$message = '<table style="width:100%;background:#fafaf8;padding:15px;">
         <tr style="border-bottom:2px solid #e41c10;">
             <td><h3>【訂購明細】</h3><hr></td>
         </tr>
         <tr>
             <td>
-                訂單編號 : '.$row['order_number'].'
+                訂單編號 : ' . $row['order_number'] . '
             </td>
         </tr>
         <tr>
             <td>
-                付款方式 : '.get_payment($row['order_payment']).'
+                付款方式 : ' . get_payment($row['order_payment']) . '
             </td>
         </tr>
         <tr>
@@ -301,88 +300,89 @@ class Checkout extends Public_Controller {
         </tr>
         <tr>
             <td>
-                訂購日期 : '.$row['order_date'].'
+                訂購日期 : ' . $row['order_date'] . '
             </td>
         </tr>
         </table>
         ';
 
-        $content = '<table cellpadding="6" cellspacing="1" style="width:100%" border="0">';
+		$content = '<table cellpadding="6" cellspacing="1" style="width:100%" border="0">';
 
-        $content .= '<tr>';
-                $content .= '<th style="text-align:left;">商品名稱</th>';
-                $content .= '<th style="text-align:right;">價格</th>';
-                $content .= '<th style="text-align:center;">數量</th>';
-                $content .= '<th style="text-align:right">小計</th>';
-        $content .= '</tr>';
+		$content .= '<tr>';
+		$content .= '<th style="text-align:left;">商品名稱</th>';
+		$content .= '<th style="text-align:right;">價格</th>';
+		$content .= '<th style="text-align:center;">數量</th>';
+		$content .= '<th style="text-align:right">小計</th>';
+		$content .= '</tr>';
 
-        $i = 1;
-        $total=0;
-        if ($query2->num_rows() > 0) { foreach($query2->result_array() as $items){
-            $content .= '<tr>';
-                $content .= '<td>'.get_product_name($items['product_id']);
-                $content .= '</td>';
-                $content .= '<td style="text-align:right">NT$ '.number_format($items['order_item_price']).'</td>';
-                $content .= '<td style="text-align:center">'.$items['order_item_qty'].'</td>';
-                $content .= '<td style="text-align:right">NT$ '.number_format($items['order_item_price']*$items['order_item_qty']).'</td>';
-            $content .= '</tr>';
-            $total+=$items['order_item_qty']*$items['order_item_price'];
-        $i++;
-        }};
+		$i = 1;
+		$total = 0;
+		if ($query2->num_rows() > 0) {
+			foreach ($query2->result_array() as $items) {
+				$content .= '<tr>';
+				$content .= '<td>' . get_product_name($items['product_id']);
+				$content .= '</td>';
+				$content .= '<td style="text-align:right">NT$ ' . number_format($items['order_item_price']) . '</td>';
+				$content .= '<td style="text-align:center">' . $items['order_item_qty'] . '</td>';
+				$content .= '<td style="text-align:right">NT$ ' . number_format($items['order_item_price'] * $items['order_item_qty']) . '</td>';
+				$content .= '</tr>';
+				$total += $items['order_item_qty'] * $items['order_item_price'];
+				$i++;
+			}};
 
-        $content .= '<tr><td colspan="4"><hr></td></tr>';
-        $content .= '<tr>';
-        $content .= '<td colspan="2"> </td>';
-        $content .= '<td style="text-align:right"><strong>小計</strong></td>';
-        $content .= '<td style="text-align:right">NT$ '.number_format($total).'</td>';
-        $content .= '</tr>';
-        $content .= '<tr>';
-        $content .= '<td colspan="2"> </td>';
-        $content .= '<td style="text-align:right"><strong>運費</strong></td>';
-        $content .= '<td style="text-align:right">NT$ '.number_format($row['order_delivery_cost']).'</td>';
-        $content .= '</tr>';
-        $content .= '<tr>';
-        $content .= '<td colspan="2"> </td>';
-        $content .= '<td style="text-align:right"><strong>總計</strong></td>';
-        $content .= '<td style="text-align:right">NT$ '.number_format($row['order_discount_total']).'</td>';
-        $content .= '</tr>';
-        $content .= '<tr><td colspan="4" text-align="center"><a href="'.base_url().'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
+		$content .= '<tr><td colspan="4"><hr></td></tr>';
+		$content .= '<tr>';
+		$content .= '<td colspan="2"> </td>';
+		$content .= '<td style="text-align:right"><strong>小計</strong></td>';
+		$content .= '<td style="text-align:right">NT$ ' . number_format($total) . '</td>';
+		$content .= '</tr>';
+		$content .= '<tr>';
+		$content .= '<td colspan="2"> </td>';
+		$content .= '<td style="text-align:right"><strong>運費</strong></td>';
+		$content .= '<td style="text-align:right">NT$ ' . number_format($row['order_delivery_cost']) . '</td>';
+		$content .= '</tr>';
+		$content .= '<tr>';
+		$content .= '<td colspan="2"> </td>';
+		$content .= '<td style="text-align:right"><strong>總計</strong></td>';
+		$content .= '<td style="text-align:right">NT$ ' . number_format($row['order_discount_total']) . '</td>';
+		$content .= '</tr>';
+		$content .= '<tr><td colspan="4" text-align="center"><a href="' . base_url() . 'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
 
-        $content .= '</table>';
+		$content .= '</table>';
 
-        $information = '<table style="width:100%;background:#fafaf8;padding:15px;">
+		$information = '<table style="width:100%;background:#fafaf8;padding:15px;">
         <tr style="border-bottom:2px solid #e41c10;">
             <td><h3>【收件資訊】</h3><hr></td>
         </tr>
         <tr>
             <td>
-                收件姓名 : '.$row['customer_name'].'
+                收件姓名 : ' . $row['customer_name'] . '
             </td>
         </tr>
         <tr>
             <td>
-                聯絡電話 : '.$row['customer_phone'].'
+                聯絡電話 : ' . $row['customer_phone'] . '
             </td>
         </tr>
         <tr>
             <td>
-                收件地址 : '.$row['order_delivery_address'].'
+                收件地址 : ' . $row['order_delivery_address'] . '
             </td>
         </tr>
         <tr>
             <td>
                 <div style="width:100%;background:#fff;padding:15px 0px 15px 10px;border:1px dashed #979797;">
-                    備註 : '.$row['order_remark'].'
+                    備註 : ' . $row['order_remark'] . '
                 </div>
             </td>
         </tr>
         </table>
         ';
 
-        $footer = '<div style="width:750px;height:70px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
+		$footer = '<div style="width:750px;height:70px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
 
-        // Get full html:
-        $body = '<html>
+		// Get full html:
+		$body = '<html>
           <head>
             <style>
                 #main-div{
@@ -410,64 +410,63 @@ class Checkout extends Public_Controller {
           </head>
           <body>
             <div id="main-div" style="max-width:750px;font-size:14px;border:1px solid #979797; padding:20px;">
-                '.$header.'
-                '.$message.'
-                '.$content.'
-                '.$information.'
-                '.$footer.'
+                ' . $header . '
+                ' . $message . '
+                ' . $content . '
+                ' . $information . '
+                ' . $footer . '
             </div>
           </body>
         </html>';
 
-        $this->load->library('email');
+		$this->load->library('email');
 
-        // 寄信給賣家
-        $this->email->set_smtp_host("mail.td-stuff.com");
-        $this->email->set_smtp_user("service@td-stuff.com");
-        $this->email->set_smtp_pass("Td-stuff@admin");
-        $this->email->set_smtp_port("587");
-        $this->email->set_smtp_crypto("");
+		// 寄信給賣家
+		$this->email->set_smtp_host("mail.td-stuff.com");
+		$this->email->set_smtp_user("service@td-stuff.com");
+		$this->email->set_smtp_pass("Td-stuff@admin");
+		$this->email->set_smtp_port("587");
+		$this->email->set_smtp_crypto("");
 
-        $this->email->to($row['customer_email']);
-        $this->email->from('service@td-stuff.com', get_setting_general('name'));
-        $this->email->subject($subject);
-        $this->email->message($body);
-        if ($this->email->send()){
-            echo "1";
-        } else {
-            echo "0";
-        }
-    }
+		$this->email->to($row['customer_email']);
+		$this->email->from('service@td-stuff.com', get_setting_general('name'));
+		$this->email->subject($subject);
+		$this->email->message($body);
+		if ($this->email->send()) {
+			echo "1";
+		} else {
+			echo "0";
+		}
+	}
 
-    public function test_send_email()
-    {
-    	echo 'ccc___';
-        //Load email library
-        $this->load->library('email');
+	public function test_send_email() {
+		echo 'ccc___';
+		//Load email library
+		$this->load->library('email');
 
-        $this->email->set_smtp_host("mail.td-stuff.com");
-        $this->email->set_smtp_user("service@td-stuff.com");
-        $this->email->set_smtp_pass("Td-stuff@admin");
-        $this->email->set_smtp_port("587");
-        $this->email->set_smtp_crypto("");
+		$this->email->set_smtp_host("mail.td-stuff.com");
+		$this->email->set_smtp_user("service@td-stuff.com");
+		$this->email->set_smtp_pass("Td-stuff@admin");
+		$this->email->set_smtp_port("587");
+		$this->email->set_smtp_crypto("");
 
-        //Email content
-        $htmlContent = '<h1>Sending email via SMTP server</h1>';
-        $htmlContent .= '<p>This email has sent via SMTP server from CodeIgniter application.</p>';
+		//Email content
+		$htmlContent = '<h1>Sending email via SMTP server</h1>';
+		$htmlContent .= '<p>This email has sent via SMTP server from CodeIgniter application.</p>';
 
-        $list = array('a0935756869@gmail.com', 'sianming30@gmail.com', 'sianming31@gmail.com');
-        $list = array('a0935756869@gmail.com');
-        $this->email->to($list);
-        $this->email->from('service@td-stuff.com', get_setting_general('name'));
-        $this->email->subject('How to send email via SMTP server in CodeIgniter');
-        $this->email->message($htmlContent);
+		$list = array('a0935756869@gmail.com', 'sianming30@gmail.com', 'sianming31@gmail.com');
+		$list = array('a0935756869@gmail.com');
+		$this->email->to($list);
+		$this->email->from('service@td-stuff.com', get_setting_general('name'));
+		$this->email->subject('How to send email via SMTP server in CodeIgniter');
+		$this->email->message($htmlContent);
 
-        //Send email
-        if($this->email->send()){
-            echo '1';
-        } else {
-            echo '0';
-        }
-    }
+		//Send email
+		if ($this->email->send()) {
+			echo '1';
+		} else {
+			echo '0';
+		}
+	}
 
 }

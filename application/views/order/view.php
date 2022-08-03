@@ -131,7 +131,13 @@
             <p>地址：<?php echo $order['order_delivery_address'] ?></p>
             <hr>
             <h3>訂單備註</h3>
-            <p><?php echo $order['order_remark'] ?></p>
+            <p style="border: 1px solid gray;border-radius: 5px;margin: 0px;padding: 10px;">
+                <?php if (!empty($order['order_remark'])) {
+                    echo $order['order_remark'];
+                } else {
+                    echo '無填寫訂單備註。';
+                }?>
+            </p>
         </div>
     </div>
 </div>
