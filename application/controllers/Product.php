@@ -4,8 +4,6 @@ class Product extends Public_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->helper('cookie');
-		$this->load->library('cart');
 		$this->load->model('product_model');
 	}
 
