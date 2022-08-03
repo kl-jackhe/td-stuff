@@ -1,6 +1,6 @@
 <?php
 $count = 0;
-foreach ($this->my_cart as $items) {
+foreach ($this->cart->contents() as $items) {
 	$count++;
 }?>
 <style>
@@ -147,7 +147,7 @@ foreach ($this->my_cart as $items) {
                             </thead>
                             <tbody>
                                 <?php $i = 1;?>
-                                <?php foreach ($this->my_cart['items'] as $items): ?>
+                                <?php foreach ($this->cart->contents() as $items): ?>
                                 <tr style="border-top:1px solid dimgray;">
                                     <td><?=$i?></td>
                                     <td>
@@ -183,7 +183,7 @@ foreach ($this->my_cart as $items) {
                         </table>
                         <hr>
                         <span style="text-align:right;">購物車小計：
-                            <span style="color: #dd0606;font-weight: bold;"> $<?php echo $this->my_cart['subtotal'] ?></span>
+                            <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() ?></span>
                         </span>
                         <br>
                         <br>
@@ -194,7 +194,7 @@ foreach ($this->my_cart as $items) {
                         <div class="container-fluid py-3">
                             <div class="row">
                                 <div class="col-12">
-                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo $this->my_cart['subtotal'] ?></span></h3>
+                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -241,7 +241,7 @@ foreach ($this->my_cart as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo $this->my_cart['subtotal'] ?></span></h3>
+                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
                                 </div>
                             </div>
                         </div>

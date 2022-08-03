@@ -73,7 +73,7 @@ class Checkout extends Public_Controller {
 			$order_delivery_address .= $this->input->post('address');
 		}
 
-		$order_total = intval($this->my_cart['subtotal'] + $delivery_cost);
+		$order_total = intval($this->cart->total() + $delivery_cost);
 
 		$order_pay_status = 'not_paid';
 
@@ -102,7 +102,7 @@ class Checkout extends Public_Controller {
 		);
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
-		foreach ($this->my_cart['items'] as $cart_item):
+		foreach ($this->cart->contents() as $cart_item):
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
@@ -192,7 +192,7 @@ class Checkout extends Public_Controller {
 				//     'Quantity' => (int) "1筆",
 				//     'URL' => "dedwed"
 				// ));
-				if ($cart = $this->my_cart):
+				if ($cart = $this->cart->contents()):
 					foreach ($cart as $item):
 						array_push($obj->Send['Items'], array(
 							'Name' => get_product_name($item['id']),
@@ -230,10 +230,10 @@ class Checkout extends Public_Controller {
 
 	public function success($id) {
 		$this->data['page_title'] = '訂單完成';
-		// $this->cart->destroy();
+		$this->cart->destroy();
 
-		$this->db->where('session_id', $this->session_id);
-		$this->db->delete('cart');
+		// $this->db->where('session_id', $this->session_id);
+		// $this->db->delete('cart');
 
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
