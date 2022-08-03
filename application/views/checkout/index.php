@@ -287,6 +287,11 @@ foreach ($this->cart->contents() as $items) {
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
                                     <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">門市地址</span>
+                                    </div>
                                     <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
                                     <div style="width: 100%; margin-top: 15px;">
                                         <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
@@ -407,11 +412,11 @@ $("#wizard").steps({
     function select_store_info() {
         set_user_data();
         <?php if(wp_is_mobile()){ ?>
-            // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
+            $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
         <?php } else { ?>
-            // var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+            var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
         <?php } ?>
-        $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
+        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
     }
 
     function set_store_info(storename = '', storeaddress = '') {
@@ -421,7 +426,7 @@ $("#wizard").steps({
 
     function set_user_data() {
         $.ajax({
-            url: "/checkout/set_user_daa",
+            url: "/checkout/set_user_data",
             method: "POST",
             data: { name: $('#name').val(), phone: $('#phone').val(), email: $('#email').val() },
             success: function(data) {
