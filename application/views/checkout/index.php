@@ -407,10 +407,11 @@ $("#wizard").steps({
     function select_store_info() {
         set_user_data();
         <?php if(wp_is_mobile()){ ?>
-            $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
+            // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
         <?php } else { ?>
-            var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+            // var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
         <?php } ?>
+        $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo base_url() . 'get_store_info_location.php' ?>');
     }
 
     function set_store_info(storename = '', storeaddress = '') {
