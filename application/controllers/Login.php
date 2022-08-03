@@ -77,22 +77,6 @@ class Login extends Public_Controller {
 		}
 		else
 		{
-			// Facebook Login Start
-			// $app_id = $this->config->item('app_id');
-			// $app_secret = $this->config->item('app_secret');
-
-			// $fb = new Facebook\Facebook([
-		 //  		'app_id' => $app_id, // Replace {app-id} with your app id
-		 //  		'app_secret' => $app_secret,
-		 //  		'default_graph_version' => 'v3.0',
-		 //  	]);
-
-			// $helper = $fb->getRedirectLoginHelper();
-
-			// $permissions = ['email']; // Optional permissions
-			// $loginUrl = $helper->getLoginUrl(base_url().'fb_callback', $permissions);
-			// $this->data['fb_login_url'] = htmlspecialchars($loginUrl);
-			// Facebook Login End
 			// the user is not logging in so display the login page
 			// set the flash data error message if there is one
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
@@ -192,26 +176,6 @@ class Login extends Public_Controller {
 		}
 	}
 
-	public function binding_line()
-	{
-		if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password')))
-		{
-			$update_data = array(
-	            'oauth_uid' => $this->input->post('line_id'),
-	        );
-
-	        $this->db->where('username', $this->input->post('identity'));
-	        $this->db->update('users', $update_data);
-	        $this->session->set_flashdata('message', 'LINE ID綁定成功');
-	        redirect('/', 'refresh');
-		}
-		else
-		{
-			$this->session->set_flashdata('message', $this->ion_auth->errors());
-			redirect('line/binding', 'refresh');
-		}
-	}
-
 	/**
 	 * Log the user out
 	 */
@@ -219,7 +183,6 @@ class Login extends Public_Controller {
 	{
 		// log the user out
 		$this->ion_auth->logout();
-		// $this->session->sess_destroy();
 
 		// redirect them to the login page
 		$this->session->set_flashdata('message', $this->ion_auth->messages());

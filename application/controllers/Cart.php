@@ -90,6 +90,11 @@ class Cart extends Public_Controller {
 		echo $count;
 	}
 
+	public function test()
+	{
+		$this->session->sess_destroy();
+	}
+
 	/////////////////////////////////////////
 
 	public function view() {

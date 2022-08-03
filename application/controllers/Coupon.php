@@ -6,10 +6,8 @@ class Coupon extends Public_Controller {
     {
         parent::__construct();
         $this->load->model('coupon_model');
-        if (!$this->ion_auth->logged_in())
-        {
-         $this->session->sess_destroy();
-         redirect('login', 'refresh');
+        if (!$this->ion_auth->logged_in()) {
+            redirect('login', 'refresh');
         }
     }
 

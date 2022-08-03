@@ -374,7 +374,6 @@ class Auth extends Public_Controller {
 		// {
 		//     redirect($_SERVER['HTTP_REFERER']);
 		// }
-		$this->session->sess_destroy();
 
 		$tables = $this->config->item('tables', 'ion_auth');
 		$identity_column = $this->config->item('identity', 'ion_auth');

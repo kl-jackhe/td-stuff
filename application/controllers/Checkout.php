@@ -28,7 +28,7 @@ class Checkout extends Public_Controller {
 		$this->render('checkout/index');
 	}
 
-	function set_user_daa() {
+	function set_user_data() {
 		set_cookie("user_name", $this->input->post('name'), 30*86400);
 		set_cookie("user_phone", $this->input->post('phone'), 30*86400);
 		set_cookie("user_email", $this->input->post('email'), 30*86400);

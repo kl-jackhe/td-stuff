@@ -7,10 +7,8 @@ class Order extends Public_Controller {
         parent::__construct();
         $this->load->model('home_model');
         $this->load->model('order_model');
-        if (!$this->ion_auth->logged_in())
-        {
-         $this->session->sess_destroy();
-         redirect('login', 'refresh');
+        if (!$this->ion_auth->logged_in()) {
+            redirect('login', 'refresh');
         }
     }
 
