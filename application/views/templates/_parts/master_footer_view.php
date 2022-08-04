@@ -1,8 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
     <div class="fixed-bottom header_fixed_icon">
+        <!-- <div id="resoult"></div> -->
         <div id="fa-facebook-square" class="my-2 icon_pointer">
-            <a href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
+            <a id="facebook_href" href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
             </a>
         </div>
@@ -128,6 +129,20 @@ $(function() {
 });
 </script>
 <!-- scrollTop -->
+<script>
+    var ua = navigator.userAgent;
+    var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
+    var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
+    if(android==true){
+        $('#facebook_href').attr('href','fb://www.facebook.com/114764431237605')
+    // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
+    }else if(iOS==true){
+        $('#facebook_href').attr('href','fb://www.facebook.com/114764431237605')
+    // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
+    }else{
+    // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
+    }
+</script>
 </body>
 
 </html>
