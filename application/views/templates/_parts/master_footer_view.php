@@ -2,7 +2,7 @@
 
     <div class="fixed-bottom header_fixed_icon">
         <div id="fa-facebook-square" class="my-2 icon_pointer">
-            <a href="#" style="outline: none;">
+            <a href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
             </a>
         </div>
