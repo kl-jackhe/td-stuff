@@ -333,6 +333,9 @@ $("#wizard").steps({
     transitionEffect: "slideLeft",
     enableFinishButton: false,
     saveState: true,
+    <?php if($this->input->get('step')!=''){
+        echo 'startIndex: '.$this->input->get('step').',';
+    } ?>
     onStepChanging: function (event, currentIndex, newIndex) {
         console.log(currentIndex)
         console.log(event)
