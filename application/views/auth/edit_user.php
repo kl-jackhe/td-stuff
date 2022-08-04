@@ -51,6 +51,13 @@ input.zipcode{
                         <hr>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
+                                <span class="input-group-text">使用者帳號</span>
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                            </div>
+                            <input type="text" class="form-control" name="username" id="username" value="<?php echo $user->username; ?>" readonly>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
                                 <span class="input-group-text">姓名</span>
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                             </div>
@@ -61,7 +68,7 @@ input.zipcode{
                                 <span class="input-group-text">電子郵件</span>
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></i></span>
                             </div>
-                            <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email ?>" readonly>
+                            <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email ?>">
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -83,12 +90,12 @@ input.zipcode{
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">生日</span>
-                                <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                                <span class="input-group-text"><i class="fa-solid fa-cake-candles"></i></span>
                             </div>
                             <?php if ($user->birthday == '0000-00-00') {?>
-                            <input type="text" class="form-control datepicker" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
+                            <input type="text" class="form-control datepicker" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off">
                             <?php } else {?>
-                            <input type="text" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off" readonly>
+                            <input type="text" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday ?>" autocomplete="off">
                             <?php }?>
                         </div>
                         <div class="input-group mb-3">
@@ -96,14 +103,24 @@ input.zipcode{
                                 <span class="input-group-text">密碼</span>
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <?php echo form_input($password); ?>
+                            <?$password_value = array(
+                            	'placeholder' => '＊＊＊＊＊＊',
+                            	'name' => 'password',
+                            	'id' => 'password',
+                            	'class' => 'form-control');
+                            echo form_input($password_value);?>
                         </div>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">確認密碼</span>
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            <?php echo form_input($password_confirm); ?>
+                            <?$password_confirm_value = array(
+                                'placeholder' => '＊＊＊＊＊＊',
+                                'name' => 'password_confirm',
+                                'id' => 'password_confirm',
+                                'class' => 'form-control');
+                            echo form_input($password_confirm_value);?>
                         </div>
                         <?php // echo form_hidden('id', $user->id);?>
                         <input type="hidden" id="id" name="id" value="<?php echo $user->id ?>">
