@@ -134,10 +134,10 @@ $(function() {
     var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
     var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
     if(android==true){
-        $('#facebook_href').attr('href','fb://www.facebook.com/114764431237605')
+        $('#facebook_href').attr('href','fb://page/114764431237605')
     // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
     }else if(iOS==true){
-        $('#facebook_href').attr('href','fb://www.facebook.com/114764431237605')
+        $('#facebook_href').attr('href','fb://page/?id=114764431237605')
     // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
     }else{
     // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
