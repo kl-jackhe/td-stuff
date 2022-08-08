@@ -85,45 +85,41 @@
                         <!-- <div class="col-12 pb-3">
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div> -->
+                        <!-- <input type="text" id="keywords" class="form-control" placeholder="請輸入商品名稱" size="50"> -->
                         <?if (!empty($product_category)) {
                             foreach ($product_category as $row) {?>
                                 <div class="col-3 col-md-2">
-                                    <span class="product_category btn"><?echo $row['product_category_name'];?></span>
-                                    <input type="hidden" name="" value="<?echo $row['product_category_id'];?>">
+                                    <span class="product_category btn" id="<?echo 'product_category_id_'.$row['product_category_id']?>" onClick="searchFilter(<?echo $row['product_category_id'];?>)"><?echo $row['product_category_name'];?></span>
                                 </div>
                             <?}
                         }?>
                     </div>
                     <hr class="py-2" style="border-top: 1px solid #988B7A;">
                 </div>
-                <div class="col-md-12 text-center">
-                    <div class="row justify-content-center" id="product_index">
-                        <? if (!empty($products)) { foreach ($products as $product) { ?>
-                        <div class="col-md-4 pb-5">
-                            <a href="/product/view/<?=$product['product_id']?>">
-                                <?if (!empty($product['product_image'])) {?>
-                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
-                                <?}else{?>
-                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
-                                <?}?>
-                                <div class="product_name">
-                                    <span><?=$product['product_name'];?></span>
-                                </div>
-                            </a>
-                            <!-- <div class="product_price">
-                                $<span style="color:#68396D">
-                                    <?=$product['product_price'];?></span>
-                            </div> -->
-                            <a href="/product/view/<?=$product['product_id']?>">
-                                <div class="btn select_product">
-                                    <span>選購</span>
-                                </div>
-                            </a>
-                        </div>
-                        <? }} ?>
-                    </div>
+                <div id="data" class="col-12">
+                <?php require 'ajax-data.php';?>
                 </div>
             </div>
         </div>
     </section>
 </div>
+<script>
+    function searchFilter(product_category) {
+    // var keywords = $('#keywords').val();
+    // var product_category = $('#product_category').val();
+    // alert(product_category);
+    $.ajax({
+        type: 'GET',
+        url: 'product/ajaxData',
+        // data: 'keywords=' + keywords + '&product_category=' + product_category,
+        data: 'product_category=' + product_category,
+        beforeSend: function() {
+            $('#loading').show();
+        },
+        success: function(html) {
+            $('#data').html(html);
+            $('#loading').fadeOut("fast");
+        }
+    });
+}
+</script>

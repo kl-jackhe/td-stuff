@@ -13,26 +13,30 @@ class Product_model extends CI_Model {
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);
 		}
+		if (!empty($params['search']['product_category_id'])) {
+			$this->db->where('product_category_id', $params['search']['product_category_id']);
+			// $this->db->like('product_category_id', $params['search']['product_category_id']);
+		}
 		// if (!empty($params['search']['category'])) {
 		// 	$this->db->join('product_category_list', 'product_category_list.product_id = product.product_id');
 		// 	$this->db->where('product_category_list.product_category_id', $params['search']['category']);
 		// }
-		if (!empty($params['search']['status'])) {
-			$this->db->where('product_status', $params['search']['status']);
-		} else {
-			$this->db->where('product_status', '1');
-		}
-		if (!empty($params['search']['sortBy'])) {
-			$this->db->order_by('product.product_id', $params['search']['sortBy']);
-		} else {
-			$this->db->order_by('product.product_id', 'desc');
-		}
+		// if (!empty($params['search']['status'])) {
+		// 	$this->db->where('product_status', $params['search']['status']);
+		// } else {
+		// 	$this->db->where('product_status', '1');
+		// }
+		// if (!empty($params['search']['sortBy'])) {
+		// 	$this->db->order_by('product.product_id', $params['search']['sortBy']);
+		// } else {
+		// 	$this->db->order_by('product.product_id', 'desc');
+		// }
 		//set start and limit
-		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-			$this->db->limit($params['limit'], $params['start']);
-		} elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-			$this->db->limit($params['limit']);
-		}
+		// if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+		// 	$this->db->limit($params['limit'], $params['start']);
+		// } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+		// 	$this->db->limit($params['limit']);
+		// }
 		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
 			$result = $this->db->count_all_results();
 		} else {
