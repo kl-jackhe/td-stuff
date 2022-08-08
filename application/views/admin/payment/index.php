@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-md-12">
+  <!-- <div class="col-md-12">
     <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     <hr>
-  </div>
+  </div> -->
   <div class="col-md-4">
     <div class="content-box-large">
     <?php $attributes = array('class' => 'payment', 'id' => 'payment');?>
@@ -22,7 +22,7 @@
   	  <table class="table">
         <thead>
           <tr>
-            <th>分類名稱</th>
+            <th>支付名稱</th>
             <th>操作</th>
           </tr>
         </thead>
