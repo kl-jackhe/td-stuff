@@ -18,37 +18,37 @@ class Payment extends Admin_Controller {
 
 		$data = array(
 			'payment_name' => $this->input->post('payment_name'),
-			'creator_id' => $this->current_user->id,
-			'created_at' => date('Y-m-d H:i:s'),
+			// 'creator_id' => $this->current_user->id,
+			// 'created_at' => date('Y-m-d H:i:s'),
 		);
 
 		$this->db->insert('payment', $data);
-		redirect(base_url() . 'setting/payment');
+		redirect(base_url() . 'admin/payment');
 	}
 
 	public function edit_payment($id) {
 		$this->data['page_title'] = '編輯付款方式';
-		$this->data['payment'] = $this->mysql_model->_select('payment', 'payment_id', $id, 'row');
+		$this->data['payment'] = $this->mysql_model->_select('payment', 'id', $id, 'row');
 
-		$this->render('setting/payment/edit');
+		$this->render('admin/payment/edit');
 	}
 
 	public function update_payment($id) {
 		$data = array(
 			'payment_name' => $this->input->post('payment_name'),
-			'updater_id' => $this->current_user->id,
-			'updated_at' => date('Y-m-d H:i:s'),
+			// 'updater_id' => $this->current_user->id,
+			// 'updated_at' => date('Y-m-d H:i:s'),
 		);
-		$this->db->where('payment_id', $id);
+		$this->db->where('id', $id);
 		$this->db->update('payment', $data);
 
-		redirect(base_url() . 'setting/payment');
+		redirect(base_url() . 'admin/payment');
 	}
 
 	public function delete_payment($id) {
-		$this->db->where('payment_id', $id);
+		$this->db->where('id', $id);
 		$this->db->delete('payment');
-		redirect(base_url() . 'setting/payment');
+		redirect(base_url() . 'admin/payment');
 	}
 
 }
