@@ -12,13 +12,13 @@
     </li>
     <li class="<?php if ($current == "product") {echo "active";}?>">
       <a href="/admin/product">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-shopping-basket"></i>
         <span>商品管理</span>
       </a>
     </li>
     <li class="<?php if ($current == "order") {echo "active";}?>">
       <a href="/admin/order">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-list-alt"></i>
         <span>訂單管理</span>
       </a>
     </li>
@@ -28,15 +28,33 @@
         <span>店家管理</span>
       </a>
     </li> -->
+    <li class="<?php if ($current == "delivery") {echo "active";}?>">
+      <a href="/admin/delivery">
+        <i class="fa fa-truck"></i>
+        <span>配送管理</span>
+      </a>
+    </li>
+    <li class="<?php if ($current == "payment") {echo "active";}?>">
+      <a href="/admin/payment">
+        <i class="fa fa-credit-card-alt"></i>
+        <span>支付管理</span>
+      </a>
+    </li>
     <li class="<?php if ($current == "posts") {echo "active";}?>">
       <a href="/admin/posts">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-newspaper-o"></i>
         <span>最新消息管理</span>
       </a>
     </li>
-    <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>
+    <li class="<?php if ($current == "banner") {echo "active";}?>">
+      <a href="/admin/banner">
+        <i class="fa fa-sliders"></i>
+        <span>首頁Banner</span>
+      </a>
+    </li>
+    <!-- <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-tags"></i>
         <span>活動行銷管理</span>
         <b class="arrow fa fa-angle-right"></b>
       </a>
@@ -45,10 +63,10 @@
           <a href="/admin/banner">首頁Banner</a>
         </li>
       </ul>
-    </li>
+    </li> -->
     <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-users"></i>
         <span>帳號管理</span>
         <b class="arrow fa fa-angle-right"></b>
       </a>
@@ -72,7 +90,7 @@
     </li> -->
     <li class="<?php if ($current == "setting") {echo "active";}?>">
       <a href="/admin/setting/general">
-        <i class="fa fa-dashboard"></i>
+        <i class="fa fa-cogs"></i>
         <span>全站設定</span>
       </a>
     </li>
