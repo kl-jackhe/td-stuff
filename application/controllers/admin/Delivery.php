@@ -7,7 +7,7 @@ class Delivery extends Admin_Controller {
 	}
 
 	public function index() {
-		$this->data['page_title'] = '配送方式';
+		$this->data['page_title'] = '配送管理';
 		$this->data['delivery'] = $this->mysql_model->_select('delivery');
 
 		$this->render('admin/delivery/index');
