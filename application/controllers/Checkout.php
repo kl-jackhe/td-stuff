@@ -299,7 +299,7 @@ class Checkout extends Public_Controller {
         </tr>
         <tr>
             <td>
-                訂單狀況 : 接收訂單
+                訂單狀況 : 訂單確認
             </td>
         </tr>
         <tr>
@@ -311,44 +311,73 @@ class Checkout extends Public_Controller {
         ';
 
 		$content = '<table cellpadding="6" cellspacing="1" style="width:100%" border="0">';
-
+		$content .= '<thead>';
 		$content .= '<tr>';
-		$content .= '<th style="text-align:left;">商品名稱</th>';
-		$content .= '<th style="text-align:right;">價格</th>';
-		$content .= '<th style="text-align:center;">數量</th>';
-		$content .= '<th style="text-align:right">小計</th>';
+		$content .= '<th style="text-align:center;">#</th>';
+		$content .= '<th style="text-align:center;">圖片</th>';
+		$content .= '<th style="text-align:left;">商品</th>';
 		$content .= '</tr>';
+		$content .= '</thead>';
 
+		$content .= '<tbody>';
 		$i = 1;
 		$total = 0;
 		if ($query2->num_rows() > 0) {
 			foreach ($query2->result_array() as $items) {
-				$content .= '<tr>';
-				$content .= '<td>' . get_product_name($items['product_id']);
-				$content .= '</td>';
-				$content .= '<td style="text-align:right">NT$ ' . number_format($items['order_item_price']) . '</td>';
-				$content .= '<td style="text-align:center">' . $items['order_item_qty'] . '</td>';
-				$content .= '<td style="text-align:right">NT$ ' . number_format($items['order_item_price'] * $items['order_item_qty']) . '</td>';
-				$content .= '</tr>';
-				$total += $items['order_item_qty'] * $items['order_item_price'];
-				$i++;
-			}};
+				if ($items['product_id'] == 0) {
+					$content .= '<tr>';
+					$content .= '<td style="text-align:center">' . $i . '</td>';
+					$this->db->select('*');
+					$this->db->from('product_combine');
+					$this->db->where('id', $items['product_combine_id']);
+					$query_img = $this->db->get();
+					foreach ($query_img->result_array() as $img) {
+						$content .= '<td style="text-align:center"><img src="' . base_url() . 'assets/uploads/' . $img['picture'] . '" height="80px"></td>';
+					}
+					$content .= '<td style="text-align:left">';
+					$content .= '<div>';
+					$x = 0;
+					$this->db->select('*');
+					$this->db->from('product_combine');
+					$this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+					$this->db->where('product_combine.id', $items['product_combine_id']);
+					$query_product = $this->db->get();
+					foreach ($query_product->result_array() as $product) {
+						if ($x < 1) {
+							$content .= get_product_name($product['product_id']) . ' - ' . get_product_combine_name($product['product_combine_id']);
+						}
+						$content .= '<ul style="color: gray;">';
+						$content .= '<li style="list-style-type: circle;">';
+						$content .= $product['qty'] . ' ' . $product['product_unit'];
+						if (!empty($product['product_specification'])) {
+							$content .= ' - ' . $product['product_specification'];
+						}
+						$content .= '</li>';
+						$content .= '</ul>';
+						$x++;}
+					$content .= '</div>';
+					$content .= '<div>金額：$' . number_format($items['order_item_price']) . '</div>';
+					$content .= '<div>數量：' . $items['order_item_qty'] . '</div>';
+					$content .= '<div>小計：<span style="color:#dd0606;">$' . number_format($items['order_item_qty'] * $items['order_item_price']) . '</span></div>';
+					$content .= '</td>';
+					$content .= '</tr>';
+					$content .= '</tbody>';
+					$total += $items['order_item_qty'] * $items['order_item_price'];
+					$i++;
+				}}};
 
-		$content .= '<tr><td colspan="4"><hr></td></tr>';
+		$content .= '<tr><td colspan="3"><hr></td></tr>';
 		$content .= '<tr>';
 		$content .= '<td colspan="2"> </td>';
-		$content .= '<td style="text-align:right"><strong>小計</strong></td>';
-		$content .= '<td style="text-align:right">NT$ ' . number_format($total) . '</td>';
+		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>小計：</strong><span style="color: #dd0606;">$' . number_format($total) . '</sapn></td>';
 		$content .= '</tr>';
 		$content .= '<tr>';
 		$content .= '<td colspan="2"> </td>';
-		$content .= '<td style="text-align:right"><strong>運費</strong></td>';
-		$content .= '<td style="text-align:right">NT$ ' . number_format($row['order_delivery_cost']) . '</td>';
+		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>運費：</strong><span style="color: #dd0606;">$' . number_format($row['order_delivery_cost']) . '</sapn></td>';
 		$content .= '</tr>';
 		$content .= '<tr>';
 		$content .= '<td colspan="2"> </td>';
-		$content .= '<td style="text-align:right"><strong>總計</strong></td>';
-		$content .= '<td style="text-align:right">NT$ ' . number_format($row['order_discount_total']) . '</td>';
+		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>總計：</strong><span style="color: #dd0606;">$' . number_format($row['order_discount_total']) . '</sapn></td>';
 		$content .= '</tr>';
 		$content .= '<tr><td colspan="4" text-align="center"><a href="' . base_url() . 'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
 
@@ -376,14 +405,14 @@ class Checkout extends Public_Controller {
         <tr>
             <td>
                 <div style="width:100%;background:#fff;padding:15px 0px 15px 10px;border:1px dashed #979797;">
-                    備註 : ' . $row['order_remark'] . '
+                    訂單備註：' . $row['order_remark'] . '
                 </div>
             </td>
         </tr>
         </table>
         ';
 
-		$footer = '<div style="width:750px;height:70px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
+		$footer = '<div style="width:100%;height:50px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
 
 		// Get full html:
 		$body = '<html>
