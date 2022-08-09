@@ -18,6 +18,9 @@ class Delivery extends Admin_Controller {
 
 		$data = array(
 			'delivery_name' => $this->input->post('delivery_name'),
+			'shipping_cost' => $this->input->post('shipping_cost'),
+			'delivery_info' => $this->input->post('delivery_info'),
+			'delivery_status' => $this->input->post('delivery_status'),
 			// 'creator_id' => $this->current_user->id,
 			// 'created_at' => date('Y-m-d H:i:s'),
 		);
@@ -36,6 +39,29 @@ class Delivery extends Admin_Controller {
 	public function update_delivery($id) {
 		$data = array(
 			'delivery_name' => $this->input->post('delivery_name'),
+			'shipping_cost' => $this->input->post('shipping_cost'),
+			'delivery_info' => $this->input->post('delivery_info'),
+			'delivery_status' => $this->input->post('delivery_status'),
+			// 'updater_id' => $this->current_user->id,
+			// 'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('id', $id);
+		$this->db->update('delivery', $data);
+
+		redirect(base_url() . 'admin/delivery');
+	}
+
+	public function update_delivery_status($id) {
+		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'id', $id);
+		foreach ($this->data['delivery'] as $row) {
+			if ($row['delivery_status'] == 1) {
+				$delivery_status = 0;
+			} else {
+				$delivery_status = 1;
+			}
+		}
+		$data = array(
+			'delivery_status' => $delivery_status,
 			// 'updater_id' => $this->current_user->id,
 			// 'updated_at' => date('Y-m-d H:i:s'),
 		);
