@@ -502,4 +502,44 @@ class Checkout extends Public_Controller {
 		}
 	}
 
+	function test_qpay($order_id = 0)
+	{
+		if($order_id==0){
+			exit;
+		}
+
+		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+
+		$qpay = new \Sinopac\QPay();
+		$qpay->setShopNo('NA0216_001');
+		$qpay->setFirstHashPair('8806BFF40F5E43D6', 'F53EEDD2E4C946B8');
+		$qpay->setSecondHashPair('9E45ED540B944B81', '6E0DED3AE3684258');
+
+		// Enabling sandbox mode will send API request to Sinopac's testing server.
+		$qpay->enableSandbox();
+
+		$data = [
+		    'shop_no'                 => 'NA0216_001',
+		    'order_no'                => 'C' . date("YmdHis"),
+		    'amount'                  => 5000,
+		    'cc_auto_billing'         => 'Y',
+		    'cc_expired_billing_days' => 7,
+		    'cc_expired_minutes'      => 10,
+		    'product_name'            => '信用卡訂單',
+		    'return_url'              => base_url().'checkout/test_qpay_return',
+		    'backend_url'             => 'http://10.11.22.113:8803/QPay.ApiClient/AutoPush/PushSuccess',
+		];
+
+		$results = $qpay->createOrderByCreditCard($data);
+
+		if (!empty($results['Message'])) {
+		    print_r($results['Message']);
+		}
+	}
+
+	function test_qpay_return()
+	{
+		print_r($_POST);
+	}
+
 }
