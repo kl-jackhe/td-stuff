@@ -7,6 +7,7 @@
       <th>商品封面</th>
       <th>名稱</th>
       <th class="text-center">預設價格</th>
+      <th class="text-center">加購價格</th>
       <!-- <th>描述</th> -->
       <th>操作</th>
     </tr>
@@ -20,6 +21,7 @@ if (!empty($product)) {foreach ($product as $data) {?>
       <td style="width: 75px;"><?php echo get_image($data['product_image']) ?></td>
       <td><?php echo $data['product_name'] ?></td>
       <td class="text-center">$<?php echo $data['product_price'] ?></td>
+      <td class="text-center">$<?php echo $data['product_add_on_price'] ?></td>
       <!-- <td><?php echo $data['product_description'] ?></td> -->
       <td>
         <a href="/admin/product/edit/<?php echo $data['product_id'] ?>" class="btn btn-primary" target="_blank" >編輯</a>

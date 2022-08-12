@@ -137,6 +137,7 @@ class Product extends Admin_Controller {
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
+			'product_add_on_price' => $this->input->post('product_add_on_price'),
 			'product_category_id' => $this->input->post('product_category'),
 			'product_description' => $this->input->post('product_description'),
 			'product_image' => $this->input->post('product_image'),
