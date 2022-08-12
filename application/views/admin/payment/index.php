@@ -3,7 +3,7 @@
     <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     <hr>
   </div> -->
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <div class="content-box-large">
     <?php $attributes = array('class' => 'payment', 'id' => 'payment');?>
     <?php echo form_open('admin/payment/insert_payment', $attributes); ?>
@@ -27,8 +27,8 @@
       </div>
     <?php echo form_close(); ?>
     </div>
-  </div>
-  <div class="col-md-8">
+  </div> -->
+  <div class="col-md-12">
   	<div class="content-box-large">
   	  <table class="table">
         <thead>
@@ -52,7 +52,7 @@
             <?}?></td>
 	          <td>
 	            <a href="/admin/payment/edit_payment/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-	            <a href="/admin/payment/delete_payment/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a>
+	            <!-- <a href="/admin/payment/delete_payment/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
 	          </td>
 	        </tr>
 	        <?endforeach?>

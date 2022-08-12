@@ -3,7 +3,7 @@
     <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     <hr>
   </div> -->
-  <div class="col-md-4">
+  <!-- <div class="col-md-4">
     <div class="content-box-large">
     <?php $attributes = array('class' => 'delivery', 'id' => 'delivery');?>
     <?php echo form_open('admin/delivery/insert_delivery', $attributes); ?>
@@ -31,8 +31,8 @@
       </div>
     <?php echo form_close(); ?>
     </div>
-  </div>
-  <div class="col-md-8">
+  </div> -->
+  <div class="col-md-12">
   	<div class="content-box-large">
   	  <table class="table">
         <thead>
@@ -64,7 +64,7 @@
             <?}?></td>
 	          <td>
 	            <a href="/admin/delivery/edit_delivery/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-	            <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a>
+	            <!-- <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
 	          </td>
 	        </tr>
 	        <?endforeach?>

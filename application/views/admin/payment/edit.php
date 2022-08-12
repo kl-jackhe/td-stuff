@@ -9,7 +9,7 @@
       <?php echo form_open('admin/payment/update_payment/' . $payment['id'], $attributes); ?>
           <div class="form-group">
             <label for="payment_name">支付名稱</label>
-            <input type="text" class="form-control" name="payment_name" value="<?php echo $payment['payment_name']; ?>">
+            <input type="text" class="form-control" name="payment_name" value="<?php echo $payment['payment_name']; ?>" readonly>
           </div>
           <div class="form-group">
             <label for="payment_info">描述</label>
