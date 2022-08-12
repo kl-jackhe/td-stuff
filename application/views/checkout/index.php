@@ -209,33 +209,31 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
+                                    <?foreach ($delivery as $row) {?>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="711_pickup_frozen" checked>
                                         <label class="form-check-label" for="checkout_delivery2">
-                                            7-11-超商取貨
+                                            <?=$row['delivery_name']?>
                                         </label>
+                                        <?if (!empty($row['delivery_info'])) {?>
+                                            <p style="font-size:12px;color: gray;"><?=$row['delivery_info'];?></p>
+                                        <?}?>
                                     </div>
-                                    <div class="form-check d-none">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="family_pickup_frozen">
-                                        <label class="form-check-label" for="checkout_delivery2">
-                                            全家-超商取貨
-                                        </label>
-                                    </div>
+                                    <?}?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
-                                    <div class="form-check">
+                                    <?foreach ($payment as $row) {?>
+                                        <div class="form-check">
                                         <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment1" value="bank_transfer" checked>
                                         <label class="form-check-label" for="checkout_payment1">
-                                            銀行匯款
+                                            <?=$row['payment_name']?>
                                         </label>
+                                        <!-- <?if (!empty($row['payment_info'])) {?>
+                                            <p style="font-size:12px;color: gray;"><?=$row['payment_info'];?></p>
+                                        <?}?> -->
                                     </div>
-                                    <!-- <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment2" value="credit">
-                                        <label class="form-check-label" for="checkout_payment2">
-                                            信用卡
-                                        </label>
-                                    </div> -->
+                                    <?}?>
                                 </div>
                                 <div class="col-12">
                                     <hr>
