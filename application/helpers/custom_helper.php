@@ -290,13 +290,23 @@ function get_order_step($data) {
 }
 
 function get_delivery($data) {
-	switch ($data) {
-	case 'home_delivery_frozen':
-		return "冷凍宅配";
-		break;
-	case '711_pickup_frozen':
-		return "7-11 超商取貨";
-		break;
+	// switch ($data) {
+	// case 'home_delivery_frozen':
+	// 	return "冷凍宅配";
+	// 	break;
+	// case '711_pickup_frozen':
+	// 	return "7-11 超商取貨";
+	// 	break;
+	// }
+	$CI = &get_instance();
+	$CI->db->select('*');
+	$query = $CI->db->get_where('delivery', array('delivery_name_code' => $data));
+	if ($query->num_rows() > 0) {
+		$result = $query->row_array();
+		$data = $result['delivery_name'];
+		return $data;
+	} else {
+		return 0;
 	}
 }
 

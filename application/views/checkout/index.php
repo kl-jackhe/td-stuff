@@ -209,17 +209,18 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
-                                    <?foreach ($delivery as $row) {?>
+                                    <? $delivery_count = 0;
+                                    foreach ($delivery as $row) {?>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery2" value="711_pickup_frozen" checked>
-                                        <label class="form-check-label" for="checkout_delivery2">
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" checked>
+                                        <label class="form-check-label" for="checkout_delivery<?=$delivery_count?>">
                                             <?=$row['delivery_name']?>
                                         </label>
                                         <?if (!empty($row['delivery_info'])) {?>
                                             <p style="font-size:12px;color: gray;"><?=$row['delivery_info'];?></p>
                                         <?}?>
                                     </div>
-                                    <?}?>
+                                    <?$delivery_count++;}?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
