@@ -9,7 +9,6 @@ class Product_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('product');
-		$this->db->where('product_status', 1);
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);
@@ -22,11 +21,11 @@ class Product_model extends CI_Model {
 		// 	$this->db->join('product_category_list', 'product_category_list.product_id = product.product_id');
 		// 	$this->db->where('product_category_list.product_category_id', $params['search']['category']);
 		// }
-		// if (!empty($params['search']['status'])) {
-		// 	$this->db->where('product_status', $params['search']['status']);
-		// } else {
-		// 	$this->db->where('product_status', '1');
-		// }
+		if (!empty($params['search']['status'])) {
+			$this->db->where('product_status', $params['search']['status']);
+		} else {
+			$this->db->where('product_status', '1');
+		}
 		// if (!empty($params['search']['sortBy'])) {
 		// 	$this->db->order_by('product.product_id', $params['search']['sortBy']);
 		// } else {

@@ -80,7 +80,8 @@
                                         </thead>
                                         <tbody id="plan-item-list">
                                             <?php if (!empty($product_combine_item)) {
-	foreach ($product_combine_item as $item) {?>
+	foreach ($product_combine_item as $item) {
+		?>
                                                 <tr>
                                                     <td>
                                                         <input type="text" name="plan_qty[]" class="form-control" value="<?php echo $item['qty'] ?>">
@@ -100,6 +101,7 @@
 		$options = array();
 		// $options = array("" => "規格");
 		if (!empty($product_specification)) {
+			$options[''] = '請選擇...';
 			foreach ($product_specification as $ps) {
 				$options[$ps['specification']] = $ps['specification'];
 			}}
