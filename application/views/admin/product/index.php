@@ -8,8 +8,8 @@
     <div class="form-inline form-group text-right">
       <input type="text" id="keywords" class="form-control" placeholder="搜尋..."/>
       <select id="status" class="form-control" onchange="searchFilter()">
-        <option value="1">啟用的</option>
-        <option value="2">停用的</option>
+        <option value="1">上架中</option>
+        <option value="2">已下架</option>
       </select>
       <button onclick="searchFilter()" class="btn btn-primary"><i class="fa fa-search"></i> 搜尋</button>
     </div>

@@ -9,6 +9,7 @@ class Product_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('product');
+		$this->db->where('product_status', 1);
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);
@@ -49,14 +50,14 @@ class Product_model extends CI_Model {
 	}
 
 	function getHomeProducts() {
-		// $this->db->where('product_category_parent', '0');
+		$this->db->select('*');
+		$this->db->where('product_status', 1);
 		$query = $this->db->get('product');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
 		} else {
 			return false;
 		}
-		// return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
 	function get_product_category() {

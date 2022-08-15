@@ -309,6 +309,24 @@ class Product extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
+	// 商品上下架
+	public function update_product_status($id) {
+		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id);
+		foreach ($this->data['product'] as $row) {
+			if ($row['product_status'] == 1) {
+				$product_status = 2;
+			} else {
+				$product_status = 1;
+			}
+		}
+		$data = array(
+			'product_status' => $product_status,
+		);
+		$this->db->where('product_id', $id);
+		$this->db->update('product', $data);
+		redirect(base_url() . 'admin/product');
+	}
+
 	// 其他功能
 	public function get_product_info() {
 		$data = $this->input->post('product_id');
