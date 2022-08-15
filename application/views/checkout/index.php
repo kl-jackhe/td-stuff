@@ -307,6 +307,9 @@ foreach ($this->cart->contents() as $items) {
                                     <label class="col-form-label">訂單備註</label>
                                     <textarea class="form-control" name="remark" rows="3"></textarea>
                                 </div>
+                                <div class="col-12 py-3">
+                                    <p>＊銀行匯款＊<br>注意事項：完成付款後，記得聯繫客服，確認付款完成！</p>
+                                </div>
                                 <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div> -->

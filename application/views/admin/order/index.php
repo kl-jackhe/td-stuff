@@ -15,15 +15,17 @@ select.district {
       <input type="text" id="keywords" class="form-control" placeholder="訂單編號..." size="10">
       <input type="text" id="start_date" class="form-control datepicker" value="" placeholder="起始日期" size="9" autocomplete="off">
       <input type="text" id="end_date" class="form-control datepicker" value="" placeholder="終止日期" size="9" autocomplete="off">
-      <?php $att = 'class="form-control" id="category" onchange="searchFilter()"';
+      <?$att = 'class="form-control" id="category" onchange="searchFilter()"';
       $options = array(
-        ''         => '訂單狀態',
-        'confirm'  => '訂單確認',
-        'process'  => '處理中',
-        'shipping' => '已出貨',
-        'complete' => '完成',
+      	'' => '訂單狀態',
+      	'confirm' => '訂單確認',
+      	'pay_ok' => '已收款',
+      	'process' => '待出貨',
+      	'shipping' => '已出貨',
+      	'complete' => '完成',
+        'order_cancel' => '訂單取消',
       );
-      echo form_dropdown('category', $options, '', $att); ?>
+      echo form_dropdown('category', $options, '', $att);?>
       <select id="category2" class="form-control hide" onchange="searchFilter()">
         <option value="">訂單狀態</option>
         <option value="accept">接收訂單</option>
@@ -49,7 +51,7 @@ select.district {
   </div>
 </div>
 <div class="table-responsive" id="datatable">
-  <?php require('ajax-data.php'); ?>
+  <?php require 'ajax-data.php';?>
 </div>
 
 <!-- Modal -->

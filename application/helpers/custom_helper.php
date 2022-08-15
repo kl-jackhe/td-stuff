@@ -277,14 +277,20 @@ function get_order_step($data) {
 	case 'confirm':
 		return "訂單確認";
 		break;
+	case 'pay_ok':
+		return "已收款";
+		break;
 	case 'process':
-		return "處理中";
+		return "待出貨";
 		break;
 	case 'shipping':
 		return "已出貨";
 		break;
 	case 'complete':
 		return "完成";
+		break;
+	case 'order_cancel':
+		return "訂單取消";
 		break;
 	}
 }
@@ -328,6 +334,16 @@ function get_payment($data) {
 		return "後支付";
 		break;
 	}
+	// $CI = &get_instance();
+	// $CI->db->select('*');
+	// $query = $CI->db->get_where('payment', array('payment_name_code' => $data));
+	// if ($query->num_rows() > 0) {
+	// 	$result = $query->row_array();
+	// 	$data = $result['delivery_name'];
+	// 	return $data;
+	// } else {
+	// 	return 0;
+	// }
 }
 
 function get_en_date($data) {

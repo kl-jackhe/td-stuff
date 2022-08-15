@@ -156,11 +156,11 @@ tr:first-child td:first-child {
                                     <span class="fs-13">銀行帳號</span>
                                 </th>
                                 <td>
-                                    <span class="fs-16 color-595757">
-                                        <?php echo get_setting_general('atm_bank_account') ?></span>
+                                    <span class="fs-16 color-595757"><?php echo get_setting_general('atm_bank_account') ?></span>
                                 </td>
                             </tr>
                         </table>
+                        <p>完成付款後，記得聯繫客服，確認付款完成！</p>
                         <?php }?>
                         <hr>
                         <h3>訂購人資訊</h3>
