@@ -1,3 +1,4 @@
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 <?php
 $count = 0;
 foreach ($this->cart->contents() as $items) {
@@ -352,7 +353,7 @@ $("#wizard").steps({
                 alert('請輸入收件電話');
                 return false;
             }
-            if(delivery=='711_pickup_frozen') {
+            if(delivery=='711_pickup') {
                 if($('#storename').val()=='' || $('#storeaddress').val()==''){
                     alert('請選擇取貨門市');
                     return false;
