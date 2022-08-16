@@ -5,6 +5,7 @@ class Order_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('orders');
+		$this->db->order_by("order_id", "desc");
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->group_start();

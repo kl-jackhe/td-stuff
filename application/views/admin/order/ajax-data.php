@@ -1,24 +1,28 @@
 <?php echo $this->ajax_pagination_admin->create_links(); ?>
-
 <table class="table table-striped table-bordered table-hover" id="data-table">
   <thead>
     <tr class="info">
-      <th>訂單編號</th>
-      <th>訂單日期</th>
-      <th class="text-center">訂單金額</th>
-      <th>客戶名稱</th>
-      <th>配送地址</th>
-      <th class="text-center">配送方式</th>
-      <th class="text-center">付款方式</th>
-      <!-- <th class="text-center">付款狀態</th> -->
-      <!-- <th class="text-center">訂單狀態</th> -->
-      <th>訂單狀態</th>
-      <th>操作</th>
+      <th class="text-center text-nowrap">訂單編號</th>
+      <th class="text-center text-nowrap">訂單日期</th>
+      <th class="text-center text-nowrap">金額</th>
+      <th class="text-nowrap">客戶名稱</th>
+      <th class="text-nowrap">配送地址</th>
+      <th class="text-center text-nowrap">配送方式</th>
+      <th class="text-center text-nowrap">付款方式</th>
+      <!-- <th class="text-center text-nowrap">付款狀態</th> -->
+      <!-- <th class="text-center text-nowrap">訂單狀態</th> -->
+      <th class="text-center text-nowrap">匯款後五碼</th>
+      <th class="text-center text-nowrap">訂單狀態</th>
+      <th class="text-center text-nowrap">操作</th>
     </tr>
   </thead>
   <? if (!empty($orders)): foreach ($orders as $order): ?>
     <tr>
-      <td><?php echo $order['order_number'] ?></td>
+      <?if ($order['order_step'] == 'order_cancel'){ ?>
+        <td style="color:red;"><?php echo $order['order_number'] ?></td>
+      <?}else{?>
+        <td><?php echo $order['order_number'] ?></td>
+      <?}?>
       <td><?php echo $order['order_date'] ?></td>
       <td class="text-right"><?php echo format_number($order['order_discount_total']) ?></td>
       <td><?php echo $order['customer_name'] ?></td>
@@ -34,11 +38,18 @@
 	      <td class="text-center"><?php echo get_payment($order['order_payment']) ?></td>
 	      <!-- <td class="text-right"><?php echo get_pay_status($order['order_pay_status']) ?></td> -->
 	      <!-- <td class="text-right"><?php echo get_order_step($order['order_step']) ?></td> -->
+        <td>
+          <?$attributes = array('class' => 'form-inline');
+            echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
+          <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>">
+          <button type="submit" class="btn btn-primary btn-sm">更新</button>
+          <?echo form_close() ?>
+        </td>
 	      <td>
 	        <?php $attributes = array('class' => 'form-inline');?>
 	        <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
-	          <? $att = 'class="form-control"';
-        	$options = array(
+	          <?$att = 'class="form-control"';
+        	  $options = array(
         		'confirm' => '訂單確認',
         		'pay_ok' => '已收款',
             'process' => '待出貨',
