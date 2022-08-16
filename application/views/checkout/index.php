@@ -218,7 +218,7 @@ foreach ($this->cart->contents() as $items) {
                                             <?=$row['delivery_name']?>
                                         </label>
                                         <?if (!empty($row['delivery_info'])) {?>
-                                            <p style="font-size:12px;color: gray;"><?=$row['delivery_info'];?></p>
+                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['delivery_info'];?></p>
                                         <?}?>
                                     </div>
                                     <?$delivery_count++;}?>
@@ -231,9 +231,9 @@ foreach ($this->cart->contents() as $items) {
                                         <label class="form-check-label" for="checkout_payment1">
                                             <?=$row['payment_name']?>
                                         </label>
-                                        <!-- <?if (!empty($row['payment_info'])) {?>
-                                            <p style="font-size:12px;color: gray;"><?=$row['payment_info'];?></p>
-                                        <?}?> -->
+                                        <?if (!empty($row['payment_info'])) {?>
+                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['payment_info'];?></p>
+                                        <?}?>
                                     </div>
                                     <?}?>
                                 </div>

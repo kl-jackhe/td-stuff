@@ -42,7 +42,7 @@
         <?if (!empty($payment)): foreach ($payment as $data): ?>
 	        <tr>
 	          <td><?php echo $data['payment_name'] ?></td>
-            <td><?php echo $data['payment_info'] ?></td>
+            <td style="white-space: pre-wrap;"><?php echo $data['payment_info'] ?></td>
             <td><?if ($data['payment_status'] == 1) {?>
               <a href="/admin/payment/update_payment_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
               <span>啟用中</span></a>
