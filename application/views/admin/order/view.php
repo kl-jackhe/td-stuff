@@ -1,6 +1,9 @@
 <!-- <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
 <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script> -->
 <style>
+    p {
+        margin: 0px;
+    }
     img {
         width: 100%;
     }
@@ -12,7 +15,7 @@
     .money_size {
         color: #dd0606;
         font-weight: bold;
-        font-size: 24px;
+        font-size: 18px;
     }
     .table_img_tilte {
         width: 75px;
@@ -31,6 +34,17 @@
         border-top: 1px solid gray;
         border-left: 1px solid gray;
     }
+    .mb_control {
+        display: none;
+    }
+    @media screen and (max-width:767px) {
+        .pc_control {
+            display: none;
+        }
+        .mb_control {
+            display: block;
+        }
+    }
     @media print {
         * {
         -webkit-print-color-adjust: exact !important;
@@ -48,7 +62,7 @@
             <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info">返回上一頁</a>
             <button class="btn btn-success" type="button" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> 列印</button>       
         </div>
-        <div class="content-box-large">
+        <div class="content-box-large pc_control">
             <div class="row" style="padding-left: 5px;padding-right: 5px;">
                 <div class="col-md-12">
                     <!-- <?php if($order['order_status']==2){ ?>
@@ -146,7 +160,43 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <table class="table table-bordered">
+                </div>
+            </div>
+        </div>
+        <div class="content-box-large mb_control">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>
+                                <p class="front_title">訂單編號：<?php echo $order['order_number'] ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="front_title">訂單日期：<?php echo $order['order_date'] ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="front_title">訂單狀態：<?php echo get_order_step($order['order_step']) ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="front_title">客戶名稱：<?php echo $order['customer_name'] ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="front_title">客戶電話：<?php echo $order['customer_phone'] ?></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="front_title">客戶信箱：<?php echo $order['customer_email'] ?></p>
+                            </td>
+                        </tr>
                         <tr>
                             <td>
                                 <table class="table table-bordered table-hover">
@@ -251,7 +301,7 @@
                                 <span class="front_title">總計：<span class="money_size">$<?php echo number_format($order['order_discount_total']) ?></span></span>
                             </td>
                         </tr>
-                    </table> -->
+                    </table>
                 </div>
             </div>
         </div>
