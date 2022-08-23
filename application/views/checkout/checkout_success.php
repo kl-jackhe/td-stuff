@@ -57,47 +57,58 @@ tr:first-child td:first-child {
                                     <th scope="col" class="text-nowrap">商品</th>
                                 </tr>
                             </thead>
-                            <?php 
-                $count = 1;
-                $total = 0;
-                 if (!empty($order_item)) {
-                    foreach ($order_item as $item) {
-                        if ($item['product_id'] == 0) {?>
+                            <?$count = 1;
+                            $total = 0;
+                            if (!empty($order_item)) {
+                            	foreach ($order_item as $item) {
+                            		if ($item['product_id'] == 0) {?>
                             <tbody>
                                 <tr>
                                     <td>
                                         <?php echo $count ?>
                                     </td>
                                     <td>
-                                        <?php $this->db->select('*');
-                            $this->db->from('product_combine');
-                            $this->db->where('id', $item['product_combine_id']);
-                            $query = $this->db->get();
-                            foreach ($query->result_array() as $row) {
-                                echo get_front_image($row['picture']);
-                            }?>
+                                        <?$this->db->select('*');
+                            			$this->db->from('product_combine');
+                            			$this->db->where('id', $item['product_combine_id']);
+                            			$query = $this->db->get();
+                            			foreach ($query->result_array() as $row) {
+                            				echo get_front_image($row['picture']);
+                            			}?>
                                     </td>
                                     <td>
                                         <div>
-                                            <?php $i = 0;
-                            $this->db->select('*');
-                            $this->db->from('product_combine');
-                            $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
-                            $this->db->where('product_combine.id', $item['product_combine_id']);
-                            $query = $this->db->get();
-                            foreach ($query->result_array() as $row) {
-                                // echo $row['id'] . ' ' . $row['product_specification'] . ' ' . $row['product_id'] . '<br>';
-                                if ($i < 1) {
-                                    echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
-                                }?>
-                                            <ul class="pl-3 m-0" style="color: gray;">
-                                                <li style="list-style-type: circle;">
-                                                    <?echo $row['qty'] . ' ' . $row['product_unit'];
-                                    if (!empty($row['product_specification'])) {
-                                        echo ' - ' . $row['product_specification'];
-                                    }?>
-                                                </li>
-                                            </ul>
+                                            <?$i = 0;
+                                            $this->db->select('*');
+                                            $this->db->from('product_combine');
+                                            $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+                                            $this->db->where('product_combine.id', $item['product_combine_id']);
+                                            $query = $this->db->get();
+                                            foreach ($query->result_array() as $row) {
+                                                // echo $row['id'] . ' ' . $row['product_specification'] . ' ' . $row['product_id'] . '<br>';
+                                                if ($i < 1) {
+                                                    echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);}?>
+                                                    <ul class="pl-3 m-0" style="color: gray;">
+                                                        <li style="list-style-type: circle;">
+                                                            <?echo $row['qty'] . ' ' . $row['product_unit'];
+                                                            // $total_qty = $row['qty']*$item['order_item_qty'];
+                                                            // echo ' - 共：' . $total_qty . ' ' . $row['product_unit'];
+                                                        if (!empty($row['product_specification'])) {
+                                                            echo ' - ' . $row['product_specification'];
+                                                        }
+                                                        foreach ($order_item as $specification_item) {
+                                                            if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
+                                                                $this->db->select('*');
+                                                                $this->db->from('product_specification');
+                                                                $this->db->where('id', $specification_item['specification_id']);
+                                                                $query_specification = $this->db->get();
+                                                                foreach ($query_specification->result_array() as $row_specification) {
+                                                                    echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
+                                                                }
+                                                            }
+                                                        }?>
+                                                    </li>
+                                                </ul>
                                             <?$i++;}?>
                                         </div>
                                         <div>金額：$
@@ -113,7 +124,11 @@ tr:first-child td:first-child {
                             </tbody>
                             <?php $count++;?>
                             <?php $total += $item['order_item_qty'] * $item['order_item_price'];?>
-                            <?php }}}?>
+                            <?php }
+
+
+
+                        }}?>
                         </table>
                         <hr>
                         <span class="front_title">小計：<span class="money_size">$
@@ -124,10 +139,10 @@ tr:first-child td:first-child {
                         </h3>
                         <h3>配送 / 取貨地點：
                             <?php if (!empty($order['order_store_address'])) {
-                    echo $order['order_store_name'] . ' ' . $order['order_store_address'];
-                } else {
-                    echo $order['order_delivery_address'];
-                }?>
+	echo $order['order_store_name'] . ' ' . $order['order_store_address'];
+} else {
+	echo $order['order_delivery_address'];
+}?>
                         </h3>
                         <span class="front_title">運費：<span class="money_size"> $
                                 <?php echo format_number($order['order_delivery_cost']) ?></span></span>
@@ -180,10 +195,10 @@ tr:first-child td:first-child {
                         <h3>訂單備註</h3>
                         <p style="border: 1px solid gray;border-radius: 5px;margin: 0px;padding: 10px;">
                             <?php if (!empty($order['order_remark'])) {
-                                echo $order['order_remark'];
-                            } else {
-                                echo '無填寫訂單備註。';
-                            }?>
+	echo $order['order_remark'];
+} else {
+	echo '無填寫訂單備註。';
+}?>
                         </p>
                     </div>
                 </div>

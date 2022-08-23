@@ -274,6 +274,7 @@ class Product extends Admin_Controller {
 			'current_price' => $this->input->post('product_combine_current_price'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
+			'type' => $this->input->post('any_specification'),
 		);
 		$this->db->where('id', $id);
 		$this->db->update('product_combine', $update_data);
@@ -283,7 +284,7 @@ class Product extends Admin_Controller {
 
 		$qty = $this->input->post('plan_qty');
 		$unit = $this->input->post('plan_unit');
-		$specification = $this->input->post('plan_specification');
+
 		$count = count($qty);
 		for ($i = 0; $i < $count; $i++) {
 			if (!empty($qty)) {

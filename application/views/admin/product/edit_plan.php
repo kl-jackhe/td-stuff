@@ -23,7 +23,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_name">方案名稱</label>
                                     <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<?php echo $product_combine['name'] ?>" required>
@@ -40,6 +40,16 @@
                                 <div class="form-group">
                                     <label for="product_combine_current_price">方案價</label>
                                     <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<?php echo $product_combine['price'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label for="any_specification">開啟任意規格</label>
+                                    <?if ($product_combine['type'] == 1) {?>
+                                        <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
+                                    <?} else {?>
+                                        <input id="any_specification" name="any_specification" type="checkbox">
+                                    <?}?>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -75,7 +85,7 @@
                                                 <th width="30%" class="text-center">數量</th>
                                                 <th width="30%" class="text-center">單位</th>
                                                 <th width="30%" class="text-center">規格</th>
-                                                <th width="10%" class="text-center">操作</th>
+                                                <th width="5%" class="text-center">操作</th>
                                             </tr>
                                         </thead>
                                         <tbody id="plan-item-list">
@@ -130,7 +140,13 @@ $(document).ready(function() {
     $(document).on('click', '.x', function(){
         $(this).parent().parent().remove();
     });
-
+    $('#any_specification').click(function() {
+        if ($("#any_specification").is(":checked") == true) {
+            $('#any_specification').val('1');
+        } else {
+            $('#any_specification').val('0');
+        }
+    });
 });
 function add_plan_item()
 {
@@ -145,6 +161,7 @@ function add_plan_item()
     var specification = '';
     var specification_list = $('#product-specification-list .specification');
     specification += '<select class="form-control" name="plan_specification[]">';
+    specification += '<option value="">請選擇...</option>';
     for(var i=0;i<specification_list.length;i++){
         specification += '<option value=' + specification_list[i].value + '>' + specification_list[i].value + '</option>';
     }

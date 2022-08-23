@@ -169,6 +169,24 @@ foreach ($this->cart->contents() as $items) {
                                                 <p><? echo $item['qty'] . ' ' . $item['product_unit'];
                                         		if (!empty($item['product_specification'])) {
                                         		  echo ' - ' . $item['product_specification'];
+                                                }if (!empty($items['specification']['specification_id'])) {
+                                                    $y=0;
+                                                    $x=0;
+                                                    // $total_qty = $item['qty']*$items['qty'];
+                                                    // echo ' - 共：' . $total_qty . ' ' . $item['product_unit'];
+                                                    foreach($items['specification']['specification_qty'] as $row){
+                                                        // if ($items['qty'] > 1) {
+                                                        //     $specification_qty[$y] = $row*$items['qty'];
+                                                        // } else {
+                                                        //     $specification_qty[$y] = $row;
+                                                        // }
+                                                        $specification_qty[$y] = $row;
+                                                        $y++;
+                                                    }
+                                                    foreach($items['specification']['specification_name'] as $specification_name){
+                                                        echo '<br>' . '✓ ' . $specification_name . ' x ' . $specification_qty[$x];
+                                                        $x++;
+                                                    }
                                                 }?>
                                         	 </p><?}
                                         }

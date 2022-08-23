@@ -81,6 +81,17 @@ class Product_model extends CI_Model {
 		}
 	}
 
+	function get_product_combine_item($id) {
+		$this->db->select('*');
+		$this->db->where('product_combine_id', $id);
+		$query = $this->db->get('product_combine_item');
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return false;
+		}
+	}
+
 	function getSingleProduct($id) {
 		$this->db->select('*');
 		$this->db->where('product_id', $id);

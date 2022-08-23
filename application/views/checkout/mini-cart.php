@@ -90,7 +90,7 @@
                 <div class="col-8 py-2 px-0">
                     <?php $image = get_product_combine($items['id'], 'picture');?>
                     <?php if ($image != '') {?>
-                        <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
+                    <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                     <?php }?>
                 </div>
             </div>
@@ -101,26 +101,41 @@
                     <span style="font-weight: bold; font-size: 16px;">
                         <?php echo $items['name']; ?>
                     </span>
-                    <?php
-$this->db->where('product_combine_id', $items['id']);
-		$query = $this->db->get('product_combine_item');
-		if ($query->num_rows() > 0) {
-			echo '<ul class="pl-3 m-0" style="color: gray;">';
-			foreach ($query->result_array() as $item) {
-				// echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
-                ?>
-                <li style="list-style-type: circle;">
-                    <?
-                    echo $item['qty'] . ' ' . $item['product_unit'];
-                    if (!empty($item['product_specification'])) {
-                        echo ' - '.$item['product_specification'];
-                    }
-                    ?>
-                </li>
-			<?}
-			echo '</ul>';
-		}
-		?>
+                    <?$this->db->where('product_combine_id', $items['id']);
+                    $query = $this->db->get('product_combine_item');
+                    if ($query->num_rows() > 0) {
+                        echo '<ul class="pl-3 m-0" style="color: gray;">';
+                        foreach ($query->result_array() as $item) {
+                            // echo '<li style="list-style-type: circle;">' . get_product_name($item['product_id']) . ' ' . $item['product_unit'] . ' ' . $item['product_specification'] . '</li>';
+                            ?>
+                                <li style="list-style-type: circle;">
+                                <? echo $item['qty'] . ' ' . $item['product_unit'];
+                                if (!empty($item['product_specification'])) {
+                                    echo ' - '.$item['product_specification'];
+                                }
+                                if (!empty($items['specification']['specification_id'])) {
+                                    $y=0;
+                                    $x=0;
+                                    $total_qty = $item['qty']*$items['qty'];
+                                    echo ' - 共：' . $total_qty . ' ' . $item['product_unit'];
+                                    foreach($items['specification']['specification_qty'] as $row){
+                                        // if ($items['qty'] > 1) {
+                                        //     $specification_qty[$y] = $row*$items['qty'];
+                                        // } else {
+                                        //     $specification_qty[$y] = $row;
+                                        // }
+                                        $specification_qty[$y] = $row;
+                                        $y++;
+                                    }
+                                    foreach($items['specification']['specification_name'] as $specification_name){
+                                        echo '<br>' . '✓ ' . $specification_name . ' x ' . $specification_qty[$x];
+                                        $x++;
+                                    }
+                                }?>
+                                </li>
+                                <?}
+                        echo '</ul>';
+                    }?>
                 </div>
             </div>
         </div>
@@ -136,7 +151,7 @@ $this->db->where('product_combine_id', $items['id']);
                                             <i class="fa-solid fa-minus"></i>
                                         </button>
                                     </span>
-                                    <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" disabled>
+                                    <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" readonly>
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
                                             <i class="fa-solid fa-plus"></i>

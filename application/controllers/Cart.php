@@ -16,6 +16,11 @@ class Cart extends Public_Controller {
 	}
 
 	function add_combine() {
+		$i = 0;
+		$specification_name = $this->input->post('specification_name');
+		$specification_qty = $this->input->post('specification_qty');
+		$specification_id = $this->input->post('specification_id');
+
 		$combine_id = $this->input->post('combine_id');
 		$qty = $this->input->post('qty');
 
@@ -31,13 +36,27 @@ class Cart extends Public_Controller {
 		// if($this_product_combine['picture']!=''){
 		// 	$image = $this_product_combine['picture'];
 		// }
-
+		if (!empty($specification_qty)) {
+			foreach ($specification_qty as $row) {
+				if ($row != 0) {
+					$specification_name_array[] = $specification_name[$i];
+					$specification_id_array[] = $specification_id[$i];
+					$specification_qty_array[] = $row;
+				}
+				$i++;
+			}
+		}
 		$insert_data = array(
 			'product_id' => $this_product_combine['product_id'],
 			'id' => $this_product_combine['id'],
 			'name' => $name,
 			'price' => $price,
 			'qty' => $qty,
+			'specification' => array(
+				'specification_name' => $specification_name_array,
+				'specification_id' => $specification_id_array,
+				'specification_qty' => $specification_qty_array,
+			),
 			// 'image' => $image,
 			'options' => array(
 				'time' => get_random_string(15),
