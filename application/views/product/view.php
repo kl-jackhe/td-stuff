@@ -1,5 +1,5 @@
 <style>
-    .product_description img {
+.product_description img {
     width: 100%;
     max-width: 900px;
     height: 100%;
@@ -71,6 +71,9 @@ input.qtyminus {
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
+                <div class="col-md-8">
+                    <img style="width:100%;" src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
+                </div>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">
                         <?=$product['product_name']?>
@@ -80,6 +83,9 @@ input.qtyminus {
                     } else {
                         echo '<h3>暫無商品描述</h3>';
                     } ?>
+                </div>
+                <div class="col-md-8">
+                    <img style="width:100%;" src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
                 </div>
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>
@@ -140,40 +146,57 @@ input.qtyminus {
                                 <div>
                                     <?$product_combine_item_qty = $this->product_model->get_product_combine_item($combine['id']);?>
                                 </div>
-                                <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification<?php echo $combine['id'] ?>">
+                                <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>">
                                     <i class="fa-solid fa-cart-shopping"></i> 選擇規格
                                 </button>
                                 <form action="/cart/add_multitude_specification" id="multitude_specification" method="POST">
-                                    <div class="modal fade" id="multitude_specification<?php echo $combine['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="multitude_specification<?php echo $combine['id'] ?>Label" aria-hidden="true">
+                                    <div class="modal fade" id="multitude_specification_modal_<?php echo $combine['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="multitude_specification_Label" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title" id="multitude_specification<?php echo $combine['id'] ?>Label">選擇規格</h4>
+                                                    <h4 class="modal-title" id="multitude_specification_Label">選擇規格</h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <?if (!empty($specification)) {
-                                                    foreach($specification as $row){?>
-                                                    <div class="input-group my-3">
-                                                        <span style="width: 30%;">
-                                                            <?=$row['specification'];?>
-                                                        </span>
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                <i class="fa-solid fa-minus"></i>
-                                                            </button>
-                                                        </span>
-                                                        <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style" value="0" min="0" max="100" readonly>
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                <i class="fa-solid fa-plus"></i>
-                                                            </button>
-                                                        </span>
-                                                        <input type="hidden" name="<?echo $combine['id'].'specification_name[]'?>" value="<?php echo $row['specification'] ?>">
-                                                        <input type="hidden" name="<?echo $combine['id'].'specification_id[]'?>" value="<?php echo $row['id'] ?>">
-                                                    </div>
+                                                <?if (!empty($specification)) {
+                                                    foreach($specification as $row) {?>
+                                                        <div class="input-group my-3">
+                                                            <span style="width: 30%;">
+                                                                <?=$row['specification'];?>
+                                                            </span>
+                                                            <?if ($row['status'] == 0) {?>
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                        <i class="fa-solid fa-minus"></i>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style" value="0" min="0" max="100" readonly>
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                        <i class="fa-solid fa-plus"></i>
+                                                                    </button>
+                                                                </span>
+                                                            <?} else {?>
+                                                                <span class="text-center" style="color: #C52B29;font-weight: bold;">已售完</span>
+                                                                    <div style="display: none;">
+                                                                        <span class="input-group-btn">
+                                                                        <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                            <i class="fa-solid fa-minus"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                    <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style select_qty_value" value="0" min="0" max="100" readonly>
+                                                                    <span class="input-group-btn">
+                                                                        <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                            <i class="fa-solid fa-plus"></i>
+                                                                        </button>
+                                                                    </span>
+                                                                </div>
+                                                            <?}?>
+                                                            <input type="hidden" name="<?echo $combine['id'].'specification_name[]'?>" value="<?php echo $row['specification'] ?>">
+                                                            <input type="hidden" name="<?echo $combine['id'].'specification_id[]'?>" value="<?php echo $row['id'] ?>">
+                                                        </div>
                                                     <?}
                                                 } else {
                                                     echo '尚無規格可以選擇！';
@@ -184,7 +207,7 @@ input.qtyminus {
                                                 </div>
                                                 <input type="hidden" name="combine_id" value="<?php echo $combine['id'] ?>">
                                                 <div class="modal-footer">
-                                                    <span class="btn add_product" onclick="add_cart(<?php echo $combine['id'] ?>)">
+                                                    <span class="btn add_product" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
                                                         <i class="fa-solid fa-cart-shopping"></i> 選購
                                                     </span>
                                                 </div>
@@ -216,10 +239,6 @@ function add_cart(combine_id) {
     var specification_name = $("input[name='"+ combine_id +"specification_name[]']").map(function(){return $(this).val();}).get();
     var specification_id = $("input[name='"+ combine_id + "specification_id[]']").map(function(){return $(this).val();}).get();
     var specification_qty = $("input[name='"+ combine_id + "specification_qty[]']").map(function(){return $(this).val();}).get();
-    // alert(specification_name);
-    // alert(specification_id);
-    // alert(specification_qty);
-    // alert(combine_id);
     $.ajax({
         url: "/cart/add_combine",
         method: "POST",
@@ -237,17 +256,53 @@ function add_cart(combine_id) {
     });
 }
 
+// 數量判斷
 function specification_qty(combine_id,product_combine_item) {
     var qty = document.getElementById("qty_" + combine_id).value;
-    var total_qty= qty*product_combine_item;
+    var total_qty = qty * product_combine_item;
     $('.total_qty').html(total_qty);
-    $.ajax({
-        method: "POST",
-        data: { combine_id: combine_id, qty: qty },
-        success: function(data) {
-            // $('.select_qty').html(select_qty);
+    setTimeout(function(){
+        var qty_sum = select_qty(combine_id);
+        $('.select_qty').html(qty_sum);
+        if (total_qty <= qty_sum) {
+            $('.select_qty_button').prop('disabled', true);
         }
-    });
+        if (total_qty > qty_sum) {
+            $('.select_qty_button').prop('disabled', false);
+        }
+    }, 50);
+    return total_qty;
+}
+function select_qty(combine_id) {
+    let qty_sum = $("input[name='"+ combine_id + "specification_qty[]']").map(function(){return $(this).val();}).get();
+    let select_qty_sum = 0;
+    for (var i = 0; i < qty_sum.length; i++) {
+        select_qty_sum = select_qty_sum + qty_sum.map(Number)[i];
+    }
+    return select_qty_sum;
+}
+function select_qty_ok_add_cart(combine_id,product_combine_item) {
+    var total_qty = specification_qty(combine_id,product_combine_item);
+    var qty_sum = select_qty(combine_id);
+    if (total_qty == qty_sum) {
+        add_cart(combine_id);
+        $('#multitude_specification_modal_'+combine_id).modal('toggle');
+        clear(combine_id);
+    }
+    if (total_qty > qty_sum) {
+        alert('請選取正確數量');
+    }
+    if (total_qty < qty_sum) {
+        alert('請重新選取數量');
+    }
+}
+
+// 加入購物車後清除內容
+function clear(combine_id) {
+    setTimeout(function(){
+        $("input[name='"+ combine_id + "specification_qty[]']").val('0');
+        $('#qty_'+combine_id).val('1');
+    }, 50);
 }
 
 // plugin bootstrap minus and plus
@@ -321,7 +376,7 @@ $('.product-view .btn-number').click(function(e) {
                 input.val(currentVal - 1).change();
             }
             if (parseInt(input.val()) == input.attr('min')) {
-                $(this).attr('disabled', true);
+                // $(this).attr('disabled', true);
             }
 
         } else if (type == 'plus') {
@@ -362,5 +417,3 @@ $('.product-view .input-number').change(function() {
     }
 });
 </script>
-
-
