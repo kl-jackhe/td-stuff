@@ -377,9 +377,21 @@ class Checkout extends Public_Controller {
 						if (!empty($product['product_specification'])) {
 							$content .= ' - ' . $product['product_specification'];
 						}
+						foreach ($query2->result_array() as $specification_item) {
+							if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $items['product_combine_id'] == $specification_item['product_combine_id']) {
+								$this->db->select('*');
+								$this->db->from('product_specification');
+								$this->db->where('id', $specification_item['specification_id']);
+								$query_specification = $this->db->get();
+								foreach ($query_specification->result_array() as $row_specification) {
+									$content .= '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
+								}
+							}
+						}
 						$content .= '</li>';
 						$content .= '</ul>';
-						$x++;}
+						$x++;
+					}
 					$content .= '</div>';
 					$content .= '<div>金額：$' . number_format($items['order_item_price']) . '</div>';
 					$content .= '<div>數量：' . $items['order_item_qty'] . '</div>';
@@ -490,6 +502,7 @@ class Checkout extends Public_Controller {
 		$this->email->from('service@td-stuff.com', get_setting_general('name'));
 		$this->email->subject($subject);
 		$this->email->message($body);
+		// echo $content;
 		if ($this->email->send()) {
 			echo "1";
 		} else {

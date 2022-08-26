@@ -125,9 +125,6 @@ tr:first-child td:first-child {
                             <?php $count++;?>
                             <?php $total += $item['order_item_qty'] * $item['order_item_price'];?>
                             <?php }
-
-
-
                         }}?>
                         </table>
                         <hr>
