@@ -71,8 +71,8 @@ input.qtyminus {
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
-                <div class="col-md-8">
-                    <img style="width:100%;" src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
+                <div class="col-md-8 text-center product_description">
+                    <img src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
                 </div>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">
@@ -84,8 +84,8 @@ input.qtyminus {
                         echo '<h3>暫無商品描述</h3>';
                     } ?>
                 </div>
-                <div class="col-md-8">
-                    <img style="width:100%;" src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
+                <div class="col-md-8 text-center product_description">
+                    <img src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
                 </div>
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>
