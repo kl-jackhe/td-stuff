@@ -40,7 +40,19 @@
     </thead>
     <? if (!empty($orders)): foreach ($orders as $order): ?>
     <tbody class="pc_control">
+        <?if ($order['order_step'] == 'pay_ok'){ ?>
+        <tr style="background-color: #0080FF;">
+        <?}if ($order['order_step'] == 'order_cancel'){ ?>
+        <tr style="background-color: #FF2D2D;">
+        <?}if ($order['order_step'] == 'shipping'){ ?>
+        <tr style="background-color: #FF8040;">
+        <?}if ($order['order_step'] == 'complete'){ ?>
+        <tr style="background-color: #53FF53;">
+        <?}if ($order['order_step'] == 'process'){ ?>
+        <tr style="background-color: #FFFF6F;">
+        <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
+        <?}?>
             <?if ($order['order_step'] == 'order_cancel'){ ?>
             <td style="text-decoration: line-through;">
                 <?php echo $order['order_number'] ?>
@@ -112,7 +124,19 @@
         </tr>
     </tbody>
     <tbody class="mb_control">
+        <?if ($order['order_step'] == 'pay_ok'){ ?>
+        <tr style="background-color: #0080FF;">
+        <?}if ($order['order_step'] == 'order_cancel'){ ?>
+        <tr style="background-color: #FF2D2D;">
+        <?}if ($order['order_step'] == 'shipping'){ ?>
+        <tr style="background-color: #FF8040;">
+        <?}if ($order['order_step'] == 'complete'){ ?>
+        <tr style="background-color: #53FF53;">
+        <?}if ($order['order_step'] == 'process'){ ?>
+        <tr style="background-color: #FFFF6F;">
+        <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
+        <?}?>
             <td>
                 <?if ($order['order_step'] == 'order_cancel'){ ?>
                 <p>訂單編號：<span style="text-decoration: line-through;">
@@ -149,7 +173,19 @@
                 </p>
             </td>
         </tr>
+        <?if ($order['order_step'] == 'pay_ok'){ ?>
+        <tr style="background-color: #0080FF;">
+        <?}if ($order['order_step'] == 'order_cancel'){ ?>
+        <tr style="background-color: #FF2D2D;">
+        <?}if ($order['order_step'] == 'shipping'){ ?>
+        <tr style="background-color: #FF8040;">
+        <?}if ($order['order_step'] == 'complete'){ ?>
+        <tr style="background-color: #53FF53;">
+        <?}if ($order['order_step'] == 'process'){ ?>
+        <tr style="background-color: #FFFF6F;">
+        <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
+        <?}?>
             <td>
                 <p>匯款後五碼</p>
                 <div class="input-group">
