@@ -164,6 +164,10 @@ input.qtyminus {
                                                     foreach($specification as $row) {?>
                                                         <div class="input-group my-3">
                                                             <span style="width: 30%;">
+                                                                <img class="product_view_img_style" src="/assets/uploads/<?php echo $row['picture']; ?>">
+                                                            </span>
+                                                            <span style="width: 30%;">
+                                                                <img src="">
                                                                 <?=$row['specification'];?>
                                                             </span>
                                                             <?if ($row['status'] == 0) {?>

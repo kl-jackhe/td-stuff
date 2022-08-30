@@ -125,7 +125,9 @@
                                 </div>
                                 <table class="table table-bordered" id="paramsFields">
                                     <tr class="info">
-                                        <th class="text-center" style="width: 80%;">規格</th>
+                                        <th class="text-center">規格</th>
+                                        <th class="text-center">圖片</th>
+                                        <th class="text-center">狀態</th>
                                         <th class="text-center"></th>
                                     </tr>
                                     <tbody id="product-specification-list">
@@ -134,6 +136,44 @@
                                             <td>
                                                 <input type="hidden" class="form-control" name="id[]" value="<?php echo $row['id']; ?>">
                                                 <input type="text" class="form-control specification" name="specification[]" value="<?php echo $row['specification']; ?>">
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=picture<?php echo $row['id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+                                                </div>
+                                                <?php if (!empty($row['picture'])) {?>
+                                                    <img src="/assets/uploads/<?php echo $row['picture']; ?>" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive" style="<?php if (empty($row['picture'])) {echo 'display: none';}?>;max-width: 100px;width: 100%;">
+                                                <?php } else {?>
+                                                    <img src="" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive">
+                                                <?php }?>
+                                                <input type="hidden" id="picture<?php echo $row['id']; ?>" name="picture[]" value="<?php echo $row['picture']; ?>" />
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($row['status'])) {?>
+                                                <select name=status[] class="form-control">
+                                                    <?if ($row['status'] == 0) { ?>
+                                                        <option value="0" selected>販售中</option>
+                                                        <option value="1">已售完</option>
+                                                        <option value="2">預購</option>
+                                                    <?}?>
+                                                    <?if ($row['status'] == 1) { ?>
+                                                        <option value="0">販售中</option>
+                                                        <option value="1" selected>已售完</option>
+                                                        <option value="2">預購</option> 
+                                                    <?}?>
+                                                    <?if ($row['status'] == 2) { ?>
+                                                        <option value="0">販售中</option>
+                                                        <option value="1">已售完</option>
+                                                        <option value="2" selected>預購</option>
+                                                    <?}?>
+                                                </select>
+                                                <?php } else {?>
+                                                <select name=status[] class="form-control">
+                                                    <option value="0" selected>販售中</option>
+                                                    <option value="1">已售完</option>
+                                                    <option value="2">預購</option>
+                                                </select>
+                                                <?php }?>
                                             </td>
                                             <td class="text-center"><i class="fa fa-trash-o x"></i></td>
                                         </tr>

@@ -168,12 +168,16 @@ class Product extends Admin_Controller {
 		$this->db->delete('product_specification');
 
 		$specification = $this->input->post('specification');
+		$picture = $this->input->post('picture');
+		$status = $this->input->post('status');
 		$count = count($specification);
 		for ($i = 0; $i < $count; $i++) {
 			if (!empty($specification)) {
 				$insert_data = array(
 					'product_id' => $id,
 					'specification' => $specification[$i],
+					'picture' => $picture[$i],
+					'status' => $status[$i],
 				);
 				$this->db->insert('product_specification', $insert_data);
 			}
