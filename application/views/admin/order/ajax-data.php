@@ -1,14 +1,31 @@
 <?php echo $this->ajax_pagination_admin->create_links(); ?>
 <style>
-    p {
-  margin: 0px;
+p {
+    margin: 0px;
 }
 .mb_control {
-  display: none;
+    display: none;
 }
 .input-group {
-  width: 65%;
+    width: 65%;
 }
+.pay_ok_color {
+    background-color: #C4E1FF !important;
+}
+.order_cancel_color {
+    background-color: #FFB5B5 !important;
+}
+.shipping_color {
+    background-color: #DAB1D5 !important;
+}
+.complete_color {
+    background-color: #CEFFCE !important;
+}
+.process_color {
+    background-color: #FFFFCE !important;
+}
+
+
 @media screen and (max-width:767px) {
   .input-group {
     width: 65%;
@@ -41,15 +58,15 @@
     <? if (!empty($orders)): foreach ($orders as $order): ?>
     <tbody class="pc_control">
         <?if ($order['order_step'] == 'pay_ok'){ ?>
-        <tr style="background-color: #C4E1FF;">
+        <tr class="pay_ok_color">
         <?}if ($order['order_step'] == 'order_cancel'){ ?>
-        <tr style="background-color: #FFB5B5;">
+        <tr class="order_cancel_color">
         <?}if ($order['order_step'] == 'shipping'){ ?>
-        <tr style="background-color: #DAB1D5;">
+        <tr class="shipping_color">
         <?}if ($order['order_step'] == 'complete'){ ?>
-        <tr style="background-color: #CEFFCE;">
+        <tr class="complete_color">
         <?}if ($order['order_step'] == 'process'){ ?>
-        <tr style="background-color: #FFFFCE;">
+        <tr class="process_color">
         <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
         <?}?>
@@ -125,15 +142,15 @@
     </tbody>
     <tbody class="mb_control">
         <?if ($order['order_step'] == 'pay_ok'){ ?>
-        <tr style="background-color: #C4E1FF;">
+        <tr class="pay_ok_color">
         <?}if ($order['order_step'] == 'order_cancel'){ ?>
-        <tr style="background-color: #FFB5B5;">
+        <tr class="order_cancel_color">
         <?}if ($order['order_step'] == 'shipping'){ ?>
-        <tr style="background-color: #DAB1D5;">
+        <tr class="shipping_color">
         <?}if ($order['order_step'] == 'complete'){ ?>
-        <tr style="background-color: #CEFFCE;">
+        <tr class="complete_color">
         <?}if ($order['order_step'] == 'process'){ ?>
-        <tr style="background-color: #FFFFCE;">
+        <tr class="process_color">
         <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
         <?}?>
@@ -174,15 +191,15 @@
             </td>
         </tr>
         <?if ($order['order_step'] == 'pay_ok'){ ?>
-        <tr style="background-color: #C4E1FF;">
+        <tr class="pay_ok_color">
         <?}if ($order['order_step'] == 'order_cancel'){ ?>
-        <tr style="background-color: #FFB5B5;">
+        <tr class="order_cancel_color">
         <?}if ($order['order_step'] == 'shipping'){ ?>
-        <tr style="background-color: #DAB1D5;">
+        <tr class="shipping_color">
         <?}if ($order['order_step'] == 'complete'){ ?>
-        <tr style="background-color: #CEFFCE;">
+        <tr class="complete_color">
         <?}if ($order['order_step'] == 'process'){ ?>
-        <tr style="background-color: #FFFFCE;">
+        <tr class="process_color">
         <?}if ($order['order_step'] == 'confirm'){ ?>
         <tr>
         <?}?>
