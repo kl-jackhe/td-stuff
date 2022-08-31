@@ -37,8 +37,11 @@
     }
     .delete_box {
         position: absolute;
-        bottom: 7px;
-        left: 0px;
+        bottom: 6px;
+        left: 3px;
+    }
+    .delete_box img {
+        width: 150%;
     }
     .subtotal_box {
         position: absolute;
@@ -58,8 +61,11 @@
     }
     .delete_box {
         position: absolute;
-        bottom: 7px;
-        left: -5px;
+        bottom: 5px;
+        left: -4px;
+    }
+    .delete_box img {
+        width: 15px;
     }
     .subtotal_box span {
         color: #BE2633;
@@ -82,7 +88,9 @@
                                 <span><?=$i?></span>
                             </div>
                             <div class="col delete_box">
-                                <span class="mini-cart-x delete_button_style align-text-bottom" style="cursor: pointer;font-size: 12px;" valign="bottom" id="<?php echo $items["rowid"] ?>"><i class="fa-solid fa-xmark"></i></span>
+                                <span class="mini-cart-x align-text-bottom" style="cursor: pointer;" valign="bottom" id="<?php echo $items["rowid"] ?>">
+                                    <img src="/assets/images/web icon_delete.png" alt="">
+                                </span>
                             </div>
                         </div>
                     </div>
