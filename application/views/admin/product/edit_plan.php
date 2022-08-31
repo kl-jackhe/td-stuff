@@ -39,7 +39,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_current_price">方案價</label>
-                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<?php echo $product_combine['price'] ?>" required>
+                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<?php echo $product_combine['current_price'] ?>" required>
                                 </div>
                             </div>
                             <div class="col-md-1">
