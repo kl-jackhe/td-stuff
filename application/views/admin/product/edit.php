@@ -274,6 +274,6 @@ function add_unit()
 }
 function add_specification()
 {
-  $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+  $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td><div class="form-group"><a href="/assets/admin/filemanager/dialog.php?type=1&field_id=picture[]&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a></div></td><td><select name=status[] class="form-control"><option value="0" selected>販售中</option><option value="1">已售完</option><option value="2">預購</option></select></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
 }
 </script>
