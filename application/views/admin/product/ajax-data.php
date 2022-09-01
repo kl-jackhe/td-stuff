@@ -8,6 +8,7 @@
       <th>名稱</th>
       <th class="text-center">預設價格</th>
       <th class="text-center">加購價格</th>
+      <th class="text-center">銷售狀態</th>
       <th class="text-center">上架/下架</th>
       <th class="text-center">操作</th>
     </tr>
@@ -22,8 +23,26 @@ if (!empty($product)) {foreach ($product as $data) {?>
       <td><?php echo $data['product_name'] ?></td>
       <td class="text-center">$<?php echo $data['product_price'] ?></td>
       <td class="text-center">$<?php echo $data['product_add_on_price'] ?></td>
+      <td class="text-center">
+        <div class="input-group" style="margin: auto;width: 50%;">
+          <span class="input-group-btn">
+            <?php $attributes = array('class' => 'form-inline');?>
+            <?php echo form_open('admin/product/update_sales_status/' . $data['product_id'], $attributes); ?>
+            <?$att = 'class="form-control dropdown-toggle"';
+              $options = array(
+              '0' => '販售中',
+              '1' => '已售完',
+              '2' => '預購',
+              );
+              echo form_dropdown('sales_status', $options, $data['sales_status'], $att);?>
+            <button type="submit" class="btn btn-primary btn-sm">修改</button>
+            <?php echo form_close() ?>
+          </span>
+        </div>
+      </td>
       <!-- <td><?php echo $data['product_description'] ?></td> -->
-      <td class="text-center"><?if ($data['product_status'] == 1) {?>
+      <td class="text-center">
+      <?if ($data['product_status'] == 1) {?>
         <a href="/admin/product/update_product_status/<?php echo $data['product_id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要下架嗎?')"></i>
         <span>上架中</span></a>
       <?} else {?>
