@@ -15,9 +15,21 @@
               </div>
           </a>
           <a href="/product/view/<?=$product['product_id']?>">
+            <?if($product['sales_status']==0){?>
               <div class="btn select_product">
-                  <span>選購</span>
+                  <span>現貨</span>
               </div>
+            <?}?>
+            <?if($product['sales_status']==1){?>
+              <div class="btn select_product" style="background: #817F82;">
+                  <span>售完 補貨中</span>
+              </div>
+            <?}?>
+            <?if($product['sales_status']==2){?>
+              <div class="btn select_product" style="background: #A60747;">
+                  <span>預購</span>
+              </div>
+            <?}?>
           </a>
       </div>
       <?endforeach?>

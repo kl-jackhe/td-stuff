@@ -153,9 +153,21 @@
                                 $<span style="color:#68396D">
                                     <?=$product['product_price'];?></span>
                             </div> -->
-                            <a class="btn select_product my-2" href="/product/view/<?=$product['product_id']?>">
-                                <span>選購</span>
-                            </a>
+                            <?if($product['sales_status']==0){?>
+                                <a class="btn select_product my-2" href="/product/view/<?=$product['product_id']?>">
+                                    <span>現貨</span>
+                                </a>
+                            <?}?>
+                            <?if($product['sales_status']==1){?>
+                                <a class="btn select_product my-2" style="background: #817F82;" href="/product/view/<?=$product['product_id']?>">
+                                    <span>售完 補貨中</span>
+                                </a>
+                            <?}?>
+                            <?if($product['sales_status']==2){?>
+                                <a class="btn select_product my-2" style="background: #A60747;" href="/product/view/<?=$product['product_id']?>">
+                                    <span>預購</span>
+                                </a>
+                            <?}?>
                         </div>
                         <?}
                     }?>
