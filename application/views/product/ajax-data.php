@@ -22,7 +22,7 @@
             <?}?>
             <?if($product['sales_status']==1){?>
               <div class="btn select_product" style="background: #817F82;">
-                  <span>售完 補貨中</span>
+                  <span>售完</span>
               </div>
             <?}?>
             <?if($product['sales_status']==2){?>

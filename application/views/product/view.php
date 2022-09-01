@@ -146,9 +146,21 @@ input.qtyminus {
                                 <div>
                                     <?$product_combine_item_qty = $this->product_model->get_product_combine_item($combine['id']);?>
                                 </div>
-                                <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>">
+                                <?if($product['sales_status'] == 0){?>
+                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>">
                                     <i class="fa-solid fa-cart-shopping"></i> 選擇規格
-                                </button>
+                                    </button>
+                                <?}?>
+                                <?if($product['sales_status'] == 1){?>
+                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" style="background: #817F82;" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>" disabled>
+                                    <i class="fa-solid fa-cart-shopping"></i> 售完
+                                    </button>
+                                <?}?>
+                                <?if($product['sales_status'] == 2){?>
+                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>">
+                                    <i class="fa-solid fa-cart-shopping"></i> 選擇規格
+                                    </button>
+                                <?}?>
                                 <form action="/cart/add_multitude_specification" id="multitude_specification" method="POST">
                                     <div class="modal fade" id="multitude_specification_modal_<?php echo $combine['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="multitude_specification_Label" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -224,9 +236,16 @@ input.qtyminus {
                                                 </div>
                                                 <input type="hidden" name="combine_id" value="<?php echo $combine['id'] ?>">
                                                 <div class="modal-footer">
-                                                    <span class="btn add_product" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
-                                                        <i class="fa-solid fa-cart-shopping"></i> 選購
-                                                    </span>
+                                                    <?if($product['sales_status'] == 0){?>
+                                                        <span class="btn add_product" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
+                                                            <i class="fa-solid fa-cart-shopping"></i> 選購
+                                                        </span>
+                                                    <?}?>
+                                                    <?if($product['sales_status'] == 2){?>
+                                                        <span class="btn add_product" style="background: #A60747;" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
+                                                            <i class="fa-solid fa-cart-shopping"></i> 預購
+                                                        </span>
+                                                    <?}?>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,9 +253,18 @@ input.qtyminus {
                                 </form>
                                 <!-- 任意選取規格 -->
                                 <?} else {?>
-                                <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product">
-                                    <i class="fa-solid fa-cart-shopping"></i> 選購
-                                </button>
+                                    <?if($product['sales_status'] == 0){?>
+                                        <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product">
+                                        <i class="fa-solid fa-cart-shopping"></i> 選購
+                                    <?}?>
+                                    <?if($product['sales_status'] == 1){?>
+                                        <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product" style="background: #817F82;">
+                                        <i class="fa-solid fa-cart-shopping" disabled></i> 售完
+                                    <?}?>
+                                    <?if($product['sales_status'] == 2){?>
+                                        <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product" style="background: #A60747;">
+                                        <i class="fa-solid fa-cart-shopping"></i> 預購
+                                    <?}?>
                                 <?}?>
                             </div>
                         </div>

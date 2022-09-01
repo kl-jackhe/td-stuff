@@ -160,7 +160,7 @@
                             <?}?>
                             <?if($product['sales_status']==1){?>
                                 <a class="btn select_product my-2" style="background: #817F82;" href="/product/view/<?=$product['product_id']?>">
-                                    <span>售完 補貨中</span>
+                                    <span>售完</span>
                                 </a>
                             <?}?>
                             <?if($product['sales_status']==2){?>
