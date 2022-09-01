@@ -316,20 +316,13 @@ class Product extends Admin_Controller {
 
 	// 商品銷售狀態
 	public function update_sales_status($id) {
-		// $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id);
-		// foreach ($this->data['product'] as $row) {
-		// 	if ($row['sales_status'] == 1) {
-		// 		$product_status = 2;
-		// 	} else {
-		// 		$product_status = 1;
-		// 	}
-		// }
-		
-		$data = array(
+		if (!empty($id)) {
+			$data = array(
 			'sales_status' => $this->input->post('sales_status'),
-		);
-		$this->db->where('product_id', $id);
-		$this->db->update('product', $data);
+			);
+			$this->db->where('product_id', $id);
+			$this->db->update('product', $data);
+		}
 		redirect(base_url() . 'admin/product');
 	}
 
