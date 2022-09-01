@@ -70,6 +70,17 @@
                                     <?echo $row['qty'] . ' ' . $row['product_unit'];
                                     if (!empty($row['product_specification'])) {
                                         echo ' - ' . $row['product_specification'];
+                                    }
+                                    foreach ($order_item as $specification_item) {
+                                        if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
+                                            $this->db->select('*');
+                                            $this->db->from('product_specification');
+                                            $this->db->where('id', $specification_item['specification_id']);
+                                            $query_specification = $this->db->get();
+                                            foreach ($query_specification->result_array() as $row_specification) {
+                                                echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
+                                            }
+                                        }
                                     }?>
                                     </li>
                                 </ul>
