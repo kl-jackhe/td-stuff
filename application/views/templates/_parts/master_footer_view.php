@@ -26,6 +26,11 @@
     </div>
 
     <footer id="footer">
+        <!-- <div class="row justify-content-center">
+            <div class="col-md-12 text-center" style="padding-bottom: 15px;padding-top: 15px;">
+                <span>本網站產品已投保OO產物產品責任保險$250,000,000元。  保險證號：0000字第12AAAA0001234號</span>
+            </div>
+        </div> -->
         <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
