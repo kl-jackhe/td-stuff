@@ -154,7 +154,15 @@ input.qtyminus {
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title" id="multitude_specification_Label">選擇規格</h4>
+                                                    <p class="modal-title text-left" id="multitude_specification_Label">選擇規格
+                                                        <br>
+                                                        <span style="font-size: 18px;font-weight: bold;">
+                                                            <?if (!empty($combine['description'])) {?>
+                                                            <span><? echo $combine['description'];?>&ensp;</span>
+                                                            <?}?>
+                                                            請選擇 <span class="total_qty"></span> 樣
+                                                        </span>
+                                                    </p>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -163,13 +171,16 @@ input.qtyminus {
                                                 <?if (!empty($specification)) {
                                                     foreach($specification as $row) {?>
                                                         <div class="input-group my-3">
-                                                            <span style="width: 30%;">
+                                                            <div style="width: 25%;">
                                                                 <img class="product_view_img_style" src="/assets/uploads/<?php echo $row['picture']; ?>">
-                                                            </span>
-                                                            <span style="width: 30%;">
-                                                                <img src="">
-                                                                <?=$row['specification'];?>
-                                                            </span>
+                                                            </div>
+                                                            <div style="width: 30%;position: relative;">
+                                                                <div style="position: absolute;bottom: 10px;left: 20px;font-size: 18px;font-weight: bold;">
+                                                                    <?=$row['specification'];?>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group" style="width: 45%;">
+                                                                <div class="input-group" style="position: absolute;bottom: 10px;">
                                                             <?if ($row['status'] == 0) {?>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
@@ -184,8 +195,8 @@ input.qtyminus {
                                                                 </span>
                                                             <?} else {?>
                                                                 <span class="text-center" style="color: #C52B29;font-weight: bold;">已售完</span>
-                                                                    <div style="display: none;">
-                                                                        <span class="input-group-btn">
+                                                                <div style="display: none;">
+                                                                    <span class="input-group-btn">
                                                                         <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
                                                                             <i class="fa-solid fa-minus"></i>
                                                                         </button>
@@ -198,6 +209,8 @@ input.qtyminus {
                                                                     </span>
                                                                 </div>
                                                             <?}?>
+                                                            </div>
+                                                            </div>
                                                             <input type="hidden" name="<?echo $combine['id'].'specification_name[]'?>" value="<?php echo $row['specification'] ?>">
                                                             <input type="hidden" name="<?echo $combine['id'].'specification_id[]'?>" value="<?php echo $row['id'] ?>">
                                                         </div>
