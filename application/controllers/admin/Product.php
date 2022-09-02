@@ -314,11 +314,11 @@ class Product extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	// 商品銷售狀態
+	// 商品銷售狀態 ------------------------------------------------------------------------------
 	public function update_sales_status($id) {
 		if (!empty($id)) {
 			$data = array(
-			'sales_status' => $this->input->post('sales_status'),
+				'sales_status' => $this->input->post('sales_status'),
 			);
 			$this->db->where('product_id', $id);
 			$this->db->update('product', $data);
@@ -326,7 +326,7 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product');
 	}
 
-	// 商品上下架
+	// 商品上下架 --------------------------------------------------------------------------------
 	public function update_product_status($id) {
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id);
 		foreach ($this->data['product'] as $row) {
@@ -344,7 +344,7 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product');
 	}
 
-	// 其他功能
+	// 其他功能 ---------------------------------------------------------------------------------
 	public function get_product_info() {
 		$data = $this->input->post('product_id');
 		$this->db->where('product_id', $data);
@@ -369,13 +369,18 @@ class Product extends Admin_Controller {
 
 	public function insert_category() {
 		$this->data['page_title'] = '新增商品分類';
-
-		$data = array(
-			'product_category_name' => $this->input->post('product_category_name'),
-			'creator_id' => $this->current_user->id,
-		);
-
-		$this->db->insert('product_category', $data);
+		$product_category_name = $this->input->post('product_category_name');
+		$this->data['product_category'] = $this->mysql_model->_select('product_category', 'product_category_name', $product_category_name);
+		if ($this->data['product_category'] > 0) {
+			$this->session->set_flashdata('message', '新增失敗「名稱重複」');
+		} else {
+			$data = array(
+				'product_category_name' => $product_category_name,
+				'creator_id' => $this->current_user->id,
+			);
+			$this->db->insert('product_category', $data);
+			$this->session->set_flashdata('message', '新增成功');
+		}
 		redirect(base_url() . 'admin/product/category');
 	}
 
@@ -403,5 +408,55 @@ class Product extends Admin_Controller {
 		$this->db->delete('product_category');
 
 		redirect(base_url() . 'admin/product/category');
+	}
+
+	// 加購功能 ---------------------------------------------------------------------------------
+	public function add_on_group() {
+		$this->data['page_title'] = '加購項目';
+		$this->data['add_on_group'] = $this->mysql_model->_select('product_add_on_group');
+		$this->render('admin/product/add_on_group/index');
+	}
+
+	public function insert_add_on_group() {
+		$this->data['page_title'] = '新增加購項目';
+		$product_group_name = $this->input->post('product_group_name');
+		$this->data['product_add_on_group'] = $this->mysql_model->_select('product_add_on_group', 'product_group_name', $product_group_name);
+		if ($this->data['product_add_on_group'] > 0) {
+			$this->session->set_flashdata('message', '新增失敗「名稱重複」');
+		} else {
+			$data = array(
+				'product_group_name' => $this->input->post('product_group_name'),
+			);
+			$this->db->insert('product_add_on_group', $data);
+			$this->session->set_flashdata('message', '新增成功');
+		}
+		redirect(base_url() . 'admin/product/add_on_group');
+	}
+
+	public function edit_add_on_group($id) {
+		$this->data['page_title'] = '編輯加購項目';
+		if (!empty($id)) {
+			$this->data['add_on_group'] = $this->mysql_model->_select('product_add_on_group', 'id', $id, 'row');
+		}
+		$this->render('admin/product/add_on_group/edit');
+	}
+
+	public function update_add_on_group($id) {
+		$data = array(
+			'product_group_name' => $this->input->post('product_group_name'),
+			// 'updater_id' => $this->current_user->id,
+			// 'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('product_group_id', $id);
+		$this->db->update('product_add_on_group', $data);
+
+		redirect(base_url() . 'admin/product/add_on_group');
+	}
+
+	public function delete_add_on_group($id) {
+		$this->db->where('product_group_id', $id);
+		$this->db->delete('product_add_on_group');
+
+		redirect(base_url() . 'admin/product/add_on_group');
 	}
 }
