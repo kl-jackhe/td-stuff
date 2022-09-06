@@ -45,6 +45,9 @@
     position: relative;
     z-index: 10;
 }
+#v-pills-tab-other {
+    display: none;
+}
 @media (max-width: 767px) {
     .nav-link {
         margin: 5px 0px 5px 0px;
@@ -73,11 +76,11 @@
                     <div class="row">
                         <div class="col-12 col-md-3">
                             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                <button class="nav-link btn active" id="disclaimer-tab" data-toggle="pill" data-target="#disclaimer" type="button" role="tab" aria-controls="disclaimer" aria-selected="true">免責聲明</button>
-                                <button class="nav-link btn" id="terms_of_service-tab" data-toggle="pill" data-target="#terms_of_service" type="button" role="tab" aria-controls="terms_of_service" aria-selected="false">服務條款</button>
-                                <button class="nav-link btn" id="intellectual_property-tab" data-toggle="pill" data-target="#intellectual_property" type="button" role="tab" aria-controls="intellectual_property" aria-selected="false">知識產權</button>
-                                <button class="nav-link btn" id="return_policy-tab" data-toggle="pill" data-target="#return_policy" type="button" role="tab" aria-controls="return_policy" aria-selected="false">退貨政策</button>
-                                <button class="nav-link btn" id="logistics_payment_method-tab" data-toggle="pill" data-target="#logistics_payment_method" type="button" role="tab" aria-controls="logistics_payment_method" aria-selected="false">物流/支付方式</button>
+                                <a href="#" class="nav-link btn active" id="disclaimer-tab" data-toggle="pill" data-target="#disclaimer" role="tab" aria-controls="disclaimer" aria-selected="true">免責聲明</a>
+                                <a href="#" class="nav-link btn" id="terms_of_service-tab" data-toggle="pill" data-target="#terms_of_service" role="tab" aria-controls="terms_of_service" aria-selected="false">服務條款</a>
+                                <a href="#" class="nav-link btn" id="intellectual_property-tab" data-toggle="pill" data-target="#intellectual_property" role="tab" aria-controls="intellectual_property" aria-selected="false">知識產權</a>
+                                <a href="#" class="nav-link btn" id="return_policy-tab" data-toggle="pill" data-target="#return_policy" role="tab" aria-controls="return_policy" aria-selected="false">退貨政策</a>
+                                <a href="#" class="nav-link btn" id="logistics_payment_method-tab" data-toggle="pill" data-target="#logistics_payment_method" role="tab" aria-controls="logistics_payment_method" aria-selected="false">物流/支付方式</a>
                             </div>
                         </div>
                         <div class="col-12 m_border"></div>
@@ -168,25 +171,62 @@
     </section>
 </div>
 <script>
-$('#v-pills-tab button').on('click', function(event) {
+    <?if($_GET['target']!=''){?>
+        var target="<?=$_GET['target']?>";
+        $("#disclaimer-tab").removeClass('active show');
+        $("#disclaimer").removeClass('active show');
+        $("#disclaimer-tab").attr('aria-selected', false);
+        if (target == 'disclaimer') {
+            $("#"+target+"-tab").addClass('active show');
+            $("#"+target).addClass('active show');
+            $("#"+target+"-tab").attr('aria-selected', true);
+        }
+        if (target == 'terms_of_service') {
+            $("#"+target+"-tab").addClass('active show');
+            $("#"+target).addClass('active show');
+            $("#"+target+"-tab").attr('aria-selected', true);
+        }
+        if (target == 'intellectual_property') {
+            $("#"+target+"-tab").addClass('active show');
+            $("#"+target).addClass('active show');
+            $("#"+target+"-tab").attr('aria-selected', true);
+        }
+        if (target == 'return_policy') {
+            $("#"+target+"-tab").addClass('active show');
+            $("#"+target).addClass('active show');
+            $("#"+target+"-tab").attr('aria-selected', true);
+        }
+        if (target == 'logistics_payment_method') {
+            $("#"+target+"-tab").addClass('active show');
+            $("#"+target).addClass('active show');
+            $("#"+target+"-tab").attr('aria-selected', true);
+        }
+    <?}else{?>
+        var target='';
+        alert(target);
+    <?}?>
+</script>
+<script>
+$('#v-pills-tab a').on('click', function(event) {
     event.preventDefault()
     $(this).tab('show')
     var h = $(window).height();
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var h_sum = h - header_h - footer_h;
-    $(".tab-pane").css('height', h_sum);
+    $(".tab-pane").css('height', h_sum*0.95);
 })
 </script>
 <!-- Window Height -->
 <script>
 $(function() {
     var h = $(window).height();
+    var main_h = $(".main").height();
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var h_sum = h - header_h - footer_h;
-    var line_h = h_sum+60;
-    $(".tab-pane").css('height', h_sum);
+    var line_h = h_sum+50;
+    $(".tab-pane").css('height', h_sum*0.95);
     $(".straight_line").css('height', line_h);
 });
 </script>

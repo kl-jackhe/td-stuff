@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <footer id="footer">
+    <footer id="footer" style="font-size: 14px">
         <!-- <div class="row justify-content-center">
             <div class="col-md-12 text-center" style="padding-bottom: 15px;padding-top: 15px;">
                 <span>本網站產品已投保OO產物產品責任保險$250,000,000元。  保險證號：0000字第12AAAA0001234號</span>
@@ -34,7 +34,16 @@
         <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <div class="col-md-6">
+                    <div class="col-md-12" id="v-pills-tab-other" style="padding-bottom: 6px;">
+                        <span style="color: #fff;">
+                            ｜<a href="/policy?target=disclaimer">免責聲明</a>
+                            ｜ <a href="/policy?target=terms_of_service">服務條款</a>
+                            ｜ <a href="/policy?target=intellectual_property">知識產權</a>
+                            ｜ <a href="/policy?target=return_policy">退貨政策</a>
+                            ｜ <a href="/policy?target=logistics_payment_method">物流 / 支付方式</a> ｜
+                        </span>
+                    </div>
+                    <div class="col-md-12">
                         <span style="color: #fff;">Copyright © 2022 <?php echo get_setting_general('name'); ?>. All rights reserved.</span>
                     </div>
                 </div>

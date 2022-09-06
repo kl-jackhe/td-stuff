@@ -117,6 +117,13 @@
     .icon_pointer {
         cursor: pointer;
     }
+    #v-pills-tab-other a {
+        text-decoration: none;
+        color: #fff;#888787
+    }
+    #v-pills-tab-other a:hover {
+        color: #888787;
+    }
     #footer {
         margin-top: 30px;
     }
