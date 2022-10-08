@@ -172,6 +172,12 @@ class Product extends Admin_Controller {
 		$status = $this->input->post('status');
 		$count = count($specification);
 		for ($i = 0; $i < $count; $i++) {
+			if (empty($picture[$i])) {
+				$picture[$i] = '';
+			}
+			if (empty($status[$i])) {
+				$status[$i] = 0;
+			}
 			if (!empty($specification)) {
 				$insert_data = array(
 					'product_id' => $id,
@@ -288,7 +294,7 @@ class Product extends Admin_Controller {
 
 		$qty = $this->input->post('plan_qty');
 		$unit = $this->input->post('plan_unit');
-
+		$specification = $this->input->post('plan_specification');
 		$count = count($qty);
 		for ($i = 0; $i < $count; $i++) {
 			if (!empty($qty)) {
@@ -298,6 +304,7 @@ class Product extends Admin_Controller {
 					'qty' => $qty[$i],
 					'product_unit' => get_empty($unit[$i]),
 					'product_specification' => get_empty($specification[$i]),
+
 				);
 				$this->db->insert('product_combine_item', $insert_data);
 			}
