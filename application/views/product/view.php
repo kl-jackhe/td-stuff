@@ -193,35 +193,37 @@ input.qtyminus {
                                                             </div>
                                                             <div class="input-group" style="width: 45%;">
                                                                 <div class="input-group" style="position: absolute;bottom: 10px;">
-                                                            <?if ($row['status'] == 0) {?>
-                                                                <span class="input-group-btn">
-                                                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                        <i class="fa-solid fa-minus"></i>
-                                                                    </button>
-                                                                </span>
-                                                                <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style" value="0" min="0" max="100" readonly>
-                                                                <span class="input-group-btn">
-                                                                    <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                        <i class="fa-solid fa-plus"></i>
-                                                                    </button>
-                                                                </span>
-                                                            <?} else {?>
-                                                                <span class="text-center" style="color: #C52B29;font-weight: bold;">已售完</span>
-                                                                <div style="display: none;">
-                                                                    <span class="input-group-btn">
-                                                                        <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                            <i class="fa-solid fa-minus"></i>
-                                                                        </button>
-                                                                    </span>
-                                                                    <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style select_qty_value" value="0" min="0" max="100" readonly>
-                                                                    <span class="input-group-btn">
-                                                                        <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
-                                                                            <i class="fa-solid fa-plus"></i>
-                                                                        </button>
-                                                                    </span>
+                                                                <?if ($row['status'] == 0) {
+                                                                    if ($row['limit_enable'] == 'YES'){?>
+                                                                        <p class="text-center" style="color: #C52B29;font-weight: bold;width: 100%;">選購 <span class="limit_qty"></span> 組 x 限購數量 <?=$row['limit_qty']?></p>
+                                                                        <span class="input-group-btn">
+                                                                            <button onclick="specification_limit_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>,<?=$row['limit_qty']?>,<?=$row['id']?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                                <i class="fa-solid fa-minus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                        <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style" value="0" min="0" max="100" readonly>
+                                                                        <span class="input-group-btn">
+                                                                            <button onclick="specification_limit_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>,<?=$row['limit_qty']?>,<?=$row['id']?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                                <i class="fa-solid fa-plus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    <?} else {?>
+                                                                        <span class="input-group-btn">
+                                                                            <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                                <i class="fa-solid fa-minus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                        <input type="text" name="<?echo $combine['id'].'specification_qty[]'?>" id="<?php echo $row['id'].'_'.$combine['id'] ?>" class="form-control input-number input_border_style" value="0" min="0" max="100" readonly>
+                                                                        <span class="input-group-btn">
+                                                                            <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn btn-number button_border_style_r select_qty_button" data-type="plus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">
+                                                                                <i class="fa-solid fa-plus"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    <?}?>
+                                                                <?} else {?>
+                                                                    <span class="text-center" style="color: #C52B29;font-weight: bold;width: 100%;">已售完</span>
+                                                                <?}?>
                                                                 </div>
-                                                            <?}?>
-                                                            </div>
                                                             </div>
                                                             <input type="hidden" name="<?echo $combine['id'].'specification_name[]'?>" value="<?php echo $row['specification'] ?>">
                                                             <input type="hidden" name="<?echo $combine['id'].'specification_id[]'?>" value="<?php echo $row['id'] ?>">
@@ -300,11 +302,35 @@ function add_cart(combine_id) {
         }
     });
 }
+// 限購數量判斷
+function specification_limit_qty(combine_id,product_combine_item,limit_qty,id) {
+    var qty = document.getElementById("qty_" + combine_id).value;
+    var limit_id = id+'_'+combine_id;
+    var total_qty = qty * product_combine_item;
+    var limit_qty_total = limit_qty * qty;
+    $('.limit_qty').html(qty);
+    $('.total_qty').html(total_qty);
+    setTimeout(function(){
+        $("#"+limit_id).attr({
+           "max" : limit_qty_total,
+        });
+        var qty_sum = select_qty(combine_id);
+        $('.select_qty').html(qty_sum);
+        if (total_qty <= qty_sum) {
+            $('.select_qty_button').prop('disabled', true);
+        }
+        if (total_qty > qty_sum) {
+            $('.select_qty_button').prop('disabled', false);
+        }
+    }, 50);
+    return total_qty;
+}
 
 // 數量判斷
 function specification_qty(combine_id,product_combine_item) {
     var qty = document.getElementById("qty_" + combine_id).value;
     var total_qty = qty * product_combine_item;
+    $('.limit_qty').html(qty);
     $('.total_qty').html(total_qty);
     setTimeout(function(){
         var qty_sum = select_qty(combine_id);

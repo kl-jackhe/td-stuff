@@ -129,6 +129,7 @@
                                         <?php if (!empty($product_specification)) {?>
                                         <th class="text-center">圖片</th>
                                         <th class="text-center">狀態</th>
+                                        <th class="text-center">限購數量</th>
                                         <?php }?>
                                         <th class="text-center"></th>
                                     </tr>
@@ -176,6 +177,22 @@
                                                     <option value="2">預購</option>
                                                 </select>
                                                 <?php }?>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" name="limit_enable[]">
+                                                    <?if (!empty($row['limit_enable'])) {?>
+                                                        <option value="YES" selected>啟用</option>
+                                                        <option value="">停用</option>
+                                                    <?} else {?>
+                                                        <option value="YES">啟用</option>
+                                                        <option value="" selected>停用</option>
+                                                    <?}?>
+                                                </select>
+                                                <?if ($row['limit_qty'] > 0) {?>
+                                                    <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" value="<?=$row['limit_qty']?>">
+                                                <?} else {?>
+                                                    <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量">
+                                                <?}?>
                                             </td>
                                             <td class="text-center"><i class="fa fa-trash-o x"></i></td>
                                         </tr>
@@ -270,6 +287,15 @@ $(document).ready(function() {
         $(this).parent().parent().remove();
     });
 });
+function checkbox($id) {
+    var id = "limit_enable_"+$id;
+    if (document.getElementById(id).checked) {
+        alert('OK');
+        $('#'+id).val('YES');
+    } else {
+        $('#'+id).val('NO');
+    }
+}
 function add_unit()
 {
   $("#product-unit-list").append('<tr><td><input type="text" name="unit[]" class="form-control unit"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
@@ -279,5 +305,3 @@ function add_specification()
   $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
 }
 </script>
-
-<!-- <td><div class="form-group"><a href="/assets/admin/filemanager/dialog.php?type=1&field_id=picture&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a></div></td><td><select name=status[] class="form-control"><option value="0" selected>販售中</option><option value="1">已售完</option><option value="2">預購</option></select></td> -->

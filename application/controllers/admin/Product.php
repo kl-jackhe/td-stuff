@@ -170,6 +170,8 @@ class Product extends Admin_Controller {
 		$specification = $this->input->post('specification');
 		$picture = $this->input->post('picture');
 		$status = $this->input->post('status');
+		$limit_enable = $this->input->post('limit_enable');
+		$limit_qty = $this->input->post('limit_qty');
 		$count = count($specification);
 		for ($i = 0; $i < $count; $i++) {
 			if (empty($picture[$i])) {
@@ -178,12 +180,20 @@ class Product extends Admin_Controller {
 			if (empty($status[$i])) {
 				$status[$i] = 0;
 			}
+			if (empty($limit_enable[$i])) {
+				$limit_enable[$i] = '';
+			}
+			if (empty($limit_qty[$i])) {
+				$limit_qty[$i] = 0;
+			}
 			if (!empty($specification)) {
 				$insert_data = array(
 					'product_id' => $id,
 					'specification' => $specification[$i],
 					'picture' => $picture[$i],
 					'status' => $status[$i],
+					'limit_enable' => $limit_enable[$i],
+					'limit_qty' => $limit_qty[$i],
 				);
 				$this->db->insert('product_specification', $insert_data);
 			}
