@@ -1,6 +1,6 @@
 <div class="row">
-    <?php $attributes = array('class' => 'plan_update_submit_form', 'id' => 'plan_update_submit_form');?>
-    <?php echo form_open('admin/product/update_plan/' . $product_combine['id'], $attributes); ?>
+    <? $attributes = array('class' => 'plan_update_submit_form', 'id' => 'plan_update_submit_form');?>
+    <? echo form_open('admin/product/update_plan/' . $product_combine['id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
             <span id="quick-update-btn" class="btn btn-primary">更新</span>
@@ -18,7 +18,6 @@
                         <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">方案</a>
                     </li> -->
                 </ul>
-
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
@@ -26,29 +25,41 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_name">方案名稱</label>
-                                    <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<?php echo $product_combine['name'] ?>" required>
-                                    <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
+                                    <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<? echo $product_combine['name'] ?>" required>
+                                    <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="product_combine_price">原價</label>
-                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<?php echo $product_combine['price'] ?>" required>
+                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="product_combine_current_price">方案價</label>
-                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<?php echo $product_combine['current_price'] ?>" required>
+                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
                                 </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="product_combine_current_price">限購</label>
+                                <select class="form-control" name="limit_enable">
+                                    <?if (!empty($product_combine['limit_enable'])) {?>
+                                        <option value="YES" selected>啟用</option>
+                                        <option value="">停用</option>
+                                    <?} else {?>
+                                        <option value="YES">啟用</option>
+                                        <option value="" selected>停用</option>
+                                    <?}?>
+                                </select>
                             </div>
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label for="any_specification">開啟任意規格</label>
                                     <?if ($product_combine['type'] == 1) {?>
-                                        <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
+                                    <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
                                     <?} else {?>
-                                        <input id="any_specification" name="any_specification" type="checkbox">
+                                    <input id="any_specification" name="any_specification" type="checkbox">
                                     <?}?>
                                 </div>
                             </div>
@@ -58,12 +69,12 @@
                                     <div class="form-group">
                                         <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_combine_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
                                     </div>
-                                    <?php if (!empty($product_combine['picture'])) {?>
-                                        <img src="/assets/uploads/<?php echo $product_combine['picture']; ?>" id="add_product_combine_image<?php echo $product_combine['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product_combine['picture'])) {echo 'display: none';}?>">
-                                    <?php } else {?>
-                                        <img src="" id="add_product_combine_image<?php echo $product_combine['product_id']; ?>_preview" class="img-responsive">
-                                    <?php }?>
-                                    <input type="hidden" id="add_product_combine_image" name="product_combine_image" value="<?php echo $product_combine['picture'] ?>">
+                                    <?if (!empty($product_combine['picture'])) {?>
+                                    <img src="/assets/uploads/<? echo $product_combine['picture']; ?>" id="add_product_combine_image<? echo $product_combine['product_id']; ?>_preview" class="img-responsive" style="<? if (empty($product_combine['picture'])) {echo 'display: none';}?>">
+                                    <?} else {?>
+                                    <img src="" id="add_product_combine_image<?echo $product_combine['product_id']; ?>_preview" class="img-responsive">
+                                    <?}?>
+                                    <input type="hidden" id="add_product_combine_image" name="product_combine_image" value="<?echo $product_combine['picture'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -71,7 +82,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_combine_description">方案描述</label>
-                                    <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"><?php echo $product_combine['description'] ?></textarea>
+                                    <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"><? echo $product_combine['description'] ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -89,39 +100,38 @@
                                             </tr>
                                         </thead>
                                         <tbody id="plan-item-list">
-                                            <?php if (!empty($product_combine_item)) {
-	foreach ($product_combine_item as $item) {
-		?>
-                                                <tr>
-                                                    <td>
-                                                        <input type="text" name="plan_qty[]" class="form-control" value="<?php echo $item['qty'] ?>">
-                                                    </td>
-                                                    <td>
-                                                        <?php $att = 'class="form-control"';
-		$options = array();
-		// $options = array("" => "單位");
-		if (!empty($product_unit)) {
-			foreach ($product_unit as $pu) {
-				$options[$pu['unit']] = $pu['unit'];
-			}}
-		echo form_dropdown('plan_unit[]', $options, $item['product_unit'], $att);?>
-                                                    </td>
-                                                    <td>
-                                                        <?php $att = 'class="form-control"';
-		$options = array();
-		// $options = array("" => "規格");
-		if (!empty($product_specification)) {
-			$options[''] = '請選擇...';
-			foreach ($product_specification as $ps) {
-				$options[$ps['specification']] = $ps['specification'];
-			}}
-		echo form_dropdown('plan_specification[]', $options, $item['product_specification'], $att);?>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <i class="fa fa-trash-o x"></i>
-                                                    </td>
-                                                </tr>
-                                            <?php }}?>
+                                            <? if (!empty($product_combine_item)) {
+                                                foreach ($product_combine_item as $item) {?>
+                                            <tr>
+                                                <td>
+                                                    <input type="text" name="plan_qty[]" class="form-control" value="<? echo $item['qty'] ?>">
+                                                </td>
+                                                <td>
+                                                    <?$att = 'class="form-control"';
+                                                    $options = array();
+                                                    // $options = array("" => "單位");
+                                                    if (!empty($product_unit)) {
+                                                        foreach ($product_unit as $pu) {
+                                                            $options[$pu['unit']] = $pu['unit'];
+                                                        }}
+                                                    echo form_dropdown('plan_unit[]', $options, $item['product_unit'], $att);?>
+                                                </td>
+                                                <td>
+                                                    <?$att = 'class="form-control"';
+                                                    $options = array();
+                                                    // $options = array("" => "規格");
+                                                    if (!empty($product_specification)) {
+                                                        $options[''] = '請選擇...';
+                                                        foreach ($product_specification as $ps) {
+                                                            $options[$ps['specification']] = $ps['specification'];
+                                                        }}
+                                                    echo form_dropdown('plan_specification[]', $options, $item['product_specification'], $att);?>
+                                                </td>
+                                                <td class="text-center">
+                                                    <i class="fa fa-trash-o x"></i>
+                                                </td>
+                                            </tr>
+                                            <?}}?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -132,12 +142,11 @@
             </div>
         </div>
     </div>
-    <?php echo form_close() ?>
+    <?echo form_close() ?>
 </div>
-
 <script>
 $(document).ready(function() {
-    $(document).on('click', '.x', function(){
+    $(document).on('click', '.x', function() {
         $(this).parent().parent().remove();
     });
     $('#any_specification').click(function() {
@@ -148,12 +157,12 @@ $(document).ready(function() {
         }
     });
 });
-function add_plan_item()
-{
+
+function add_plan_item() {
     var unit = '';
     var unit_list = $('#product-unit-list .unit');
     unit += '<select class="form-control" name="plan_unit[]">';
-    for(var i=0;i<unit_list.length;i++){
+    for (var i = 0; i < unit_list.length; i++) {
         unit += '<option value=' + unit_list[i].value + '>' + unit_list[i].value + '</option>';
     }
     unit += '</select>';
@@ -162,12 +171,12 @@ function add_plan_item()
     var specification_list = $('#product-specification-list .specification');
     specification += '<select class="form-control" name="plan_specification[]">';
     specification += '<option value="">請選擇...</option>';
-    for(var i=0;i<specification_list.length;i++){
+    for (var i = 0; i < specification_list.length; i++) {
         specification += '<option value=' + specification_list[i].value + '>' + specification_list[i].value + '</option>';
     }
     specification += '</select>';
 
-    $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>'+unit+'</td><td>'+specification+'</td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+    $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>' + unit + '</td><td>' + specification + '</td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
 }
 $('.fancybox').fancybox({
     'width': 1920,
@@ -175,7 +184,7 @@ $('.fancybox').fancybox({
     'type': 'iframe',
     'autoScale': false
 });
-$('#quick-update-btn').click(function(e){
+$('#quick-update-btn').click(function(e) {
     e.preventDefault();
     var form = $('#plan_update_submit_form');
     var url = form.attr('action');
@@ -187,15 +196,13 @@ $('#quick-update-btn').click(function(e){
         // contentType: false,
         // cache: false,
         // processData: false,
-        success : function(data)
-        {
-          // $('#use-Modal').modal('hide');
-          location.reload(true);
-          // console.log(data);
+        success: function(data) {
+            // $('#use-Modal').modal('hide');
+            location.reload(true);
+            // console.log(data);
         },
-        error: function(data)
-        {
-          console.log('無法送出');
+        error: function(data) {
+            console.log('無法送出');
         }
     })
 });

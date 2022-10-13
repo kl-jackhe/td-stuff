@@ -194,7 +194,7 @@ input.qtyminus {
                                                             <div class="input-group" style="width: 45%;">
                                                                 <div class="input-group" style="position: absolute;bottom: 10px;">
                                                                 <?if ($row['status'] == 0) {
-                                                                    if ($row['limit_enable'] == 'YES'){?>
+                                                                    if ($row['limit_enable'] == 'YES' && $combine['limit_enable'] == 'YES'){?>
                                                                         <p class="text-center" style="color: #C52B29;font-weight: bold;width: 100%;">選購 <span class="limit_qty"></span> 組 x 限購數量 <?=$row['limit_qty']?></p>
                                                                         <span class="input-group-btn">
                                                                             <button onclick="specification_limit_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>,<?=$row['limit_qty']?>,<?=$row['id']?>)" type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="<?php echo $row['id'].'_'.$combine['id'] ?>">

@@ -240,7 +240,6 @@ class Product extends Admin_Controller {
 	function create_plan($id) {
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
-
 		$this->load->view('admin/product/create_plan', $this->data);
 	}
 
@@ -295,6 +294,7 @@ class Product extends Admin_Controller {
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
 			'type' => $this->input->post('any_specification'),
+			'limit_enable' => $this->input->post('limit_enable'),
 		);
 		$this->db->where('id', $id);
 		$this->db->update('product_combine', $update_data);
@@ -314,11 +314,11 @@ class Product extends Admin_Controller {
 					'qty' => $qty[$i],
 					'product_unit' => get_empty($unit[$i]),
 					'product_specification' => get_empty($specification[$i]),
-
 				);
 				$this->db->insert('product_combine_item', $insert_data);
 			}
 		}
+		$this->session->set_flashdata('message', '商品更新成功！');
 	}
 
 	function delete_plan($id) {
