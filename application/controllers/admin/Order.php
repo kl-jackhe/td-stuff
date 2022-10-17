@@ -380,6 +380,14 @@ class Order extends Admin_Controller {
 			// 寄簡訊給買家
 		}
 
+		if ($step == 'pay_ok' || $step == 'process') {
+			$this->order_synchronize($id);
+		}
+
+		if ($step == 'shipping' || $step == 'complete' || $step == 'order_cancel') {
+			$this->order_update_synchronize($id);
+		}
+
 		$this->session->set_flashdata('message', '訂單更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);
 	}
@@ -539,5 +547,256 @@ class Order extends Admin_Controller {
 
 		}
 	}
+
+	function order_synchronize($order_id, $action = 'do')
+    {
+        // if($_SERVER['HTTP_HOST']=='erp.shangyulin.com.tw'){
+            $this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+            $array = array(
+                'ErrorCode' => '',
+                'Errors' => null,
+                'Message' => 'ok',
+                'IsSuccess' => true,
+                'Data' => array(
+                    'order' => array(),
+                    'order_item' => array(),
+                )
+            );
+            $order = $this_order;
+            $order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
+            $order['order_payment_name'] = get_payment($this_order['order_payment']);
+            $array['Data']['order'] = $order;
+
+            // $this->db->select('order_item.*');
+            // $this->db->join('product', 'product.product_id = order_item.product_id');
+            $this->db->where('order_id', $this_order['order_id']);
+            $this->db->where('product_id', 0);
+            $query = $this->db->get('order_item');
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $item) {
+                	$order_item = $item;
+
+                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+                	$order_item['product_combine'] = $pc;
+
+                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+                	$order_item['product_name'] = $product['product_name'];
+                	$order_item['product_price'] = $product['product_price'];
+
+                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+                	if(!empty($pci)) { foreach($pci as $qqq) {
+                		$order_item['product_combine_item'][] = $qqq;
+                	}}
+
+                    array_push($array['Data']['order_item'], $order_item);
+                }
+            }
+
+            if($action=='read'){
+            	header('Content-Type: application/json');
+            	echo json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+            	exit;
+            }
+
+            $make_call = $this->callAPI('POST', 'http://erp.vei-star.com/api/vei_star/sales_order/save', json_encode($array));
+            $response = json_decode($make_call, true);
+            if($response['IsSuccess']==true || $response['IsSuccess']==1){
+                echo 'send success.';
+            } else {
+                // echo 'send fail.';
+                print_r($response);
+            }
+        // }
+    }
+
+    function order_update_synchronize($order_id, $action = 'do')
+    {
+        // if($_SERVER['HTTP_HOST']=='erp.shangyulin.com.tw'){
+            $this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+            $array = array(
+                'ErrorCode' => '',
+                'Errors' => null,
+                'Message' => 'ok',
+                'IsSuccess' => true,
+                'Data' => array(
+                    'order' => array(),
+                    'order_item' => array(),
+                )
+            );
+            $order = $this_order;
+            $order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
+            $order['order_payment_name'] = get_payment($this_order['order_payment']);
+            $array['Data']['order'] = $order;
+
+            // $this->db->select('order_item.*');
+            // $this->db->join('product', 'product.product_id = order_item.product_id');
+            $this->db->where('order_id', $this_order['order_id']);
+            $this->db->where('product_id', 0);
+            $query = $this->db->get('order_item');
+            if ($query->num_rows() > 0) {
+                foreach ($query->result_array() as $item) {
+                	$order_item = $item;
+
+                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+                	$order_item['product_combine'] = $pc;
+
+                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+                	$order_item['product_name'] = $product['product_name'];
+                	$order_item['product_price'] = $product['product_price'];
+
+                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+                	if(!empty($pci)) { foreach($pci as $qqq) {
+                		$order_item['product_combine_item'][] = $qqq;
+                	}}
+
+                    array_push($array['Data']['order_item'], $order_item);
+                }
+            }
+
+            if($action=='read'){
+            	header('Content-Type: application/json');
+            	echo json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+            	exit;
+            }
+
+            $make_call = $this->callAPI('POST', 'http://erp.vei-star.com/api/vei_star/sales_order/update', json_encode($array));
+            $response = json_decode($make_call, true);
+            if($response['IsSuccess']==true || $response['IsSuccess']==1){
+                echo 'send success.';
+            } else {
+                // echo 'send fail.';
+                print_r($response);
+            }
+        // }
+    }
+
+    //////////////////////////////////////////
+
+    function getallheaders()
+    {
+       $headers = array ();
+       foreach ($_SERVER as $name => $value)
+       {
+           if (substr($name, 0, 5) == 'HTTP_')
+           {
+               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+           }
+       }
+       return $headers;
+    }
+
+    function get_token()
+    {
+        foreach ($this->getallheaders() as $name => $value) {
+            if($name=='X-Token'){
+                $X_TOKEN = $value;
+            }
+        }
+        if(!empty($X_TOKEN)){
+            return $X_TOKEN;
+        } else {
+            return false;
+        }
+    }
+
+    function check_token($X_TOKEN)
+    {
+        if(empty($X_TOKEN)){
+            $X_ERROR_CODE = '990102';
+            $array = array(
+                'ErrorCode' => '1',
+                'Errors' => ['no token.'],
+                'Message' => 'no token.',
+                'IsSuccess' => false,
+                'Data' => null
+            );
+            header('Content-Type: application/json');
+            header('X_ERROR_CODE: '.$X_ERROR_CODE);
+            echo json_encode($array, JSON_UNESCAPED_UNICODE);
+            exit;
+        } else {
+            $key = 'KUANGLIP';
+            // 解密
+            $x_token_decrypt = $this->decryptStr($X_TOKEN, $key);
+            if($x_token_decrypt=='mei-fresh'){
+                //
+            } else {
+                $X_ERROR_CODE = '990102';
+                $array = array(
+                    'ErrorCode' => '1',
+                    'Errors' => ['token error.'],
+                    'Message' => 'token error.',
+                    'IsSuccess' => false,
+                    'Data' => null
+                );
+                header('Content-Type: application/json');
+                header('X_ERROR_CODE: '.$X_ERROR_CODE);
+                echo json_encode($array, JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+        }
+    }
+
+    // 加密
+    function encryptStr($str, $key){
+        $block = mcrypt_get_block_size('des', 'ecb');
+        $pad = $block - (strlen($str) % $block);
+        $str .= str_repeat(chr($pad), $pad);
+        $enc_str = mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+        return base64_encode($enc_str);
+    }
+
+    // 解密
+    function decryptStr($str, $key){
+        $str = base64_decode($str);
+        $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+        $block = mcrypt_get_block_size('des', 'ecb');
+        $pad = ord($str[($len = strlen($str)) - 1]);
+        return substr($str, 0, strlen($str) - $pad);
+    }
+
+    function callAPI($method, $url, $data){
+        // $key = 'KUANGLIP';
+        // $X_TOKEN = $this->encryptStr('mei-fresh', $key);
+
+        $curl = curl_init();
+        switch ($method){
+            case "GET":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+                if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            case "POST":
+                curl_setopt($curl, CURLOPT_POST, 1);
+                if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            case "PUT":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+                if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            case "DELETE":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                if ($data)
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
+            default:
+                if ($data)
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+       }
+        // OPTIONS:
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            // 'X-Token: '.$X_TOKEN,
+        ));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        // EXECUTE:
+        $result = curl_exec($curl);
+        curl_close($curl);
+        return $result;
+    }
 
 }
