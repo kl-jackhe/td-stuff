@@ -72,7 +72,7 @@ input.qtyminus {
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
-                    <img src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
+                    <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
                 </div>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">
@@ -85,7 +85,7 @@ input.qtyminus {
                     } ?>
                 </div>
                 <div class="col-md-8 text-center product_description">
-                    <img src="/assets/uploads/Banner/page banner_free shipping_1000.jpg">
+                    <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
                 </div>
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>
