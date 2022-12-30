@@ -33,6 +33,32 @@
     width: 100%;
 }
 
+.carousel-fade .carousel-item {
+ opacity: 0;
+ transition-duration: 2s;
+ transition-property: opacity;
+}
+
+.carousel-fade  .carousel-item.active,
+.carousel-fade  .carousel-item-next.carousel-item-left,
+.carousel-fade  .carousel-item-prev.carousel-item-right {
+  opacity: 1;
+}
+
+.carousel-fade .active.carousel-item-left,
+.carousel-fade  .active.carousel-item-right {
+ opacity: 0;
+}
+
+.carousel-fade  .carousel-item-next,
+.carousel-fade .carousel-item-prev,
+.carousel-fade .carousel-item.active,
+.carousel-fade .active.carousel-item-left,
+.carousel-fade  .active.carousel-item-prev {
+ transform: translateX(0);
+ transform: translate3d(0, 0, 0);
+}
+
 #home_product {
     font-size: 18px;
     line-height: 20px;
@@ -115,13 +141,19 @@
 <div role="main" class="main">
     <section class="page-header no-padding sm-slide-fix content_auto_h">
         <div class="container">
-            <div class="row carousel_box">
-                <div class="col-md-12 owl-carousel owl-theme item-slide" data-plugin-options='{"items":1, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}'>
-                    <?php if (!empty($banner)) {foreach ($banner as $data) {?>
-                    <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
-                        <img class="img-fluid" style="width: 100%;" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
-                    </a>
-                    <?php }}?>
+            <div class="carousel_box">
+                <div id="home-carousel" class="carousel slide carousel-fade" data-touch="false" data-interval="false">
+                    <div class="carousel-inner">
+                        <?php $count=0; ?>
+                        <?php if (!empty($banner)) {foreach ($banner as $data) {?>
+                            <div class="carousel-item <?php echo ($count==0?'active':'') ?>">
+                                <a href="<?php echo $data['banner_link'] ?>" target="<?php echo ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
+                                    <img class="d-block w-100" style="width: 100%;" src="/assets/uploads/<?php echo $data['banner_image'] ?>">
+                                </a>
+                            </div>
+                            <?php $count++; ?>
+                        <?php }}?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -177,3 +209,11 @@
         </div>
     </section>
 </div>
+
+<script>
+    $('#home-carousel').carousel({
+          interval: 6000
+    })
+</script>
+
+<!-- data-plugin-options='{"items": 2, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}' -->
