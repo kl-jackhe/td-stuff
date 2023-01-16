@@ -41,6 +41,7 @@
                             ｜ <a href="/policy?target=intellectual_property">知識產權</a>
                             ｜ <a href="/policy?target=return_policy">退貨政策</a>
                             ｜ <a href="/policy?target=logistics_payment_method">物流 / 支付方式</a> ｜
+                            　維星行銷國際企業有限公司  統編：90696281
                         </span>
                     </div>
                     <div class="col-md-12">
