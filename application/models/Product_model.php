@@ -32,11 +32,29 @@ class Product_model extends CI_Model {
 		// 	$this->db->order_by('product.product_id', 'desc');
 		// }
 		//set start and limit
-		// if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-		// 	$this->db->limit($params['limit'], $params['start']);
-		// } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-		// 	$this->db->limit($params['limit']);
-		// }
+		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+			$this->db->limit($params['limit'], $params['start']);
+		} elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+			$this->db->limit($params['limit']);
+		}
+		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
+			$result = $this->db->count_all_results();
+		} else {
+			//get records
+			$query = $this->db->get();
+			//return fetched data
+			$result = ($query->num_rows() > 0) ? $query->result_array() : false;
+		}
+		return $result;
+	}
+
+	function getProducts($params = array()) {
+		$this->db->select('*');
+		$this->db->from('product');
+		if (!empty($params['search']['product_category_id'])) {
+			$this->db->where('product_category_id', $params['search']['product_category_id']);
+		}
+		$this->db->where('product_status', '1');
 		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
 			$result = $this->db->count_all_results();
 		} else {

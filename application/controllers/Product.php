@@ -9,12 +9,11 @@ class Product extends Public_Controller {
 
 	public function index() {
 		$this->data['page_title'] = '商品';
-		// $this->data['products'] = $this->product_model->getHomeProducts();
 
 		$data = array();
 		//total rows count
 		$conditions['returnType'] = 'count';
-		$totalRec = $this->product_model->getRows($conditions);
+		$totalRec = $this->product_model->getProducts($conditions);
 		//pagination configuration
 		$config['target'] = '#data';
 		$config['base_url'] = base_url() . 'product/ajaxData';
@@ -23,22 +22,10 @@ class Product extends Public_Controller {
 		$config['link_func'] = 'searchFilter';
 		$this->ajax_pagination->initialize($config);
 		//get the posts data
-		// $this->data['products'] = $this->product_model->getRows(array('limit' => $this->perPage));
-		$this->data['products'] = $this->product_model->getRows(array());
-
+		$this->data['products'] = $this->product_model->getProducts();
 		$this->data['product_category'] = $this->product_model->get_product_category();
-		$this->render('product/index');
-	}
 
-	public function view($id = 0) {
-		if ($id == 0) {
-			redirect(base_url() . 'product');
-		}
-		$this->data['product'] = $this->product_model->getSingleProduct($id);
-		$this->data['specification'] = $this->product_model->getProduct_Specification($id);
-		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
-		$this->data['page_title'] = $this->data['product']['product_name'];
-		$this->render('product/view');
+		$this->render('product/index');
 	}
 
 	function ajaxData() {
@@ -61,7 +48,7 @@ class Product extends Public_Controller {
 		}
 		//total rows count
 		$conditions['returnType'] = 'count';
-		$totalRec = $this->product_model->getRows($conditions);
+		$totalRec = $this->product_model->getProducts($conditions);
 		//pagination configuration
 		$config['target'] = '#data';
 		$config['base_url'] = base_url() . 'product/ajaxData';
@@ -74,8 +61,19 @@ class Product extends Public_Controller {
 		$conditions['limit'] = $this->perPage;
 		//get posts data
 		$conditions['returnType'] = '';
-		$this->data['products'] = $this->product_model->getRows($conditions);
+		$this->data['products'] = $this->product_model->getProducts($conditions);
 		//load the view
 		$this->load->view('product/ajax-data', $this->data, false);
+	}
+
+	public function view($id = 0) {
+		if ($id == 0) {
+			redirect(base_url() . 'product');
+		}
+		$this->data['product'] = $this->product_model->getSingleProduct($id);
+		$this->data['specification'] = $this->product_model->getProduct_Specification($id);
+		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
+		$this->data['page_title'] = $this->data['product']['product_name'];
+		$this->render('product/view');
 	}
 }

@@ -16,7 +16,7 @@ class Product extends Admin_Controller {
 		$totalRec = $this->product_model->getRows($conditions);
 		//pagination configuration
 		$config['target'] = '#datatable';
-		$config['base_url'] = base_url() . 'product/ajaxData';
+		$config['base_url'] = base_url() . 'admin/product/ajaxData';
 		$config['total_rows'] = $totalRec;
 		$config['per_page'] = $this->perPage;
 		$config['link_func'] = 'searchFilter';
