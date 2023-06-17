@@ -333,6 +333,9 @@ function get_payment($data) {
 	case 'after_pay':
 		return "後支付";
 		break;
+	case 'ecpay':
+		return "綠界科技";
+		break;
 	}
 	// $CI = &get_instance();
 	// $CI->db->select('*');

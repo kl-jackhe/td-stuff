@@ -100,7 +100,12 @@ p {
                 <?php echo get_delivery($order['order_delivery']) ?>
             </td>
             <td class="text-center">
-                <?php echo get_payment($order['order_payment']) ?>
+                <?php
+                echo get_payment($order['order_payment']);
+                if($order['order_payment']=='ecpay'){
+                    echo '<br>'.get_pay_status($order['order_pay_status']);
+                }
+                ?>
             </td>
             <!-- <td class="text-right"><?php echo get_pay_status($order['order_pay_status']) ?></td> -->
             <!-- <td class="text-right"><?php echo get_order_step($order['order_step']) ?></td> -->

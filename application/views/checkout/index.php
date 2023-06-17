@@ -231,7 +231,7 @@ foreach ($this->cart->contents() as $items) {
                                     <? $delivery_count = 0;
                                     foreach ($delivery as $row) {?>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" checked>
+                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
                                         <label class="form-check-label" for="checkout_delivery<?=$delivery_count?>">
                                             <?=$row['delivery_name']?>
                                         </label>
@@ -243,17 +243,18 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
-                                    <?foreach ($payment as $row) {?>
-                                        <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment1" value="bank_transfer" checked>
-                                        <label class="form-check-label" for="checkout_payment1">
-                                            <?=$row['payment_name']?>
-                                        </label>
-                                        <?if (!empty($row['payment_info'])) {?>
-                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['payment_info'];?></p>
-                                        <?}?>
-                                    </div>
-                                    <?}?>
+                                    <? $payment_count = 0;
+                                    foreach ($payment as $row) {?>
+                                        <div class="form-check <?php // echo ($row['payment_code']=='ecpay'?'d-none':'') ?>">
+                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?=$payment_count?>" value="<?=$row['payment_code'];?>" <?php echo($payment_count==0?'checked':'') ?>>
+                                            <label class="form-check-label" for="checkout_payment<?=$payment_count?>">
+                                                <?=$row['payment_name']?>
+                                            </label>
+                                            <?if (!empty($row['payment_info'])) {?>
+                                                <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['payment_info'];?></p>
+                                            <?}?>
+                                        </div>
+                                    <?$payment_count++;}?>
                                 </div>
                                 <div class="col-12">
                                     <hr>

@@ -153,25 +153,11 @@ class Checkout extends Public_Controller {
 			}
 		endforeach;
 
-		// 儲存訂單其他資訊
-		// $session_data = array(
-		// 	'order_number' => $order_number,
-		// 	'user_name' => $this->input->post('checkout_name'),
-		// 	'user_phone' => $this->input->post('checkout_phone'),
-		// 	'user_email' => $this->input->post('checkout_email'),
-		// 	'remark' => $this->input->post('checkout_remark'),
-		// 	'payment' => $this->input->post('checkout_payment'),
-		// );
-		// $this->session->set_userdata($session_data);
-
 		// Start 寄信給買家、賣家
 		$this->send_order_email($order_id);
 
-		// 取貨付款
-		if ($this->input->post('checkout_payment') == 'cash_on_delivery') {
-
-			// 綠界-信用卡
-		} elseif ($this->input->post('checkout_payment') == 'credit') {
+		// 綠界-信用卡
+		if ($this->input->post('checkout_payment') == 'ecpay') {
 
 			/**
 			 *    Credit信用卡付款產生訂單範例
@@ -192,9 +178,9 @@ class Checkout extends Public_Controller {
 
 				// 正式環境
 				$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-				$obj->HashKey = 'H2jCwAEjf2VVCbrX'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
-				$obj->HashIV = 'e0a5MtggjlNETHFo'; //測試用HashIV，請自行帶入ECPay提供的HashIV
-				$obj->MerchantID = '3004957'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
+				$obj->HashKey = 'ZtzbR917Xc6Dn5qf'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
+				$obj->HashIV = 'ZtzbR917Xc6Dn5qf'; //測試用HashIV，請自行帶入ECPay提供的HashIV
+				$obj->MerchantID = '3382155'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
 				$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
 
 				//基本參數(請依系統規劃自行調整)
@@ -202,32 +188,32 @@ class Checkout extends Public_Controller {
 				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
 				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); //交易時間
 				$obj->Send['TotalAmount'] = $order_total; //交易金額
-				$obj->Send['TradeDesc'] = get_empty_remark($this->input->post('checkout_remark')); //交易描述
+				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: '.$this->input->post('remark')); //交易描述
 				$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式:Credit
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
-				$obj->Send['OrderResultURL'] = base_url() . "store/check_pay/" . $order_number; //付款完成通知回傳的網址
+				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
 				//$obj->Send['ClientBackURL']     = base_url(); //付款完成後，顯示返回商店按鈕
 
 				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
 				//訂單的商品資料
-				// array_push($obj->Send['Items'], array(
-				//     'Name' => "網路訂單",
-				//     'Price' => (int)$price,
-				//     'Currency' => "元",
-				//     'Quantity' => (int) "1筆",
-				//     'URL' => "dedwed"
-				// ));
-				if ($cart = $this->cart->contents()):
-					foreach ($cart as $item):
-						array_push($obj->Send['Items'], array(
-							'Name' => get_product_name($item['id']),
-							'Price' => (int) $item['price'],
-							'Currency' => "元",
-							'Quantity' => (int) $item['qty'],
-							'URL' => "dedwed",
-						));
-					endforeach;
-				endif;
+				array_push($obj->Send['Items'], array(
+				    'Name' => "網購商品",
+				    'Price' => (int)$order_total,
+				    'Currency' => "元",
+				    'Quantity' => (int) "1筆",
+				    'URL' => "dedwed"
+				));
+				// if ($cart = $this->cart->contents()):
+				// 	foreach ($cart as $item):
+				// 		array_push($obj->Send['Items'], array(
+				// 			'Name' => get_product_name($item['id']),
+				// 			'Price' => (int) $item['price'],
+				// 			'Currency' => "元",
+				// 			'Quantity' => (int) $item['qty'],
+				// 			'URL' => "dedwed",
+				// 		));
+				// 	endforeach;
+				// endif;
 				//Credit信用卡分期付款延伸參數(可依系統需求選擇是否代入)
 				//以下參數不可以跟信用卡定期定額參數一起設定
 				$obj->SendExtend['CreditInstallment'] = 0; //分期期數，預設0(不分期)
@@ -248,9 +234,75 @@ class Checkout extends Public_Controller {
 				echo $e->getMessage();
 			}
 
-			// $this->render('store/checkout-credit-callback');
+		// Line Pay
+		} elseif ($this->input->post('checkout_payment')=='line_pay') {
+
+            // Line Pay
+            // New -----
+            $channelId     = "1605255943"; // 通路ID
+            $channelSecret = "b8f35d1420c340b188c3c7affb3ce65b"; // 通路密鑰
+            // Get Base URL path without filename
+            // $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
+            $input = $_POST;
+            // $input['isSandbox'] = (isset($input['isSandbox'])) ? true : false;
+            // $input['isSandbox'] = true;
+            $input['isSandbox'] = false;
+            // Create LINE Pay client
+            $linePay = new \yidas\linePay\Client([
+                'channelId' => $channelId,
+                'channelSecret' => $channelSecret,
+                'isSandbox' => $input['isSandbox'],
+            ]);
+            // Create an order based on Reserve API parameters
+            $orderParams = [
+                "amount" => $order_total,
+                "currency" => 'TWD',
+                "orderId" => $order_number,
+                "packages" => [
+                    [
+                        "id" => "test1",
+                        "amount" => $order_total,
+                        "name" => "package name",
+                        "products" => [
+                            [
+                                "name" => '網購商品',
+                                "quantity" => 1,
+                                "price" => $order_total,
+                                "imageUrl" => 'https://td-stuff.com/assets/uploads/web_logo_td.png',
+                            ],
+                        ],
+                    ],
+                ],
+                "redirectUrls" => [
+                    "confirmUrl" => base_url()."checkout/line_pay_confirm",
+                    "cancelUrl" => base_url(),
+                ],
+                "options" => [
+                    "display" => [
+                        "checkConfirmUrlBrowser" => true,
+                    ],
+                ],
+            ];
+            // Online Reserve API
+            $response = $linePay->request($orderParams);
+            // Check Reserve API result
+            if (!$response->isSuccessful()) {
+                die("<script>alert('ErrorCode {$response['returnCode']}: " . addslashes($response['returnMessage']) . "');history.back();</script>");
+            }
+            // Save the order info to session for confirm
+            $_SESSION['linePayOrder'] = [
+                'transactionId' => (string) $response["info"]["transactionId"],
+                'params' => $orderParams,
+                'isSandbox' => $input['isSandbox'],
+            ];
+            // Save input for next process and next form
+            $_SESSION['config'] = $input;
+            // Redirect to LINE Pay payment URL
+            header('Location: '. $response->getPaymentUrl() );
+
+        }else {
+			redirect(base_url() . 'checkout/success/' . $order_id);
 		}
-		redirect(base_url() . 'checkout/success/' . $order_id);
 	}
 
 	public function success($id) {
@@ -264,6 +316,116 @@ class Checkout extends Public_Controller {
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
 		$this->render('checkout/checkout_success');
 	}
+
+	public function check_pay($order_number)
+    {
+        $rtncode = $_POST['RtnCode'];
+        // echo $rtncode.'<br>';
+        $merchanttradeno = $_POST['MerchantTradeNo'];
+        // $merchanttradeno = substr($merchanttradeno, 0, 14);
+        // echo $merchanttradeno.'<br>';
+        // $order_number = substr($merchanttradeno, 0, 14);
+
+        // 查詢訂單資訊
+        $order_id = 0;
+        $this->db->select('order_id');
+        $this->db->where('order_number', $order_number);
+        $this->db->limit(1);
+        $query = $this->db->get('orders');
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+            $order_id = $row['order_id'];
+        }
+
+        if($rtncode == '1' && $order_id > 0){
+
+            $data = array(
+                'order_pay_status' => 'paid',
+                'order_pay_feedback' => get_empty($merchanttradeno),
+            );
+            $this->db->where('order_id', $order_id);
+            $this->db->update('orders', $data);
+
+            redirect(base_url() . 'checkout/success/' . $order_id);
+        } else {
+            // redirect(base_url() . 'checkout/success/' . $order_id);
+        }
+    }
+
+    public function line_pay_confirm()
+    {
+        // New -----
+        $channelId     = "1605255943"; // 通路ID
+        $channelSecret = "b8f35d1420c340b188c3c7affb3ce65b"; // 通路密鑰
+        // Get saved config
+        $config = $_SESSION['config'];
+        // Create LINE Pay client
+        $linePay = new \yidas\linePay\Client([
+            'channelId' => $channelId,
+            'channelSecret' => $channelSecret,
+            'isSandbox' => ($config['isSandbox']) ? true : false,
+        ]);
+        // Successful page URL
+        $successUrl = base_url();
+        // Get the transactionId from query parameters
+        $transactionId = (string) $_GET['transactionId'];
+        // Get the order from session
+        $order = $_SESSION['linePayOrder'];
+        // Check transactionId (Optional)
+        if ($order['transactionId'] != $transactionId) {
+            die("<script>alert('TransactionId doesn\'t match');location.href=".base_url().";</script>");
+        }
+        // Online Confirm API
+        try {
+            $response = $linePay->confirm($order['transactionId'], [
+                'amount' => (integer) $order['params']['amount'],
+                'currency' => $order['params']['currency'],
+            ]);
+        } catch (\yidas\linePay\exception\ConnectException $e) {
+
+            // Implement recheck process
+            die("Confirm API timeout! A recheck mechanism should be implemented.");
+        }
+        // Save error info if confirm fails
+        if (!$response->isSuccessful()) {
+            $_SESSION['linePayOrder']['confirmCode'] = $response['returnCode'];
+            $_SESSION['linePayOrder']['confirmMessage'] = $response['returnMessage'];
+            $_SESSION['linePayOrder']['isSuccessful'] = false;
+            die("<script>alert('Refund Failed\\nErrorCode: {$_SESSION['linePayOrder']['confirmCode']}\\nErrorMessage: {$_SESSION['linePayOrder']['confirmMessage']}');location.href='{$successUrl}';</script>");
+        }
+        // Code for saving the successful order into your application database...
+        $_SESSION['linePayOrder']['isSuccessful'] = true;
+
+        $rtncode = $response['returnCode'];
+        $return_order_id = $response['info']['orderId'];
+        $order_number = $return_order_id;
+
+        // 查詢訂單資訊
+        $order_id = 0;
+        $this->db->select('order_id');
+        $this->db->where('order_number', $order_number);
+        $this->db->limit(1);
+        $query = $this->db->get('orders');
+        if($query->num_rows()>0){
+            $row = $query->row_array();
+            $order_id = $row['order_id'];
+        }
+
+        if($rtncode == '0000' && $order_id > 0){
+            $update_data = array(
+                'order_pay_status' => 'paid',
+                'order_pay_feedback' => get_empty($transactionId),
+            );
+            $this->db->where('order_id', $order_id);
+            $this->db->update('orders', $update_data);
+
+            redirect(base_url() . 'checkout/success/' . $order_id);
+        } else {
+        	// redirect(base_url() . 'checkout/success/' . $order_id);
+        }
+        // Redirect to successful page
+        // header("Location: {$successUrl}");
+    }
 
 	public function get_store_info() {
 		$this->load->view('checkout/get_store_info');
