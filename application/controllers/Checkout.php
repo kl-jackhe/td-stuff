@@ -179,7 +179,7 @@ class Checkout extends Public_Controller {
 				// 正式環境
 				$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
 				$obj->HashKey = 'ZtzbR917Xc6Dn5qf'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
-				$obj->HashIV = 'ZtzbR917Xc6Dn5qf'; //測試用HashIV，請自行帶入ECPay提供的HashIV
+				$obj->HashIV = 'lpsDZrOpn8dxLSgM'; //測試用HashIV，請自行帶入ECPay提供的HashIV
 				$obj->MerchantID = '3382155'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
 				$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
 
