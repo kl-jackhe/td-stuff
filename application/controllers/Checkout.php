@@ -239,8 +239,8 @@ class Checkout extends Public_Controller {
 
             // Line Pay
             // New -----
-            $channelId     = "1605255943"; // 通路ID
-            $channelSecret = "b8f35d1420c340b188c3c7affb3ce65b"; // 通路密鑰
+            $channelId     = "2000014653"; // 通路ID
+            $channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
             // Get Base URL path without filename
             // $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
             $input = $_POST;
@@ -355,8 +355,8 @@ class Checkout extends Public_Controller {
     public function line_pay_confirm()
     {
         // New -----
-        $channelId     = "1605255943"; // 通路ID
-        $channelSecret = "b8f35d1420c340b188c3c7affb3ce65b"; // 通路密鑰
+        $channelId     = "2000014653"; // 通路ID
+        $channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
         // Get saved config
         $config = $_SESSION['config'];
         // Create LINE Pay client
