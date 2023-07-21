@@ -6,9 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $page_title; ?></title>
-    <!-- <link rel="shortcut icon" href="/favicon.ico"/> -->
     <?php echo $include_style; ?>
   </head>
+  <style>
+    .nav-list>li>a {
+      padding: 0px 15px 0px 15px!important;
+    }
+  </style>
 <body class="skin-blue">
 
 <?php echo $admin_navbar_menu; ?>

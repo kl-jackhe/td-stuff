@@ -648,12 +648,6 @@ function get_expatriate_name($id) {
 	}
 }
 
-function get_random_string($str_len) {
-	$str = 'abcdefghijklmnopqrstuvwxyz0123456789';
-	$shuffled = str_shuffle($str);
-	return substr($shuffled, 0, $str_len);
-}
-
 function check_have_string($string, $text) {
 	if (!empty($string)) {
 		$str1 = $string;

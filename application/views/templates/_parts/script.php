@@ -1,42 +1,21 @@
-<!-- <script src="/node_modules/vue/dist/vue.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script> -->
-<!-- <script src="/node_modules/axios/dist/axios.min.js"></script> -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script> -->
-<!-- <script src="/assets/admin/js/app.js"></script> -->
 <script src="/node_modules/@fancyapps/fancybox/dist/jquery.fancybox.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.js"></script> -->
 <script src="/node_modules/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.min.js"></script> -->
-<!-- 拖曳 -->
-<!-- <script src="/assets/admin/js/jquery.nestable.js"></script> -->
-<!-- <script src="/assets/admin/js/excanvas.min.js"></script> -->
 <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js?v=3.3.7"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
-<script src="/node_modules/chosen-js/chosen.jquery.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.5/chosen.jquery.min.js"></script> -->
-<!-- <script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script> -->
+<!-- <script src="/node_modules/chosen-js/chosen.jquery.min.js"></script> -->
+<script src="/assets/chosen_v1.8.7/chosen.jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-<!-- <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
+<!-- <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script> -->
 <script src="/assets/admin/js/dataTables.bootstrap.min.js"></script>
-<!-- <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script> -->
 <script src="/assets/admin/js/flaty.js"></script>
 <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script> -->
 <script src="/node_modules/moment/min/moment.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script> -->
 <script src="/node_modules/moment/locale/zh-tw.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/locale/zh-tw.js"></script> -->
 <script src="/node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script> -->
 <script src="/node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.zh-TW.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.zh-TW.min.js"></script> -->
 <script src="/node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script> -->
 <script src="/assets/admin/js/bootstrap-formhelpers.js"></script>
 <script src="/node_modules/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
 
 <script>
@@ -277,74 +256,7 @@ function start_chosen() {
 }
 </script>
 
-<!-- <script src="/tinymce/tinymce.min.js"></script>
-<script type="text/javascript">
-
-const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
-
-tinymce.init({
-  selector: 'textarea#product_description',
-  language: 'zh-Hans',
-  plugins: 'importcss searchreplace autolink directionality code visualblocks visualchars image link media table charmap pagebreak nonbreaking insertdatetime advlist lists wordcount charmap quickbars emoticons imagetools',
-  editimage_cors_hosts: ['picsum.photos'],
-  menubar: 'edit view insert format tools table',
-  toolbar: 'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | print pagebreak charmap emoticons | insertfile image media template link',
-  toolbar_sticky: true,
-  toolbar_sticky_offset: isSmallScreen ? 102 : 108,
-  image_class_list: [
-    { title: 'None', value: '' },
-    { title: 'Some class', value: 'class-name' }
-  ],
-  importcss_append: true,
-  file_picker_callback: (callback, value, meta) => {
-    if (meta.filetype === 'file') {
-      callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
-    }
-    if (meta.filetype === 'image') {
-      callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
-    }
-    if (meta.filetype === 'media') {
-      callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
-    }
-  },
-  height: 600,
-  image_title: true,
-  image_advtab: true,
-  automatic_uploads: true,
-  file_picker_types: 'image',
-  file_picker_callback: (cb, value, meta) => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        const id = 'blobid' + (new Date()).getTime();
-        const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-        const base64 = reader.result.split(',')[1];
-        const blobInfo = blobCache.create(id, file, base64);
-        blobCache.add(blobInfo);
-        cb(blobInfo.blobUri(), { title: file.name });
-      });
-      reader.readAsDataURL(file);
-    });
-    input.click();
-  },
-  image_caption: true,
-  quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-  noneditable_class: 'mceNonEditable',
-  toolbar_mode: 'sliding',
-  contextmenu: 'link image table',
-  skin: useDarkMode ? 'oxide-dark' : 'oxide',
-  content_css: useDarkMode ? 'dark' : 'default',
-  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
-});
-</script> -->
-
 <script src="/assets/admin/tinymce4.4.3/tinymce.min.js" type="text/javascript"></script>
-<!-- <script src="/assets/admin/tinymce/tinymce.min.js" type="text/javascript"></script> -->
 <script>
 	tinymce.init( {
     language: 'zh_TW',
@@ -364,34 +276,3 @@ tinymce.init({
     external_plugins: { "filemanager" : "plugins/responsivefilemanager/plugin.min.js"}
 	});
 </script>
-
-<!-- <script src="/assets/admin/ckeditor-full/ckeditor.js" type="text/javascript"></script> -->
-<!-- <script>
-	CKEDITOR.config.contentsCss  = ['https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'];
-	var areas = Array('editor1', 'editor2', 'editor3');
-	$.each(areas, function (i, area) {
-	    CKEDITOR.replace(area, {
-	    	customConfig: '/assets/admin/ckeditor-full/my-config.js',
-	    	on: {
-		        instanceReady: function() {
-		            this.dataProcessor.htmlFilter.addRules( {
-		                elements: {
-		                    img: function( el ) {
-		                        // Add an attribute.
-		                        // if ( !el.attributes.alt )
-		                        // el.attributes.alt = 'An image';
-
-		                        // Add some class.
-		                        el.addClass( 'img-responsive' );
-
-		                    }
-		                }
-		            } );
-		        }
-	    	},
-	    	filebrowserBrowseUrl : '/assets/admin/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-			filebrowserUploadUrl : '/assets/admin/filemanager/dialog.php?type=2&editor=ckeditor&fldr=',
-			filebrowserImageBrowseUrl : '/assets/admin/filemanager/dialog.php?type=1&editor=ckeditor&fldr='
-	    });
-    });
-</script> -->

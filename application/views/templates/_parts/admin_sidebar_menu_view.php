@@ -18,10 +18,22 @@
     </li>
     <li class="<?php if ($current == "order") {echo "active";}?>">
       <a href="/admin/order">
-        <i class="fa fa-list-alt"></i>
+        <i class="fa-solid fa-list-check"></i>
         <span>訂單管理</span>
       </a>
     </li>
+    <li class="<?php if ($current == "sales") {echo "active";}?>">
+      <a href="/admin/sales">
+        <i class="fa-solid fa-file-circle-check"></i>
+        <span>銷售管理</span>
+      </a>
+    <li>
+      <li class="<?php if ($current == "agent") {echo "active";}?>">
+      <a href="/admin/agent">
+        <i class="fa-solid fa-handshake"></i>
+        <span>代言人管理</span>
+      </a>
+    <li>
     <!-- <li class="<?php if ($current == "store") {echo "active";}?>">
       <a href="/admin/store">
         <i class="fa fa-dashboard"></i>
@@ -42,14 +54,14 @@
     </li>
     <li class="<?php if ($current == "posts") {echo "active";}?>">
       <a href="/admin/posts">
-        <i class="fa fa-newspaper-o"></i>
-        <span>最新消息管理</span>
+        <i class="fa-solid fa-newspaper"></i>
+        <span>最新消息</span>
       </a>
     </li>
     <li class="<?php if ($current == "banner") {echo "active";}?>">
       <a href="/admin/banner">
-        <i class="fa fa-sliders"></i>
-        <span>首頁Banner</span>
+        <i class="fas fa-ad"></i>
+        <span>首頁輪播</span>
       </a>
     </li>
     <!-- <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>

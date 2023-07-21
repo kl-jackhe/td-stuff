@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
     <div class="fixed-bottom header_fixed_icon">
-        <!-- <div id="resoult"></div> -->
+        <?if ($agentID == '') {?>
         <div id="fa-facebook-square" class="my-2 icon_pointer">
             <a id="facebook_href" href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
@@ -12,6 +12,7 @@
                 <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
             </a>
         </div>
+        <?}?>
         <div id="fa-bag-shopping" class="my-2 icon_pointer" style="position: ;">
             <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
@@ -25,6 +26,7 @@
         </div>
     </div>
 
+    <?if ($agentID == '') {?>
     <footer id="footer" style="font-size: 14px">
         <!-- <div class="row justify-content-center">
             <div class="col-md-12 text-center" style="padding-bottom: 15px;padding-top: 15px;">
@@ -51,6 +53,7 @@
             </div>
         </div>
     </footer>
+    <?}?>
 
     <!-- MyCart Modal -->
     <div class="modal fade" id="my_cart" tabindex="-1" role="dialog" aria-labelledby="my_cart_title" aria-hidden="true">

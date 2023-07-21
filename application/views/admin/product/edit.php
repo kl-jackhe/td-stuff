@@ -26,6 +26,7 @@
     <div class="col-md-12">
         <div class="form-group">
             <button type="submit" class="btn btn-primary">修改</button>
+            <span class="btn btn-success" onclick="createSingleSales(<?=$product['product_id']?>)">建立銷售頁面</span>
         </div>
     </div>
     <div class="col-md-12">
@@ -303,5 +304,22 @@ function add_unit()
 function add_specification()
 {
   $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+}
+function createSingleSales(product_id) {
+    if (confirm('確定要建立銷售頁面')) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/sales/createSingleSales',
+            data: {
+                product_id: product_id,
+            },
+            success: function(data) {
+                window.location.href = data;
+            },
+            error: function(data) {
+                console.log('Create Error');
+            }
+        })
+    }
 }
 </script>
