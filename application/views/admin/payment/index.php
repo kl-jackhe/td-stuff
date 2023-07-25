@@ -36,6 +36,7 @@
             <th>支付名稱</th>
             <th>描述</th>
             <th>狀態</th>
+            <th>排序</th>
             <th>操作</th>
           </tr>
         </thead>
@@ -50,6 +51,7 @@
               <a href="/admin/payment/update_payment_status/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
               <span>停用</span></a>
             <?}?></td>
+            <td><?=$data['sort']?></td>
 	          <td>
 	            <a href="/admin/payment/edit_payment/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
 	            <!-- <a href="/admin/payment/delete_payment/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->

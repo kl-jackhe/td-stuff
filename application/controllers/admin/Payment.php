@@ -40,6 +40,7 @@ class Payment extends Admin_Controller {
 			'payment_name' => $this->input->post('payment_name'),
 			'payment_info' => $this->input->post('payment_info'),
 			'payment_status' => $this->input->post('payment_status'),
+			'sort' => $this->input->post('sort'),
 			// 'updater_id' => $this->current_user->id,
 			// 'updated_at' => date('Y-m-d H:i:s'),
 		);

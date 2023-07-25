@@ -28,6 +28,10 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="sort"></label>
+            <input type="text" class="form-control" name="sort" value="<?php echo $payment['sort']; ?>" readonly>
+          </div>
+          <div class="form-group">
             <button type="submit" class="btn btn-primary">修改</button>
           </div>
       <?php echo form_close(); ?>

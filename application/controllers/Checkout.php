@@ -9,7 +9,10 @@ class Checkout extends Public_Controller {
 	public function index() {
 		$this->data['page_title'] = '結帳';
 
-		$this->data['payment'] = $this->mysql_model->_select('payment', 'payment_status', '1');
+		$this->db->select('*');
+		$this->db->where('payment_status', 1);
+		$this->db->order_by('sort','asc');
+		$this->data['payment'] = $this->db->get('payment')->result_array();
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 
 		$this->data['user_data']['name'] = '';
