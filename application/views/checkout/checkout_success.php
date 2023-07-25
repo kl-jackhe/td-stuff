@@ -202,15 +202,17 @@ tr:first-child td:first-child {
                 <div class="row justify-content-center py-5">
                     <div class="col-12 col-md-6 text-center">
                         <div class="row">
-                            <div class="col-12 col-md-6 py-2">
-                                <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
-                            </div>
-                            <div class="col-12 col-md-6 py-2">
-                                <a href="https://line.me/R/ti/p/@504bdron" class="btn btn-info btn-block">聯繫客服</a>
-                            </div>
-                            <div class="col-12 py-2">
-                                <a href="/" class="btn btn-primary btn-block">回首頁</a>
-                            </div>
+                            <?if ($agentID == '') {?>
+                                <div class="col-12 col-md-6 py-2">
+                                    <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
+                                </div>
+                                <div class="col-12 col-md-6 py-2">
+                                    <a href="https://line.me/R/ti/p/@504bdron" class="btn btn-info btn-block">聯繫客服</a>
+                                </div>
+                                <div class="col-12 py-2">
+                                    <a href="/" class="btn btn-primary btn-block">回首頁</a>
+                                </div>
+                            <?}?>
                         </div>
                     </div>
                 </div>

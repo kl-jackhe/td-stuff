@@ -201,12 +201,12 @@
         <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
             <div class="header-body">
                 <div class="header-container container m_padding">
+                    <?if ($agentID == '') {?>
                     <div class="header-row py-4 m_padding">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            <?if ($agentID == '') {?>
                             <a href="<?php echo base_url() ?>" class="top_logo_style" style="max-width: 130px;">
                                 <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                             </a>
@@ -241,12 +241,12 @@
                                     </div>
                                 </ul>
                             </div>
-                            <?}?>
                         </nav>
                         <div class="px-4 m_hr_border">
                             <hr style="border-top: 1px solid #988B7A;">
                         </div>
                     </div>
+                    <?}?>
                 </div>
             </div>
         </header>

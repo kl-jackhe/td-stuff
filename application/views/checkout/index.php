@@ -152,12 +152,19 @@ foreach ($this->cart->contents() as $items) {
                                 <tr style="border-top:1px solid dimgray;">
                                     <td><?=$i?></td>
                                     <td>
-                                        <a href="product/view/<?=$items['product_id']?>">
+                                        <?if ($agentID == '') {?>
+                                            <a href="product/view/<?=$items['product_id']?>">
+                                                <?php $image = get_product_combine($items['id'], 'picture');?>
+                                                <?php if ($image != '') {?>
+                                                    <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
+                                                <?php }?>
+                                            </a>
+                                        <?} else {?>
                                             <?php $image = get_product_combine($items['id'], 'picture');?>
                                             <?php if ($image != '') {?>
                                                 <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
                                             <?php }?>
-                                        </a>
+                                        <?}?>
                                     </td>
                                     <td>
                                         <p><?php echo $items['name']; ?></p>
