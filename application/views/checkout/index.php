@@ -421,18 +421,18 @@ $("#wizard").steps({
 </script>
 <script>
     $(document).ready(function() {
-        // $('#phone').keyup(function () {
-        //     if (/[^0-9\.-]/g.test(this.value)) {
-        //         this.value = this.value.replace(/[^0-9\.-]/g, '');
-        //         $(this).val($(this).val().replace(/[^\d].+/, ""));
-        //     }
-        // };
-        $("#phone").on("keypress keyup blur",function (event) {
-            $(this).val($(this).val().replace(/[^\d].+/, ""));
-            if ((event.which < 48 || event.which > 57)) {
-                event.preventDefault();
-            }
+        $('#phone').on('input', function() {
+            var inputValue = $(this).val();
+            inputValue = inputValue.replace(/\D/g, '');
+            inputValue = inputValue.slice(0, 10);
+            $(this).val(inputValue);
         });
+        // $("#phone").on("keypress keyup blur",function (event) {
+        //     $(this).val($(this).val().replace(/[^\d].+/, ""));
+        //     if ((event.which < 48 || event.which > 57)) {
+        //         event.preventDefault();
+        //     }
+        // });
     });
     function select_store_info() {
         set_user_data();
@@ -455,19 +455,20 @@ $("#wizard").steps({
             method: "POST",
             data: { name: $('#name').val(), phone: $('#phone').val(), email: $('#email').val() },
             success: function(data) {
-                // 
+                //
             }
         });
     }
 
     function form_check() {
         var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+        var phone = $('#phone').val();
         if($('#name').val()==''){
             alert('請輸入收件姓名');
             return false;
         }
-        if($('#phone').val()==''){
-            alert('請輸入收件電話');
+        if(phone.length < 10){
+            alert('請輸入完整的收件電話');
             return false;
         }
         if(delivery=='711_pickup_frozen') {
