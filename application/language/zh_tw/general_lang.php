@@ -63,3 +63,9 @@ $lang['product_daily_stock'] = '每日庫存';
 $lang['product_person_buy'] = '限購份數';
 $lang['product_description'] = '備註';
 $lang['product_image'] = '圖片';
+
+$lang['Test'] = '測試';
+$lang['Closure'] = '關閉';
+$lang['OnSale'] = '銷售中';
+$lang['OutSale'] = '停售中';
+$lang['ForSale'] = '待販售';

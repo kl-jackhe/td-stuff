@@ -15,6 +15,9 @@
                     <li role="presentation" class="active">
                         <a href="#general" aria-controls="general" role="tab" data-toggle="tab">基本資料</a>
                     </li>
+                    <li role="presentation">
+                        <a href="#product" aria-controls="product" role="tab" data-toggle="tab">商品資訊</a>
+                    </li>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -22,48 +25,42 @@
                         <div class="row">
                             <?if (!empty($SingleSalesDetail)) {?>
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>ID</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">ID</span>
                                     <input type="text" class="form-control" id="sales_id" value="<?=$SingleSalesDetail['id']?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>商品名稱</label>
-                                    <input type="text" class="form-control" id="product_id" value="<?=$SingleSalesDetail['product_id']?>" readonly>
+                                <div class="input-group">
+                                    <span class="input-group-addon">商品名稱</span>
+                                    <input type="text" class="form-control" id="product_id" value="<?=get_product_name($SingleSalesDetail['product_id'])?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>網址</label>
-                                    <input type="text" class="form-control" id="url" value="<?=$SingleSalesDetail['url']?>" readonly>
+                                <div class="input-group">
+                                    <span class="input-group-addon">狀態</span>
+                                    <input type="text" class="form-control" id="status" value="<?=$this->lang->line($SingleSalesDetail['status'])?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <hr>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">展示日期</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">展示日期</span>
                                     <input type="text" class="form-control datepicker" id="pre_date" value="<?=($SingleSalesDetail['pre_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['pre_date'], 0, 10) : '')?>">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">開始日期</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">開始日期</span>
                                     <input type="text" class="form-control datepicker" id="start_date" value="<?=($SingleSalesDetail['start_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['start_date'], 0, 10) : '')?>">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">結束日期</label>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon">結束日期</span>
                                     <input type="text" class="form-control datepicker" id="end_date" value="<?=($SingleSalesDetail['end_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['end_date'], 0, 10) : '')?>">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>狀態</label>
-                                    <input type="text" class="form-control" id="status" value="<?=$SingleSalesDetail['status']?>">
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -80,7 +77,7 @@
                                     匯入現有代言人 <i class="fa-solid fa-file-import"></i>
                                 </span>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="overflow-x: auto;">
                                 <table class="table table-bordered table-striped table-hover" style="border-radius: 10px;margin-top: 20px;" id="data-table">
                                     <thead>
                                         <tr class="info">
@@ -115,7 +112,7 @@
                                                     <input type="text" id="agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_name']?>" class="form-control">
                                                 </td>
                                                 <td>
-                                                    <p><?=($row['status'] == true ? '啟用中' : '停用中')?></p>
+                                                    <p>狀態：<?=($row['status'] == true ? '啟用中' : '停用中')?></p>
                                                     <p>建立時間：<?=$row['created_at']?></p>
                                                     <p>更新時間：<?=$row['updated_at']?></p>
                                                 </td>
@@ -133,6 +130,9 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="product">
+                        <? require 'product/product_edit.php'; ?>
                     </div>
                 </div>
             </div>

@@ -70,6 +70,12 @@ input.qtyminus {
     <section class="form-section content_auto_h">
         <div class="container-fluid">
             <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h1><?=$this->session->userdata('agent_name')?></h1>
+                    <div class="px-4 m_hr_border">
+                        <hr style="border-top: 1px solid #988B7A;">
+                    </div>
+                </div>
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">

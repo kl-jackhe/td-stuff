@@ -62,6 +62,13 @@ class Sales extends Admin_Controller {
         $this->data['SingleSalesDetail'] = $this->sales_model->getSingleSalesDetail($id);
         $this->data['SingleSalesAgentDetail'] = $this->sales_model->getSingleSalesAgentDetail($id);
         $this->data['AgentList'] = $this->agent_model->getAgentList();
+
+        $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $this->data['SingleSalesDetail']['product_id'], 'row');
+        $this->data['product_unit'] = $this->mysql_model->_select('single_product_unit', 'product_id', $this->data['SingleSalesDetail']['product_id']);
+        $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $this->data['SingleSalesDetail']['product_id']);
+        $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $this->data['SingleSalesDetail']['product_id']);
+
+
         $this->data['page_title'] = '銷售頁面編輯';
         $this->render('admin/sales/edit');
     }
@@ -92,6 +99,100 @@ class Sales extends Admin_Controller {
         );
         $this->db->where('id',$this->input->post('sales_id'));
         $this->db->update('single_sales', $update_data);
+    }
+
+    function create_plan($id) {
+        $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
+        $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $id);
+        $this->load->view('admin/sales/product/product_create_plan', $this->data);
+    }
+
+    function insert_plan() {
+        $data = array(
+            'product_id' => $this->input->post('product_id'),
+            'name' => $this->input->post('product_combine_name'),
+            'price' => $this->input->post('product_combine_price'),
+            'current_price' => $this->input->post('product_combine_current_price'),
+            'picture' => $this->input->post('product_combine_image'),
+            'description' => $this->input->post('product_combine_description'),
+        );
+        $id = $this->mysql_model->_insert('single_product_combine', $data);
+
+        $qty = $this->input->post('plan_qty');
+        $unit = $this->input->post('plan_unit');
+        $specification = $this->input->post('plan_specification');
+        $count = count($qty);
+        for ($i = 0; $i < $count; $i++) {
+            if (!empty($qty)) {
+                $insert_data = array(
+                    'product_id' => $this->input->post('product_id'),
+                    'product_combine_id' => $id,
+                    'qty' => $qty[$i],
+                    'product_unit' => get_empty($unit[$i]),
+                    'product_specification' => get_empty($specification[$i]),
+                );
+                $this->db->insert('single_product_combine_item', $insert_data);
+            }
+        }
+    }
+
+    function edit_plan($id) {
+        $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'id', $id, 'row');
+        $product_id = $this->data['product_combine']['product_id'];
+        $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $product_id, 'row');
+        $this->data['product_unit'] = $this->mysql_model->_select('single_product_unit', 'product_id', $product_id);
+        $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $product_id);
+        $this->data['product_combine_item'] = $this->mysql_model->_select('single_product_combine_item', 'product_combine_id', $this->data['product_combine']['id']);
+
+        $this->load->view('admin/sales/product/product_edit_plan', $this->data);
+    }
+
+    function update_plan($id) {
+        $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'id', $id, 'row');
+
+        $update_data = array(
+            'product_id' => $this->input->post('product_id'),
+            'name' => $this->input->post('product_combine_name'),
+            'price' => $this->input->post('product_combine_price'),
+            'current_price' => $this->input->post('product_combine_current_price'),
+            'picture' => $this->input->post('product_combine_image'),
+            'description' => $this->input->post('product_combine_description'),
+            'type' => $this->input->post('any_specification'),
+            'limit_enable' => $this->input->post('limit_enable'),
+        );
+        $this->db->where('id', $id);
+        $this->db->update('single_product_combine', $update_data);
+
+        $this->db->where('product_combine_id', $id);
+        $this->db->delete('single_product_combine_item');
+
+        $qty = $this->input->post('plan_qty');
+        $unit = $this->input->post('plan_unit');
+        $specification = $this->input->post('plan_specification');
+        $count = count($qty);
+        for ($i = 0; $i < $count; $i++) {
+            if (!empty($qty)) {
+                $insert_data = array(
+                    'product_id' => $this->input->post('product_id'),
+                    'product_combine_id' => $id,
+                    'qty' => $qty[$i],
+                    'product_unit' => get_empty($unit[$i]),
+                    'product_specification' => get_empty($specification[$i]),
+                );
+                $this->db->insert('single_product_combine_item', $insert_data);
+            }
+        }
+        $this->session->set_flashdata('message', '商品更新成功！');
+    }
+
+    function delete_plan($id) {
+        $this->db->where('id', $id);
+        $this->db->delete('single_product_combine');
+
+        $this->db->where('product_combine_id', $id);
+        $this->db->delete('single_product_combine_item');
+
+        redirect($_SERVER['HTTP_REFERER']);
     }
 
 

@@ -57,8 +57,10 @@ class Agent extends Admin_Controller {
 
     function createAgentQuantity() {
         if ($this->input->post('agent_qty') > 0) {
+            $conut = 0;
             for ($i=0; $i < $this->input->post('agent_qty'); $i++) {
                 $repeatedAttempts = 0;
+                $conut++;
                 $agentID = '';
                 do {
                     $agentID = 'A' .  date('ym') . get_random_string(3);
@@ -85,6 +87,7 @@ class Agent extends Admin_Controller {
                         $insertData = array(
                             'single_sales_id' => $this->input->post('sales_id'),
                             'agent_id' => $agentID,
+                            'agent_name' => $conut,
                         );
                         $this->db->insert('single_sales_agent',$insertData);
                         if ($this->db->affected_rows() > 0) {

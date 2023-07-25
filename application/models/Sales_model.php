@@ -26,11 +26,11 @@ class Sales_model extends CI_Model {
         return (!empty($query)? $query : false);
     }
 
-    function getSingleSalesAgentDetail($id) {
+    function getSingleSalesAgentDetail($single_sales_id) {
         $this->db->select('single_sales_agent.id AS single_sales_agent_id,single_sales_id,agent_id,single_sales_agent.name AS single_sales_agent_name,single_sales_agent.cost,single_sales_agent.created_at,single_sales_agent.updated_at');
         $this->db->select('agent.id AS agent_id,agent.name AS agent_name,agent.users_id,agent.status');
         $this->db->join('agent', 'agent.id = single_sales_agent.agent_id');
-        $this->db->where('single_sales_id', $id);
+        $this->db->where('single_sales_id', $single_sales_id);
         $query = $this->db->get('single_sales_agent')->result_array();
         return (!empty($query)? $query : false);
     }
@@ -45,6 +45,15 @@ class Sales_model extends CI_Model {
 
     function checkSingleSalesAgentIsDuplicate($single_sales_id,$agent_id) {
         $this->db->select('id,single_sales_id,agent_id');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where('agent_id', $agent_id);
+        $this->db->limit(1);
+        $row = $this->db->get('single_sales_agent')->row_array();
+        return (!empty($row)? $row : false);
+    }
+
+    function getAgentName($single_sales_id,$agent_id) {
+        $this->db->select('id,name');
         $this->db->where('single_sales_id',$single_sales_id);
         $this->db->where('agent_id', $agent_id);
         $this->db->limit(1);
