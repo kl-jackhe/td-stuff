@@ -282,9 +282,6 @@
         var single_sales_agent_id = $('input[name="single_sales_agent_id[]"]');
         var single_sales_agent_list = [];
         for (i=0;i< single_sales_agent_id.length;i++) {
-            // console.log($('#single_sales_agent_name_' + single_sales_agent_id[i].value).val());
-            // console.log($('#agent_id_' + single_sales_agent_id[i].value).val());
-            // console.log($('#agent_name_' + single_sales_agent_id[i].value).val());
             single_sales_agent_list[i] = {
                 single_sales_agent_id:single_sales_agent_id[i].value,
                 single_sales_agent_name:$('#single_sales_agent_name_' + single_sales_agent_id[i].value).val(),
@@ -292,11 +289,6 @@
                 agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val()
             };
         }
-        // console.log(single_sales_agent_list);
-        // console.log($('#sales_id').val());
-        // console.log($('#pre_date').val());
-        // console.log($('#start_date').val());
-        // console.log($('#end_date').val());
         if ($('#start_date').val() != '' && $('#end_date').val() != '') {
             if ($('#start_date').val() > $('#end_date').val()) {
                alert('開始日期大於結束日期！請修改正確日期。');
@@ -361,4 +353,32 @@
             });
         }
     }
+
+    $(document).ready(function () {
+        if (location.hash) {
+            $('a[href=\'' + location.hash + '\']').tab('show');
+        }
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('a[href="' + activeTab + '"]').tab('show');
+        }
+        $('body').on('click', 'a[data-toggle=\'tab\']', function (e) {
+            e.preventDefault()
+            var tab_name = this.getAttribute('href')
+            if (history.pushState) {
+                history.pushState(null, null, tab_name)
+            } else {
+                location.hash = tab_name
+            }
+            localStorage.setItem('activeTab', tab_name)
+
+            $(this).tab('show');
+            return false;
+        });
+        $(window).on('popstate', function () {
+            var anchor = location.hash ||
+                $('a[data-toggle=\'tab\']').first().attr('href');
+            $('a[href=\'' + anchor + '\']').tab('show');
+        });
+    });
 </script>

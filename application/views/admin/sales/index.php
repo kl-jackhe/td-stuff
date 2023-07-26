@@ -29,18 +29,30 @@
             <div class="tabbable">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
-                        <a href="#history" aria-controls="history" role="tab" data-toggle="tab">銷售紀錄</a>
+                        <a href="#Test" aria-controls="Test" role="tab" data-toggle="tab">測試中</a>
                     </li>
                     <li role="presentation">
-                        <a href="#page" aria-controls="page" role="tab" data-toggle="tab">銷售頁面</a>
+                        <a href="#ForSale" aria-controls="ForSale" role="tab" data-toggle="tab">展示中</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#OnSale" aria-controls="OnSale" role="tab" data-toggle="tab">銷售中</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#History" aria-controls="History" role="tab" data-toggle="tab">歷史</a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="history">
-                        <? require 'history.php'; ?>
+                    <div role="tabpanel" class="tab-pane active" id="Test">
+                        <? require 'tag_test.php'; ?>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="page">
-                        <? require 'page.php'; ?>
+                    <div role="tabpanel" class="tab-pane" id="ForSale">
+                        <? require 'tag_forsale.php'; ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="OnSale">
+                        <? require 'tag_onsale.php'; ?>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="History">
+                        <? require 'tag_history.php'; ?>
                     </div>
                 </div>
             </div>
