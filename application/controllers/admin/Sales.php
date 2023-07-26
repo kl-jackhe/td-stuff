@@ -101,6 +101,15 @@ class Sales extends Admin_Controller {
         $this->db->update('single_sales', $update_data);
     }
 
+    function updateSingleSalesStatus() {
+        $update_data = array(
+            'status' => $this->input->post('status'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        );
+        $this->db->where('id',$this->input->post('id'));
+        $this->db->update('single_sales', $update_data);
+    }
+
     function create_plan($id) {
         $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
         $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $id);

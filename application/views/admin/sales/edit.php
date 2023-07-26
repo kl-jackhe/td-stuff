@@ -18,6 +18,19 @@
                     <li role="presentation">
                         <a href="#product" aria-controls="product" role="tab" data-toggle="tab">商品資訊</a>
                     </li>
+                    <?if (!empty($SingleSalesDetail)) {
+                        $status = array('Closure','OutSale','ForSale','OnSale');
+                        $btn_class = array('btn-danger','btn-warning','btn-info','btn-success');
+                        for ($i=0;$i<count($status);$i++) {
+                            if ($status[$i] != $SingleSalesDetail['status']) {?>
+                                <li style="float: right;margin-left: 10px;font-weight: bold;" 
+                                class="btn <?=$btn_class[$i]?>" 
+                                onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>')">
+                                    <?=$this->lang->line($status[$i])?>
+                                </li>
+                            <?}
+                        }
+                    }?>
                 </ul>
                 <!-- Tab panes -->
                 <div class="tab-content">
@@ -269,9 +282,9 @@
         var single_sales_agent_id = $('input[name="single_sales_agent_id[]"]');
         var single_sales_agent_list = [];
         for (i=0;i< single_sales_agent_id.length;i++) {
-            console.log($('#single_sales_agent_name_' + single_sales_agent_id[i].value).val());
-            console.log($('#agent_id_' + single_sales_agent_id[i].value).val());
-            console.log($('#agent_name_' + single_sales_agent_id[i].value).val());
+            // console.log($('#single_sales_agent_name_' + single_sales_agent_id[i].value).val());
+            // console.log($('#agent_id_' + single_sales_agent_id[i].value).val());
+            // console.log($('#agent_name_' + single_sales_agent_id[i].value).val());
             single_sales_agent_list[i] = {
                 single_sales_agent_id:single_sales_agent_id[i].value,
                 single_sales_agent_name:$('#single_sales_agent_name_' + single_sales_agent_id[i].value).val(),
@@ -279,11 +292,11 @@
                 agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val()
             };
         }
-        console.log(single_sales_agent_list);
-        console.log($('#sales_id').val());
-        console.log($('#pre_date').val());
-        console.log($('#start_date').val());
-        console.log($('#end_date').val());
+        // console.log(single_sales_agent_list);
+        // console.log($('#sales_id').val());
+        // console.log($('#pre_date').val());
+        // console.log($('#start_date').val());
+        // console.log($('#end_date').val());
         if ($('#start_date').val() != '' && $('#end_date').val() != '') {
             if ($('#start_date').val() > $('#end_date').val()) {
                alert('開始日期大於結束日期！請修改正確日期。');
@@ -327,5 +340,25 @@
           // 複製失敗時處理錯誤
           console.error("複製連結失敗: ", error);
         });
+    }
+
+    function updateSingleSalesStatus(id,status) {
+        if (confirm('確定要變更狀態嗎？')) {
+            $.ajax({
+                type: "POST",
+                url: '/admin/sales/updateSingleSalesStatus',
+                data: {
+                    id: id,
+                    status: status,
+                },
+                success: function(data) {
+                    alert('更新成功！');
+                    location.reload();
+                },
+                error: function(data) {
+                    console.log('Create Error');
+                }
+            });
+        }
     }
 </script>

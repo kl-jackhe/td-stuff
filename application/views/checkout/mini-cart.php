@@ -96,10 +96,14 @@
                     </div>
                 </div>
                 <div class="col-8 py-2 px-0">
-                    <?php $image = get_product_combine($items['id'], 'picture');?>
-                    <?php if ($image != '') {?>
-                    <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
-                    <?php }?>
+                    <?//$image = get_product_combine($items['id'], 'picture');?>
+                    <?//php $image = ?>
+                    <?//php if ($image != '') {?>
+                    <!-- <img style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?//php echo $items['name']; ?>"> -->
+                    <?//php }?>
+                    <?if ($items['image'] != '') {?>
+                        <img style="width: 100%;" src="/assets/uploads/<?=$items['image']?>" alt="<?$items['name']; ?>">
+                    <?}?>
                 </div>
             </div>
         </div>

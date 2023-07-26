@@ -35,14 +35,6 @@ class Sales_model extends CI_Model {
         return (!empty($query)? $query : false);
     }
 
-    function getSingleSalesProductID($id) {
-        $this->db->select('product_id');
-        $this->db->where('id',$id);
-        $this->db->limit(1);
-        $row = $this->db->get('single_sales')->row_array();
-        return (!empty($row)? $row : false);
-    }
-
     function checkSingleSalesAgentIsDuplicate($single_sales_id,$agent_id) {
         $this->db->select('id,single_sales_id,agent_id');
         $this->db->where('single_sales_id',$single_sales_id);
@@ -59,6 +51,15 @@ class Sales_model extends CI_Model {
         $this->db->limit(1);
         $row = $this->db->get('single_sales_agent')->row_array();
         return (!empty($row)? $row : false);
+    }
+
+    function updateSingleSalesStatus($id,$status) {
+        $update_data = array(
+            'status' => $status,
+            'updated_at' => date('Y-m-d H:i:s'),
+        );
+        $this->db->where('id',$id);
+        $this->db->update('single_sales', $update_data);
     }
 
 }

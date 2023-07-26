@@ -29,13 +29,6 @@ class Cart extends Public_Controller {
 
 		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
 		$price = $this_product_combine['current_price'];
-		$image = '';
-		// if($this_product['product_image']!=''){
-		// 	$image = $this_product['product_image'];
-		// }
-		// if($this_product_combine['picture']!=''){
-		// 	$image = $this_product_combine['picture'];
-		// }
 		if (!empty($specification_qty)) {
 			foreach ($specification_qty as $row) {
 				if ($row != 0) {
@@ -57,26 +50,60 @@ class Cart extends Public_Controller {
 				'specification_id' => $specification_id_array,
 				'specification_qty' => $specification_qty_array,
 			),
-			// 'image' => $image,
+			'image' => $this_product_combine['picture'],
 			'options' => array(
 				'time' => get_random_string(15),
 			),
 		);
 		$rowid = $this->cart->insert($insert_data);
+		if ($rowid) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-		// $rowid = get_random_string(15);
-		// $insert_data = array(
-		// 	'session_id' => $this->session_id,
-		// 	'rowid' => $rowid,
-		// 	'product_id' => $this_product_combine['product_id'],
-		// 	'id' => $this_product_combine['id'],
-		// 	'name' => $name,
-		// 	'price' => $price,
-		// 	'qty' => $qty,
-		// 	'subtotal' => $price*$qty,
-		// 	'time' => get_random_string(15),
-		// );
-		// $this->mysql_model->_insert('cart', $insert_data);
+	function add_single_sales_combine() {
+		$i = 0;
+		$specification_name = $this->input->post('specification_name');
+		$specification_qty = $this->input->post('specification_qty');
+		$specification_id = $this->input->post('specification_id');
+
+		$combine_id = $this->input->post('combine_id');
+		$qty = $this->input->post('qty');
+
+		$this_product_combine = $this->mysql_model->_select('single_product_combine', 'id', $combine_id, 'row');
+		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
+
+		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
+		$price = $this_product_combine['current_price'];
+		if (!empty($specification_qty)) {
+			foreach ($specification_qty as $row) {
+				if ($row != 0) {
+					$specification_name_array[] = $specification_name[$i];
+					$specification_id_array[] = $specification_id[$i];
+					$specification_qty_array[] = $row;
+				}
+				$i++;
+			}
+		}
+		$insert_data = array(
+			'product_id' => $this_product_combine['product_id'],
+			'id' => $this_product_combine['id'],
+			'name' => $name,
+			'price' => $price,
+			'qty' => $qty,
+			'specification' => array(
+				'specification_name' => $specification_name_array,
+				'specification_id' => $specification_id_array,
+				'specification_qty' => $specification_qty_array,
+			),
+			'image' => $this_product_combine['picture'],
+			'options' => array(
+				'time' => get_random_string(15),
+			),
+		);
+		$rowid = $this->cart->insert($insert_data);
 		if ($rowid) {
 			return true;
 		} else {
@@ -90,19 +117,6 @@ class Cart extends Public_Controller {
 			'qty' => $this->input->post('qty'),
 		);
 		$this->cart->update($data);
-
-		// if($this->input->post('qty')>0){
-		// 	$data = array(
-		//         'qty' => $this->input->post('qty'),
-		//     );
-		//     $this->db->where('session_id', $this->session_id);
-		//     $this->db->where('rowid ', $this->input->post('rowid'));
-		//     $this->db->update('cart', $data);
-		// } else {
-		// 	$this->db->where('session_id', $this->session_id);
-		// 	$this->db->where('rowid ', $this->input->post('rowid'));
-		// 	$this->db->delete('cart');
-		// }
 	}
 
 	public function update_price() {
@@ -119,17 +133,10 @@ class Cart extends Public_Controller {
 			'qty' => 0,
 		);
 		$this->cart->update($data);
-
-		// $this->db->where('session_id', $this->session_id);
-		// $this->db->where('rowid ', $this->input->post('rowid'));
-		// $this->db->delete('cart');
 	}
 
 	public function remove_all() {
 		$this->cart->destroy();
-
-		// $this->db->where('session_id', $this->session_id);
-		// $this->db->delete('cart');
 	}
 
 	public function check_cart_is_empty() {
@@ -139,14 +146,6 @@ class Cart extends Public_Controller {
 				$count++;
 			}
 		}
-
-		// $this->db->where('session_id', $this->session_id);
-		// $query = $this->db->get('cart');
-		// if ($query->num_rows() > 0) {
-		// 	foreach ($query->result_array() as $row) {
-		// 		$count++;
-		// 	}
-		// }
 		echo $count;
 	}
 

@@ -2,7 +2,7 @@
     <section class="form-section content_auto_h">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                此連結已失效！
+                <h1>此連結已失效！</h1>
             </div>
         </div>
     </section>

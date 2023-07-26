@@ -34,10 +34,8 @@ $route['coupon/delete/(:num)']           = 'pos/delete_coupon/$1';
 $route['admin/export/(:any)']            = 'admin/export/index/$1';
 $route['backup_db']                      = 'others/backup_db';
 
+$route['SingleSales/checkSingleSalesDate'] = 'SingleSales/checkSingleSalesDate';
 $route['SingleSales/(:any)'] 			 = 'SingleSales/index/$1';
-$route['singlesales/(:any)'] 			 = 'singlesales/index/$1';
-$route['singleSales/(:any)'] 			 = 'singleSales/index/$1';
-$route['Singlesales/(:any)'] 			 = 'Singlesales/index/$1';
 
 //////////////////////////////////////////////////////////////////////////////////////
 
