@@ -15,9 +15,9 @@
                     <li role="presentation" class="active">
                         <a href="#general" aria-controls="general" role="tab" data-toggle="tab">基本資料</a>
                     </li>
-                    <li role="presentation">
+                    <!-- <li role="presentation">
                         <a href="#product" aria-controls="product" role="tab" data-toggle="tab">商品資訊</a>
-                    </li>
+                    </li> -->
                     <?if (!empty($SingleSalesDetail)) {
                         $status = array('Closure','OutSale','ForSale','OnSale');
                         $btn_class = array('btn-danger','btn-warning','btn-info','btn-success');

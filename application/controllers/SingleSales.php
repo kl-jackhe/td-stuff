@@ -28,8 +28,10 @@ class SingleSales extends Public_Controller {
 			$this->session->set_userdata($session_data);
 			$this->data['single_sales'] = $row;
 			$this->data['product'] = $this->product_model->getSingleProduct($row['product_id']);
-			$this->data['specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $row['product_id']);
-			$this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $row['product_id']);
+			$this->data['specification'] = $this->mysql_model->_select('product_specification', 'product_id', $row['product_id']);
+			$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $row['product_id']);
+			// $this->data['specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $row['product_id']);
+			// $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $row['product_id']);
 			$this->render('single_sales/index');
 		} else {
 			$this->render('single_sales/error');
