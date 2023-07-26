@@ -325,7 +325,7 @@ function get_payment($data) {
 		return "信用卡";
 		break;
 	case 'cash_on_delivery':
-		return "餐到付款";
+		return "貨到付款";
 		break;
 	case 'line_pay':
 		return "Line Pay";
