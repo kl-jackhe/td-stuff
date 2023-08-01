@@ -287,7 +287,7 @@ function add_cart(combine_id) {
     var specification_id = $("input[name='"+ combine_id + "specification_id[]']").map(function(){return $(this).val();}).get();
     var specification_qty = $("input[name='"+ combine_id + "specification_qty[]']").map(function(){return $(this).val();}).get();
     $.ajax({
-        url: "/cart/add_single_sales_combine",
+        url: "/cart/add_combine",
         method: "POST",
         data: {
             combine_id: combine_id,

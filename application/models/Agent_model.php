@@ -22,4 +22,11 @@ class Agent_model extends CI_Model {
         return (!empty($query)? $query : false);
     }
 
+    function getAgentName($agent_id) {
+        $this->db->select('id,name');
+        $this->db->where('id', $agent_id);
+        $this->db->limit(1);
+        $row = $this->db->get('agent')->row_array();
+        return (!empty($row)? $row['name'] : '');
+    }
 }

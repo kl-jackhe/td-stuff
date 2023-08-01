@@ -23,9 +23,7 @@
                         $btn_class = array('btn-danger','btn-warning','btn-info','btn-success');
                         for ($i=0;$i<count($status);$i++) {
                             if ($status[$i] != $SingleSalesDetail['status']) {?>
-                                <li style="float: right;margin-left: 10px;font-weight: bold;" 
-                                class="btn <?=$btn_class[$i]?>" 
-                                onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>')">
+                                <li style="float: right;margin-left: 10px;font-weight: bold;" class="btn <?=$btn_class[$i]?>" onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>')">
                                     <?=$this->lang->line($status[$i])?>
                                 </li>
                             <?}
@@ -99,6 +97,7 @@
                                             <th>銷售網址</th>
                                             <th>用戶ID</th>
                                             <th>用戶名稱</th>
+                                            <th>利潤百分比</th>
                                             <th>狀態</th>
                                         </tr>
                                     </thead>
@@ -107,10 +106,12 @@
                                         $count = 0;
                                         foreach ($SingleSalesAgentDetail as $row) {
                                             $count++;?>
-                                            <input type="hidden" name="single_sales_agent_id[]" value="<?=$row['single_sales_agent_id']?>">
-                                            <input type="hidden" id="agent_id_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_id']?>">
                                             <tr>
-                                                <td><?=$count?></td>
+                                                <td>
+                                                    <input type="hidden" name="single_sales_agent_id[]" value="<?=$row['single_sales_agent_id']?>">
+                                                    <input type="hidden" id="agent_id_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_id']?>">
+                                                    <?=$count?>
+                                                </td>
                                                 <td>
                                                     <input type="text" id="single_sales_agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['single_sales_agent_name']?>" class="form-control">
                                                 </td>
@@ -123,6 +124,12 @@
                                                 <td><?=$row['agent_id']?></td>
                                                 <td>
                                                     <input type="text" id="agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_name']?>" class="form-control">
+                                                </td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <input type="number" max="100" min="0" id="profit_percentage_<?=$row['single_sales_agent_id']?>" value="<?=$row['profit_percentage']?>" class="form-control">
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <p>狀態：<?=($row['status'] == true ? '啟用中' : '停用中')?></p>
@@ -280,21 +287,26 @@
 
     function updateEditAllData() {
         var single_sales_agent_id = $('input[name="single_sales_agent_id[]"]');
+        console.log(single_sales_agent_id);
         var single_sales_agent_list = [];
         for (i=0;i< single_sales_agent_id.length;i++) {
-            single_sales_agent_list[i] = {
+            item = {
                 single_sales_agent_id:single_sales_agent_id[i].value,
                 single_sales_agent_name:$('#single_sales_agent_name_' + single_sales_agent_id[i].value).val(),
                 agent_id:$('#agent_id_' + single_sales_agent_id[i].value).val(),
-                agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val()
+                agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val(),
+                profit_percentage:$('#profit_percentage_' + single_sales_agent_id[i].value).val()
             };
+            single_sales_agent_list.push(item);
         }
+        console.log(single_sales_agent_list);
         if ($('#start_date').val() != '' && $('#end_date').val() != '') {
             if ($('#start_date').val() > $('#end_date').val()) {
                alert('開始日期大於結束日期！請修改正確日期。');
                return;
             }
         }
+
         $.ajax({
             type: "POST",
             url: '/admin/sales/updateEditAllData',

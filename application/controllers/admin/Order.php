@@ -5,6 +5,8 @@ class Order extends Admin_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('order_model');
+		$this->load->model('sales_model');
+		$this->load->model('agent_model');
 	}
 
 	public function index() {

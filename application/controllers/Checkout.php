@@ -43,6 +43,11 @@ class Checkout extends Public_Controller {
 	public function save_order() {
 		$this->data['page_title'] = '結帳';
 
+		if ($this->session->userdata('single_sales_status') == 'Test') {
+			$this->render('single_sales/error');
+			return;
+		}
+
 		$date = date('Y-m-d');
 		$y = substr($date, 0, 4);
 		$m = substr($date, 5, 2);
@@ -102,6 +107,8 @@ class Checkout extends Public_Controller {
 			'order_pay_status' => $order_pay_status,
 			'order_step' => 'confirm',
 			'order_remark' => $this->input->post('remark'),
+			'single_sales_id' => $this->session->userdata('single_sales_id'),
+			'agent_id' => $this->session->userdata('agent_id'),
 			// 'creator_id' => $this->ion_auth->user()->row()->id,
 			'created_at' => $created_at,
 		);

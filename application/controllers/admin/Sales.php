@@ -4,16 +4,86 @@ class Sales extends Admin_Controller {
 
 	function __construct() {
 		parent::__construct();
+        $this->load->model('order_model');
         $this->load->model('sales_model');
         $this->load->model('agent_model');
 	}
 
-    function index()
+    function page()
     {
-        $this->data['page_title'] = '銷售管理';
+        $this->data['page_title'] = '銷售頁面';
+        $this->render('admin/sales/page/index');
+    }
+
+    function pageAjaxData() {
+        $conditions = array();
+        $page = $this->input->get('page');
+        if (!$page) {
+            $offset = 0;
+        } else {
+            $offset = $page;
+        }
+        $status = $this->input->get('status');
+        if (!empty($status)) {
+            $conditions['search']['status'] = $status;
+        }
+        //set start and limit
+        $conditions['start'] = $offset;
+        $conditions['limit'] = $this->perPage;
+        //get posts data
+        $this->data['SingleSales'] = $this->sales_model->getRows($conditions);
+        $this->data['SingleSalesAgent'] = $this->sales_model->getSingleSalesAgentList();
+        $this->data['SingleStatus'] = $this->input->get('status');
+        //load the view
+        $this->load->view('admin/sales/page/ajax-data', $this->data, false);
+    }
+
+    function history()
+    {
+        $this->data['page_title'] = '銷售紀錄';
         $this->data['SingleSales'] = $this->sales_model->getSingleSalesList();
         $this->data['SingleSalesAgent'] = $this->sales_model->getSingleSalesAgentList();
-        $this->render('admin/sales/index');
+        $this->render('admin/sales/history/index');
+    }
+
+    function ajaxData() {
+        $conditions = array();
+        $page = $this->input->get('page');
+        if (!$page) {
+            $offset = 0;
+        } else {
+            $offset = $page;
+        }
+        $keywords = $this->input->get('keywords');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+        if (!empty($keywords)) {
+            $conditions['search']['keywords'] = $keywords;
+        }
+        if (!empty($start_date)) {
+            $conditions['search']['start_date'] = $start_date;
+        }
+        if (!empty($end_date)) {
+            $conditions['search']['end_date'] = $end_date;
+        }
+        //total rows count
+        $conditions['returnType'] = 'count';
+        $totalRec = $this->order_model->getSalesHistoryRows($conditions);
+        //pagination configuration
+        $config['target'] = '#datatable';
+        $config['base_url'] = base_url() . 'admin/sales/ajaxData';
+        $config['total_rows'] = $totalRec;
+        $config['per_page'] = $this->perPage;
+        $config['link_func'] = 'searchFilter';
+        $this->ajax_pagination_admin->initialize($config);
+        //set start and limit
+        $conditions['start'] = $offset;
+        $conditions['limit'] = $this->perPage;
+        //get posts data
+        $conditions['returnType'] = '';
+        $this->data['orders'] = $this->order_model->getSalesHistoryRows($conditions);
+        //load the view
+        $this->load->view('admin/sales/history/ajax-data', $this->data, false);
     }
 
     function createSingleSales() {
@@ -62,15 +132,12 @@ class Sales extends Admin_Controller {
         $this->data['SingleSalesDetail'] = $this->sales_model->getSingleSalesDetail($id);
         $this->data['SingleSalesAgentDetail'] = $this->sales_model->getSingleSalesAgentDetail($id);
         $this->data['AgentList'] = $this->agent_model->getAgentList();
-
         $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $this->data['SingleSalesDetail']['product_id'], 'row');
         $this->data['product_unit'] = $this->mysql_model->_select('single_product_unit', 'product_id', $this->data['SingleSalesDetail']['product_id']);
         $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $this->data['SingleSalesDetail']['product_id']);
         $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $this->data['SingleSalesDetail']['product_id']);
-
-
         $this->data['page_title'] = '銷售頁面編輯';
-        $this->render('admin/sales/edit');
+        $this->render('admin/sales/page/edit');
     }
 
     function updateEditAllData() {
@@ -85,8 +152,10 @@ class Sales extends Admin_Controller {
                 $this->db->update('agent', $update_data);
                 $update_data = array(
                     'name' => $row['single_sales_agent_name'],
+                    'profit_percentage' => $row['profit_percentage'],
                     'updated_at' => date('Y-m-d H:i:s'),
                 );
+                $this->db->where('single_sales_id',$this->input->post('sales_id'));
                 $this->db->where('id',$row['single_sales_agent_id']);
                 $this->db->update('single_sales_agent', $update_data);
             }
@@ -113,7 +182,7 @@ class Sales extends Admin_Controller {
     function create_plan($id) {
         $this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
         $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $id);
-        $this->load->view('admin/sales/product/product_create_plan', $this->data);
+        $this->load->view('admin/sales/page/product/product_create_plan', $this->data);
     }
 
     function insert_plan() {
@@ -126,7 +195,6 @@ class Sales extends Admin_Controller {
             'description' => $this->input->post('product_combine_description'),
         );
         $id = $this->mysql_model->_insert('single_product_combine', $data);
-
         $qty = $this->input->post('plan_qty');
         $unit = $this->input->post('plan_unit');
         $specification = $this->input->post('plan_specification');
@@ -153,7 +221,7 @@ class Sales extends Admin_Controller {
         $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $product_id);
         $this->data['product_combine_item'] = $this->mysql_model->_select('single_product_combine_item', 'product_combine_id', $this->data['product_combine']['id']);
 
-        $this->load->view('admin/sales/product/product_edit_plan', $this->data);
+        $this->load->view('admin/sales/page/product/product_edit_plan', $this->data);
     }
 
     function update_plan($id) {

@@ -126,4 +126,59 @@ class Order_model extends CI_Model {
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
+	function getOrderProductQTY($single_sales_id, $agent_id='') {
+		$this->db->select_sum('order_item_qty');
+		$this->db->join('order_item','order_item.order_id = orders.order_id');
+		$this->db->where('order_step != ','order_cancel');
+		$this->db->where('order_item_price', 0);
+		$this->db->where('single_sales_id', $single_sales_id);
+		if ($agent_id != '') {
+			$this->db->where('agent_id', $agent_id);
+		}
+		$row = $this->db->get('orders')->row_array();
+		return (!empty($row)? ($row['order_item_qty'] > 0 ? $row['order_item_qty'] : 0 ) : 0);
+	}
+
+	function getOrderTotalAmount($single_sales_id, $agent_id='') {
+		$this->db->select_sum('order_discount_total');
+		$this->db->where('order_step != ','order_cancel');
+		$this->db->where('single_sales_id', $single_sales_id);
+		if ($agent_id != '') {
+			$this->db->where('agent_id', $agent_id);
+		}
+		$row = $this->db->get('orders')->row_array();
+		return (!empty($row)? ($row['order_discount_total'] > 0 ? $row['order_discount_total'] : 0 ) : 0);
+	}
+
+	function getSalesHistoryRows($params = array()) {
+		$this->db->select('*');
+		$this->db->from('orders');
+		$this->db->order_by("order_id", "desc");
+		if (!empty($params['search']['keywords'])) {
+			$this->db->group_start();
+			$this->db->like('order_number', $params['search']['keywords']);
+			$this->db->or_like('customer_name', $params['search']['keywords']);
+			$this->db->or_like('customer_phone', $params['search']['keywords']);
+			$this->db->group_end();
+		}
+		if (!empty($params['search']['start_date'])) {
+			$this->db->where('order_date >=', $params['search']['start_date']);
+		}
+		if (!empty($params['search']['end_date'])) {
+			$this->db->where('order_date <=', $params['search']['end_date']);
+		}
+		$this->db->where('single_sales_id !=', '');
+		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+			$this->db->limit($params['limit'], $params['start']);
+		} elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+			$this->db->limit($params['limit']);
+		}
+		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
+			$result = $this->db->count_all_results();
+		} else {
+			$query = $this->db->get();
+			$result = ($query->num_rows() > 0) ? $query->result_array() : false;
+		}
+		return $result;
+	}
 }

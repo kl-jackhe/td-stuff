@@ -27,38 +27,33 @@
     <div class="col-md-12">
         <div class="content-box-large">
             <div class="tabbable">
+                <input type="hidden" id="status" value="">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
-                        <a href="#Test" aria-controls="Test" role="tab" data-toggle="tab">測試中</a>
+                        <a href="#Test" aria-controls="Test" role="tab" data-toggle="tab" onclick="searchTagStatus('Test')">測試中</a>
                     </li>
                     <li role="presentation">
-                        <a href="#ForSale" aria-controls="ForSale" role="tab" data-toggle="tab">展示中</a>
+                        <a href="#ForSale" aria-controls="ForSale" role="tab" data-toggle="tab" onclick="searchTagStatus('ForSale')">展示中</a>
                     </li>
                     <li role="presentation">
-                        <a href="#OnSale" aria-controls="OnSale" role="tab" data-toggle="tab">銷售中</a>
+                        <a href="#OnSale" aria-controls="OnSale" role="tab" data-toggle="tab" onclick="searchTagStatus('OnSale')">銷售中</a>
                     </li>
                     <li role="presentation">
-                        <a href="#History" aria-controls="History" role="tab" data-toggle="tab">歷史</a>
+                        <a href="#History" aria-controls="History" role="tab" data-toggle="tab" onclick="searchTagStatus('History')">歷史</a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="Test">
-                        <? require 'tag_test.php'; ?>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="ForSale">
-                        <? require 'tag_forsale.php'; ?>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="OnSale">
-                        <? require 'tag_onsale.php'; ?>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="History">
-                        <? require 'tag_history.php'; ?>
-                    </div>
+                    <div role="tabpanel" class="tab-pane active" id="Test"></div>
+                    <div role="tabpanel" class="tab-pane" id="ForSale"></div>
+                    <div role="tabpanel" class="tab-pane" id="OnSale"></div>
+                    <div role="tabpanel" class="tab-pane" id="History"></div>
+                    <?php require 'ajax-data.php';?>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         if (location.hash) {
@@ -77,7 +72,6 @@
                 location.hash = tab_name
             }
             localStorage.setItem('activeTab', tab_name)
-
             $(this).tab('show');
             return false;
         });
@@ -86,5 +80,12 @@
                 $('a[data-toggle=\'tab\']').first().attr('href');
             $('a[href=\'' + anchor + '\']').tab('show');
         });
+        status = activeTab.replace('#', '');
+        searchTagStatus(status);
     });
+
+    function searchTagStatus(status) {
+        $('#status').val(status);
+        searchFilterSales();
+    }
 </script>

@@ -21,7 +21,7 @@ class Agent extends Admin_Controller {
             $repeatedAttempts = 0;
             $agentID = '';
             do {
-                $agentID = 'A' .  date('ym') . get_random_string(3);
+                $agentID = 'A' .  date('md') . get_random_string(3);
                 $this->db->select('id');
                 $this->db->where('id',$agentID);
                 $this->db->limit(1);
@@ -63,7 +63,7 @@ class Agent extends Admin_Controller {
                 $conut++;
                 $agentID = '';
                 do {
-                    $agentID = 'A' .  date('ym') . get_random_string(3);
+                    $agentID = 'A' .  date('md') . get_random_string(3);
                     $this->db->select('id');
                     $this->db->where('id',$agentID);
                     $this->db->limit(1);
@@ -87,7 +87,7 @@ class Agent extends Admin_Controller {
                         $insertData = array(
                             'single_sales_id' => $this->input->post('sales_id'),
                             'agent_id' => $agentID,
-                            'agent_name' => $conut,
+                            'name' => $conut,
                         );
                         $this->db->insert('single_sales_agent',$insertData);
                         if ($this->db->affected_rows() > 0) {

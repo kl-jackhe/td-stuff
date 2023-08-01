@@ -1,5 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
-<?php $current = $this->uri->segment(2);?>
+<?php $current = $this->uri->segment(2);
+$sales_current = $this->uri->segment(3);?>
 <!-- BEGIN Sidebar -->
 <div id="sidebar" class="navbar-collapse collapse sidebar-fixed">
   <!-- BEGIN Navlist -->
@@ -22,11 +23,20 @@
         <span>訂單管理</span>
       </a>
     </li>
-    <li class="<?php if ($current == "sales") {echo "active";}?>">
-      <a href="/admin/sales">
+    <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
+      <a href="#" class="dropdown-toggle">
         <i class="fa-solid fa-file-circle-check"></i>
         <span>銷售管理</span>
+        <b class="arrow fa fa-angle-right"></b>
       </a>
+      <ul class="submenu">
+        <li <?php if ($sales_current == "page") {echo 'class="active"';}?>>
+          <a href="/admin/sales/page">銷售頁面</a>
+        </li>
+        <li <?php if ($sales_current == "history") {echo 'class="active"';}?>>
+          <a href="/admin/sales/history">銷售紀錄</a>
+        </li>
+      </ul>
     <li>
       <li class="<?php if ($current == "agent") {echo "active";}?>">
       <a href="/admin/agent">

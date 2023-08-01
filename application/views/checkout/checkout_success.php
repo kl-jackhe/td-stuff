@@ -136,10 +136,10 @@ tr:first-child td:first-child {
                         </h3>
                         <h3>配送 / 取貨地點：
                             <?php if (!empty($order['order_store_address'])) {
-	echo $order['order_store_name'] . ' ' . $order['order_store_address'];
-} else {
-	echo $order['order_delivery_address'];
-}?>
+                            	echo $order['order_store_name'] . ' ' . $order['order_store_address'];
+                            } else {
+                            	echo $order['order_delivery_address'];
+                            }?>
                         </h3>
                         <span class="front_title">運費：<span class="money_size"> $
                                 <?php echo format_number($order['order_delivery_cost']) ?></span></span>
@@ -192,10 +192,10 @@ tr:first-child td:first-child {
                         <h3>訂單備註</h3>
                         <p style="border: 1px solid gray;border-radius: 5px;margin: 0px;padding: 10px;">
                             <?php if (!empty($order['order_remark'])) {
-	echo $order['order_remark'];
-} else {
-	echo '無填寫訂單備註。';
-}?>
+                            	echo $order['order_remark'];
+                            } else {
+                            	echo '無填寫訂單備註。';
+                            }?>
                         </p>
                     </div>
                 </div>
@@ -206,9 +206,11 @@ tr:first-child td:first-child {
                                 <div class="col-12 col-md-6 py-2">
                                     <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
                                 </div>
-                                <div class="col-12 col-md-6 py-2">
+                            <?}?>
+                                <div <?=($agentID == '' ? 'class="col-12 col-md-6 py-2"' : 'class="col-12 col-md-12 py-2"')?>>
                                     <a href="https://line.me/R/ti/p/@504bdron" class="btn btn-info btn-block">聯繫客服</a>
                                 </div>
+                            <?if ($agentID == '') {?>
                                 <div class="col-12 py-2">
                                     <a href="/" class="btn btn-primary btn-block">回首頁</a>
                                 </div>
