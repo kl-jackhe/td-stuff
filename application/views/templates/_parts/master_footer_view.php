@@ -2,25 +2,30 @@
 
     <div class="fixed-bottom header_fixed_icon">
         <?if ($agentID == '') {?>
-        <div id="fa-facebook-square" class="my-2 icon_pointer">
+        <div id="fa-facebook-square" class="my-3 icon_pointer">
             <a id="facebook_href" href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
             </a>
         </div>
         <?}?>
-        <div id="fa-line" class="my-2 icon_pointer">
+        <div id="fa-line" class="my-3 icon_pointer">
             <a href="https://line.me/R/ti/p/@504bdron" target="_blank" style="outline: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
             </a>
         </div>
-        <div id="fa-bag-shopping" class="my-2 icon_pointer" style="position: ;">
+        <div id="scrollToBottomBtn" class="my-3 icon_pointer">
+            <a href="#" style="outline: none;">
+                <img class="fixed_icon_style" src="/assets/images/web icon_buynow-1.png" alt="">
+            </a>
+        </div>
+        <div id="fa-bag-shopping" class="my-3 icon_pointer">
             <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
                 <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
             </a>
         </div>
-        <div id="fa-angles-up" class="my-2 icon_pointer" style="display: none;">
-            <a href="#" style="color:black;outline: none;">
+        <div id="fa-angles-up" class="my-3 icon_pointer">
+            <a href="#" style="color:black;outline: none;" style="display: none;">
                 <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
             </a>
         </div>
@@ -109,45 +114,47 @@ function view_form_check() {
 }
 </script>
 <!-- MyCart -->
-<!-- Window Height -->
 <script>
-$(function() {
-    var h = $(window).height();
-    var header_h = $("#header").height();
-    var footer_h = $("#footer").height();
-    var content_auto_h = $(".content_auto_h").height();
-    // alert(content_auto_h);
-    // alert(h);
-    var main_h = $(".main").height();
-    var h_sum = h - header_h - footer_h;
-    var h_checkout = h_sum * 0.6;
-    if (h_sum >= content_auto_h) {
-        $(".content_auto_h").css('height', h_sum);
-    } else {
-        $(".content_auto_h").css('height', '100%');
-    }
-    $(".wizard > .content").css('min-height', h_checkout);
-});
-</script>
-<!-- Window Height -->
-<!-- scrollTop -->
-<script>
-$(function() {
-    var $win = $(window);
-    $win.scroll(function() {
-        if ($win.scrollTop() > 100) {
-            $('#fa-angles-up').slideDown();
+$(document).ready(function() {
+    //<!-- Window Height -->
+    $(function() {
+        var h = $(window).height();
+        var header_h = $("#header").height();
+        var footer_h = $("#footer").height();
+        var content_auto_h = $(".content_auto_h").height();
+        // alert(content_auto_h);
+        // alert(h);
+        var main_h = $(".main").height();
+        var h_sum = h - header_h - footer_h;
+        var h_checkout = h_sum * 0.6;
+        if (h_sum >= content_auto_h) {
+            $(".content_auto_h").css('height', h_sum);
         } else {
-            $('#fa-angles-up').slideUp();
+            $(".content_auto_h").css('height', '100%');
         }
+        $(".wizard > .content").css('min-height', h_checkout);
     });
-    $('#fa-angles-up').click(function() {
-        $('html, body').animate({ scrollTop: 0 }, 200);
+    //<!-- scrollTop -->
+    $(function() {
+        var $win = $(window);
+        $win.scroll(function() {
+            if ($win.scrollTop() > 100) {
+                $('#fa-angles-up').slideDown();
+            } else {
+                $('#fa-angles-up').slideUp();
+            }
+        });
+        $('#fa-angles-up').click(function() {
+            $('html, body').animate({ scrollTop: 0 }, 200);
+        });
     });
-});
-</script>
-<!-- scrollTop -->
-<script>
+    //<!-- scrollDown -->
+    $(function() {
+        $('#scrollToBottomBtn').click(function() {
+            $('html, body').animate({scrollTop: $(document).height()}, 1000);
+        });
+    });
+    //裝置辨認
     var ua = navigator.userAgent;
     var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
     var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
@@ -160,6 +167,7 @@ $(function() {
     }else{
     // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
     }
+});
 </script>
 </body>
 

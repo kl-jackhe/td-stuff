@@ -144,6 +144,13 @@ class Sales extends Admin_Controller {
         $this->input->post('single_sales_agent_list');
         if (!empty($this->input->post('single_sales_agent_list'))) {
             foreach ($this->input->post('single_sales_agent_list') as $row) {
+                $style = '';
+                if ($row['color_style'] != '') {
+                    $style .= 'color:' . $row['color_style'] . ';';
+                }
+                if ($row['font_size_style'] != '') {
+                    $style .= 'font-size:' . $row['font_size_style'] . ';';
+                }
                 $update_data = array(
                     'name' => $row['agent_name'],
                     'updated_at' => date('Y-m-d H:i:s'),
@@ -152,6 +159,7 @@ class Sales extends Admin_Controller {
                 $this->db->update('agent', $update_data);
                 $update_data = array(
                     'name' => $row['single_sales_agent_name'],
+                    'name_style' => $style,
                     'profit_percentage' => $row['profit_percentage'],
                     'updated_at' => date('Y-m-d H:i:s'),
                 );

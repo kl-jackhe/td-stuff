@@ -12,7 +12,7 @@
 }
 /*    上下滑動特效    */
 .main {
-    padding-top: 150px;
+    padding-top: 180px;
 }
 .product_description img {
     width: 100%;
@@ -81,8 +81,7 @@ input.qtyminus {
     width: 100%;
 }
 </style>
-<?
-if (!empty($single_sales)) {
+<?if (!empty($single_sales)) {
     $targetDate = '';
     if ($single_sales['status'] == 'OnSale') {
         $targetDate = $single_sales['end_date'];
@@ -103,14 +102,16 @@ if (!empty($single_sales)) {
 }?>
 <div class="container-fluid fixed-top" id="header">
     <div class="row justify-content-center">
-        <div class="col-md-6 text-center" style="padding-top: 10px; padding-bottom: 10px;font-size: 30px;">
-            <div><?=$this->session->userdata('agent_name')?></div>
+        <div class="col-md-6 text-center" style="padding-top: 10px; padding-bottom: 10px;">
+            <div style="<?=(!empty($name_style)? $name_style : '') ?>"><?=$this->session->userdata('agent_name')?></div>
             <?if ($targetDate != '') {?>
-                <div id="countdown" style="color:red">
-                    <span><?php echo $days; ?> </span>天
-                    <span><?php echo $hours; ?> </span>時
-                    <span><?php echo $minutes; ?> </span>分
-                    <span><?php echo $seconds; ?> </span>秒
+                <div style="color: red;font-size: 18px;">剩餘時間</div>
+                    <div id="countdown" style="color:red;font-size: 18px;">
+                        <span><?php echo $days; ?> </span>天
+                        <span><?php echo $hours; ?> </span>時
+                        <span><?php echo $minutes; ?> </span>分
+                        <span><?php echo $seconds; ?> </span>秒
+                    </div>
                 </div>
             <?}?>
         </div>

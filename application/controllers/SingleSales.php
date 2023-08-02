@@ -29,6 +29,7 @@ class SingleSales extends Public_Controller {
 				'single_sales_status' => $row['status'],
 			);
 			$this->session->set_userdata($session_data);
+			$this->data['name_style'] = $agent_name['name_style'];
 			$this->data['single_sales'] = $row;
 			$this->data['product'] = $this->product_model->getSingleProduct($row['product_id']);
 			$this->data['specification'] = $this->mysql_model->_select('product_specification', 'product_id', $row['product_id']);
@@ -46,14 +47,16 @@ class SingleSales extends Public_Controller {
 
 	function checkSingleSalesDate() {
 		$SingleSalesList = $this->sales_model->getSingleSalesList();
-		foreach ($SingleSalesList as $ssl_row) {
-			if ($ssl_row['status'] == 'OnSale' && date('Y-m-d',strtotime($ssl_row['end_date'])) < date('Y-m-d')) {
-				echo $ssl_row['id'] . 'end_date';
-				$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OutSale');
-			}
-			if ($ssl_row['status'] == 'ForSale' && date('Y-m-d',strtotime($ssl_row['start_date'])) < date('Y-m-d')) {
-				echo $ssl_row['id'] . 'start_date';
-				$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OnSale');
+		if () {
+			foreach ($SingleSalesList as $ssl_row) {
+				if ($ssl_row['status'] == 'OnSale' && date('Y-m-d',strtotime($ssl_row['end_date'])) < date('Y-m-d')) {
+					echo $ssl_row['id'] . 'end_date';
+					$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OutSale');
+				}
+				if ($ssl_row['status'] == 'ForSale' && date('Y-m-d',strtotime($ssl_row['start_date'])) < date('Y-m-d')) {
+					echo $ssl_row['id'] . 'start_date';
+					$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OnSale');
+				}
 			}
 		}
 	}

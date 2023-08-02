@@ -93,10 +93,9 @@
                                     <thead>
                                         <tr class="info">
                                             <th>排序</th>
-                                            <th>網站名稱/外觀</th>
+                                            <th>網站名稱 / 外觀</th>
                                             <th>銷售網址</th>
-                                            <th>用戶ID</th>
-                                            <th>用戶名稱</th>
+                                            <th>代言人ID / 名稱</th>
                                             <th>利潤百分比</th>
                                             <th>狀態</th>
                                         </tr>
@@ -105,6 +104,16 @@
                                     <? if (!empty($SingleSalesAgentDetail)) {
                                         $count = 0;
                                         foreach ($SingleSalesAgentDetail as $row) {
+                                            $str = $row['single_sales_agent_name_style'];
+                                            $result_style = array();
+                                            if (preg_match('/color:(#(?:[0-9a-fA-F]{3}){1,2});(?:.*font-size:\s*([\d.]+px);)?/', $str, $matches)) {
+                                                if (isset($matches[1]) && !empty($matches[1])) {
+                                                    $result_style['color'] = $matches[1]; // 匹配到的颜色值
+                                                }
+                                                if (isset($matches[2]) && !empty($matches[2])) {
+                                                    $result_style['font-size'] = $matches[2]; // 匹配到的字体大小值
+                                                }
+                                            }
                                             $count++;?>
                                             <tr>
                                                 <td>
@@ -114,30 +123,43 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" id="single_sales_agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['single_sales_agent_name']?>" class="form-control">
-                                                    <div>
-                                                        <label for="head">選擇字體顏色</label>
-                                                        <input type="color" id="head" name="head" value="#000000">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">字體顏色</span>
+                                                        <input type="color" id="color_style_<?=$row['single_sales_agent_id']?>" value="<?=(isset($result_style['color']) ? $result_style['color'] : '#000000')?>" class="form-control">
                                                     </div>
-                                                    <div>
-                                                        <select class="form-control">
-                                                            <option value="">選擇字體大小</option>
-                                                            <?$font_size = 12;
-                                                            for ($i=0;$i<6;$i++) {
-                                                                $font_size += 2;?>
-                                                                <option value="<?=$font_size?>"><?=$font_size?> px</option>
-                                                            <?}?>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">字體大小</span>
+                                                        <select class="form-control" id="font_size_style_<?=$row['single_sales_agent_id']?>">
+                                                            <option value="">請選擇</option>
+                                                            <?$font_size = 18;
+                                                            for ($i=0;$i<10;$i++) {
+                                                                $font_size += 2;
+                                                                $font_size_srt = $font_size . 'px';
+                                                                if (isset($result_style['font-size'])) {
+                                                                    if ($result_style['font-size'] == $font_size_srt) {?>
+                                                                        <option value="<?=$font_size_srt?>" selected><?=$font_size?> px</option>
+                                                                    <?} else {?>
+                                                                        <option value="<?=$font_size_srt?>"><?=$font_size?> px</option>
+                                                                    <?}
+                                                                } else {?>
+                                                                    <option value="<?=$font_size_srt?>"><?=$font_size?> px</option>
+                                                                <?}
+                                                            }?>
                                                         </select>
                                                     </div>
+                                                    <!-- <div><span style="<?=$row['single_sales_agent_name_style']?>"><?=$row['single_sales_agent_name']?></span></div> -->
                                                 </td>
                                                 <td>
                                                     <?if (!empty($SingleSalesDetail)) {?>
-                                                        <p><?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?></p>
+                                                        <!-- <p><?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?></p> -->
                                                         <a href="<?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?>" class="copy-link" onclick="copyLink(event)">點擊這裡複製連結 <i class="fa-regular fa-copy"></i></a>
                                                     <?}?>
                                                 </td>
-                                                <td><?=$row['agent_id']?></td>
                                                 <td>
-                                                    <input type="text" id="agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_name']?>" class="form-control">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><?=$row['agent_id']?></span>
+                                                        <input type="text" id="agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['agent_name']?>" class="form-control">
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <div class="input-group">
@@ -301,7 +323,6 @@
 
     function updateEditAllData() {
         var single_sales_agent_id = $('input[name="single_sales_agent_id[]"]');
-        console.log(single_sales_agent_id);
         var single_sales_agent_list = [];
         for (i=0;i< single_sales_agent_id.length;i++) {
             item = {
@@ -309,11 +330,12 @@
                 single_sales_agent_name:$('#single_sales_agent_name_' + single_sales_agent_id[i].value).val(),
                 agent_id:$('#agent_id_' + single_sales_agent_id[i].value).val(),
                 agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val(),
+                color_style:$('#color_style_' + single_sales_agent_id[i].value).val(),
+                font_size_style:$('#font_size_style_' + single_sales_agent_id[i].value).val(),
                 profit_percentage:$('#profit_percentage_' + single_sales_agent_id[i].value).val()
             };
             single_sales_agent_list.push(item);
         }
-        console.log(single_sales_agent_list);
         if ($('#start_date').val() != '' && $('#end_date').val() != '') {
             if ($('#start_date').val() > $('#end_date').val()) {
                alert('開始日期大於結束日期！請修改正確日期。');

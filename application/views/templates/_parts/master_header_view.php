@@ -17,25 +17,8 @@
     <meta name="twitter:card" content="<?php echo base_url() ?>assets/uploads/<?php echo get_setting_general('logo') ?>" />
     <meta name="twitter:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />
     <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
-    <!-- Favicon -->
-    <!-- <link rel="shortcut icon" href="<?php echo base_url() ?>favicon.ico" /> -->
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-    <!-- Theme CSS -->
-    <!-- <link rel="stylesheet" href="/assets/css/theme.css">
-    <link rel="stylesheet" href="/assets/css/theme-elements.css?v=201909062146"> -->
-    <!-- Current Page CSS -->
-    <!-- <link rel="stylesheet" href="/node_modules/rs-plugin/css/settings.css">
-    <link rel="stylesheet" href="/node_modules/rs-plugin/css/layers.css">
-    <link rel="stylesheet" href="/node_modules/rs-plugin/css/navigation.css"> -->
-    <!-- Theme Custom CSS -->
-    <!-- <link rel="stylesheet" href="/assets/css/custom.css?v=201912091409"> -->
-    <!-- Head Libs -->
-    <!-- <script src="/node_modules/modernizr/modernizr.min.js"></script>
-    <link rel="stylesheet" href="/assets/admin/jqueryui/1.12.1/jquery-ui.min.css">
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/assets/admin/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js?v=3.3.7"></script> -->
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <!-- Fontawesome -->
@@ -50,13 +33,12 @@
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <!-- purchase-steps -->
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script> -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
-    
-    <!-- Fb -->
+    <!-- FB -->
     <meta name="facebook-domain-verification" content="52kw8g3o4wd60qya7wp0z2fclnhjty" />
     <!-- End Meta Pixel Code -->
     <script>
@@ -75,7 +57,6 @@
     src="https://www.facebook.com/tr?id=1169081307337104&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
-
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G2CB64XB4"></script>

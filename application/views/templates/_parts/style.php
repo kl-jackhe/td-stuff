@@ -12,20 +12,15 @@
 <link rel="stylesheet" href="/node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">
 <link rel="stylesheet" href="/assets/admin/css/bootstrap-formhelpers.min.css">
 <link rel="stylesheet" href="/node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css">
-<!-- <link rel="stylesheet" href="/node_modules/chosen-js/chosen.min.css"> -->
 <link rel="stylesheet" href="/assets/chosen_v1.8.7/chosen.min.css">
 <link rel="stylesheet" href="/assets/admin/css/dataTables.bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="/assets/admin/jqueryui/1.12.1/jquery-ui.min.css">
 <!-- jquery因為bootstrap的關係，所以只能匯入v2的最新版 -->
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 <script src="/node_modules/jquery-migrate/dist/jquery-migrate.min.js"></script>
 <script src="/assets/admin/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.25/daterangepicker.min.js"></script>
 
 <style>
 	.dataTables_info{
