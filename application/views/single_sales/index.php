@@ -1,4 +1,19 @@
 <style>
+/*    上下滑動特效    */
+#header {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 10;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.header_hidden {
+    opacity: 0 !important;
+}
+/*    上下滑動特效    */
+.main {
+    padding-top: 150px;
+}
 .product_description img {
     width: 100%;
     max-width: 900px;
@@ -25,11 +40,11 @@ input.qtyminus {
     background: #f8f8f8;
 }
 .button_border_style_l {
-        border: 1px solid #B5ACA5;
-        padding: 0px 5px 0px 5px;
-        border-radius: 5px 0px 0px 5px;
-        color: #524535;
-        background: #fff;
+    border: 1px solid #B5ACA5;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
+    color: #524535;
+    background: #fff;
 }
 .button_border_style_r {
     border: 1px solid #B5ACA5;
@@ -66,16 +81,50 @@ input.qtyminus {
     width: 100%;
 }
 </style>
+<?
+if (!empty($single_sales)) {
+    $targetDate = '';
+    if ($single_sales['status'] == 'OnSale') {
+        $targetDate = $single_sales['end_date'];
+    }
+    if ($single_sales['status'] == 'ForSale') {
+        $targetDate = $single_sales['start_date'];
+    }
+    // 計算現在時間與目標日期的差值
+    $now = time();
+    $target = strtotime($targetDate);
+    $diff = $target - $now;
+
+    // 計算倒數時間（時：分：秒）
+    $days = floor($diff / (60 * 60 * 24));
+    $hours = floor(($diff % (60 * 60 * 24)) / (60 * 60));
+    $minutes = floor(($diff % (60 * 60)) / 60);
+    $seconds = $diff % 60;
+}?>
+<div class="container-fluid fixed-top" id="header">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center" style="padding-top: 10px; padding-bottom: 10px;font-size: 30px;">
+            <div><?=$this->session->userdata('agent_name')?></div>
+            <?if ($targetDate != '') {?>
+                <div id="countdown" style="color:red">
+                    <span><?php echo $days; ?> </span>天
+                    <span><?php echo $hours; ?> </span>時
+                    <span><?php echo $minutes; ?> </span>分
+                    <span><?php echo $seconds; ?> </span>秒
+                </div>
+            <?}?>
+        </div>
+    </div>
+</div>
 <div role="main" class="main product-view">
     <section class="form-section content_auto_h">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h1><?=$this->session->userdata('agent_name')?></h1>
-                    <div class="px-4 m_hr_border">
+                <!-- <div class="col-md-8">
+                    <div class="px-4 m_hr_border text-center">
                         <hr style="border-top: 1px solid #988B7A;">
                     </div>
-                </div>
+                </div> -->
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">
@@ -486,5 +535,83 @@ $('.product-view .input-number').change(function() {
         alert('Sorry, the maximum value was reached');
         $(this).val($(this).data('oldValue'));
     }
+});
+
+// 每秒更新倒數時間
+function updateCountdown() {
+    var countdownDiv = document.getElementById("countdown");
+    var countdownValues = countdownDiv.getElementsByTagName("span");
+    var seconds = parseInt(countdownValues[3].textContent);
+    if (seconds > 0) {
+            countdownValues[3].textContent = seconds - 1;
+    } else {
+        var minutes = parseInt(countdownValues[2].textContent);
+        countdownValues[3].textContent = 59;
+        if (minutes > 0) {
+            countdownValues[2].textContent = minutes - 1;
+        } else {
+            var hours = parseInt(countdownValues[1].textContent);
+            countdownValues[2].textContent = 59;
+            if (hours > 0) {
+                countdownValues[1].textContent = hours - 1;
+            } else {
+                var days = parseInt(countdownValues[0].textContent);
+                countdownValues[1].textContent = 23;
+                countdownValues[0].textContent = days - 1;
+            }
+        }
+    }
+}
+setInterval(updateCountdown, 1000);
+
+$(document).ready(function() {
+      var lastScrollTop = 0;
+      var delta = 5; // 定義滾動的誤差值
+      var headerHeight = $('#header').outerHeight(); // 取得header的高度
+      var didScroll;
+
+      // 監聽滾動事件
+      $(window).on('scroll touchmove', function() {
+        didScroll = true;
+      });
+
+      // 每100毫秒檢查是否滾動
+      setInterval(function() {
+        if (didScroll) {
+          hasScrolled();
+          didScroll = false;
+        }
+      }, 100);
+
+      function hasScrolled() {
+        var scrollTop = $(this).scrollTop();
+        if (Math.abs(lastScrollTop - scrollTop) <= delta) {
+          return;
+        }
+        if (scrollTop > lastScrollTop && scrollTop > headerHeight){
+          // 向下滾動，隱藏header
+          $('#header').addClass('header_hidden');
+        } else {
+          // 向上滾動，顯示header
+          if (scrollTop + $(window).height() < $(document).height()) {
+            $('#header').removeClass('header_hidden');
+          }
+          if (scrollTop == 0) {
+            $('#header').removeClass('header_hidden');
+          }
+        }
+        lastScrollTop = scrollTop;
+      }
+
+      // 檢測用戶代理字符串，如果是iOS，禁用touchstart事件
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        $('body').on('touchstart', function(e) {
+          if ($(e.target).closest('#header').length === 0) {
+            return;
+          }
+          e.preventDefault();
+        });
+      }
+
 });
 </script>

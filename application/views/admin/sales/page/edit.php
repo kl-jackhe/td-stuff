@@ -93,7 +93,7 @@
                                     <thead>
                                         <tr class="info">
                                             <th>排序</th>
-                                            <th>網站名稱</th>
+                                            <th>網站名稱/外觀</th>
                                             <th>銷售網址</th>
                                             <th>用戶ID</th>
                                             <th>用戶名稱</th>
@@ -114,6 +114,20 @@
                                                 </td>
                                                 <td>
                                                     <input type="text" id="single_sales_agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['single_sales_agent_name']?>" class="form-control">
+                                                    <div>
+                                                        <label for="head">選擇字體顏色</label>
+                                                        <input type="color" id="head" name="head" value="#000000">
+                                                    </div>
+                                                    <div>
+                                                        <select class="form-control">
+                                                            <option value="">選擇字體大小</option>
+                                                            <?$font_size = 12;
+                                                            for ($i=0;$i<6;$i++) {
+                                                                $font_size += 2;?>
+                                                                <option value="<?=$font_size?>"><?=$font_size?> px</option>
+                                                            <?}?>
+                                                        </select>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <?if (!empty($SingleSalesDetail)) {?>
@@ -127,7 +141,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="input-group">
-                                                        <input type="number" max="100" min="0" id="profit_percentage_<?=$row['single_sales_agent_id']?>" value="<?=$row['profit_percentage']?>" class="form-control">
+                                                        <input type="number" max="100" min="0" id="profit_percentage_<?=$row['single_sales_agent_id']?>" value="<?=format_number($row['profit_percentage'])?>" class="form-control">
                                                         <span class="input-group-addon">%</span>
                                                     </div>
                                                 </td>

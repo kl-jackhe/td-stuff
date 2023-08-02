@@ -32,7 +32,7 @@
                         );
                         $pre_hits += $ssa_row['pre_hits'];
                         $start_hits += $ssa_row['start_hits'];
-                        $sales_staff_list_str .= $count . '. ' . $this->agent_model->getAgentName($ssa_row['agent_id']) . '<br>';
+                        $sales_staff_list_str .= $count . '. ' . $this->agent_model->getAgentName($ssa_row['agent_id']) . '&emsp;' . format_number($ssa_row['profit_percentage']) . '%' . '<br>';
                       }
                     }
                   }
@@ -71,7 +71,7 @@
                         </td>
                         <td>
                           <div style="padding-bottom: 5px;border-bottom: 1px solid gray;">
-                            <span data-html="true" data-toggle="tooltip" data-placement="bottom" data-original-title="<?=$sales_staff_list_str?>">
+                            <span data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="<?=$sales_staff_list_str?>">
                               <?=$count?> 人 <i class="fa-regular fa-circle-question"></i>
                             </span>
                           </div>
@@ -79,7 +79,7 @@
                             for ($i=0; $i < count($sales_staff); $i++) {
                               if ($this->order_model->getOrderTotalAmount($row['id'],$sales_staff[$i]['agent_id']) > 0) {?>
                                 <div style="padding-top: 10px;">
-                                  <span style="border: 1px solid gray;padding: 3px 6px 3px 6px;border-radius: 5px;" data-html="true" data-toggle="tooltip" data-placement="bottom" data-original-title="銷售數量：<?=$this->order_model->getOrderProductQTY($row['id'],$sales_staff[$i]['agent_id'])?><br>銷售金額：<?='$' . format_number($this->order_model->getOrderTotalAmount($row['id'],$sales_staff[$i]['agent_id']))?>">
+                                  <span style="border: 1px solid gray;padding: 3px 6px 3px 6px;border-radius: 5px;" data-html="true" data-toggle="tooltip" data-placement="right" data-original-title="銷售數量：<?=$this->order_model->getOrderProductQTY($row['id'],$sales_staff[$i]['agent_id'])?><br>銷售金額：<?='$' . format_number($this->order_model->getOrderTotalAmount($row['id'],$sales_staff[$i]['agent_id']))?>">
                                     <?=$this->agent_model->getAgentName($sales_staff[$i]['agent_id'])?> <i class="fa-solid fa-circle-info"></i>
                                   </span>
                                 </div>
