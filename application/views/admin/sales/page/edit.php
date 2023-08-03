@@ -5,7 +5,11 @@
 </style>
 <div class="row">
     <div class="col-md-12">
-        <span class="btn btn-success" style="margin-bottom: 10px;" onclick="updateEditAllData()">一鍵更新 <i class="fa-solid fa-upload"></i></span>
+        <?if (!empty($SingleSalesDetail)) {
+            if ($SingleSalesDetail['status'] != 'Closure') {?>
+                <span class="btn btn-success" style="margin-bottom: 10px;" onclick="updateEditAllData()">一鍵更新 <i class="fa-solid fa-upload"></i></span>
+            <?}
+        }?>
     </div>
     <div class="col-md-12">
         <div class="content-box-large">
@@ -22,8 +26,8 @@
                         $status = array('Closure','OutSale','ForSale','OnSale');
                         $btn_class = array('btn-danger','btn-warning','btn-info','btn-success');
                         for ($i=0;$i<count($status);$i++) {
-                            if ($status[$i] != $SingleSalesDetail['status']) {?>
-                                <li style="float: right;margin-left: 10px;font-weight: bold;" class="btn <?=$btn_class[$i]?>" onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>')">
+                            if ($status[$i] != $SingleSalesDetail['status'] && $SingleSalesDetail['status'] != 'Closure') {?>
+                                <li style="float: right;margin-left: 10px;font-weight: bold;" class="btn <?=$btn_class[$i]?>" onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>','<?=$this->lang->line($status[$i]);?>')">
                                     <?=$this->lang->line($status[$i])?>
                                 </li>
                             <?}
@@ -45,6 +49,9 @@
                                 <div class="input-group">
                                     <span class="input-group-addon">商品名稱</span>
                                     <input type="text" class="form-control" id="product_id" value="<?=get_product_name($SingleSalesDetail['product_id'])?>" readonly>
+                                    <a href="/admin/product/edit/<?php echo $SingleSalesDetail['product_id'] ?>" target="_blank" class="input-group-addon">
+                                        <i class="fa-solid fa-up-right-from-square"></i>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -59,19 +66,19 @@
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <span class="input-group-addon">展示日期</span>
-                                    <input type="text" class="form-control datepicker" id="pre_date" value="<?=($SingleSalesDetail['pre_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['pre_date'], 0, 10) : '')?>">
+                                    <input type="text" class="form-control datetimepicker" id="pre_date" value="<?=($SingleSalesDetail['pre_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['pre_date'], 0, 10) : '')?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <span class="input-group-addon">開始日期</span>
-                                    <input type="text" class="form-control datepicker" id="start_date" value="<?=($SingleSalesDetail['start_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['start_date'], 0, 10) : '')?>">
+                                    <input type="text" class="form-control datetimepicker" id="start_date" value="<?=($SingleSalesDetail['start_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['start_date'], 0, 10) : '')?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <span class="input-group-addon">結束日期</span>
-                                    <input type="text" class="form-control datepicker" id="end_date" value="<?=($SingleSalesDetail['end_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['end_date'], 0, 10) : '')?>">
+                                    <input type="text" class="form-control datetimepicker" id="end_date" value="<?=($SingleSalesDetail['end_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['end_date'], 0, 10) : '')?>">
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -81,12 +88,14 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12" style="padding-bottom: 10px;">
+                                <?if ($SingleSalesDetail['status'] != 'Closure') {?>
                                 <span class="btn btn-primary" data-toggle="modal" data-target="#createAgent">
                                     建立代言人數量 <i class="fa-solid fa-plus"></i>
                                 </span>
                                 <span class="btn btn-info" data-toggle="modal" data-target="#selectAgentImport" style="margin-left: 10px;">
                                     匯入現有代言人 <i class="fa-solid fa-file-import"></i>
                                 </span>
+                                <?}?>
                             </div>
                             <div class="col-md-12" style="overflow-x: auto;">
                                 <table class="table table-bordered table-striped table-hover" style="border-radius: 10px;margin-top: 20px;" id="data-table">
@@ -152,7 +161,7 @@
                                                 <td>
                                                     <?if (!empty($SingleSalesDetail)) {?>
                                                         <!-- <p><?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?></p> -->
-                                                        <a href="<?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?>" class="copy-link" onclick="copyLink(event)">點擊這裡複製連結 <i class="fa-regular fa-copy"></i></a>
+                                                        <a href="<?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?>" class="copy-link" onclick="copyLink(event)">點擊這裡複製連結&emsp;<i class="fa-regular fa-copy"></i></a>
                                                     <?}?>
                                                 </td>
                                                 <td>
@@ -254,6 +263,14 @@
 <!-- Select Agent Import Modal -->
 <script>
     $(document).ready(function(){
+        <?if (!empty($SingleSalesDetail)) {
+            if ($SingleSalesDetail['status'] == 'Closure') {?>
+                $('input[type="text"]').prop('disabled', true);
+                $('input[type="color"]').prop('disabled', true);
+                $('input[type="number"]').prop('disabled', true);
+                $('select').prop('disabled', true);
+            <?}
+        }?>
         $('[data-toggle="tooltip"]').tooltip();
         $('#data-table').DataTable({
             searching: false,
@@ -382,8 +399,8 @@
         });
     }
 
-    function updateSingleSalesStatus(id,status) {
-        if (confirm('確定要變更狀態嗎？')) {
+    function updateSingleSalesStatus(id,status,status_str) {
+        if (confirm('確定要變更狀態為 [ ' + status_str + ' ] 嗎？')) {
             $.ajax({
                 type: "POST",
                 url: '/admin/sales/updateSingleSalesStatus',

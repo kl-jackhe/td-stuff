@@ -46,16 +46,20 @@ class SingleSales extends Public_Controller {
 	}
 
 	function checkSingleSalesDate() {
-		$SingleSalesList = $this->sales_model->getSingleSalesList();
-		if () {
-			foreach ($SingleSalesList as $ssl_row) {
-				if ($ssl_row['status'] == 'OnSale' && date('Y-m-d',strtotime($ssl_row['end_date'])) < date('Y-m-d')) {
-					echo $ssl_row['id'] . 'end_date';
-					$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OutSale');
+		$sslicc_query = $this->sales_model->getSingleSalesListIsCanChange();
+		if (!empty($sslicc_query)) {
+			foreach ($sslicc_query as $sslicc_row) {
+				if ($sslicc_row['status'] == 'OnSale' && ($sslicc_row['end_date'] < date('Y-m-d H:i:s') && $sslicc_row['end_date'] != '0000-00-00 00:00:00')) {
+					echo $sslicc_row['id'] . ' - OnSale To OutSale.<br>';
+					$this->sales_model->updateSingleSalesStatus($sslicc_row['id'],'OutSale');
 				}
-				if ($ssl_row['status'] == 'ForSale' && date('Y-m-d',strtotime($ssl_row['start_date'])) < date('Y-m-d')) {
-					echo $ssl_row['id'] . 'start_date';
-					$this->sales_model->updateSingleSalesStatus($ssl_row['id'],'OnSale');
+				if ($sslicc_row['status'] == 'ForSale' && ($sslicc_row['start_date'] < date('Y-m-d H:i:s') && $sslicc_row['start_date'] != '0000-00-00 00:00:00')) {
+					echo $sslicc_row['id'] . ' - ForSale To OnSale.<br>';
+					$this->sales_model->updateSingleSalesStatus($sslicc_row['id'],'OnSale');
+				}
+				if ($sslicc_row['status'] == 'Test' && ($sslicc_row['pre_date'] < date('Y-m-d H:i:s') && $sslicc_row['pre_date'] != '0000-00-00 00:00:00')) {
+					echo $sslicc_row['id'] . ' - Test To ForSale.<br>';
+					$this->sales_model->updateSingleSalesStatus($sslicc_row['id'],'ForSale');
 				}
 			}
 		}

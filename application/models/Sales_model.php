@@ -82,7 +82,10 @@ class Sales_model extends CI_Model {
     }
 
     function getSingleSalesListIsCanChange() {
-        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,status,created_at,updated_at');
+        $this->db->select('id,pre_date,start_date,end_date,status');
+        $this->db->where('status','ForSale');
+        $this->db->or_where('status','OnSale');
+        $this->db->or_where('status','Test');
         $query = $this->db->get('single_sales')->result_array();
         return (!empty($query)? $query : false);
     }

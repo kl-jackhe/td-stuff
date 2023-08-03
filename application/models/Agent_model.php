@@ -6,6 +6,15 @@ class Agent_model extends CI_Model {
         parent::__construct();
     }
 
+    function getRows($params = array()) {
+        $this->db->select('id,name,users_id,status,created_at,updated_at');
+        if (!empty($params['search']['status'])) {
+            $this->db->where('status', ($params['search']['status'] == 'Enabled' ? true : false));
+        }
+        $query = $this->db->get('agent')->result_array();
+        return (!empty($query)? $query : false);
+    }
+
     function getAgentList() {
         $this->db->select('id,name,users_id,status,created_at,updated_at');
         $this->db->where('status',1);

@@ -11,9 +11,18 @@ class Agent extends Admin_Controller {
     function index()
     {
         $this->data['page_title'] = '代言人管理';
-        $this->data['Agent'] = $this->agent_model->getAgentList();
-        $this->data['Users'] = $this->agent_model->getUsersList();
         $this->render('admin/agent/index');
+    }
+
+    function ajaxData() {
+        $conditions = array();
+        $status = $this->input->get('status');
+        if (!empty($status)) {
+            $conditions['search']['status'] = $status;
+        }
+        $this->data['Agent'] = $this->agent_model->getRows($conditions);
+        // $this->data['Users'] = $this->agent_model->getUsersList();
+        $this->load->view('admin/agent/ajax-data', $this->data, false);
     }
 
     function createAgent() {
@@ -125,5 +134,21 @@ class Agent extends Admin_Controller {
         }
     }
 
+    function editAgent() {
+
+    }
+
+    function updateAgent() {
+        
+    }
+
+    function updateAgentStatus() {
+        $updateData = array(
+            'id' => $this->input->post('id'),
+            'status' => ($this->input->post('status') == true? false : true),
+        );
+        $this->db->where('id',$this->input->post('id'));
+        $this->db->update('agent',$updateData);
+    }
 
 }

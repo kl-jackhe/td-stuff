@@ -37,15 +37,15 @@
                     }
                   }
                   ?>
-                    <tr>
+                    <tr <?=($row['status'] == 'Closure' ? 'style="background-color: #FFB5B5;"' : '')?>>
                         <td>
-                          <a href="editSingleSales/<?=$row['id']?>" target="_blank" style="text-decoration: underline">
-                            <?=$row['id']?>
+                          <a href="editSingleSales/<?=$row['id']?>" target="_blank">
+                            <?=$row['id']?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
                           </a>
                         </td>
                         <td>
-                          <a href="editSingleSales/<?=$row['id']?>" target="_blank" style="text-decoration: underline">
-                            <?=get_product_name($row['product_id'])?>
+                          <a href="/admin/product/edit/<?=$row['product_id']?>" target="_blank">
+                            <?=get_product_name($row['product_id'])?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
                           </a>
                         </td>
                         <?if ($SingleStatus == 'History') {?>
