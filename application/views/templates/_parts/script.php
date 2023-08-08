@@ -217,18 +217,23 @@ function responsive_filemanager_callback(field_id) {
 function searchFilter(page_num) {
     page_num = page_num ? page_num : 0;
     var keywords = $('#keywords').val();
+    var other_keywords = $('#other_keywords').val();
     var sortBy = $('#sortBy').val();
     var category = $('#category').val();
+    var category1 = $('#category1').val();
     var category2 = $('#category2').val();
     var status = $('#status').val();
     var county = $('#county').val();
     var district = $('#district').val();
     var start_date = $('#start_date').val();
     var end_date = $('#end_date').val();
+    var sales = $('#sales').val();
+    var agent = $('#agent').val();
+    var product = $('#product').val();
     $.ajax({
         type: 'GET',
         url: '/admin/<?php echo $this->uri->segment(2); ?>/ajaxData/' + page_num,
-        data: 'page=' + page_num + '&keywords=' + keywords + '&sortBy=' + sortBy + '&category=' + category + '&category2=' + category2 + '&status=' + status + '&county=' + county + '&district=' + district + '&start_date=' + start_date + '&end_date=' + end_date,
+        data: 'page=' + page_num + '&keywords=' + keywords + '&other_keywords=' + other_keywords + '&sortBy=' + sortBy + '&category=' + category + '&category1=' + category1 + '&category2=' + category2 + '&status=' + status + '&county=' + county + '&district=' + district + '&start_date=' + start_date + '&end_date=' + end_date + '&sales=' + sales + '&agent=' + agent + '&product=' + product,
         beforeSend: function() {
             $('#loading').show();
         },

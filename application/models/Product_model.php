@@ -66,6 +66,12 @@ class Product_model extends CI_Model {
 		return $result;
 	}
 
+	function getProductList() {
+		$this->db->select('*');
+		$query = $this->db->get('product')->result_array();
+		return (!empty($query)?$query:false);
+	}
+
 	function getHomeProducts() {
 		$this->db->select('*');
 		$this->db->where('product_status', 1);

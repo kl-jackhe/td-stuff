@@ -3,7 +3,7 @@
 class Order_model extends CI_Model {
 
 	function getRows($params = array()) {
-		$this->db->select('*');
+		$this->db->select('orders.*');
 		$this->db->from('orders');
 		$this->db->order_by("order_id", "desc");
 		//filter data by searched keywords
@@ -14,18 +14,32 @@ class Order_model extends CI_Model {
 			$this->db->or_like('customer_phone', $params['search']['keywords']);
 			$this->db->group_end();
 		}
-		if (!empty($params['search']['category'])) {
-			$this->db->where('order_step', $params['search']['category']);
+		if (!empty($params['search']['product'])) {
+			$this->db->select('order_item.product_id');
+			$this->db->join('order_item', 'order_item.order_id = orders.order_id');
+			$this->db->where('order_item.product_id',$params['search']['product']);
+			$this->db->group_by('orders.order_id');
 		}
-		if (!empty($params['search']['category2'])) {
-			// $this->db->where('order_step',$params['search']['category2']);
-			// $this->db->where('order_delivery_place',$params['search']['category']);
+		if (!empty($params['search']['step'])) {
+			$this->db->where('order_step', $params['search']['step']);
+		}
+		if (!empty($params['search']['delivery'])) {
+			$this->db->where('order_delivery',$params['search']['delivery']);
+		}
+		if (!empty($params['search']['payment'])) {
+			$this->db->where('order_payment',$params['search']['payment']);
 		}
 		if (!empty($params['search']['start_date'])) {
 			$this->db->where('order_date >=', $params['search']['start_date']);
 		}
 		if (!empty($params['search']['end_date'])) {
 			$this->db->where('order_date <=', $params['search']['end_date']);
+		}
+		if (!empty($params['search']['sales'])) {
+			$this->db->where('single_sales_id', $params['search']['sales']);
+		}
+		if (!empty($params['search']['agent'])) {
+			$this->db->where('agent_id', $params['search']['agent']);
 		}
 		//sort data by ascending or desceding order
 		if (!empty($params['search']['sortBy'])) {
@@ -151,7 +165,7 @@ class Order_model extends CI_Model {
 	}
 
 	function getSalesHistoryRows($params = array()) {
-		$this->db->select('*');
+		$this->db->select('orders.*');
 		$this->db->from('orders');
 		$this->db->order_by("order_id", "desc");
 		if (!empty($params['search']['keywords'])) {
@@ -161,11 +175,32 @@ class Order_model extends CI_Model {
 			$this->db->or_like('customer_phone', $params['search']['keywords']);
 			$this->db->group_end();
 		}
+		if (!empty($params['search']['product'])) {
+			$this->db->select('order_item.product_id');
+			$this->db->join('order_item', 'order_item.order_id = orders.order_id');
+			$this->db->where('order_item.product_id',$params['search']['product']);
+			$this->db->group_by('orders.order_id');
+		}
+		if (!empty($params['search']['step'])) {
+			$this->db->where('order_step', $params['search']['step']);
+		}
+		if (!empty($params['search']['delivery'])) {
+			$this->db->where('order_delivery',$params['search']['delivery']);
+		}
+		if (!empty($params['search']['payment'])) {
+			$this->db->where('order_payment',$params['search']['payment']);
+		}
 		if (!empty($params['search']['start_date'])) {
 			$this->db->where('order_date >=', $params['search']['start_date']);
 		}
 		if (!empty($params['search']['end_date'])) {
 			$this->db->where('order_date <=', $params['search']['end_date']);
+		}
+		if (!empty($params['search']['sales'])) {
+			$this->db->where('single_sales_id', $params['search']['sales']);
+		}
+		if (!empty($params['search']['agent'])) {
+			$this->db->where('agent_id', $params['search']['agent']);
 		}
 		$this->db->where('single_sales_id !=', '');
 		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
@@ -180,5 +215,20 @@ class Order_model extends CI_Model {
 			$result = ($query->num_rows() > 0) ? $query->result_array() : false;
 		}
 		return $result;
+	}
+
+	function getPaymentList() {
+		$this->db->select('id,payment_code,payment_name');
+		$this->db->where('payment_status','1');
+		$this->db->order_by('sort','asc');
+		$query = $this->db->get('payment')->result_array();
+		return (!empty($query)?$query:false);
+	}
+
+	function getDeliveryList() {
+		$this->db->select('id,delivery_name_code,delivery_name');
+		$this->db->where('delivery_status','1');
+		$query = $this->db->get('delivery')->result_array();
+		return (!empty($query)?$query:false);
 	}
 }

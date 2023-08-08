@@ -7,25 +7,16 @@ class Order extends Admin_Controller {
 		$this->load->model('order_model');
 		$this->load->model('sales_model');
 		$this->load->model('agent_model');
+		$this->load->model('product_model');
 	}
 
 	public function index() {
 		$this->data['page_title'] = '訂單';
-
-		$data = array();
-		//total rows count
-		$conditions['returnType'] = 'count';
-		$totalRec = $this->order_model->getRows($conditions);
-		//pagination configuration
-		$config['target'] = '#datatable';
-		$config['base_url'] = base_url() . 'admin/order/ajaxData';
-		$config['total_rows'] = $totalRec;
-		$config['per_page'] = $this->perPage;
-		$config['link_func'] = 'searchFilter';
-		$this->ajax_pagination_admin->initialize($config);
-		//get the posts data
-		$this->data['orders'] = $this->order_model->getRows(array('limit' => $this->perPage));
-
+		$this->data['payment'] = $this->order_model->getPaymentList();
+		$this->data['delivery'] = $this->order_model->getDeliveryList();
+		$this->data['single_sales'] = $this->sales_model->getSingleSalesList();
+		$this->data['agent'] = $this->agent_model->getAgentList();
+		$this->data['product'] = $this->product_model->getProductList();
 		$this->render('admin/order/index');
 	}
 
@@ -40,34 +31,48 @@ class Order extends Admin_Controller {
 		}
 		//set conditions for search
 		$keywords = $this->input->get('keywords');
+		$product = $this->input->get('product');
 		// $sortBy = $this->input->get('sortBy');
 		$category = $this->input->get('category');
+		$category1 = $this->input->get('category1');
 		$category2 = $this->input->get('category2');
 		// $status = $this->input->get('status');
 		$start_date = $this->input->get('start_date');
 		$end_date = $this->input->get('end_date');
+		$sales = $this->input->get('sales');
+		$agent = $this->input->get('agent');
 		if (!empty($keywords)) {
 			$conditions['search']['keywords'] = $keywords;
+		}
+		if (!empty($product)) {
+			$conditions['search']['product'] = $product;
 		}
 		// if(!empty($sortBy)){
 		//     $conditions['search']['sortBy'] = $sortBy;
 		// }
 		if (!empty($category)) {
-			$conditions['search']['category'] = $category;
+			$conditions['search']['step'] = $category;
+		}
+		if (!empty($category1)) {
+			$conditions['search']['delivery'] = $category1;
 		}
 		if (!empty($category2)) {
-			$conditions['search']['category2'] = $category2;
+			$conditions['search']['payment'] = $category2;
 		}
 		// if(!empty($status)){
 		//     $conditions['search']['status'] = $status;
 		// }
 		if (!empty($start_date)) {
 			$conditions['search']['start_date'] = $start_date;
-		} else {
 		}
 		if (!empty($end_date)) {
 			$conditions['search']['end_date'] = $end_date;
-		} else {
+		}
+		if (!empty($sales)) {
+			$conditions['search']['sales'] = $sales;
+		}
+		if (!empty($agent)) {
+			$conditions['search']['agent'] = $agent;
 		}
 		//total rows count
 		$conditions['returnType'] = 'count';
@@ -87,7 +92,6 @@ class Order extends Admin_Controller {
 		$this->data['orders'] = $this->order_model->getRows($conditions);
 		//load the view
 		$this->load->view('admin/order/ajax-data', $this->data, false);
-		//$this->render('admin/order/ajax-pagination-data');
 	}
 
 	public function view($id) {

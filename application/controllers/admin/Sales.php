@@ -7,6 +7,7 @@ class Sales extends Admin_Controller {
         $this->load->model('order_model');
         $this->load->model('sales_model');
         $this->load->model('agent_model');
+        $this->load->model('product_model');
 	}
 
     function page()
@@ -43,6 +44,10 @@ class Sales extends Admin_Controller {
         $this->data['page_title'] = '銷售紀錄';
         $this->data['SingleSales'] = $this->sales_model->getSingleSalesList();
         $this->data['SingleSalesAgent'] = $this->sales_model->getSingleSalesAgentList();
+        $this->data['payment'] = $this->order_model->getPaymentList();
+        $this->data['delivery'] = $this->order_model->getDeliveryList();
+        $this->data['agent'] = $this->agent_model->getAgentList();
+        $this->data['product'] = $this->product_model->getProductList();
         $this->render('admin/sales/history/index');
     }
 
@@ -54,17 +59,42 @@ class Sales extends Admin_Controller {
         } else {
             $offset = $page;
         }
+        //set conditions for search
         $keywords = $this->input->get('keywords');
+        $product = $this->input->get('product');
+        $category = $this->input->get('category');
+        $category1 = $this->input->get('category1');
+        $category2 = $this->input->get('category2');
         $start_date = $this->input->get('start_date');
         $end_date = $this->input->get('end_date');
+        $sales = $this->input->get('sales');
+        $agent = $this->input->get('agent');
         if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
+        }
+        if (!empty($product)) {
+            $conditions['search']['product'] = $product;
+        }
+        if (!empty($category)) {
+            $conditions['search']['step'] = $category;
+        }
+        if (!empty($category1)) {
+            $conditions['search']['delivery'] = $category1;
+        }
+        if (!empty($category2)) {
+            $conditions['search']['payment'] = $category2;
         }
         if (!empty($start_date)) {
             $conditions['search']['start_date'] = $start_date;
         }
         if (!empty($end_date)) {
             $conditions['search']['end_date'] = $end_date;
+        }
+        if (!empty($sales)) {
+            $conditions['search']['sales'] = $sales;
+        }
+        if (!empty($agent)) {
+            $conditions['search']['agent'] = $agent;
         }
         //total rows count
         $conditions['returnType'] = 'count';
