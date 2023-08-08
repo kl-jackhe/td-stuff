@@ -1,19 +1,16 @@
 <style>
 /*    上下滑動特效    */
-#header {
+#single_sales_header {
     opacity: 1;
     transition: opacity 0.3s ease-in-out;
     z-index: 10;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-.header_hidden {
+.single_sales_header_hidden {
     opacity: 0 !important;
 }
 /*    上下滑動特效    */
-.main {
-    padding-top: 180px;
-}
 .product_description img {
     width: 100%;
     max-width: 900px;
@@ -80,6 +77,11 @@ input.qtyminus {
     max-height: 300px;
     width: 100%;
 }
+.name_style {
+    color: <?=(isset($name_style->color_style)? $name_style->color_style : '')?>;
+    font-size: <?=(isset($name_style->font_size_style)? $name_style->font_size_style : '')?>;
+    background-color: <?=(isset($name_style->background_color_style)? $name_style->background_color_style : '')?>;
+}
 </style>
 <?if (!empty($single_sales)) {
     $targetDate = '';
@@ -100,18 +102,27 @@ input.qtyminus {
     $minutes = floor(($diff % (60 * 60)) / 60);
     $seconds = $diff % 60;
 }?>
-<div class="container-fluid fixed-top" id="header">
+<div class="container-fluid fixed-top" id="single_sales_header">
     <div class="row justify-content-center">
-        <div class="col-md-6 text-center" style="padding-top: 10px; padding-bottom: 10px;">
-            <div style="<?=(!empty($name_style)? $name_style : '') ?>"><?=$this->session->userdata('agent_name')?></div>
+        <div class="col-md-12 text-center name_style" style="padding-top: 10px; padding-bottom: 10px;margin-bottom: 10px;">
+            <?=$this->session->userdata('agent_name')?>
+        </div>
+        <div class="col-md-6 text-center time_box" style="margin-bottom: 10px;">
             <?if ($targetDate != '') {?>
-                <div style="color: red;font-size: 18px;">剩餘時間</div>
-                    <div id="countdown" style="color:red;font-size: 18px;">
-                        <span><?php echo $days; ?> </span>天
-                        <span><?php echo $hours; ?> </span>時
-                        <span><?php echo $minutes; ?> </span>分
-                        <span><?php echo $seconds; ?> </span>秒
-                    </div>
+                <div style="font-size: 14px;">剩餘時間</div>
+                <div id="countdown">
+                    <div style="display: inline-block;background-color: #FF7575;border-radius: 5px; padding: 2px 6px 2px 6px;width: 40px;">
+                        <span style="font-size: 22px;color:#fff;"><?php echo $days; ?> </span>
+                    </div> 天
+                    <div style="display: inline-block;background-color: #FF7575;border-radius: 5px; padding: 2px 6px 2px 6px;width: 40px;">
+                        <span style="font-size: 22px;color:#fff;"><?php echo $hours; ?> </span>
+                    </div> 時
+                    <div style="display: inline-block;background-color: #FF7575;border-radius: 5px; padding: 2px 6px 2px 6px;width: 40px;">
+                        <span style="font-size: 22px;color:#fff;"><?php echo $minutes; ?> </span>
+                    </div> 分
+                    <div style="display: inline-block;background-color: #FF7575;border-radius: 5px; padding: 2px 6px 2px 6px;width: 40px;">
+                        <span style="font-size: 22px;color:#fff;"><?php echo $seconds; ?> </span>
+                    </div> 秒
                 </div>
             <?}?>
         </div>
@@ -568,7 +579,7 @@ setInterval(updateCountdown, 1000);
 $(document).ready(function() {
       var lastScrollTop = 0;
       var delta = 5; // 定義滾動的誤差值
-      var headerHeight = $('#header').outerHeight(); // 取得header的高度
+      var headerHeight = $('#single_sales_header').outerHeight(); // 取得header的高度
       var didScroll;
 
       // 監聽滾動事件
@@ -589,30 +600,22 @@ $(document).ready(function() {
         if (Math.abs(lastScrollTop - scrollTop) <= delta) {
           return;
         }
-        if (scrollTop > lastScrollTop && scrollTop > headerHeight){
-          // 向下滾動，隱藏header
-          $('#header').addClass('header_hidden');
-        } else {
-          // 向上滾動，顯示header
-          if (scrollTop + $(window).height() < $(document).height()) {
-            $('#header').removeClass('header_hidden');
-          }
-          if (scrollTop == 0) {
-            $('#header').removeClass('header_hidden');
-          }
-        }
         lastScrollTop = scrollTop;
       }
 
       // 檢測用戶代理字符串，如果是iOS，禁用touchstart事件
       if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
         $('body').on('touchstart', function(e) {
-          if ($(e.target).closest('#header').length === 0) {
+          if ($(e.target).closest('#single_sales_header').length === 0) {
             return;
           }
           e.preventDefault();
         });
       }
+
+
+    var header_h = $('#single_sales_header').height();
+    $('.main').css('padding-top', header_h * 1.2);
 
 });
 </script>

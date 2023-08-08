@@ -113,16 +113,7 @@
                                     <? if (!empty($SingleSalesAgentDetail)) {
                                         $count = 0;
                                         foreach ($SingleSalesAgentDetail as $row) {
-                                            $str = $row['single_sales_agent_name_style'];
-                                            $result_style = array();
-                                            if (preg_match('/color:(#(?:[0-9a-fA-F]{3}){1,2});(?:.*font-size:\s*([\d.]+px);)?/', $str, $matches)) {
-                                                if (isset($matches[1]) && !empty($matches[1])) {
-                                                    $result_style['color'] = $matches[1]; // 匹配到的颜色值
-                                                }
-                                                if (isset($matches[2]) && !empty($matches[2])) {
-                                                    $result_style['font-size'] = $matches[2]; // 匹配到的字体大小值
-                                                }
-                                            }
+                                            $json = json_decode($row['single_sales_agent_name_style']);
                                             $count++;?>
                                             <tr>
                                                 <td>
@@ -134,18 +125,18 @@
                                                     <input type="text" id="single_sales_agent_name_<?=$row['single_sales_agent_id']?>" value="<?=$row['single_sales_agent_name']?>" class="form-control">
                                                     <div class="input-group">
                                                         <span class="input-group-addon">字體顏色</span>
-                                                        <input type="color" id="color_style_<?=$row['single_sales_agent_id']?>" value="<?=(isset($result_style['color']) ? $result_style['color'] : '#000000')?>" class="form-control">
+                                                        <input type="color" id="color_style_<?=$row['single_sales_agent_id']?>" value="<?=(isset($json->color_style) ? ($json->color_style != '' ? $json->color_style : '#000000') : '#000000')?>" class="form-control">
                                                     </div>
                                                     <div class="input-group">
                                                         <span class="input-group-addon">字體大小</span>
                                                         <select class="form-control" id="font_size_style_<?=$row['single_sales_agent_id']?>">
                                                             <option value="">請選擇</option>
                                                             <?$font_size = 18;
-                                                            for ($i=0;$i<10;$i++) {
+                                                            for ($i=0;$i<7;$i++) {
                                                                 $font_size += 2;
                                                                 $font_size_srt = $font_size . 'px';
-                                                                if (isset($result_style['font-size'])) {
-                                                                    if ($result_style['font-size'] == $font_size_srt) {?>
+                                                                if (isset($json->font_size_style)) {
+                                                                    if ($json->font_size_style == $font_size_srt) {?>
                                                                         <option value="<?=$font_size_srt?>" selected><?=$font_size?> px</option>
                                                                     <?} else {?>
                                                                         <option value="<?=$font_size_srt?>"><?=$font_size?> px</option>
@@ -155,6 +146,10 @@
                                                                 <?}
                                                             }?>
                                                         </select>
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">底色</span>
+                                                        <input type="color" id="background_color_style_<?=$row['single_sales_agent_id']?>" value="<?=(isset($json->background_color_style) ? ($json->background_color_style != '' ? $json->background_color_style : '#000000') : '#000000')?>" class="form-control">
                                                     </div>
                                                     <!-- <div><span style="<?=$row['single_sales_agent_name_style']?>"><?=$row['single_sales_agent_name']?></span></div> -->
                                                 </td>
@@ -349,6 +344,7 @@
                 agent_name:$('#agent_name_' + single_sales_agent_id[i].value).val(),
                 color_style:$('#color_style_' + single_sales_agent_id[i].value).val(),
                 font_size_style:$('#font_size_style_' + single_sales_agent_id[i].value).val(),
+                background_color_style:$('#background_color_style_' + single_sales_agent_id[i].value).val(),
                 profit_percentage:$('#profit_percentage_' + single_sales_agent_id[i].value).val()
             };
             single_sales_agent_list.push(item);

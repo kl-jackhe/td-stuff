@@ -365,29 +365,6 @@ $("#wizard").steps({
     <?php if($this->input->get('step')!=''){
         echo 'startIndex: '.$this->input->get('step').',';
     } ?>
-    onStepChanging: function (event, currentIndex, newIndex) {
-        console.log(currentIndex)
-        console.log(event)
-        console.log(newIndex)
-        if (currentIndex == 2) {
-            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
-            if($('#name').val()==''){
-                alert('請輸入收件姓名');
-                return false;
-            }
-            if($('#phone').val()==''){
-                alert('請輸入收件電話');
-                return false;
-            }
-            if(delivery=='711_pickup') {
-                if($('#storename').val()=='' || $('#storeaddress').val()==''){
-                    alert('請選擇取貨門市');
-                    return false;
-                }
-            }
-        }
-        return true;
-    },
     onStepChanged: function (event, currentIndex, priorIndex) {
         if (currentIndex == 0) {
             $('.progress_box_bar').css('width', '0%');
@@ -411,8 +388,37 @@ $("#wizard").steps({
         next: "下一步",
         previous: "上一步",
         loading: "載入中..."
-    }
+    },
     // autoFocus: true
+    onStepChanging: function (event, currentIndex, newIndex) {
+        $('#phone').on('input', function() {
+            var inputValue = $(this).val();
+            inputValue = inputValue.replace(/\D/g, '');
+            inputValue = inputValue.slice(0, 10);
+            $(this).val(inputValue);
+        });
+        // console.log(currentIndex)
+        // console.log(event)
+        // console.log(newIndex)
+        if (newIndex === 3) {
+            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            if($('#name').val()==''){
+                alert('請輸入收件姓名');
+                return false;
+            }
+            if($('#phone').val().length < 10){
+                alert('請輸入完整的收件電話');
+                return false;
+            }
+            if(delivery=='711_pickup') {
+                if($('#storename').val()=='' || $('#storeaddress').val()==''){
+                    alert('請選擇取貨門市');
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 });
 </script>
 <!-- purchase-steps -->
