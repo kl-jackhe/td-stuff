@@ -109,7 +109,7 @@ input.qtyminus {
         </div>
         <div class="col-md-6 text-center time_box" style="margin-bottom: 10px;">
             <?if ($targetDate != '') {?>
-                <div style="font-size: 14px;">剩餘時間</div>
+                <div style="font-size: 14px;"><?=($time_description == ''? '剩餘時間' : $time_description)?></div>
                 <div id="countdown">
                     <div style="display: inline-block;background-color: #FF7575;border-radius: 5px; padding: 2px 6px 2px 6px;width: 40px;">
                         <span style="font-size: 22px;color:#fff;"><?php echo $days; ?> </span>
@@ -147,6 +147,11 @@ input.qtyminus {
                     } else {
                         echo '<h3>暫無商品描述</h3>';
                     } ?>
+                </div>
+                <div class="col-md-8 text-center product_description">
+                    <p class="m-0" style="font-size: 28px;">
+                        <?=$product['product_note']?>
+                    </p>
                 </div>
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>

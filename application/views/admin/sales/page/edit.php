@@ -152,10 +152,14 @@
                                                         <input type="color" id="background_color_style_<?=$row['single_sales_agent_id']?>" value="<?=(isset($json->background_color_style) ? ($json->background_color_style != '' ? $json->background_color_style : '#000000') : '#000000')?>" class="form-control">
                                                     </div>
                                                     <!-- <div><span style="<?=$row['single_sales_agent_name_style']?>"><?=$row['single_sales_agent_name']?></span></div> -->
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">時間文字</span>
+                                                        <input type="text" id="time_description_<?=$row['single_sales_agent_id']?>" value="<?=$row['time_description']?>" class="form-control" placeholder="預設文字〔剩餘時間〕">
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <?if (!empty($SingleSalesDetail)) {?>
-                                                        <!-- <p><?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?></p> -->
+                                                        <!-- <p class="m-0"><?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?></p> -->
                                                         <a href="<?=$SingleSalesDetail['url'] . '?aid=' . $row['agent_id']?>" class="copy-link" onclick="copyLink(event)">點擊這裡複製連結&emsp;<i class="fa-regular fa-copy"></i></a>
                                                     <?}?>
                                                 </td>
@@ -345,6 +349,7 @@
                 color_style:$('#color_style_' + single_sales_agent_id[i].value).val(),
                 font_size_style:$('#font_size_style_' + single_sales_agent_id[i].value).val(),
                 background_color_style:$('#background_color_style_' + single_sales_agent_id[i].value).val(),
+                time_description:$('#time_description_' + single_sales_agent_id[i].value).val(),
                 profit_percentage:$('#profit_percentage_' + single_sales_agent_id[i].value).val()
             };
             single_sales_agent_list.push(item);

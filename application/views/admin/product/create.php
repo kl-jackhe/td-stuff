@@ -70,6 +70,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="product_note">注意事項</label>
+                                    <textarea class="form-control" id="product_note" name="product_note" cols="30" rows="10"></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

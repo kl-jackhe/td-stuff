@@ -188,6 +188,7 @@ class Sales extends Admin_Controller {
                 $update_data = array(
                     'name' => $row['single_sales_agent_name'],
                     'name_style' => json_encode($style),
+                    'time_description' => $row['time_description'],
                     'profit_percentage' => $row['profit_percentage'],
                     'updated_at' => date('Y-m-d H:i:s'),
                 );

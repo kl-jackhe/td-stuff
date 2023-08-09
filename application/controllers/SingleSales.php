@@ -30,6 +30,7 @@ class SingleSales extends Public_Controller {
 			);
 			$this->session->set_userdata($session_data);
 			$this->data['name_style'] = json_decode($agent_name['name_style']);
+			$this->data['time_description'] = strval($agent_name['time_description']);
 			$this->data['single_sales'] = $row;
 			$this->data['product'] = $this->product_model->getSingleProduct($row['product_id']);
 			$this->data['specification'] = $this->mysql_model->_select('product_specification', 'product_id', $row['product_id']);
