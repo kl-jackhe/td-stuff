@@ -806,4 +806,15 @@ class User extends Admin_Controller {
 		if ($returnhtml) return $view_html;//This will return html on 3rd argument being true
 	}
 
+	function updateUsers() {
+        $updateData = array(
+            'full_name' => $this->input->post('full_name'),
+            'phone' => $this->input->post('phone'),
+            'email' => $this->input->post('email'),
+            'address' => $this->input->post('address'),
+        );
+        $this->db->where('id',$this->input->post('id'));
+        $this->db->update('users',$updateData);
+    }
+
 }

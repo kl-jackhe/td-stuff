@@ -11,6 +11,7 @@ class Agent extends Admin_Controller {
     function index()
     {
         $this->data['page_title'] = '代言人管理';
+        $this->data['Users'] = $this->agent_model->getUsersList();
         $this->render('admin/agent/index');
     }
 
@@ -21,7 +22,6 @@ class Agent extends Admin_Controller {
             $conditions['search']['status'] = $status;
         }
         $this->data['Agent'] = $this->agent_model->getRows($conditions);
-        // $this->data['Users'] = $this->agent_model->getUsersList();
         $this->load->view('admin/agent/ajax-data', $this->data, false);
     }
 
@@ -134,12 +134,25 @@ class Agent extends Admin_Controller {
         }
     }
 
-    function editAgent() {
-
+    function editAgent($id) {
+        $this->data['page_title'] = '代言人資料';
+        $this->data['agent'] = $this->agent_model->getAgentDetail($id);
+        $this->data['Users'] = $this->agent_model->getUsersList();
+        $this->render('admin/agent/edit');
     }
 
     function updateAgent() {
-        
+        $updateData = array(
+            'id' => $this->input->post('id'),
+            'name' => $this->input->post('name'),
+            'users_id' => $this->input->post('users_id'),
+            'full_name' => $this->input->post('full_name'),
+            'phone' => $this->input->post('phone'),
+            'address' => $this->input->post('address'),
+            'remark' => $this->input->post('remark'),
+        );
+        $this->db->where('id',$this->input->post('id'));
+        $this->db->update('agent',$updateData);
     }
 
     function updateAgentStatus() {

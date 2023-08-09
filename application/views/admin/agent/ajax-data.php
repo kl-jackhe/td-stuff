@@ -13,7 +13,7 @@
                 foreach ($Agent as $row) { ?>
                     <tr>
                         <td>
-                            <a href="editAgent" target="_blank">
+                            <a href="agent/editAgent/<?=$row['id']?>" target="_blank">
                                 <?=$row['id']?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
                             </a>
                         </td>

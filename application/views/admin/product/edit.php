@@ -255,20 +255,20 @@
                             </div>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="plan">
+                    <!-- <div role="tabpanel" class="tab-pane" id="plan">
                         <div class="row">
                             <div class="col-md-12">
 
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
     <?php echo form_close(); ?>
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <div style="border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto;">
             <table class="table table-bordered table-striped table-condensed">
@@ -289,7 +289,7 @@
             </table>
         </div>
     </div>
-</div>
+</div> -->
 <script>
 $(document).ready(function() {
     $(document).on('click', '.x', function(){
