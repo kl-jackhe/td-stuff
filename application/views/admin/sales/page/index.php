@@ -27,7 +27,7 @@
     <div class="col-md-12">
         <div class="content-box-large">
             <div class="tabbable">
-                <input type="hidden" id="status" value="">
+                <input type="hidden" id="status" value="Test">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#Test" aria-controls="Test" role="tab" data-toggle="tab" onclick="searchTagStatus('Test')">測試中</a>
@@ -85,7 +85,18 @@
     });
 
     function searchTagStatus(status) {
-        $('#status').val(status);
+        if (status == 'Test') {
+            $('#status').val(status);
+        }
+        if (status == 'ForSale') {
+            $('#status').val(status);
+        }
+        if (status == 'OnSale') {
+            $('#status').val(status);
+        }
+        if (status == 'History') {
+            $('#status').val(status);
+        }
         searchFilterSales();
     }
 </script>

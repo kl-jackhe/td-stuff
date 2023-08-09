@@ -34,7 +34,7 @@
                 <span class="btn" data-toggle="modal" data-target="#createAgent" style="background-color: #2894FF;color: white;cursor: pointer;border-color:#2894FF;margin-bottom: 15px;">
                     建立代言人 <i class="fa-solid fa-user-plus"></i>
                 </span>
-                <input type="hidden" id="status" value="1">
+                <input type="hidden" id="status" value="Enabled">
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#Enabled" aria-controls="Enabled" role="tab" data-toggle="tab" onclick="searchTagStatus('Enabled')">啟用中</a>
@@ -121,11 +121,17 @@
         });
 
         status = activeTab.replace('#', '');
+        console.log(status);
         searchTagStatus(status);
     });
 
     function searchTagStatus(status) {
-        $('#status').val(status);
+        if (status == 'Disabled') {
+            $('#status').val(status);
+        }
+        if (status == 'Enabled') {
+            $('#status').val(status);
+        }
         searchFilter();
     }
 
