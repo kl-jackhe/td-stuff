@@ -134,7 +134,7 @@ select.district {
 
     $(".chosen_other").chosen({
       no_results_text: "沒有找到。",
-      // search_contains: true,
+      search_contains: true,
       // width: "100%",
     });
   });
