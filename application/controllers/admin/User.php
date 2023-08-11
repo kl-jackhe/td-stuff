@@ -17,9 +17,10 @@ class User extends Admin_Controller {
     {
         $this->data['page_title'] = '使用者管理';
 
+        $query = $this->ion_auth_model->getUsers();
         $data = array();
         //total rows count
-        $totalRec = count($this->ion_auth_model->getUsers());
+        $totalRec = (!empty($query)? count($query) : 0);
         //pagination configuration
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/user/ajaxData';

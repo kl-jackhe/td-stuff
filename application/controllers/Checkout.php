@@ -107,8 +107,8 @@ class Checkout extends Public_Controller {
 			'order_pay_status' => $order_pay_status,
 			'order_step' => 'confirm',
 			'order_remark' => $this->input->post('remark'),
-			'single_sales_id' => $this->session->userdata('single_sales_id'),
-			'agent_id' => $this->session->userdata('agent_id'),
+			'single_sales_id' => ($this->session->userdata('single_sales_id') != ''?$this->session->userdata('single_sales_id'):''),
+			'agent_id' => ($this->session->userdata('agent_id') != ''?$this->session->userdata('agent_id'):''),
 			// 'creator_id' => $this->ion_auth->user()->row()->id,
 			'created_at' => $created_at,
 		);
