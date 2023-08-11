@@ -84,6 +84,12 @@
         text-align: center;
     }
     .top_logo_style {
+        <?if ($this->is_td_stuff) {?>
+            max-width: 130px;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            max-width: 200px;
+        <?}?>
         position: absolute;
         transform: translate(-50%, -50%);
         left: 50%;
@@ -97,14 +103,26 @@
         padding: 5px;
     }
     .nav_user_login_edit {
-        border: 1px solid #534431;
-        color: #808080 !important;
+        <?if ($this->is_td_stuff) {?>
+            border: 1px solid #534431;
+            color: #808080 !important;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            border: 1px solid #f6d523;
+            color: #000 !important;
+        <?}?>
         padding: 2px 12px 2px 12px !important;
         outline: none;
     }
     .nav_user_register_logout {
-        background: #534431;
-        color: #fff !important;
+        <?if ($this->is_td_stuff) {?>
+            background: #534431;
+            color: #fff !important;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #f6d523;
+            color: #000 !important;
+        <?}?>
         padding: 2px 12px 2px 12px !important;
         outline: none;
     }
@@ -156,8 +174,14 @@
         .top_logo_style {
             position: relative;
             transform: none;
-            left: -35%;
-            top: 0;
+            <?if ($this->is_td_stuff) {?>
+                left: -35%;
+                top: 0;
+            <?}?>
+            <?if ($this->is_liqun_food) {?>
+                left: -20%;
+                top: 5px;
+            <?}?>
         }
         .nav_user_style {
             position: relative;
@@ -188,7 +212,7 @@
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                            <a href="<?php echo base_url() ?>" class="top_logo_style" style="max-width: 130px;">
+                            <a href="<?php echo base_url() ?>" class="top_logo_style">
                                 <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                             </a>
                             <div class="collapse navbar-collapse" id="navbarToggler">

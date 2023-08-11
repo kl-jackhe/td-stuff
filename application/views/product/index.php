@@ -12,7 +12,12 @@
 }
 
 #product_index a:hover {
-    color: #68396D;
+    <?if ($this->is_td_stuff) {?>
+        color: #68396D;
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        color: #f6d523;
+    <?}?>
 }
 
 #product_index .product_name {
@@ -23,14 +28,20 @@
     line-height: 35px;
 }
 #zoomA {
-  transition: transform ease-in-out 0s;
+    transition: transform ease-in-out 0s;
 }
 #zoomA:hover {
     transform: scale(1.05);
 }
 .select_product {
-    background-color: #68396D;
-    color: #fff !important;
+    <?if ($this->is_td_stuff) {?>
+        background-color: #68396D;
+        color: #fff !important;
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        background-color: #f6d523;
+        color: #000 !important;
+    <?}?>
     width: 50%;
     line-height: 1.8;
     padding: 0;
@@ -50,7 +61,12 @@
     padding-right: 30px;
 }
 .product_category {
-    border: 1px solid #68396D;
+    <?if ($this->is_td_stuff) {?>
+        border: 1px solid #68396D;
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        border: 1px solid #f6d523;
+    <?}?>
     padding: 5px 15px 5px 15px;
     border-radius: 10px;
     width: 100%;

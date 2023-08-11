@@ -207,9 +207,13 @@ tr:first-child td:first-child {
                                     <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
                                 </div>
                             <?}?>
+                            <?if ($this->is_td_stuff) {?>
                                 <div <?=($agentID == '' ? 'class="col-12 col-md-6 py-2"' : 'class="col-12 col-md-12 py-2"')?>>
                                     <a href="https://line.me/R/ti/p/@504bdron" class="btn btn-info btn-block" target="_blank">聯繫客服 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
+                            <?}?>
+                            <?if ($this->is_liqun_food) {?>
+                            <?}?>
                             <?if ($agentID == '') {?>
                                 <div class="col-12 py-2">
                                     <a href="/" class="btn btn-primary btn-block">回首頁</a>

@@ -12,6 +12,15 @@ class MY_Controller extends CI_Controller
 		$this->load->helper('product');
 		$this->load->model('mysql_model');
 		$this->data['page_title'] = get_setting_general('name');
+
+		$this->is_liqun_food = false;
+        if (strpos(base_url(), 'liqun-food') !== false) {
+            $this->is_liqun_food = true;
+        }
+        $this->is_td_stuff = false;
+        if (strpos(base_url(), 'td-stuff') !== false) {
+            $this->is_td_stuff = true;
+        }
 	}
 
 	protected function render($the_view = NULL, $template = 'master')

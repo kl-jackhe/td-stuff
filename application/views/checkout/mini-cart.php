@@ -53,6 +53,16 @@
         text-align: right;
         font-size: 22px;
     }
+    .view_form_check_style {
+        <?if ($this->is_td_stuff) {?>
+            background-color: #420252;
+            color: #fff !important;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background-color: #f6d523;
+            color: #000 !important;
+        <?}?>
+    }
 @media (max-width: 767px) {
     .num_box {
         position: absolute;
@@ -211,7 +221,7 @@
         <spna class="btn btn-block mt-md" style="color: #4E4E4E;background-color: #BCBCBC;" data-dismiss="modal">繼續選購</span>
     </div>
     <div class="col-6">
-        <span class="btn btn-block mt-md" style="color: #fff;background-color: #420252;" onclick="view_form_check()">前往 結帳</span>
+        <span class="btn btn-block mt-md view_form_check_style" onclick="view_form_check()">前往 結帳</span>
     </div>
 </div>
 <script>

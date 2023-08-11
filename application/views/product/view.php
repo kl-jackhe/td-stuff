@@ -47,8 +47,14 @@ input.qtyminus {
     text-align: center;
 }
 .add_product {
-    background-color: #68396D;
-    color: #fff !important;
+    <?if ($this->is_td_stuff) {?>
+        background-color: #68396D;
+        color: #fff !important;
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        background-color: #f6d523;
+        color: #000 !important;
+    <?}?>
     width: 100%;
     line-height: 1.8;
     padding: 0;
@@ -72,7 +78,11 @@ input.qtyminus {
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
-                    <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                    <?if ($this->is_td_stuff) {?>
+                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                    <?}?>
+                    <?if ($this->is_liqun_food) {?>
+                    <?}?>
                 </div>
                 <div class="col-md-8 text-center product_description">
                     <p class="m-0" style="font-size: 28px;">
@@ -90,7 +100,11 @@ input.qtyminus {
                     </p>
                 </div>
                 <div class="col-md-8 text-center product_description">
-                    <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                    <?if ($this->is_td_stuff) {?>
+                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                    <?}?>
+                    <?if ($this->is_liqun_food) {?>
+                    <?}?>
                 </div>
                 <div class="col-md-12 text-center">
                     <p class="m-0" style="font-size: 28px;">方案選擇</p>

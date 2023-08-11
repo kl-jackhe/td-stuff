@@ -73,17 +73,41 @@ foreach ($this->cart->contents() as $items) {
     }
 
     .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
-        background: #420452;
+        <?if ($this->is_td_stuff) {?>
+            background: #420452;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #f6d523;
+            color: #000;
+        <?}?>
     }
 
     .wizard > .steps .disabled p {
-        background: #B5ABB6;
+        <?if ($this->is_td_stuff) {?>
+            background: #B5ABB6;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #cfcdcd;
+            color: #807e7e;
+        <?}?>
     }
     .wizard > .steps .current p {
-        background: #420452;
+        <?if ($this->is_td_stuff) {?>
+            background: #420452;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #f6d523;
+            color: #252020;
+        <?}?>
     }
     .wizard > .steps .done p {
-        background: #420452;
+        <?if ($this->is_td_stuff) {?>
+            background: #420452;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #f6d523;
+            color: #252020;
+        <?}?>
     }
 
     .wizard a {
@@ -112,12 +136,22 @@ foreach ($this->cart->contents() as $items) {
     }
 
     .progress_box {
-        background-color:#B5ABB6;
+        <?if ($this->is_td_stuff) {?>
+            background-color:#B5ABB6;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background-color:#cfcdcd;
+        <?}?>
         height: 1.5px;
     }
     .progress_box_bar {
         width:0%;
-        background:#420452;
+        <?if ($this->is_td_stuff) {?>
+            background: #420452;
+        <?}?>
+        <?if ($this->is_liqun_food) {?>
+            background: #f6d523;
+        <?}?>
     }
     @media (max-width: 767.98px) {
     }
