@@ -166,6 +166,9 @@ class Sales extends Admin_Controller {
         $this->data['product_unit'] = $this->mysql_model->_select('single_product_unit', 'product_id', $this->data['SingleSalesDetail']['product_id']);
         $this->data['product_specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $this->data['SingleSalesDetail']['product_id']);
         $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $this->data['SingleSalesDetail']['product_id']);
+
+        $this->data['orders'] = $this->order_model->getSalesPageHistoryList($id);
+
         $this->data['page_title'] = '銷售頁面編輯';
         $this->render('admin/sales/page/edit');
     }
@@ -201,6 +204,7 @@ class Sales extends Admin_Controller {
             'pre_date' => $this->input->post('pre_date'),
             'start_date' => $this->input->post('start_date'),
             'end_date' => $this->input->post('end_date'),
+            'default_profit_percentage' => $this->input->post('default_profit_percentage'),
             'updated_at' => date('Y-m-d H:i:s'),
         );
         $this->db->where('id',$this->input->post('sales_id'));
@@ -214,6 +218,114 @@ class Sales extends Admin_Controller {
         );
         $this->db->where('id',$this->input->post('id'));
         $this->db->update('single_sales', $update_data);
+    }
+
+    function calculationReport() {
+        $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
+        if (!empty($ssd_row)) {
+            $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
+            if (!empty($ssad_query)) {
+                foreach ($ssad_query as $ssad_row) {
+                    $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                    $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
+                    $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                    $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
+                    $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+                }
+                $this->data['SingleSalesDetail'] = $ssd_row;
+                $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
+                $this->load->view('/admin/report/single_sales_agent_report', $this->data);
+            } else {
+                echo 'no';
+            }
+        } else {
+            echo 'no';
+        }
+    }
+
+    function calculationTurnoverAmount($single_sales_id,$agent_id) {
+        $this->db->select_sum('order_discount_total');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where('agent_id',$agent_id);
+        $this->db->where('order_step','complete');
+        $this->db->where('order_status','1');
+        $row = $this->db->get('orders')->row_array();
+        return (!empty($row) ? $row['order_discount_total'] : 0);
+    }
+
+    function calculationIncome($turnoverAmount,$default_profit_percentage,$agent_id,$profit_percentage) {
+        $income = 0;
+        if ($turnoverAmount > 0) {
+            $income = round($turnoverAmount * (($profit_percentage > 0 ? $profit_percentage : $default_profit_percentage)/100));
+        }
+        return $income;
+    }
+
+    function calculationOrderQTY($single_sales_id,$agent_id) {
+        $total_qty = 0;
+        $complete_qty = 0;
+        $cancel_qty = 0;
+        $other_qty = 0;
+        $this->db->select('order_id,order_step');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where('agent_id',$agent_id);
+        $this->db->where('order_status','1');
+        $query = $this->db->get('orders')->result_array();
+        if (!empty($query)) {
+            foreach ($query as $row) {
+                $total_qty++;
+                if ($row['order_step'] == 'complete') {
+                    $complete_qty++;
+                } elseif ($row['order_step'] == 'order_cancel') {
+                    $cancel_qty++;
+                } else {
+                    $other_qty++;
+                }
+            }
+        }
+        $orderQtyArray = array(
+            'total_qty' => $total_qty,
+            'complete' => $complete_qty,
+            'cancel' => $cancel_qty,
+            'other' => $other_qty,
+        );
+        return $orderQtyArray;
+    }
+
+    function calculationTurnoverRate($orderQtyList) {
+        $turnoverRate = 0;
+        if ($orderQtyList['total_qty'] > 0) {
+            $turnoverRate = floor(($orderQtyList['complete'] / $orderQtyList['total_qty']) * 100);
+        }
+        return $turnoverRate;
+    }
+
+    function updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$single_sales_agent_id,$id) {
+        $updateData = array(
+            'turnover_amount' => $turnoverAmount,
+            'income' => $income,
+            'order_qty' => $orderQtyList['total_qty'],
+            'finish_qty' => $orderQtyList['complete'],
+            'cancel_qty' => $orderQtyList['cancel'],
+            'other_qty' => $orderQtyList['other'],
+            'turnover_rate' => $turnoverRate,
+            'updated_at' => date('Y-m-d H:i:s'),
+        );
+        $this->db->where('id',$single_sales_agent_id);
+        $this->db->update('single_sales_agent',$updateData);
+
+        $update_data = array(
+            'status' => 'Closure',
+            'updated_at' => date('Y-m-d H:i:s'),
+        );
+        $this->db->where('id',$id);
+        $this->db->update('single_sales', $update_data);
+    }
+
+    function viewCalculationReport() {
+        $this->data['SingleSalesDetail'] = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
+        $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($this->input->post('id'));
+        $this->load->view('/admin/report/single_sales_agent_report', $this->data);
     }
 
     function create_plan($id) {

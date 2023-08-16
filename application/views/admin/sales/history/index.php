@@ -5,6 +5,10 @@ select.district {
 .zipcode{
   display: none!important;
 }
+.chosen-container {
+  border: 0 !important;
+  text-align: left !important;
+}
 </style>
 <div class="row">
   <!-- <div class="col-md-6">
@@ -75,5 +79,11 @@ select.district {
 <script>
   $(document).ready(function () {
     searchFilter();
+
+    $(".chosen_other").chosen({
+      no_results_text: "沒有找到。",
+      search_contains: true,
+      // width: "100%",
+    });
   });
 </script>

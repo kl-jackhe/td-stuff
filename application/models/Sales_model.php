@@ -7,7 +7,7 @@ class Sales_model extends CI_Model {
     }
 
     function getRows($params = array()) {
-        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,status,created_at,updated_at');
+        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,qty,unit,default_profit_percentage,status,created_at,updated_at');
         if (!empty($params['search']['status'])) {
             if ($params['search']['status'] == 'History') {
                 $this->db->where('status', 'Closure');
@@ -26,13 +26,13 @@ class Sales_model extends CI_Model {
     }
 
     function getSingleSalesList() {
-        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,status,created_at,updated_at');
+        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,qty,unit,default_profit_percentage,status,created_at,updated_at');
         $query = $this->db->get('single_sales')->result_array();
         return (!empty($query)? $query : false);
     }
 
     function getSingleSalesDetail($id) {
-        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,status,created_at,updated_at');
+        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,qty,unit,default_profit_percentage,status,created_at,updated_at');
         $this->db->where('id', $id);
         $this->db->limit(1);
         $row = $this->db->get('single_sales')->row_array();
@@ -46,8 +46,29 @@ class Sales_model extends CI_Model {
     }
 
     function getSingleSalesAgentDetail($single_sales_id) {
-        $this->db->select('single_sales_agent.id AS single_sales_agent_id,single_sales_id,agent_id,single_sales_agent.name AS single_sales_agent_name,single_sales_agent.name_style AS single_sales_agent_name_style,single_sales_agent.time_description,single_sales_agent.cost,single_sales_agent.profit_percentage,single_sales_agent.created_at,single_sales_agent.updated_at');
-        $this->db->select('agent.id AS agent_id,agent.name AS agent_name,agent.users_id,agent.status');
+        $this->db->select('
+            single_sales_agent.id AS single_sales_agent_id,
+            single_sales_id,
+            single_sales_agent.name AS single_sales_agent_name,
+            single_sales_agent.name_style AS single_sales_agent_name_style,
+            single_sales_agent.time_description,
+            single_sales_agent.cost,
+            single_sales_agent.profit_percentage,
+            single_sales_agent.order_qty,
+            single_sales_agent.finish_qty,
+            single_sales_agent.cancel_qty,
+            single_sales_agent.turnover_rate,
+            single_sales_agent.turnover_amount,
+            single_sales_agent.income,
+            single_sales_agent.created_at,
+            single_sales_agent.updated_at
+            ');
+        $this->db->select('
+            agent.id AS agent_id,
+            agent.name AS agent_name,
+            agent.users_id,
+            agent.status
+            ');
         $this->db->join('agent', 'agent.id = single_sales_agent.agent_id');
         $this->db->where('single_sales_id', $single_sales_id);
         $query = $this->db->get('single_sales_agent')->result_array();

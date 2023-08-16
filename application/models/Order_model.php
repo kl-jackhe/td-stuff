@@ -231,4 +231,12 @@ class Order_model extends CI_Model {
 		$query = $this->db->get('delivery')->result_array();
 		return (!empty($query)?$query:false);
 	}
+
+	function getSalesPageHistoryList($single_sales_id) {
+		$this->db->select('*');
+		$this->db->where('single_sales_id',$single_sales_id);
+		$this->db->order_by("order_id", "desc");
+		$query = $this->db->get('orders')->result_array();
+		return (!empty($query) ? $query : false);
+	}
 }
