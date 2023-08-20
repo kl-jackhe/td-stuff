@@ -23,6 +23,8 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202308201555();
+                            $this->update_202308191205();
                             $this->update_202308161230();
                             $this->update_202308161240();
                         } else {
@@ -35,6 +37,60 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202308201555() {
+        $version = '202308201555';
+        $description = '[users]新增欄位[join_status]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'join_status'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `users` ADD `join_status` varchar(30) NOT NULL AFTER `id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202308191205() {
+        $version = '202308191205';
+        $description = 'setting_general insertData[facebook,line,instagram,tiktok,xiaohongshu,logo_max_width,shopping_notes]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('logo_max_width','official_facebook_1','official_facebook_2','official_line_1','official_line_2','official_instagram_1','official_instagram_2','official_tiktok_1','official_tiktok_2','official_xiaohongshu_1','official_xiaohongshu_2','shopping_notes');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

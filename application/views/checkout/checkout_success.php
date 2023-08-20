@@ -34,7 +34,7 @@ tr:first-child td:first-child {
             <div class="checkout-list" style="border: none; box-shadow: none; margin-bottom: 0px;">
                 <div class="row text-center">
                     <div class="col-12">
-                        <h2>下單完成！</h2>
+                        <h1 style="color: red;font-weight: bold;">下單完成！</h1>
                     </div>
                 </div>
                 <div class="row justify-content-center">
@@ -144,7 +144,7 @@ tr:first-child td:first-child {
                         <span class="front_title">運費：<span class="money_size"> $
                                 <?php echo format_number($order['order_delivery_cost']) ?></span></span>
                         <hr>
-                        <span class="front_title">總計：<span class="money_size"> $
+                        <span class="front_title">總計：<span class="money_size" style="color: #F75000;font-size: 28px;"> $
                                 <?php echo format_number($order['order_discount_total']) ?></span></span>
                         <hr>
                         <h3>付款方式：
@@ -207,13 +207,18 @@ tr:first-child td:first-child {
                                     <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
                                 </div>
                             <?}?>
-                            <?if ($this->is_td_stuff) {?>
-                                <div <?=($agentID == '' ? 'class="col-12 col-md-6 py-2"' : 'class="col-12 col-md-12 py-2"')?>>
-                                    <a href="https://line.me/R/ti/p/@504bdron" class="btn btn-info btn-block" target="_blank">聯繫客服 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            <?}?>
-                            <?if ($this->is_liqun_food) {?>
-                            <?}?>
+                            <div <?=($agentID == '' ? 'class="col-12 col-md-6 py-2"' : 'class="col-12 col-md-12 py-2"')?>>
+                                <a href="<?=get_setting_general('official_line_1')?>" class="btn btn-info btn-block" target="_blank">聯繫客服 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            </div>
+                            <?if ($this->is_td_stuff) {
+                                if (!empty($users)) {
+                                    if ($users['join_status'] == '' || $users['join_status'] == 'NotJoin') {?>
+                                         <div class="col-12 py-2">
+                                            <span class="btn btn-success btn-block" data-toggle="modal" data-target="#joinNowMemberModal">一鍵成為會員</span>
+                                        </div>
+                                    <?}
+                                }
+                            }?>
                             <?if ($agentID == '') {?>
                                 <div class="col-12 py-2">
                                     <a href="/" class="btn btn-primary btn-block">回首頁</a>
@@ -225,6 +230,65 @@ tr:first-child td:first-child {
             </div>
         </div>
     </section>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="joinNowMemberModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="mb-1 mt-0">加入會員</h2>
+                        <h4 class="m-0">優點：可以事先掌握訂單狀態/售後服務跟上網紅分享好消息</h4>
+                    </div>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group pb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">帳號</span>
+                            </div>
+                            <input type="text" class="form-control" id="account" value="<?=$order['customer_phone']?>" readonly>
+                        </div>
+                        <div>
+                            <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
+                        </div>
+                        <div class="input-group pb-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">密碼</span>
+                            </div>
+                            <input type="password" class="form-control" id="password" value="" placeholder="請輸入密碼">
+                            <div class="input-group-append">
+                                <span class="input-group-text" onclick="passwordShowOrHide('password')">
+                                    <i class="fa-solid fa-eye" id="password_eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">密碼確認</span>
+                            </div>
+                            <input type="password" class="form-control" id="password_confirm" value="" placeholder="請輸入密碼確認">
+                            <div class="input-group-append">
+                                <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
+                                    <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="btn btn-primary" onclick="joinNowMember('<?=encode($order['order_id'])?>')">註冊</span>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 function get_order() {
@@ -246,5 +310,56 @@ function get_order() {
         $("table.paid").fadeIn('fast');
         $("table.picked").fadeIn('fast');
     }
+}
+function passwordShowOrHide(source) {
+    if ($('#'+source).attr("type") === "password") {
+        $('#'+source).attr("type", "text");
+        $('#'+source+'_eye').removeClass("fa-eye");
+        $('#'+source+'_eye').addClass("fa-eye-slash");
+    } else {
+        $('#'+source).attr("type", "password");
+        $('#'+source+'_eye').removeClass("fa-eye-slash");
+        $('#'+source+'_eye').addClass("fa-eye");
+    }
+}
+function joinNowMember(order_id) {
+    if ($('#password').val() == '') {
+        alert('請輸入密碼！');
+        return;
+    }
+    if ($('#password_confirm').val() == '') {
+        alert('請輸入密碼確認！');
+        return;
+    }
+    if ($('#password').val().length < 8) {
+        alert('密碼請輸入 8 位(含)以上的數字或英文！');
+        return;
+    }
+    if ($('#password_confirm').val().length < 8) {
+        alert('密碼確認請輸入 8 位(含)以上的數字或英文！');
+        return;
+    }
+    if ($('#password').val() != $('#password_confirm').val()) {
+        alert('密碼不匹配！請在確認輸入的密碼。');
+        return;
+    }
+    $.ajax({
+        url: '/auth/join_user/',
+        type: 'POST',
+        data: {
+            order_id: order_id,
+            password: $('#password').val(),
+            password_confirm: $('#password_confirm').val(),
+        },
+        success: function(data) {
+            if (data == 'yes') {
+                alert('已註冊完成');
+                location.reload();
+            } else {
+                alert('註冊失敗，請聯繫客服。');
+                location.reload();
+            }
+        }
+    });
 }
 </script>

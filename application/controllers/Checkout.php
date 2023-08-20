@@ -68,6 +68,8 @@ class Checkout extends Public_Controller {
 		$customer_id = 0;
 		if (isset($this->current_user->id)) {
 			$customer_id = $this->current_user->id;
+		} else {
+			$customer_id = $this->get_users_id();
 		}
 
 		$delivery_cost = 0;
@@ -310,20 +312,47 @@ class Checkout extends Public_Controller {
             // Redirect to LINE Pay payment URL
             header('Location: '. $response->getPaymentUrl() );
 
-        }else {
-			redirect(base_url() . 'checkout/success/' . $order_id);
+        } else {
+			redirect(base_url() . 'checkout/success/' . encode($order_id));
 		}
 	}
 
-	public function success($id) {
+	function get_users_id()
+    {
+        $users_id = 0;
+        $this->db->select('id');
+        $this->db->where('username', trim($this->input->post('phone')));
+        $this->db->limit(1);
+        $row = $this->db->get('users')->row_array();
+        if (!empty($row)) {
+            $users_id = $row['id'];
+        } else {
+            $group = array('2');
+            $additional_data = array(
+                'join_status' => 'NotJoin',
+                'full_name' => $this->input->post('name'),
+                'phone' => $this->input->post('phone'),
+                'created_at' => date('Y-m-d H:i:s'),
+            );
+            $password = get_random_string(10);
+            $this->ion_auth->register($this->input->post('phone'), $password, $this->input->post('email'), $additional_data, $group);
+            $this->db->select('id');
+            $this->db->where('username', $this->input->post('phone'));
+            $this->db->limit(1);
+            $u_row = $this->db->get('users')->row_array();
+            if (!empty($u_row)) {
+                $users_id = $u_row['id'];
+            }
+        }
+        return $users_id;
+    }
+
+	public function success($order_id) {
 		$this->data['page_title'] = '訂單完成';
 		$this->cart->destroy();
-
-		// $this->db->where('session_id', $this->session_id);
-		// $this->db->delete('cart');
-
-		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
-		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
+		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', decode($order_id), 'row');
+		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', decode($order_id));
+		$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
 		$this->render('checkout/checkout_success');
 	}
 

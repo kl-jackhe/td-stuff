@@ -261,8 +261,9 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12">
                                     <h3 class="mt-0">購物須知</h3>
-                                    <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
-                                    <p style="color:#dd0606;">2. 超商取貨者，請務必確認手機號碼是否正確。</p>
+                                    <textarea class="form-control" cols="30" rows="3" disabled><?=get_setting_general('shopping_notes')?></textarea>
+                                    <!-- <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
+                                    <p style="color:#dd0606;">2. 超商取貨者，請務必確認手機號碼是否正確。</p> -->
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -368,8 +369,14 @@ foreach ($this->cart->contents() as $items) {
                                     <label class="col-form-label">訂單備註</label>
                                     <textarea class="form-control" name="remark" rows="3"></textarea>
                                 </div>
-                                <div class="col-12 py-3">
+                                <div class="col-12 py-3" id="NotesOnBankRemittance">
                                     <p>＊銀行匯款＊<br>注意事項：完成付款後，記得聯繫客服，確認付款完成！</p>
+                                    <?if (get_setting_general('official_line_1') != '') {?>
+                                        Line客服連結：
+                                        <a href="<?=get_setting_general('official_line_1')?>" target="_blank" style="text-decoration-line: underline;">
+                                            <?=get_setting_general('official_line_1')?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
+                                        </a>
+                                    <?}?>
                                 </div>
                                 <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
@@ -436,6 +443,7 @@ $("#wizard").steps({
         // console.log(newIndex)
         if (newIndex === 3) {
             var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
             if($('#name').val()==''){
                 alert('請輸入收件姓名');
                 return false;
@@ -444,11 +452,16 @@ $("#wizard").steps({
                 alert('請輸入完整的收件電話');
                 return false;
             }
-            if(delivery=='711_pickup') {
+            if(delivery == '711_pickup') {
                 if($('#storename').val()=='' || $('#storeaddress').val()==''){
                     alert('請選擇取貨門市');
                     return false;
                 }
+            }
+            if (payment != 'bank_transfer') {
+                $('#NotesOnBankRemittance').hide();
+            } else {
+                $('#NotesOnBankRemittance').show();
             }
         }
         return true;
@@ -474,12 +487,23 @@ $("#wizard").steps({
             inputValue = inputValue.slice(0, 10);
             $(this).val(inputValue);
         });
-        // $("#phone").on("keypress keyup blur",function (event) {
-        //     $(this).val($(this).val().replace(/[^\d].+/, ""));
-        //     if ((event.which < 48 || event.which > 57)) {
-        //         event.preventDefault();
-        //     }
-        // });
+        $(function() {
+            var h = $(window).height();
+            var header_h = $("#header").height();
+            var footer_h = $("#footer").height();
+            var content_auto_h = $(".content_auto_h").height();
+            // alert(content_auto_h);
+            // alert(h);
+            var main_h = $(".main").height();
+            var h_sum = h - header_h - footer_h;
+            var h_checkout = h_sum * 0.7;
+            if (h_sum >= content_auto_h) {
+                $(".content_auto_h").css('height', h_sum * 0.9);
+            } else {
+                $(".content_auto_h").css('height', '100%');
+            }
+            $(".wizard > .content").css('min-height', h_checkout);
+        });
     });
     function select_store_info() {
         set_user_data();

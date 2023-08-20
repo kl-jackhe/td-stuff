@@ -590,6 +590,40 @@ class Auth extends Public_Controller {
 		$this->render('auth/edit_user');
 	}
 
+	// join a user
+	public function join_user() {
+		$order_id = decode($this->input->post('order_id'));
+		$this->db->select('customer_id,customer_name,customer_phone,customer_email');
+		$this->db->where('order_id', $order_id);
+		$this->db->limit(1);
+		$o_row = $this->db->get('orders')->row_array();
+		if (!empty($o_row)) {
+			$user = $this->ion_auth->user($o_row['customer_id'])->row();
+			if (isset($_POST) && !empty($_POST)) {
+				$data = array(
+					'join_status' => 'IsJoin',
+					'full_name' => $o_row['customer_name'],
+					'email' => $o_row['customer_email'],
+					'phone' => $o_row['customer_phone'],
+					'password' => $this->input->post('password'),
+					'updated_at' => date('Y-m-d H:i:s'),
+				);
+				if ($this->ion_auth->update($user->id, $data)) {
+					echo 'yes';
+					return;
+				} else {
+					echo 'no';
+					return;
+				}
+			}
+			echo 'no';
+			return;
+		} else {
+			echo 'error';
+			return;
+		}
+	}
+
 	/**
 	 * Create a new group
 	 */

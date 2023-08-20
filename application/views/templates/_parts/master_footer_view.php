@@ -1,28 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
     <div class="fixed-bottom header_fixed_icon">
-        <?if ($agentID == '') {?>
-        <div id="fa-facebook-square" class="my-3 icon_pointer">
-            <?if ($this->is_td_stuff) {?>
-                <a id="facebook_href" href="https://www.facebook.com/114764431237605" target="_blank" style="outline: none;">
+        <?if ($agentID == '' && get_setting_general('official_facebook_1') != '') {?>
+            <div id="fa-facebook-square" class="my-3 icon_pointer">
+                <a id="facebook_href" href="<?=get_setting_general('official_facebook_1')?>" target="_blank" style="outline: none;">
                     <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
                 </a>
-            <?}?>
-            <?if ($this->is_liqun_food) {?>
-
-            <?}?>
-        </div>
+            </div>
         <?}?>
-        <div id="fa-line" class="my-3 icon_pointer">
-            <?if ($this->is_td_stuff) {?>
-                <a href="https://line.me/R/ti/p/@504bdron" target="_blank" style="outline: none;">
+        <?if (get_setting_general('official_line_1') != '') {?>
+            <div id="fa-line" class="my-3 icon_pointer">
+                <a href="<?=get_setting_general('official_line_1')?>" target="_blank" style="outline: none;">
                     <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
                 </a>
-            <?}?>
-            <?if ($this->is_liqun_food) {?>
-
-            <?}?>
-        </div>
+            </div>
+        <?}?>
         <div id="scrollToBottomBtn" class="my-3 icon_pointer">
             <a href="#" style="outline: none;">
                 <?if ($this->is_td_stuff) {?>
@@ -145,21 +137,19 @@ function view_form_check() {
 $(document).ready(function() {
     //<!-- Window Height -->
     $(function() {
-        var h = $(window).height();
-        var header_h = $("#header").height();
-        var footer_h = $("#footer").height();
-        var content_auto_h = $(".content_auto_h").height();
-        // alert(content_auto_h);
-        // alert(h);
-        var main_h = $(".main").height();
-        var h_sum = h - header_h - footer_h;
-        var h_checkout = h_sum * 0.6;
-        if (h_sum >= content_auto_h) {
-            $(".content_auto_h").css('height', h_sum);
-        } else {
-            $(".content_auto_h").css('height', '100%');
-        }
-        $(".wizard > .content").css('min-height', h_checkout);
+        // var h = $(window).height();
+        // var header_h = $("#header").height();
+        // var footer_h = $("#footer").height();
+        // var content_auto_h = $(".content_auto_h").height();
+        // var main_h = $(".main").height();
+        // var h_sum = h - header_h - footer_h;
+        // // var h_checkout = h_sum * 0.6;
+        // if (h_sum >= content_auto_h) {
+        //     $(".content_auto_h").css('height', h_sum);
+        // } else {
+        //     $(".content_auto_h").css('height', '100%');
+        // }
+        // $(".wizard > .content").css('min-height', h_checkout);
     });
     //<!-- scrollTop -->
     $(function() {

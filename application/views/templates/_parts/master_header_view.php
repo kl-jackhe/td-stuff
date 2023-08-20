@@ -84,12 +84,7 @@
         text-align: center;
     }
     .top_logo_style {
-        <?if ($this->is_td_stuff) {?>
-            max-width: 130px;
-        <?}?>
-        <?if ($this->is_liqun_food) {?>
-            max-width: 200px;
-        <?}?>
+        max-width: <?=(get_setting_general('logo_max_width') != '' ? get_setting_general('logo_max_width') .'px' : '130px')?>;
         position: absolute;
         transform: translate(-50%, -50%);
         left: 50%;

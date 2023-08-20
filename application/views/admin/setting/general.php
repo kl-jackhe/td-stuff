@@ -29,9 +29,7 @@
 
 			<!-- Tab panes -->
 			<div class="tab-content">
-				
 			    <div role="tabpanel" class="tab-pane active" id="company">
-
 			      	<div class="form-group">
 						<label class="col-md-2" for="name">網站名稱</label>
 						<div class="col-md-4">
@@ -93,6 +91,36 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-2" for="official_facebook_1">FaceBook</label>
+						<div class="col-md-4">
+							<input type="text" name="official_facebook_1" id="official_facebook_1" class="form-control" value="<?php echo get_setting_general('official_facebook_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="official_line_1">Line</label>
+						<div class="col-md-4">
+							<input type="text" name="official_line_1" id="official_line_1" class="form-control" value="<?php echo get_setting_general('official_line_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="official_instagram_1">Instagram</label>
+						<div class="col-md-4">
+							<input type="text" name="official_instagram_1" id="official_instagram_1" class="form-control" value="<?php echo get_setting_general('official_instagram_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="official_tiktok_1">TikTok</label>
+						<div class="col-md-4">
+							<input type="text" name="official_tiktok_1" id="official_tiktok_1" class="form-control" value="<?php echo get_setting_general('official_tiktok_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="official_xiaohongshu_1">小紅書</label>
+						<div class="col-md-4">
+							<input type="text" name="official_xiaohongshu_1" id="official_xiaohongshu_1" class="form-control" value="<?php echo get_setting_general('official_xiaohongshu_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-2" for="meta_keywords">網站meta關鍵字</label>
 						<div class="col-md-4">
 							<input type="text" name="meta_keywords" id="meta_keywords" class="form-control" value="<?php echo get_setting_general('meta_keywords') ?>"/>
@@ -102,6 +130,12 @@
 						<label class="col-md-2" for="meta_description">網站meta描述</label>
 						<div class="col-md-4">
 							<input type="text" name="meta_description" id="meta_description" class="form-control" value="<?php echo get_setting_general('meta_description') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="shopping_notes">購物須知</label>
+						<div class="col-md-4">
+							<textarea class="form-control" rows="3" name="shopping_notes" id="shopping_notes"><?php echo get_setting_general('shopping_notes') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group hide">
@@ -121,13 +155,19 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-2" for="logo_max_width">LOGO最大寬度<p style="font-size: 12px;margin: 0;color: red;">無設定則預設為130px</p></label>
+						<div class="col-md-4">
+							<div class="input-group">
+								<input type="text" name="logo_max_width" id="logo_max_width" class="form-control" value="<?=get_setting_general('logo_max_width') ?>"/>
+								<span class="input-group-addon">px</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-2" for="file_upload">LOGO</label>
 						<div class="col-md-4">
-
 							<img src="<?php if (!empty(get_setting_general('logo'))) { echo base_url().'assets/uploads/'.get_setting_general('logo'); } ?>" id="logo_preview" class="img-responsive" <?php if (empty(get_setting_general('logo'))) { echo "style='display:none;'"; } ?>>
-
 							<input type="hidden" id="logo" name="logo" value="<?php echo get_setting_general('logo') ?>"/>
-
 				            <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=logo&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇LOGO</a>
 						</div>
 					</div>
