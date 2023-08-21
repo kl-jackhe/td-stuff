@@ -7,7 +7,7 @@ class Update extends Admin_Controller {
         parent::__construct();
     }
 
-    function index($version = '202308161240')
+    function index($version = '202308212140')
     {
         if ($version != '') {
             $this->version = $version;
@@ -23,6 +23,8 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202308212210();
+                            $this->update_202308212140();
                             $this->update_202308201555();
                             $this->update_202308191205();
                             $this->update_202308161230();
@@ -37,6 +39,68 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202308212210() {
+        $version = '202308212210';
+        $description = 'setting_general insertData[smtp_host,smtp_user,smtp_pass,smtp_port,smtp_crypto]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('smtp_host','smtp_user','smtp_pass','smtp_port','smtp_crypto');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202308212140() {
+        $version = '202308212140';
+        $description = 'setting_general insertData[facebook,line,instagram,tiktok,xiaohongshu,single_sales_error_info]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('official_facebook_1_qrcode','official_facebook_2_qrcode','official_line_1_qrcode','official_line_2_qrcode','official_instagram_1_qrcode','official_instagram_2_qrcode','official_tiktok_1_qrcode','official_tiktok_2_qrcode','official_xiaohongshu_1_qrcode','official_xiaohongshu_2_qrcode','single_sales_error_info');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

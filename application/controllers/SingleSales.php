@@ -22,6 +22,10 @@ class SingleSales extends Public_Controller {
 				$this->render('single_sales/error');
 				return;
 			}
+			if (($row['status'] == 'OnSale' && $row['start_date'] >= date('Y-m-d H:i:s')) || ($row['status'] == 'ForSale' && $row['pre_date'] >= date('Y-m-d H:i:s'))) {
+				$this->render('single_sales/error');
+				return;
+			}
 			$session_data = array(
 				'single_sales_id' => $id,
 				'agent_id' => $this->input->get('aid'),

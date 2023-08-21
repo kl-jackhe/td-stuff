@@ -452,6 +452,10 @@ $("#wizard").steps({
                 alert('請輸入完整的收件電話');
                 return false;
             }
+            if($('#email').val()==''){
+                alert('請輸入完整的電子郵件');
+                return false;
+            }
             if(delivery == '711_pickup') {
                 if($('#storename').val()=='' || $('#storeaddress').val()==''){
                     alert('請選擇取貨門市');
@@ -533,13 +537,16 @@ $("#wizard").steps({
 
     function form_check() {
         var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
-        var phone = $('#phone').val();
         if($('#name').val()==''){
             alert('請輸入收件姓名');
             return false;
         }
-        if(phone.length < 10){
+        if($('#phone').val().length < 10){
             alert('請輸入完整的收件電話');
+            return false;
+        }
+        if($('#email').val()==''){
+            alert('請輸入完整的電子郵件');
             return false;
         }
         if(delivery=='711_pickup_frozen') {

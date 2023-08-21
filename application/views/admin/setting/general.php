@@ -79,6 +79,36 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-2" for="smtp_host">電子郵件伺服器</label>
+						<div class="col-md-4">
+							<input type="text" name="smtp_host" id="smtp_host" class="form-control" value="<?php echo get_setting_general('smtp_host') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="smtp_user">電子郵件帳號</label>
+						<div class="col-md-4">
+							<input type="text" name="smtp_user" id="smtp_user" class="form-control" value="<?php echo get_setting_general('smtp_user') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="smtp_pass">電子郵件密碼</label>
+						<div class="col-md-4">
+							<input type="text" name="smtp_pass" id="smtp_pass" class="form-control" value="<?php echo get_setting_general('smtp_pass') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="smtp_port">電子郵件埠號</label>
+						<div class="col-md-4">
+							<input type="text" name="smtp_port" id="smtp_port" class="form-control" value="<?php echo get_setting_general('smtp_port') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="smtp_crypto">電子郵件加密類型</label>
+						<div class="col-md-4">
+							<input type="text" name="smtp_crypto" id="smtp_crypto" class="form-control" value="<?php echo get_setting_general('smtp_crypto') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-2" for="atm_bank_code">銀行代碼</label>
 						<div class="col-md-4">
 							<input type="text" name="atm_bank_code" id="atm_bank_code" class="form-control" value="<?php echo get_setting_general('atm_bank_code') ?>"/>
@@ -100,6 +130,14 @@
 						<label class="col-md-2" for="official_line_1">Line</label>
 						<div class="col-md-4">
 							<input type="text" name="official_line_1" id="official_line_1" class="form-control" value="<?php echo get_setting_general('official_line_1') ?>"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="file_upload">Line QR Code</label>
+						<div class="col-md-4">
+							<img src="<?php if (!empty(get_setting_general('official_line_1_qrcode'))) { echo base_url().'assets/uploads/'.get_setting_general('official_line_1_qrcode'); } ?>" id="official_line_1_qrcode_preview" class="img-responsive" <?php if (empty(get_setting_general('official_line_1_qrcode'))) { echo "style='display:none;'"; } ?>>
+							<input type="hidden" id="official_line_1_qrcode" name="official_line_1_qrcode" value="<?php echo get_setting_general('official_line_1_qrcode') ?>"/>
+				            <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=official_line_1_qrcode&relative_url=1" class="btn btn-primary fancybox" type="button">選擇圖片</a>
 						</div>
 					</div>
 					<div class="form-group">
@@ -138,6 +176,12 @@
 							<textarea class="form-control" rows="3" name="shopping_notes" id="shopping_notes"><?php echo get_setting_general('shopping_notes') ?></textarea>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="single_sales_error_info">銷售頁面不開放文字描述</label>
+						<div class="col-md-4">
+							<textarea class="form-control" rows="3" name="single_sales_error_info" id="single_sales_error_info"><?php echo get_setting_general('single_sales_error_info') ?></textarea>
+						</div>
+					</div>
 					<div class="form-group hide">
 						<label class="col-md-2" for="per_page">毎頁顯示筆數</label>
 						<div class="col-md-4">
@@ -171,9 +215,7 @@
 				            <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=logo&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇LOGO</a>
 						</div>
 					</div>
-
 			    </div>
-
 			</div>
 		</div>
 		<div class="form-group">

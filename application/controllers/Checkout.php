@@ -617,7 +617,7 @@ class Checkout extends Public_Controller {
 		$content .= '<td colspan="2"> </td>';
 		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>總計：</strong><span style="color: #dd0606;">$' . number_format($row['order_discount_total']) . '</sapn></td>';
 		$content .= '</tr>';
-		$content .= '<tr><td colspan="4" text-align="center"><a href="' . base_url() . 'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
+		// $content .= '<tr><td colspan="4" text-align="center"><a href="' . base_url() . 'order" target="_blank" class="order-check-btn"style="color: #000;">訂單查詢</a></td></tr>';
 
 		$content .= '</table>';
 
@@ -648,6 +648,9 @@ class Checkout extends Public_Controller {
             </td>
         </tr>
         </table>
+        <div style="text-align:center"></div>
+        <h3>【官方客服LINE QR Code】</h3>
+        <img src="' . base_url() . 'assets/uploads/' . get_setting_general('official_line_1_qrcode') . '" height="150px">
         ';
 
 		$footer = '<div style="width:100%;height:50px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
@@ -693,11 +696,11 @@ class Checkout extends Public_Controller {
 		$this->load->library('email');
 
 		// 寄信給賣家
-		$this->email->set_smtp_host("mail.td-stuff.com");
-		$this->email->set_smtp_user("service@td-stuff.com");
-		$this->email->set_smtp_pass("Td-stuff@admin");
-		$this->email->set_smtp_port("587");
-		$this->email->set_smtp_crypto("");
+		$this->email->set_smtp_host(get_setting_general('smtp_host'));
+		$this->email->set_smtp_user(get_setting_general('smtp_user'));
+		$this->email->set_smtp_pass(get_setting_general('smtp_pass'));
+		$this->email->set_smtp_port(get_setting_general('smtp_port'));
+		$this->email->set_smtp_crypto(get_setting_general('smtp_crypto'));
 
 		$this->email->to($row['customer_email']);
 		$this->email->from('service@td-stuff.com', get_setting_general('name'));
