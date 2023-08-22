@@ -34,19 +34,19 @@
     <div class="col-md-4">
         <div class="input-group">
             <span class="input-group-addon">展示日期</span>
-            <input type="text" class="form-control datetimepicker" id="pre_date" value="<?=($SingleSalesDetail['pre_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['pre_date'], 0, 10) : '')?>">
+            <input type="text" class="form-control datetimepicker" id="pre_date" value="<?=($SingleSalesDetail['pre_date'] != '0000-00-00 00:00:00' ? $SingleSalesDetail['pre_date'] : '')?>">
         </div>
     </div>
     <div class="col-md-4">
         <div class="input-group">
             <span class="input-group-addon">開始日期</span>
-            <input type="text" class="form-control datetimepicker" id="start_date" value="<?=($SingleSalesDetail['start_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['start_date'], 0, 10) : '')?>">
+            <input type="text" class="form-control datetimepicker" id="start_date" value="<?=($SingleSalesDetail['start_date'] != '0000-00-00 00:00:00' ? $SingleSalesDetail['start_date'] : '')?>">
         </div>
     </div>
     <div class="col-md-4">
         <div class="input-group">
             <span class="input-group-addon">結束日期</span>
-            <input type="text" class="form-control datetimepicker" id="end_date" value="<?=($SingleSalesDetail['end_date'] != '0000-00-00 00:00:00' ? substr($SingleSalesDetail['end_date'], 0, 10) : '')?>">
+            <input type="text" class="form-control datetimepicker" id="end_date" value="<?=($SingleSalesDetail['end_date'] != '0000-00-00 00:00:00' ? $SingleSalesDetail['end_date'] : '')?>">
         </div>
     </div>
     <div class="col-md-12">
