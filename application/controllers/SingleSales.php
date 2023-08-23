@@ -15,8 +15,10 @@ class SingleSales extends Public_Controller {
 			if ($this->session->userdata('agent_id') != $this->input->get('aid')) {
 				$this->cart->destroy();
 				unset($_SESSION['single_sales_id']);
+				unset($_SESSION['single_sales_url']);
 				unset($_SESSION['agent_id']);
 				unset($_SESSION['agent_name']);
+				unset($_SESSION['single_sales_status']);
 			}
 			if (empty($agent_name) || ($row['status'] == 'Closure' || $row['status'] == 'OutSale')) {
 				$this->render('single_sales/error');
@@ -28,6 +30,7 @@ class SingleSales extends Public_Controller {
 			}
 			$session_data = array(
 				'single_sales_id' => $id,
+				'single_sales_url' => $row['url'] . '?aid=' . $this->input->get('aid'),
 				'agent_id' => $this->input->get('aid'),
 				'agent_name' => $agent_name['name'],
 				'single_sales_status' => $row['status'],

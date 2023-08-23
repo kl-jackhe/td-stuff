@@ -41,8 +41,8 @@ class Agent_model extends CI_Model {
 
     function getAgentDetail($id) {
         $this->db->select('agent.id,agent.name,agent.full_name,agent.phone,agent.address,agent.remark,agent.users_id,agent.status,agent.created_at,agent.updated_at');
-        $this->db->select('users.username,users.gender,users.email AS users_email,users.full_name AS users_full_name,users.phone AS users_phone,users.county,users.district,users.address AS users_address,users.birthday,users.company,users.status AS users_status');
-        $this->db->join('users','users.id = agent.users_id');
+        // $this->db->select('users.username,users.gender,users.email AS users_email,users.full_name AS users_full_name,users.phone AS users_phone,users.county,users.district,users.address AS users_address,users.birthday,users.company,users.status AS users_status');
+        // $this->db->join('users','users.id = agent.users_id');
         $this->db->where('agent.id', $id);
         $this->db->limit(1);
         $row = $this->db->get('agent')->row_array();

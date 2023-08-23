@@ -4,6 +4,7 @@
 			<h3>銷售商品：<?=get_product_name($SingleSalesDetail['product_id'])?></h3>
 		</div>
 	<?}?>
+	<div class="col-md-12"><hr></div>
 	<div class="col-md-12">
 		<table class="table table-bordered table-striped">
 			<thead>

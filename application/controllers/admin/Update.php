@@ -7,7 +7,7 @@ class Update extends Admin_Controller {
         parent::__construct();
     }
 
-    function index($version = '202308212140')
+    function index($version = '202308231510')
     {
         if ($version != '') {
             $this->version = $version;
@@ -23,6 +23,7 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202308231510();
                             $this->update_202308212210();
                             $this->update_202308212140();
                             $this->update_202308201555();
@@ -39,6 +40,37 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202308231510() {
+        $version = '202308231510';
+        $description = 'setting_general insertData[mail_header_text,mail_boddy_text,mail_other_text,mail_footer_text]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('mail_header_text','mail_boddy_text','mail_other_text','mail_footer_text');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

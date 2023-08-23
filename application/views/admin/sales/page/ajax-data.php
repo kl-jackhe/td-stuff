@@ -123,7 +123,7 @@
                         <?if ($SingleStatus == 'History') {?>
                           <td>
                             <span class="btn btn-danger btn-sm <?=($row['status'] == 'OutSale'? '' : 'hide')?>" onclick="calculationReport('<?=$row['id']?>')">結束並計算</span>
-                            <span class="btn btn-success btn-sm <?=($row['status'] == 'Closure'? '' : 'hide')?>" onclick="viewCalculationReport('<?=$row['id']?>')">查看報表</span>
+                            <span class="btn btn-success btn-sm <?=($row['status'] == 'Closure'? '' : 'hide')?>" data-toggle="modal" data-target="#reportModal" onclick="viewCalculationReport('<?=$row['id']?>')">查看報表</span>
                           </td>
                         <?}?>
                     </tr>
@@ -139,50 +139,8 @@
         </table>
     </div>
 </div>
-<div id="report"></div>
 <script>
 $(document).ready(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
-function calculationReport(id) {
-    if (confirm('確定要結束此次銷售並且計算所有費用嗎？')) {
-        $('#loading').show();
-        $.ajax({
-            type: "POST",
-            url: '/admin/sales/calculationReport',
-            data: {
-                id: id,
-            },
-            success: function(data) {
-                if (data != 'no') {
-                    alert('執行成功！');
-                    $('#report').html(data);
-                } else {
-                    alert('執行失敗！');
-                }
-            },
-            error: function(data) {
-                alert('執行失敗！');
-                console.log('Error');
-            }
-        });
-        $('#loading').hide();
-    }
-}
-
-function viewCalculationReport(id) {
-    $.ajax({
-        type: "POST",
-        url: '/admin/sales/viewCalculationReport',
-        data: {
-            id: id,
-        },
-        success: function(data) {
-            $('#report').html(data);
-        },
-        error: function(data) {
-            console.log('Error');
-        }
-    });
-}
 </script>

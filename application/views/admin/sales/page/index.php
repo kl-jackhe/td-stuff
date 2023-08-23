@@ -53,7 +53,18 @@
         </div>
     </div>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="report">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (location.hash) {
@@ -98,5 +109,50 @@
             $('#status').val(status);
         }
         searchFilterSales();
+    }
+
+    function calculationReport(id) {
+        if (confirm('確定要結束此次銷售並且計算所有費用嗎？')) {
+            $('#loading').show();
+            $.ajax({
+                type: "POST",
+                url: '/admin/sales/calculationReport',
+                data: {
+                    id: id,
+                },
+                success: function(data) {
+                    if (data == 'yse') {
+                        alert('執行成功！');
+                        location.reload();
+                    } else if (data == 'no_default_profit_percentage') {
+                        alert('預設利潤％數沒設定！');
+                    } else {
+                        alert('執行失敗！');
+                    }
+                },
+                error: function(data) {
+                    alert('執行失敗！');
+                    console.log('Error');
+                }
+            });
+            $('#loading').hide();
+        }
+    }
+
+    function viewCalculationReport(id) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/sales/viewCalculationReport',
+            data: {
+                id: id,
+            },
+            success: function(data) {
+                $('#report').html(data);
+                $('#reportModal').show();
+            },
+            error: function(data) {
+                console.log('Error');
+            }
+        });
     }
 </script>

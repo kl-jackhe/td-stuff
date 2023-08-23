@@ -389,6 +389,11 @@ foreach ($this->cart->contents() as $items) {
                         </div>
                     </section>
                 </div>
+                <?if ($this->session->userdata('single_sales_url') != '') {?>
+                    <div class="mb-4">
+                        <a href="<?=$this->session->userdata('single_sales_url')?>" class="btn btn-info">繼續購物</a>
+                    </div>
+                <?}?>
             </div>
         </div>
         <?php echo form_close() ?>

@@ -224,19 +224,24 @@ class Sales extends Admin_Controller {
         $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
         if (!empty($ssd_row)) {
             $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-            if (!empty($ssad_query)) {
-                foreach ($ssad_query as $ssad_row) {
-                    $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                    $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
-                    $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                    $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
-                    $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+            if ($ssd_row['default_profit_percentage'] > 0) {
+                if (!empty($ssad_query)) {
+                    foreach ($ssad_query as $ssad_row) {
+                        $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                        $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
+                        $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                        $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
+                        $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+                    }
+                    $this->data['SingleSalesDetail'] = $ssd_row;
+                    $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
+                    $this->load->view('/admin/report/single_sales_agent_report', $this->data);
+                    echo 'yes';
+                } else {
+                    echo 'no';
                 }
-                $this->data['SingleSalesDetail'] = $ssd_row;
-                $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-                $this->load->view('/admin/report/single_sales_agent_report', $this->data);
             } else {
-                echo 'no';
+                echo 'no_default_profit_percentage';
             }
         } else {
             echo 'no';

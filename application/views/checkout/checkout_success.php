@@ -172,7 +172,7 @@ tr:first-child td:first-child {
                                 </td>
                             </tr>
                         </table>
-                        <p>完成付款後，記得聯繫客服，確認付款完成！</p>
+                        <p style="font-size:18px;">完成付款後，記得聯繫客服，確認付款完成！</p>
                         <?php }?>
                         <hr>
                         <h3>訂購人資訊</h3>

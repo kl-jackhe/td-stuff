@@ -109,6 +109,30 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-2" for="mail_header_text">寄件主旨</label>
+						<div class="col-md-4">
+							<textarea name="mail_header_text" id="mail_header_text" class="form-control" rows="3"><?php echo get_setting_general('mail_header_text') ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="mail_boddy_text">寄件主要內容文字描述</label>
+						<div class="col-md-4">
+							<textarea name="mail_boddy_text" id="mail_boddy_text" class="form-control" rows="3"><?php echo get_setting_general('mail_boddy_text') ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="mail_other_text">寄件次要內容文字描述</label>
+						<div class="col-md-4">
+							<textarea name="mail_other_text" id="mail_other_text" class="form-control" rows="3"><?php echo get_setting_general('mail_other_text') ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2" for="mail_footer_text">寄件尾部文字描述</label>
+						<div class="col-md-4">
+							<textarea name="mail_footer_text" id="mail_footer_text" class="form-control" rows="3"><?php echo get_setting_general('mail_footer_text') ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-2" for="atm_bank_code">銀行代碼</label>
 						<div class="col-md-4">
 							<input type="text" name="atm_bank_code" id="atm_bank_code" class="form-control" value="<?php echo get_setting_general('atm_bank_code') ?>"/>

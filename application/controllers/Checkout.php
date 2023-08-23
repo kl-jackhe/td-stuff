@@ -647,11 +647,16 @@ class Checkout extends Public_Controller {
                 </div>
             </td>
         </tr>
-        </table>
-        <div style="text-align:center"></div>
-        <h3>【官方客服LINE QR Code】</h3>
-        <img src="' . base_url() . 'assets/uploads/' . get_setting_general('official_line_1_qrcode') . '" height="150px">
-        ';
+        </table>';
+
+        if (get_setting_general('mail_footer_text') != '') {
+        	echo '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
+        }
+
+        if (get_setting_general('official_line_1_qrcode') != '') {
+        	echo '<h3>【官方客服LINE QR Code】</h3>
+        		<img src="' . base_url() . 'assets/uploads/' . get_setting_general('official_line_1_qrcode') . '" height="150px">';
+        }
 
 		$footer = '<div style="width:100%;height:50px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
 
