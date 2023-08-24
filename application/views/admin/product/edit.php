@@ -112,7 +112,7 @@
                                                 <input type="hidden" class="form-control" name="id[]" value="<?php echo $row['id']; ?>">
                                                 <input type="text" class="form-control unit" name="unit[]" value="<?php echo $row['unit']; ?>">
                                             </td>
-                                            <td class="text-center"><i class="fa fa-trash-o x"></i></td>
+                                            <td class="text-center"><i class="fa-solid fa-trash x"></i></td>
                                         </tr>
                                         <?}}?>
                                     </tbody>
@@ -153,41 +153,25 @@
                                                 <input type="hidden" id="picture<?php echo $row['id']; ?>" name="picture[]" value="<?php echo $row['picture']; ?>" />
                                             </td>
                                             <td>
-                                                <?php if (!empty($row['status'])) {?>
-                                                <select name=status[] class="form-control">
-                                                    <?if ($row['status'] == 0) { ?>
-                                                        <option value="0" selected>販售中</option>
-                                                        <option value="1">已售完</option>
-                                                        <option value="2">預購</option>
-                                                        <option value="99">停用</option>
-                                                    <?}?>
-                                                    <?if ($row['status'] == 1) { ?>
-                                                        <option value="0">販售中</option>
-                                                        <option value="1" selected>已售完</option>
-                                                        <option value="2">預購</option> 
-                                                        <option value="99">停用</option>
-                                                    <?}?>
-                                                    <?if ($row['status'] == 2) { ?>
-                                                        <option value="0">販售中</option>
-                                                        <option value="1">已售完</option>
-                                                        <option value="2" selected>預購</option>
-                                                        <option value="99">停用</option>
-                                                    <?}?>
-                                                    <?if ($row['status'] == 99) { ?>
-                                                        <option value="0">販售中</option>
-                                                        <option value="1">已售完</option>
-                                                        <option value="2">預購</option>
-                                                        <option value="99" selected>停用</option>
-                                                    <?}?>
-                                                </select>
-                                                <?php } else {?>
-                                                <select name=status[] class="form-control">
-                                                    <option value="0" selected>販售中</option>
-                                                    <option value="1">已售完</option>
-                                                    <option value="2">預購</option>
-                                                    <option value="99">停用</option>
-                                                </select>
-                                                <?php }?>
+                                                <?$status_array = array(
+                                                    '0' => '販售中',
+                                                    '1' => '已售完',
+                                                    '2' => '預購',
+                                                    '99' => '停用',
+                                                );
+                                                if (!empty($row['status'])) {?>
+                                                    <select name=status[] class="form-control">
+                                                        <? foreach ($status_array as $key => $value) {?>
+                                                            <option value="<?=$key?>" <?=($row['status'] == $key? 'selected' : '')?>><?=$value?></option>
+                                                        <?}?>
+                                                    </select>
+                                                <?} else {?>
+                                                    <select name=status[] class="form-control">
+                                                        <? foreach ($status_array as $key => $value) {?>
+                                                            <option value="<?=$key?>" <?=('0' == $key? 'selected' : '')?>><?=$value?></option>
+                                                        <?}?>
+                                                    </select>
+                                                <?}?>
                                             </td>
                                             <td>
                                                 <select class="form-control" name="limit_enable[]">
@@ -205,7 +189,7 @@
                                                     <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量">
                                                 <?}?>
                                             </td>
-                                            <td class="text-center"><i class="fa fa-trash-o x"></i></td>
+                                            <td class="text-center"><i class="fa-solid fa-trash x"></i></td>
                                         </tr>
                                         <?php }}?>
                                     </tbody>
@@ -317,11 +301,11 @@ function checkbox($id) {
 }
 function add_unit()
 {
-  $("#product-unit-list").append('<tr><td><input type="text" name="unit[]" class="form-control unit"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+  $("#product-unit-list").append('<tr><td><input type="text" name="unit[]" class="form-control unit"/></td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
 }
 function add_specification()
 {
-  $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+  $("#product-specification-list").append('<tr><td><input type="text" name="specification[]" class="form-control specification"/></td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
 }
 function createSingleSales(product_id) {
     if (confirm('確定要建立銷售頁面')) {

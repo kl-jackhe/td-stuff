@@ -114,7 +114,7 @@ function add_plan_item()
     }
     specification += '</select>';
 
-    $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>'+unit+'</td><td>'+specification+'</td><td class="text-center"><i class="fa fa-trash-o x"></i></td></tr>');
+    $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>'+unit+'</td><td>'+specification+'</td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
 }
 $('.fancybox').fancybox({
     'width': 1920,
