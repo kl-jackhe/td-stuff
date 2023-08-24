@@ -25,6 +25,7 @@
                     $start_hits = 0;
                     $sales_staff = array();
                     $sales_staff_list_str = '';
+                    $sales_staff_hits_list_str = '';
                     foreach ($SingleSalesAgent as $ssa_row) {
                       if ($ssa_row['single_sales_id'] == $row['id']) {
                         $count++;
@@ -34,6 +35,7 @@
                         $pre_hits += $ssa_row['pre_hits'];
                         $start_hits += $ssa_row['start_hits'];
                         $sales_staff_list_str .= $count . '. ' . $this->agent_model->getAgentName($ssa_row['agent_id']) . '&emsp;' . format_number($ssa_row['profit_percentage']) . '%' . '<br>';
+                        $sales_staff_hits_list_str .= $count . '. ' . $this->agent_model->getAgentName($ssa_row['agent_id']) . '<br>當前點擊數：' . $ssa_row['start_hits'] . '<br>';
                       }
                     }
                   }
@@ -105,7 +107,13 @@
                           <td><?=$pre_hits?></td>
                         <?}?>
                         <?if ($SingleStatus == 'OnSale') {?>
-                          <td><?=$start_hits?></td>
+                          <td>
+                              <div style="padding-bottom: 5px;border-bottom: 1px solid gray;">
+                                <span data-html="true" data-toggle="tooltip" data-placement="left" data-original-title="<?=$sales_staff_hits_list_str?>">
+                                  <?=$start_hits?> <i class="fa-regular fa-circle-question"></i>
+                                </span>
+                              </div>
+                          </td>
                         <?}?>
                         <?if ($SingleStatus == 'History') {?>
                           <td><?=$pre_hits + $start_hits?></td>
