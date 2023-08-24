@@ -1,5 +1,3 @@
-<!-- <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
-<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script> -->
 <style>
     p {
         margin: 0px;
@@ -55,24 +53,50 @@
     }
 </style>
 <div class="row">
-    <?php // $attributes = array('class' => 'download', 'id' => 'download');?>
-    <?php // echo form_open('admin/order/update/' . $order['order_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group hidden-print">
-            <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info">返回上一頁</a>
-            <button class="btn btn-success" type="button" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> 列印</button>       
+            <div class="row">
+                <div class="col-md-3 col-sm-12" style="padding-bottom: 10px;">
+                    <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info">返回上一頁</a>
+                    <button class="btn btn-success" type="button" onclick="window.print()"><i class="fa fa-print" aria-hidden="true"></i> 列印</button>
+                </div>
+                <div class="col-md-3 col-sm-12" style="padding-bottom: 10px;">
+                    <div class="input-group" style="width: 70%;">
+                        <span class="input-group-btn">
+                            <?$attributes = array('class' => 'form-inline');
+                            echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
+                            <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>" placeholder="匯款後五碼">
+                            <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                            <?echo form_close() ?>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="input-group" style="width: 70%;">
+                        <span class="input-group-btn">
+                            <?php $attributes = array('class' => 'form-inline');?>
+                            <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
+                            <?$att = 'class="form-control dropdown-toggle"';
+                              $options = array(
+                              'confirm' => '訂單確認',
+                              'pay_ok' => '已收款',
+                              'process' => '待出貨',
+                              'shipping' => '已出貨',
+                              'complete' => '完成',
+                              'order_cancel' => '訂單取消',
+                              'invalid' => '訂單不成立',
+                            );
+                            echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
+                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
+                            <?php echo form_close() ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="content-box-large pc_control">
             <div class="row" style="padding-left: 5px;padding-right: 5px;">
                 <div class="col-md-12">
-                    <!-- <?php if($order['order_status']==2){ ?>
-                        <div class="form-group">
-                            <h4 style="color: red;">訂單已取消單</h4>
-                        </div>
-                    <?php } ?>
-                    <div class="form-group">
-                        <h4>訂單狀態：<?php echo get_order_step($order['order_step']) ?></h4>
-                    </div> -->
                     <div class="row front_title border_style">
                         <div class="col-md-4">訂單編號：<?php echo $order['order_number'] ?></div>
                         <div class="col-md-4 text-center">訂單日期：<?php echo $order['order_date'] ?></div>
@@ -104,7 +128,7 @@
                                     $query = $this->db->get();
                                     foreach ($query->result_array() as $row) {
                                         echo get_front_image($row['picture']);
-                                    }?>        
+                                    }?>
                                 </div>
                                 <div class="col-md-4">
                                     <?$i = 0;
@@ -317,5 +341,4 @@
             </div>
         </div>
     </div>
-    <?php // echo form_close(); ?>
 </div>

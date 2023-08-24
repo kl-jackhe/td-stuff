@@ -24,6 +24,9 @@ p {
 .process_color {
     background-color: #FFFFCE !important;
 }
+.invalid_color {
+    background-color: #B3D9D9 !important;
+}
 
 
 @media screen and (max-width:767px) {
@@ -57,19 +60,7 @@ p {
         foreach ($orders as $order) {
         $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
         <tbody class="pc_control">
-            <?if ($order['order_step'] == 'pay_ok'){ ?>
-            <tr class="pay_ok_color">
-            <?}if ($order['order_step'] == 'order_cancel'){ ?>
-            <tr class="order_cancel_color">
-            <?}if ($order['order_step'] == 'shipping'){ ?>
-            <tr class="shipping_color">
-            <?}if ($order['order_step'] == 'complete'){ ?>
-            <tr class="complete_color">
-            <?}if ($order['order_step'] == 'process'){ ?>
-            <tr class="process_color">
-            <?}if ($order['order_step'] == 'confirm'){ ?>
-            <tr>
-            <?}?>
+            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
                 <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
                     <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
                     <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
@@ -117,7 +108,8 @@ p {
                               'process' => '待出貨',
                               'shipping' => '已出貨',
                               'complete' => '完成',
-                              'order_cancel' => '訂單取消',
+                              // 'order_cancel' => '訂單取消',
+                              'invalid' => '訂單不成立',
                             );
                             echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
                             <button type="submit" class="btn btn-primary btn-sm">修改</button>
@@ -138,23 +130,11 @@ p {
             </tr>
         </tbody>
         <tbody class="mb_control">
-            <?if ($order['order_step'] == 'pay_ok'){ ?>
-            <tr class="pay_ok_color">
-            <?}if ($order['order_step'] == 'order_cancel'){ ?>
-            <tr class="order_cancel_color">
-            <?}if ($order['order_step'] == 'shipping'){ ?>
-            <tr class="shipping_color">
-            <?}if ($order['order_step'] == 'complete'){ ?>
-            <tr class="complete_color">
-            <?}if ($order['order_step'] == 'process'){ ?>
-            <tr class="process_color">
-            <?}if ($order['order_step'] == 'confirm'){ ?>
-            <tr>
-            <?}?>
+            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
                 <td>
                     <?if ($order['order_step'] == 'order_cancel'){ ?>
                     <p>訂單編號：<span style="text-decoration: line-through;">
-                            <?php echo $order['order_number'] ?></span></p>
+                        <?php echo $order['order_number'] ?></span></p>
                     <?}else{?>
                     <p>訂單編號：
                         <?php echo $order['order_number'] ?>
@@ -173,7 +153,7 @@ p {
                         <?php echo get_payment($order['order_payment']) ?>
                     </p>
                     <p>訂單金額：<span style="color:red;font-weight: bold;">
-                            <?php echo format_number($order['order_discount_total']) ?></span></p>
+                        <?php echo format_number($order['order_discount_total']) ?></span></p>
                 </td>
                 <td>
                     <p>寄送/取貨地址：</p>
@@ -225,7 +205,8 @@ p {
                               'process' => '待出貨',
                               'shipping' => '已出貨',
                               'complete' => '完成',
-                              'order_cancel' => '訂單取消',
+                              // 'order_cancel' => '訂單取消',
+                              'invalid' => '訂單不成立',
                             );
                             echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
                             <button type="submit" class="btn btn-primary btn-sm">修改</button>
