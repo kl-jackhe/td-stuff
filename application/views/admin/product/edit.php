@@ -159,16 +159,25 @@
                                                         <option value="0" selected>販售中</option>
                                                         <option value="1">已售完</option>
                                                         <option value="2">預購</option>
+                                                        <option value="99">停用</option>
                                                     <?}?>
                                                     <?if ($row['status'] == 1) { ?>
                                                         <option value="0">販售中</option>
                                                         <option value="1" selected>已售完</option>
                                                         <option value="2">預購</option> 
+                                                        <option value="99">停用</option>
                                                     <?}?>
                                                     <?if ($row['status'] == 2) { ?>
                                                         <option value="0">販售中</option>
                                                         <option value="1">已售完</option>
                                                         <option value="2" selected>預購</option>
+                                                        <option value="99">停用</option>
+                                                    <?}?>
+                                                    <?if ($row['status'] == 99) { ?>
+                                                        <option value="0">販售中</option>
+                                                        <option value="1">已售完</option>
+                                                        <option value="2">預購</option>
+                                                        <option value="99" selected>停用</option>
                                                     <?}?>
                                                 </select>
                                                 <?php } else {?>
@@ -176,6 +185,7 @@
                                                     <option value="0" selected>販售中</option>
                                                     <option value="1">已售完</option>
                                                     <option value="2">預購</option>
+                                                    <option value="99">停用</option>
                                                 </select>
                                                 <?php }?>
                                             </td>

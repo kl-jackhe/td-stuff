@@ -247,7 +247,8 @@ input.qtyminus {
                                                 </div>
                                                 <div class="modal-body">
                                                 <?if (!empty($specification)) {
-                                                    foreach($specification as $row) {?>
+                                                    foreach($specification as $row) {
+                                                        if ($row['status'] != 99) {?>
                                                         <div class="input-group my-3">
                                                             <div style="width: 25%;">
                                                                 <img class="product_view_img_style" src="/assets/uploads/<?php echo $row['picture']; ?>">
@@ -295,6 +296,7 @@ input.qtyminus {
                                                             <input type="hidden" name="<?echo $combine['id'].'specification_id[]'?>" value="<?php echo $row['id'] ?>">
                                                         </div>
                                                     <?}
+                                                    }
                                                 } else {
                                                     echo '尚無規格可以選擇！';
                                                 }?>
