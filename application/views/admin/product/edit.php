@@ -95,6 +95,14 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-3" style="padding-bottom: 15px;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">預估庫存量</span>
+                                    <input type="text" class="form-control" id="inventory" name="inventory" value="<?php echo number_format($product['inventory']); ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>單位</label>

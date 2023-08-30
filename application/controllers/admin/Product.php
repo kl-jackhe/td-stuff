@@ -143,6 +143,7 @@ class Product extends Admin_Controller {
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
 			'product_image' => $this->input->post('product_image'),
+			'inventory' => $this->input->post('inventory'),
 			'updater_id' => $this->current_user->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
