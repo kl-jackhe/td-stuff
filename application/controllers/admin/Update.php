@@ -23,6 +23,7 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202308301910();
                             $this->update_202308231510();
                             $this->update_202308212210();
                             $this->update_202308212140();
@@ -40,6 +41,35 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202308301910() {
+        $version = '202308301910';
+        $description = '[product]新增欄位[inventory]&[single_sales_agent]新增欄位[signature_file]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'inventory'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `inventory` decimal(13,4) NOT NULL AFTER `sort`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM single_sales_agent LIKE 'signature_file'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `single_sales_agent` ADD `signature_file` varchar(100) NOT NULL AFTER `income`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

@@ -27,7 +27,6 @@ p {
 .invalid_color {
     background-color: #B3D9D9 !important;
 }
-
 @media screen and (max-width:767px) {
   .input-group {
     width: 65%;
@@ -166,19 +165,7 @@ p {
                     </p>
                 </td>
             </tr>
-            <?if ($order['order_step'] == 'pay_ok'){ ?>
-            <tr class="pay_ok_color">
-            <?}if ($order['order_step'] == 'order_cancel'){ ?>
-            <tr class="order_cancel_color">
-            <?}if ($order['order_step'] == 'shipping'){ ?>
-            <tr class="shipping_color">
-            <?}if ($order['order_step'] == 'complete'){ ?>
-            <tr class="complete_color">
-            <?}if ($order['order_step'] == 'process'){ ?>
-            <tr class="process_color">
-            <?}if ($order['order_step'] == 'confirm'){ ?>
-            <tr>
-            <?}?>
+            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
                 <td>
                     <p>匯款後五碼</p>
                     <div class="input-group">

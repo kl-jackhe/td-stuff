@@ -49,6 +49,7 @@ select.district {
         <option value="shipping">已出貨</option>
         <option value="complete">完成</option>
         <option value="order_cancel">訂單取消</option>
+        <option value="invalid">訂單不成立</option>
       </select>
       <input type="text" id="start_date" class="form-control datepicker" value="" placeholder="起始日期" size="9" autocomplete="off">
       <input type="text" id="end_date" class="form-control datepicker" value="" placeholder="終止日期" size="9" autocomplete="off">

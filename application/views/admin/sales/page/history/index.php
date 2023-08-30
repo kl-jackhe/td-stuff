@@ -2,21 +2,20 @@
 .pay_ok_color {
     background-color: #C4E1FF !important;
 }
-
 .order_cancel_color {
     background-color: #FFB5B5 !important;
 }
-
 .shipping_color {
     background-color: #DAB1D5 !important;
 }
-
 .complete_color {
     background-color: #CEFFCE !important;
 }
-
 .process_color {
     background-color: #FFFFCE !important;
+}
+.invalid_color {
+    background-color: #B3D9D9 !important;
 }
 </style>
 <div class="row">
@@ -38,19 +37,7 @@
           foreach ($orders as $order) {
           $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
             <tbody class="pc_control">
-                <?if ($order['order_step'] == 'pay_ok'){ ?>
-                <tr class="pay_ok_color">
-                    <?}if ($order['order_step'] == 'order_cancel'){ ?>
-                <tr class="order_cancel_color">
-                    <?}if ($order['order_step'] == 'shipping'){ ?>
-                <tr class="shipping_color">
-                    <?}if ($order['order_step'] == 'complete'){ ?>
-                <tr class="complete_color">
-                    <?}if ($order['order_step'] == 'process'){ ?>
-                <tr class="process_color">
-                    <?}if ($order['order_step'] == 'confirm'){ ?>
-                <tr>
-                    <?}?>
+                <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
                     <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
                         <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
                             <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
@@ -84,6 +71,7 @@
                       'shipping' => '已出貨',
                       'complete' => '完成',
                       'order_cancel' => '訂單取消',
+                      'invalid' => '訂單不成立',
                     );
                     foreach ($step_array as $key => $value) {
                       if ($key == $order['order_step']) {
