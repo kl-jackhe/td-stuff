@@ -389,11 +389,13 @@ class Order extends Admin_Controller {
 		if ($this->is_td_stuff) {
 			if ($step == 'pay_ok' || $step == 'process' || $step == 'confirm' || $step == 'invalid') {
 				$this->order_synchronize($id);
-			}
-
-			if ($step == 'shipping' || $step == 'complete' || $step == 'order_cancel') {
+			} else {
 				$this->order_update_synchronize($id);
 			}
+
+			// if ($step == 'shipping' || $step == 'complete' || $step == 'order_cancel') {
+			// 	$this->order_update_synchronize($id);
+			// }
 		}
 
 		$this->session->set_flashdata('message', '訂單更新成功！');
