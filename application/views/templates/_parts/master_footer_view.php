@@ -18,7 +18,7 @@
         <div id="scrollToBottomBtn" class="my-3 icon_pointer">
             <a href="#" style="outline: none;">
                 <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_buynow-1.png" alt="">
+                    <img class="fixed_icon_style" src="/assets/images/web icon_buynow-2.png" alt="">
                 <?}?>
                 <?if ($this->is_liqun_food) {?>
                     <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png" alt="">
@@ -29,7 +29,7 @@
             <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
                 <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car.png" alt="">
+                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car-2.png" alt="">
                 <?}?>
                 <?if ($this->is_liqun_food) {?>
                     <img class="fixed_icon_style" src="/assets/images/liqun/web icon_shopping car.png" alt="">
@@ -39,7 +39,7 @@
         <div id="fa-angles-up" class="my-3 icon_pointer">
             <a href="#" style="color:black;outline: none;" style="display: none;">
                 <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_top.png" alt="">
+                    <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png" alt="">
                 <?}?>
                 <?if ($this->is_liqun_food) {?>
                     <img class="fixed_icon_style" src="/assets/images/liqun/web icon_top.png" alt="">
