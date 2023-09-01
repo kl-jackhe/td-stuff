@@ -603,7 +603,7 @@ class Order extends Admin_Controller {
 	                    array_push($array['Data']['order_item'], $order_item);
                     }
 
-                    if($item['product_id']>0){
+                    // if($item['product_id']>0){
                     	$order_item = $item;
 
                     	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
@@ -624,7 +624,7 @@ class Order extends Admin_Controller {
 			            };
 
                     	array_push($array['Data']['product_item'], $order_item);
-                    }
+                    // }
                 }
             }
 
@@ -690,7 +690,7 @@ class Order extends Admin_Controller {
 	                    array_push($array['Data']['order_item'], $order_item);
                     }
 
-                    if($item['product_id']>0){
+                    // if($item['product_id']>0){
                     	$order_item = $item;
 
                     	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
@@ -711,7 +711,7 @@ class Order extends Admin_Controller {
 			            };
 
                     	array_push($array['Data']['product_item'], $order_item);
-                    }
+                    // }
                 }
             }
 
