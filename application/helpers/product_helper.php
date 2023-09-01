@@ -149,6 +149,18 @@ function get_product_description($id) {
 	}
 }
 
+function get_product_specification_name($id) {
+	$CI = &get_instance();
+	$CI->db->select('specification');
+	$CI->db->limit(1);
+	$query = $CI->db->get_where('product_specification', array('id' => $id));
+	if ($query->num_rows() > 0) {
+		$row = $query->row_array();
+		return $row['specification'];
+	}
+	return '';
+}
+
 function get_product_category($id) {
 	$result = '';
 	$CI = &get_instance();

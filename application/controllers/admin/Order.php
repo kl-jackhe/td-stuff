@@ -570,6 +570,7 @@ class Order extends Admin_Controller {
                 'Data' => array(
                     'order' => array(),
                     'order_item' => array(),
+                    'product_item' => array(),
                 )
             );
             $order = $this_order;
@@ -580,25 +581,50 @@ class Order extends Admin_Controller {
             // $this->db->select('order_item.*');
             // $this->db->join('product', 'product.product_id = order_item.product_id');
             $this->db->where('order_id', $this_order['order_id']);
-            $this->db->where('product_id', 0);
+            // $this->db->where('product_id', 0);
             $query = $this->db->get('order_item');
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $item) {
-                	$order_item = $item;
+                	if($item['product_id']==0){
+	                	$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+	                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+	                	$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
+	                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+	                	$order_item['product_name'] = $product['product_name'];
+	                	$order_item['product_price'] = $product['product_price'];
 
-                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
-                	if(!empty($pci)) { foreach($pci as $qqq) {
-                		$order_item['product_combine_item'][] = $qqq;
-                	}}
+	                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+	                	if(!empty($pci)) { foreach($pci as $qqq) {
+	                		$order_item['product_combine_item'][] = $qqq;
+	                	}}
 
-                    array_push($array['Data']['order_item'], $order_item);
+	                    array_push($array['Data']['order_item'], $order_item);
+                    }
+
+                    if($item['product_id']>0){
+                    	$order_item = $item;
+
+                    	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+	                	$order_item['product_combine'] = $pc;
+
+                    	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+	                	$order_item['product_name'] = $product['product_name'];
+	                	$order_item['product_price'] = $product['product_price'];
+	                	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
+
+	                	$order_item['product_unit'] = '';
+	                	$this->db->where('product_combine_id', $item['product_combine_id']);
+			            $this->db->where('product_id', $pc['product_id']);
+			            $query = $this->db->get('product_combine_item');
+			            if ($query->num_rows() > 0) {
+			            	$row = $query->row_array();
+			            	$order_item['product_unit'] = $row['product_unit'];
+			            };
+
+                    	array_push($array['Data']['product_item'], $order_item);
+                    }
                 }
             }
 
@@ -631,6 +657,7 @@ class Order extends Admin_Controller {
                 'Data' => array(
                     'order' => array(),
                     'order_item' => array(),
+                    'product_item' => array(),
                 )
             );
             $order = $this_order;
@@ -641,25 +668,50 @@ class Order extends Admin_Controller {
             // $this->db->select('order_item.*');
             // $this->db->join('product', 'product.product_id = order_item.product_id');
             $this->db->where('order_id', $this_order['order_id']);
-            $this->db->where('product_id', 0);
+            // $this->db->where('product_id', 0);
             $query = $this->db->get('order_item');
             if ($query->num_rows() > 0) {
                 foreach ($query->result_array() as $item) {
-                	$order_item = $item;
+                	if($item['product_id']==0){
+	                	$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+	                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+	                	$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
+	                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+	                	$order_item['product_name'] = $product['product_name'];
+	                	$order_item['product_price'] = $product['product_price'];
 
-                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
-                	if(!empty($pci)) { foreach($pci as $qqq) {
-                		$order_item['product_combine_item'][] = $qqq;
-                	}}
+	                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+	                	if(!empty($pci)) { foreach($pci as $qqq) {
+	                		$order_item['product_combine_item'][] = $qqq;
+	                	}}
 
-                    array_push($array['Data']['order_item'], $order_item);
+	                    array_push($array['Data']['order_item'], $order_item);
+                    }
+
+                    if($item['product_id']>0){
+                    	$order_item = $item;
+
+                    	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+	                	$order_item['product_combine'] = $pc;
+
+                    	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+	                	$order_item['product_name'] = $product['product_name'];
+	                	$order_item['product_price'] = $product['product_price'];
+	                	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
+
+	                	$order_item['product_unit'] = '';
+	                	$this->db->where('product_combine_id', $item['product_combine_id']);
+			            $this->db->where('product_id', $pc['product_id']);
+			            $query = $this->db->get('product_combine_item');
+			            if ($query->num_rows() > 0) {
+			            	$row = $query->row_array();
+			            	$order_item['product_unit'] = $row['product_unit'];
+			            };
+
+                    	array_push($array['Data']['product_item'], $order_item);
+                    }
                 }
             }
 
