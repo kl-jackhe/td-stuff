@@ -7,8 +7,8 @@
       <th>商品封面</th>
       <th>名稱</th>
       <th class="text-center">預設價格</th>
-      <th class="text-center">加購價格</th>
-      <th class="text-center" style="width: 15%;">銷售狀態</th>
+      <!-- <th class="text-center">加購價格</th> -->
+      <th class="text-center">銷售狀態</th>
       <th class="text-center">預估庫存量</th>
       <th class="text-center">上架/下架</th>
       <th class="text-center">操作</th>
@@ -23,17 +23,14 @@ if (!empty($product)) {foreach ($product as $data) {?>
       <td style="width: 75px;"><?php echo get_image($data['product_image']) ?></td>
       <td><?php echo $data['product_name'] ?></td>
       <td class="text-center">$<?php echo $data['product_price'] ?></td>
-      <td class="text-center">$<?php echo $data['product_add_on_price'] ?></td>
+      <!-- <td class="text-center">$<?php echo $data['product_add_on_price'] ?></td> -->
       <td>
         <?$options = array('0' => '販售中','1' => '已售完','2' => '預購',);?>
-        <div class="input-group">
-          <select class="form-control" name="sales_status" id="sales_status_<?=$data['product_id']?>">
-            <? foreach ($options as $key => $value) {?>
-              <option value="<?=$key?>" <?=($data['sales_status'] == $key ? 'selected' : '')?>><?=$value?></option>
-            <?}?>
-          </select>
-          <span class="input-group-addon" style="cursor: pointer;" onclick="update_sales_status('<?=$data['product_id']?>')">修改</span>
-        </div>
+        <select class="form-control" name="sales_status" id="sales_status_<?=$data['product_id']?>" onchange="update_sales_status('<?=$data['product_id']?>')">
+          <? foreach ($options as $key => $value) {?>
+            <option value="<?=$key?>" <?=($data['sales_status'] == $key ? 'selected' : '')?>><?=$value?></option>
+          <?}?>
+        </select>
       </td>
       <td class="text-center" style="font-weight: bold;color: <?=($data['inventory'] > 0 ? 'green' : 'red')?>;"><?php echo number_format($data['inventory'])?></td>
       <td class="text-center">
