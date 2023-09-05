@@ -129,6 +129,7 @@ class Checkout extends Public_Controller {
 
 			$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
 			if (!empty($this_product_combine_item)) {
+				$inventory = array();
 				foreach ($this_product_combine_item as $items) {
 					$order_item = array(
 						'order_id' => $order_id,
@@ -139,6 +140,26 @@ class Checkout extends Public_Controller {
 						'created_at' => $created_at,
 					);
 					$this->db->insert('order_item', $order_item);
+					if (array_key_exists($items['product_id'],$inventory)) {
+						$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
+					} else {
+						$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
+					}
+				}
+				if (!empty($inventory)) {
+					foreach ($inventory as $key => $value) {
+						$this->db->set('inventory', 'inventory - ' . $value, FALSE);
+						$this->db->where('product_id',$key);
+						$this->db->update('product');
+
+						$inventory_log = array(
+							'product_id' => $key,
+							'source' => 'Order',
+							'change_history' => -$value,
+							'change_notes' => $order_number,
+						);
+						$this->db->insert('inventory_log', $inventory_log);
+					}
 				}
 			}
 			if (!empty($cart_item['specification']['specification_id'])) {

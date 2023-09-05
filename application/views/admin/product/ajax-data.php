@@ -8,7 +8,8 @@
       <th>名稱</th>
       <th class="text-center">預設價格</th>
       <th class="text-center">加購價格</th>
-      <th class="text-center">銷售狀態</th>
+      <th class="text-center" style="width: 15%;">銷售狀態</th>
+      <th class="text-center">預估庫存量</th>
       <th class="text-center">上架/下架</th>
       <th class="text-center">操作</th>
     </tr>
@@ -23,32 +24,21 @@ if (!empty($product)) {foreach ($product as $data) {?>
       <td><?php echo $data['product_name'] ?></td>
       <td class="text-center">$<?php echo $data['product_price'] ?></td>
       <td class="text-center">$<?php echo $data['product_add_on_price'] ?></td>
-      <td class="text-center">
-        <div class="input-group" style="margin: auto;width: 50%;">
-          <span class="input-group-btn">
-            <?php $attributes = array('class' => 'form-inline');?>
-            <?php echo form_open('admin/product/update_sales_status/' . $data['product_id'], $attributes); ?>
-            <?$att = 'class="form-control dropdown-toggle"';
-              $options = array(
-              '0' => '販售中',
-              '1' => '已售完',
-              '2' => '預購',
-              );
-              echo form_dropdown('sales_status', $options, $data['sales_status'], $att);?>
-            <button type="submit" class="btn btn-primary btn-sm">修改</button>
-            <?php echo form_close() ?>
-          </span>
+      <td>
+        <?$options = array('0' => '販售中','1' => '已售完','2' => '預購',);?>
+        <div class="input-group">
+          <select class="form-control" name="sales_status" id="sales_status_<?=$data['product_id']?>">
+            <? foreach ($options as $key => $value) {?>
+              <option value="<?=$key?>" <?=($data['sales_status'] == $key ? 'selected' : '')?>><?=$value?></option>
+            <?}?>
+          </select>
+          <span class="input-group-addon" style="cursor: pointer;" onclick="update_sales_status('<?=$data['product_id']?>')">修改</span>
         </div>
       </td>
-      <!-- <td><?php echo $data['product_description'] ?></td> -->
+      <td class="text-center" style="font-weight: bold;color: <?=($data['inventory'] > 0 ? 'green' : 'red')?>;"><?php echo number_format($data['inventory'])?></td>
       <td class="text-center">
-      <?if ($data['product_status'] == 1) {?>
-        <a href="/admin/product/update_product_status/<?php echo $data['product_id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要下架嗎?')"></i>
-        <span>上架中</span></a>
-      <?} else {?>
-        <a href="/admin/product/update_product_status/<?php echo $data['product_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要上架嗎?')"></i>
-        <span>已下架</span></a>
-      <?}?>
+        <a href="/admin/product/update_product_status/<?php echo $data['product_id'] ?>" class="btn btn-<?=($data['product_status'] == 1 ? 'success' : 'danger')?> btn-sm" onClick="return confirm('確定要<?=($data['product_status'] == 1 ? '下' : '上')?>架嗎?')"></i>
+        <span><?=($data['product_status'] == 1 ? '上架中' : '已下架')?></span></a>
       </td>
       <td class="text-center">
         <a href="/admin/product/edit/<?php echo $data['product_id'] ?>" class="btn btn-primary" target="_blank" >編輯</a>

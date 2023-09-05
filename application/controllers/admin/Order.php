@@ -101,21 +101,6 @@ class Order extends Admin_Controller {
 		$this->render('admin/order/view');
 	}
 
-	// public function update($id)
-	// {
-	//     $data = array(
-	//         'order_step' => $this->input->post('order_step'),
-	//         'updater_id' => $this->current_user->id,
-	//         'updated_at' => date('Y-m-d H:i:s'),
-	//     );
-
-	//     $this->db->where('order_id', $id);
-	//     $this->db->update('orders', $data);
-
-	//     $this->session->set_flashdata('message', '訂單更新成功！');
-	//     redirect($_SERVER['HTTP_REFERER']);
-	// }
-
 	public function update_remittance_account($id) {
 		$data = array(
 			'remittance_account' => $this->input->post('remittance_account'),
@@ -392,10 +377,35 @@ class Order extends Admin_Controller {
 			} else {
 				$this->order_update_synchronize($id);
 			}
+		}
 
-			// if ($step == 'shipping' || $step == 'complete' || $step == 'order_cancel') {
-			// 	$this->order_update_synchronize($id);
-			// }
+		//庫存回補
+		if ($step == 'order_cancel' && !empty($this_order_item) && !empty($this_order)) {
+			$inventory = array();
+			foreach ($this_order_item as $toi_row) {
+				if ($toi_row['product_id'] > 0) {
+					if (array_key_exists($toi_row['product_id'],$inventory)) {
+						$inventory[$toi_row['product_id']] += $toi_row['order_item_qty'];
+					} else {
+						$inventory[$toi_row['product_id']] = $toi_row['order_item_qty'];
+					}
+				}
+			}
+			if (!empty($inventory)) {
+				foreach ($inventory as $key => $value) {
+					$this->db->set('inventory', 'inventory + ' . $value, FALSE);
+					$this->db->where('product_id',$key);
+					$this->db->update('product');
+
+					$inventory_log = array(
+						'product_id' => $key,
+						'source' => 'OrderBackfill',
+						'change_history' => $value,
+						'change_notes' => $this_order['order_number'],
+					);
+					$this->db->insert('inventory_log', $inventory_log);
+				}
+			}
 		}
 
 		$this->session->set_flashdata('message', '訂單更新成功！');

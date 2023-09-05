@@ -23,6 +23,7 @@ $sales_current = $this->uri->segment(3);?>
         <span>訂單管理</span>
       </a>
     </li>
+    <?if ($this->is_td_stuff) {?>
     <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa-solid fa-file-circle-check"></i>
@@ -44,12 +45,7 @@ $sales_current = $this->uri->segment(3);?>
         <span>代言人管理</span>
       </a>
     <li>
-    <!-- <li class="<?php if ($current == "store") {echo "active";}?>">
-      <a href="/admin/store">
-        <i class="fa fa-dashboard"></i>
-        <span>店家管理</span>
-      </a>
-    </li> -->
+    <?}?>
     <li class="<?php if ($current == "delivery") {echo "active";}?>">
       <a href="/admin/delivery">
         <i class="fa fa-truck"></i>
@@ -74,18 +70,6 @@ $sales_current = $this->uri->segment(3);?>
         <span>首頁輪播</span>
       </a>
     </li>
-    <!-- <li <?php if ($current == "banner" || $current == "product_banner" || $current == "coupon") {echo "class='active'";}?>>
-      <a href="#" class="dropdown-toggle">
-        <i class="fa fa-tags"></i>
-        <span>活動行銷管理</span>
-        <b class="arrow fa fa-angle-right"></b>
-      </a>
-      <ul class="submenu">
-        <li <?php if ($current == "banner") {echo 'class="active"';}?>>
-          <a href="/admin/banner">首頁Banner</a>
-        </li>
-      </ul>
-    </li> -->
     <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa fa-users"></i>
@@ -96,20 +80,11 @@ $sales_current = $this->uri->segment(3);?>
         <li <?php if ($current == "user") {echo 'class="active"';}?>>
           <a href="/admin/user">使用者管理</a>
         </li>
-        <!-- <li <?php if ($current == "driver") {echo 'class="active"';}?>>
-          <a href="/admin/driver">司機管理</a>
-        </li> -->
         <li <?php if ($current == "auth") {echo 'class="active"';}?>>
           <a href="/admin/auth">管理員系統</a>
         </li>
       </ul>
     </li>
-    <!-- <li>
-      <a href="/assets/admin/ckfinder/samples/full-page-open.html" target="_blank">
-        <i class="fa fa-dashboard"></i>
-        <span>檔案管理</span>
-      </a>
-    </li> -->
     <li class="<?php if ($current == "setting") {echo "active";}?>">
       <a href="/admin/setting/general">
         <i class="fa fa-cogs"></i>

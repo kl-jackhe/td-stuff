@@ -55,3 +55,23 @@
     </div>
   </div>
 </div>
+<script>
+$(document).ready(function() {
+  searchFilter();
+});
+
+function update_sales_status(product_id) {
+  $.ajax({
+    url: '/admin/product/update_sales_status/'+product_id,
+    type: 'POST',
+    data: {sales_status: $('#sales_status_'+product_id).val()},
+  })
+  .done(function() {
+    console.log("success");
+    searchFilter();
+  })
+  .fail(function() {
+    console.log("error");
+  });
+}
+</script>

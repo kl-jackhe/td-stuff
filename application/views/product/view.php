@@ -79,7 +79,7 @@ input.qtyminus {
                 <?php if (!empty($product)) { ?>
                 <div class="col-md-8 text-center product_description">
                     <?if ($this->is_td_stuff) {?>
-                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg">
                     <?}?>
                     <?if ($this->is_liqun_food) {?>
                     <?}?>
@@ -101,7 +101,7 @@ input.qtyminus {
                 </div>
                 <div class="col-md-8 text-center product_description">
                     <?if ($this->is_td_stuff) {?>
-                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000.jpg">
+                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg">
                     <?}?>
                     <?if ($this->is_liqun_food) {?>
                     <?}?>

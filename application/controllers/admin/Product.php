@@ -9,22 +9,6 @@ class Product extends Admin_Controller {
 
 	public function index() {
 		$this->data['page_title'] = '商品管理';
-
-		$data = array();
-		//total rows count
-		$conditions['returnType'] = 'count';
-		$totalRec = $this->product_model->getRows($conditions);
-		//pagination configuration
-		$config['target'] = '#datatable';
-		$config['base_url'] = base_url() . 'admin/product/ajaxData';
-		$config['total_rows'] = $totalRec;
-		$config['per_page'] = $this->perPage;
-		$config['link_func'] = 'searchFilter';
-		$this->ajax_pagination_admin->initialize($config);
-		//get the posts data
-		$this->data['product_category'] = $this->mysql_model->_select('product_category');
-		$this->data['product'] = $this->product_model->getRows(array('limit' => $this->perPage));
-
 		$this->render('admin/product/index');
 	}
 
@@ -70,8 +54,9 @@ class Product extends Admin_Controller {
 		//get posts data
 		$conditions['returnType'] = '';
 		$this->data['product'] = $this->product_model->getRows($conditions);
+		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		//load the view
-		$this->load->view('admin/product/ajax-data', $this->data, false);
+		$this->load->view('admin/product/ajax-data', $this->data);
 	}
 
 	public function create() {
@@ -149,6 +134,14 @@ class Product extends Admin_Controller {
 		);
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
+
+		$inventory_log = array(
+			'product_id' => $id,
+			'source' => 'ProductEdit',
+			'change_history' => $this->input->post('inventory'),
+			'change_notes' => 'Adjustment',
+		);
+		$this->db->insert('inventory_log', $inventory_log);
 
 		// 商品單位
 		$this->db->where('product_id', $id);

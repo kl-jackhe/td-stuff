@@ -26,7 +26,9 @@
     <div class="col-md-12">
         <div class="form-group">
             <button type="submit" class="btn btn-primary">修改</button>
-            <span class="btn btn-success" onclick="createSingleSales(<?=$product['product_id']?>)">建立銷售頁面</span>
+            <?if ($this->is_td_stuff) {?>
+                <span class="btn btn-success" onclick="createSingleSales(<?=$product['product_id']?>)">建立銷售頁面</span>
+            <?}?>
         </div>
     </div>
     <div class="col-md-12">
