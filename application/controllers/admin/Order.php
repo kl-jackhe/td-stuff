@@ -393,17 +393,24 @@ class Order extends Admin_Controller {
 			}
 			if (!empty($inventory)) {
 				foreach ($inventory as $key => $value) {
-					$this->db->set('inventory', 'inventory + ' . $value, FALSE);
+					$this->db->select('excluding_inventory');
 					$this->db->where('product_id',$key);
-					$this->db->update('product');
+					$p_row = $this->db->get('product')->row_array();
+					if (!empty($p_row)) {
+						if ($p_row['excluding_inventory'] == false) {
+							$this->db->set('inventory', 'inventory + ' . $value, FALSE);
+							$this->db->where('product_id',$key);
+							$this->db->update('product');
 
-					$inventory_log = array(
-						'product_id' => $key,
-						'source' => 'OrderBackfill',
-						'change_history' => $value,
-						'change_notes' => $this_order['order_number'],
-					);
-					$this->db->insert('inventory_log', $inventory_log);
+							$inventory_log = array(
+								'product_id' => $key,
+								'source' => 'OrderBackfill',
+								'change_history' => $value,
+								'change_notes' => $this_order['order_number'],
+							);
+							$this->db->insert('inventory_log', $inventory_log);
+						}
+					}
 				}
 			}
 		}

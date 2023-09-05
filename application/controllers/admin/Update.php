@@ -23,6 +23,7 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202309051755();
                             $this->update_202309051540();
                             $this->update_202308301910();
                             $this->update_202308231510();
@@ -42,6 +43,29 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202309051755() {
+        $version = '202309051755';
+        $description = '[product]新增欄位[excluding_inventory]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'excluding_inventory'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `excluding_inventory` TINYINT(2) NOT NULL DEFAULT '1' AFTER `inventory`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

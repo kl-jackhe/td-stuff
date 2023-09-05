@@ -99,7 +99,16 @@
                         <div class="row">
                             <div class="col-md-3" style="padding-bottom: 15px;">
                                 <div class="input-group">
-                                    <span class="input-group-addon">預估庫存量</span>
+                                    <span class="input-group-addon">是否計算庫存</span>
+                                    <select class="form-control" id="excluding_inventory" name="excluding_inventory">
+                                        <option value="0" <?=($product['excluding_inventory'] == false ? 'selected' : '')?>>是</option>
+                                        <option value="1" <?=($product['excluding_inventory'] == true ? 'selected' : '')?>>否</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" style="padding-bottom: 15px;">
+                                <div class="input-group">
+                                    <span class="input-group-addon">當前庫存量</span>
                                     <input type="text" class="form-control" id="inventory" name="inventory" value="<?php echo number_format($product['inventory']); ?>">
                                 </div>
                             </div>

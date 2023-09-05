@@ -41,6 +41,7 @@ class SingleSales extends Public_Controller {
 			$this->data['single_sales'] = $row;
 			$this->data['product'] = $this->product_model->getSingleProduct($row['product_id']);
 			$this->data['specification'] = $this->mysql_model->_select('product_specification', 'product_id', $row['product_id']);
+			$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $row['product_id']);
 			$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $row['product_id']);
 			// $this->data['specification'] = $this->mysql_model->_select('single_product_specification', 'product_id', $row['product_id']);
 			// $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $row['product_id']);

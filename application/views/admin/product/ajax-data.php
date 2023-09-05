@@ -9,7 +9,8 @@
       <th class="text-center">預設價格</th>
       <!-- <th class="text-center">加購價格</th> -->
       <th class="text-center">銷售狀態</th>
-      <th class="text-center">預估庫存量</th>
+      <th class="text-center">計算庫存</th>
+      <th class="text-center">當前庫存量</th>
       <th class="text-center">上架/下架</th>
       <th class="text-center">操作</th>
     </tr>
@@ -31,6 +32,11 @@ if (!empty($product)) {foreach ($product as $data) {?>
             <option value="<?=$key?>" <?=($data['sales_status'] == $key ? 'selected' : '')?>><?=$value?></option>
           <?}?>
         </select>
+      </td>
+      <td class="text-center">
+        <span style="font-size: 18px;color:<?=($data['excluding_inventory'] == true ? 'red' : 'green' )?>">
+          <i class="fa-regular fa-circle-<?=($data['excluding_inventory'] == true ? 'xmark' : 'check' )?>"></i>
+        </span>
       </td>
       <td class="text-center" style="font-weight: bold;color: <?=($data['inventory'] > 0 ? 'green' : 'red')?>;"><?php echo number_format($data['inventory'])?></td>
       <td class="text-center">
