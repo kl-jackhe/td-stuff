@@ -16,6 +16,7 @@ class Sales_model extends CI_Model {
                 $this->db->where('status', $params['search']['status']);
             }
         }
+        $this->db->order_by('status','desc');
         // if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
         //     $this->db->limit($params['limit'], $params['start']);
         // } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {

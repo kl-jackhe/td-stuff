@@ -233,9 +233,6 @@ class Sales extends Admin_Controller {
                         $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
                         $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
                     }
-                    $this->data['SingleSalesDetail'] = $ssd_row;
-                    $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-                    $this->load->view('/admin/report/single_sales_agent_report', $this->data);
                     echo 'yes';
                 } else {
                     echo 'no';

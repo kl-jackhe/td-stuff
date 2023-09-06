@@ -121,9 +121,11 @@
                     id: id,
                 },
                 success: function(data) {
-                    if (data == 'yse') {
-                        alert('執行成功！');
-                        location.reload();
+                    if (data == 'yes') {
+                        if (confirm('執行成功！')) {
+                            viewCalculationReport(id);
+                            searchFilterSales();
+                        }
                     } else if (data == 'no_default_profit_percentage') {
                         alert('預設利潤％數沒設定！');
                     } else {
@@ -140,6 +142,7 @@
     }
 
     function viewCalculationReport(id) {
+        $('#report').html('');
         $.ajax({
             type: "POST",
             url: '/admin/sales/viewCalculationReport',
@@ -148,7 +151,7 @@
             },
             success: function(data) {
                 $('#report').html(data);
-                $('#reportModal').show();
+                $('#reportModal').modal('show');
             },
             error: function(data) {
                 console.log('Error');
