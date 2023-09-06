@@ -23,17 +23,18 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
-                            $this->update_202309061300();
-                            $this->update_202309051755();
-                            $this->update_202309051540();
-                            $this->update_202308301910();
-                            $this->update_202308231510();
-                            $this->update_202308212210();
-                            $this->update_202308212140();
-                            $this->update_202308201555();
-                            $this->update_202308191205();
-                            $this->update_202308161230();
                             $this->update_202308161240();
+                            $this->update_202308161230();
+                            $this->update_202308191205();
+                            $this->update_202308201555();
+                            $this->update_202308212140();
+                            $this->update_202308212210();
+                            $this->update_202308231510();
+                            $this->update_202308301910();
+                            $this->update_202309051540();
+                            $this->update_202309051755();
+                            $this->update_202309061300();
+                            $this->update_202309061750();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -44,6 +45,29 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202309061750() {
+        $version = '202309061750';
+        $description = '[product]新增欄位[stock_overbought]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'stock_overbought'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `stock_overbought` TINYINT(2) NOT NULL DEFAULT '1' AFTER `excluding_inventory`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
