@@ -23,6 +23,7 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
+                            $this->update_202309061300();
                             $this->update_202309051755();
                             $this->update_202309051540();
                             $this->update_202308301910();
@@ -43,6 +44,40 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202309061300() {
+        $version = '202309061300';
+        $description = '新增資料表[notify]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'notify'");
+            if ($query->num_rows() > 0) {
+                // 已經存在
+            } else {
+                // 不存在
+                $this->db->query("CREATE TABLE `notify` (
+                    `id` int(11) NOT NULL,
+                    `title` varchar(50) NOT NULL,
+                    `content` varchar(500) NOT NULL,
+                    `source` varchar(20) NOT NULL,
+                    `read` TINYINT(2) NOT NULL DEFAULT '1',
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `notify` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `notify` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
