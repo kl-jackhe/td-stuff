@@ -423,5 +423,40 @@ class Sales extends Admin_Controller {
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    function uploadSignature() {
+        // 上傳商品圖片
+        if (!empty($_FILES['product_image']['tmp_name'])) {
+            $message = '';
+            $this->load->library('upload');
+            $ext = pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION);
+            $product_image = 'p_img_' . $id . '_' . date('YmdHis') . '.' . $ext;
+            $config['upload_path'] = './assets/uploads/';
+            $config['allowed_types'] = 'jpeg|jpg|png';
+            $config['max_size'] = 2048;
+            $config['file_name'] = $product_image;
+            $this->upload->initialize($config);
+            if ($_FILES['product_image']['size'] < 2048000) {
+                if ($_FILES['product_image']['type'] == 'image/png' || $_FILES['product_image']['type'] == 'image/jpeg' || $_FILES['product_image']['type'] == 'image/jpg') {
+                    if ($this->upload->do_upload('product_image')) {
+                        $uploadedImage = $this->upload->data();
+                        $this->resizeImage($uploadedImage['file_name']);
+                    } else {
+                        $product_image = '';
+                    }
+                    $data = array(
+                        'product_image' => $product_image,
+                    );
+                    $this->db->where('product_id', $id);
+                    $this->db->update('product', $data);
+                    $message = $this->lang->line('update_success');
+                } else {
+                    $message = '圖片格式有誤';
+                }
+            } else {
+                $message = '圖片檔案超過2M';
+            }
+        }
+    }
+
 
 }

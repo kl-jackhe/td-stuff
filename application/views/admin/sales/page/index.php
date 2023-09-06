@@ -41,7 +41,7 @@
   background-color: white;
 }
 </style>
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-12">
         <canvas id="signature" width="450" height="150" style="border: 1px solid #ddd;"></canvas>
         <br>
@@ -49,7 +49,7 @@
         <button id="saveJPGButton">jpge</button>
         <button id="clear-signature">Clear</button>
     </div>
-</div>
+</div> -->
 
 <div class="row">
     <div class="col-md-12">
@@ -198,29 +198,27 @@ jQuery(document).ready(function($){
     $('#clear-signature').on('click', function(){
         signaturePad.clear();
     });
-    // $('#xxxxxx').on('click', function(event) {
-    //     signaturePad.toDataURL("image/jpeg"); // save image as JPEG
-    // });
     saveJPGButton.addEventListener("click", function (event) {
       if (signaturePad.isEmpty()) {
         alert("Please provide a signature first.");
       } else {
         var dataURL = signaturePad.toDataURL("image/jpeg");
-        download(dataURL, imgName+".jpg");
+        var imgName = <?=$product_image = 'p_img_' . $id . '_' . date('YmdHis') . '.' . $ext;?>
+        // download(dataURL, imgName+".jpg");
         //alert(dataURL);
         $.ajax({
           type: 'POST',
-          url: "<?php echo base_url('assets/signature_img'); ?>",
+          url: "/admin/sales/uploadSignature",
           data: {
-            data:dataURL,name:imgName
+            data:dataURL,
           },
           success: function(data, textStatus, jqXHR){
             if(data!='0')
             {
-              alert("上傳成功！");
+                alert("上傳成功！");
             }
             else
-              alert('錯誤！這個檔案不是圖片。');
+                alert('錯誤！這個檔案不是圖片。');
           }
         });
       }
