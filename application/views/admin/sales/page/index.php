@@ -22,7 +22,35 @@
     .table-curved tr:last-child td:last-child {
         border-radius: 0 0 6px 0;
     }
+    .wrapper {
+  position: relative;
+  width: 400px;
+  height: 200px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.signature-pad {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width:400px;
+  height:200px;
+  background-color: white;
+}
 </style>
+<div class="row">
+    <div class="col-md-12">
+        <canvas id="signature" width="450" height="150" style="border: 1px solid #ddd;"></canvas>
+        <br>
+
+        <button id="saveJPGButton">jpge</button>
+        <button id="clear-signature">Clear</button>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="content-box-large">
@@ -158,4 +186,44 @@
             }
         });
     }
+</script>
+<!-- 簽名JS -->
+<script src="/assets/admin/js/signature/signature_pad.js"></script>
+<!-- 簽名JS -->
+
+<script>
+jQuery(document).ready(function($){
+    const canvas = document.getElementById("signature");
+    const signaturePad = new SignaturePad(canvas);
+    $('#clear-signature').on('click', function(){
+        signaturePad.clear();
+    });
+    // $('#xxxxxx').on('click', function(event) {
+    //     signaturePad.toDataURL("image/jpeg"); // save image as JPEG
+    // });
+    saveJPGButton.addEventListener("click", function (event) {
+      if (signaturePad.isEmpty()) {
+        alert("Please provide a signature first.");
+      } else {
+        var dataURL = signaturePad.toDataURL("image/jpeg");
+        download(dataURL, imgName+".jpg");
+        //alert(dataURL);
+        $.ajax({
+          type: 'POST',
+          url: "<?php echo base_url('assets/signature_img'); ?>",
+          data: {
+            data:dataURL,name:imgName
+          },
+          success: function(data, textStatus, jqXHR){
+            if(data!='0')
+            {
+              alert("上傳成功！");
+            }
+            else
+              alert('錯誤！這個檔案不是圖片。');
+          }
+        });
+      }
+    });
+});
 </script>
