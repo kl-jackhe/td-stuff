@@ -94,6 +94,11 @@ class Product extends Admin_Controller {
 	}
 
 	public function update($id) {
+		if ($this->checkSKUIsDuplicated($id,$this->input->post('product_sku')) == 'No') {
+			$this->session->set_flashdata('message', '品號重複');
+			redirect($_SERVER['HTTP_REFERER']);
+			exit;
+		}
 		// 紀錄欄位變動
 		$updated_at = date('Y-m-d H:i:s');
 		$product = $this->mysql_model->_select('product', 'product_id', $id, 'row');
@@ -122,6 +127,7 @@ class Product extends Admin_Controller {
 
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
+			'product_sku' => $this->input->post('product_sku'),
 			'product_price' => $this->input->post('product_price'),
 			'product_add_on_price' => $this->input->post('product_add_on_price'),
 			'product_category_id' => $this->input->post('product_category'),
@@ -130,6 +136,7 @@ class Product extends Admin_Controller {
 			'product_image' => $this->input->post('product_image'),
 			'inventory' => $this->input->post('inventory'),
 			'excluding_inventory' => $this->input->post('excluding_inventory'),
+			'stock_overbought' => $this->input->post('stock_overbought'),
 			'updater_id' => $this->current_user->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
@@ -205,6 +212,15 @@ class Product extends Admin_Controller {
 		// $this->db->delete('product');
 
 		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+	function checkSKUIsDuplicated($product_id,$product_sku) {
+		$this->db->select('product_id');
+		$this->db->where('product_id !=',$product_id);
+		$this->db->where('product_sku',$product_sku);
+		$this->db->limit(1);
+		$row = $this->db->get('product')->row_array();
+		return (!empty($row)? 'No' : 'Yes');
 	}
 
 	public function multiple_action() {

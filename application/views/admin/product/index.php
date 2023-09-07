@@ -7,7 +7,7 @@
   </div>
   <div class="col-md-8">
     <div class="form-inline form-group text-right">
-      <input type="text" id="keywords" class="form-control" placeholder="搜尋..."/>
+      <input type="text" id="keywords" class="form-control" placeholder="搜尋商品名稱..."/>
       <select id="status" class="form-control" onchange="searchFilter()">
         <option value="1">上架中</option>
         <option value="2">已下架</option>

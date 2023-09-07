@@ -73,6 +73,13 @@
                                     </div>
                                     <div class="col-md-4 col-sm-12">
                                         <div class="form-group">
+                                            <label for="product_sku">品號</label>
+                                            <input type="text" class="form-control" id="product_sku" name="product_sku" value="<?php echo $product['product_sku']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="form-group">
                                             <label for="product_price">預設價格</label>
                                             <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
                                         </div>
