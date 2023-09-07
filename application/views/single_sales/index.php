@@ -206,9 +206,9 @@ input.qtyminus {
                                 <div>
                                     <?$product_combine_item_qty = $this->product_model->get_product_combine_item($combine['id']);?>
                                 </div>
-                                <?if(($product['sales_status'] == 0 || $product['sales_status'] == 2) && ($product['inventory'] >= $inventory || $product['excluding_inventory'] == true)){?>
+                                <?if(($product['sales_status'] == 0 || $product['sales_status'] == 2) && ($product['inventory'] >= $inventory || $product['excluding_inventory'] == true || $product['stock_overbought'] == true)){?>
                                     <button onclick="specification_qty(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" type="button" class="btn add_product" data-toggle="modal" data-target="#multitude_specification_modal_<?php echo $combine['id'] ?>">
-                                    <i class="fa-solid fa-cart-shopping"></i> 選擇規格
+                                        <i class="fa-solid fa-cart-shopping"></i> 選擇規格
                                     </button>
                                 <?} else {?>
                                     <span class="btn add_product" style="background: #817F82;cursor: auto;">
@@ -294,14 +294,14 @@ input.qtyminus {
                                                 </div>
                                                 <input type="hidden" name="combine_id" value="<?php echo $combine['id'] ?>">
                                                 <div class="modal-footer">
-                                                    <?if($product['sales_status'] == 0){?>
-                                                        <span class="btn add_product" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
-                                                            <i class="fa-solid fa-cart-shopping"></i> 選購
-                                                        </span>
-                                                    <?}?>
-                                                    <?if($product['sales_status'] == 2){?>
-                                                        <span class="btn add_product" style="background: #A60747;" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)">
-                                                            <i class="fa-solid fa-cart-shopping"></i> 預購
+                                                    <?if($product['sales_status'] == 0 || $product['sales_status'] == 2){?>
+                                                        <span class="btn add_product" onclick="select_qty_ok_add_cart(<?php echo $combine['id'] ?>,<?php echo $product_combine_item_qty['qty'] ?>)" style="<?=($product['sales_status'] == 2 || ($product['inventory'] < $inventory && $product['stock_overbought'] == true) ?'background: #A60747;':'')?>">
+                                                            <i class="fa-solid fa-cart-shopping"></i> 
+                                                            <?if ($product['inventory'] < $inventory && $product['stock_overbought'] == true){
+                                                                echo '預購';
+                                                            } else {
+                                                                echo ($product['sales_status'] == 0 ? '選購' : '預購');
+                                                            }?>
                                                         </span>
                                                     <?}?>
                                                 </div>
@@ -311,9 +311,14 @@ input.qtyminus {
                                 </form>
                                 <!-- 任意選取規格 -->
                                 <?} else {
-                                    if(($product['sales_status'] == 0 || $product['sales_status'] == 2) && ($product['inventory'] >= $inventory || $product['excluding_inventory'] == true)){?>
-                                        <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product" style="<?=($product['sales_status'] == 0?'':'background: #A60747;')?>">
-                                            <i class="fa-solid fa-cart-shopping"></i> <?=($product['sales_status'] == 0?'選購':'預購')?>
+                                    if(($product['sales_status'] == 0 || $product['sales_status'] == 2) && ($product['inventory'] >= $inventory || $product['excluding_inventory'] == true || $product['stock_overbought'] == true)){?>
+                                        <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product" style="<?=($product['sales_status'] == 2 || ($product['inventory'] < $inventory && $product['stock_overbought'] == true) ?'background: #A60747;':'')?>">
+                                            <i class="fa-solid fa-cart-shopping"></i> 
+                                            <?if ($product['inventory'] < $inventory && $product['stock_overbought'] == true){
+                                                echo '預購';
+                                            } else {
+                                                echo ($product['sales_status'] == 0 ? '選購' : '預購');
+                                            }?>
                                         </button>
                                     <?} else {?>
                                         <span class="btn add_product" style="background: #817F82;cursor: auto;">
@@ -323,10 +328,11 @@ input.qtyminus {
                                 }?>
                             </div>
                         </div>
-                        <? }} ?>
+                        <?}
+                        }?>
                     </div>
                 </div>
-                <? } ?>
+                <?}?>
             </div>
         </div>
     </section>

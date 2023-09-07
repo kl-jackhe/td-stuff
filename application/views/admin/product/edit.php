@@ -48,40 +48,68 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <?if (!empty($product_category)) {?>
-                                    <label for="product_category">分類</label>
-                                    <?php $att = 'id="product_category" class="form-control chosen" data-rule-required="true"';
-                                        $data = array();
-                                        foreach ($product_category as $c) {
-                                            $data[$c['product_category_id']] = $c['product_category_name'];
-                                        }
-                                        echo form_dropdown('product_category', $data, $product['product_category_id'], $att);
-                                    } else {
-                                        echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
-                                    }?>
-                                  </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="product_name">商品名稱</label>
-                                    <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
+                            <div class="col-md-10 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <?if (!empty($product_category)) {?>
+                                            <label for="product_category">分類</label>
+                                            <?php $att = 'id="product_category" class="form-control chosen" data-rule-required="true"';
+                                                $data = array();
+                                                foreach ($product_category as $c) {
+                                                    $data[$c['product_category_id']] = $c['product_category_name'];
+                                                }
+                                                echo form_dropdown('product_category', $data, $product['product_category_id'], $att);
+                                            } else {
+                                                echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
+                                            }?>
+                                          </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="product_name">商品名稱</label>
+                                            <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="product_price">預設價格</label>
+                                            <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="product_add_on_price">加購價格</label>
+                                            <input type="text" class="form-control" id="product_add_on_price" name="product_add_on_price" value="<?php echo $product['product_add_on_price']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">是否計算庫存</span>
+                                            <select class="form-control" id="excluding_inventory" name="excluding_inventory">
+                                                <option value="0" <?=($product['excluding_inventory'] == false ? 'selected' : '')?>>是</option>
+                                                <option value="1" <?=($product['excluding_inventory'] == true ? 'selected' : '')?>>否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">低於庫存時轉預購</span>
+                                            <select class="form-control" id="stock_overbought" name="stock_overbought">
+                                                <option value="0" <?=($product['stock_overbought'] == false ? 'selected' : '')?>>否</option>
+                                                <option value="1" <?=($product['stock_overbought'] == true ? 'selected' : '')?>>是</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">當前庫存量</span>
+                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?php echo number_format($product['inventory']); ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="product_price">預設價格</label>
-                                    <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="product_add_on_price">加購價格</label>
-                                    <input type="text" class="form-control" id="product_add_on_price" name="product_add_on_price" value="<?php echo $product['product_add_on_price']; ?>">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 col-sm-12">
                                 <div class="form-group">
                                     <label for="product_image" class="control-label">封面圖片</label>
                                     <div class="form-group">
@@ -93,23 +121,6 @@
                                         <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
                                     <?php }?>
                                     <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3" style="padding-bottom: 15px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon">是否計算庫存</span>
-                                    <select class="form-control" id="excluding_inventory" name="excluding_inventory">
-                                        <option value="0" <?=($product['excluding_inventory'] == false ? 'selected' : '')?>>是</option>
-                                        <option value="1" <?=($product['excluding_inventory'] == true ? 'selected' : '')?>>否</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3" style="padding-bottom: 15px;">
-                                <div class="input-group">
-                                    <span class="input-group-addon">當前庫存量</span>
-                                    <input type="text" class="form-control" id="inventory" name="inventory" value="<?php echo number_format($product['inventory']); ?>">
                                 </div>
                             </div>
                         </div>
