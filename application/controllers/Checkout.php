@@ -42,6 +42,7 @@ class Checkout extends Public_Controller {
 
 	public function save_order() {
 		$this->data['page_title'] = '結帳';
+		$this->load->model('product_model');
 
 		if ($this->session->userdata('single_sales_status') == 'Test') {
 			$this->render('single_sales/error');
@@ -184,6 +185,7 @@ class Checkout extends Public_Controller {
 						'order_item_qty' => 0,
 						'order_item_price' => 0,
 						'specification_id' => $row,
+						'specification_str' => $this->product_model->getSpecificationStr($row),
 						'specification_qty' => $specification_id[$qty_array],
 						'created_at' => $created_at,
 					);

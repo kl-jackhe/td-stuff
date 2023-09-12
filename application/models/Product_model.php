@@ -216,4 +216,12 @@ class Product_model extends CI_Model {
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
+	function getSpecificationStr($id) {
+		$this->db->select('specification');
+		$this->db->where('id',$id);
+		$this->db->limit(1);
+		$row = $this->db->get('product_specification')->row_array();
+		return (!empty($row)?$row['specification']:'');
+	}
+
 }

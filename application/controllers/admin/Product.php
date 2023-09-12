@@ -152,65 +152,84 @@ class Product extends Admin_Controller {
 		$this->db->insert('inventory_log', $inventory_log);
 
 		// 商品單位
-		$this->db->where('product_id', $id);
-		$this->db->delete('product_unit');
-
+		$unitStr = array();
 		$unit = $this->input->post('unit');
-		$count = count($unit);
-		for ($i = 0; $i < $count; $i++) {
-			if (!empty($unit)) {
-				$insert_data = array(
-					'product_id' => $id,
-					'unit' => $unit[$i],
-				);
-				$this->db->insert('product_unit', $insert_data);
+		if (is_array($unit)) {
+			for ($i = 0; $i < count($unit); $i++) {
+				if (!empty($unit)) {
+					$unitStr[] = $unit[$i];
+					$unit_data = array('unit' => $unit[$i]);
+					$this->db->select('id');
+					$this->db->where('product_id',$id);
+					$this->db->where('unit',$unit[$i]);
+					$this->db->limit(1);
+					$pu_row = $this->db->get('product_unit')->row_array();
+					if (!empty($pu_row)) {
+						$this->db->where('id',$pu_row['id']);
+						$this->db->update('product_unit', $unit_data);
+					} else {
+						$unit_data['product_id'] = $id;
+						$this->db->insert('product_unit', $unit_data);
+					}
+				}
 			}
+			//刪除不要的單位
+			$this->db->where('product_id',$id);
+			$this->db->where_not_in('unit',$unitStr);
+			$this->db->delete('product_unit');
 		}
-
+		
 		// 商品規格
-		$this->db->where('product_id', $id);
-		$this->db->delete('product_specification');
-
+		$specificationStr = array();
 		$specification = $this->input->post('specification');
 		$picture = $this->input->post('picture');
 		$status = $this->input->post('status');
 		$limit_enable = $this->input->post('limit_enable');
 		$limit_qty = $this->input->post('limit_qty');
-		$count = count($specification);
-		for ($i = 0; $i < $count; $i++) {
-			if (empty($picture[$i])) {
-				$picture[$i] = '';
+		if (is_array($specification)) {
+			for ($i = 0; $i < count($specification); $i++) {
+				if (empty($picture[$i])) {
+					$picture[$i] = '';
+				}
+				if (empty($status[$i])) {
+					$status[$i] = 0;
+				}
+				if (empty($limit_enable[$i])) {
+					$limit_enable[$i] = '';
+				}
+				if (empty($limit_qty[$i])) {
+					$limit_qty[$i] = 0;
+				}
+				if (!empty($specification)) {
+					$specificationStr[] = $specification[$i];
+					$specification_data = array(
+						'picture' => $picture[$i],
+						'status' => $status[$i],
+						'limit_enable' => $limit_enable[$i],
+						'limit_qty' => $limit_qty[$i],
+					);
+					$this->db->select('id');
+					$this->db->where('product_id',$id);
+					$this->db->where('specification',$specification[$i]);
+					$this->db->limit(1);
+					$ps_row = $this->db->get('product_specification')->row_array();
+					if (!empty($ps_row)) {
+						$this->db->where('id',$ps_row['id']);
+						$this->db->update('product_specification', $specification_data);
+					} else {
+						$specification_data['product_id'] = $id;
+						$specification_data['specification'] = $specification[$i];
+						$this->db->insert('product_specification', $specification_data);
+					}
+				}
 			}
-			if (empty($status[$i])) {
-				$status[$i] = 0;
-			}
-			if (empty($limit_enable[$i])) {
-				$limit_enable[$i] = '';
-			}
-			if (empty($limit_qty[$i])) {
-				$limit_qty[$i] = 0;
-			}
-			if (!empty($specification)) {
-				$insert_data = array(
-					'product_id' => $id,
-					'specification' => $specification[$i],
-					'picture' => $picture[$i],
-					'status' => $status[$i],
-					'limit_enable' => $limit_enable[$i],
-					'limit_qty' => $limit_qty[$i],
-				);
-				$this->db->insert('product_specification', $insert_data);
-			}
+			//刪除不要的規格
+			$this->db->where('product_id',$id);
+			$this->db->where_not_in('specification',$specificationStr);
+			$this->db->delete('product_specification');
 		}
 
 		$this->session->set_flashdata('message', '商品更新成功！');
-		redirect($_SERVER['HTTP_REFERER']);
-	}
-
-	public function delete($id) {
-		// $this->db->where('product_id', $id);
-		// $this->db->delete('product');
-
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 

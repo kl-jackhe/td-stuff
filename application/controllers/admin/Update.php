@@ -36,6 +36,7 @@ class Update extends Admin_Controller {
                             $this->update_202309061300();
                             $this->update_202309061750();
                             $this->update_202309071240();
+                            $this->update_202309121800();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -46,6 +47,29 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202309121800() {
+        $version = '202309121800';
+        $description = '[order_item]新增欄位[specification_str]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'specification_str'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `order_item` ADD `specification_str` varchar(300) NOT NULL  AFTER `specification_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

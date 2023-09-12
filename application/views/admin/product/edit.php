@@ -111,7 +111,7 @@
                                     <div class="col-md-4 col-sm-12">
                                         <div class="input-group">
                                             <span class="input-group-addon">當前庫存量</span>
-                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?php echo number_format($product['inventory']); ?>">
+                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?=intval($product['inventory'])?>">
                                         </div>
                                     </div>
                                 </div>
