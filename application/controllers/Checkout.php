@@ -30,14 +30,39 @@ class Checkout extends Public_Controller {
 			$this->data['user_data']['email'] = get_cookie("user_email", true);
 			$this->data['user_data']['address'] = get_cookie("user_address", true);
 		}
+		$this->setMemberInfo($this->data['user_data']['phone']);
 		$this->render('checkout/index');
 	}
 
+	function setMemberInfo($phone) {
+		unset($_SESSION['user_id']);
+		unset($_SESSION['single_sales_url']);
+		unset($_SESSION['agent_id']);
+		$sessionData = array(
+			'member_id' => '',
+			'member_join_status' => '',
+			'member_username' => '',
+			'member_full_name' => '',
+			'member_phone' => '',
+			'member_email' => '',
+		);
+		$row = $this->checkThereAreMembers($phone);
+		if (!empty($row)) {
+			$sessionData['member_id'] = $row['id'];
+			$sessionData['member_join_status'] = $row['join_status'];
+			$sessionData['member_username'] = $row['username'];
+			$sessionData['member_full_name'] = $row['full_name'];
+			$sessionData['member_phone'] = $row['phone'];
+			$sessionData['member_email'] = $row['email'];
+		}
+		$this->session->set_userdata($sessionData);
+	}
+
 	function set_user_data() {
-		set_cookie("user_name", $this->input->post('name'), 30 * 86400);
-		set_cookie("user_phone", $this->input->post('phone'), 30 * 86400);
-		set_cookie("user_email", $this->input->post('email'), 30 * 86400);
-		set_cookie("user_address", $this->input->post('address'), 30 * 86400);
+		set_cookie("user_name", $this->input->post('name'), time() + 31536000);
+		set_cookie("user_phone", $this->input->post('phone'), time() + 31536000);
+		set_cookie("user_email", $this->input->post('email'), time() + 31536000);
+		set_cookie("user_address", $this->input->post('address'), time() + 31536000);
 	}
 
 	public function save_order() {
@@ -66,12 +91,18 @@ class Checkout extends Public_Controller {
 			}
 		}
 
-		$customer_id = 0;
-		if (isset($this->current_user->id)) {
-			$customer_id = $this->current_user->id;
-		} else {
-			$customer_id = $this->get_users_id();
+		if ($this->input->post('become_member_quickly') == 'yes') {
+			$u_row = $this->checkThereAreMembers($this->input->post('phone'));
+			if (empty($u_row)) {
+				$this->createUsers($this->input->post('name'), $this->input->post('phone'), $this->input->post('email'), $this->input->post('password'), $this->input->post('become_member_quickly'));
+			} 
+			if (!empty($u_row)) {
+				if ($u_row['join_status'] == 'NotJoin') {
+					$this->updateJoinUser($u_row, $this->input->post('password'));
+				}
+			}
 		}
+		$customer_id = (isset($this->current_user->id) ? $this->current_user->id : $this->get_users_id());
 
 		$delivery_cost = 0;
 
@@ -347,35 +378,50 @@ class Checkout extends Public_Controller {
 		}
 	}
 
+	function checkThereAreMembers($phone) {
+		$this->db->select('id,join_status,username,email,full_name,phone,status');
+		$this->db->where('username',trim($phone));
+		$this->db->limit(1);
+		$row = $this->db->get('users')->row_array();
+		return ((!empty($row))?$row:false);
+	}
+
+	function createUsers($name,$phone,$email,$password,$become_member_quickly = '') {
+		$additional_data = array(
+            'join_status' => ($become_member_quickly == 'yes' ? 'IsJoin' : 'NotJoin' ),
+            'full_name' => $name,
+            'phone' => $phone,
+            'created_at' => date('Y-m-d H:i:s'),
+        );
+        $this->ion_auth->register($phone, $password, $email, $additional_data, array('2'));
+	}
+
 	function get_users_id()
     {
         $users_id = 0;
-        $this->db->select('id');
-        $this->db->where('username', trim($this->input->post('phone')));
-        $this->db->limit(1);
-        $row = $this->db->get('users')->row_array();
+        $row = $this->checkThereAreMembers($this->input->post('phone'));
         if (!empty($row)) {
             $users_id = $row['id'];
         } else {
-            $group = array('2');
-            $additional_data = array(
-                'join_status' => 'NotJoin',
-                'full_name' => $this->input->post('name'),
-                'phone' => $this->input->post('phone'),
-                'created_at' => date('Y-m-d H:i:s'),
-            );
-            $password = get_random_string(10);
-            $this->ion_auth->register($this->input->post('phone'), $password, $this->input->post('email'), $additional_data, $group);
-            $this->db->select('id');
-            $this->db->where('username', $this->input->post('phone'));
-            $this->db->limit(1);
-            $u_row = $this->db->get('users')->row_array();
+            $this->createUsers($this->input->post('name'), $this->input->post('phone'), $this->input->post('email'),get_random_string(10));
+            $u_row = $this->checkThereAreMembers($this->input->post('phone'));
             if (!empty($u_row)) {
                 $users_id = $u_row['id'];
             }
         }
         return $users_id;
     }
+
+    function updateJoinUser($userData,$password) {
+		if (!empty($userData)) {
+			$data = array(
+				'join_status' => 'IsJoin',
+				'password' => $password,
+				'updated_at' => date('Y-m-d H:i:s'),
+			);
+			$this->ion_auth->update($userData['id'], $data);
+		}
+	}
 
 	public function success($order_id) {
 		$this->data['page_title'] = '訂單完成';
@@ -677,14 +723,15 @@ class Checkout extends Public_Controller {
                 </div>
             </td>
         </tr>
-        </table>';
+        </table>
+        <br>';
 
         if (get_setting_general('mail_footer_text') != '') {
-        	echo '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
+        	$information .= '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
         }
 
         if (get_setting_general('official_line_1_qrcode') != '') {
-        	echo '<h3>【官方客服LINE QR Code】</h3>
+        	$information .= '<h3>【官方客服LINE QR Code】</h3>
         		<img src="' . base_url() . 'assets/uploads/' . get_setting_general('official_line_1_qrcode') . '" height="150px">';
         }
 
