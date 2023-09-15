@@ -372,10 +372,13 @@ class Order extends Admin_Controller {
 		}
 
 		if ($this->is_td_stuff) {
-			if ($step == 'pay_ok' || $step == 'process' || $step == 'confirm' || $step == 'invalid') {
+			// if ($step == 'pay_ok' || $step == 'process' || $step == 'confirm' || $step == 'invalid') {
+			// 	$this->order_synchronize($id);
+			// } else {
+			// 	$this->order_update_synchronize($id);
+			// }
+			if ($step != 'invalid') {
 				$this->order_synchronize($id);
-			} else {
-				$this->order_update_synchronize($id);
 			}
 		}
 
@@ -578,7 +581,7 @@ class Order extends Admin_Controller {
 	function order_synchronize($order_id, $action = 'do')
     {
         $api_url = '';
-        if($_SERVER['HTTP_HOST']=='td-stuff.com'){
+        if ($this->is_td_stuff) {
         	$api_url = 'http://erp.vei-star.com';
         }
 
@@ -674,7 +677,7 @@ class Order extends Admin_Controller {
     function order_update_synchronize($order_id, $action = 'do')
     {
     	$api_url = '';
-        if($_SERVER['HTTP_HOST']=='td-stuff.com'){
+        if ($this->is_td_stuff) {
         	$api_url = 'http://erp.vei-star.com';
         }
 
