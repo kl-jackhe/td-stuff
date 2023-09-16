@@ -35,9 +35,12 @@ class Checkout extends Public_Controller {
 	}
 
 	function setMemberInfo($phone) {
-		unset($_SESSION['user_id']);
-		unset($_SESSION['single_sales_url']);
-		unset($_SESSION['agent_id']);
+		unset($_SESSION['member_id']);
+		unset($_SESSION['member_join_status']);
+		unset($_SESSION['member_username']);
+		unset($_SESSION['member_full_name']);
+		unset($_SESSION['member_phone']);
+		unset($_SESSION['member_email']);
 		$sessionData = array(
 			'member_id' => '',
 			'member_join_status' => '',

@@ -191,12 +191,12 @@ input.qtyminus {
                                                                 <div style="width: 25%;">
                                                                     <img class="product_view_img_style" src="/assets/uploads/<?php echo $row['picture']; ?>">
                                                                 </div>
-                                                                <div style="width: 30%;position: relative;">
+                                                                <div style="width: 45%;position: relative;">
                                                                     <div style="position: absolute;bottom: 10px;left: 20px;font-size: 18px;font-weight: bold;">
                                                                         <?=$row['specification'];?>
                                                                     </div>
                                                                 </div>
-                                                                <div class="input-group" style="width: 45%;">
+                                                                <div class="input-group" style="width: 30%;">
                                                                     <div class="input-group" style="position: absolute;bottom: 10px;">
                                                                     <?if ($row['status'] == 0) {
                                                                         if ($row['limit_enable'] == 'YES' && $combine['limit_enable'] == 'YES'){?>
