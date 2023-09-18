@@ -221,28 +221,48 @@ class Sales extends Admin_Controller {
     }
 
     function calculationReport() {
+        $jsonData = array();
+        $jsonData['ExecutionResults'] = 'no';
         $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
         if (!empty($ssd_row)) {
-            $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-            if ($ssd_row['default_profit_percentage'] > 0) {
-                if (!empty($ssad_query)) {
-                    foreach ($ssad_query as $ssad_row) {
-                        $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                        $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
-                        $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                        $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
-                        $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+            $orderQty = $this->getOrderQty($ssd_row['id']);
+            $jsonData['UndoneOrderList'] = $this->getUndoneOrderList($ssd_row['id']);
+            $jsonData['OrderQty'] = $orderQty . ' / ' . ($orderQty - (!empty($jsonData['UndoneOrderList']) ? count($jsonData['UndoneOrderList']) : 0));
+            if (empty($jsonData['UndoneOrderList'])) {
+                $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
+                if ($ssd_row['default_profit_percentage'] > 0) {
+                    if (!empty($ssad_query)) {
+                        foreach ($ssad_query as $ssad_row) {
+                            $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                            $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
+                            $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                            $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
+                            $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+                        }
+                        $jsonData['ExecutionResults'] = 'yes';
                     }
-                    echo 'yes';
                 } else {
-                    echo 'no';
+                    $jsonData['ExecutionResults'] = 'no_default_profit_percentage';
                 }
-            } else {
-                echo 'no_default_profit_percentage';
             }
-        } else {
-            echo 'no';
         }
+        echo json_encode($jsonData);
+    }
+
+    function getUndoneOrderList($single_sales_id) {
+        $status = array('complete','order_cancel');
+        $this->db->select('order_id,order_number,order_step,single_sales_id,agent_id');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where_not_in('order_step',$status);
+        $query = $this->db->get('orders')->result_array();
+        return (!empty($query) ? $query : false);
+    }
+
+    function getOrderQty($single_sales_id) {
+        $this->db->select('order_id,order_number,order_step,single_sales_id,agent_id');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $query = $this->db->get('orders');
+        return ($query->num_rows() > 0 ? $query->num_rows() : 0);
     }
 
     function calculationTurnoverAmount($single_sales_id,$agent_id) {
@@ -328,6 +348,36 @@ class Sales extends Admin_Controller {
         $this->data['SingleSalesDetail'] = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
         $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($this->input->post('id'));
         $this->load->view('/admin/report/single_sales_agent_report', $this->data);
+    }
+
+    function viewCalculationReportPDF() {
+        $dataArray = array();
+        $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->get('ssid'));
+        $this->db->select('name,cost,profit_percentage,pre_hits,start_hits,order_qty,finish_qty,cancel_qty,other_qty,turnover_rate,turnover_amount,income,signature_file');
+        $this->db->where('single_sales_id',$this->input->get('ssid'));
+        $this->db->where('agent_id', $this->input->get('aid'));
+        $this->db->limit(1);
+        $ssa_row = $this->db->get('single_sales_agent')->row_array();
+        if (!empty($ssa_row) && !empty($ssd_row)) {
+            $dataArray = array(
+                'name' => $ssa_row['name'],
+                'profit_percentage' => number_format($ssa_row['profit_percentage'] > 0 ? $ssa_row['profit_percentage'] : $ssd_row['default_profit_percentage']) . '%',
+                'start_date' => $ssd_row['start_date'],
+                'end_date' => $ssd_row['end_date'],
+                'pre_hits' => $ssa_row['pre_hits'],
+                'start_hits' => $ssa_row['start_hits'],
+                'order_qty' => $ssa_row['order_qty'],
+                'finish_qty' => $ssa_row['finish_qty'],
+                'cancel_qty' => $ssa_row['cancel_qty'],
+                'turnover_rate' => number_format($ssa_row['turnover_rate']) . '%',
+                'turnover_amount' => number_format($ssa_row['turnover_amount']),
+                'income' => number_format($ssa_row['income']),
+                'signature_file' => $ssa_row['signature_file'],
+                'date_now' => date('Y-m-d'),
+            );
+        }
+        $this->data['data'] = $dataArray;
+        $this->render('admin/report/calculation_report_pdf');
     }
 
     function create_plan($id) {

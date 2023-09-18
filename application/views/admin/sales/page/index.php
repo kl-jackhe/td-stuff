@@ -93,6 +93,18 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="undoneOrderListModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="undoneOrderList">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (location.hash) {
@@ -145,24 +157,32 @@
             $.ajax({
                 type: "POST",
                 url: '/admin/sales/calculationReport',
+                dataType: 'json',
                 data: {
                     id: id,
                 },
                 success: function(data) {
-                    if (data == 'yes') {
+                    console.log(data);
+                    if (data['ExecutionResults'] == 'no') {
+                        if (!$.isEmptyObject(data['UndoneOrderList'])) {
+                            viewUndoneOrderList(data['UndoneOrderList'],data['OrderQty']);
+                        } else {
+                            alert('執行失敗！');
+                        }
+                    }
+                    if (data['ExecutionResults'] == 'yes') {
                         if (confirm('執行成功！')) {
                             viewCalculationReport(id);
                             searchFilterSales();
                         }
-                    } else if (data == 'no_default_profit_percentage') {
+                    }
+                    if (data['ExecutionResults'] == 'no_default_profit_percentage') {
                         alert('預設利潤％數沒設定！');
-                    } else {
-                        alert('執行失敗！');
                     }
                 },
                 error: function(data) {
-                    alert('執行失敗！');
-                    console.log('Error');
+                    console.log(data);
+                    alert('異常錯誤！');
                 }
             });
             $('#loading').hide();
@@ -186,12 +206,44 @@
             }
         });
     }
+
+    function viewUndoneOrderList(data,orderQty) {
+        var undoneOrderListStr = '';
+        undoneOrderListStr += '<h3 class="text-center">訂單筆數：' + orderQty + '</h3>';
+        undoneOrderListStr += '<h3 class="text-center">未完成訂單比數：' + data.length + '</h3>';
+        undoneOrderListStr += '<table class="table table-bordered table-striped"><tbody>';
+        undoneOrderListStr += '<tr style="font-size:18px;"><th>訂單編號</th><th>訂單狀態</th></tr>';
+        for (var i=0;i<data.length;i++) {
+            undoneOrderListStr += '<tr style="font-size:16px;">'
+            undoneOrderListStr += '<td><a href="/admin/order/view/' + data[i]['order_id'] + '" target="_blank">' + data[i]['order_number'] + '</a></td>';
+            if (data[i]['order_step'] == 'confirm') {
+                undoneOrderListStr += '<td>訂單確認</td>';
+            }
+            if (data[i]['order_step'] == 'pay_ok') {
+                undoneOrderListStr += '<td style="background-color: #C4E1FF">已收款</td>';
+            }
+            if (data[i]['order_step'] == 'process') {
+                undoneOrderListStr += '<td style="background-color: #FFFFCE">待出貨</td>';
+            }
+            if (data[i]['order_step'] == 'shipping') {
+                undoneOrderListStr += '<td style="background-color: #DAB1D5">已出貨</td>';
+            }
+            if (data[i]['order_step'] == 'invalid') {
+                undoneOrderListStr += '<td style="background-color: #B3D9D9">訂單不成立</td>';
+            }
+            undoneOrderListStr += '</tr>'
+        }
+        undoneOrderListStr += '</tbody></table>';
+        $('#undoneOrderList').html('');
+        $('#undoneOrderList').html(undoneOrderListStr);
+        $('#undoneOrderListModal').modal('show');
+    }
 </script>
 <!-- 簽名JS -->
 <script src="/assets/admin/js/signature/signature_pad.js"></script>
 <!-- 簽名JS -->
 
-<script>
+<!-- <script>
 jQuery(document).ready(function($){
     const canvas = document.getElementById("signature");
     const signaturePad = new SignaturePad(canvas);
@@ -224,4 +276,4 @@ jQuery(document).ready(function($){
       }
     });
 });
-</script>
+</script> -->
