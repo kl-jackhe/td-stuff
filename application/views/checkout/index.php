@@ -433,9 +433,9 @@ foreach ($this->cart->contents() as $items) {
                                 <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div> -->
-                                <div class="col-6 my-5">
+                                <!-- <div class="col-6 my-5">
                                     <span onclick="form_check()" class="btn btn-primary w-100">下單購買</span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </section>
@@ -457,7 +457,7 @@ $("#wizard").steps({
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    enableFinishButton: false,
+    // enableFinishButton: false,
     saveState: true,
     <?php if($this->input->get('step')!=''){
         echo 'startIndex: '.$this->input->get('step').',';
@@ -481,7 +481,7 @@ $("#wizard").steps({
         cancel: "取消",
         current: "current step:",
         pagination: "Pagination",
-        finish: "完成",
+        finish: "下單購買",
         next: "下一步",
         previous: "上一步",
         loading: "載入中..."
@@ -548,6 +548,10 @@ $("#wizard").steps({
         }
         checkConfirmInfo();
         return true;
+    },
+    onFinishing: function (event, currentIndex) { 
+        form_check();
+        return true; 
     }
 });
 function checkConfirmInfo() {

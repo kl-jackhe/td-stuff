@@ -37,6 +37,7 @@ class Update extends Admin_Controller {
                             $this->update_202309061750();
                             $this->update_202309071240();
                             $this->update_202309121800();
+                            $this->update_202309191500();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -47,6 +48,37 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202309191500() {
+        $version = '202309191500';
+        $description = 'setting_general insertData[join_member_info]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('join_member_info');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

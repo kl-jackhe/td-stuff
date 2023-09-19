@@ -215,6 +215,7 @@ tr:first-child td:first-child {
                                     if ($users['join_status'] == '' || $users['join_status'] == 'NotJoin') {?>
                                          <div class="col-12 py-2">
                                             <span class="btn btn-success btn-block" data-toggle="modal" data-target="#joinNowMemberModal">一鍵成為會員</span>
+                                            <span style="color:red;font-size: 14px;"><?=get_setting_general('join_member_info')?></span>
                                         </div>
                                     <?}
                                 }
@@ -238,8 +239,7 @@ tr:first-child td:first-child {
             <div class="modal-header">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="mb-1 mt-0">加入會員</h2>
-                        <h4 class="m-0">優點：可以事先掌握訂單狀態/售後服務跟上網紅分享好消息</h4>
+                        <h2 class="mb-1 mt-0">快速加入會員</h2>
                     </div>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

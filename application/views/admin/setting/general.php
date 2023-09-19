@@ -201,6 +201,12 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label class="col-md-2" for="join_member_info">加入會員文字描述</label>
+						<div class="col-md-4">
+							<textarea class="form-control" rows="3" name="join_member_info" id="join_member_info"><?php echo get_setting_general('join_member_info') ?></textarea>
+						</div>
+					</div>
+					<div class="form-group">
 						<label class="col-md-2" for="single_sales_error_info">銷售頁面不開放文字描述</label>
 						<div class="col-md-4">
 							<textarea class="form-control" rows="3" name="single_sales_error_info" id="single_sales_error_info"><?php echo get_setting_general('single_sales_error_info') ?></textarea>
