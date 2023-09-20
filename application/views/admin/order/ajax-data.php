@@ -42,6 +42,27 @@ p {
 <table class="table table-striped table-bordered table-hover" id="data-table">
     <thead class="pc_control">
         <tr class="info">
+            <th>
+                <?$order_step_list = array(
+                    'confirm' => '訂單確認',
+                    'pay_ok' => '已收款',
+                    'process' => '待出貨',
+                    'shipping' => '已出貨',
+                    'complete' => '完成',
+                    'invalid' => '訂單不成立',);?>
+                <select class="form-control" >
+                    <option value="">選擇狀態</option>
+                    <?foreach ($order_step_list as $key => $value) {?>
+                        <option value="<?=$key?>"><?=$value?></option>
+                    <?}?>
+                </select>
+                <div class="input-group">
+                    <span class="input-group-addon">全選</span>
+                    <span class="input-group-addon">
+                        <input type="checkbox" id="selectAll" style="width: 30px;">
+                    </span>
+                </div>
+            </th>
             <th>訂單編號</th>
             <th>訂單日期</th>
             <th>客戶名稱</th>
@@ -59,6 +80,9 @@ p {
         $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
         <tbody class="pc_control">
             <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                <td class="text-center">
+                    <input type="checkbox" class="form-control" name="" style="width: 25px;display: inline-block;" value="<?=$order['order_id']?>">
+                </td>
                 <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
                     <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
                     <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
