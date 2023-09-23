@@ -58,7 +58,7 @@
     <!-- End Facebook Pixel Code -->
 
     <!-- FB -->
-    <!-- <meta name="facebook-domain-verification" content="52kw8g3o4wd60qya7wp0z2fclnhjty" /> -->
+    <meta name="facebook-domain-verification" content="52kw8g3o4wd60qya7wp0z2fclnhjty" />
     <!-- End Meta Pixel Code -->
     <!-- <script>
     !function(f,b,e,v,n,t,s)

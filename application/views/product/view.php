@@ -77,7 +77,7 @@ input.qtyminus {
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
-                <div class="col-md-8 text-center product_description">
+                <div class="col-md-8 text-center product_description" style="margin-bottom: 35px;">
                     <?if ($this->is_td_stuff) {?>
                         <img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg">
                     <?}?>
@@ -93,9 +93,9 @@ input.qtyminus {
                         <?=$product['product_note']?>
                     </p>
                 </div>
-                <div class="col-md-8 text-center product_description">
+                <div class="col-md-8 text-center product_description" style="margin-bottom: 35px;">
                     <?if ($this->is_td_stuff) {?>
-                        <img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg">
+                        <p><img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg"></p>
                     <?}?>
                 </div>
                 <div class="col-md-12 text-center">
