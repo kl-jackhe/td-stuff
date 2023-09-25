@@ -23,7 +23,7 @@
                         <a href="#product" aria-controls="product" role="tab" data-toggle="tab">商品資訊</a>
                     </li> -->
                     <li role="presentation">
-                        <a href="#history" aria-controls="history" role="tab" data-toggle="tab">訂單記錄</a>
+                        <a href="#history" aria-controls="history" role="tab" data-toggle="tab">訂單記錄 (<?=$orderProductQTY?>)</a>
                     </li>
                     <?if (!empty($SingleSalesDetail)) {
                         $status = array('Closure','OutSale','ForSale','OnSale');

@@ -153,6 +153,16 @@ class Order_model extends CI_Model {
 		return (!empty($row)? ($row['order_item_qty'] > 0 ? $row['order_item_qty'] : 0 ) : 0);
 	}
 
+	function getSingleOrderProductQTY($order_id) {
+		$this->db->select_sum('order_item_qty');
+		$this->db->join('order_item','order_item.order_id = orders.order_id');
+		$this->db->where('order_step != ','order_cancel');
+		$this->db->where('order_item_price', 0);
+		$this->db->where('orders.order_id', $order_id);
+		$row = $this->db->get('orders')->row_array();
+		return (!empty($row)? ($row['order_item_qty'] > 0 ? $row['order_item_qty'] : 0 ) : 0);
+	}
+
 	function getOrderTotalAmount($single_sales_id, $agent_id='') {
 		$this->db->select_sum('order_discount_total');
 		$this->db->where('order_step != ','order_cancel');

@@ -190,6 +190,7 @@ class Sales extends Admin_Controller {
         $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $this->data['SingleSalesDetail']['product_id']);
 
         $this->data['orders'] = $this->order_model->getSalesPageHistoryList($id);
+        $this->data['orderProductQTY'] = $this->order_model->getOrderProductQTY($id);
 
         $this->data['page_title'] = '銷售頁面編輯';
         $this->render('admin/sales/page/edit');
