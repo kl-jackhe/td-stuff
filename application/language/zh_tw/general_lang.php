@@ -69,3 +69,4 @@ $lang['Closure'] = '關閉';
 $lang['OnSale'] = '銷售中';
 $lang['OutSale'] = '停售中';
 $lang['ForSale'] = '待販售';
+$lang['Finish'] = '結案';

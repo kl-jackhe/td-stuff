@@ -69,12 +69,16 @@
                     <li role="presentation">
                         <a href="#History" aria-controls="History" role="tab" data-toggle="tab" onclick="searchTagStatus('History')">歷史</a>
                     </li>
+                    <li role="presentation">
+                        <a href="#Finish" aria-controls="Finish" role="tab" data-toggle="tab" onclick="searchTagStatus('Finish')">結案</a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="Test"></div>
                     <div role="tabpanel" class="tab-pane" id="ForSale"></div>
                     <div role="tabpanel" class="tab-pane" id="OnSale"></div>
                     <div role="tabpanel" class="tab-pane" id="History"></div>
+                    <div role="tabpanel" class="tab-pane" id="Finish"></div>
                     <?php require 'ajax-data.php';?>
                 </div>
             </div>
@@ -132,6 +136,7 @@
             $('a[href=\'' + anchor + '\']').tab('show');
         });
         status = activeTab.replace('#', '');
+
         searchTagStatus(status);
     });
 
@@ -146,6 +151,9 @@
             $('#status').val(status);
         }
         if (status == 'History') {
+            $('#status').val(status);
+        }
+        if (status == 'Finish') {
             $('#status').val(status);
         }
         searchFilterSales();
@@ -237,6 +245,26 @@
         $('#undoneOrderList').html('');
         $('#undoneOrderList').html(undoneOrderListStr);
         $('#undoneOrderListModal').modal('show');
+    }
+
+    function closedCase(id,status) {
+        if (confirm('確定要結案？')) {
+            $.ajax({
+                type: "POST",
+                url: '/admin/sales/updateSingleSalesStatus',
+                data: {
+                    id: id,
+                    status: status,
+                },
+                success: function(data) {
+                    alert('結案成功！');
+                    searchFilterSales();
+                },
+                error: function(data) {
+                    alert('異常錯誤！');
+                }
+            });
+        }
     }
 </script>
 <!-- 簽名JS -->

@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-12">
         <?if (!empty($SingleSalesDetail)) {
-            if ($SingleSalesDetail['status'] != 'Closure') {?>
+            if ($SingleSalesDetail['status'] != 'Closure' && $SingleSalesDetail['status'] != 'Finish') {?>
                 <span class="btn btn-success" style="margin-bottom: 10px;" onclick="updateEditAllData()">一鍵更新 <i class="fa-solid fa-upload"></i></span>
             <?}
         }?>
@@ -29,7 +29,7 @@
                         $status = array('Closure','OutSale','ForSale','OnSale');
                         $btn_class = array('btn-danger','btn-warning','btn-info','btn-success');
                         for ($i=0;$i<count($status);$i++) {
-                            if ($status[$i] != $SingleSalesDetail['status'] && $SingleSalesDetail['status'] != 'Closure') {?>
+                            if ($status[$i] != $SingleSalesDetail['status'] && $SingleSalesDetail['status'] != 'Closure' && $SingleSalesDetail['status'] != 'Finish') {?>
                                 <li style="float: right;margin-left: 10px;font-weight: bold;" class="btn <?=$btn_class[$i]?>" onclick="updateSingleSalesStatus('<?=$SingleSalesDetail['id']?>','<?=$status[$i]?>','<?=$this->lang->line($status[$i]);?>')">
                                     <?=$this->lang->line($status[$i])?>
                                 </li>

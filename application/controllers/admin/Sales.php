@@ -139,7 +139,7 @@ class Sales extends Admin_Controller {
     }
 
     function createSingleSales() {
-        //status -> Closure OnSale OutSale ForSale Test
+        //status -> Closure OnSale OutSale ForSale Test Finish
         if ($this->input->post('product_id') != '') {
             $repeatedAttempts = 0;
             $ssID = '';
