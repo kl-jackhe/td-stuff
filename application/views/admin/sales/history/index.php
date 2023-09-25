@@ -71,7 +71,31 @@ select.district {
 <div class="table-responsive" id="datatable">
   <?php require 'ajax-data.php';?>
 </div>
-
+<!-- operateModal -->
+<div class="modal fade" id="operateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog  modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <select class="form-control" id="selectStep">
+          <option value="">----選擇訂單狀態----</option>
+          <?foreach ($step_list as $key => $value) {
+            if ($key != '' && $key != 'order_cancel') {?>
+              <option value="<?=$key?>"><?=$value?></option>
+            <?}
+          }?>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <span class="btn btn-primary" onclick="selectBoxChangeStep()">修改</span>
+        <span class="btn btn-danger" data-dismiss="modal">關閉</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- operateModal -->
 <script>
   $(document).ready(function () {
     searchFilter(<?php echo get_cookie('order_page') ?>);
