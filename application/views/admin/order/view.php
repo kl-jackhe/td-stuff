@@ -141,7 +141,7 @@
                                         if ($i < 1) {
                                             echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
                                         }?>
-                                        <ul class="pl-3 m-0" style="color: gray;">
+                                        <ul style="color: #0066CC; padding-left: 25px;">
                                             <li style="list-style-type: circle;">
                                             <?echo $row['qty'] . ' ' . $row['product_unit'];
                                             if (!empty($row['product_specification'])) {
@@ -186,12 +186,12 @@
                         </div>
                         <div class="col-md-4">
                             <div class="row text-right">
-                                <div class="col-md-6">小計：</div>
-                                <div class="col-md-6"><?php echo number_format($total) ?></div>
-                                <div class="col-md-6">運費：</div>
-                                <div class="col-md-6"><?php echo number_format($order['order_delivery_cost']) ?></div>
-                                <div class="col-md-6">總計：</div>
-                                <div class="col-md-6"><?php echo number_format($order['order_discount_total']) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">小計：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($total) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">運費：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_delivery_cost']) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">總計：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_discount_total']) ?></div>
                             </div>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
         </div>
         <div class="content-box-large mb_control">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="padding: 5px;">
                     <table class="table table-bordered">
                         <tr>
                             <td>
@@ -234,7 +234,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table class="table table-bordered table-hover">
+                                <table class="table table-bordered table-hover" style="margin: 0px;">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -242,7 +242,7 @@
                                             <th scope="col" class="text-nowrap">商品</th>
                                         </tr>
                                     </thead>
-                                    <?php 
+                                    <?php
                                     $count = 1;
                                     $total = 0;
                                      if (!empty($order_item)) {
@@ -261,26 +261,37 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                <?php $i = 0;
-                                                $this->db->select('*');
-                                                $this->db->from('product_combine');
-                                                $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
-                                                $this->db->where('product_combine.id', $item['product_combine_id']);
-                                                $query = $this->db->get();
-                                                foreach ($query->result_array() as $row) {
-                                                    // echo $row['id'] . ' ' . $row['product_specification'] . ' ' . $row['product_id'] . '<br>';
-                                                    if ($i < 1) {
-                                                        echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
-                                                    }?>
-                                                    <ul class="pl-3 m-0" style="color: gray;">
-                                                        <li style="list-style-type: circle;">
-                                                        <?echo $row['qty'] . ' ' . $row['product_unit'];
-                                                        if (!empty($row['product_specification'])) {
-                                                            echo ' - ' . $row['product_specification'];
+                                                    <?$i = 0;
+                                                    $this->db->select('*');
+                                                    $this->db->from('product_combine');
+                                                    $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+                                                    $this->db->where('product_combine.id', $item['product_combine_id']);
+                                                    $query = $this->db->get();
+                                                    foreach ($query->result_array() as $row) {
+                                                        if ($i < 1) {
+                                                            echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
                                                         }?>
-                                                        </li>
-                                                    </ul>
-                                                    <?$i++;}?>
+                                                        <ul style="color: #0066CC; padding-left: 20px;">
+                                                            <li style="list-style-type: circle;">
+                                                            <?echo $row['qty'] . ' ' . $row['product_unit'];
+                                                            if (!empty($row['product_specification'])) {
+                                                                echo ' - ' . $row['product_specification'];
+                                                            }
+                                                            foreach ($order_item as $specification_item) {
+                                                                if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
+                                                                    $this->db->select('*');
+                                                                    $this->db->from('product_specification');
+                                                                    $this->db->where('id', $specification_item['specification_id']);
+                                                                    $query_specification = $this->db->get();
+                                                                    foreach ($query_specification->result_array() as $row_specification) {
+                                                                        echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
+                                                                    }
+                                                                }
+                                                            }?>
+                                                            </li>
+                                                        </ul>
+                                                        <?$i++;
+                                                    }?>
                                                 </div>
                                                 <div>金額：$<?php echo number_format($item['order_item_price']) ?></div>
                                                 <div>數量：<?php echo $item['order_item_qty'] ?></div>
