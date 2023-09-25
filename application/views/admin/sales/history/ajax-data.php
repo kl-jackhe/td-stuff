@@ -42,6 +42,12 @@ p {
 <table class="table table-striped table-bordered table-hover" id="data-table">
     <thead class="pc_control">
         <tr class="info">
+            <th>
+                <p class="btn btn-primary btn-sm" style="margin-bottom: 10px;" data-toggle="modal" data-target="#operateModal">操作 <i class="fa-solid fa-arrow-up-right-from-square"></i></p>
+                <br>
+                <input type="hidden" id="selectAll" value="0">
+                <p class="btn btn-success btn-sm" onclick="selectAll()">全選 <i class="fa-regular fa-square selectAll"></i></p>
+            </th>
             <th>訂單編號</th>
             <th>訂單日期</th>
             <th>客戶名稱</th>
@@ -59,6 +65,9 @@ p {
         $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
         <tbody class="pc_control">
             <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                <td class="text-center">
+                    <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?=$order['order_id']?>">
+                </td>
                 <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
                     <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
                     <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>

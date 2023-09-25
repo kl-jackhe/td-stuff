@@ -128,10 +128,20 @@ class Order extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	public function update_step() {
-		$id = $this->input->post('id');
-		$step = $this->input->post('step');
-		
+	function selectBoxChangeStep() {
+		foreach ($this->input->post('id_list') as $id) {
+			$this->update_step($id, $this->input->post('step'));
+		}
+	}
+
+	public function update_step($id = '',$step = '') {
+		if ($id == '') {
+			$id = $this->input->post('id');
+		}
+		if ($step == '') {
+			$step = $this->input->post('step');
+		}
+
 		// 已取貨
 		if ($step == 'picked') {
 			$data = array(

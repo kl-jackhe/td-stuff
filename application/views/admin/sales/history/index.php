@@ -102,4 +102,50 @@ select.district {
       });
     }
   }
+
+  function selectAll() {
+    if ($('#selectAll').val() == 1) {
+      $('#selectAll').val(0);
+      $('.selectAll').removeClass('fa-square-check');
+      $('.selectAll').addClass('fa-square');
+      $('input[type="checkbox"]').prop('checked', false);
+    } else {
+      $('#selectAll').val(1);
+      $('.selectAll').removeClass('fa-square');
+      $('.selectAll').addClass('fa-square-check');
+      $('input[type="checkbox"]').prop('checked', true);
+    }
+  }
+
+  function selectBoxChangeStep() {
+    var checkedInputsArray = $('input[name="selectCheckbox"]:checked').map(function() {
+        return this.value;
+    }).get();
+    if ($.isEmptyObject(checkedInputsArray)) {
+      alert('請選擇訂單！');
+      return;
+    }
+    if ($('#selectStep').val() == '') {
+      alert('請選擇狀態！');
+      return;
+    }
+    if (confirm('訂定要變更訂單狀態？')) {
+      $.ajax({
+          type: "POST",
+          url: '/admin/order/selectBoxChangeStep',
+          data: {
+              id_list: checkedInputsArray,
+              step: $('#selectStep').val(),
+          },
+          success: function(data) {
+              $('#operateModal').modal('hide');
+              searchFilter(<?php echo get_cookie('order_page') ?>);
+          },
+          error: function(data) {
+              console.log(data);
+              alert('異常錯誤！');
+          }
+      });
+    }
+  }
 </script>
