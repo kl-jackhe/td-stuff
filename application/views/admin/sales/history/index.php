@@ -82,7 +82,7 @@ select.district {
         <select class="form-control" id="selectStep">
           <option value="">----選擇訂單狀態----</option>
           <?foreach ($step_list as $key => $value) {
-            if ($key != '' && $key != 'order_cancel') {?>
+            if ($key != '') {?>
               <option value="<?=$key?>"><?=$value?></option>
             <?}
           }?>

@@ -27,8 +27,8 @@
                 <? if ($agent['id'] == 0) {?>
                     <option value="" selected>選擇會員</option>
                 <?}
-                if (!empty($Users)) {
-                    foreach ($Users as $row) {?>
+                if (!empty($users)) {
+                    foreach ($users as $row) {?>
                         <option value="<?=$row['id'] ?>" <?=($agent['users_id'] == $row['id'] ? 'selected' : '')?>><?=$row['full_name'] . ' - ' . $row['username'] ?></option>
                     <?}
                 }?>

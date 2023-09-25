@@ -72,25 +72,13 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <div class="input-group" style="width: 70%;">
-                        <span class="input-group-btn">
-                            <?php $attributes = array('class' => 'form-inline');?>
-                            <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
-                            <?$att = 'class="form-control dropdown-toggle"';
-                              $options = array(
-                              'confirm' => '訂單確認',
-                              'pay_ok' => '已收款',
-                              'process' => '待出貨',
-                              'shipping' => '已出貨',
-                              'complete' => '完成',
-                              'order_cancel' => '訂單取消',
-                              'invalid' => '訂單不成立',
-                            );
-                            echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
-                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
-                            <?php echo form_close() ?>
-                        </span>
-                    </div>
+                    <select id="order_step_<?=$order['order_id']?>pc" onchange="changeStep('<?=$order['order_id']?>','pc')" class="form-control">
+                        <?foreach ($step_list as $key => $value) {
+                            if ($key != '') {?>
+                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                            <?}
+                        }?>
+                    </select>
                 </div>
             </div>
         </div>
@@ -353,3 +341,24 @@
         </div>
     </div>
 </div>
+<script>
+function changeStep(id,source) {
+    if (confirm('訂定要變更訂單狀態？')) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/order/update_step',
+            data: {
+                id: id,
+                step: $('#order_step_' + id + source).val(),
+            },
+            success: function(data) {
+                alert('修改完成！');
+            },
+            error: function(data) {
+                console.log(data);
+                alert('異常錯誤！');
+            }
+        });
+    }
+}
+</script>

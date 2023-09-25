@@ -60,149 +60,169 @@ p {
             <th>代言人</th>
         </tr>
     </thead>
-    <?if (!empty($orders)) {
-        foreach ($orders as $order) {
-        $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
-        <tbody class="pc_control">
-            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
-                <td class="text-center">
-                    <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?=$order['order_id']?>">
-                </td>
-                <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
-                    <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
-                    <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
-                    </a>
-                </td>
-                <td>
-                    <?php echo $order['order_date'] ?>
-                </td>
-                <td>
-                    <?php echo $order['customer_name'] ?>
-                </td>
-                <td>
-                    <?=(!empty($order['order_store_address'])? $order['order_store_name'] . '<br>' . $order['order_store_address'] : $order['order_delivery_address'])?>
-                </td>
-                <td class="text-center">
-                    <?=get_delivery($order['order_delivery']) ?>
-                </td>
-                <td class="text-center">
-                    <?php
-                    echo '$' . format_number($order['order_discount_total']) . '<br>' . get_payment($order['order_payment']);
-                    if ($order['order_payment']=='ecpay'){
-                        echo '<br>'.get_pay_status($order['order_pay_status']);
-                    }?>
-                </td>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <?$attributes = array('class' => 'form-inline');
-                            echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
-                            <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>">
-                            <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                            <?echo form_close() ?>
-                        </span>
-                    </div>
-                </td>
-                <td>
-                    <select id="order_step_<?=$order['order_id']?>pc" onchange="changeStep('<?=$order['order_id']?>','pc')" class="form-control">
-                        <?foreach ($step_list as $key => $value) {
-                            if ($key != '' && $key != 'order_cancel') {?>
-                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
-                            <?}
-                        }?>
-                    </select>
-                </td>
-                <td>
-                    <?if ($order['single_sales_id'] != '') {?>
-                        <a href="/admin/sales/editSingleSales/<?php echo $order['single_sales_id'] ?>" target="_blank">
-                            <?=$order['single_sales_id']?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
+    <tbody class="pc_control">
+        <?if (!empty($orders)) {
+            foreach ($orders as $order) {
+                $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
+                <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                    <td class="text-center">
+                        <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?=$order['order_id']?>">
+                    </td>
+                    <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
+                        <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
+                        <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
                         </a>
-                    <?}?>
-                </td>
-                <td>
-                    <?=$agentName?>
-                </td>
-            </tr>
-        </tbody>
-        <tbody class="mb_control">
-            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
-                <td>
-                    <?if ($order['order_step'] == 'order_cancel'){ ?>
-                    <p>訂單編號：<span style="text-decoration: line-through;">
-                        <?php echo $order['order_number'] ?></span></p>
-                    <?}else{?>
-                    <p>訂單編號：
-                        <?php echo $order['order_number'] ?>
-                    </p>
-                    <?}?>
-                    <p>訂單日期：
+                    </td>
+                    <td>
                         <?php echo $order['order_date'] ?>
-                    </p>
-                    <p>客戶名稱：
+                    </td>
+                    <td>
                         <?php echo $order['customer_name'] ?>
-                    </p>
-                    <p>配送方式：
-                        <?php echo get_delivery($order['order_delivery']) ?>
-                    </p>
-                    <p>付款方式：
-                        <?php echo get_payment($order['order_payment']) ?>
-                    </p>
-                    <p>訂單金額：<span style="color:red;font-weight: bold;">
-                        <?php echo format_number($order['order_discount_total']) ?></span></p>
-                </td>
-                <td>
-                    <p>寄送/取貨地址：</p>
-                    <p>
-                        <?if (!empty($order['order_store_address'])) {
-                          echo $order['order_store_name'] . '<br>';
-                          echo $order['order_store_address'];
-                        } else {
-                          echo $order['order_delivery_address'];
+                    </td>
+                    <td>
+                        <?=(!empty($order['order_store_address'])? $order['order_store_name'] . '<br>' . $order['order_store_address'] : $order['order_delivery_address'])?>
+                    </td>
+                    <td class="text-center">
+                        <?=get_delivery($order['order_delivery']) ?>
+                    </td>
+                    <td class="text-center">
+                        <?php
+                        echo '$' . format_number($order['order_discount_total']) . '<br>' . get_payment($order['order_payment']);
+                        if ($order['order_payment']=='ecpay'){
+                            echo '<br>'.get_pay_status($order['order_pay_status']);
                         }?>
-                    </p>
-                </td>
-            </tr>
-            <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
-                <td>
-                    <p>匯款後五碼</p>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <?$attributes = array('class' => 'form-inline');
-                            echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
-                            <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>">
-                            <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                            <?echo form_close() ?>
-                        </span>
-                    </div>
-                </td>
-                <td>
-                    <p>訂單狀態</p>
-                    <select id="order_step_<?=$order['order_id']?>mb" onchange="changeStep('<?=$order['order_id']?>','mb')" class="form-control">
-                        <?foreach ($step_list as $key => $value) {
-                            if ($key != '' && $key != 'order_cancel') {?>
-                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
-                            <?}
-                        }?>
-                    </select>
-                </td>
-            </tr>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <?$attributes = array('class' => 'form-inline');
+                                echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
+                                <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>">
+                                <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                <?echo form_close() ?>
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <select id="order_step_<?=$order['order_id']?>pc" onchange="changeStep('<?=$order['order_id']?>','pc')" class="form-control">
+                            <?foreach ($step_list as $key => $value) {
+                                if ($key != '') {?>
+                                    <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                                <?}
+                            }?>
+                        </select>
+                    </td>
+                    <td>
+                        <?if ($order['single_sales_id'] != '') {?>
+                            <a href="/admin/sales/editSingleSales/<?=$order['single_sales_id'] ?>" target="_blank">
+                                <?=$order['single_sales_id']?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                            </a>
+                        <?}?>
+                    </td>
+                    <td>
+                        <?if ($agentName != '') {?>
+                            <a href="/admin/agent/editAgent<?=$order['agent_id']?>" target="_blank">
+                                <?=$agentName?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                            </a>
+                        <?}?>
+                    </td>
+                </tr>
+            <?}
+        } else {?>
             <tr>
-                <td>
-                    <div class="input-group">
-                        <span class="input-group-addon">查看訂單</span>
-                        <a href="/admin/order/view/<?php echo $order['order_id'] ?>" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-eye"></i></a>
-                    </div>
-                </td>
-                <td>
+                <td colspan="15">
+                    <center>對不起, 沒有資料 !</center>
                 </td>
             </tr>
-        </tbody>
-        <?}
-    } else {?>
-    <tr>
-        <td colspan="15">
-            <center>對不起, 沒有資料 !</center>
-        </td>
-    </tr>
-    <?}?>
+        <?}?>
+    </tbody>
+    <tbody class="mb_control">
+        <?if (!empty($orders)) {
+            foreach ($orders as $order) {
+                $agentName = $this->agent_model->getAgentName($order['agent_id']);?>
+                <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                    <td>
+                        <p>訂單編號：
+                            <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank" <?=($order['order_step'] == 'order_cancel' ? 'style="text-decoration: line-through;"' : '')?>>
+                                <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                            </a>
+                        </p>
+                        <p>訂單日期：
+                            <?php echo $order['order_date'] ?>
+                        </p>
+                        <p>客戶名稱：
+                            <?php echo $order['customer_name'] ?>
+                        </p>
+                        <p>配送方式：
+                            <?php echo get_delivery($order['order_delivery']) ?>
+                        </p>
+                        <p>付款方式：
+                            <?php echo get_payment($order['order_payment']) ?>
+                        </p>
+                        <p>訂單金額：<span style="color:red;font-weight: bold;">
+                            <?php echo format_number($order['order_discount_total']) ?></span></p>
+                    </td>
+                    <td>
+                        <p>寄送/取貨地址：</p>
+                        <p>
+                            <?if (!empty($order['order_store_address'])) {
+                              echo $order['order_store_name'] . '<br>';
+                              echo $order['order_store_address'];
+                            } else {
+                              echo $order['order_delivery_address'];
+                            }?>
+                        </p>
+                    </td>
+                </tr>
+                <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                    <td>
+                        <p>匯款後五碼</p>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <?$attributes = array('class' => 'form-inline');
+                                echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes);?>
+                                <input type="text" class="form-control" name="remittance_account" value="<?=$order['remittance_account']?>">
+                                <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                <?echo form_close() ?>
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <p>訂單狀態</p>
+                        <select id="order_step_<?=$order['order_id']?>mb" onchange="changeStep('<?=$order['order_id']?>','mb')" class="form-control">
+                            <?foreach ($step_list as $key => $value) {
+                                if ($key != '') {?>
+                                    <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                                <?}
+                            }?>
+                        </select>
+                    </td>
+                </tr>
+                <?if ($order['single_sales_id'] != '' || $agentName != '') {?>
+                    <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
+                        <td>
+                            <?if ($order['single_sales_id'] != '') {?>
+                                <a href="/admin/sales/editSingleSales/<?=$order['single_sales_id'] ?>" target="_blank">
+                                    <?=$order['single_sales_id']?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <?}?>
+                        </td>
+                        <td>
+                            <?if ($agentName != '') {?>
+                                <a href="/admin/agent/editAgent<?=$order['agent_id']?>" target="_blank">
+                                    <?=$agentName?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <?}?>
+                        </td>
+                    </tr>
+                <?}
+            }
+        } else {?>
+            <tr>
+                <td colspan="15">
+                    <center>對不起, 沒有資料 !</center>
+                </td>
+            </tr>
+        <?}?>
+    </tbody>
 </table>
