@@ -8,6 +8,17 @@ class Sales extends Admin_Controller {
         $this->load->model('sales_model');
         $this->load->model('agent_model');
         $this->load->model('product_model');
+
+        $this->data['step_list'] = array(
+            '' => '訂單狀態',
+            'confirm' => '訂單確認',
+            'pay_ok' => '已收款',
+            'process' => '待出貨',
+            'shipping' => '已出貨',
+            'complete' => '完成',
+            'order_cancel' => '訂單取消',
+            'invalid' => '訂單不成立',
+        );
 	}
 
     function page()
@@ -56,8 +67,10 @@ class Sales extends Admin_Controller {
         $page = $this->input->get('page');
         if (!$page) {
             $offset = 0;
+            $this->input->set_cookie("order_page", '0', 3600);
         } else {
             $offset = $page;
+            $this->input->set_cookie("order_page", $page, 3600);
         }
         //set conditions for search
         $keywords = $this->input->get('keywords');
@@ -69,6 +82,15 @@ class Sales extends Admin_Controller {
         $end_date = $this->input->get('end_date');
         $sales = $this->input->get('sales');
         $agent = $this->input->get('agent');
+        setcookie('order_keywords', $keywords, time() + 3600, '/');
+        setcookie('order_product', $product, time() + 3600, '/');
+        setcookie('order_category', $category, time() + 3600, '/');
+        setcookie('order_category1', $category1, time() + 3600, '/');
+        setcookie('order_category2', $category2, time() + 3600, '/');
+        setcookie('order_start_date', $start_date, time() + 3600, '/');
+        setcookie('order_end_date', $end_date, time() + 3600, '/');
+        setcookie('order_sales', $sales, time() + 3600, '/');
+        setcookie('order_agent', $agent, time() + 3600, '/');
         if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }

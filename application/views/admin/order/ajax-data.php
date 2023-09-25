@@ -119,25 +119,13 @@ p {
                     </div>
                 </td>
                 <td>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <?php $attributes = array('class' => 'form-inline');?>
-                            <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
-                            <?$att = 'class="form-control dropdown-toggle"';
-                              $options = array(
-                              'confirm' => '訂單確認',
-                              'pay_ok' => '已收款',
-                              'process' => '待出貨',
-                              'shipping' => '已出貨',
-                              'complete' => '完成',
-                              // 'order_cancel' => '訂單取消',
-                              'invalid' => '訂單不成立',
-                            );
-                            echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
-                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
-                            <?php echo form_close() ?>
-                        </span>
-                    </div>
+                    <select id="order_step_<?=$order['order_id']?>pc" onchange="changeStep('<?=$order['order_id']?>','pc')" class="form-control">
+                        <?foreach ($step_list as $key => $value) {
+                            if ($key != '' && $key != 'order_cancel') {?>
+                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                            <?}
+                        }?>
+                    </select>
                 </td>
                 <td>
                     <?if ($order['single_sales_id'] != '') {?>
@@ -204,25 +192,13 @@ p {
                 </td>
                 <td>
                     <p>訂單狀態</p>
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <?php $attributes = array('class' => 'form-inline');?> -->
-                            <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
-                            <?$att = 'class="form-control dropdown-toggle"';
-                              $options = array(
-                              'confirm' => '訂單確認',
-                              'pay_ok' => '已收款',
-                              'process' => '待出貨',
-                              'shipping' => '已出貨',
-                              'complete' => '完成',
-                              // 'order_cancel' => '訂單取消',
-                              'invalid' => '訂單不成立',
-                            );
-                            echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
-                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
-                            <?php echo form_close() ?>
-                        </span>
-                    </div>
+                    <select id="order_step_<?=$order['order_id']?>mb" onchange="changeStep('<?=$order['order_id']?>','mb')" class="form-control">
+                        <?foreach ($step_list as $key => $value) {
+                            if ($key != '' && $key != 'order_cancel') {?>
+                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                            <?}
+                        }?>
+                    </select>
                 </td>
             </tr>
             <tr>

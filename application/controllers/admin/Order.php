@@ -8,6 +8,17 @@ class Order extends Admin_Controller {
 		$this->load->model('sales_model');
 		$this->load->model('agent_model');
 		$this->load->model('product_model');
+
+		$this->data['step_list'] = array(
+			'' => '訂單狀態',
+			'confirm' => '訂單確認',
+			'pay_ok' => '已收款',
+			'process' => '待出貨',
+			'shipping' => '已出貨',
+			'complete' => '完成',
+			'order_cancel' => '訂單取消',
+			'invalid' => '訂單不成立',
+        );
 	}
 
 	public function index() {
@@ -24,32 +35,38 @@ class Order extends Admin_Controller {
 		$conditions = array();
 		//calc offset number
 		$page = $this->input->get('page');
-		if (!$page) {
-			$offset = 0;
-		} else {
-			$offset = $page;
-		}
+        if (!$page) {
+            $offset = 0;
+            $this->input->set_cookie("order_page", '0', 3600);
+        } else {
+            $offset = $page;
+            $this->input->set_cookie("order_page", $page, 3600);
+        }
 		//set conditions for search
 		$keywords = $this->input->get('keywords');
 		$product = $this->input->get('product');
-		// $sortBy = $this->input->get('sortBy');
 		$category = $this->input->get('category');
 		$category1 = $this->input->get('category1');
 		$category2 = $this->input->get('category2');
-		// $status = $this->input->get('status');
 		$start_date = $this->input->get('start_date');
 		$end_date = $this->input->get('end_date');
 		$sales = $this->input->get('sales');
 		$agent = $this->input->get('agent');
+		setcookie('order_keywords', $keywords, time() + 3600, '/');
+		setcookie('order_product', $product, time() + 3600, '/');
+		setcookie('order_category', $category, time() + 3600, '/');
+		setcookie('order_category1', $category1, time() + 3600, '/');
+		setcookie('order_category2', $category2, time() + 3600, '/');
+		setcookie('order_start_date', $start_date, time() + 3600, '/');
+		setcookie('order_end_date', $end_date, time() + 3600, '/');
+		setcookie('order_sales', $sales, time() + 3600, '/');
+		setcookie('order_agent', $agent, time() + 3600, '/');
 		if (!empty($keywords)) {
 			$conditions['search']['keywords'] = $keywords;
 		}
 		if (!empty($product)) {
 			$conditions['search']['product'] = $product;
 		}
-		// if(!empty($sortBy)){
-		//     $conditions['search']['sortBy'] = $sortBy;
-		// }
 		if (!empty($category)) {
 			$conditions['search']['step'] = $category;
 		}
@@ -59,9 +76,6 @@ class Order extends Admin_Controller {
 		if (!empty($category2)) {
 			$conditions['search']['payment'] = $category2;
 		}
-		// if(!empty($status)){
-		//     $conditions['search']['status'] = $status;
-		// }
 		if (!empty($start_date)) {
 			$conditions['search']['start_date'] = $start_date;
 		}
@@ -114,10 +128,10 @@ class Order extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	public function update_step($id, $step = '') {
-		if ($step == '') {
-			$step = $this->input->post('order_step');
-		}
+	public function update_step() {
+		$id = $this->input->post('id');
+		$step = $this->input->post('step');
+		
 		// 已取貨
 		if ($step == 'picked') {
 			$data = array(
@@ -417,9 +431,8 @@ class Order extends Admin_Controller {
 				}
 			}
 		}
-
-		$this->session->set_flashdata('message', '訂單更新成功！');
-		redirect($_SERVER['HTTP_REFERER']);
+		// $this->session->set_flashdata('message', '訂單更新成功！');
+		// redirect($_SERVER['HTTP_REFERER']);
 	}
 
 	public function multiple_action() {
@@ -507,16 +520,6 @@ class Order extends Admin_Controller {
 		}
 		// redirect( base_url() . 'admin/order');
 	}
-
-	// public function delete($id)
-	// {
-	//     $this->db->where('order_id', $id);
-	//     $this->db->delete('orders');
-	//     $this->db->where('order_id', $id);
-	//     $this->db->delete('order_item');
-
-	//     redirect( base_url() . 'admin/order');
-	// }
 
 	public function line_pay_refund($order_id) {
 		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
