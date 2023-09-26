@@ -41,7 +41,7 @@
                             <td><?=$sales['pre_hits'] + $sales['start_hits']?></td>
                             <td><?=$this->lang->line($sales['status'])?></td>
                             <td>
-                                <span class="btn btn-success btn-sm <?=($sales['status'] == 'Closure'? '' : 'hide')?>" data-toggle="modal" data-target="#reportModal" onclick="viewCalculationReport('<?=$sales['id']?>')">查看報表</span>
+                                <span class="btn btn-success btn-sm <?=($sales['status'] == 'Closure'? '' : 'hide')?>" data-toggle="modal" data-target="#reportModal" onclick="viewCalculationReport('<?=$sales['single_sales_id']?>')">查看報表</span>
                             </td>
                         </tr>
                     <?}
