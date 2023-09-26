@@ -12,7 +12,7 @@
                 <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總天數</th><?}?>
                 <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總數量</th><?}?>
                 <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總額</th><?}?>
-                <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'ForSale' || $SingleStatus == 'Finish') {?><th>點擊數</th><?}?>
+                <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'ForSale') {?><th>點擊數</th><?}?>
                 <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?><th>總點擊數</th><?}?>
                 <?if ($SingleStatus == 'Test') {?><th>日期</th><?}?>
                 <?if ($SingleStatus == 'History') {?><th>狀態</th><?}?>
@@ -103,7 +103,7 @@
                         <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?>
                           <td><?='$' . format_number($this->order_model->getOrderTotalAmount($row['id']))?></td>
                         <?}?>
-                        <?if ($SingleStatus == 'ForSale' || $SingleStatus == 'Finish') {?>
+                        <?if ($SingleStatus == 'ForSale') {?>
                           <td><?=$pre_hits?></td>
                         <?}?>
                         <?if ($SingleStatus == 'OnSale') {?>
