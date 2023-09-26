@@ -50,8 +50,8 @@ select.district {
       <input type="text" id="end_date" class="form-control datepicker" value="<?=(isset($_COOKIE['order_end_date']) ? $_COOKIE['order_end_date'] : '' )?>" placeholder="終止日期" size="9" autocomplete="off">
       <select id="sales" class="form-control chosen_other" onchange="searchFilter()">
         <option value="">銷售頁面</option>
-        <?if (!empty($single_sales)) {
-          foreach ($single_sales as $row) {?>
+        <?if (!empty($SingleSales)) {
+          foreach ($SingleSales as $row) {?>
             <option value="<?=$row['id']?>" <?=(isset($_COOKIE['order_sales']) && $_COOKIE['order_sales'] == $row['id'] ? 'selected' : '' )?>><?=$row['id'] . ' - ' . get_product_name($row['product_id'])?></option>
           <?}
         }?>
