@@ -74,8 +74,8 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="row" style="justify-content: right;">
-                        <div class="col-md-4">
+                    <div class="row" style="justify-content: right;display: flex;">
+                        <div class="col-md-2 col-sm-12">
                             <select id="agent" class="form-control chosen_other" onchange="searchFilterSales()">
                                 <option value="">代言人</option>
                                 <?if (!empty($agent)) {
@@ -85,7 +85,7 @@
                                 }?>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2 col-sm-12">
                             <select id="product" class="form-control chosen_other" onchange="searchFilterSales()">
                                 <option value="">商品</option>
                                 <?if (!empty($product)) {
@@ -134,6 +134,12 @@
 </div>
 <script>
     $(document).ready(function () {
+        $(".chosen_other").chosen({
+          no_results_text: "沒有找到。",
+          search_contains: true,
+          width: "100%",
+        });
+
         if (location.hash) {
             $('a[href=\'' + location.hash + '\']').tab('show');
         }

@@ -247,6 +247,8 @@ function searchFilter(page_num) {
 function searchFilterSales(page_num) {
     page_num = page_num ? page_num : 0;
     var keywords = $('#keywords').val();
+    var agent = $('#agent').val();
+    var product = $('#product').val();
     var sortBy = $('#sortBy').val();
     var status = $('#status').val();
     var start_date = $('#start_date').val();
@@ -254,7 +256,7 @@ function searchFilterSales(page_num) {
     $.ajax({
         type: 'GET',
         url: '/admin/<?php echo $this->uri->segment(2); ?>/pageAjaxData/' + page_num,
-        data: 'page=' + page_num + '&keywords=' + keywords + '&sortBy=' + sortBy + '&status=' + status + '&start_date=' + start_date + '&end_date=' + end_date,
+        data: 'page=' + page_num + '&keywords=' + keywords + '&agent=' + agent + '&product=' + product + '&sortBy=' + sortBy + '&status=' + status + '&start_date=' + start_date + '&end_date=' + end_date,
         beforeSend: function() {
             $('#loading').show();
         },

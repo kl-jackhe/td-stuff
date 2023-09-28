@@ -7,16 +7,40 @@ class Sales_model extends CI_Model {
     }
 
     function getRows($params = array()) {
-        $this->db->select('id,product_id,url,pre_date,start_date,end_date,stock_qty,cost,qty,unit,default_profit_percentage,status,created_at,updated_at');
+        $this->db->select('
+            single_sales.id,
+            single_sales.product_id,
+            single_sales.url,
+            single_sales.pre_date,
+            single_sales.start_date,
+            single_sales.end_date,
+            single_sales.stock_qty,
+            single_sales.cost,
+            single_sales.qty,
+            single_sales.unit,
+            single_sales.default_profit_percentage,
+            single_sales.status,
+            single_sales.created_at,
+            single_sales.updated_at');
+        $this->db->join('single_sales_agent', 'single_sales_agent.single_sales_id = single_sales.id');
+        if (!empty($params['search']['agent'])) {
+            $this->db->where('single_sales_agent.agent_id', $params['search']['agent']);
+        }
+        if (!empty($params['search']['product'])) {
+            $this->db->where('single_sales.product_id', $params['search']['product']);
+        }
         if (!empty($params['search']['status'])) {
             if ($params['search']['status'] == 'History') {
-                $this->db->where('status', 'Closure');
-                $this->db->or_where('status', 'OutSale');
+                $this->db->group_start();
+                $this->db->where('single_sales.status', 'Closure');
+                $this->db->or_where('single_sales.status', 'OutSale');
+                $this->db->group_end();
             } else {
-                $this->db->where('status', $params['search']['status']);
+                $this->db->where('single_sales.status', $params['search']['status']);
             }
         }
-        $this->db->order_by('status','desc');
+        $this->db->order_by('single_sales.status','desc');
+        $this->db->group_by('single_sales.id');
         if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
             $this->db->limit($params['limit'], $params['start']);
         } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {

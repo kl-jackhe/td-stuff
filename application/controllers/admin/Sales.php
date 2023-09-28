@@ -37,7 +37,20 @@ class Sales extends Admin_Controller {
         } else {
             $offset = $page;
         }
+
+        $keywords = $this->input->get('keywords');
+        $agent = $this->input->get('agent');
+        $product = $this->input->get('product');
         $status = $this->input->get('status');
+        if (!empty($keywords)) {
+            $conditions['search']['keywords'] = $keywords;
+        }
+        if (!empty($agent)) {
+            $conditions['search']['agent'] = $agent;
+        }
+        if (!empty($product)) {
+            $conditions['search']['product'] = $product;
+        }
         if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
