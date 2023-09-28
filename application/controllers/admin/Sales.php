@@ -24,6 +24,8 @@ class Sales extends Admin_Controller {
     function page()
     {
         $this->data['page_title'] = '銷售頁面';
+        $this->data['agent'] = $this->agent_model->getAgentList();
+        $this->data['product'] = $this->product_model->getProductList();
         $this->render('admin/sales/page/index');
     }
 
@@ -39,6 +41,16 @@ class Sales extends Admin_Controller {
         if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
+        $conditions['returnType'] = 'count';
+        $sales_data = $this->sales_model->getRows($conditions);
+        $totalRec = (!empty($sales_data) ? count($sales_data) : 0 );
+        //pagination configuration
+        $config['target'] = '#datatable';
+        $config['base_url'] = base_url() . 'admin/sales/pageAjaxData';
+        $config['total_rows'] = $totalRec;
+        $config['per_page'] = $this->perPage;
+        $config['link_func'] = 'searchFilterSales';
+        $this->ajax_pagination_admin->initialize($config);
         //set start and limit
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;

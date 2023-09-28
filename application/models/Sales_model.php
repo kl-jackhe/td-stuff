@@ -17,11 +17,11 @@ class Sales_model extends CI_Model {
             }
         }
         $this->db->order_by('status','desc');
-        // if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-        //     $this->db->limit($params['limit'], $params['start']);
-        // } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
-        //     $this->db->limit($params['limit']);
-        // }
+        if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+            $this->db->limit($params['limit'], $params['start']);
+        } elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params)) {
+            $this->db->limit($params['limit']);
+        }
         $query = $this->db->get('single_sales')->result_array();
         return (!empty($query)? $query : false);
     }

@@ -24,7 +24,7 @@
                         $daysDiff = $interval->days;?>
                         <tr <?=($sales['status'] == 'Closure' ? 'style="background-color: #FFB5B5;"' : '')?>>
                             <td>
-                                <a href="editSingleSales/<?=$sales['single_sales_id']?>" target="_blank">
+                                <a href="/admin/sales/editSingleSales/<?=$sales['single_sales_id']?>" target="_blank">
                                     <?=$sales['single_sales_id']?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
                                 </a>
                             </td>

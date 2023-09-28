@@ -74,11 +74,34 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="Test"></div>
+                    <div class="row" style="justify-content: right;">
+                        <div class="col-md-4">
+                            <select id="agent" class="form-control chosen_other" onchange="searchFilterSales()">
+                                <option value="">代言人</option>
+                                <?if (!empty($agent)) {
+                                  foreach ($agent as $row) {?>
+                                    <option value="<?=$row['id']?>" <?=(isset($_COOKIE['order_agent']) && $_COOKIE['order_agent'] == $row['id'] ? 'selected' : '' )?>><?=$row['name']?></option>
+                                  <?}
+                                }?>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="product" class="form-control chosen_other" onchange="searchFilterSales()">
+                                <option value="">商品</option>
+                                <?if (!empty($product)) {
+                                    foreach ($product as $row) {?>
+                                        <option value="<?=$row['product_id']?>" <?=(isset($_COOKIE['order_product']) && $_COOKIE['order_product'] == $row['product_id'] ? 'selected' : '' )?>><?=$row['product_name']?></option>
+                                    <?}
+                                }?>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- <div role="tabpanel" class="tab-pane active" id="Test"></div>
                     <div role="tabpanel" class="tab-pane" id="ForSale"></div>
                     <div role="tabpanel" class="tab-pane" id="OnSale"></div>
                     <div role="tabpanel" class="tab-pane" id="History"></div>
-                    <div role="tabpanel" class="tab-pane" id="Finish"></div>
+                    <div role="tabpanel" class="tab-pane" id="Finish"></div> -->
                     <?php require 'ajax-data.php';?>
                 </div>
             </div>

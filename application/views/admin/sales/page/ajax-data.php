@@ -1,3 +1,4 @@
+<?php echo $this->ajax_pagination_admin->create_links(); ?>
 <div class="row">
     <div class="col-md-12">
         <table class="table table-bordered table-striped table-hover" id="datatable" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;border-bottom-width: 0px;">
