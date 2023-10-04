@@ -111,10 +111,12 @@
                             $this->db->where('product_combine.id', $item['product_combine_id']);
                             $this->db->limit(1);
                             $combine_row = $this->db->get('product_combine')->row_array();
-                            $this->db->select('product_id,specification_id,specification_str,specification_qty');
+                            $this->db->select_sum('specification_qty');
+                            $this->db->select('product_id,specification_id,specification_str');
                             $this->db->where('order_id',$item['order_id']);
                             $this->db->where('product_combine_id',$item['product_combine_id']);
                             $this->db->where('order_item_qty',0);
+                            $this->db->group_by('specification_id');
                             $specification_query = $this->db->get('order_item')->result_array();?>
                             <div class="row border_product">
                                 <div class="col-md-1 text-center"><?=$count;?></div>
