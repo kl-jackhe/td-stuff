@@ -80,6 +80,9 @@
                         }?>
                     </select>
                 </div>
+                <div class="col-md-3 col-sm-12 text-right">
+                    <span class="btn btn-warning" onclick="order_update_synchronize('<?=$order['order_id']?>');">同步至ERP</span>
+                </div>
             </div>
         </div>
         <div class="content-box-large pc_control">
@@ -359,5 +362,25 @@ function changeStep(id,source) {
             }
         });
     }
+}
+
+function order_update_synchronize(id) {
+    $.ajax({
+        type: "POST",
+        url: '/admin/order/order_update_synchronize/'+id,
+        data: {
+            id: id,
+        },
+        success: function(data) {
+            if(data=='send success.'){
+                alert('傳送成功！');
+            } else {
+                alert('傳送失敗！');
+            }
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
 }
 </script>
