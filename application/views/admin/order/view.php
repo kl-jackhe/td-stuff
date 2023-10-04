@@ -106,57 +106,54 @@
                     $total = 0;
                     if (!empty($order_item)) {
                         foreach ($order_item as $item) {
-                            if ($item['product_id'] == 0) {?>
+                            $this->db->select('*');
+                            $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+                            $this->db->where('product_combine.id', $item['product_combine_id']);
+                            $this->db->limit(1);
+                            $combine_row = $this->db->get('product_combine')->row_array();
+                            $this->db->select('product_id,specification_id,specification_str,specification_qty');
+                            $this->db->where('order_id',$item['order_id']);
+                            $this->db->where('product_combine_id',$item['product_combine_id']);
+                            $this->db->where('order_item_qty',0);
+                            $specification_query = $this->db->get('order_item')->result_array();?>
                             <div class="row border_product">
-                                <div class="col-md-1 text-center"><?php echo $count ?></div>
+                                <div class="col-md-1 text-center"><?=$count;?></div>
                                 <div class="col-md-2">
-                                    <?$this->db->select('*');
-                                    $this->db->from('product_combine');
+                                    <?$this->db->select('picture');
                                     $this->db->where('id', $item['product_combine_id']);
-                                    $query = $this->db->get();
-                                    foreach ($query->result_array() as $row) {
+                                    $this->db->limit(1);
+                                    $row = $this->db->get('product_combine')->row_array();
+                                    if (!empty($row)) {
                                         echo get_front_image($row['picture']);
                                     }?>
                                 </div>
                                 <div class="col-md-4">
-                                    <?$i = 0;
-                                    $this->db->select('*');
-                                    $this->db->from('product_combine');
-                                    $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
-                                    $this->db->where('product_combine.id', $item['product_combine_id']);
-                                    $query = $this->db->get();
-                                    foreach ($query->result_array() as $row) {
-                                        if ($i < 1) {
-                                            echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
-                                        }?>
+                                    <?if (!empty($combine_row)) {?>
+                                        <?=get_product_name($combine_row['product_id']) . ' - ' . get_product_combine_name($combine_row['product_combine_id']);?>
                                         <ul style="color: #0066CC; padding-left: 25px;">
                                             <li style="list-style-type: circle;">
-                                            <?echo $row['qty'] . ' ' . $row['product_unit'];
-                                            if (!empty($row['product_specification'])) {
-                                                echo ' - ' . $row['product_specification'];
+                                            <?echo ($combine_row['qty'] * $item['order_item_qty']) . ' ' . $combine_row['product_unit'];
+                                            if (!empty($combine_row['product_specification'])) {
+                                                echo ' - ' . $combine_row['product_specification'];
                                             }
-                                            foreach ($order_item as $specification_item) {
-                                                if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
-                                                    $this->db->select('*');
-                                                    $this->db->from('product_specification');
-                                                    $this->db->where('id', $specification_item['specification_id']);
-                                                    $query_specification = $this->db->get();
-                                                    foreach ($query_specification->result_array() as $row_specification) {
-                                                        echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
-                                                    }
+                                            if (!empty($specification_query)) {
+                                                foreach ($specification_query as $specification_row) {
+                                                    echo '<br>' . '✓ ' . $specification_row['specification_str'] . ' x ' . $specification_row['specification_qty'];
                                                 }
                                             }?>
                                             </li>
                                         </ul>
-                                        <?$i++;}?>
+                                    <?}?>
                                 </div>
                                 <div class="col-md-2 text-center"><?php echo number_format($item['order_item_price']) ?></div>
                                 <div class="col-md-1 text-center"><?php echo $item['order_item_qty'] ?></div>
-                                <div class="col-md-2 text-right"><?php echo number_format($item['order_item_qty'] * $item['order_item_price']) ?></div>
+                                <div class="col-md-2 text-right"><?php echo number_format($item['order_item_price'] * $item['order_item_qty']) ?></div>
                             </div>
-                            <?php $count++;?>
-                        <?php $total += $item['order_item_qty'] * $item['order_item_price'];?>
-                    <?php }}}?>
+                            <?
+                            $count++;
+                            $total += $item['order_item_price'] * $item['order_item_qty'];?>
+                        <?}
+                    }?>
                     <div class="row front_title border_style">
                         <div class="col-md-8">
                             <div class="row">
@@ -186,7 +183,7 @@
                 </div>
             </div>
         </div>
-        <div class="content-box-large mb_control">
+        <!-- <div class="content-box-large mb_control">
             <div class="row">
                 <div class="col-sm-12" style="padding: 5px;">
                     <table class="table table-bordered">
@@ -338,7 +335,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 <script>
