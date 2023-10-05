@@ -661,12 +661,14 @@ class Order extends Admin_Controller {
                 	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
 
                 	$order_item['product_unit'] = '';
+                	$order_item['product_specification'] = '';
                 	$this->db->where('product_combine_id', $item['product_combine_id']);
 		            $this->db->where('product_id', $pc['product_id']);
 		            $query = $this->db->get('product_combine_item');
 		            if ($query->num_rows() > 0) {
 		            	$row = $query->row_array();
 		            	$order_item['product_unit'] = $row['product_unit'];
+		            	$order_item['product_specification'] = $row['product_specification'];
 		            };
 
                 	array_push($array['Data']['product_item'], $order_item);
@@ -757,12 +759,14 @@ class Order extends Admin_Controller {
                 	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
 
                 	$order_item['product_unit'] = '';
+                	$order_item['product_specification'] = '';
                 	$this->db->where('product_combine_id', $item['product_combine_id']);
 		            $this->db->where('product_id', $pc['product_id']);
 		            $query = $this->db->get('product_combine_item');
 		            if ($query->num_rows() > 0) {
 		            	$row = $query->row_array();
 		            	$order_item['product_unit'] = $row['product_unit'];
+		            	$order_item['product_specification'] = $row['product_specification'];
 		            };
 
                 	array_push($array['Data']['product_item'], $order_item);
