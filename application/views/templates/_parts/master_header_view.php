@@ -19,73 +19,37 @@
     <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <!-- Fontawesome -->
+    <link href="/assets/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="/assets/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/brands.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/solid.css" rel="stylesheet">
-    <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
-    <!-- Fontawesome -->
-    <!-- purchase-steps -->
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <!-- purchase-steps -->
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script> -->
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
+    <?if ($this->is_td_stuff) {?>
     <!-- Facebook Pixel Code -->
     <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window,document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-     fbq('init', '1169081307337104'); 
-    fbq('track', 'PageView');
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init', '1169081307337104'); fbq('track', 'PageView');
     </script>
     <noscript>
      <img height="1" width="1" 
     src="https://www.facebook.com/tr?id=1169081307337104&ev=PageView&noscript=1"/>
     </noscript>
     <!-- End Facebook Pixel Code -->
-
     <!-- FB -->
     <meta name="facebook-domain-verification" content="52kw8g3o4wd60qya7wp0z2fclnhjty" />
-    <!-- End Meta Pixel Code -->
-    <!-- <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1169081307337104');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1169081307337104&ev=PageView&noscript=1"
-    /></noscript> -->
-    <!-- End Meta Pixel Code -->
-
+    <!-- FB -->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G2CB64XB4"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-9G2CB64XB4');
     </script>
+    <?}?>
 </head>
 <style>
     body {
