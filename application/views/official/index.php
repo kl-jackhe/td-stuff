@@ -163,7 +163,7 @@
                         <a href="#" class="nav_item_style" style="color: #fff;text-decoration:none;border: 2px solid #615d56;border-radius: 30px;background-color: #615d56;padding: 1px 15px 1px 15px;">註冊我的店</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">聯絡我們</a>
+                        <a href="<?=get_setting_general('official_line_1')?>" target="_blank" class="nav_item_style">聯絡我們</a>
                     </li>
                 </ul>
             </div>
@@ -197,11 +197,17 @@
                         </div>
                     </div>
                     <div class="row text-center justify-content-center py-5">
-                        <div class="col-12 col-md-5">
+                        <div class="col-md-5 d-none d-md-block d-lg-block d-xl-block">
                             <img src="/assets/images/559mall_official/page_4-text.jpg" class="img-fluid">
                         </div>
-                        <div class="col-12 col-md-5">
+                        <div class="col-md-5 d-none d-md-block d-lg-block d-xl-block">
                             <img src="/assets/images/559mall_official/page_4-pic.jpg" class="img-fluid">
+                        </div>
+                        <div class="col-12 d-block d-md-none d-lg-none d-xl-none">
+                            <img src="/assets/images/559mall_official/page_4-pic.jpg" class="img-fluid">
+                        </div>
+                        <div class="col-12 d-block d-md-none d-lg-none d-xl-none">
+                            <img src="/assets/images/559mall_official/page_4-text.jpg" class="img-fluid">
                         </div>
                     </div>
                 </div>
@@ -209,7 +215,7 @@
         </content>
         <div class="fixed-bottom fixed_icon">
             <div id="fa-message" class="my-3 icon_pointer">
-                <a href="#" target="_blank" style="outline: none;">
+                <a href="<?=get_setting_general('official_line_1')?>" target="_blank" style="outline: none;">
                     <img class="fixed_icon_style" src="/assets/images/559mall_official/icon/web%20icon_message.png">
                 </a>
             </div>
@@ -232,7 +238,7 @@
                     <div class="row justify-content-center">
                         <div class="col-10 col-md-2 my-2"><a href="#">關於559mall</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
-                        <div class="col-10 col-md-2 my-2"><a href="#">聯絡我們</a></div>
+                        <div class="col-10 col-md-2 my-2"><a href="<?=get_setting_general('official_line_1')?>" target="_blank">聯絡我們</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                         <div class="col-10 col-md-2 my-2"><a href="#">購物商店示範</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
