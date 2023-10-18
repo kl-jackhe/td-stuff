@@ -61,7 +61,7 @@
                     <?if ($this->is_td_stuff) {?>
                     <div class="col-md-12" id="v-pills-tab-other" style="padding-bottom: 6px;">
                         <span style="color: #fff;">
-                            ｜<a href="/policy?target=disclaimer">免責聲明</a>
+                            ｜ <a href="/policy?target=disclaimer">免責聲明</a>
                             ｜ <a href="/policy?target=terms_of_service">服務條款</a>
                             ｜ <a href="/policy?target=intellectual_property">知識產權</a>
                             ｜ <a href="/policy?target=return_policy">退貨政策</a>

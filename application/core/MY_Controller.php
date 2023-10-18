@@ -13,14 +13,9 @@ class MY_Controller extends CI_Controller
 		$this->load->model('mysql_model');
 		$this->data['page_title'] = get_setting_general('name');
 
-		$this->is_liqun_food = false;
-        if (strpos(base_url(), 'liqun-food') !== false) {
-            $this->is_liqun_food = true;
-        }
-        $this->is_td_stuff = false;
-        if (strpos(base_url(), 'td-stuff') !== false) {
-            $this->is_td_stuff = true;
-        }
+        $this->is_liqun_food = (strpos(base_url(), 'liqun-food') !== false ? true : false );
+        $this->is_td_stuff = (strpos(base_url(), 'td-stuff') !== false ? true : false );
+        $this->is_partnertoys4 = (strpos(base_url(), 'partnertoys4') !== false ? true : false );
 	}
 
 	protected function render($the_view = NULL, $template = 'master')
