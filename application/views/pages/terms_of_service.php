@@ -182,46 +182,24 @@
         </div>
         <content id="content">
             <div class="row justify-content-center">
-                <div class="col-12">
-                    <div class="row text-center justify-content-center pb-5">
-                        <div class="col-12 col-md-12 p-0">
-                            <img src="/assets/images/559mall_official/index_top pic_1920_10201249.jpg" class="img-fluid banner d-none d-md-none d-lg-none d-xl-block">
-                            <img src="/assets/images/559mall_official/index_top%20pic_1536.jpg" class="img-fluid d-none d-md-block d-lg-none d-xl-none">
-                            <img src="/assets/images/559mall_official/index_top%20pic_800.jpg" class="img-fluid d-block d-md-none d-lg-none d-xl-none">
-                            <!-- jquery 自動帶入圖片 -->
-                            <!-- <img src="" class="img-fluid banner"> -->
+                <div class="col-12" style="background-color:#f2efe8; padding-top: 80px;padding-bottom: 30px;">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-8">
+                            <h1>服務條款</h1>
                         </div>
                     </div>
-                    <div class="row text-center justify-content-center py-5">
-                        <div class="col-12 col-md-10">
-                            <img src="/assets/images/559mall_official/page_2-text.png" class="img-fluid">
-                            <div style="background-image: url('/assets/images/559mall_official/page_2-button_bg.png'); background-position: center;background-repeat: no-repeat;background-size:contain;padding: 15px;font-size: 24px;">
-                                <span>｜ <a href="#">網站商店示範</a> ｜ <a href="#">註冊</a> ｜</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row text-center justify-content-center py-5">
-                        <div class="col-12 col-md-5">
-                            <img src="/assets/images/559mall_official/page_3-pic.jpg" class="img-fluid">
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <img src="/assets/images/559mall_official/page_3-text10201242.jpg" class="img-fluid">
-                        </div>
-                    </div>
-                    <div class="row text-center justify-content-center py-5">
-                        <div class="col-md-5 d-none d-md-block d-lg-block d-xl-block">
-                            <img src="/assets/images/559mall_official/page_4-text10201242.jpg" class="img-fluid">
-                        </div>
-                        <div class="col-md-5 d-none d-md-block d-lg-block d-xl-block">
-                            <img src="/assets/images/559mall_official/page_4-pic.jpg" class="img-fluid">
-                        </div>
-                        <div class="col-12 d-block d-md-none d-lg-none d-xl-none">
-                            <img src="/assets/images/559mall_official/page_4-pic.jpg" class="img-fluid">
-                        </div>
-                        <div class="col-12 d-block d-md-none d-lg-none d-xl-none">
-                            <img src="/assets/images/559mall_official/page_4-text10201242.jpg" class="img-fluid">
-                        </div>
-                    </div>
+                </div>
+                <div class="col-12 col-md-8" style="margin-top: 60px;margin-bottom: 80px;">
+                    <p>
+                        感謝您瀏覽本商城網站。<br>
+                        您可以根據以下服務條款及任何其他本網站所提及的條例存取或使用本網站或相關服務。使用服務，例如於本網站訂購商品，即表示您同意所有服務條款。
+                    </p>
+                    <p>
+                        本協議並不承認您與本商城的任何關係（合夥、合作、僱用或其他形式）。本協議並不賦予您成為本商城的代表。
+                    </p>
+                    <p>
+                        本商城保留在任何時間更改本網站、相關政策及協議、隱私聲明以及本服務條款的權利。您應該定時瀏覽本網站，查看上述的政策及協議、隱私聲明以及本服務條款的更新或更改。
+                    </p>
                 </div>
             </div>
         </content>
