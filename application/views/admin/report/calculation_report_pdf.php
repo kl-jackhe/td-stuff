@@ -100,6 +100,66 @@
                 <td><?=$data['turnover_rate']?></td>
             </tr>
             <tr>
+                <td>銷售規格列表</td>
+                <td>
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <?if (!empty($dailySalesQty)) {?>
+            <tr>
+                <td>每日銷售列表</td>
+                <td>
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>訂單數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($dailySalesQty as $key => $value) {?>
+                                <tr>
+                                    <td><?=$key?></td>
+                                    <td><?=$value?></td>
+                                </tr>
+                            <?}?>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <?}
+            if (!empty($customerSourceList)) {?>
+            <tr>
+                <td>客戶來源列表</td>
+                <td>
+                    <table class="table table-bordered" style="margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>縣市</th>
+                                <th>區里鎮</th>
+                                <th>訂單數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($customerSourceList as $key => $value) {?>
+                                <tr>
+                                    <td><?=$key?></td>
+                                    <td><?=$value['location']?></td>
+                                    <td><?=$value['qty']?></td>
+                                </tr>
+                            <?}?>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <?}?>
+            <tr>
                 <td>總銷售額</td>
                 <td><?=$data['turnover_amount']?></td>
             </tr>

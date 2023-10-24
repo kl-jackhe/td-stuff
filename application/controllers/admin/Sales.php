@@ -399,15 +399,24 @@ class Sales extends Admin_Controller {
     }
 
     function viewCalculationReportPDF() {
-        $dataArray = array();
+        $data = array();
+        $dailySalesQty = array();
+        $customerSourceList = array();
         $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->get('ssid'));
-        $this->db->select('name,cost,profit_percentage,pre_hits,start_hits,order_qty,finish_qty,cancel_qty,other_qty,turnover_rate,turnover_amount,income,signature_file');
+        $this->db->select('single_sales_id,agent_id,name,cost,profit_percentage,pre_hits,start_hits,order_qty,finish_qty,cancel_qty,other_qty,turnover_rate,turnover_amount,income,signature_file');
         $this->db->where('single_sales_id',$this->input->get('ssid'));
         $this->db->where('agent_id', $this->input->get('aid'));
         $this->db->limit(1);
         $ssa_row = $this->db->get('single_sales_agent')->row_array();
         if (!empty($ssa_row) && !empty($ssd_row)) {
-            $dataArray = array(
+            if ($ssd_row['start_date'] <= $ssd_row['end_date']) {
+                $orderList = $this->getSingleSalesOderList($ssd_row['start_date'],$ssd_row['end_date'],$ssa_row['single_sales_id'],$ssa_row['agent_id']);
+                if (!empty($orderList)) {
+                    $dailySalesQty = $this->getDailySalesQty($ssd_row['start_date'],$ssd_row['end_date'],$orderList);
+                    $customerSourceList = $this->getCustomerSourceList($orderList);
+                }
+            }
+            $data = array(
                 'name' => $ssa_row['name'],
                 'profit_percentage' => number_format($ssa_row['profit_percentage'] > 0 ? $ssa_row['profit_percentage'] : $ssd_row['default_profit_percentage']) . '%',
                 'start_date' => $ssd_row['start_date'],
@@ -424,8 +433,57 @@ class Sales extends Admin_Controller {
                 'date_now' => date('Y-m-d'),
             );
         }
-        $this->data['data'] = $dataArray;
+        $this->data['data'] = $data;
+        $this->data['dailySalesQty'] = $dailySalesQty;
+        $this->data['customerSourceList'] = $customerSourceList;
         $this->render('admin/report/calculation_report_pdf');
+    }
+
+    function getDailySalesQty($start_date,$end_date,$orderList) {
+        $dailySalesQty = array();
+        $startDate = new DateTime($start_date);
+        $endDate = new DateTime($end_date);
+        $endDate->modify('+1 day');
+        $dateInterval = new DateInterval('P1D'); // 每天增加1天
+        $datePeriod = new DatePeriod($startDate, $dateInterval, $endDate);
+        foreach ($datePeriod as $dateList) {
+            $dailySalesQty[$dateList->format('Y-m-d')] = 0;
+        }
+        foreach ($orderList as $row) {
+            if (array_key_exists($row['order_date'], $dailySalesQty)) {
+                $dailySalesQty[$row['order_date']]++;
+            }
+        }
+        return $dailySalesQty;
+    }
+
+    function getCustomerSourceList($orderList) {
+        $customerSourceList = array();
+        foreach ($orderList as $row) {
+            $address = mb_convert_encoding($row['order_store_address'], "UTF-8", "auto");
+            if (preg_match('/(.+?[縣市])(.+?[區里鎮])/u', $address, $matches)) {
+                $county = $matches[1];
+                $location = $matches[2];
+                if (array_key_exists($county, $customerSourceList)) {
+                    $customerSourceList[$county]['location'] = $location;
+                    $customerSourceList[$county]['qty']++;
+                } else {
+                    $customerSourceList[$county]['location'] = $location;
+                    $customerSourceList[$county]['qty'] = 1;
+                }
+            }
+        }
+        return $customerSourceList;
+    }
+
+    function getSingleSalesOderList($start_date,$end_date,$single_sales_id,$agent_id) {
+        $this->db->select('order_date,order_store_address');
+        $this->db->where('order_date >=',$start_date);
+        $this->db->where('order_date <=',$end_date);
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where('agent_id',$agent_id);
+        $query = $this->db->get('orders')->result_array();
+        return (!empty($query)?$query:false);
     }
 
     function create_plan($id) {
