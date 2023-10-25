@@ -400,6 +400,7 @@ class Sales extends Admin_Controller {
 
     function viewCalculationReportPDF() {
         $data = array();
+        $salesProductDetailList = array();
         $dailySalesQty = array();
         $customerSourceList = array();
         $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->get('ssid'));
@@ -412,11 +413,13 @@ class Sales extends Admin_Controller {
             if ($ssd_row['start_date'] <= $ssd_row['end_date']) {
                 $orderList = $this->getSingleSalesOderList($ssd_row['start_date'],$ssd_row['end_date'],$ssa_row['single_sales_id'],$ssa_row['agent_id']);
                 if (!empty($orderList)) {
+                    $salesProductDetailList = $this->getSalesProductDetailList($orderList);
                     $dailySalesQty = $this->getDailySalesQty($ssd_row['start_date'],$ssd_row['end_date'],$orderList);
                     $customerSourceList = $this->getCustomerSourceList($orderList);
                 }
             }
             $data = array(
+                'product_name' => get_product_name($ssd_row['product_id']),
                 'name' => $ssa_row['name'],
                 'profit_percentage' => number_format($ssa_row['profit_percentage'] > 0 ? $ssa_row['profit_percentage'] : $ssd_row['default_profit_percentage']) . '%',
                 'start_date' => $ssd_row['start_date'],
@@ -434,9 +437,52 @@ class Sales extends Admin_Controller {
             );
         }
         $this->data['data'] = $data;
+        $this->data['salesProductDetailList'] = $salesProductDetailList;
         $this->data['dailySalesQty'] = $dailySalesQty;
         $this->data['customerSourceList'] = $customerSourceList;
         $this->render('admin/report/calculation_report_pdf');
+    }
+
+    function getSalesProductDetailList($orderList) {
+        $salesProductDetailList = array();
+        $orderIdList = array();
+        foreach ($orderList as $row) {
+            $orderIdList[] = $row['order_id'];
+        }
+        if (!empty($orderIdList)) {
+            $this->db->select('product_combine_id,product_id,order_item_qty,specification_id,specification_str,specification_qty');
+            $this->db->where_in('order_id', $orderIdList);
+            $this->db->where('order_item_price', 0);
+            $oi_query = $this->db->get('order_item')->result_array();
+            if (!empty($oi_query)) {
+                foreach ($oi_query as $oi_row) {
+                    if ($oi_row['specification_id'] > 0) {
+                        $specification_str = $oi_row['specification_str'];
+                        if ($oi_row['specification_str'] == '') {
+                            $this->db->select('specification');
+                            $this->db->where('id',$oi_row['specification_id']);
+                            $this->db->where('product_id',$oi_row['product_id']);
+                            $this->db->limit(1);
+                            $ps_row = $this->db->get('product_specification')->row_array();
+                            $specification_str = (!empty($ps_row) ? $ps_row['specification'] : '');
+                        }
+                        if (array_key_exists($specification_str,$salesProductDetailList)) {
+                            $salesProductDetailList[$specification_str] += $oi_row['specification_qty'];
+                        } else {
+                            $salesProductDetailList[$specification_str] = $oi_row['specification_qty'];
+                        }
+                    } else {
+                        $productName = get_product_name($oi_row['product_id']);
+                        if (array_key_exists($productName,$salesProductDetailList)) {
+                            $salesProductDetailList[$productName] += $oi_row['order_item_qty'];
+                        } else {
+                            $salesProductDetailList[$productName] = $oi_row['order_item_qty'];
+                        }
+                    }
+                }
+            }
+        }
+        return $salesProductDetailList;
     }
 
     function getDailySalesQty($start_date,$end_date,$orderList) {
@@ -461,7 +507,7 @@ class Sales extends Admin_Controller {
         $customerSourceList = array();
         foreach ($orderList as $row) {
             $address = mb_convert_encoding($row['order_store_address'], "UTF-8", "auto");
-            if (preg_match('/(.+?[縣市])(.+?[區里鎮])/u', $address, $matches)) {
+            if (preg_match('/(.+?[縣市])(.+?[鄉鎮區])/u', $address, $matches)) {
                 $county = $matches[1];
                 $location = $matches[2];
                 if (array_key_exists($county, $customerSourceList)) {
@@ -477,7 +523,7 @@ class Sales extends Admin_Controller {
     }
 
     function getSingleSalesOderList($start_date,$end_date,$single_sales_id,$agent_id) {
-        $this->db->select('order_date,order_store_address');
+        $this->db->select('order_id,order_date,order_store_address');
         $this->db->where('order_date >=',$start_date);
         $this->db->where('order_date <=',$end_date);
         $this->db->where('single_sales_id',$single_sales_id);

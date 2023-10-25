@@ -99,19 +99,33 @@
                 <td>成交率</td>
                 <td><?=$data['turnover_rate']?></td>
             </tr>
+            <?if (!empty($salesProductDetailList)) {?>
             <tr>
                 <td>銷售規格列表</td>
                 <td>
                     <table class="table table-bordered" style="margin-bottom: 0;">
-                        <tbody>
+                        <thead>
                             <tr>
-                                <td></td>
+                                <th colspan="5">銷售商品：<?=$data['product_name']?></th>
                             </tr>
+                            <tr>
+                                <th>規格</th>
+                                <th>數量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?foreach ($salesProductDetailList as $key => $value) {?>
+                                <tr>
+                                    <td><?=$key?></td>
+                                    <td><?=$value?></td>
+                                </tr>
+                            <?}?>
                         </tbody>
                     </table>
                 </td>
             </tr>
-            <?if (!empty($dailySalesQty)) {?>
+            <?}
+            if (!empty($dailySalesQty)) {?>
             <tr>
                 <td>每日銷售列表</td>
                 <td>
@@ -142,7 +156,7 @@
                         <thead>
                             <tr>
                                 <th>縣市</th>
-                                <th>區里鎮</th>
+                                <th>鄉鎮</th>
                                 <th>訂單數</th>
                             </tr>
                         </thead>
