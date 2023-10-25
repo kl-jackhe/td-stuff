@@ -99,27 +99,32 @@
                 <td>成交率</td>
                 <td><?=$data['turnover_rate']?></td>
             </tr>
-            <?if (!empty($salesProductDetailList)) {?>
+            <?if (!empty($salesProductDetailList) || ($data['product_name'] != '' && $data['product_qty'] > 0)) {?>
             <tr>
                 <td>銷售規格列表</td>
                 <td>
                     <table class="table table-bordered" style="margin-bottom: 0;">
                         <thead>
                             <tr>
-                                <th colspan="5">銷售商品：<?=$data['product_name']?></th>
+                                <th>銷售商品：<?=$data['product_name']?></th>
+                                <th>總數量：<?=$data['product_qty']?></th>
                             </tr>
+                            <?if (!empty($salesProductDetailList)) {?>
                             <tr>
                                 <th>規格</th>
                                 <th>數量</th>
                             </tr>
+                            <?}?>
                         </thead>
                         <tbody>
-                            <?foreach ($salesProductDetailList as $key => $value) {?>
-                                <tr>
-                                    <td><?=$key?></td>
-                                    <td><?=$value?></td>
-                                </tr>
-                            <?}?>
+                            <?if (!empty($salesProductDetailList)) {
+                                foreach ($salesProductDetailList as $key => $value) {?>
+                                    <tr>
+                                        <td><?=$key?></td>
+                                        <td><?=$value?></td>
+                                    </tr>
+                                <?}
+                            }?>
                         </tbody>
                     </table>
                 </td>
