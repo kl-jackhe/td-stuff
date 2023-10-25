@@ -21,7 +21,7 @@
     /*size: A4;*/
     margin: 2cm;
     padding: 2cm;
-    margin-top: 0px;
+    margin-top: 1.5cm;
     padding-top: 0cm;
 }
 
@@ -29,7 +29,7 @@
     /*size: A4;*/
     margin: 2cm;
     padding: 2cm;
-    margin-top: -48px;
+    margin-top: -7cm;
     padding-top: 0cm;
 }
 
@@ -58,15 +58,13 @@
 </div>
 <div class="main">
     <table class="table table-bordered table-striped">
-        <thead>
+        <tbody>
             <tr>
                 <th colspan="5">製表日期：<?=$data['date_now']?></th>
             </tr>
             <tr>
                 <th colspan="5">銷售詳細表</th>
             </tr>
-        </thead>
-        <tbody>
             <tr>
                 <td>名字</td>
                 <td><?=$data['name']?></td>
@@ -99,7 +97,24 @@
                 <td>成交率</td>
                 <td><?=$data['turnover_rate']?></td>
             </tr>
+            <tr>
+                <td>總銷售額</td>
+                <td><?=$data['turnover_amount']?></td>
+            </tr>
+            <tr>
+                <td>利潤％</td>
+                <td><?=$data['profit_percentage']?></td>
+            </tr>
+            <tr>
+                <td>收益</td>
+                <td><?=$data['income']?></td>
+            </tr>
             <?if (!empty($salesProductDetailList) || ($data['product_name'] != '' && $data['product_qty'] > 0)) {?>
+            <tr>
+                <th colspan="3">銷售數據</th>
+            </tr>
+            <?}
+            if (!empty($salesProductDetailList) || !empty($dailySalesQty) || !empty($customerSourceList)) {?>
             <tr>
                 <td>銷售規格列表</td>
                 <td>
@@ -178,18 +193,6 @@
                 </td>
             </tr>
             <?}?>
-            <tr>
-                <td>總銷售額</td>
-                <td><?=$data['turnover_amount']?></td>
-            </tr>
-            <tr>
-                <td>利潤％</td>
-                <td><?=$data['profit_percentage']?></td>
-            </tr>
-            <tr>
-                <td>收益</td>
-                <td><?=$data['income']?></td>
-            </tr>
             <tr>
                 <td>簽名</td>
                 <td style="height: 100px;"></td>
