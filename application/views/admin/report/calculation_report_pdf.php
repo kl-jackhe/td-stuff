@@ -156,7 +156,7 @@
                         <thead>
                             <tr>
                                 <th>縣市</th>
-                                <th>鄉鎮</th>
+                                <th>鄉鎮區</th>
                                 <th>訂單數</th>
                             </tr>
                         </thead>
@@ -185,12 +185,10 @@
                 <td>收益</td>
                 <td><?=$data['income']?></td>
             </tr>
-        </tbody>
-        <tfoot>
             <tr>
                 <td>簽名</td>
                 <td style="height: 100px;"></td>
             </tr>
-        </tfoot>
+        </tbody>
     </table>
 </div>
