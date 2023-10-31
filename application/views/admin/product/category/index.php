@@ -23,19 +23,38 @@
         <thead>
           <tr>
             <th>分類名稱</th>
+            <th>配送方式</th>
             <th>操作</th>
           </tr>
         </thead>
         <?php if (!empty($category)) {
-          foreach ($category as $data){ ?>
-	        <tr>
-	          <td><?php echo $data['product_category_name'] ?></td>
-	          <td>
-	            <a href="/admin/product/edit_category/<?php echo $data['product_category_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-	            <a href="/admin/product/delete_category/<?php echo $data['product_category_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a>
-	          </td>
-	        </tr>
-	        <?php }} else {?>
+          foreach ($category as $data){
+            $deliveryStr = '';
+            $this->db->select('delivery.id,delivery.delivery_name');
+            $this->db->join('delivery', 'delivery.id = delivery_range_list.delivery_id');
+            $this->db->where('source', 'ProductCategory');
+            $this->db->where('source_id', $data['product_category_id']);
+            $drl_query = $this->db->get('delivery_range_list')->result_array();
+            if (!empty($drl_query)) {
+              $count = 0;
+              foreach ($drl_query as $drl_row) {
+                if ($count > 0) {
+                  $deliveryStr .= ' , ';
+                }
+                $deliveryStr .= $drl_row['delivery_name'];
+                $count++;
+              }
+            }?>
+  	        <tr>
+  	          <td><?php echo $data['product_category_name'] ?></td>
+              <td><?=($deliveryStr != '' ? $deliveryStr : '任何配送方式')?></td>
+  	          <td>
+  	            <a href="/admin/product/edit_category/<?php echo $data['product_category_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+  	            <a href="/admin/product/delete_category/<?php echo $data['product_category_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
+  	          </td>
+  	        </tr>
+	        <?}
+        } else {?>
           <tr>
             <td colspan="4"><center>對不起, 沒有資料 !</center></td>
           </tr>

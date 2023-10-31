@@ -89,7 +89,13 @@ class Product extends Admin_Controller {
 		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id);
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
 		$this->data['product_category'] = $this->mysql_model->_select('product_category');
-		$this->data['change_log'] = get_change_log('product', $id);
+		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
+		$this->db->select('delivery_id');
+		$this->db->where('source', 'Product');
+		$this->db->where('source_id', $id);
+		$this->db->where('status', 1);
+		$this->data['use_delivery_list'] = $this->db->get('delivery_range_list')->result_array();
+		// $this->data['change_log'] = get_change_log('product', $id);
 		$this->render('admin/product/edit');
 	}
 
@@ -178,7 +184,7 @@ class Product extends Admin_Controller {
 			$this->db->where_not_in('unit',$unitStr);
 			$this->db->delete('product_unit');
 		}
-		
+
 		// 商品規格
 		$specificationStr = array();
 		$specification = $this->input->post('specification');
@@ -227,6 +233,23 @@ class Product extends Admin_Controller {
 			$this->db->where('product_id',$id);
 			$this->db->where_not_in('specification',$specificationStr);
 			$this->db->delete('product_specification');
+		}
+
+		// 刪除配送方式
+		$this->db->where('source', 'Product');
+		$this->db->where('source_id', $id);
+		$this->db->delete('delivery_range_list');
+		$delivery = $this->input->post('delivery');
+		if (count($delivery) > 0) {
+			// 新增配送方式
+			for ($i=0;$i<count($delivery);$i++) {
+				$insertData = array(
+					'delivery_id' => $delivery[$i],
+					'source' => 'Product',
+					'source_id' => $id,
+				);
+				$this->db->insert('delivery_range_list', $insertData);
+			}
 		}
 
 		$this->session->set_flashdata('message', '商品更新成功！');
@@ -437,6 +460,13 @@ class Product extends Admin_Controller {
 		$this->data['page_title'] = '編輯商品分類';
 		$this->data['category'] = $this->mysql_model->_select('product_category', 'product_category_id', $id, 'row');
 
+		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
+		$this->db->select('delivery_id');
+		$this->db->where('source', 'ProductCategory');
+		$this->db->where('source_id', $id);
+		$this->db->where('status', 1);
+		$this->data['use_delivery_list'] = $this->db->get('delivery_range_list')->result_array();
+
 		$this->render('admin/product/category/edit');
 	}
 
@@ -448,6 +478,23 @@ class Product extends Admin_Controller {
 		);
 		$this->db->where('product_category_id', $id);
 		$this->db->update('product_category', $data);
+
+		// 刪除配送方式
+		$this->db->where('source', 'ProductCategory');
+		$this->db->where('source_id', $id);
+		$this->db->delete('delivery_range_list');
+		$delivery = $this->input->post('delivery');
+		if (count($delivery) > 0) {
+			// 新增配送方式
+			for ($i=0;$i<count($delivery);$i++) {
+				$insertData = array(
+					'delivery_id' => $delivery[$i],
+					'source' => 'ProductCategory',
+					'source_id' => $id,
+				);
+				$this->db->insert('delivery_range_list', $insertData);
+			}
+		}
 
 		redirect(base_url() . 'admin/product/category');
 	}

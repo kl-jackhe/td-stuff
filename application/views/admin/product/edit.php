@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-md-10 col-sm-12">
                                 <div class="row">
-                                    <div class="col-md-4 col-sm-12">
+                                    <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <?if (!empty($product_category)) {?>
                                             <label for="product_category">分類</label>
@@ -65,20 +65,19 @@
                                             }?>
                                           </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-12">
+                                    <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="product_name">商品名稱</label>
                                             <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-12">
+                                    <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="product_sku">品號</label>
                                             <input type="text" class="form-control" id="product_sku" name="product_sku" value="<?php echo $product['product_sku']; ?>" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-8"></div>
-                                    <div class="col-md-4 col-sm-12">
+                                    <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="product_price">預設價格</label>
                                             <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
@@ -91,29 +90,57 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 col-sm-12">
-                                        <div class="input-group">
+                                        <div class="input-group" style="margin-bottom: 10px;">
                                             <span class="input-group-addon">是否計算庫存</span>
                                             <select class="form-control" id="excluding_inventory" name="excluding_inventory">
                                                 <option value="0" <?=($product['excluding_inventory'] == false ? 'selected' : '')?>>是</option>
                                                 <option value="1" <?=($product['excluding_inventory'] == true ? 'selected' : '')?>>否</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-12">
-                                        <div class="input-group">
+                                        <div class="input-group" style="margin-bottom: 10px;">
                                             <span class="input-group-addon">低於庫存時轉預購</span>
                                             <select class="form-control" id="stock_overbought" name="stock_overbought">
                                                 <option value="0" <?=($product['stock_overbought'] == false ? 'selected' : '')?>>否</option>
                                                 <option value="1" <?=($product['stock_overbought'] == true ? 'selected' : '')?>>是</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4 col-sm-12">
-                                        <div class="input-group">
+                                        <div class="input-group" style="margin-bottom: 10px;">
                                             <span class="input-group-addon">當前庫存量</span>
                                             <input type="text" class="form-control" id="inventory" name="inventory" value="<?=intval($product['inventory'])?>">
                                         </div>
                                     </div>
+                                    <?if (!empty($delivery)) {?>
+                                        <div class="col-md-4 col-sm-12">
+                                            <p style="color: red;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">指定配送方式</span>
+                                                <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
+                                                    <? foreach ($delivery as $d_row) {
+                                                        $is_use = '';
+                                                        if (!empty($use_delivery_list)) {
+                                                            foreach ($use_delivery_list as $udl_row) {
+                                                                if ($udl_row['delivery_id'] == $d_row['id']) {
+                                                                    $is_use = 'selected';
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }?>
+                                                        <option value="<?=$d_row['id']?>" <?=($is_use != '' ? $is_use : '')?>><?=$d_row['delivery_name']?></option>
+                                                    <?}?>
+                                                </select>
+                                            </div>
+                                            <?if (!empty($product_combine)) {?>
+                                                <!-- <div class="input-group">
+                                                    <span class="input-group-addon">方案指定配送方式</span>
+                                                    <select name="delivery_product_combine" id="delivery_product_combine" class="form-control chosen" multiple>
+                                                        <?foreach ($product_combine as $pc_row) {?>
+                                                            <option value="<?=$pc_row['id']?>"><?=$pc_row['name']?></option>
+                                                        <?}?>
+                                                    </select>
+                                                </div> -->
+                                            <?}?>
+                                        </div>
+                                    <?}?>
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-12">

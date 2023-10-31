@@ -52,14 +52,11 @@ class Delivery extends Admin_Controller {
 	}
 
 	public function update_delivery_status($id) {
-		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'id', $id);
-		foreach ($this->data['delivery'] as $row) {
-			if ($row['delivery_status'] == 1) {
-				$delivery_status = 0;
-			} else {
-				$delivery_status = 1;
-			}
-		}
+		$this->db->select('id,delivery_status');
+		$this->db->where('id',$id);
+		$this->db->limit(1);
+		$d_row = $this->db->get('delivery')->row_array();
+		$delivery_status = ($d_row['delivery_status'] == 1 ? 0 : 1);
 		$data = array(
 			'delivery_status' => $delivery_status,
 			// 'updater_id' => $this->current_user->id,
@@ -67,6 +64,11 @@ class Delivery extends Admin_Controller {
 		);
 		$this->db->where('id', $id);
 		$this->db->update('delivery', $data);
+
+		if ($delivery_status == 0) {
+			$this->db->where('delivery_id', $id);
+			$this->db->delete('delivery_range_list');
+		}
 
 		redirect(base_url() . 'admin/delivery');
 	}

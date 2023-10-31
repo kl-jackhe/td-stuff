@@ -40,6 +40,7 @@ class Update extends Admin_Controller {
                             $this->update_202309191500();
                             $this->update_202310251330();
                             $this->update_202310251800();
+                            $this->update_202310311530();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -50,6 +51,40 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202310311530() {
+        $version = '202310311530';
+        $description = '新增資料表[delivery_range_list]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'delivery_range_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `delivery_range_list` (
+                    `id` int(11) NOT NULL,
+                    `delivery_id` int(11) NOT NULL,
+                    `source` varchar(100) NOT NULL,
+                    `source_id` int(11) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `delivery_range_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD INDEX(`delivery_id`);");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD INDEX(`source_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
