@@ -283,18 +283,72 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
-                                    <? $delivery_count = 0;
-                                    foreach ($delivery as $row) {?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
-                                        <label class="form-check-label" for="checkout_delivery<?=$row['delivery_name_code'];?>">
-                                            <?=$row['delivery_name']?>
-                                        </label>
-                                        <?if (!empty($row['delivery_info'])) {?>
-                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['delivery_info'];?></p>
-                                        <?}?>
-                                    </div>
-                                    <?$delivery_count++;}?>
+                                    <?
+                                    $deliveryList = array();
+                                    if (!empty($delivery)) {
+                                        foreach ($delivery as $row) {
+                                            $deliveryList[$row['id']] = array(
+                                                'product_category' => 'All',
+                                                'product' => 'All',
+                                                'product_combine' => 'All',
+                                                'is_use' => 'All',
+                                                'source_id' => 0,
+                                                'code' => $row['delivery_name_code'],
+                                                'name' => $row['delivery_name'],
+                                                'info' => $row['delivery_info']
+                                            );
+                                            $this->db->select('delivery_id,source,source_id');
+                                            $this->db->where('delivery_id', $row['id']);
+                                            $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                            if (!empty($drl_query)) {
+                                                foreach ($drl_query as $drl_row) {
+                                                    if ($drl_row['source'] == 'ProductCategory') {
+                                                        $deliveryList['product_category'] = 'Using',
+                                                    }
+                                                    if ($drl_row['source'] == 'Product') {
+                                                        $deliveryList['product'] = 'Using',
+                                                    }
+                                                    if ($drl_row['source'] == 'ProductCombine') {
+                                                        $deliveryList['product_combine'] = 'Using',
+                                                    }
+                                                    $deliveryList['source_id'] = $drl_row['source_id'],
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    
+
+
+                                    $deliveryList = array();
+                                    if (!empty($product_list)) {
+                                        foreach ($product_list as $pl_row) {
+                                            $this->db->select('delivery_id,source,source_id');
+                                            $this->db->where('delivery_id', $pl_row['delivery_id']);
+                                            $this->db->where('source_id', $pl_row['product_id']);
+                                            $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                            if (!empty($drl_query)) {
+                                                foreach ($drl_query as $drl_row) {
+                                                    $deliveryList[] = array(
+                                                    );
+                                                }
+                                            }
+                                        }
+                                    }
+                                    $delivery_count = 0;
+                                        foreach ($delivery as $row) {?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
+                                                <label class="form-check-label" for="checkout_delivery<?=$row['delivery_name_code'];?>">
+                                                    <?=$row['delivery_name']?>
+                                                </label>
+                                                <?if (!empty($row['delivery_info'])) {?>
+                                                    <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['delivery_info'];?></p>
+                                                <?}?>
+                                            </div>
+                                            <?
+                                            $delivery_count++;
+                                        }?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
