@@ -180,8 +180,21 @@ foreach ($this->cart->contents() as $items) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1;?>
-                                <?php foreach ($this->cart->contents() as $items): ?>
+                                <?php $i = 1;
+                                $product_list = array();
+                                foreach ($this->cart->contents() as $items):
+                                    $this->db->select('product_category_id');
+                                    $this->db->where('product_id', $items['product_id']);
+                                    $this->db->limit(1);
+                                    $p_row = $this->db->get('product')->row_array();
+                                    if (!empty($p_row)) {
+                                        $product_list[] = array(
+                                            'product_category_id' => $p_row['product_category_id'],
+                                            'product_id' => $items['product_id'],
+                                            'product_combine_id' => $items['id'],
+                                        );
+                                    }
+                                ?>
                                 <tr style="border-top:1px solid dimgray;">
                                     <td><?=$i?></td>
                                     <td>
