@@ -109,94 +109,99 @@
                 <td>收益</td>
                 <td><?=$data['income']?></td>
             </tr>
-            <?if (!empty($salesProductDetailList) || ($data['product_name'] != '' && $data['product_qty'] > 0)) {?>
-            <tr>
-                <th colspan="3">銷售數據</th>
-            </tr>
-            <?}
-            if (!empty($salesProductDetailList) || !empty($dailySalesQty) || !empty($customerSourceList)) {?>
-            <tr>
-                <td>銷售規格列表</td>
-                <td>
-                    <table class="table table-bordered" style="margin-bottom: 0;">
-                        <thead>
-                            <tr>
-                                <th>銷售商品：<?=$data['product_name']?></th>
-                                <th>總數量：<?=$data['product_qty']?></th>
-                            </tr>
-                            <?if (!empty($salesProductDetailList)) {?>
-                            <tr>
-                                <th>規格</th>
-                                <th>數量</th>
-                            </tr>
-                            <?}?>
-                        </thead>
-                        <tbody>
-                            <?if (!empty($salesProductDetailList)) {
-                                foreach ($salesProductDetailList as $key => $value) {?>
-                                    <tr>
-                                        <td><?=$key?></td>
-                                        <td><?=$value?></td>
-                                    </tr>
-                                <?}
-                            }?>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <?}
-            if (!empty($dailySalesQty)) {?>
-            <tr>
-                <td>每日銷售列表</td>
-                <td>
-                    <table class="table table-bordered" style="margin-bottom: 0;">
-                        <thead>
-                            <tr>
-                                <th>日期</th>
-                                <th>訂單數</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?foreach ($dailySalesQty as $key => $value) {?>
-                                <tr>
-                                    <td><?=$key?></td>
-                                    <td><?=$value?></td>
-                                </tr>
-                            <?}?>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <?}
-            if (!empty($customerSourceList)) {?>
-            <tr>
-                <td>客戶來源列表</td>
-                <td>
-                    <table class="table table-bordered" style="margin-bottom: 0;">
-                        <thead>
-                            <tr>
-                                <th>縣市</th>
-                                <th>鄉鎮區</th>
-                                <th>訂單數</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?foreach ($customerSourceList as $key => $value) {?>
-                                <tr>
-                                    <td><?=$key?></td>
-                                    <td><?=$value['location']?></td>
-                                    <td><?=$value['qty']?></td>
-                                </tr>
-                            <?}?>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            <?}?>
             <tr>
                 <td>簽名</td>
                 <td style="height: 100px;"></td>
             </tr>
         </tbody>
     </table>
+    <?if (!empty($salesProductDetailList) || ($data['product_name'] != '' && $data['product_qty'] > 0)) {?>
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <th colspan="5">銷售數據</th>
+                </tr>
+                <?
+                if (!empty($salesProductDetailList) || !empty($dailySalesQty) || !empty($customerSourceList)) {?>
+                <tr>
+                    <td>銷售規格列表</td>
+                    <td>
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>銷售商品：<?=$data['product_name']?></th>
+                                    <th>總數量：<?=$data['product_qty']?></th>
+                                </tr>
+                                <?if (!empty($salesProductDetailList)) {?>
+                                <tr>
+                                    <th>規格</th>
+                                    <th>數量</th>
+                                </tr>
+                                <?}?>
+                            </thead>
+                            <tbody>
+                                <?if (!empty($salesProductDetailList)) {
+                                    foreach ($salesProductDetailList as $key => $value) {?>
+                                        <tr>
+                                            <td><?=$key?></td>
+                                            <td><?=$value?></td>
+                                        </tr>
+                                    <?}
+                                }?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <?}
+                if (!empty($dailySalesQty)) {?>
+                <tr>
+                    <td>每日銷售列表</td>
+                    <td>
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>訂單數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?foreach ($dailySalesQty as $key => $value) {?>
+                                    <tr>
+                                        <td><?=$key?></td>
+                                        <td><?=$value?></td>
+                                    </tr>
+                                <?}?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <?}
+                if (!empty($customerSourceList)) {?>
+                <tr>
+                    <td>客戶來源列表</td>
+                    <td>
+                        <table class="table table-bordered" style="margin-bottom: 0;">
+                            <thead>
+                                <tr>
+                                    <th>縣市</th>
+                                    <th>鄉鎮區</th>
+                                    <th>訂單數</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?foreach ($customerSourceList as $key => $value) {?>
+                                    <tr>
+                                        <td><?=$key?></td>
+                                        <td><?=$value['location']?></td>
+                                        <td><?=$value['qty']?></td>
+                                    </tr>
+                                <?}?>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <?}?>
+            </tbody>
+        </table>
+    <?}?>
 </div>
