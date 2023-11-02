@@ -285,70 +285,68 @@ foreach ($this->cart->contents() as $items) {
                                     <h3 class="mt-0">運送方式</h3>
                                     <?
                                     $deliveryList = array();
-                                    if (!empty($delivery)) {
-                                        foreach ($delivery as $row) {
-                                            $deliveryList[$row['id']] = array(
-                                                'product_category' => 'All',
-                                                'product' => 'All',
-                                                'product_combine' => 'All',
-                                                'is_use' => 'All',
-                                                'source_id' => 0,
-                                                'code' => $row['delivery_name_code'],
-                                                'name' => $row['delivery_name'],
-                                                'info' => $row['delivery_info']
-                                            );
-                                            $this->db->select('delivery_id,source,source_id');
-                                            $this->db->where('delivery_id', $row['id']);
-                                            $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                            if (!empty($drl_query)) {
-                                                foreach ($drl_query as $drl_row) {
-                                                    if ($drl_row['source'] == 'ProductCategory') {
-                                                        $deliveryList['product_category'] = 'Using',
-                                                    }
-                                                    if ($drl_row['source'] == 'Product') {
-                                                        $deliveryList['product'] = 'Using',
-                                                    }
-                                                    if ($drl_row['source'] == 'ProductCombine') {
-                                                        $deliveryList['product_combine'] = 'Using',
-                                                    }
-                                                    $deliveryList['source_id'] = $drl_row['source_id'],
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                    
-
-
-                                    $deliveryList = array();
                                     if (!empty($product_list)) {
                                         foreach ($product_list as $pl_row) {
-                                            $this->db->select('delivery_id,source,source_id');
-                                            $this->db->where('delivery_id', $pl_row['delivery_id']);
-                                            $this->db->where('source_id', $pl_row['product_id']);
-                                            $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                            if (!empty($drl_query)) {
-                                                foreach ($drl_query as $drl_row) {
-                                                    $deliveryList[] = array(
-                                                    );
+                                            if ($pl_row['product_category_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'ProductCategory');
+                                                $this->db->where('source_id', $pl_row['product_category_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCategory';
+                                                    }
+                                                }
+                                            }
+                                            if ($pl_row['product_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'Product');
+                                                $this->db->where('source_id', $pl_row['product_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'Product';
+                                                    }
+                                                }
+                                            }
+                                            if ($pl_row['product_combine_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'ProductCombine');
+                                                $this->db->where('source_id', $pl_row['product_combine_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCombine';
+                                                    }
                                                 }
                                             }
                                         }
                                     }
+                                    $this->db->select('delivery_name_code,delivery_name,delivery_info');
+                                    if (!empty($deliveryList)) {
+                                        $deliveryIdList = array();
+                                        foreach ($deliveryList as $key => $value) {
+                                            $deliveryIdList[] = $key;
+                                        }
+                                        $this->db->where_in('id', $deliveryIdList);
+                                    }
+                                    $this->db->where('delivery_status', 1);
+                                    $d_query = $this->db->get('delivery')->result_array();
+
                                     $delivery_count = 0;
-                                        foreach ($delivery as $row) {?>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
-                                                <label class="form-check-label" for="checkout_delivery<?=$row['delivery_name_code'];?>">
-                                                    <?=$row['delivery_name']?>
-                                                </label>
-                                                <?if (!empty($row['delivery_info'])) {?>
-                                                    <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['delivery_info'];?></p>
-                                                <?}?>
-                                            </div>
-                                            <?
-                                            $delivery_count++;
-                                        }?>
+                                    foreach ($d_query as $d_row) {?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$d_row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
+                                            <label class="form-check-label" for="checkout_delivery<?=$d_row['delivery_name_code'];?>">
+                                                <?=$d_row['delivery_name']?>
+                                            </label>
+                                            <?if (!empty($d_row['delivery_info'])) {?>
+                                                <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$d_row['delivery_info'];?></p>
+                                            <?}?>
+                                        </div>
+                                        <?
+                                        $delivery_count++;
+                                    }?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
@@ -405,26 +403,23 @@ foreach ($this->cart->contents() as $items) {
                                         <div id="twzipcode"></div>
                                     </div>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
+                                <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
                                     <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
-                                    <!-- <div class="input-group-append">
-                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
-                                    </div> -->
                                     <div style="width: 100%; margin-top: 15px;">
                                         <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
                                     </div>
@@ -561,12 +556,24 @@ $("#wizard").steps({
             inputValue = inputValue.slice(0, 10);
             $(this).val(inputValue);
         });
+        var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+        var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
         // console.log(currentIndex)
         // console.log(event)
         // console.log(newIndex)
+        // console.log(delivery);
+
+        if (delivery == '711_pickup') {
+            $('.delivery_address').hide();
+            $('.supermarket').show();
+        }
+        if (delivery == 'home_delivery') {
+            $('.delivery_address').show();
+            $('.supermarket').hide();
+        }
         if (newIndex === 3) {
-            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
-            var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
+            // var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            // var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
             if($('#name').val()==''){
                 alert('請輸入收件姓名');
                 return false;
