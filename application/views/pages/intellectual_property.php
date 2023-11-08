@@ -136,9 +136,9 @@
                 <div class="col-md-8 col-lg-9 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
                     <div class="row justify-content-end">
                         <div class="col-12 text-right ">
-                            <a href="#" class="nav_item_style">網購商店示範</a>
-                            <a href="#" class="nav_item_style">商店精選</a>
-                            <a href="#" class="nav_item_style">技術支援</a>
+                            <a href="/SampleStore" class="nav_item_style">網購商店示範</a>
+                            <a href="/FeaturedStore" class="nav_item_style">商店精選</a>
+                            <a href="/TechnicalSupport" class="nav_item_style">技術支援</a>
                             <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px; background-color: transparent;">登入</a>
                             <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px;background-color: #615d56;color: #fff;">註冊我的店</a>
                         </div>
@@ -157,13 +157,13 @@
             <div class="collapse navbar-collapse" id="navbarToggler" style="position: fixed;top: 12%;z-index: 9999;background-color: rgb(245, 242, 236);height: 100%;min-height: 2000px;padding: 6% 20px 15px 20px;">
                 <ul class="navbar-nav">
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">網購商店示範</a>
+                        <a href="/SampleStore" class="nav_item_style">網購商店示範</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">商店精選</a>
+                        <a href="/FeaturedStore" class="nav_item_style">商店精選</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">技術支援</a>
+                        <a href="/TechnicalSupport" class="nav_item_style">技術支援</a>
                     </li>
                     <li class="nav_item_mb_style">
                         <hr style="color:#fff;">
@@ -248,7 +248,7 @@
             </div>
         </div>
         <footer id="footer">
-            <div class="row justify-content-center py-5" style="background-color: #e3e1df;">
+            <div class="row justify-content-center py-5 text-center" style="background-color: #e3e1df;">
                 <div class="col-12 col-md-6" style="color: #878787;">
                     <p>註冊專屬網路商店，每月 NT$ 1,990。不限任何裝置使用，無論是手機、平板、電腦。</p>
                     <p>展示的封面與文章僅用於說明目的，559mall可使用的模組依實際註冊模式主。</p>
@@ -258,15 +258,15 @@
             <div class="row justify-content-center pt-4 pb-3" style="background-color: #625d57;color: #fff;">
                 <div class="col-12 col-md-8 footer_nav_itme">
                     <div class="row justify-content-center">
-                        <div class="col-10 col-md-2 my-2"><a href="#">關於559mall</a></div>
+                        <div class="col-10 col-md-2 my-2"><a href="/About">關於559mall</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                         <div class="col-10 col-md-2 my-2"><a href="<?=get_setting_general('official_line_1')?>" target="_blank">聯絡我們</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
-                        <div class="col-10 col-md-2 my-2"><a href="#">購物商店示範</a></div>
+                        <div class="col-10 col-md-2 my-2"><a href="/SampleStore">購物商店示範</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                         <div class="col-10 col-md-2 my-2"><a href="#">問與答</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
-                        <div class="col-10 col-md-2 my-2"><a href="#">技術支援</a></div>
+                        <div class="col-10 col-md-2 my-2"><a href="/TechnicalSupport">技術支援</a></div>
                         <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                     </div>
                 </div>

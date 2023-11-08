@@ -68,6 +68,12 @@
     #content a:hover {
         color: #414141;
     }
+    .technical_support a {
+        color: #000 !important;
+    }
+    .technical_support a:hover {
+        opacity: 0.75;
+    }
     #footer a:hover {
         color: #e84c69;
     }
@@ -182,45 +188,60 @@
         </div>
         <content id="content">
             <div class="row justify-content-center">
-                <div class="col-12" style="background-color:#f2efe8; padding-top: 80px;padding-bottom: 30px;">
+                <div class="col-12 col-md-8" style="padding-top: 100px;">
+                    <h3 style="letter-spacing: 2px;display: inline-block;">程式技術支援</h3>
+                </div>
+                <div class="col-12 col-md-8 technical_support" style="margin-top: 30px;">
                     <div class="row justify-content-center">
-                        <div class="col-12 col-md-8">
-                            <h1>免責聲明</h1>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-1.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">金流支援程式介紹、申請方式</p>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-2.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">金流、物流，電子發票串接方式</p>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-3.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">申請專屬網域名稱</p>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-1.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">金流支援程式介紹、申請方式</p>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-2.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">金流、物流，電子發票串接方式</p>
+                            </a>
+                        </div>
+                        <div class="col-12 col-md-4 mb-5">
+                            <a href="#">
+                                <div class="text-center" style="padding: 20px 10px 20px 10px; border: 1px solid gray; border-radius: 5px;">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_support-3.png" style="width: 35%">
+                                </div>
+                                <p class="my-3">申請專屬網域名稱</p>
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-md-8" style="margin-top: 60px;margin-bottom: 80px;">
-                    <p>
-                        歡迎您成為本商城網站（以下簡稱本公司）的用戶，為了能讓您安心使用本公司網站的各項服務，並保障 您的權益，請務必確保您已詳細閱讀及明確瞭解以下『免責聲明』，並同意，屬下列情況發生時本網站毋須擔負任何責任：
-                    </p>
-                    <p>
-                        第一條<br>
-                        本網頁所載的所有資料、商標、標誌、圖像、短片、聲音檔案、連結及其他資料等（以下簡稱「資料」），只供參考之用，本公司將會隨時更改資料，並由本公司決定而不作另行通知。雖然本公司已盡力確保本網頁的資料準確性，但本公司不會明示或隱含保證該等資料均為準確無誤。本公司不會對任何錯誤或遺漏承擔責任。
-                    </p>
-                    <p>
-                        第二條<br>
-                        本公司可能會連接至其他機構或有提供或建置相關連結所提供至第三人網頁者，該等連結所指向之 網頁或資料，均為被連結網站所提供，相關權利為該等網站、內容提供者或合法權利人所有，本公司不會對這些網頁內容作出任何保證或承擔任何責任。使用者如瀏覽這些網頁，將要自己承擔後果。本公司就各項服務，本公司不擔保其真實性、正確性、即時性、完整性或合法性。
-                    </p>
-                    <p>
-                        第三條<br>
-                        用戶開始在本公司網站上進行填寫物件資訊、個人資料、上傳圖片等行為，表示您已同意本公司網站的使用條款，上述動作將純屬用戶個人行為、本公司對其內容之真實性或完整性不負有任何責任。
-                    </p>
-                    <p>
-                        第四條<br>
-                        本公司不會對使用或任何人士使用本網頁而引致任何損害（包括但不限於電腦病毒、系統固障、資料損失）承擔任何賠償。任何由於電腦病毒侵入或發作、因政府管制而造成的暫時性關閉等影響網路正常經營之不可抗力而造成的資料損毀、丟失、被盜用或竄改等與本公司無關，本網站不承擔任何直接、間接、附帶、特別、衍生性或懲罰性賠償。
-                    </p>
-                    <p>
-                        第五條<br>
-                        本公司不保證各項服務之穩定、安全、無誤，及不中斷；用戶明示承擔使用本服務之所有風險及可能發生之任何損害。
-                    </p>
-                    <p>
-                        第六條<br>
-                        本公司隨時可修改、暫停或中斷本公司網站之全部或一部，包括停止或變更網頁資料，所有或任何本網站上的服務、專欄、資料庫或內容，而毋須事前通知用戶。即可改正本公司網站任何一部分之錯誤或遺漏，或可對某些項目或服務增加限制，或可限制您對本公司網站之全部或一部之使用且不須因此負任何責任。本公司亦保留隨時依法令規定或政府命令揭露任何資訊之權利。
-                    </p>
-                    <p>
-                        第七條<br>
-                        在給予或不給予事先通知下，本公司保留隨時更新本免責聲明的權利，任何更改於本公司網站發佈時，立即生效。請您在每次瀏覽本網站時，務必查看此免責聲明。如您繼續使用本公司網站，即代表您下同意接受更改後的免責聲明約束。
-                    </p>
                 </div>
             </div>
         </content>

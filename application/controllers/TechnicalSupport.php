@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class About extends Public_Controller {
+class TechnicalSupport extends Public_Controller {
 
 	function __construct() {
 		parent::__construct();
 	}
 
 	public function index() {
-		$this->data['page_title'] = '關於' . get_setting_general('name');
-		$this->load->view('pages/about', $this->data);
+		$this->data['page_title'] = '技術支援';
+		$this->load->view('pages/technical_support', $this->data);
 	}
 
 }
