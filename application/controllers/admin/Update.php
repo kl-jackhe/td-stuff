@@ -41,6 +41,7 @@ class Update extends Admin_Controller {
                             $this->update_202310251330();
                             $this->update_202310251800();
                             $this->update_202310311530();
+                            $this->update_202311081430();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -51,6 +52,30 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    
+
+    function update_202311081430() {
+        $version = '202311081430';
+        $description = '[users]資料表[email]移除唯一值';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'email'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users` DROP INDEX `uc_email`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
