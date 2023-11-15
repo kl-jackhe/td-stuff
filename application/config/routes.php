@@ -7,6 +7,7 @@ $route['admin/login']                    = 'admin/login';
 // Auth
 $route['auth']                           = 'auth';
 $route['login']                          = 'login/index';
+$route['login_v2']                       = 'login/index_v2';
 $route['logout']                         = 'login/logout';
 $route['register']                       = 'auth/create_user';
 $route['forgot_password']                = 'login/forgot_password';

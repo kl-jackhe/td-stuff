@@ -96,6 +96,86 @@ class Login extends Public_Controller {
 		}
 	}
 
+	public function index_v2()
+	{
+		$this->data['page_title'] = '登入';
+
+		if ($this->ion_auth->logged_in())
+		{
+			// redirect('/', 'refresh');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+
+		// validate form input
+		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
+		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
+
+		if ($this->form_validation->run() == true)
+		{
+			// check to see if the user is logging in
+			// check for "remember me"
+			$remember = true;
+
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
+			{
+				//if the login is successful
+				$data = array(
+					'ip_address' => $this->input->ip_address(),
+					'user_id'    => $this->ion_auth->user()->row()->id,
+					'datetime'   => date('Y-m-d H:i:s'),
+	            );
+	            $this->db->insert('login_log', $data);
+				//redirect them back to the home page
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				if($this->ion_auth->in_group('admin'))
+				{
+					redirect('admin', 'refresh');
+				}
+				//
+				if($this->input->post('now_url')!=''){
+					redirect($this->input->post('now_url'));
+				} else {
+					redirect('/');
+				}
+
+				// if(!empty($this->input->post('page')) && $this->input->post('page')=='home'){
+				// 	redirect( base_url() . $this->input->post('page'), 'refresh');
+				// } else {
+				// 	// redirect('/', 'refresh');
+				// 	redirect($_SERVER['HTTP_REFERER']);
+				// }
+			}
+			else
+			{
+				// if the login was un-successful
+				// redirect them back to the login page
+				// $this->session->set_flashdata('message', '使用者名稱或是密碼錯誤 , 請重新輸入。');
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				$this->load->view('auth/login_v2',$this->data);
+				// redirect('login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
+			}
+		}
+		else
+		{
+			// the user is not logging in so display the login page
+			// set the flash data error message if there is one
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$this->data['identity'] = array('name' => 'identity',
+				'id'    => 'identity',
+				'type'  => 'text',
+				'value' => $this->form_validation->set_value('identity'),
+			);
+			$this->data['password'] = array('name' => 'password',
+				'id'   => 'password',
+				'type' => 'password',
+			);
+
+			$this->session->set_flashdata('message', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+			$this->load->view('auth/login_v2',$this->data);
+		}
+	}
+
 	/**
 	 * Forgot password
 	 */
