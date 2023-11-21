@@ -26,6 +26,7 @@ class Admin_Controller extends MY_Controller
 
 		$this->data['include_style'] = $this->load->view('templates/_parts/style.php', NULL, TRUE);
 		$this->data['include_script'] = $this->load->view('templates/_parts/script.php', NULL, TRUE);
+
 		$this->data['admin_navbar_menu'] = $this->load->view('templates/_parts/admin_navbar_menu_view.php', NULL, TRUE);
 		$this->data['admin_sidebar_menu'] = $this->load->view('templates/_parts/admin_sidebar_menu_view.php', $this->data, TRUE);
 	}

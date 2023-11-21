@@ -10,7 +10,7 @@ class Banner extends Admin_Controller {
 
     public function index()
     {
-        $this->data['page_title'] = 'Banner';
+        $this->data['page_title'] = '首頁輪播';
         $this->render('admin/banner/index');
     }
 

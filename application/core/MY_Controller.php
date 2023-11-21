@@ -15,7 +15,7 @@ class MY_Controller extends CI_Controller
 
         $this->is_liqun_food = (strpos(base_url(), 'liqun-food') !== false ? true : false );
         $this->is_td_stuff = (strpos(base_url(), 'td-stuff') !== false ? true : false );
-        $this->is_partnertoys4 = (strpos(base_url(), 'partnertoys4') !== false ? true : false );
+        $this->is_partnertoys = (strpos(base_url(), 'partnertoys') !== false ? true : false );
 	}
 
 	protected function render($the_view = NULL, $template = 'master')
@@ -33,6 +33,9 @@ class MY_Controller extends CI_Controller
 		else
 		{
 			$this->data['the_view_content'] = (is_null($the_view)) ? '' : $this->load->view($the_view, $this->data, TRUE);
+			if ($this->is_partnertoys && $template == 'master') {
+				$template = 'partnertoys';
+			}
 			$this->load->view('templates/' . $template . '_view', $this->data);
 		}
 	}

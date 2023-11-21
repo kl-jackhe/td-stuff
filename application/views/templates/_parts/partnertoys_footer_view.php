@@ -16,59 +16,27 @@
         <?}?>
         <div id="scrollToBottomBtn" class="my-3 icon_pointer">
             <a href="#" style="outline: none;">
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_buynow-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png" alt="">
             </a>
         </div>
         <div id="fa-bag-shopping" class="my-3 icon_pointer">
             <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_shopping car.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_shopping car.png" alt="">
             </a>
         </div>
         <div id="fa-angles-up" class="my-3 icon_pointer">
             <a href="#" style="color:black;outline: none;" style="display: none;">
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_top.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_top.png" alt="">
             </a>
         </div>
     </div>
 
     <?if ($agentID == '') {?>
     <footer id="footer" style="font-size: 14px">
-        <!-- <div class="row justify-content-center">
-            <div class="col-md-12 text-center" style="padding-bottom: 15px;padding-top: 15px;">
-                <span>本網站產品已投保OO產物產品責任保險$250,000,000元。  保險證號：0000字第12AAAA0001234號</span>
-            </div>
-        </div> -->
         <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <?if ($this->is_td_stuff) {?>
-                    <div class="col-md-12" id="v-pills-tab-other" style="padding-bottom: 6px;">
-                        <span style="color: #fff;">
-                            ｜ <a href="/policy?target=disclaimer">免責聲明</a>
-                            ｜ <a href="/policy?target=terms_of_service">服務條款</a>
-                            ｜ <a href="/policy?target=intellectual_property">知識產權</a>
-                            ｜ <a href="/policy?target=return_policy">退貨政策</a>
-                            ｜ <a href="/policy?target=logistics_payment_method">物流 / 支付方式</a> ｜
-                            　維星行銷國際企業有限公司  統編：90696281
-                        </span>
-                    </div>
-                    <?}?>
                     <div class="col-md-12">
                         <span style="color: #fff;">Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.</span>
                     </div>
@@ -99,10 +67,11 @@
 <script src="/assets/bootstrap-4.2.1-dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
-<!-- <script defer src="/assets/fullPage.js-master/dist/jquery.fullpage.min.js"></script>
-<script defer src="/assets/fullPage.js-master/vendors/jquery.easings.min.js"></script> -->
 <script>
 $(document).ready(function() {
+    $('#home-carousel').carousel({
+          interval: 5000
+    });
     get_cart_qty();
 });
 </script>

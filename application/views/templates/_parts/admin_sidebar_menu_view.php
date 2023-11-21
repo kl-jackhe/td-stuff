@@ -23,6 +23,20 @@ $sales_current = $this->uri->segment(3);?>
         <span>訂單管理</span>
       </a>
     </li>
+    <?if ($this->is_partnertoys) {?>
+    <li class="<?php if ($current == "lottery") {echo "active";}?>">
+      <a href="/admin/lottery">
+        <i class="fa-solid fa-gifts"></i>
+        <span>抽選管理</span>
+      </a>
+    </li>
+    <li class="<?php if ($current == "mail") {echo "active";}?>">
+      <a href="/admin/mail">
+        <i class="fa-solid fa-envelopes-bulk"></i>
+        <span>郵件管理</span>
+      </a>
+    </li>
+    <?}?>
     <?if ($this->is_td_stuff) {?>
     <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">

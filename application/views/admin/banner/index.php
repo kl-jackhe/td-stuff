@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-6">
-        <a href="/admin/banner/create" class="btn btn-primary">新增Banner</a>
+        <a href="/admin/banner/create" class="btn btn-primary">新增輪播</a>
         <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
     </div>
     <div class="col-md-6">

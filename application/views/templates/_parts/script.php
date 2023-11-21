@@ -45,21 +45,21 @@ $(document).ready(function() {
             e.preventDefault();
         }
     });
-    $(".form-inline.form-group.text-right #keywords").keypress(function(event) {
-        if (event.keyCode == 13) {
-            searchFilter();
-        }
-    });
-    $(".form-inline.form-group.text-right #keywords2").keypress(function(event) {
-        if (event.keyCode == 13) {
-            searchFilter();
-        }
-    });
-    $(".form-inline.form-group.text-right #keywords3").keypress(function(event) {
-        if (event.keyCode == 13) {
-            searchFilter();
-        }
-    });
+    // $(".form-inline.form-group.text-right #keywords").keypress(function(event) {
+    //     if (event.keyCode == 13) {
+    //         searchFilter();
+    //     }
+    // });
+    // $(".form-inline.form-group.text-right #keywords2").keypress(function(event) {
+    //     if (event.keyCode == 13) {
+    //         searchFilter();
+    //     }
+    // });
+    // $(".form-inline.form-group.text-right #keywords3").keypress(function(event) {
+    //     if (event.keyCode == 13) {
+    //         searchFilter();
+    //     }
+    // });
     $("#submit_form input.form-control").on("keypress", function(event) {
         // console.log("submit_form keypress");
         var keyPressed = event.keyCode || event.which;
