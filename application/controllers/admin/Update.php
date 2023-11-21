@@ -42,6 +42,7 @@ class Update extends Admin_Controller {
                             $this->update_202310251800();
                             $this->update_202310311530();
                             $this->update_202311081430();
+                            $this->update_202311211630();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -55,7 +56,76 @@ class Update extends Admin_Controller {
         }
     }
 
-    
+    function update_202311211630() {
+        $version = '202311211630';
+        $description = '新增資料表[lottery][lottery_pool]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'lottery'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `lottery` (
+                  `id` int(8) NOT NULL,
+                  `name` varchar(255) NOT NULL,
+                  `email_subject` varchar(100) NOT NULL,
+                  `email_content` text NOT NULL,
+                  `sms_subject` varchar(255) NOT NULL,
+                  `sms_content` varchar(255) NOT NULL,
+                  `product_id` int(8) NOT NULL,
+                  `number_limit` int(8) NOT NULL,
+                  `number_remain` int(8) NOT NULL,
+                  `number_alternate` int(8) NOT NULL,
+                  `star_time` datetime NOT NULL,
+                  `end_time` datetime NOT NULL,
+                  `draw_date` datetime NOT NULL,
+                  `fill_up_date` datetime NOT NULL,
+                  `draw_over` int(8) NOT NULL,
+                  `fill_up_over` int(8) NOT NULL,
+                  `filter_black` int(8) NOT NULL,
+                  `state` varchar(255) NOT NULL,
+                  `lottery_end` int(8) NOT NULL,
+                  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `lottery` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `lottery` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `lottery` ADD INDEX(`product_id`);");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'lottery_pool'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `lottery_pool` (
+                  `id` int(8) NOT NULL,
+                  `lottery_id` int(8) NOT NULL,
+                  `users_id` int(8) NOT NULL,
+                  `send_mail` text NOT NULL,
+                  `abstain` int(8) NOT NULL,
+                  `winner` int(8) NOT NULL,
+                  `alternate` int(8) NOT NULL,
+                  `fill_up` int(8) NOT NULL,
+                  `blacklist` int(8) NOT NULL,
+                  `abandon` int(8) NOT NULL,
+                  `order_state` varchar(255) NOT NULL,
+                  `order_odno` varchar(18) NOT NULL,
+                  `msg_mail` varchar(255) NOT NULL,
+                  `msg` varchar(255) NOT NULL,
+                  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`lottery_id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`users_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
 
     function update_202311081430() {
         $version = '202311081430';
