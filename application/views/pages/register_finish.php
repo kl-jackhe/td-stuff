@@ -66,7 +66,7 @@
         color: #fff;
     }
     #content a:hover {
-        color: #dd4c7c;
+        color: #000;
     }
     #footer a:hover {
         color: #e84c69;
@@ -182,58 +182,23 @@
         </div>
         <content id="content">
             <div class="row justify-content-center">
-                <div class="col-10 col-sm-6 col-md-6" style="padding-top: 100px;">
-                    <h3 style="letter-spacing: 2px; color: #333232;">註冊專屬商店</h3>
-                    <h3 style="letter-spacing: 2px; color: #dd4c7c; margin-top: 30px; font-weight: 300;">建立商店資訊</h3>
+                <div class="d-none d-sm-none d-md-block d-lg-block col-md-10 text-center" style="padding-top: 100px;">
+                    <img src="/assets/images/559mall_official/pay%20opion_finish%20pic-web.jpg" alt="" class="img-fluid">
+                </div>
+                <div class="col-12 d-block d-sm-block d-md-none d-lg-none text-center" style="padding-top: 100px;">
+                    <img src="/assets/images/559mall_official/pay opion_finish pic-phone.jpg" alt="" class="img-fluid">
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-10 col-sm-6 col-md-6" style="padding-top: 50px; padding-bottom: 50px; color: #333232;">
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">姓名</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon" style="padding: 5px 40px 5px 0px;">性別</span>
-                        <input type="hidden" name="" id="" class="form-control" style="border: 0;">
-                        <div>
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                            <label class="form-check-label" for="flexRadioDefault1" style="padding-right: 30px;">男</label>
-                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                            <label class="form-check-label" for="flexRadioDefault2">女</label>
-                        </div>
-                    </div>
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">手機</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">電子信箱</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">密碼</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <div class="form-group mb-3 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">確認密碼</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <div class="form-group mb-1 input-group" style="border-bottom: 1px solid #b1b1b1;align-items: center;">
-                        <span class="input-group-addon">免費域名</span>
-                        <input type="text" name="" id="" class="form-control" style="border: 0;">
-                    </div>
-                    <p style="display: block; color: #838383;">註：免費網路域名申請注意事項說明</p>
+                <div class="col-10 col-sm-4 col-md-4 text-center" style="padding-top: 30px; padding-bottom: 10px; color: #333232;">
+                    <p style="line-height: 30px;">年付方案使用期間:<br>2024/02/05-2025/02/04</p>
                 </div>
             </div>
             <div class="row justify-content-center pb-5">
                 <div class="col-10 col-sm-6 col-md-6">
                     <div class="row justify-content-center">
-                        <div class="col-10 col-sm-4 col-md-4 text-center" style="color: #fff; background-color: #b2b2b2; margin: 25px 20px 25px 20px; border-radius: 15px; padding: 3px 0px 3px 0px; cursor: not-allowed;">
-                            上一步
-                        </div>
-                        <div class="col-10 col-sm-4 col-md-4 text-center" style="color: #fff; background-color: #615d56; margin: 25px 20px 25px 20px; border-radius: 15px; padding: 3px 0px 3px 0px;">
-                            <a href="#">繼續</a>
+                        <div class="col-7 col-sm-4 col-md-4 text-center" style="color: #fff; background-color: #dd4c7c; margin: 25px 20px 25px 20px; border-radius: 15px; padding: 3px 0px 3px 0px; cursor: pointer;">
+                            <a href="#">啟動商店</a>
                         </div>
                     </div>
                 </div>

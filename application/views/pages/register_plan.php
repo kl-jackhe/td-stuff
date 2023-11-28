@@ -66,13 +66,7 @@
         color: #fff;
     }
     #content a:hover {
-        color: #414141;
-    }
-    .technical_support a {
-        color: #000 !important;
-    }
-    .technical_support a:hover {
-        opacity: 0.75;
+        color: #dd4c7c;
     }
     #footer a:hover {
         color: #e84c69;
@@ -188,19 +182,47 @@
         </div>
         <content id="content">
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-6 col-md-4" style="padding-top: 100px;">
-                    <h3 style="letter-spacing: 2px;color: #333232;">註冊我的專屬商店</h3>
-                    <h3 style="letter-spacing: 2px;color: #dd4c7c;margin-top: 30px;">選擇方案</h3>
+                <div class="col-10 col-sm-6 col-md-6" style="padding-top: 100px;">
+                    <h3 style="letter-spacing: 2px; color: #333232;">註冊我的專屬商店</h3>
+                    <h3 style="letter-spacing: 2px; color: #dd4c7c; margin-top: 30px; font-weight: 300;">選擇方案</h3>
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-12 col-sm-6 col-md-4" style="margin-top: 30px;">
-                    <div class="row">
-                        <div class="col-6">
+                <div class="col-12 col-sm-6 col-md-6" style="margin-top: 30px;">
+                    <div class="row justify-content-center">
+                        <div class="col-10 col-md-6" style="margin-bottom: 100px;">
                             <img src="/assets/images/559mall_official/option_a.jpg" class="img-fluid">
+                            <div class="row justify-content-center text-center mb-3">
+                                <div class="col-8" style="color: #fff; background-color: #615d56; margin: 25px 0px 25px 0px; border-radius: 15px; padding: 3px 0px 3px 0px;">
+                                    <a href="#" style="display: block;">選擇</a>
+                                </div>
+                            </div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">網路專屬商店</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">獨立網路域名、商店名稱</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">商店功能持續更新</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">電腦、平板、手機皆可使用</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">提供金流、物流串接</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">支援「超商付款取貨」服務</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">Google Analytics 數據分析</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">獨立網址、無流量限制</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">持續維護更新程式功能</div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-10 col-md-6" style="margin-bottom: 100px;">
                             <img src="/assets/images/559mall_official/option_b.jpg" class="img-fluid">
+                            <div class="row justify-content-center text-center mb-3">
+                                <div class="col-8" style="color: #fff; background-color: #615d56; margin: 25px 0px 25px 0px; border-radius: 15px; padding: 3px 0px 3px 0px;">
+                                    <a href="#" style="display: block;">選擇</a>
+                                </div>
+                            </div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">網路專屬商店</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">獨立網路域名、商店名稱</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">商店功能持續更新</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">電腦、平板、手機皆可使用</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">提供金流、物流串接</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">支援「超商付款取貨」服務</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">Google Analytics 數據分析</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">獨立網址、無流量限制</div>
+                            <div class="pb-3 mb-3" style="border-bottom: 1px solid #b1b1b1; color: #333232;">持續維護更新程式功能</div>
                         </div>
                     </div>
                 </div>
