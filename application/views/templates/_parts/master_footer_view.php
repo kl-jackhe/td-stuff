@@ -36,7 +36,7 @@
             </a>
         </div>
         <div id="fa-angles-up" class="my-3 icon_pointer">
-            <a href="#" style="color:black;outline: none;" style="display: none;">
+            <a href="#" style="color:black;outline: none;">
                 <?if ($this->is_td_stuff) {?>
                     <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png" alt="">
                 <?}?>

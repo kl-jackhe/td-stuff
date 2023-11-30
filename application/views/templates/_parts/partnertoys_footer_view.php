@@ -2,43 +2,88 @@
     <div class="fixed-bottom header_fixed_icon">
         <?if ($agentID == '' && get_setting_general('official_facebook_1') != '') {?>
             <div id="fa-facebook-square" class="my-3 icon_pointer">
-                <a id="facebook_href" href="<?=get_setting_general('official_facebook_1')?>" target="_blank" style="outline: none;">
-                    <img class="fixed_icon_style" src="/assets/images/web icon_fb.png" alt="">
+                <a id="facebook_href" href="<?=get_setting_general('official_facebook_1')?>" target="_blank">
+                    <i class="fa-brands fa-facebook fixed_icon_style"></i>
+                </a>
+            </div>
+        <?}?>
+        <?if ($agentID == '' && get_setting_general('official_instagram_1') != '') {?>
+            <div id="fa-instagram-square" class="my-3 icon_pointer">
+                <a id="instagram_href" href="<?=get_setting_general('official_instagram_1')?>" target="_blank">
+                    <i class="fa-brands fa-instagram fixed_icon_style"></i>
                 </a>
             </div>
         <?}?>
         <?if (get_setting_general('official_line_1') != '') {?>
             <div id="fa-line" class="my-3 icon_pointer">
-                <a href="<?=get_setting_general('official_line_1')?>" target="_blank" style="outline: none;">
-                    <img class="fixed_icon_style" src="/assets/images/web icon_line service.png" alt="">
+                <a href="<?=get_setting_general('official_line_1')?>" target="_blank">
+                    <img class="fixed_icon_style" src="/assets/images/web icon_line service.png">
                 </a>
             </div>
         <?}?>
-        <div id="scrollToBottomBtn" class="my-3 icon_pointer">
-            <a href="#" style="outline: none;">
-                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png" alt="">
-            </a>
-        </div>
+        <?if (strpos(base_url(), 'home') !== false) { ?>
+            <div id="scrollToBottomBtn" class="my-3 icon_pointer">
+                <a href="#">
+                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png">
+                </a>
+            </div>
+        <?}?>
         <div id="fa-bag-shopping" class="my-3 icon_pointer">
-            <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
+            <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
-                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_shopping car.png" alt="">
+                <i class="fa-solid fa-cart-shopping fixed_icon_style"></i>
             </a>
         </div>
         <div id="fa-angles-up" class="my-3 icon_pointer">
-            <a href="#" style="color:black;outline: none;" style="display: none;">
-                <img class="fixed_icon_style" src="/assets/images/liqun/web icon_top.png" alt="">
+            <a href="#">
+                <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png">
             </a>
         </div>
     </div>
 
     <?if ($agentID == '') {?>
-    <footer id="footer" style="font-size: 14px">
-        <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
+    <footer id="footer">
+        <div class="footer-company-info">
+            <div class="container-fluid">
+                <div class="row justify-content-center" style="padding-left: 15px;padding-right: 15px;">
+                    <div class="col-12 col-md-2">
+                        <h2>最新消息</h2>
+                        <hr>
+                        <p><a href="">測試</a></p>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <h2>夥伴商城</h2>
+                        <hr>
+                        <p><a href="#">現貨商品-周邊</a></p>
+                        <p><a href="#">現貨商品-周邊</a></p>
+                        <p><a href="#">現貨商品-周邊</a></p>
+                        <p><a href="#">現貨商品-周邊</a></p>
+                        <p><a href="#">現貨商品-周邊</a></p>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <h2>其他連結</h2>
+                        <hr>
+                        <p><a href="#">關於夥伴</a></p>
+                        <p><a href="#">產品介紹</a></p>
+                        <p><a href="#">合作介紹</a></p>
+                        <p><a href="#">經銷通路</a></p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <h2>聯絡我們</h2>
+                        <hr>
+                        <p><i class="fa-solid fa-phone"></i>&ensp;<a href="tel:<?php echo get_setting_general('phone1'); ?>"><?php echo get_setting_general('phone1'); ?></a></p>
+                        <p><i class="fa-solid fa-envelope"></i>&ensp;<a href="mailto:<?php echo get_setting_general('email'); ?>"><?php echo get_setting_general('email'); ?></a></p>
+                        <p><i class="fa-solid fa-map-location-dot"></i>&ensp;<?php echo get_setting_general('address'); ?></p>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.4789445134197!2d120.67437757593652!3d24.15493037312489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d7ace462a2b%3A0xc2473adc0c9d6183!2zNDA05Y-w5Lit5biC5YyX5Y2A5Lit5riF6Lev5LiA5q61ODnomZ85IDEw!5e0!3m2!1szh-TW!2stw!4v1701331194617!5m2!1szh-TW!2stw" width="100%" height="auto" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
                     <div class="col-md-12">
-                        <span style="color: #fff;">Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.</span>
+                        Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.
                     </div>
                 </div>
             </div>
@@ -57,7 +102,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                 </div>
             </div>
         </div>
@@ -73,10 +117,62 @@ $(document).ready(function() {
           interval: 5000
     });
     get_cart_qty();
+    var $navbarToggler = $("#navbarToggler");
+    var $menuToggle = $(".navbar-toggler");
+    var isOpen = false;
+    $menuToggle.click(function() {
+        if (isOpen) {
+                $navbarToggler.animate({
+                    left: "-100%"
+                }, 500, function() {
+                    isOpen = false;
+                });
+        } else {
+                $navbarToggler.animate({
+                    left: 0
+                }, 500, function() {
+                    isOpen = true;
+                });
+        }
+    });
+    //Window Height
+    var header_h = $(".header_fixed_top").height();
+    $(".content_auto_h").css('padding-top', header_h * 2.5);
+    //scrollTop
+    $(function() {
+        var $win = $(window);
+        $win.scroll(function() {
+            if ($win.scrollTop() > 100) {
+                $('#fa-angles-up').slideDown();
+            } else {
+                $('#fa-angles-up').slideUp();
+            }
+        });
+        $('#fa-angles-up').click(function() {
+            $('html, body').animate({ scrollTop: 0 }, 200);
+        });
+    });
+    //scrollDown
+    $(function() {
+        $('#scrollToBottomBtn').click(function() {
+            $('html, body').animate({scrollTop: $(document).height()}, 1000);
+        });
+    });
+    //裝置辨認
+    var ua = navigator.userAgent;
+    var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
+    var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
+    if(android==true){
+        $('#facebook_href').attr('href','fb://page/114764431237605')
+    // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
+    }else if(iOS==true){
+        $('#facebook_href').attr('href','fb://page/?id=114764431237605')
+    // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
+    }else{
+    // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
+    }
 });
-</script>
-<!-- MyCart -->
-<script>
+//MyCart
 function get_cart_qty() {
     $.ajax({
         url: "/cart/check_cart_is_empty",
@@ -105,60 +201,7 @@ function view_form_check() {
         }
     });
 }
-</script>
-<!-- MyCart -->
-<script>
-$(document).ready(function() {
-    //<!-- Window Height -->
-    $(function() {
-        var h = $(window).height();
-        var header_h = $("#header").height();
-        var footer_h = $("#footer").height();
-        var content_auto_h = $(".content_auto_h").height();
-        var main_h = $(".main").height();
-        var h_sum = h - header_h - footer_h;
-        // var h_checkout = h_sum * 0.6;
-        if (h_sum >= content_auto_h) {
-            $(".content_auto_h").css('height', h_sum);
-        } else {
-            $(".content_auto_h").css('height', '100%');
-        }
-        // $(".wizard > .content").css('min-height', h_checkout);
-    });
-    //<!-- scrollTop -->
-    $(function() {
-        var $win = $(window);
-        $win.scroll(function() {
-            if ($win.scrollTop() > 100) {
-                $('#fa-angles-up').slideDown();
-            } else {
-                $('#fa-angles-up').slideUp();
-            }
-        });
-        $('#fa-angles-up').click(function() {
-            $('html, body').animate({ scrollTop: 0 }, 200);
-        });
-    });
-    //<!-- scrollDown -->
-    $(function() {
-        $('#scrollToBottomBtn').click(function() {
-            $('html, body').animate({scrollTop: $(document).height()}, 1000);
-        });
-    });
-    //裝置辨認
-    var ua = navigator.userAgent;
-    var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
-    var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
-    if(android==true){
-        $('#facebook_href').attr('href','fb://page/114764431237605')
-    // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
-    }else if(iOS==true){
-        $('#facebook_href').attr('href','fb://page/?id=114764431237605')
-    // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
-    }else{
-    // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
-    }
-});
+//MyCart
 </script>
 </body>
 

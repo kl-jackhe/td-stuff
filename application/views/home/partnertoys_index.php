@@ -2,107 +2,79 @@
 .owl-theme .owl-nav [class*='owl-']:hover {
     background: transparent;
 }
-
 .owl-prev {
     color: #DCDEDD !important;
 }
-
 .owl-prev:hover {
     color: #585755 !important;
 }
-
 .owl-prev:focus {
     border: none !important;
     outline: none !important;
 }
-
 .owl-next {
     color: #DCDEDD !important;
 }
-
 .owl-next:hover {
     color: #585755 !important;
 }
-
 .owl-next:focus {
     border: none !important;
     outline: none !important;
 }
-
 .owl-dots {
     width: 100%;
 }
-
 .carousel-fade .carousel-item {
  opacity: 0;
  transition-duration: 2s;
  transition-property: opacity;
 }
-
 .carousel-fade  .carousel-item.active,
 .carousel-fade  .carousel-item-next.carousel-item-left,
 .carousel-fade  .carousel-item-prev.carousel-item-right {
-  opacity: 1;
+    opacity: 1;
 }
-
 .carousel-fade .active.carousel-item-left,
 .carousel-fade  .active.carousel-item-right {
- opacity: 0;
+    opacity: 0;
 }
-
 .carousel-fade  .carousel-item-next,
 .carousel-fade .carousel-item-prev,
 .carousel-fade .carousel-item.active,
 .carousel-fade .active.carousel-item-left,
 .carousel-fade  .active.carousel-item-prev {
- transform: translateX(0);
- transform: translate3d(0, 0, 0);
+    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
 }
-
 #home_product {
     font-size: 18px;
     line-height: 20px;
     align-items: end;
 }
-
 #home_product a {
     text-decoration: none;
     color: black;
     transition: 500ms ease 0s;
 }
-
 #home_product a:hover {
-    <?if ($this->is_td_stuff) {?>
-        color: #68396D;
-    <?}?>
-    <?if ($this->is_liqun_food) {?>
-        color: #f6d523;
-    <?}?>
+    color: rgba(239,132,104,1.0);
 }
-
 #home_product .product_name {
     line-height: 35px;
 }
-
 #home_product .product_price {
     line-height: 35px;
 }
 #zoomA {
-  transition: transform ease-in-out 0s;
+    transition: transform ease-in-out 0s;
 }
 #zoomA:hover {
     transform: scale(1.05);
 }
-
 .select_product {
-    <?if ($this->is_td_stuff) {?>
-         background-color: #68396D;
-         color: #fff !important;
-    <?}?>
-    <?if ($this->is_liqun_food) {?>
-         background-color: #f6d523;
-         color: #000 !important;
-    <?}?>
+    background-color: rgba(239,132,104,1.0);
+    color: #fff !important;
     width: 50%;
     line-height: 1.8;
     padding: 0;
@@ -171,11 +143,11 @@
                             <?php $count++;
                         }?>
                     </div>
-                    <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="left: -35px;font-size: 24px;">
+                    <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="font-size: 24px;">
                         <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
                         <span class="sr-only">Previous</span>
                     </a>
-                    <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="right: -35px;font-size: 24px;">
+                    <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="font-size: 24px;">
                         <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
                         <span class="sr-only">Next</span>
                     </a>
@@ -185,50 +157,52 @@
         <?}?>
         <div class="container">
             <div class="row product_box">
-                <div class="col-md-12 text-center">
-                    <span style="font-size:24px;">熱銷商品</span>
+                <div class="col-md-12">
+                    <span style="font-size:24px;">最新商品</span>
                     <hr style="border-top: 1px solid #988B7A;margin: 10px 0px 25px 0px;">
                 </div>
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center product_box_list" id="home_product">
-                        <?
-                        if (!empty($products)) {
+                        <?if (!empty($products)) {
+                            $count = 0;
                             foreach ($products as $product){
-                        ?>
-                        <div class="col-md-4 pb-5 ipad_w">
-                            <a href="/product/view/<?=$product['product_id']?>">
-                                <?if (!empty($product['product_image'])) {?>
-                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
-                                <?}else{?>
-                                <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
-                                <?}?>
-                                <div class="product_name">
-                                    <span>
-                                        <?=$product['product_name'];?></span>
+                                if ($count < 12) {?>
+                                <div class="col-md-4 pb-5 ipad_w">
+                                    <a href="/product/view/<?=$product['product_id']?>">
+                                        <?if (!empty($product['product_image'])) {?>
+                                        <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=$product['product_image'];?>">
+                                        <?}else{?>
+                                        <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
+                                        <?}?>
+                                        <div class="product_name">
+                                            <span>
+                                                <?=$product['product_name'];?></span>
+                                        </div>
+                                    </a>
+                                    <!-- <div class="product_price">
+                                        $<span style="color:#68396D">
+                                            <?=$product['product_price'];?></span>
+                                    </div> -->
+                                    <?if($product['sales_status']==0){?>
+                                        <a class="btn select_product my-2" href="/product/view/<?=$product['product_id']?>">
+                                            <span>現貨</span>
+                                        </a>
+                                    <?}?>
+                                    <?if($product['sales_status']==1){?>
+                                        <a class="btn select_product my-2" style="background: #817F82;" href="/product/view/<?=$product['product_id']?>">
+                                            <span>售完</span>
+                                        </a>
+                                    <?}?>
+                                    <?if($product['sales_status']==2){?>
+                                        <a class="btn select_product my-2" style="background: #A60747;" href="/product/view/<?=$product['product_id']?>">
+                                            <span>預購</span>
+                                        </a>
+                                    <?}?>
                                 </div>
-                            </a>
-                            <!-- <div class="product_price">
-                                $<span style="color:#68396D">
-                                    <?=$product['product_price'];?></span>
-                            </div> -->
-                            <?if($product['sales_status']==0){?>
-                                <a class="btn select_product my-2" href="/product/view/<?=$product['product_id']?>">
-                                    <span>現貨</span>
-                                </a>
-                            <?}?>
-                            <?if($product['sales_status']==1){?>
-                                <a class="btn select_product my-2" style="background: #817F82;" href="/product/view/<?=$product['product_id']?>">
-                                    <span>售完</span>
-                                </a>
-                            <?}?>
-                            <?if($product['sales_status']==2){?>
-                                <a class="btn select_product my-2" style="background: #A60747;" href="/product/view/<?=$product['product_id']?>">
-                                    <span>預購</span>
-                                </a>
-                            <?}?>
-                        </div>
-                        <?}
-                    }?>
+                                <?}
+                                $count++;
+                            }
+                        }?>
                     </div>
                 </div>
             </div>

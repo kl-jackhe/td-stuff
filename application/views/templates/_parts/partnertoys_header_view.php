@@ -31,16 +31,9 @@
     body {
         font-family: Open Sans, "Microsoft JhengHei";
     }
-    #cart-qty {
-        color: #BE2633;
-        position: absolute;
-        top: -10px;
-        right: 20px;
-        background: #D1D1D1;
-        border-radius: 50px;
-        width: 23px;
-        height: 23px;
-        text-align: center;
+    a {
+        outline: none;
+        text-decoration: none;
     }
     .top_logo_style {
         max-width: <?=(get_setting_general('logo_max_width') != '' ? get_setting_general('logo_max_width') .'px' : '130px')?>;
@@ -49,26 +42,48 @@
         left: 50%;
         top: 40%;
     }
-    .nav_user_style {
-        position:absolute;
-        right: 35px;
+    .header_relative_top {
+        background-color: #fff;
+        position: relative;
+        z-index: 999;
     }
-    .nav_user_style li {
-        padding: 5px;
+    .header_fixed_top {
+        background-color: #fff;
+        position: fixed;
+        box-shadow: 0 5px 30px 5px #E0E0E0;
+        width: 100%;
+        top: 0;
+        z-index: 1030;
     }
-    .nav_user_login_edit {
-        border: 1px solid #534431;
-        color: #808080 !important;
-        padding: 2px 12px 2px 12px !important;
-        outline: none;
+    .header_logo {
+        width: 70%;
     }
-    .nav_user_register_logout {
-        background: #534431;
-        color: #fff !important;
-        padding: 2px 12px 2px 12px !important;
-        outline: none;
+    #navbarToggler {
+        position: fixed;
+        top: 7%;
+        z-index: 9999;
+        background-color: rgb(245, 242, 236);
+        height: 100%;
+        min-height: 2000px;
+        padding: 6% 20px 15px 20px;
+    }
+    .nav_item_style {
+        font-weight: bold;
+        align-self: center;
+        margin-right: 20px;
+        font-size: 18px;
+        color: #000;
+        padding: 10px;
+    }
+    .nav_item_style:hover {
+        color: rgba(239,132,104,1.0) !important;
+    }
+    .nav_item_mb_style {
+        padding-top: 15px;
+        padding-bottom: 15px;
     }
     .fixed_icon_style {
+        font-size: -webkit-xxx-large;
         max-width: 40px;
     }
     .header_fixed_icon {
@@ -76,34 +91,81 @@
         right: 25px;
         bottom: 60px;
     }
+    #fa-instagram-square a {
+        color: #DD2A7B;
+    }
+    #fa-instagram-square a:hover {
+        color: #8134AF;
+    }
+    #fa-bag-shopping a {
+        color: #ff5a00;
+    }
+    #fa-bag-shopping a:hover {
+        color: #ef8468;
+    }
     .icon_pointer {
         cursor: pointer;
     }
     #v-pills-tab-other a {
-        text-decoration: none;
-        color: #fff;#888787
+        color: #fff;
     }
     #v-pills-tab-other a:hover {
         color: #888787;
     }
+    .footer-company-info h2 {
+        font-weight: bold;
+    }
+    .footer-company-info a {
+        color: #000;
+    }
+    .footer-company-info a:hover {
+        color: #d35448;
+        text-decoration: underline;
+    }
+    .footer-company-info {
+        background-color: #faf5f3;
+        padding-bottom: 25px;
+        padding-top:25px;
+        box-shadow: 0 5px 30px 5px #E0E0E0;
+        font-size: 16px;
+    }
+    .footer-copyright {
+        background-color: #d35448;
+        padding-bottom: 25px;
+        padding-top:25px;
+        box-shadow: 0 5px 30px 5px #E0E0E0;
+        color: #fff;
+        font-size: 14px;
+    }
     #footer {
         margin-top: 30px;
     }
+    #cart-qty {
+        color: #BE2633;
+        position: absolute;
+        top: -30px;
+        right: 5px;
+        background: #D1D1D1;
+        border-radius: 50px;
+        width: 23px;
+        height: 23px;
+        text-align: center;
+    }
     @media (min-width: 768px) and (max-width: 991.98px) {
+        .header_logo {
+            width: 100%;
+        }
         .top_logo_style {
             position: relative;
             transform: none;
             left: -10px;
             top: 0;
         }
-        .nav_user_style {
-            position: relative;
-            right: 0;
-            width: 12%;
-            left: 10px;
-        }
     }
     @media (max-width: 767px) {
+        .header_logo {
+            width: 100%;
+        }
         .navbar-toggler {
             padding: 0.45rem 0.75rem;
             left: 0px;
@@ -119,11 +181,6 @@
             left: -35%;
             top: 0;
         }
-        .nav_user_style {
-            position: relative;
-            right: -10px;
-            width: 30%;
-        }
         .m_hr_border {
             padding-right: 15px !important;
             padding-left: 15px !important;
@@ -136,52 +193,61 @@
 
 <body>
     <div class="body h-100">
-        <header id="header" class="header-narrow header-semi-transparent header-transparent-sticky-deactive custom-header-transparent-bottom-border">
-            <div class="header-body">
-                <div class="header-container container m_padding">
-                    <?if ($agentID == '') {?>
-                    <div class="header-row py-4 m_padding">
-                        <nav class="navbar navbar-expand-lg navbar-light">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <a href="<?php echo base_url() ?>" class="top_logo_style">
-                                <img class="img-fluid" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
-                            </a>
-                            <div class="collapse navbar-collapse" id="navbarToggler">
-                                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                                    <?php $current = $this->uri->segment(1); ?>
-                                    <li class="nav-item <?php echo ($current==''?'active':'') ?>">
-                                        <a class="nav-link" style="outline: none;" href="<?php echo base_url() ?>">首頁</a>
-                                    </li>
-                                    <li class="nav-item <?php echo ($current=='product'?'active':'') ?>">
-                                        <a class="nav-link" style="outline: none;" href="/product">全館商品</a>
-                                    </li>
-                                    <div class="row nav_user_style">
-                                        <?php if (!$this->ion_auth->logged_in()){ ?>
-                                            <li class="nav-item">
-                                                <a href="/login" class="btn nav-link nav_user_login_edit">登入</a>
-                                            </li>
-                                            <li class="nav-item" >
-                                                <a href="/register" class="btn register-btn nav-link nav_user_register_logout">註冊</a>
-                                            </li>
-                                            <? } else { ?>
-                                            <li class="nav-item" >
-                                                <a class="btn nav-link nav_user_login_edit" href="/auth/edit_user">我的帳戶</a>
-                                            </li>
-                                            <li class="nav-item" >
-                                                <a class="btn nav-link nav_user_register_logout" href="/logout">登出</a>
-                                            </li>
-                                        <? } ?>
-                                    </div>
-                                </ul>
+        <header id="header">
+            <div class="container-fluid">
+                <div class="row py-2 justify-content-center header_fixed_top">
+                    <div class="col-5 col-md-3 col-lg-2" style="align-self: center;">
+                        <a href="<?php echo base_url() ?>">
+                            <img class="header_logo" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
+                        <div class="row justify-content-end">
+                            <div class="col-12 text-right ">
+                                <a href="/product" class="nav_item_style">夥伴商城</a>
+                                <a href="#" class="nav_item_style">關於夥伴</a>
+                                <a href="#" class="nav_item_style">最新訊息</a>
+                                <a href="#" class="nav_item_style">合作介紹</a>
+                                <a href="#" class="nav_item_style">經銷通路</a>
+                                <a href="#" class="nav_item_style">會員專區</a>
+                                <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px; background-color: transparent;">登入</a>
                             </div>
-                        </nav>
-                        <div class="px-4 m_hr_border">
-                            <hr style="border-top: 1px solid #988B7A;">
                         </div>
                     </div>
-                    <?}?>
+                    <div class="col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
+                        <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
+                                <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
+                            </button>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </header>
+        <div class="row" style="position: relative;z-index: 99;">
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav">
+                    <li class="nav_item_mb_style">
+                        <a href="/product" class="nav_item_style">夥伴商城</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style">關於夥伴</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style">最新訊息</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style">合作介紹</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style">經銷通路</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style">會員專區</a>
+                    </li>
+                    <li class="nav_item_mb_style">
+                        <a href="#" class="nav_item_style" style="color: #000;text-decoration:none;border: 2px solid #615d56;border-radius: 30px; background-color: transparent;padding: 1px 15px 1px 15px;">登入</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
