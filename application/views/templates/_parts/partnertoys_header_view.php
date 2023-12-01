@@ -207,7 +207,7 @@
                             <div class="col-12 text-right ">
                                 <a href="/product" class="nav_item_style">夥伴商城</a>
                                 <a href="#" class="nav_item_style">關於夥伴</a>
-                                <a href="#" class="nav_item_style">最新訊息</a>
+                                <a href="/latestNews" class="nav_item_style">最新訊息</a>
                                 <a href="#" class="nav_item_style">合作介紹</a>
                                 <a href="#" class="nav_item_style">經銷通路</a>
                                 <a href="#" class="nav_item_style">會員專區</a>
