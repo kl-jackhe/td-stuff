@@ -1,7 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-//1232131
-
 class Product extends Public_Controller {
 
 	function __construct() {

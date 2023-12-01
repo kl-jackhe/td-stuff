@@ -10,7 +10,7 @@ class Posts extends Public_Controller {
 
 	public function index()
     {
-        $this->data['page_title'] = '最新消息';
+        $this->data['page_title'] = 'test';
 
         $data = array();
         //total rows count
