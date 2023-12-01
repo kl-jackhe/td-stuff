@@ -18,6 +18,9 @@
     <?if ($this->is_liqun_food) {?>
         color: #f6d523;
     <?}?>
+    <?if ($this->is_partnertoys) {?>
+        color: rgba(239,132,104,1.0);
+    <?}?>
 }
 
 #product_index .product_name {
@@ -41,6 +44,10 @@
     <?if ($this->is_liqun_food) {?>
         background-color: #f6d523;
         color: #000 !important;
+    <?}?>
+    <?if ($this->is_partnertoys) {?>
+        background-color: rgba(239,132,104,1.0);
+        color: #fff !important;
     <?}?>
     width: 50%;
     line-height: 1.8;
@@ -66,6 +73,9 @@
     <?}?>
     <?if ($this->is_liqun_food) {?>
         border: 1px solid #f6d523;
+    <?}?>
+    <?if ($this->is_partnertoys) {?>
+        border: 1px solid rgba(239,132,104,1.0);
     <?}?>
     padding: 5px 15px 5px 15px;
     border-radius: 10px;

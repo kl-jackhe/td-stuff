@@ -79,6 +79,10 @@ foreach ($this->cart->contents() as $items) {
             background: #f6d523;
             color: #000;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
+            color: #000;
+        <?}?>
     }
 
     .wizard > .steps .disabled p {
@@ -86,6 +90,10 @@ foreach ($this->cart->contents() as $items) {
             background: #B5ABB6;
         <?}?>
         <?if ($this->is_liqun_food) {?>
+            background: #cfcdcd;
+            color: #807e7e;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
             background: #cfcdcd;
             color: #807e7e;
         <?}?>
@@ -98,6 +106,10 @@ foreach ($this->cart->contents() as $items) {
             background: #f6d523;
             color: #252020;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
+            color: #252020;
+        <?}?>
     }
     .wizard > .steps .done p {
         <?if ($this->is_td_stuff) {?>
@@ -105,6 +117,10 @@ foreach ($this->cart->contents() as $items) {
         <?}?>
         <?if ($this->is_liqun_food) {?>
             background: #f6d523;
+            color: #252020;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);;
             color: #252020;
         <?}?>
     }
@@ -141,6 +157,9 @@ foreach ($this->cart->contents() as $items) {
         <?if ($this->is_liqun_food) {?>
             background-color:#cfcdcd;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background-color:rgba(239,132,104,1.0);
+        <?}?>
         height: 1.5px;
     }
     .progress_box_bar {
@@ -150,6 +169,9 @@ foreach ($this->cart->contents() as $items) {
         <?}?>
         <?if ($this->is_liqun_food) {?>
             background: #f6d523;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
         <?}?>
     }
     @media (max-width: 767.98px) {
@@ -495,9 +517,9 @@ foreach ($this->cart->contents() as $items) {
                                 <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div> -->
-                                <!-- <div class="col-6 my-5">
+                                <div class="col-6 my-5">
                                     <span onclick="form_check()" class="btn btn-primary w-100">下單購買</span>
-                                </div> -->
+                                </div>
                             </div>
                         </div>
                     </section>

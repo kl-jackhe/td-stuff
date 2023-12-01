@@ -26,6 +26,7 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 </head>
 <style>
     body {

@@ -50,6 +50,7 @@
       gtag('config', 'G-9G2CB64XB4');
     </script>
     <?}?>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 </head>
 <style>
     body {
