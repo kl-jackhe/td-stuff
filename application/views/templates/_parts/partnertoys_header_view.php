@@ -235,7 +235,7 @@
                         <a href="#" class="nav_item_style">關於夥伴</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">最新訊息</a>
+                        <a href="/latestNews" class="nav_item_style">最新訊息</a>
                     </li>
                     <li class="nav_item_mb_style">
                         <a href="#" class="nav_item_style">合作介紹</a>
