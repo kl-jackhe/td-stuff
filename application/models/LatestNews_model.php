@@ -19,10 +19,10 @@ class LatestNews_model extends CI_Model
 		}
 	}
 
-	// function get_news_kind_data()
-	// {
-	// 	$this->db->select('*');
-	// 	$query = $this->db->get('news_kind')->result_array();
-	// 	return (!empty($query)) ? $query : false;
-	// }
+	function get_news_kind_data()
+	{
+		$this->db->select('*');
+		$query = $this->db->get('news_kind')->result_array();
+		return (!empty($query)) ? $query : false;
+	}
 }
