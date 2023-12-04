@@ -2,7 +2,7 @@
     #post_rejust {
         padding-top: 25px;
         padding-bottom: 25px;
-        margin-top: 100px;
+        margin-top: 70px;
     }
 
     .section-contents h1 span,
@@ -32,7 +32,6 @@
         color: #e07f55;
         text-decoration: none;
     }
-
 </style>
 
 <div role="main" class="main pt-signinfo">
@@ -40,27 +39,15 @@
         <div class="container" bis_skin_checked="1">
             <div class="crumb" bis_skin_checked="1">
                 <ul class="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-                    <li class="selectWebList" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                        <a href="/" title="首頁" itemprop="item">
-                            <i class="fas fa-h-square"></i><span itemprop="name">首頁</span>
-                        </a>
-                        <meta itemprop="position" content="1">
-                    </li>
-                    <li class="selectWebList" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                        <a href="/Posts" title="最新訊息" itemprop="item">
-                            <span itemprop="name">最新訊息</span>
-                        </a>
-                        <meta itemprop="position" content="2">
-                    </li>
-
-                    <?php foreach($posts_category as $category): ?>
-                    <li class="selectWebList" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                        <a href="/Posts" title="<?php echo $category['post_category_name']?>" itemprop="item">
-                            <span itemprop="name"><?php echo $category['post_category_name']?></span>
-                        </a>
-                        <meta itemprop="position" content="2">
-                    </li>
-                    <?php endforeach;?>
+                    <?php foreach ($posts_category as $category) : ?>
+                        <li class="selectWebList" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                            <a href="/Posts" title="<?php echo $category['post_category_name'] ?>" itemprop="item">
+                                <?php echo (($category['post_category_name'] == "首頁")) ? '<i class="fas fa-h-square"></i>' : '' ?>
+                                <span itemprop="name"><?php echo $category['post_category_name'] ?></span>
+                            </a>
+                            <meta itemprop="position" content="2">
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
         </div>

@@ -4,7 +4,7 @@
         padding: 30px 15px;
         background: #fff;
         border-radius: 15px;
-        margin-bottom: 30px;
+        margin-top: 30px;
         position: relative;
         transition: all .3s ease-in-out;
         -moz-transition: all .3s ease-in-out;
@@ -18,12 +18,18 @@
     }
 
     .font_color {
+        font-size: .9375rem;
+        line-height: 20px;
         color: black;
     }
 
     .font_color:hover {
         color: #e07f55;
         text-decoration: none;
+    }
+
+    #postsDate {
+        margin-bottom: 3px;
     }
 </style>
 
@@ -38,8 +44,8 @@
                     <?php } ?>
                 </div>
                 <div class="col-md-7">
-                    <p style="margin-bottom: 3px;"><?php echo substr($post['created_at'], 0, 10) ?></p>
-                    <h5 class="font-weight-bold"><?php echo $post['post_title'] ?></h5>
+                    <p id="postsDate"><?php echo substr($post['created_at'], 0, 10) ?></p>
+                    <h3 class="font-weight-bold"><?php echo $post['post_title'] ?></h3>
                     <p><?php echo html_excerpt($post['post_content'], 110) ?></p>
                     <p class="text-right">more+</p>
                 </div>
