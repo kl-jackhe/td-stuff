@@ -13,11 +13,11 @@
                         <p style="margin-bottom: 3px;"><?php echo substr($post['created_at'], 0, 10) ?></p>
                         <h5 class="font-weight-bold"><?php echo $post['post_title'] ?></h5>
                         <p><?php echo $post['post_content'] ?></p>
-                        <div>
-                            <a href="<?php echo get_setting_general('line_link') ?>" target="_new">
+                        <!-- <div>
+                            <a href="<?php // echo get_setting_general('line_link') ?>" target="_new">
                                 <i class="fab fa-line" style="font-size: 20px; color: #4CC700"></i>
                             </a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
