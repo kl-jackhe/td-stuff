@@ -2,7 +2,7 @@
 <table class="table table-striped table-bordered table-hover" id="data-table">
     <thead>
         <tr class="info">
-            <th>序號</th>
+            <th>ID</th>
             <th>抽選名稱</th>
             <th>抽選商品</th>
             <th>抽選名額</th>
@@ -10,32 +10,39 @@
             <th>有效期限</th>
             <th>開獎時間</th>
             <th>抽選狀態</th>
-            <th class="nosorting mailbox-controls">編輯 / 刪除</th>
         </tr>
     </thead>
     <?if(!empty($lottery)) {
         foreach($lottery as $data) {?>
             <tr>
                 <td nowrap="nowrap"><?=$data['id']?></td>
-                <td class="remarks"><?=$data["name"]?></td>
-                <td class="remarks"></td>
+                <td class="remarks">
+                    <a href="/admin/lottery/edit/<?=$data['id']?>" style="font-weight: bold;text-decoration:underline;" target="_blank">
+                        <?=$data["name"]?> <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                </td>
+                <td class="remarks">
+                    <a href="/admin/product/edit/<?=$data['product_id']?>" style="font-weight: bold;text-decoration:underline;" target="_blank">
+                        <?=get_product_name($data['product_id'])?> <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                </td>
                 <td nowrap="nowrap"><?=$data["number_limit"]?></td>
                 <td nowrap="nowrap">0</td>
                 <td nowrap="nowrap"><?=$data["star_time"] . ' ~ ' . $data["end_time"]?></td>
                 <td nowrap="nowrap"><?=$data["draw_date"]?></td>
                 <td nowrap="nowrap">
                     <?if ($data["draw_over"] == 1 && $data["lottery_end"] == 0) {
-                            echo "已開獎";
-                        } if ($data["draw_over"] == 1 && $data["lottery_end"] == 1) {
-                            echo "結束";
-                        } if ($data["draw_over"] == 0 && $data["lottery_end"] == 0) {
-                            echo "/";
-                        }?>
+                        echo "已開獎";
+                    } if ($data["draw_over"] == 1 && $data["lottery_end"] == 1) {
+                        echo "結束";
+                    } if ($data["draw_over"] == 0 && $data["lottery_end"] == 0) {
+                        echo "/";
+                    }?>
                 </td>
-                <td>
+                <!-- <td> -->
                     <!-- <button type="button" onClick="location='lottery_table.php?tree=6&act=mdy&id=<?=$data[" id"]?>'" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i></button>
                     <button type="button" onClick="JavaScript:chkdel('lottery_submit.php?act=del&id=<?=$data[" id"]?>')" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></button> -->
-                </td>
+                <!-- </td> -->
             </tr>
         <?}
     } else {?>
@@ -46,7 +53,6 @@
         </tr>
     <?}?>
 </table>
-<?php echo form_close() ?>
 <!-- <script>
 $(document).ready(function() {
   $('#data-table').DataTable( {
