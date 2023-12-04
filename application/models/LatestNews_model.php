@@ -9,8 +9,7 @@ class LatestNews_model extends CI_Model
 	function get_news_data()
 	{
 		$this->db->select('*');
-		$this->db->from('news');
-		$query = $this->db->get();
+		$query = $this->db->get('news');
 
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
@@ -26,3 +25,4 @@ class LatestNews_model extends CI_Model
 		return (!empty($query)) ? $query : false;
 	}
 }
+?>

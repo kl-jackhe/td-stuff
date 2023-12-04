@@ -1,5 +1,4 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 class LatestNews extends Public_Controller
 {
     public function __construct()
@@ -11,18 +10,22 @@ class LatestNews extends Public_Controller
     }
     public function index()
     {
-        $this->data['page_title'] = '最新消息';
+        $data['page_title'] = '最新消息';
 
-        // 獲取 news 的資料
+        // get news data
         $data['news_data'] = $this->latestNews_model->get_news_data();
 
-        // 獲取 news_kind 的資料
+        // get news_kind data
         $data['news_kind_data'] = $this->latestNews_model->get_news_kind_data();
 
-        // return references
-        $this->load->view('latestNews/index', $data);
+        // set session
+        $data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
 
-        // 呼叫框架
-        $this->render('latestNews/index');
+        // transport frame
+        $data['the_view_content'] = $this->load->view('latestNews/index', $data, TRUE);
+
+        // called frame
+        $this->load->view('templates/partnertoys_view', $data);
+
     }
 }

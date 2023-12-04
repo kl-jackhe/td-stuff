@@ -3,6 +3,11 @@
         <div class="container">
             <div class="col-12">
                 <div class="row justify-content-center text-center">
+                    <?php foreach ($news_kind_data as $row) : ?>
+                        <div class="col-lg-4 col-md-3 col-sm-12">
+                            <li><? echo $row['kindname']; ?></li>
+                        </div>
+                    <?php endforeach; ?>
                     <?php foreach ($news_data as $row) : ?>
                         <div class="col-lg-4 col-md-3 col-sm-12">
                             <li><? echo $row['subject']; ?></li>
