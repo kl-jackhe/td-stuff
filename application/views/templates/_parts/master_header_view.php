@@ -51,6 +51,7 @@
     </script>
     <?}?>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
 </head>
 <style>
     body {

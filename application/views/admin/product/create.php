@@ -40,6 +40,12 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label for="product_name">上架日期</label>
+                                    <input type="date" class="form-control" id="product_name" name="product_name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label for="product_name">商品名稱</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" required>
                                     <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">

@@ -43,6 +43,7 @@ class Update extends Admin_Controller {
                             $this->update_202310311530();
                             $this->update_202311081430();
                             $this->update_202311211630();
+                            $this->update_202312051900();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -53,6 +54,29 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312051900() {
+        $version = '202312051900';
+        $description = '[product]新增欄位[distribute_at]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'distribute_at'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `distribute_at` datetime NOT NULL  AFTER `updater_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
