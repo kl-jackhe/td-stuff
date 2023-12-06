@@ -297,7 +297,7 @@
                 categories: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
                 selectedCategoryId: 1, // 目前顯示頁面主題, 1為最新消息
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
-                pageTitle: "最新訊息", // 目前標籤
+                pageTitle: "最新消息", // 目前標籤
                 perpage: 5, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
@@ -372,7 +372,10 @@
                 }
             },
             filterByCategory(categoryId) {
+                console.log('Before:', this.selectedCategoryId);
                 this.selectedCategoryId = categoryId;
+                console.log('After:', this.selectedCategoryId);
+                // this.selectedCategoryId = categoryId;
                 // 檢查過濾後的文章
                 // console.log('Selected Category ID:', categoryId);
                 // console.log('Filtered Posts:', this.filteredPosts);
@@ -407,9 +410,7 @@
             },
             clearSearch() {
                 this.searchText = '';
-                // this.pageTitle = "最新訊息";
-                // this.selectedCategoryId = 1;
-                this.filterByCategory(1); // 在清除搜尋欄後自動執行第一個篩選
+                this.filterByCategory(this.categories[0].post_category_id); // 在清除搜尋欄後自動執行第一個篩選
             },
         },
     });
