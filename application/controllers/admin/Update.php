@@ -44,6 +44,7 @@ class Update extends Admin_Controller {
                             $this->update_202311081430();
                             $this->update_202311211630();
                             $this->update_202312051900();
+                            $this->update_202312062000();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -57,6 +58,28 @@ class Update extends Admin_Controller {
         }
     }
 
+    function update_202312062000() {
+        $version = '202312062000';
+        $description = '[product]新增欄位[discontinued_at]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'discontinued_at'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `discontinued_at` datetime NOT NULL  AFTER `updater_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
     function update_202312051900() {
         $version = '202312051900';
         $description = '[product]新增欄位[distribute_at]';

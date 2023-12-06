@@ -6,7 +6,9 @@
         // 檢查上架時間是否已經到達
         $now = new DateTime();
         $distributeAt = new DateTime($product['distribute_at']);
-        if ($now >= $distributeAt) : ?>
+        $discontinued_at = new DateTime($product['discontinued_at']);
+        $not_discontinue = new DateTime('0000-00-00 00:00:00');
+        if ($now >= $distributeAt && ($now < $discontinued_at || $discontinued_at == $not_discontinue)) : ?>
           <div class="col-md-4 pb-5">
             <a href="/product/view/<?= $product['product_id'] ?>">
               <? if (!empty($product['product_image'])) { ?>

@@ -44,11 +44,23 @@
                                     <input type="datetime-local" class="form-control" id="distribute_at" name="distribute_at" required>
                                 </div>
                             </div>
+                            <!-- <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="discontinued_at">下架日期</label>
+                                    <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" required>
+                                </div>
+                            </div> -->
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_name">商品名稱</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" required>
                                     <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="product_sku">品號</label>
+                                    <input type="text" class="form-control" id="product_sku" name="product_sku" required>
                                 </div>
                             </div>
                             <div class="col-md-3">

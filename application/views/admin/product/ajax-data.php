@@ -15,6 +15,7 @@
       <th class="text-center">可低於庫存下單</th>
       <th class="text-center">上架/下架</th>
       <th class="text-center">上架時間</th>
+      <th class="text-center">下架時間</th>
       <th class="text-center">操作</th>
     </tr>
   </thead>
@@ -53,6 +54,7 @@ if (!empty($product)) {foreach ($product as $data) {?>
         <span><?=($data['product_status'] == 1 ? '上架中' : '已下架')?></span></a>
       </td>
       <td class="text-center"><?php echo $data['distribute_at'] ?></td>
+      <td class="text-center"><?php echo $data['discontinued_at'] ?></td>
       <td class="text-center">
         <a href="/admin/product/edit/<?php echo $data['product_id'] ?>" class="btn btn-primary" target="_blank" >編輯</a>
       </td>

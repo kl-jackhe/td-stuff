@@ -70,11 +70,13 @@ class Product extends Admin_Controller {
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
 			'product_category_id' => $this->input->post('product_category'),
+			'product_sku' => $this->input->post('product_sku'),
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
 			'product_image' => $this->input->post('product_image'),
 			'creator_id' => $this->current_user->id,
 			'distribute_at' => $this->input->post('distribute_at'),
+			// 'discontinued_at' => $this->input->post('discontinued_at'),
 			'created_at' => date('Y-m-d H:i:s'),
 		);
 		$product_id = $this->mysql_model->_insert('product', $data);
@@ -135,6 +137,7 @@ class Product extends Admin_Controller {
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'distribute_at' => $this->input->post('distribute_at'), //tmp
+			'discontinued_at' => $this->input->post('discontinued_at'), //tmp
 			'product_sku' => $this->input->post('product_sku'),
 			'product_price' => $this->input->post('product_price'),
 			'product_add_on_price' => $this->input->post('product_add_on_price'),
