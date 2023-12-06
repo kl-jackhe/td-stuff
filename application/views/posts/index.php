@@ -372,9 +372,10 @@
                 }
             },
             filterByCategory(categoryId) {
-                console.log('Before:', this.selectedCategoryId);
+                // console.log('Before:', this.selectedCategoryId);
                 this.selectedCategoryId = categoryId;
-                console.log('After:', this.selectedCategoryId);
+                this.currentPage = 1; // 將頁碼設置為1
+                // console.log('After:', this.selectedCategoryId);
                 // this.selectedCategoryId = categoryId;
                 // 檢查過濾後的文章
                 // console.log('Selected Category ID:', categoryId);
