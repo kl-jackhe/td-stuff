@@ -55,8 +55,6 @@
     }
 </style>
 
-<script src="https://unpkg.com/vue@next"></script>
-
 <div id="app" role="main" class="main pt-signinfo">
     <section id="post_rejust">
         <div class="searchContainer container">

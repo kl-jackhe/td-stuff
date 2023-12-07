@@ -1,5 +1,3 @@
-<script src="https://unpkg.com/vue@next"></script>
-
 <div id="app" role="main" class="main pt-signinfo">
     <section id="product_rejust product_container">
         <div class="searchContainer container">

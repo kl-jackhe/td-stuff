@@ -1,6 +1,7 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,27 +30,32 @@
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://unpkg.com/vue@next"></script>
 </head>
 <style>
     body {
         font-family: Open Sans, "Microsoft JhengHei";
     }
+
     a {
         outline: none;
         text-decoration: none;
     }
+
     .top_logo_style {
-        max-width: <?=(get_setting_general('logo_max_width') != '' ? get_setting_general('logo_max_width') .'px' : '130px')?>;
+        max-width: <?= (get_setting_general('logo_max_width') != '' ? get_setting_general('logo_max_width') . 'px' : '130px') ?>;
         position: absolute;
         transform: translate(-50%, -50%);
         left: 50%;
         top: 40%;
     }
+
     .header_relative_top {
         background-color: #fff;
         position: relative;
         z-index: 999;
     }
+
     .header_fixed_top {
         background-color: #fff;
         position: fixed;
@@ -58,9 +64,11 @@
         top: 0;
         z-index: 1030;
     }
+
     .header_logo {
         width: 70%;
     }
+
     #navbarToggler {
         position: fixed;
         top: 7%;
@@ -70,6 +78,7 @@
         min-height: 2000px;
         padding: 6% 20px 15px 20px;
     }
+
     .nav_item_style {
         font-weight: bold;
         align-self: center;
@@ -78,71 +87,89 @@
         color: #000;
         padding: 10px;
     }
+
     .nav_item_style:hover {
-        color: rgba(239,132,104,1.0) !important;
+        color: rgba(239, 132, 104, 1.0) !important;
     }
+
     .nav_item_mb_style {
         padding-top: 15px;
         padding-bottom: 15px;
     }
+
     .fixed_icon_style {
         font-size: -webkit-xxx-large;
         max-width: 40px;
     }
+
     .header_fixed_icon {
         left: auto;
         right: 25px;
         bottom: 60px;
     }
+
     #fa-instagram-square a {
         color: #DD2A7B;
     }
+
     #fa-instagram-square a:hover {
         color: #8134AF;
     }
+
     #fa-bag-shopping a {
         color: #ff5a00;
     }
+
     #fa-bag-shopping a:hover {
         color: #ef8468;
     }
+
     .icon_pointer {
         cursor: pointer;
     }
+
     #v-pills-tab-other a {
         color: #fff;
     }
+
     #v-pills-tab-other a:hover {
         color: #888787;
     }
+
     .footer-company-info h2 {
         font-weight: bold;
     }
+
     .footer-company-info a {
         color: #000;
     }
+
     .footer-company-info a:hover {
         color: #d35448;
         text-decoration: underline;
     }
+
     .footer-company-info {
         background-color: #faf5f3;
         padding-bottom: 25px;
-        padding-top:25px;
+        padding-top: 25px;
         box-shadow: 0 5px 30px 5px #E0E0E0;
         font-size: 16px;
     }
+
     .footer-copyright {
         background-color: #d35448;
         padding-bottom: 25px;
-        padding-top:25px;
+        padding-top: 25px;
         box-shadow: 0 5px 30px 5px #E0E0E0;
         color: #fff;
         font-size: 14px;
     }
+
     #footer {
         margin-top: 30px;
     }
+
     #cart-qty {
         color: #BE2633;
         position: absolute;
@@ -154,10 +181,12 @@
         height: 23px;
         text-align: center;
     }
+
     @media (min-width: 768px) and (max-width: 991.98px) {
         .header_logo {
             width: 100%;
         }
+
         .top_logo_style {
             position: relative;
             transform: none;
@@ -165,29 +194,35 @@
             top: 0;
         }
     }
+
     @media (max-width: 767px) {
         .header_logo {
             width: 100%;
         }
+
         .navbar-toggler {
             padding: 0.45rem 0.75rem;
             left: 0px;
             top: 5px;
             position: relative;
         }
+
         .m_padding {
             padding: 0px !important;
         }
+
         .top_logo_style {
             position: relative;
             transform: none;
             left: -35%;
             top: 0;
         }
+
         .m_hr_border {
             padding-right: 15px !important;
             padding-left: 15px !important;
         }
+
         .header_fixed_icon {
             right: 9px;
         }
@@ -208,8 +243,8 @@
                         <div class="row justify-content-end">
                             <div class="col-12 text-right ">
                                 <a href="/product" class="nav_item_style">夥伴商城</a>
-                                <a href="#" class="nav_item_style">關於夥伴</a>
-                                <a href="/Posts" class="nav_item_style">最新訊息</a>
+                                <a href="/about" class="nav_item_style">關於夥伴</a>
+                                <a href="/posts" class="nav_item_style">最新訊息</a>
                                 <a href="#" class="nav_item_style">合作介紹</a>
                                 <a href="#" class="nav_item_style">經銷通路</a>
                                 <a href="#" class="nav_item_style">會員專區</a>
@@ -234,10 +269,10 @@
                         <a href="/product" class="nav_item_style">夥伴商城</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="#" class="nav_item_style">關於夥伴</a>
+                        <a href="/about" class="nav_item_style">關於夥伴</a>
                     </li>
                     <li class="nav_item_mb_style">
-                        <a href="/Posts" class="nav_item_style">最新訊息</a>
+                        <a href="/posts" class="nav_item_style">最新訊息</a>
                     </li>
                     <li class="nav_item_mb_style">
                         <a href="#" class="nav_item_style">合作介紹</a>
