@@ -72,13 +72,13 @@
                                     <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="distribute_at">上架日期</label>
-                                            <input type="datetime-local" class="form-control" id="distribute_at" name="distribute_at" value="<?php echo $product['distribute_at']; ?>" required>
+                                            <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" value="<?php echo $product['distribute_at']; ?>" required>
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="discontinued_at">下架日期</label>
-                                            <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
+                                            <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-12">

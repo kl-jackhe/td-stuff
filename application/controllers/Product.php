@@ -23,7 +23,7 @@ class Product extends Public_Controller {
 		$this->ajax_pagination->initialize($config);
 		//get the posts data
 		$this->data['products'] = $this->product_model->getProducts();
-		$this->data['products_category'] = $this->product_model->get_product_category();
+		$this->data['product_category'] = $this->product_model->get_product_category();
 
 		$this->render('product/index');
 	}

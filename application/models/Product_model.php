@@ -9,6 +9,7 @@ class Product_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('product');
+		$this->db->order_by("distribute_at DESC", "product_id ASC");
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);

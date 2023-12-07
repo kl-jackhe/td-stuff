@@ -1,215 +1,149 @@
-<style>
-    #product_index {
-        font-size: 18px;
-        line-height: 20px;
-        align-items: end;
-    }
-
-    #product_index a {
-        text-decoration: none;
-        color: black;
-        transition: 500ms ease 0s;
-    }
-
-    #product_index a:hover {
-        <? if ($this->is_td_stuff) { ?>color: #68396D;
-        <? } ?><? if ($this->is_liqun_food) { ?>color: #f6d523;
-        <? } ?><? if ($this->is_partnertoys) { ?>color: rgba(239, 132, 104, 1.0);
-        <? } ?>
-    }
-
-    #product_index .product_name {
-        padding-bottom: 10px;
-    }
-
-    #product_index .product_price {
-        line-height: 35px;
-    }
-
-    #zoomA {
-        transition: all .3s ease-in-out;
-        -moz-transition: all .3s ease-in-out;
-        -webkit-transition: all .3s ease-in-out;
-        -o-transition: all .3s ease-in-out;
-    }
-
-    #zoomA:hover {
-        transform: scale(1.05);
-    }
-
-    .select_product {
-        <? if ($this->is_td_stuff) { ?>background-color: #68396D;
-        color: #fff !important;
-        <? } ?><? if ($this->is_liqun_food) { ?>background-color: #f6d523;
-        color: #000 !important;
-        <? } ?><? if ($this->is_partnertoys) { ?>background-color: rgba(239, 132, 104, 1.0);
-        color: #fff !important;
-        <? } ?>width: 50%;
-        line-height: 1.8;
-        padding: 0;
-    }
-
-    .product_img_style {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .product_box {
-        padding: 0px 25px 0px 25px;
-    }
-
-    .page-header {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-
-    .products_category {
-        <? if ($this->is_td_stuff) { ?>border: 1px solid #68396D;
-        <? } ?><? if ($this->is_liqun_food) { ?>border: 1px solid #f6d523;
-        <? } ?><? if ($this->is_partnertoys) { ?>border: 1px solid rgba(239, 132, 104, 1.0);
-        <? } ?>padding: 5px 15px 5px 15px;
-        border-radius: 10px;
-        width: 100%;
-    }
-
-    .m_padding {
-        padding-bottom: 0px !important;
-    }
-
-    @media (max-width: 767px) {
-        .product_box {
-            padding: 0px;
-        }
-
-        .page-header {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
-
-        .products_category {
-            margin: 10px 0px 10px 0px;
-            padding: 6px 2px 6px 2px;
-            font-size: 14px;
-        }
-
-        #product_index {
-            padding: 0px 30px 0px 30px;
-        }
-    }
-</style>
-
 <script src="https://unpkg.com/vue@next"></script>
 
-<div id="app" role="main" class="main">
-    <section class="form-section content_auto_h">
-        <div class="container">
-            <div class="product_breadcrumb">
-                <input type="text" id="product_search" placeholder="搜尋欄" v-model="searchText">
+<div id="app" role="main" class="main pt-signinfo">
+    <section id="product_rejust product_container">
+        <div class="searchContainer container">
+            <div class="left-content">
+                <span id="menu-btn" @click="toggleNav" :class="{ 'active': isBtnActive }"><i class="fa fa-bars" aria-hidden="true"></i></span>
+            </div>
+            <div class="right-content breadcrumb">
+                <input type="text" class="search" placeholder="搜尋欄" v-model="searchText">
                 <span v-if="searchText !== ''" @click="clearSearch" class="clear-search"><i class="fa fa-times" aria-hidden="true"></i></span>
             </div>
-            <div v-if="searchText === ''" class="crumb">
-                <ul class="product_breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList">
-                    <li v-for="category in categories" :key="category.products_category_id">
-                        <input type="button" :value="category.products_category_name" @click="filterByCategory(category.products_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.products_category_id}">
+        </div>
+        <div :class="{ 'section-sidemenu': true, 'nav-open': isNavOpen }">
+            <h1 class=""><span>夥伴商城</span></h1>
+            <!-- menu-main為第一層選單,menu-sub為第二層選單,menu-grand為第三層選單 -->
+            <ul v-if="searchText === ''" class="menu-main">
+                <li v-for="category in products_categories" :key="category.product_category_id">
+                    <input type="button" :value="'>&nbsp;' + category.product_category_name" @click="filterByCategory(category.product_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.product_category_id}">
+                </li>
+            </ul>
+            <ul v-else class="menu-main">
+                <li>
+                    <input type="button" value=">&nbsp;搜尋結果" :class="{ category_btn: true, active: true}">
+                </li>
+            </ul>
+        </div>
+        <div class="section-contents">
+            <div class="container">
+                <h1><span>{{ pageTitle }}</span></h1>
+            </div>
+            <div class="container">
+                <!-- Pagination -->
+                <ul v-if="totalPages !== 0" class="pagination">
+                    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="setPage(1)">
+                        <a class="page_link" href="" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="setPage(currentPage-1)">
+                        <a class="page_link" href="" aria-label="Previous">
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+                    <li v-for="n in limitedPages" :key="n" :class="{'active': (currentPage === n)}" @click.prevent="setPage(n)">
+                        <a class="page_link" href="">{{ n }}</a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': (currentPage === totalPages) || (totalPages === 0)}" @click.prevent="setPage(currentPage+1)">
+                        <a class="page_link" href="" aria-label="Next">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': (currentPage === totalPages) || (totalPages === 0)}" @click.prevent="setPage(totalPages)">
+                        <a class="page_link" href="" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
                     </li>
                 </ul>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row product_box">
-                <div class="col-12">
-                    <div class="row justify-content-center text-center">
-                        <? if (!empty($products_category)) {
-                            foreach ($products_category as $row) { ?>
-                                <div class="col-3 col-md-2">
-                                    <span class="products_category btn" id="<? echo 'products_category_id_' . $row['products_category_id'] ?>" onClick="searchFilter(<? echo $row['products_category_id']; ?>)"><? echo $row['products_category_name']; ?></span>
-                                </div>
-                        <? }
-                        } ?>
-                    </div>
-                    <hr class="py-2" style="border-top: 1px solid #988B7A;">
-                </div>
-                <div id="data" class="col-12">
-                    <div class="col-md-12 text-center">
-                        <div class="row justify-content-center" id="product_index">
-                            <? if (!empty($products)) :
-                                foreach ($products as $product) :
-                                    // 檢查上架時間是否已經到達
-                                    $now = new DateTime();
-                                    $distributeAt = new DateTime($product['distribute_at']);
-                                    $discontinued_at = new DateTime($product['discontinued_at']);
-                                    $not_discontinue = new DateTime('0000-00-00 00:00:00');
-                                    if ($now >= $distributeAt && ($now < $discontinued_at || $discontinued_at == $not_discontinue)) : ?>
-                                        <div class="col-md-4 pb-5">
-                                            <a href="/product/view/<?= $product['product_id'] ?>">
-                                                <? if (!empty($product['product_image'])) { ?>
-                                                    <img id="zoomA" class="img-fluid" src="/assets/uploads/<?= $product['product_image']; ?>">
-                                                <? } else { ?>
-                                                    <img id="zoomA" class="img-fluid" src="/assets/uploads/Product/img-600x600.png">
-                                                <? } ?>
-                                                <div class="product_name">
-                                                    <span><?= $product['product_name']; ?></span>
-                                                </div>
-                                            </a>
-                                            <a href="/product/view/<?= $product['product_id'] ?>">
-                                                <? if ($product['sales_status'] == 0) { ?>
-                                                    <div class="btn select_product">
-                                                        <span>現貨</span>
-                                                    </div>
-                                                <? } ?>
-                                                <? if ($product['sales_status'] == 1) { ?>
-                                                    <div class="btn select_product" style="background: #817F82;">
-                                                        <span>售完</span>
-                                                    </div>
-                                                <? } ?>
-                                                <? if ($product['sales_status'] == 2) { ?>
-                                                    <div class="btn select_product" style="background: #A60747;">
-                                                        <span>預購</span>
-                                                    </div>
-                                                <? } ?>
-                                            </a>
+                <!-- Pagination -->
+
+                <!-- Product Start -->
+                <div class="row">
+                    <div id="data" class="col-12">
+                        <div class="text-center">
+                            <div class="row justify-content-center" id="product_index">
+                                <div v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id" class="product_view_style_out col-lg-4 col-md-6 col-sm-12">
+                                    <a :href="'/product/view/' + self.product_id">
+                                        <div class="product_view_style_in">
+                                            <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
+                                            <div class="product_name">
+                                                <span>{{ self.product_name }}</span>
+                                                <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
+                                                <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
+                                                <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
+                                            </div>
                                         </div>
-                                    <? endif; ?>
-                                <? endforeach; ?>
-                            <? else : ?>
-                                <div class="col-12 text-center" style="height: 500px;">
-                                    <p>搜尋不到對應的商品！</p>
+                                    </a>
                                 </div>
-                            <? endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div v-if="filteredProducts.length === 0" class="col-12 text-center">
+                    <p style="height: 300px;">------目前暫無對應商品------</p>
+                </div>
+                <!-- Product End -->
+
+                <!-- Pagination -->
+                <ul v-if="totalPages !== 0" class="pagination" id="pagination_bottom">
+                    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="setPage(1)">
+                        <a class="page_link" href="" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="setPage(currentPage-1)">
+                        <a class="page_link" href="" aria-label="Previous">
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+                    <li v-for="n in limitedPages" :key="n" :class="{'active': (currentPage === n)}" @click.prevent="setPage(n)">
+                        <a class="page_link" href="">{{ n }}</a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': (currentPage === totalPages) || (totalPages === 0)}" @click.prevent="setPage(currentPage+1)">
+                        <a class="page_link" href="" aria-label="Next">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" :class="{'disabled': (currentPage === totalPages) || (totalPages === 0)}" @click.prevent="setPage(totalPages)">
+                        <a class="page_link" href="" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Pagination -->
             </div>
         </div>
     </section>
 </div>
+
 <script>
     const app = Vue.createApp({
         data() {
             return {
-                categories: <?php echo json_encode($products_category); ?>, // products_category資料庫所有類及項目
-                selectedCategoryId: 1, // 目前顯示頁面主題, 1為最新消息
+                selectedCategoryId: 1, // 目前顯示頁面主題, null為全部顯示
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
-                pageTitle: "最新消息", // 目前標籤
-                perpage: 5, // 一頁的資料數
+                products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
+                pageTitle: '', // 目前標籤
+                perpage: 9, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
+                isNavOpen: false, // nav搜尋標籤初始狀態為關閉
+                isBtnActive: false, // nav-btn active state
             };
         },
         mounted() {
-            // 在 mounted 鉤子中設定 selectedCategoryId 的值
-            if (this.categories.length > 0) {
-                this.selectedCategoryId = this.categories[0].post_category_id;
+            if (this.products_categories.length > 0) {
+                this.selectedCategoryId = this.products_categories[0].product_category_id;
+                this.pageTitle = this.products_categories[0].product_category_name;
             }
+
         },
         computed: {
-            filteredproducts() {
+            filteredProducts() {
                 if (this.searchText.trim() !== '') {
                     this.pageTitle = "搜尋結果"
+                    this.isNavOpen = false;
                     return this.filterproductsBySearch();
                 } else {
                     if (this.pageTitle === "搜尋結果") {
@@ -241,7 +175,7 @@
                 }
             },
             totalPages() {
-                return Math.ceil(this.filteredproducts.length / this.perpage);
+                return Math.ceil(this.filteredProducts.length / this.perpage);
             },
             pageStart() {
                 return (this.currentPage - 1) * this.perpage
@@ -249,15 +183,15 @@
             },
             pageEnd() {
                 const end = this.currentPage * this.perpage;
-                return Math.min(end, this.filteredproducts.length);
+                return Math.min(end, this.filteredProducts.length);
                 //取得該頁最後一個值的index
             }
         },
         methods: {
             filterproductsBySearch() {
-                return this.products.filter(post => {
-                    const titleMatch = post.post_title.toLowerCase().includes(this.searchText.toLowerCase());
-                    const contentMatch = post.post_content.toLowerCase().includes(this.searchText.toLowerCase());
+                return this.products.filter(product => {
+                    const titleMatch = product.product_name.toLowerCase().includes(this.searchText.toLowerCase());
+                    const contentMatch = product.product_description.toLowerCase().includes(this.searchText.toLowerCase());
                     return titleMatch || contentMatch;
                 });
             },
@@ -265,20 +199,14 @@
                 if (this.selectedCategoryId == 1) {
                     return this.products;
                 } else {
-                    return this.products.filter(post => post.post_category === this.selectedCategoryId);
+                    return this.products.filter(product => product.product_category_id === this.selectedCategoryId);
                 }
             },
             filterByCategory(categoryId) {
-                // console.log('Before:', this.selectedCategoryId);
                 this.selectedCategoryId = categoryId;
                 this.currentPage = 1; // 將頁碼設置為1
-                // console.log('After:', this.selectedCategoryId);
-                // this.selectedCategoryId = categoryId;
-                // 檢查過濾後的文章
-                // console.log('Selected Category ID:', categoryId);
-                // console.log('Filtered products:', this.filteredproducts);
-                const selectedCategory = this.categories.find(category => category.post_category_id === categoryId);
-                this.pageTitle = selectedCategory ? selectedCategory.post_category_name : "最新訊息";
+                const selectedCategory = this.products_categories.find(category => category.product_category_id === categoryId);
+                this.pageTitle = selectedCategory.product_category_name;
             },
             customExcerpt(content, maxLength) {
                 // 使用 DOMParser 解析 HTML 字符串
@@ -298,6 +226,7 @@
                 if (page <= 0 || page > this.totalPages || (page === this.totalPages && this.currentPage === this.totalPages)) {
                     return;
                 }
+                this.isNavOpen = false;
                 this.currentPage = page;
 
                 // 將頁面滾動到頂部
@@ -308,7 +237,11 @@
             },
             clearSearch() {
                 this.searchText = '';
-                this.filterByCategory(this.categories[0].post_category_id); // 在清除搜尋欄後自動執行第一個篩選
+                this.filterByCategory(this.products_categories[0].product_category_id); // 在清除搜尋欄後自動執行第一個篩選
+            },
+            toggleNav() {
+                this.isNavOpen = !this.isNavOpen;
+                this.isBtnActive = !this.isBtnActive;
             },
         },
     });

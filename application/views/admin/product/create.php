@@ -41,7 +41,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="distribute_at">上架日期</label>
-                                    <input type="datetime-local" class="form-control" id="distribute_at" name="distribute_at" required>
+                                    <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" required>
                                 </div>
                             </div>
                             <!-- <div class="col-md-3">

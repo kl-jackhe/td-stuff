@@ -1,18 +1,22 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Product extends Admin_Controller {
+class Product extends Admin_Controller
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->model('product_model');
 	}
 
-	public function index() {
+	public function index()
+	{
 		$this->data['page_title'] = '商品管理';
 		$this->render('admin/product/index');
 	}
 
-	function ajaxData() {
+	function ajaxData()
+	{
 		$conditions = array();
 		//calc offset number
 		$page = $this->input->get('page');
@@ -59,13 +63,15 @@ class Product extends Admin_Controller {
 		$this->load->view('admin/product/ajax-data', $this->data);
 	}
 
-	public function create() {
+	public function create()
+	{
 		$this->data['page_title'] = '新增商品';
 		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		$this->render('admin/product/create');
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
@@ -78,6 +84,7 @@ class Product extends Admin_Controller {
 			'distribute_at' => $this->input->post('distribute_at'),
 			// 'discontinued_at' => $this->input->post('discontinued_at'),
 			'created_at' => date('Y-m-d H:i:s'),
+			'updated_at' => date('Y-m-d H:i:s'),
 		);
 		$product_id = $this->mysql_model->_insert('product', $data);
 
@@ -85,7 +92,8 @@ class Product extends Admin_Controller {
 		redirect('admin/product/edit/' . $product_id);
 	}
 
-	public function edit($id) {
+	public function edit($id)
+	{
 		$this->data['page_title'] = '編輯商品';
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $id);
@@ -102,8 +110,9 @@ class Product extends Admin_Controller {
 		$this->render('admin/product/edit');
 	}
 
-	public function update($id) {
-		if ($this->checkSKUIsDuplicated($id,$this->input->post('product_sku')) == 'No') {
+	public function update($id)
+	{
+		if ($this->checkSKUIsDuplicated($id, $this->input->post('product_sku')) == 'No') {
 			$this->session->set_flashdata('message', '品號重複');
 			redirect($_SERVER['HTTP_REFERER']);
 			exit;
@@ -171,12 +180,12 @@ class Product extends Admin_Controller {
 					$unitStr[] = $unit[$i];
 					$unit_data = array('unit' => $unit[$i]);
 					$this->db->select('id');
-					$this->db->where('product_id',$id);
-					$this->db->where('unit',$unit[$i]);
+					$this->db->where('product_id', $id);
+					$this->db->where('unit', $unit[$i]);
 					$this->db->limit(1);
 					$pu_row = $this->db->get('product_unit')->row_array();
 					if (!empty($pu_row)) {
-						$this->db->where('id',$pu_row['id']);
+						$this->db->where('id', $pu_row['id']);
 						$this->db->update('product_unit', $unit_data);
 					} else {
 						$unit_data['product_id'] = $id;
@@ -185,8 +194,8 @@ class Product extends Admin_Controller {
 				}
 			}
 			//刪除不要的單位
-			$this->db->where('product_id',$id);
-			$this->db->where_not_in('unit',$unitStr);
+			$this->db->where('product_id', $id);
+			$this->db->where_not_in('unit', $unitStr);
 			$this->db->delete('product_unit');
 		}
 
@@ -220,12 +229,12 @@ class Product extends Admin_Controller {
 						'limit_qty' => $limit_qty[$i],
 					);
 					$this->db->select('id');
-					$this->db->where('product_id',$id);
-					$this->db->where('specification',$specification[$i]);
+					$this->db->where('product_id', $id);
+					$this->db->where('specification', $specification[$i]);
 					$this->db->limit(1);
 					$ps_row = $this->db->get('product_specification')->row_array();
 					if (!empty($ps_row)) {
-						$this->db->where('id',$ps_row['id']);
+						$this->db->where('id', $ps_row['id']);
 						$this->db->update('product_specification', $specification_data);
 					} else {
 						$specification_data['product_id'] = $id;
@@ -235,8 +244,8 @@ class Product extends Admin_Controller {
 				}
 			}
 			//刪除不要的規格
-			$this->db->where('product_id',$id);
-			$this->db->where_not_in('specification',$specificationStr);
+			$this->db->where('product_id', $id);
+			$this->db->where_not_in('specification', $specificationStr);
 			$this->db->delete('product_specification');
 		}
 
@@ -247,7 +256,7 @@ class Product extends Admin_Controller {
 		$delivery = $this->input->post('delivery');
 		if (count($delivery) > 0) {
 			// 新增配送方式
-			for ($i=0;$i<count($delivery);$i++) {
+			for ($i = 0; $i < count($delivery); $i++) {
 				$insertData = array(
 					'delivery_id' => $delivery[$i],
 					'source' => 'Product',
@@ -261,16 +270,18 @@ class Product extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	function checkSKUIsDuplicated($product_id,$product_sku) {
+	function checkSKUIsDuplicated($product_id, $product_sku)
+	{
 		$this->db->select('product_id');
-		$this->db->where('product_id !=',$product_id);
-		$this->db->where('product_sku',$product_sku);
+		$this->db->where('product_id !=', $product_id);
+		$this->db->where('product_sku', $product_sku);
 		$this->db->limit(1);
 		$row = $this->db->get('product')->row_array();
-		return (!empty($row)? 'No' : 'Yes');
+		return (!empty($row) ? 'No' : 'Yes');
 	}
 
-	public function multiple_action() {
+	public function multiple_action()
+	{
 		if (!empty($this->input->post('product_id'))) {
 			foreach ($this->input->post('product_id') as $product_id) {
 				if ($this->input->post('action') == 'delete') {
@@ -297,13 +308,15 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product');
 	}
 
-	function create_plan($id) {
+	function create_plan($id)
+	{
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
 		$this->load->view('admin/product/create_plan', $this->data);
 	}
 
-	function insert_plan() {
+	function insert_plan()
+	{
 		$data = array(
 			'product_id' => $this->input->post('product_id'),
 			'name' => $this->input->post('product_combine_name'),
@@ -332,7 +345,8 @@ class Product extends Admin_Controller {
 		}
 	}
 
-	function edit_plan($id) {
+	function edit_plan($id)
+	{
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'id', $id, 'row');
 		$product_id = $this->data['product_combine']['product_id'];
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $product_id, 'row');
@@ -343,7 +357,8 @@ class Product extends Admin_Controller {
 		$this->load->view('admin/product/edit_plan', $this->data);
 	}
 
-	function update_plan($id) {
+	function update_plan($id)
+	{
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'id', $id, 'row');
 
 		$update_data = array(
@@ -381,7 +396,15 @@ class Product extends Admin_Controller {
 		$this->session->set_flashdata('message', '商品更新成功！');
 	}
 
-	function delete_plan($id) {
+	public function delete($id)
+	{
+		$this->db->where('product_id', $id);
+		$this->db->delete('product');
+		redirect(base_url() . 'admin/product');
+	}
+
+	function delete_plan($id)
+	{
 		$this->db->where('id', $id);
 		$this->db->delete('product_combine');
 
@@ -392,7 +415,8 @@ class Product extends Admin_Controller {
 	}
 
 	// 商品銷售狀態 ------------------------------------------------------------------------------
-	public function update_sales_status($id) {
+	public function update_sales_status($id)
+	{
 		if (!empty($id)) {
 			$data = array(
 				'sales_status' => $this->input->post('sales_status'),
@@ -404,7 +428,8 @@ class Product extends Admin_Controller {
 	}
 
 	// 商品上下架 --------------------------------------------------------------------------------
-	public function update_product_status($id) {
+	public function update_product_status($id)
+	{
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id);
 		foreach ($this->data['product'] as $row) {
 			if ($row['product_status'] == 1) {
@@ -422,7 +447,8 @@ class Product extends Admin_Controller {
 	}
 
 	// 其他功能 ---------------------------------------------------------------------------------
-	public function get_product_info() {
+	public function get_product_info()
+	{
 		$data = $this->input->post('product_id');
 		$this->db->where('product_id', $data);
 		$this->db->limit(1);
@@ -437,14 +463,16 @@ class Product extends Admin_Controller {
 	}
 
 	// 商品分類 ---------------------------------------------------------------------------------
-	public function category() {
+	public function category()
+	{
 		$this->data['page_title'] = '商品分類';
 		$this->data['category'] = $this->mysql_model->_select('product_category');
 
 		$this->render('admin/product/category/index');
 	}
 
-	public function insert_category() {
+	public function insert_category()
+	{
 		$this->data['page_title'] = '新增商品分類';
 		$product_category_name = $this->input->post('product_category_name');
 		$this->data['product_category'] = $this->mysql_model->_select('product_category', 'product_category_name', $product_category_name);
@@ -461,7 +489,8 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product/category');
 	}
 
-	public function edit_category($id) {
+	public function edit_category($id)
+	{
 		$this->data['page_title'] = '編輯商品分類';
 		$this->data['category'] = $this->mysql_model->_select('product_category', 'product_category_id', $id, 'row');
 
@@ -475,7 +504,8 @@ class Product extends Admin_Controller {
 		$this->render('admin/product/category/edit');
 	}
 
-	public function update_category($id) {
+	public function update_category($id)
+	{
 		$data = array(
 			'product_category_name' => $this->input->post('product_category_name'),
 			'updater_id' => $this->current_user->id,
@@ -491,7 +521,7 @@ class Product extends Admin_Controller {
 		$delivery = $this->input->post('delivery');
 		if (count($delivery) > 0) {
 			// 新增配送方式
-			for ($i=0;$i<count($delivery);$i++) {
+			for ($i = 0; $i < count($delivery); $i++) {
 				$insertData = array(
 					'delivery_id' => $delivery[$i],
 					'source' => 'ProductCategory',
@@ -504,7 +534,8 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product/category');
 	}
 
-	public function delete_category($id) {
+	public function delete_category($id)
+	{
 		$this->db->where('product_category_id', $id);
 		$this->db->delete('product_category');
 
@@ -512,13 +543,15 @@ class Product extends Admin_Controller {
 	}
 
 	// 加購功能 ---------------------------------------------------------------------------------
-	public function add_on_group() {
+	public function add_on_group()
+	{
 		$this->data['page_title'] = '加購項目';
 		$this->data['add_on_group'] = $this->mysql_model->_select('product_add_on_group');
 		$this->render('admin/product/add_on_group/index');
 	}
 
-	public function insert_add_on_group() {
+	public function insert_add_on_group()
+	{
 		$this->data['page_title'] = '新增加購項目';
 		$product_group_name = $this->input->post('product_group_name');
 		$this->data['product_add_on_group'] = $this->mysql_model->_select('product_add_on_group', 'product_group_name', $product_group_name);
@@ -534,7 +567,8 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product/add_on_group');
 	}
 
-	public function edit_add_on_group($id) {
+	public function edit_add_on_group($id)
+	{
 		$this->data['page_title'] = '編輯加購項目';
 		if (!empty($id)) {
 			$this->data['add_on_group'] = $this->mysql_model->_select('product_add_on_group', 'id', $id, 'row');
@@ -542,7 +576,8 @@ class Product extends Admin_Controller {
 		$this->render('admin/product/add_on_group/edit');
 	}
 
-	public function update_add_on_group($id) {
+	public function update_add_on_group($id)
+	{
 		$data = array(
 			'product_group_name' => $this->input->post('product_group_name'),
 			// 'updater_id' => $this->current_user->id,
@@ -554,7 +589,8 @@ class Product extends Admin_Controller {
 		redirect(base_url() . 'admin/product/add_on_group');
 	}
 
-	public function delete_add_on_group($id) {
+	public function delete_add_on_group($id)
+	{
 		$this->db->where('product_group_id', $id);
 		$this->db->delete('product_add_on_group');
 

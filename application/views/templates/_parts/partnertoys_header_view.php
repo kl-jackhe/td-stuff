@@ -19,6 +19,7 @@
     <!-- Web Fonts  -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
     <link href="/assets/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="/assets/css/mostPage.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/fontawesome.css" rel="stylesheet">
     <link href="/assets/fontawesome-free-6.1.1-web/css/brands.css" rel="stylesheet">
