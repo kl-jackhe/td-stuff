@@ -78,7 +78,7 @@
                                     <div class="col-md-3 col-sm-12">
                                         <div class="form-group">
                                             <label for="discontinued_at">下架日期</label>
-                                            <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>" required>
+                                            <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-sm-12">
