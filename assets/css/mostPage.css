@@ -309,7 +309,8 @@ a {
 
 .product_img_style {
     width: 100%;
-    height: 250px;
+    height: auto;
+    display: block;
     /* 或者你希望的高度 */
     /* object-fit: cover; */
     /* 保持長寬比，填滿容器，可能會裁剪部分圖片 */
@@ -433,9 +434,6 @@ a {
 }
 
 @media (max-width: 1401px) {
-    .product_img_style {
-        height: 400px;
-    }
 
     /* 初始時 nav 是關閉的狀態 */
     .section-sidemenu {
@@ -510,6 +508,8 @@ a {
 }
 
 .product_view_style_in {
+    position: relative;
+    overflow: hidden;
     padding-bottom: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #eaeaea;
@@ -598,9 +598,8 @@ a {
 }
 
 .post_img {
-    width: 250px;
-    height: 250px;
-    border-radius: 15px;
+    width: 100%;
+    height: auto;
 }
 
 .font_color {
@@ -615,11 +614,9 @@ a {
 }
 
 .touch_effect {
-    padding: 20px;
     border: 1px solid #eaeaea;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: #fff;
-    border-radius: 15px;
     margin-top: 30px;
     position: relative;
     transition: all .3s ease-in-out;
@@ -635,23 +632,25 @@ a {
 }
 
 .postImg {
-    margin: 10px;
+    /* object-fit: cover; */
+    border: 1px solid #ddd;
     padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .postText {
-    margin: 10px;
-    padding: 15px;
-}
-
-@media (max-width: 768px) {
-    .post_img {
-        height: 100%;
-        width: 100%;
-        border-radius: 15px;
-    }
+    padding: 0 15px 15px 15px;
 }
 
 #view_position {
     margin-top: 100px;
+}
+
+.postTitle {
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

@@ -61,7 +61,7 @@
                     <div id="data" class="col-12">
                         <div class="text-center">
                             <div class="row justify-content-center" id="product_index">
-                                <div v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id" class="product_view_style_out col-lg-4 col-md-6 col-sm-12">
+                                <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
                                     <a :href="'/product/view/' + self.product_id">
                                         <div class="product_view_style_in">
                                             <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">

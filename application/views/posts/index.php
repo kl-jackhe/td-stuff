@@ -57,20 +57,21 @@
                 <!-- Pagination -->
 
                 <!-- Post Start -->
-                <div v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
-                    <a class="font_color" :href="'/posts/view/' + self.post_id">
-                        <div class="row touch_effect">
-                            <div class="postImg col-md-4 text-center">
-                                <img :src="'/assets/uploads/' + self.post_image" class="post_img" :alt="self.post_title">
-                            </div>
-                            <div class="postText col-md-7">
-                                <p id="postsDate" class="text-right">最後更新日期：{{ self.updated_at.substr(0, 10) }}</p>
-                                <h3 class="font-weight-bold">{{ self.post_title }}</h3>
-                                <p>{{ customExcerpt(self.post_content, 110) }}</p>
-                                <p class="text-right">more+</p>
-                            </div>
+                <div class="row">
+                    <div class="col-bg-12 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
+                        <div class="touch_effect">
+                            <a class="font_color" :href="'/posts/view/' + self.post_id">
+                                <div class="postImg text-center">
+                                    <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
+                                </div>
+                                <div class="postText">
+                                    <p class="text-right">{{ self.updated_at.substr(0, 10) }}</p>
+                                    <h3 class="postTitle font-weight-bold">{{ self.post_title }}</h3>
+                                    <p class="text-right" style="color:#e30020; margin:0;">more+</p>
+                                </div>
+                            </a>
                         </div>
-                    </a>
+                    </div>
                 </div>
                 <div v-if="filteredPosts.length === 0" class="col-12 text-center">
                     <p style="height: 300px;">------目前暫無相關消息------</p>
@@ -117,7 +118,7 @@
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
                 posts_categorys: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
-                perpage: 5, // 一頁的資料數
+                perpage: 6, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
