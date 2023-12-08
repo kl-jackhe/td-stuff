@@ -1,21 +1,3 @@
-<style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    #wrapper {
-        min-height: 100%;
-        overflow: hidden;
-    }
-
-    #footer {
-        clear: both;
-    }
-</style>
-
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="fixed-bottom header_fixed_icon">
     <? if ($agentID == '' && get_setting_general('official_facebook_1') != '') { ?>
@@ -64,25 +46,28 @@
         <div class="footer-company-info">
             <div class="container-fluid">
                 <div class="row justify-content-center" style="padding-left: 15px;padding-right: 15px;">
+                    <!-- 最新消息 -->
                     <div class="col-12 col-md-2">
                         <h2>最新消息</h2>
                         <hr>
-                        <p><a href="">測試</a></p>
+                        <p v-for="post in postCategory" @click="filterByFooterCategory(post.post_category_id)">
+                            <a href="/posts">{{ post.post_category_name }}</a>
+                        </p>
                     </div>
+
+                    <!-- 夥伴商城 -->
                     <div class="col-12 col-md-2">
                         <h2>夥伴商城</h2>
                         <hr>
-                        <p><a href="#">現貨商品-周邊</a></p>
-                        <p><a href="#">現貨商品-周邊</a></p>
-                        <p><a href="#">現貨商品-周邊</a></p>
-                        <p><a href="#">現貨商品-周邊</a></p>
-                        <p><a href="#">現貨商品-周邊</a></p>
+                        <p v-for="product in productCategory" @click="filterByFooterCategory(product.product_category_id)">
+                            <a href="/product">{{ product.product_category_name }}</a>
+                        </p>
                     </div>
                     <div class="col-12 col-md-2">
                         <h2>其他連結</h2>
                         <hr>
-                        <p><a href="#">關於夥伴</a></p>
-                        <p><a href="#">產品介紹</a></p>
+                        <p><a href="/about">關於夥伴</a></p>
+                        <p><a href="/product">產品介紹</a></p>
                         <p><a href="#">合作介紹</a></p>
                         <p><a href="#">經銷通路</a></p>
                     </div>
@@ -129,6 +114,26 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
 <script>
+    // const eventBus = Vue.createApp({});
+    // const eventBusInstance = eventBus.mount(document.body);
+
+    const footer = Vue.createApp({
+        data() {
+            return {
+                postCategory: <?php echo json_encode($post_category); ?>,
+                productCategory: <?php echo json_encode($product_category); ?>,
+            };
+        },
+        methods: {
+            filterByFooterCategory(categoryId) {
+                // 發送事件，通知其他組件
+                // eventBus.emit('category-selected', categoryId);
+            },
+        },
+    });
+    // 掛載 footer Vue 應用到 #footer 元素
+    footer.mount('#footer');
+
     $(document).ready(function() {
         $('#home-carousel').carousel({
             interval: 5000

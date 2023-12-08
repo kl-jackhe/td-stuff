@@ -1,8 +1,3 @@
-<style>
-    #view_position {
-        margin-top: 100px;
-    }
-</style>
 <div role="main" class="main pt-signinfo">
     <section>
         <div class="container" style="padding-top: 25px; padding-bottom: 25px;">

@@ -11,6 +11,8 @@ class MY_Controller extends CI_Controller
 		$this->load->helper('general');
 		$this->load->helper('product');
 		$this->load->model('mysql_model');
+		$this->load->model('posts_model');
+		$this->load->model('product_model');
 		$this->data['page_title'] = get_setting_general('name');
 
 		$this->is_liqun_food = (strpos(base_url(), 'liqun-food') !== false ? true : false);
@@ -21,6 +23,8 @@ class MY_Controller extends CI_Controller
 	protected function render($the_view = NULL, $template = 'master')
 	{
 		$this->data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
+		$this->data['post_category'] = $this->posts_model->getPostCategoryId();
+		$this->data['product_category'] = $this->product_model->get_product_category();
 		if ($template == 'json' || $this->input->is_ajax_request()) {
 			header('Content-Type: application/json');
 			echo json_encode($this->data);

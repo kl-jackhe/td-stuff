@@ -1,61 +1,4 @@
-<style>
-    .post_img {
-        width: 250px;
-        height: 250px;
-        border-radius: 15px;
-    }
-
-    .font_color {
-        font-size: .9375rem;
-        line-height: 20px;
-        color: black;
-    }
-
-    .font_color:hover {
-        color: #e07f55;
-        text-decoration: none;
-    }
-
-    .touch_effect {
-        padding: 20px;
-        border: 1px solid #eaeaea;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        background: #fff;
-        border-radius: 15px;
-        margin-top: 30px;
-        position: relative;
-        transition: all .3s ease-in-out;
-        -moz-transition: all .3s ease-in-out;
-        -webkit-transition: all .3s ease-in-out;
-        -o-transition: all .3s ease-in-out;
-    }
-
-    .touch_effect:hover {
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
-        box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35)
-    }
-
-    .postImg {
-        margin: 10px;
-        padding: 5px;
-    }
-
-    .postText {
-        margin: 10px;
-        padding: 15px;
-    }
-
-    @media (max-width: 768px) {
-        .post_img {
-            height: 100%;
-            width: 100%;
-            border-radius: 15px;
-        }
-    }
-</style>
-
-<div id="app" role="main" class="main pt-signinfo">
+<div id="postApp" role="main" class="main pt-signinfo">
     <section id="post_rejust">
         <div class="searchContainer container">
             <div class="left-content">
@@ -167,7 +110,7 @@
 </div>
 
 <script>
-    const app = Vue.createApp({
+    const postApp = Vue.createApp({
         data() {
             return {
                 selectedCategoryId: 1, // 目前顯示頁面主題, 1為最新消息
@@ -179,6 +122,7 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                sharedData: null, // 測試footer&header篩選
             };
         },
         mounted() {
@@ -188,6 +132,12 @@
                 this.pageTitle = this.posts_categorys[0].post_category_name;
             }
         },
+        // created() {
+        //     eventBus.on('category-selected', (categoryId) => {
+        //         // 在這裡執行相應的操作，比如更新你的數據或觸發其他方法
+        //         console.log('Selected Category ID:', categoryId);
+        //     });
+        // },
         computed: {
             filteredPosts() {
                 if (this.searchText.trim() !== '') {
@@ -300,5 +250,5 @@
             },
         },
     });
-    app.mount('#app');
+    postApp.mount('#postApp');
 </script>

@@ -1,5 +1,5 @@
-<div id="app" role="main" class="main pt-signinfo">
-    <section id="product_rejust product_container">
+<div id="productApp" role="main" class="main pt-signinfo">
+    <section id="product_rejust">
         <div class="searchContainer container">
             <div class="left-content">
                 <span id="menu-btn" @click="toggleNav" :class="{ 'active': isBtnActive }"><i class="fa fa-bars" aria-hidden="true"></i></span>
@@ -116,7 +116,7 @@
 </div>
 
 <script>
-    const app = Vue.createApp({
+    const productApp = Vue.createApp({
         data() {
             return {
                 selectedCategoryId: 1, // 目前顯示頁面主題, null為全部顯示
@@ -243,5 +243,5 @@
             },
         },
     });
-    app.mount('#app');
+    productApp.mount('#productApp');
 </script>

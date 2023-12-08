@@ -26,7 +26,6 @@ class Posts extends Public_Controller
         //get the posts data
         $this->data['posts'] = $this->posts_model->getPosts(array('limit' => 5));
         $this->data['posts_category'] = $this->posts_model->getPostCategoryId();
-
         $this->render('posts/index');
     }
 
@@ -68,8 +67,8 @@ class Posts extends Public_Controller
     public function view($id)
     {
         if ($id == 0) {
-			redirect(base_url() . 'posts');
-		}
+            redirect(base_url() . 'posts');
+        }
         $this->data['post'] = $this->mysql_model->_select('posts', 'post_id', $id, 'row');
         $this->render('posts/view');
     }
