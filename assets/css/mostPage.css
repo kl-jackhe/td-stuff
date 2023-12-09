@@ -225,7 +225,6 @@ a {
 
 .breadcrumb .search {
     color: rgba(211, 84, 72, 0.5);
-    margin: 90px 0px 0px 0px;
     width: 100%;
     height: 40px;
     padding-left: 20px;
@@ -251,18 +250,17 @@ a {
 #product_rejust {
     padding-top: 25px;
     padding-bottom: 25px;
-    margin-top: 0px;
+    margin-top: 90px;
 }
 
 #post_rejust {
     padding-top: 25px;
     padding-bottom: 25px;
-    margin-top: 0px;
+    margin-top: 90px;
 }
 
 .clear-search {
     position: absolute;
-    margin: 90px 0px 0px 0px;
     right: 35px;
     top: 20px;
     cursor: pointer;
@@ -270,6 +268,8 @@ a {
 }
 
 .clear-search:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     color: rgba(211, 84, 72, 1);
 }
 
@@ -287,6 +287,8 @@ a {
 }
 
 #product_index a:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     text-decoration: none;
     color: #e30020;
 }
@@ -356,6 +358,8 @@ a {
 }
 
 .page_link:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     z-index: 2;
     color: #fff;
     text-decoration: none;
@@ -481,6 +485,8 @@ a {
 
     #menu-btn:hover,
     #menu-btn.active {
+        cursor: pointer;
+        /* 懸停時顯示手型游標 */
         background-color: #d35448;
     }
 
@@ -492,7 +498,7 @@ a {
     }
 
     .left-content {
-        margin: 93px 20px 20px 20px;
+        margin: 3px 20px 20px 20px;
     }
 
     .right-content {
@@ -520,6 +526,8 @@ a {
 }
 
 .product_view_style_in:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     transform: scale(1.05);
     -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
     box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
@@ -545,6 +553,8 @@ a {
 .category_btn.active,
 .category_btn:hover,
 .category_btn:checked {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     background-color: #d35448;
     box-shadow: rgba(211, 84, 72, 0.5) 0px 3px 8px;
     color: #fff;
@@ -609,6 +619,8 @@ a {
 }
 
 .font_color:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     color: #e07f55;
     text-decoration: none;
 }
@@ -626,6 +638,8 @@ a {
 }
 
 .touch_effect:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
     transform: scale(1.05);
     -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
     box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35)
@@ -653,4 +667,303 @@ a {
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.product_description img {
+    width: 100%;
+    max-width: 900px;
+    height: 100%;
+}
+
+.qty {
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+
+input.qtyplus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+}
+
+input.qtyminus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+}
+
+.button_border_style_l {
+    border: 1px solid #B5ACA5;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
+    color: #524535;
+    background: #fff;
+}
+
+.button_border_style_r {
+    border: 1px solid #B5ACA5;
+    padding: 0px 5px 0px 5px;
+    border-radius: 0px 5px 5px 0px;
+    color: #C52B29;
+    background: #fff;
+}
+
+.input_border_style {
+    background-color: #fff !important;
+    border-top: 1px solid #B5ACA5;
+    border-bottom: 1px solid #B5ACA5;
+    padding: 0px;
+    height: 26px;
+    text-align: center;
+}
+
+#zoomA {
+    transition: transform ease-in-out 0s;
+}
+
+#zoomA:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    transform: scale(1.05);
+}
+
+.product_view_img_style {
+    border-radius: 15px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+}
+
+.productDetail {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+#productApp {
+    position: relative;
+}
+
+.productDetailStyle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    z-index: 1031;
+    background-color: #fff;
+    border: 1px solid rgba(84, 110, 122, .35);
+    margin: 20px;
+}
+
+.returnBtn {
+    z-index: 1042;
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    border-radius: 5px;
+    text-align: center;
+    width: 35px;
+    padding: 5px 10px 5px 10px;
+    color: #007bff8a;
+    background-color: #ffffff8a;
+    border: 1px solid #007bff8a;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.returnBtn:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    color: #fff;
+    background-color: #007bff;
+}
+
+.productDetailTitle {
+    text-align: center;
+    color: #000000;
+    height: 80px;
+    line-height: 70px;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(to right, #c3def5 0%, #000000 50%, #c3def5 100%);
+    border-image-slice: 1;
+    padding: 0;
+    margin: 40px 20px 0 35px;
+}
+
+.scrollToProductDetailTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    margin: 20px;
+    padding: 10px 14px;
+    color: #007bff8a;
+    background-color: #ffffff8a;
+    border: 1px solid #007bff8a;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    /* Initial opacity */
+}
+
+.scrollToProductDetailTop:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    color: #fff;
+    background-color: #007bff;
+}
+
+.cargoBtn {
+    margin: 10px 0 10px 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.cargoText {
+    margin: 10px 0 10px 0;
+    padding: 10px;
+}
+
+.cargoCountBtn {
+    cursor: pointer;
+    padding: 5px;
+    color: #007bff7f;
+    background-color: #fff;
+    border: 1px solid #007bff7f;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.cargoCountBtn:hover {
+    color: #fff;
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    text-decoration: none;
+    background-color: #007bff7f;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.cargoCountText {
+    width: 100%;
+    display: inline-block;
+    /* 設定為行內塊狀元素，使其寬度生效 */
+    padding: 5px;
+    color: #007bff7f;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid #007bff7f;
+    border-right: 0px;
+    border-left: 0px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.cargoCountText:focus {
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.cartBtn {
+    background-color: #ffbd2f;
+    border: 1px solid #ffbd2f;
+}
+
+.cartBtn:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    background-color: #ffae00;
+    box-shadow: 0 0 20px #eba10071;
+}
+
+.buyBtn {
+    background-color: #337ab7;
+    border: 1px solid #337ab7;
+}
+
+.buyBtn:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    background-color: #0088ff;
+    box-shadow: 0 0 20px rgba(9, 128, 213, 0.503)
+}
+
+.likeBtn {
+    background-color: #f53651;
+    border: 1px solid #f53651;
+}
+
+.likeBtn:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    background-color: #ff0022;
+    box-shadow: 0 0 20px rgba(213, 9, 9, 0.503)
+}
+
+.explainBtn {
+    background-color: #3d3d3d;
+    border: 1px solid #3d3d3d;
+}
+
+.explainBtn:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    background-color: #1a1a1a;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.503)
+}
+
+.cargoClick {
+    width: 100%;
+    padding: 5px 50px;
+    border-radius: 5px;
+    color: #fff;
+    border: 1px solid;
+    display: inline-block;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+
+}
+
+.cargoDescription{
+    margin: 80px 20px;
+}
+
+/* 修改滾動條 */
+::-webkit-scrollbar {
+    width: 8px;
+    /* 設置滾動條寬度 */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    /* 設置滾動條軌道的背景顏色 */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* 設置滾動條手柄的顏色 */
+    border-radius: 4px;
+    /* 設置圓角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* 滑鼠懸停時的顏色 */
 }

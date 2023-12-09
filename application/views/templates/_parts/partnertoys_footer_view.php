@@ -114,21 +114,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
 <script>
-    // const eventBus = Vue.createApp({});
-    // const eventBusInstance = eventBus.mount(document.body);
-
     const footer = Vue.createApp({
         data() {
             return {
                 postCategory: <?php echo json_encode($post_category); ?>,
                 productCategory: <?php echo json_encode($product_category); ?>,
             };
-        },
-        methods: {
-            filterByFooterCategory(categoryId) {
-                // 發送事件，通知其他組件
-                // eventBus.emit('category-selected', categoryId);
-            },
         },
     });
     // 掛載 footer Vue 應用到 #footer 元素
