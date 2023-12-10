@@ -153,7 +153,8 @@ class Update extends Admin_Controller {
                   `blacklist` int(8) NOT NULL,
                   `abandon` int(8) NOT NULL,
                   `order_state` varchar(255) NOT NULL,
-                  `order_odno` varchar(18) NOT NULL,
+                  `order_id` int(11) NOT NULL,
+                  `order_number` varchar(15) NOT NULL,
                   `msg_mail` varchar(255) NOT NULL,
                   `msg` varchar(255) NOT NULL,
                   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -162,6 +163,7 @@ class Update extends Admin_Controller {
                 $this->db->query("ALTER TABLE `lottery_pool` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
                 $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`lottery_id`);");
                 $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`users_id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`order_id`);");
             }
 
             $insertData = array(
