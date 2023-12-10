@@ -770,6 +770,25 @@ input.qtyminus {
     }
 }
 
+.postDetailStyle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 1031;
+    background-color: #fff;
+    border: 1px solid rgba(84, 110, 122, .35);
+    margin: 5% 15%;
+}
+
+@media (max-width:767px){
+    .postDetailStyle {
+        margin: 0;
+    }
+}
+
 .returnBtn {
     z-index: 1032;
     position: fixed;
@@ -882,6 +901,8 @@ input.qtyminus {
 }
 
 .cargoCountText:focus {
+    outline: none;
+    border: 1px solid #007bff7f;
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 

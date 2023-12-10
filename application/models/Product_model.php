@@ -94,6 +94,26 @@ class Product_model extends CI_Model {
 		}
 	}
 
+	function getProductCombine() {
+		$this->db->select('*');
+		$query = $this->db->get('product_combine');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
+	function getProductCombineItem() {
+		$this->db->select('*');
+		$query = $this->db->get('product_combine_item');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
 	function get_product_category_name($id) {
 		$this->db->select('product_category_name');
 		$this->db->limit(1);

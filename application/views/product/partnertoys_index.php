@@ -1,77 +1,44 @@
 <div id="productApp" role="main" class="main pt-signinfo">
     <section id="product_rejust">
-        <div>
-            <div class="searchContainer container">
-                <!-- 篩選清單呼叫鈕 -->
-                <div class="left-content">
-                    <span v-if="!isNavOpen" id="menu-btn" @click="toggleNav">
-                        <i class="fa fa-bars" aria-hidden="true"></i>
-                    </span>
-                    <span v-else id="menu-btn" :class="{ 'active': isBtnActive }" @click="toggleNav">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <!-- 篩選清單呼叫鈕 -->
+        <!-- Menu -->
+        <?php require('product-menu.php'); ?>
 
-                <!-- 搜尋攔 -->
-                <div class="right-content breadcrumb">
-                    <input type="text" class="search" placeholder="搜尋欄" v-model="searchText">
-                    <span v-if="searchText !== ''" @click="clearSearch" class="clear-search"><i class="fa fa-times" aria-hidden="true"></i></span>
-                </div>
-                <!-- 搜尋攔 -->
+        <div class="section-contents">
+            <div class="container">
+                <h1><span>{{ pageTitle }}</span></h1>
             </div>
-            <div :class="{ 'section-sidemenu': true, 'nav-open': isNavOpen }">
-                <h1 class=""><span>夥伴商城</span></h1>
-                <!-- 篩選清單 -->
-                <ul v-if="searchText === ''" class="menu-main">
-                    <li v-for="category in products_categories" :key="category.product_category_id">
-                        <input type="button" :value="'>&nbsp;' + category.product_category_name" @click="filterByCategory(category.product_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.product_category_id}">
-                    </li>
-                </ul>
-                <ul v-else class="menu-main">
-                    <li>
-                        <input type="button" value=">&nbsp;搜尋結果" :class="{ category_btn: true, active: true}">
-                    </li>
-                </ul>
-                <!-- 篩選清單 -->
-            </div>
-            <div class="section-contents">
-                <div class="container">
-                    <h1><span>{{ pageTitle }}</span></h1>
-                </div>
 
-                <!-- 全部商品 -->
-                <div class="container">
-                    <!-- Product Start -->
-                    <div class="row">
-                        <div id="data" class="col-12">
-                            <div class="text-center">
-                                <div class="row" id="product_index">
-                                    <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
-                                        <a class="productMagnificPopupTrigger" @click="showProductDetails(self)">
-                                            <div class="product_view_style_in">
-                                                <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
-                                                <div class="product_name">
-                                                    <span>{{ self.product_name }}</span>
-                                                    <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
-                                                </div>
+            <!-- 全部商品 -->
+            <div class="container">
+                <!-- Product Start -->
+                <div class="row">
+                    <div id="data" class="col-12">
+                        <div class="text-center">
+                            <div class="row" id="product_index">
+                                <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
+                                    <a class="productMagnificPopupTrigger" @click="showProductDetails(self)">
+                                        <div class="product_view_style_in">
+                                            <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
+                                            <div class="product_name">
+                                                <span>{{ self.product_name }}</span>
+                                                <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
+                                                <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
+                                                <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div v-if="filteredProducts.length === 0" class="col-12 text-center">
-                        <p style="height: 300px;">------目前暫無對應商品------</p>
-                    </div>
-                    <!-- Product End -->
-
-                    <!-- Pagination -->
-                    <?php require('ajax-data.php'); ?>
                 </div>
+                <div v-if="filteredProducts.length === 0" class="col-12 text-center">
+                    <p style="height: 300px;">------目前暫無對應商品------</p>
+                </div>
+                <!-- Product End -->
+
+                <!-- Pagination -->
+                <?php require('pagination.php'); ?>
             </div>
         </div>
         <!-- 商品詳情 -->
@@ -94,8 +61,12 @@
                         <!--價格-->
                         <div class="cargoText col-bg-12 col-md-12 col-lg-12">
                             <!--一律顯示原售價-->
+                            <div :v-if="selectedCombine !== {} && selectedCombine.price !== selectedCombine.current_price && selectedCombine.price !== 0" class="clearfix">
+                                <div class="item">方案價</div>
+                                <div class="info">$ {{ selectedCombine?.current_price }}</div>
+                            </div>
                             <div class="clearfix">
-                                <div class="item">售價</div>
+                                <div class="item">原價</div>
                                 <div class="info">$ {{ selectedProduct.product_price }}</div>
                             </div>
                         </div>
@@ -134,8 +105,8 @@
                 </div>
                 <!-- Cargo description -->
                 <div class="col-12 cargoDescription">
-                        <div v-html="selectedProduct.product_description"></div>
-                    </div>
+                    <div v-html="selectedProduct.product_description"></div>
+                </div>
                 <!-- Add a button for scrolling to the top -->
                 <span @click="scrollToProductDetailTop" class="scrollToProductDetailTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
             </div>
@@ -150,7 +121,11 @@
         data() {
             return {
                 selectedProduct: null, // 選中的商品
+                selectedCombine: null, // 選中的商品
+                selectedCombineItem: null, // 選中的商品
                 selectedCategoryId: 1, // 目前顯示頁面主題, null為全部顯示
+                combine: <?php echo json_encode($product_combine); ?>, // 取得指定商品之combine物件
+                combine_item: <?php echo json_encode($product_combine_item); ?>, // 取得指定商品之combine_item物件
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
                 products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
@@ -159,12 +134,20 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
-                showProductDetailsBox: false, // 商品詳情BOX
-                isScrollAtTop: true, // Flag to determine if scroll is at the top
                 quantity: 1, // 商品選擇數量
             };
         },
+        watch: {
+            // Watch for changes in filteredProducts and update Magnific Popup
+            filteredProducts: function() {
+                this.$nextTick(function() {
+                    this.initMagnificPopup();
+                });
+            },
+        },
         mounted() {
+            // Initialize Magnific Popup on mount
+            this.initMagnificPopup();
             // init btn state
             if (this.products_categories.length > 0) {
                 this.selectedCategoryId = this.products_categories[0].product_category_id;
@@ -232,9 +215,29 @@
             },
         },
         methods: {
+            // Initialize Magnific Popup
+            initMagnificPopup() {
+                $('.productMagnificPopupTrigger').magnificPopup({
+                    type: 'inline',
+                    midClick: true,
+                    items: {
+                        src: '#productDetailStyle',
+                        type: 'inline',
+                    },
+                    mainClass: 'mfp-zoom-in',
+                });
+            },
             // 選中獨立商品
-            showProductDetails(product) {
-                this.selectedProduct = product;
+            showProductDetails(selected) {
+                this.selectedProduct = selected;
+
+                // 查找combine中的對應物件
+                this.selectedCombine = this.combine.find(item => item.product_id === selected.product_id) || {};
+
+                // 查找combine_item中的對應物件
+                this.selectedCombineItem = this.combine_item.find(item => item.product_id === selected.product_id) || {};
+
+                console.log(this.selectedCombine, this.selectedCombineItem);
             },
             // 商品數量選擇
             increment() {
