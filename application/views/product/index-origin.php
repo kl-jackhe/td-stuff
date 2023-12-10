@@ -48,7 +48,7 @@
                             <div class="text-center">
                                 <div class="row" id="product_index">
                                     <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
-                                        <a class="productMagnificPopupTrigger" @click="showProductDetails(self)">
+                                        <a @click="showProductDetails(self)">
                                             <div class="product_view_style_in">
                                                 <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
                                                 <div class="product_name">
@@ -75,11 +75,11 @@
             </div>
         </div>
         <!-- 商品詳情 -->
-        <div ref="productDetail" id="productDetailStyle" class="productDetailStyle" v-if="selectedProduct">
+        <div ref="productDetail" v-if="selectedProduct" class="productDetailStyle">
             <!-- 關閉商品詳情 -->
-            <!-- <span class="returnBtn" @click="hideProductDetails">
+            <span class="returnBtn" @click="hideProductDetails">
                 <i class="fa fa-times" aria-hidden="true"></i>
-            </span> -->
+            </span>
             <div class="productDetailTitle">
                 <h1>商品詳情</h1>
             </div>
@@ -134,8 +134,8 @@
                 </div>
                 <!-- Cargo description -->
                 <div class="col-12 cargoDescription">
-                        <div v-html="selectedProduct.product_description"></div>
-                    </div>
+                    <div v-html="selectedProduct.product_description"></div>
+                </div>
                 <!-- Add a button for scrolling to the top -->
                 <span @click="scrollToProductDetailTop" class="scrollToProductDetailTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
             </div>
@@ -165,21 +165,11 @@
             };
         },
         mounted() {
-            // init btn state
             if (this.products_categories.length > 0) {
                 this.selectedCategoryId = this.products_categories[0].product_category_id;
                 this.pageTitle = this.products_categories[0].product_category_name;
             }
-            // 商品詳細資訊
-            $('.productMagnificPopupTrigger').magnificPopup({
-                type: 'inline',
-                midClick: true, // Allow opening popup on middle mouse click
-                items: {
-                    src: '#productDetailStyle', // ID of the popup content
-                    type: 'inline'
-                },
-                mainClass: 'mfp-zoom-in', // Add a zoom-in effect if you like
-            });
+            // Add a scroll event listener to check scroll position
         },
         computed: {
             // 篩選&搜尋
@@ -235,6 +225,11 @@
             // 選中獨立商品
             showProductDetails(product) {
                 this.selectedProduct = product;
+                this.isDetailContentVisible = true; // 詳細內容視窗可見
+            },
+            hideProductDetails() {
+                this.selectedProduct = null;
+                this.isDetailContentVisible = false; // 詳細內容視窗不可見
             },
             // 商品數量選擇
             increment() {

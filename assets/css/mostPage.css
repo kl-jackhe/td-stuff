@@ -199,6 +199,8 @@ a {
     .header_fixed_icon {
         right: 9px;
     }
+
+
 }
 
 .active {
@@ -756,15 +758,20 @@ input.qtyminus {
     right: 0;
     bottom: 0;
     overflow-y: auto;
-    /* Enable vertical scrolling */
     z-index: 1031;
     background-color: #fff;
     border: 1px solid rgba(84, 110, 122, .35);
     margin: 20px;
 }
 
+@media (max-width:767px){
+    .productDetailStyle {
+        margin: 0;
+    }
+}
+
 .returnBtn {
-    z-index: 1042;
+    z-index: 1032;
     position: fixed;
     top: 50px;
     left: 50px;
@@ -784,7 +791,6 @@ input.qtyminus {
 
 .returnBtn:hover {
     cursor: pointer;
-    /* 懸停時顯示手型游標 */
     color: #fff;
     background-color: #007bff;
 }
@@ -941,8 +947,16 @@ input.qtyminus {
 
 }
 
-.cargoDescription{
+.cargoDescription {
     margin: 80px 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.cargoDescription img {
+    height: auto;
+    width: 100%;
 }
 
 /* 修改滾動條 */
