@@ -120,12 +120,9 @@ class Product_model extends CI_Model {
 	function getSingleProduct($id) {
 		$this->db->select('*');
 		$this->db->where('product_id', $id);
-		$query = $this->db->get('product');
-		if ($query->num_rows() > 0) {
-			return $query->row_array();
-		} else {
-			return false;
-		}
+		$this->db->limit(1);
+		$row = $this->db->get('product')->row_array();
+		return (!empty($row)?$row:false);
 	}
 
 	function getProduct_Specification($id) {

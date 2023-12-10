@@ -50,6 +50,7 @@
                                     <span class="input-group-addon">商品網址</span>
                                     <span class="input-group-addon" style="cursor: pointer;color: green;" onclick="copy_product_front_link()"><i class="fa-solid fa-copy"></i></span>
                                     <input type="text" class="form-control" id="product_front_link" value="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>" disabled>
+                                    <span class="input-group-addon"><a href="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>">瀏覽頁面</a></span>
                                 </div>
                                <!--  <span class="btn btn-success" onclick="copy_product_front_link()">複製網址 <i class="fa-solid fa-copy"></i></span>
                                 <a href="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>"><?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?></a> -->
@@ -147,7 +148,7 @@
 </div>
 <div class="row">
     <div class="col-md-12" style="overflow-x: auto;">
-        <table id="example1" class="table table-bordered table-striped table-hover table-responsive">
+        <table id="data-table" class="table table-bordered table-striped table-hover table-responsive">
             <thead>
                 <tr class="info">
                     <th>序號</th>
@@ -178,7 +179,6 @@
                         $member_id = $lp_row['member_id'];
                         $send_mail = $lp_row['send_mail'];
                         $order_state = $lp_row['order_state'];
-
                         $this->db->select('*');
                         $this->db->where('id', $member_id);
                         $this->db->limit(1);
@@ -314,5 +314,34 @@ function copy_product_front_link() {
     } catch (err) {
         console.error('資料錯誤：', err);
     }
-}  
+}
+$(document).ready(function() {
+  $('#data-table').DataTable( {
+    "order": [[ 0, "desc" ]],
+    stateSave: true,
+    "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
+    "language": {
+      "processing":   "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu":   "顯示 _MENU_ 項結果",
+      "zeroRecords":  "沒有符合的結果",
+      "emptyTable":   "沒有資料",
+      "info":         "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+      "infoEmpty":    "顯示第 0 至 0 項結果，共 0 項",
+      "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+      "infoPostFix":  "",
+      "search":       "搜尋:",
+      "paginate": {
+          "first":    "第一頁",
+          "previous": "上一頁",
+          "next":     "下一頁",
+          "last":     "最後一頁"
+      },
+      "aria": {
+          "sortAscending":  ": 升冪排列",
+          "sortDescending": ": 降冪排列"
+      }
+    }
+  });
+});
 </script>
