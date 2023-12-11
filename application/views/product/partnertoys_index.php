@@ -61,7 +61,7 @@
                         <!--價格-->
                         <div class="cargoText col-bg-12 col-md-12 col-lg-12">
                             <!--一律顯示原售價-->
-                            <div :v-if="selectedCombine !== {} && selectedCombine.price !== selectedCombine.current_price && selectedCombine.price !== 0" class="clearfix">
+                            <div v-if="selectedCombine && (selectedCombine.price !== selectedCombine.current_price)" class="clearfix">
                                 <div class="item">方案價</div>
                                 <div class="info">$ {{ selectedCombine?.current_price }}</div>
                             </div>
