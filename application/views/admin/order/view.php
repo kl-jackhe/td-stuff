@@ -72,25 +72,16 @@
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12">
-                    <div class="input-group" style="width: 70%;">
-                        <span class="input-group-btn">
-                            <?php $attributes = array('class' => 'form-inline');?>
-                            <?php echo form_open('admin/order/update_step/' . $order['order_id'], $attributes); ?>
-                            <?$att = 'class="form-control dropdown-toggle"';
-                              $options = array(
-                              'confirm' => '訂單確認',
-                              'pay_ok' => '已收款',
-                              'process' => '待出貨',
-                              'shipping' => '已出貨',
-                              'complete' => '完成',
-                              'order_cancel' => '訂單取消',
-                              'invalid' => '訂單不成立',
-                            );
-                            echo form_dropdown('order_step', $options, $order['order_step'], $att);?>
-                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
-                            <?php echo form_close() ?>
-                        </span>
-                    </div>
+                    <select id="order_step_<?=$order['order_id']?>pc" onchange="changeStep('<?=$order['order_id']?>','pc')" class="form-control">
+                        <?foreach ($step_list as $key => $value) {
+                            if ($key != '') {?>
+                                <option value="<?=$key?>" <?=($key == $order['order_step']?'selected':'')?>><?=$value?></option>
+                            <?}
+                        }?>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-12 text-right">
+                    <span class="btn btn-warning" onclick="order_update_synchronize('<?=$order['order_id']?>');">同步至ERP</span>
                 </div>
             </div>
         </div>
@@ -118,57 +109,56 @@
                     $total = 0;
                     if (!empty($order_item)) {
                         foreach ($order_item as $item) {
-                            if ($item['product_id'] == 0) {?>
+                            $this->db->select('*');
+                            $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+                            $this->db->where('product_combine.id', $item['product_combine_id']);
+                            $this->db->limit(1);
+                            $combine_row = $this->db->get('product_combine')->row_array();
+                            $this->db->select_sum('specification_qty');
+                            $this->db->select('product_id,specification_id,specification_str');
+                            $this->db->where('order_id',$item['order_id']);
+                            $this->db->where('product_combine_id',$item['product_combine_id']);
+                            $this->db->where('order_item_qty',0);
+                            $this->db->group_by('specification_id');
+                            $specification_query = $this->db->get('order_item')->result_array();?>
                             <div class="row border_product">
-                                <div class="col-md-1 text-center"><?php echo $count ?></div>
+                                <div class="col-md-1 text-center"><?=$count;?></div>
                                 <div class="col-md-2">
-                                    <?$this->db->select('*');
-                                    $this->db->from('product_combine');
+                                    <?$this->db->select('picture');
                                     $this->db->where('id', $item['product_combine_id']);
-                                    $query = $this->db->get();
-                                    foreach ($query->result_array() as $row) {
+                                    $this->db->limit(1);
+                                    $row = $this->db->get('product_combine')->row_array();
+                                    if (!empty($row)) {
                                         echo get_front_image($row['picture']);
                                     }?>
                                 </div>
                                 <div class="col-md-4">
-                                    <?$i = 0;
-                                    $this->db->select('*');
-                                    $this->db->from('product_combine');
-                                    $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
-                                    $this->db->where('product_combine.id', $item['product_combine_id']);
-                                    $query = $this->db->get();
-                                    foreach ($query->result_array() as $row) {
-                                        if ($i < 1) {
-                                            echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
-                                        }?>
-                                        <ul class="pl-3 m-0" style="color: gray;">
+                                    <?if (!empty($combine_row)) {?>
+                                        <?=get_product_name($combine_row['product_id']) . ' - ' . get_product_combine_name($combine_row['product_combine_id']);?>
+                                        <ul style="color: #0066CC; padding-left: 25px;">
                                             <li style="list-style-type: circle;">
-                                            <?echo $row['qty'] . ' ' . $row['product_unit'];
-                                            if (!empty($row['product_specification'])) {
-                                                echo ' - ' . $row['product_specification'];
+                                            <?echo ($combine_row['qty'] * $item['order_item_qty']) . ' ' . $combine_row['product_unit'];
+                                            if (!empty($combine_row['product_specification'])) {
+                                                echo ' - ' . $combine_row['product_specification'];
                                             }
-                                            foreach ($order_item as $specification_item) {
-                                                if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
-                                                    $this->db->select('*');
-                                                    $this->db->from('product_specification');
-                                                    $this->db->where('id', $specification_item['specification_id']);
-                                                    $query_specification = $this->db->get();
-                                                    foreach ($query_specification->result_array() as $row_specification) {
-                                                        echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
-                                                    }
+                                            if (!empty($specification_query)) {
+                                                foreach ($specification_query as $specification_row) {
+                                                    echo '<br>' . '✓ ' . $specification_row['specification_str'] . ' x ' . $specification_row['specification_qty'];
                                                 }
                                             }?>
                                             </li>
                                         </ul>
-                                        <?$i++;}?>
+                                    <?}?>
                                 </div>
                                 <div class="col-md-2 text-center"><?php echo number_format($item['order_item_price']) ?></div>
                                 <div class="col-md-1 text-center"><?php echo $item['order_item_qty'] ?></div>
-                                <div class="col-md-2 text-right"><?php echo number_format($item['order_item_qty'] * $item['order_item_price']) ?></div>
+                                <div class="col-md-2 text-right"><?php echo number_format($item['order_item_price'] * $item['order_item_qty']) ?></div>
                             </div>
-                            <?php $count++;?>
-                        <?php $total += $item['order_item_qty'] * $item['order_item_price'];?>
-                    <?php }}}?>
+                            <?
+                            $count++;
+                            $total += $item['order_item_price'] * $item['order_item_qty'];?>
+                        <?}
+                    }?>
                     <div class="row front_title border_style">
                         <div class="col-md-8">
                             <div class="row">
@@ -186,21 +176,21 @@
                         </div>
                         <div class="col-md-4">
                             <div class="row text-right">
-                                <div class="col-md-6">小計：</div>
-                                <div class="col-md-6"><?php echo number_format($total) ?></div>
-                                <div class="col-md-6">運費：</div>
-                                <div class="col-md-6"><?php echo number_format($order['order_delivery_cost']) ?></div>
-                                <div class="col-md-6">總計：</div>
-                                <div class="col-md-6"><?php echo number_format($order['order_discount_total']) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">小計：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($total) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">運費：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_delivery_cost']) ?></div>
+                                <div class="col-md-6" style="font-size: 14px;">總計：</div>
+                                <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_discount_total']) ?></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="content-box-large mb_control">
+        <!-- <div class="content-box-large mb_control">
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="padding: 5px;">
                     <table class="table table-bordered">
                         <tr>
                             <td>
@@ -234,7 +224,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table class="table table-bordered table-hover">
+                                <table class="table table-bordered table-hover" style="margin: 0px;">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
@@ -242,7 +232,7 @@
                                             <th scope="col" class="text-nowrap">商品</th>
                                         </tr>
                                     </thead>
-                                    <?php 
+                                    <?php
                                     $count = 1;
                                     $total = 0;
                                      if (!empty($order_item)) {
@@ -261,26 +251,37 @@
                                             </td>
                                             <td>
                                                 <div>
-                                                <?php $i = 0;
-                                                $this->db->select('*');
-                                                $this->db->from('product_combine');
-                                                $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
-                                                $this->db->where('product_combine.id', $item['product_combine_id']);
-                                                $query = $this->db->get();
-                                                foreach ($query->result_array() as $row) {
-                                                    // echo $row['id'] . ' ' . $row['product_specification'] . ' ' . $row['product_id'] . '<br>';
-                                                    if ($i < 1) {
-                                                        echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
-                                                    }?>
-                                                    <ul class="pl-3 m-0" style="color: gray;">
-                                                        <li style="list-style-type: circle;">
-                                                        <?echo $row['qty'] . ' ' . $row['product_unit'];
-                                                        if (!empty($row['product_specification'])) {
-                                                            echo ' - ' . $row['product_specification'];
+                                                    <?$i = 0;
+                                                    $this->db->select('*');
+                                                    $this->db->from('product_combine');
+                                                    $this->db->join('product_combine_item', 'product_combine.id = product_combine_item.product_combine_id', 'right');
+                                                    $this->db->where('product_combine.id', $item['product_combine_id']);
+                                                    $query = $this->db->get();
+                                                    foreach ($query->result_array() as $row) {
+                                                        if ($i < 1) {
+                                                            echo get_product_name($row['product_id']) . ' - ' . get_product_combine_name($row['product_combine_id']);
                                                         }?>
-                                                        </li>
-                                                    </ul>
-                                                    <?$i++;}?>
+                                                        <ul style="color: #0066CC; padding-left: 20px;">
+                                                            <li style="list-style-type: circle;">
+                                                            <?echo $row['qty'] . ' ' . $row['product_unit'];
+                                                            if (!empty($row['product_specification'])) {
+                                                                echo ' - ' . $row['product_specification'];
+                                                            }
+                                                            foreach ($order_item as $specification_item) {
+                                                                if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $item['product_combine_id'] == $specification_item['product_combine_id']) {
+                                                                    $this->db->select('*');
+                                                                    $this->db->from('product_specification');
+                                                                    $this->db->where('id', $specification_item['specification_id']);
+                                                                    $query_specification = $this->db->get();
+                                                                    foreach ($query_specification->result_array() as $row_specification) {
+                                                                        echo '<br>' . '✓ ' . $row_specification['specification'] . ' x ' . $specification_item['specification_qty'];
+                                                                    }
+                                                                }
+                                                            }?>
+                                                            </li>
+                                                        </ul>
+                                                        <?$i++;
+                                                    }?>
                                                 </div>
                                                 <div>金額：$<?php echo number_format($item['order_item_price']) ?></div>
                                                 <div>數量：<?php echo $item['order_item_qty'] ?></div>
@@ -339,6 +340,47 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
+<script>
+function changeStep(id,source) {
+    if (confirm('訂定要變更訂單狀態？')) {
+        $.ajax({
+            type: "POST",
+            url: '/admin/order/update_step',
+            data: {
+                id: id,
+                step: $('#order_step_' + id + source).val(),
+            },
+            success: function(data) {
+                alert('修改完成！');
+            },
+            error: function(data) {
+                console.log(data);
+                alert('異常錯誤！');
+            }
+        });
+    }
+}
+
+function order_update_synchronize(id) {
+    $.ajax({
+        type: "POST",
+        url: '/admin/order/order_update_synchronize/'+id,
+        data: {
+            id: id,
+        },
+        success: function(data) {
+            if(data=='send success.'){
+                alert('傳送成功！');
+            } else {
+                alert('傳送失敗！');
+            }
+        },
+        error: function(data) {
+            console.log(data);
+        }
+    });
+}
+</script>

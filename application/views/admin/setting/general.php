@@ -111,25 +111,25 @@
 					<div class="form-group">
 						<label class="col-md-2" for="mail_header_text">寄件主旨</label>
 						<div class="col-md-4">
-							<textarea name="mail_header_text" id="mail_header_text" class="form-control" rows="3"><?php echo get_setting_general('mail_header_text') ?></textarea>
+							<textarea name="mail_header_text" id="mail_header_text" class="form-control" rows="5"><?php echo get_setting_general('mail_header_text') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-2" for="mail_boddy_text">寄件主要內容文字描述</label>
 						<div class="col-md-4">
-							<textarea name="mail_boddy_text" id="mail_boddy_text" class="form-control" rows="3"><?php echo get_setting_general('mail_boddy_text') ?></textarea>
+							<textarea name="mail_boddy_text" id="mail_boddy_text" class="form-control" rows="5"><?php echo get_setting_general('mail_boddy_text') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-2" for="mail_other_text">寄件次要內容文字描述</label>
 						<div class="col-md-4">
-							<textarea name="mail_other_text" id="mail_other_text" class="form-control" rows="3"><?php echo get_setting_general('mail_other_text') ?></textarea>
+							<textarea name="mail_other_text" id="mail_other_text" class="form-control" rows="5"><?php echo get_setting_general('mail_other_text') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-2" for="mail_footer_text">寄件尾部文字描述</label>
 						<div class="col-md-4">
-							<textarea name="mail_footer_text" id="mail_footer_text" class="form-control" rows="3"><?php echo get_setting_general('mail_footer_text') ?></textarea>
+							<textarea name="mail_footer_text" id="mail_footer_text" class="form-control" rows="5"><?php echo get_setting_general('mail_footer_text') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
@@ -185,27 +185,37 @@
 					<div class="form-group">
 						<label class="col-md-2" for="meta_keywords">網站meta關鍵字</label>
 						<div class="col-md-4">
-							<input type="text" name="meta_keywords" id="meta_keywords" class="form-control" value="<?php echo get_setting_general('meta_keywords') ?>"/>
+							<textarea class="form-control" rows="5" name="meta_keywords" id="meta_keywords"><?php echo get_setting_general('meta_keywords') ?></textarea>
+							<!-- <input type="text" name="meta_keywords" id="meta_keywords" class="form-control" value="<?php echo get_setting_general('meta_keywords') ?>"/> -->
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-2" for="meta_description">網站meta描述</label>
 						<div class="col-md-4">
-							<input type="text" name="meta_description" id="meta_description" class="form-control" value="<?php echo get_setting_general('meta_description') ?>"/>
+							<textarea class="form-control" rows="5" name="meta_description" id="meta_description"><?php echo get_setting_general('meta_description') ?></textarea>
+							<!-- <input type="text" name="meta_description" id="meta_description" class="form-control" value="<?php echo get_setting_general('meta_description') ?>"/> -->
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-md-2" for="shopping_notes">購物須知</label>
 						<div class="col-md-4">
-							<textarea class="form-control" rows="3" name="shopping_notes" id="shopping_notes"><?php echo get_setting_general('shopping_notes') ?></textarea>
+							<textarea class="form-control" rows="5" name="shopping_notes" id="shopping_notes"><?php echo get_setting_general('shopping_notes') ?></textarea>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-2" for="single_sales_error_info">銷售頁面不開放文字描述</label>
+						<label class="col-md-2" for="join_member_info">加入會員文字描述</label>
 						<div class="col-md-4">
-							<textarea class="form-control" rows="3" name="single_sales_error_info" id="single_sales_error_info"><?php echo get_setting_general('single_sales_error_info') ?></textarea>
+							<textarea class="form-control" rows="5" name="join_member_info" id="join_member_info"><?php echo get_setting_general('join_member_info') ?></textarea>
 						</div>
 					</div>
+					<?if ($this->is_td_stuff) {?>
+					<div class="form-group">
+						<label class="col-md-2" for="single_sales_error_info">銷售頁面不開放文字描述</label>
+						<div class="col-md-4">
+							<textarea class="form-control" rows="5" name="single_sales_error_info" id="single_sales_error_info"><?php echo get_setting_general('single_sales_error_info') ?></textarea>
+						</div>
+					</div>
+					<?}?>
 					<div class="form-group hide">
 						<label class="col-md-2" for="per_page">毎頁顯示筆數</label>
 						<div class="col-md-4">

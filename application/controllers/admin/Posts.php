@@ -94,6 +94,7 @@ class Posts extends Admin_Controller {
             'post_image'    => $this->input->post('post_image'),
             'creator_id'    => $this->current_user->id,
             'created_at'    => date('Y-m-d H:i:s'),
+            'updated_at'    => date('Y-m-d H:i:s'),
         );
 
         $this->mysql_model->_insert('posts',$data);

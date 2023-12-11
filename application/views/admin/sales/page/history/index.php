@@ -27,8 +27,9 @@
                     <th>訂單日期</th>
                     <th>客戶名稱</th>
                     <th>配送地址</th>
-                    <th class="text-center text-nowrap">配送方式</th>
-                    <th class="text-center text-nowrap">金額/付款方式</th>
+                    <th>配送方式</th>
+                    <th>商品數量</th>
+                    <th>金額/付款方式</th>
                     <th>訂單狀態</th>
                     <th>代言人</th>
                 </tr>
@@ -39,8 +40,8 @@
             <tbody class="pc_control">
                 <tr class="<?=($order['order_step'] == 'pay_ok'? 'pay_ok_color' : '')?> <?=($order['order_step'] == 'order_cancel'? 'order_cancel_color' : '')?> <?=($order['order_step'] == 'shipping'? 'shipping_color' : '')?> <?=($order['order_step'] == 'complete'? 'complete_color' : '')?> <?=($order['order_step'] == 'process'? 'process_color' : '')?> <?=($order['order_step'] == 'invalid'? 'invalid_color' : '')?>">
                     <td style="<?=($order['order_step'] == 'order_cancel'? 'text-decoration: line-through;' : '')?>">
-                        <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
-                            <?php echo $order['order_number'] ?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
+                        <a href="/admin/order/view/<?=$order['order_id'] ?>" target="_blank">
+                            <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
                         </a>
                     </td>
                     <td>
@@ -52,10 +53,11 @@
                     <td>
                         <?=(!empty($order['order_store_address'])? $order['order_store_name'] . '<br>' . $order['order_store_address'] : $order['order_delivery_address'])?>
                     </td>
-                    <td class="text-center">
+                    <td>
                         <?=get_delivery($order['order_delivery']) ?>
                     </td>
-                    <td class="text-center">
+                    <td><?=$this->order_model->getSingleOrderProductQTY($order['order_id']);?></td>
+                    <td>
                         <?php
                       echo '$' . format_number($order['order_discount_total']) . '<br>' . get_payment($order['order_payment']);
                       if ($order['order_payment']=='ecpay'){
@@ -63,7 +65,7 @@
                       }?>
                     </td>
                     <td>
-                        <? 
+                        <?
                     $step_array = array(
                       'confirm' => '訂單確認',
                       'pay_ok' => '已收款',
@@ -80,7 +82,9 @@
                     }?>
                     </td>
                     <td>
-                        <?=$agentName?>
+                        <a href="/admin/agent/editAgent<?=$order['agent_id']?>" target="_blank">
+                            <?=$agentName?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                        </a>
                     </td>
                 </tr>
             </tbody>

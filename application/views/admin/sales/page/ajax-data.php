@@ -1,3 +1,4 @@
+<?php echo $this->ajax_pagination_admin->create_links(); ?>
 <div class="row">
     <div class="col-md-12">
         <table class="table table-bordered table-striped table-hover" id="datatable" style="border-top-width: 0px;border-left-width: 0px;border-right-width: 0px;border-bottom-width: 0px;">
@@ -5,18 +6,18 @@
             <tr class="info">
                 <th>ID</th>
                 <th>商品名稱</th>
-                <?if ($SingleStatus == 'History') {?><th>開始時間</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?><th>開始時間</th><?}?>
                 <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'ForSale') {?><th>倒數時間</th><?}?>
                 <th>結束時間</th>
                 <th>銷售人員</th>
-                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {?><th>銷售總天數</th><?}?>
-                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {?><th>銷售總數量</th><?}?>
-                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {?><th>銷售總額</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總天數</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總數量</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?><th>銷售總額</th><?}?>
                 <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'ForSale') {?><th>點擊數</th><?}?>
-                <?if ($SingleStatus == 'History') {?><th>總點擊數</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?><th>總點擊數</th><?}?>
                 <?if ($SingleStatus == 'Test') {?><th>日期</th><?}?>
                 <?if ($SingleStatus == 'History') {?><th>狀態</th><?}?>
-                <?if ($SingleStatus == 'History') {?><th>操作</th><?}?>
+                <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?><th>操作</th><?}?>
             </tr>
                 <?foreach ($SingleSales as $row) {
                   if (!empty($SingleSalesAgent)) {
@@ -51,7 +52,7 @@
                             <?=get_product_name($row['product_id'])?>&emsp;<i class="fa-solid fa-up-right-from-square"></i>
                           </a>
                         </td>
-                        <?if ($SingleStatus == 'History') {?>
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?>
                           <td><?=$row['start_date']?></td>
                         <?}?>
                         <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'ForSale') {
@@ -78,7 +79,7 @@
                               <?=$count?> 人 <i class="fa-regular fa-circle-question"></i>
                             </span>
                           </div>
-                          <?if ($SingleStatus == 'OnSale') {
+                          <?if ($SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {
                             for ($i=0; $i < count($sales_staff); $i++) {
                               if ($this->order_model->getOrderTotalAmount($row['id'],$sales_staff[$i]['agent_id']) > 0) {?>
                                 <div style="padding-top: 10px;">
@@ -90,17 +91,17 @@
                             }
                           }?>
                         </td>
-                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {
                           $datetime1 = new DateTime($row['start_date']);
                           $datetime2 = new DateTime($row['end_date']);
                           $interval = $datetime1->diff($datetime2);
                           $daysDiff = $interval->days;?>
                           <td><?=$daysDiff?></td>
                         <?}?>
-                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {?>
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?>
                           <td><?=$this->order_model->getOrderProductQTY($row['id'])?></td>
                         <?}?>
-                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale') {?>
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'OnSale' || $SingleStatus == 'Finish') {?>
                           <td><?='$' . format_number($this->order_model->getOrderTotalAmount($row['id']))?></td>
                         <?}?>
                         <?if ($SingleStatus == 'ForSale') {?>
@@ -115,7 +116,7 @@
                               </div>
                           </td>
                         <?}?>
-                        <?if ($SingleStatus == 'History') {?>
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?>
                           <td><?=$pre_hits + $start_hits?></td>
                         <?}?>
                         <?if ($SingleStatus == 'Test') {?>
@@ -128,10 +129,11 @@
                         <?if ($SingleStatus == 'History') {?>
                           <td><?=$this->lang->line($row['status'])?></td>
                         <?}?>
-                        <?if ($SingleStatus == 'History') {?>
+                        <?if ($SingleStatus == 'History' || $SingleStatus == 'Finish') {?>
                           <td>
                             <span class="btn btn-danger btn-sm <?=($row['status'] == 'OutSale'? '' : 'hide')?>" onclick="calculationReport('<?=$row['id']?>')">結束並計算</span>
-                            <span class="btn btn-success btn-sm <?=($row['status'] == 'Closure'? '' : 'hide')?>" data-toggle="modal" data-target="#reportModal" onclick="viewCalculationReport('<?=$row['id']?>')">查看報表</span>
+                            <span class="btn btn-success btn-sm <?=($row['status'] == 'Closure' || $SingleStatus == 'Finish'? '' : 'hide')?>" data-toggle="modal" data-target="#reportModal" onclick="viewCalculationReport('<?=$row['id']?>')">查看報表</span>
+                            <span class="btn btn-warning btn-sm <?=($row['status'] == 'Closure'? '' : 'hide')?>" onclick="closedCase('<?=$row['id']?>','Finish')">結案</span>
                           </td>
                         <?}?>
                     </tr>

@@ -135,9 +135,21 @@ class Agent extends Admin_Controller {
     }
 
     function editAgent($id) {
+        $this->load->model('order_model');
         $this->data['page_title'] = '代言人資料';
         $this->data['agent'] = $this->agent_model->getAgentDetail($id);
-        $this->data['Users'] = $this->agent_model->getUsersList();
+        $this->data['sales_page'] = $this->agent_model->getAgentSalesPage($id);
+        $this->data['sales_order_list'] = $this->agent_model->getAgentSalesOrderList($id);
+        $this->data['users'] = $this->agent_model->getUsersList();
+        $this->data['step_list'] = array(
+            'confirm' => '訂單確認',
+            'pay_ok' => '已收款',
+            'process' => '待出貨',
+            'shipping' => '已出貨',
+            'complete' => '完成',
+            'order_cancel' => '訂單取消',
+            'invalid' => '訂單不成立',
+        );
         $this->render('admin/agent/edit');
     }
 

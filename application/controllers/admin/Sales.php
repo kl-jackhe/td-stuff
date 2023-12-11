@@ -8,11 +8,24 @@ class Sales extends Admin_Controller {
         $this->load->model('sales_model');
         $this->load->model('agent_model');
         $this->load->model('product_model');
+
+        $this->data['step_list'] = array(
+            '' => '訂單狀態',
+            'confirm' => '訂單確認',
+            'pay_ok' => '已收款',
+            'process' => '待出貨',
+            'shipping' => '已出貨',
+            'complete' => '完成',
+            'order_cancel' => '訂單取消',
+            'invalid' => '訂單不成立',
+        );
 	}
 
     function page()
     {
         $this->data['page_title'] = '銷售頁面';
+        $this->data['agent'] = $this->agent_model->getAgentList();
+        $this->data['product'] = $this->product_model->getProductList();
         $this->render('admin/sales/page/index');
     }
 
@@ -24,10 +37,33 @@ class Sales extends Admin_Controller {
         } else {
             $offset = $page;
         }
+
+        $keywords = $this->input->get('keywords');
+        $agent = $this->input->get('agent');
+        $product = $this->input->get('product');
         $status = $this->input->get('status');
+        if (!empty($keywords)) {
+            $conditions['search']['keywords'] = $keywords;
+        }
+        if (!empty($agent)) {
+            $conditions['search']['agent'] = $agent;
+        }
+        if (!empty($product)) {
+            $conditions['search']['product'] = $product;
+        }
         if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
+        $conditions['returnType'] = 'count';
+        $sales_data = $this->sales_model->getRows($conditions);
+        $totalRec = (!empty($sales_data) ? count($sales_data) : 0 );
+        //pagination configuration
+        $config['target'] = '#datatable';
+        $config['base_url'] = base_url() . 'admin/sales/pageAjaxData';
+        $config['total_rows'] = $totalRec;
+        $config['per_page'] = $this->perPage;
+        $config['link_func'] = 'searchFilterSales';
+        $this->ajax_pagination_admin->initialize($config);
         //set start and limit
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;
@@ -56,8 +92,10 @@ class Sales extends Admin_Controller {
         $page = $this->input->get('page');
         if (!$page) {
             $offset = 0;
+            $this->input->set_cookie("order_page", '0', 3600);
         } else {
             $offset = $page;
+            $this->input->set_cookie("order_page", $page, 3600);
         }
         //set conditions for search
         $keywords = $this->input->get('keywords');
@@ -69,6 +107,15 @@ class Sales extends Admin_Controller {
         $end_date = $this->input->get('end_date');
         $sales = $this->input->get('sales');
         $agent = $this->input->get('agent');
+        setcookie('order_keywords', $keywords, time() + 3600, '/');
+        setcookie('order_product', $product, time() + 3600, '/');
+        setcookie('order_category', $category, time() + 3600, '/');
+        setcookie('order_category1', $category1, time() + 3600, '/');
+        setcookie('order_category2', $category2, time() + 3600, '/');
+        setcookie('order_start_date', $start_date, time() + 3600, '/');
+        setcookie('order_end_date', $end_date, time() + 3600, '/');
+        setcookie('order_sales', $sales, time() + 3600, '/');
+        setcookie('order_agent', $agent, time() + 3600, '/');
         if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }
@@ -117,7 +164,7 @@ class Sales extends Admin_Controller {
     }
 
     function createSingleSales() {
-        //status -> Closure OnSale OutSale ForSale Test
+        //status -> Closure OnSale OutSale ForSale Test Finish
         if ($this->input->post('product_id') != '') {
             $repeatedAttempts = 0;
             $ssID = '';
@@ -168,6 +215,7 @@ class Sales extends Admin_Controller {
         $this->data['product_combine'] = $this->mysql_model->_select('single_product_combine', 'product_id', $this->data['SingleSalesDetail']['product_id']);
 
         $this->data['orders'] = $this->order_model->getSalesPageHistoryList($id);
+        $this->data['orderProductQTY'] = $this->order_model->getOrderProductQTY($id);
 
         $this->data['page_title'] = '銷售頁面編輯';
         $this->render('admin/sales/page/edit');
@@ -221,31 +269,48 @@ class Sales extends Admin_Controller {
     }
 
     function calculationReport() {
+        $jsonData = array();
+        $jsonData['ExecutionResults'] = 'no';
         $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
         if (!empty($ssd_row)) {
-            $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-            if ($ssd_row['default_profit_percentage'] > 0) {
-                if (!empty($ssad_query)) {
-                    foreach ($ssad_query as $ssad_row) {
-                        $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                        $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
-                        $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
-                        $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
-                        $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+            $orderQty = $this->getOrderQty($ssd_row['id']);
+            $jsonData['UndoneOrderList'] = $this->getUndoneOrderList($ssd_row['id']);
+            $jsonData['OrderQty'] = $orderQty . ' / ' . ($orderQty - (!empty($jsonData['UndoneOrderList']) ? count($jsonData['UndoneOrderList']) : 0));
+            if (empty($jsonData['UndoneOrderList'])) {
+                $ssad_query = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
+                if ($ssd_row['default_profit_percentage'] > 0) {
+                    if (!empty($ssad_query)) {
+                        foreach ($ssad_query as $ssad_row) {
+                            $turnoverAmount = $this->calculationTurnoverAmount($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                            $income = $this->calculationIncome($turnoverAmount,$ssd_row['default_profit_percentage'],$ssad_row['agent_id'],$ssad_row['profit_percentage']);
+                            $orderQtyList = $this->calculationOrderQTY($ssad_row['single_sales_id'],$ssad_row['agent_id']);
+                            $turnoverRate = $this->calculationTurnoverRate($orderQtyList);
+                            $this->updateCalculationResults($turnoverAmount,$income,$orderQtyList,$turnoverRate,$ssad_row['single_sales_agent_id'],$ssd_row['id']);
+                        }
+                        $jsonData['ExecutionResults'] = 'yes';
                     }
-                    $this->data['SingleSalesDetail'] = $ssd_row;
-                    $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($ssd_row['id']);
-                    $this->load->view('/admin/report/single_sales_agent_report', $this->data);
-                    echo 'yes';
                 } else {
-                    echo 'no';
+                    $jsonData['ExecutionResults'] = 'no_default_profit_percentage';
                 }
-            } else {
-                echo 'no_default_profit_percentage';
             }
-        } else {
-            echo 'no';
         }
+        echo json_encode($jsonData);
+    }
+
+    function getUndoneOrderList($single_sales_id) {
+        $status = array('complete','order_cancel');
+        $this->db->select('order_id,order_number,order_step,single_sales_id,agent_id');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where_not_in('order_step',$status);
+        $query = $this->db->get('orders')->result_array();
+        return (!empty($query) ? $query : false);
+    }
+
+    function getOrderQty($single_sales_id) {
+        $this->db->select('order_id,order_number,order_step,single_sales_id,agent_id');
+        $this->db->where('single_sales_id',$single_sales_id);
+        $query = $this->db->get('orders');
+        return ($query->num_rows() > 0 ? $query->num_rows() : 0);
     }
 
     function calculationTurnoverAmount($single_sales_id,$agent_id) {
@@ -331,6 +396,152 @@ class Sales extends Admin_Controller {
         $this->data['SingleSalesDetail'] = $this->sales_model->getSingleSalesDetail($this->input->post('id'));
         $this->data['SingleSalesAgentList'] = $this->sales_model->getSingleSalesAgentDetail($this->input->post('id'));
         $this->load->view('/admin/report/single_sales_agent_report', $this->data);
+    }
+
+    function viewCalculationReportPDF() {
+        $data = array();
+        $salesProductQty = 0;
+        $salesProductDetailList = array();
+        $dailySalesQty = array();
+        $customerSourceList = array();
+        $ssd_row = $this->sales_model->getSingleSalesDetail($this->input->get('ssid'));
+        $this->db->select('single_sales_id,agent_id,name,cost,profit_percentage,pre_hits,start_hits,order_qty,finish_qty,cancel_qty,other_qty,turnover_rate,turnover_amount,income,signature_file');
+        $this->db->where('single_sales_id',$this->input->get('ssid'));
+        $this->db->where('agent_id', $this->input->get('aid'));
+        $this->db->limit(1);
+        $ssa_row = $this->db->get('single_sales_agent')->row_array();
+        if (!empty($ssa_row) && !empty($ssd_row)) {
+            if ($ssd_row['start_date'] <= $ssd_row['end_date']) {
+                $orderList = $this->getSingleSalesOderList($ssd_row['start_date'],$ssd_row['end_date'],$ssa_row['single_sales_id'],$ssa_row['agent_id']);
+                if (!empty($orderList)) {
+                    $salesProductQty = $this->getSalesProductQty($orderList);
+                    $salesProductDetailList = $this->getSalesProductDetailList($orderList);
+                    $dailySalesQty = $this->getDailySalesQty($ssd_row['start_date'],$ssd_row['end_date'],$orderList);
+                    $customerSourceList = $this->getCustomerSourceList($orderList);
+                }
+            }
+            $data = array(
+                'product_name' => get_product_name($ssd_row['product_id']),
+                'product_qty' => $salesProductQty,
+                'name' => $ssa_row['name'],
+                'profit_percentage' => number_format($ssa_row['profit_percentage'] > 0 ? $ssa_row['profit_percentage'] : $ssd_row['default_profit_percentage']) . '%',
+                'start_date' => $ssd_row['start_date'],
+                'end_date' => $ssd_row['end_date'],
+                'pre_hits' => $ssa_row['pre_hits'],
+                'start_hits' => $ssa_row['start_hits'],
+                'order_qty' => $ssa_row['order_qty'],
+                'finish_qty' => $ssa_row['finish_qty'],
+                'cancel_qty' => $ssa_row['cancel_qty'],
+                'turnover_rate' => number_format($ssa_row['turnover_rate']) . '%',
+                'turnover_amount' => number_format($ssa_row['turnover_amount']),
+                'income' => number_format($ssa_row['income']),
+                'signature_file' => $ssa_row['signature_file'],
+                'date_now' => date('Y-m-d'),
+            );
+        }
+        $this->data['data'] = $data;
+        $this->data['salesProductDetailList'] = $salesProductDetailList;
+        $this->data['dailySalesQty'] = $dailySalesQty;
+        $this->data['customerSourceList'] = $customerSourceList;
+        $this->render('admin/report/calculation_report_pdf');
+    }
+
+    function getSalesProductDetailList($orderList) {
+        $salesProductDetailList = array();
+        $orderIdList = array();
+        foreach ($orderList as $row) {
+            $orderIdList[] = $row['order_id'];
+        }
+        if (!empty($orderIdList)) {
+            $this->db->select('product_combine_id,product_id,order_item_qty,specification_id,specification_str,specification_qty');
+            $this->db->where_in('order_id', $orderIdList);
+            $this->db->where('specification_id >', 0);
+            $oi_query = $this->db->get('order_item')->result_array();
+            if (!empty($oi_query)) {
+                foreach ($oi_query as $oi_row) {
+                    $specification_str = $oi_row['specification_str'];
+                    if ($oi_row['specification_str'] == '') {
+                        $this->db->select('specification');
+                        $this->db->where('id',$oi_row['specification_id']);
+                        $this->db->where('product_id',$oi_row['product_id']);
+                        $this->db->limit(1);
+                        $ps_row = $this->db->get('product_specification')->row_array();
+                        $specification_str = (!empty($ps_row) ? $ps_row['specification'] : '');
+                    }
+                    if (array_key_exists($specification_str,$salesProductDetailList)) {
+                        $salesProductDetailList[$specification_str] += $oi_row['specification_qty'];
+                    } else {
+                        $salesProductDetailList[$specification_str] = $oi_row['specification_qty'];
+                    }
+                }
+            }
+        }
+        return $salesProductDetailList;
+    }
+
+    function getSalesProductQty($orderList) {
+        $salesProductQty = 0;
+        $orderIdList = array();
+        foreach ($orderList as $row) {
+            $orderIdList[] = $row['order_id'];
+        }
+        if (!empty($orderIdList)) {
+            $this->db->select_sum('order_item_qty');
+            $this->db->where_in('order_id', $orderIdList);
+            $this->db->where('order_item_price', 0);
+            $oi_row = $this->db->get('order_item')->row_array();
+            if (!empty($oi_row)) {
+                $salesProductQty = $oi_row['order_item_qty'];
+            }
+        }
+        return $salesProductQty;
+    }
+
+    function getDailySalesQty($start_date,$end_date,$orderList) {
+        $dailySalesQty = array();
+        $startDate = new DateTime($start_date);
+        $endDate = new DateTime($end_date);
+        $endDate->modify('+1 day');
+        $dateInterval = new DateInterval('P1D'); // 每天增加1天
+        $datePeriod = new DatePeriod($startDate, $dateInterval, $endDate);
+        foreach ($datePeriod as $dateList) {
+            $dailySalesQty[$dateList->format('Y-m-d')] = 0;
+        }
+        foreach ($orderList as $row) {
+            if (array_key_exists($row['order_date'], $dailySalesQty)) {
+                $dailySalesQty[$row['order_date']]++;
+            }
+        }
+        return $dailySalesQty;
+    }
+
+    function getCustomerSourceList($orderList) {
+        $customerSourceList = array();
+        foreach ($orderList as $row) {
+            $address = mb_convert_encoding($row['order_store_address'], "UTF-8", "auto");
+            if (preg_match('/(.+?[縣市])(.+?[鄉鎮區])/u', $address, $matches)) {
+                $county = $matches[1];
+                $location = $matches[2];
+                if (array_key_exists($county, $customerSourceList)) {
+                    $customerSourceList[$county]['location'] = $location;
+                    $customerSourceList[$county]['qty']++;
+                } else {
+                    $customerSourceList[$county]['location'] = $location;
+                    $customerSourceList[$county]['qty'] = 1;
+                }
+            }
+        }
+        return $customerSourceList;
+    }
+
+    function getSingleSalesOderList($start_date,$end_date,$single_sales_id,$agent_id) {
+        $this->db->select('order_id,order_date,order_store_address');
+        $this->db->where('order_date >=',$start_date);
+        $this->db->where('order_date <=',$end_date);
+        $this->db->where('single_sales_id',$single_sales_id);
+        $this->db->where('agent_id',$agent_id);
+        $query = $this->db->get('orders')->result_array();
+        return (!empty($query)?$query:false);
     }
 
     function create_plan($id) {
@@ -424,6 +635,41 @@ class Sales extends Admin_Controller {
         $this->db->delete('single_product_combine_item');
 
         redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    function uploadSignature() {
+        // 上傳商品圖片
+        if (!empty($_FILES['product_image']['tmp_name'])) {
+            $message = '';
+            $this->load->library('upload');
+            $ext = pathinfo($_FILES['product_image']['name'], PATHINFO_EXTENSION);
+            $product_image = 'p_img_' . $id . '_' . date('YmdHis') . '.' . $ext;
+            $config['upload_path'] = './assets/uploads/';
+            $config['allowed_types'] = 'jpeg|jpg|png';
+            $config['max_size'] = 2048;
+            $config['file_name'] = $product_image;
+            $this->upload->initialize($config);
+            if ($_FILES['product_image']['size'] < 2048000) {
+                if ($_FILES['product_image']['type'] == 'image/png' || $_FILES['product_image']['type'] == 'image/jpeg' || $_FILES['product_image']['type'] == 'image/jpg') {
+                    if ($this->upload->do_upload('product_image')) {
+                        $uploadedImage = $this->upload->data();
+                        $this->resizeImage($uploadedImage['file_name']);
+                    } else {
+                        $product_image = '';
+                    }
+                    $data = array(
+                        'product_image' => $product_image,
+                    );
+                    $this->db->where('product_id', $id);
+                    $this->db->update('product', $data);
+                    $message = $this->lang->line('update_success');
+                } else {
+                    $message = '圖片格式有誤';
+                }
+            } else {
+                $message = '圖片檔案超過2M';
+            }
+        }
     }
 
 

@@ -18,7 +18,8 @@
       <!-- <th></th> -->
       <th>標題</th>
       <th>分類</th>
-      <th>日期</th>
+      <th>上傳日期</th>
+      <th>最後更新日期</th>
       <th>操作</th>
     </tr>
   </thead>
@@ -28,9 +29,10 @@
       <td><?php echo $data['post_title'] ?></td>
       <td><?php echo get_post_category_name($data['post_category']) ?></td>
       <td><?php echo $data['created_at'] ?></td>
+      <td><?php echo $data['updated_at'] ?></td>
       <td>
         <a href="/admin/posts/edit/<?php echo $data['post_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-        <a href="/admin/posts/delete/<?php echo $data['post_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('您確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a>
+        <a href="/admin/posts/delete/<?php echo $data['post_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('您確定要刪除嗎?')"><i class="fa fa-trash" aria-hidden="true"></i></a>
       </td>
     </tr>
   <?php endforeach ?>

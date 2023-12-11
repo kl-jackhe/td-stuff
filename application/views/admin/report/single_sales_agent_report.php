@@ -16,6 +16,8 @@
 					<th>收益</th>
 					<th>訂單總數</th>
 					<th>成交率</th>
+					<th class="text-center">簽收單</th>
+					<th>狀態</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,6 +31,8 @@
 							<td><?=number_format($ssal_row['income'])?></td>
 							<td><?=$ssal_row['order_qty']?></td>
 							<td><?=$ssal_row['turnover_rate']?></td>
+							<td class="text-center" style="font-size: 24px; color: red;"><a href="/admin/sales/viewCalculationReportPDF?ssid=<?=$SingleSalesDetail['id']?>&aid=<?=$ssal_row['agent_id']?>" target="_blank" style="cursor: pointer;"><i class="fa-solid fa-file-pdf"></i></a></td>
+							<td></td>
 						</tr>
 					<?}
 				} else {?>
@@ -42,3 +46,27 @@
 		</table>
 	</div>
 </div>
+<script>
+	function downloadCalculationReportPDF(single_sales_id,agent_id) {
+        $.ajax({
+        	type: "POST",
+            url: '/admin/sales/downloadCalculationReportPDF',
+            dataType: 'json',
+            data: {
+                single_sales_id: single_sales_id,
+                agent_id: agent_id,
+            },
+            success: function (data) {
+                if (data['ExecutionResults'] == 'yes') {
+                    generatePDF(data['SingleSalesAgent']);
+                } else {
+                	alert('執行失敗！');
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                alert('異常錯誤！');
+            }
+        });
+    }
+</script>

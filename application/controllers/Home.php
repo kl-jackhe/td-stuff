@@ -13,7 +13,11 @@ class Home extends Public_Controller {
 		$this->data['page_title'] = '首頁';
 		$this->data['products'] = $this->product_model->getHomeProducts();
 		$this->data['banner'] = $this->home_model->GetBanner();
-		$this->render('home/index');
+		if ($this->is_partnertoys) {
+			$this->render('home/partnertoys_index');
+		} else {
+			$this->render('home/index');
+		}
 	}
 
 	function send_email() {

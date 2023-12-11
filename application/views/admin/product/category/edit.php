@@ -11,6 +11,28 @@
 			    	<label for="product_category_name">分類名稱</label>
 			    	<input type="text" class="form-control" name="product_category_name" value="<?php echo $category['product_category_name']; ?>">
 			  	</div>
+			  	<?if (!empty($delivery)) {?>
+                    <div class="form-group">
+                        <p style="color: red;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>
+                        <div class="input-group">
+                            <span class="input-group-addon">指定配送方式</span>
+                            <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
+                                <? foreach ($delivery as $d_row) {
+                                    $is_use = '';
+                                    if (!empty($use_delivery_list)) {
+                                        foreach ($use_delivery_list as $udl_row) {
+                                            if ($udl_row['delivery_id'] == $d_row['id']) {
+                                                $is_use = 'selected';
+                                                break;
+                                            }
+                                        }
+                                    }?>
+                                    <option value="<?=$d_row['id']?>" <?=($is_use != '' ? $is_use : '')?>><?=$d_row['delivery_name']?></option>
+                                <?}?>
+                            </select>
+                        </div>
+                    </div>
+                <?}?>
 			    <div class="form-group">
 			  		<button type="submit" class="btn btn-primary">修改</button>
 			  	</div>

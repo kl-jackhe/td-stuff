@@ -31,7 +31,7 @@
           <td><?php echo $data['post_category_name'] ?></td>
           <td>
             <a href="/admin/posts/edit_category/<?php echo $data['post_category_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-            <a href="/admin/posts/delete_category/<?php echo $data['post_category_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a>
+            <a href="/admin/posts/delete_category/<?php echo $data['post_category_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash" aria-hidden="true"></i></a>
           </td>
         </tr>
         <?php endforeach ?>

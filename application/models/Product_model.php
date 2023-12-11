@@ -9,6 +9,7 @@ class Product_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('product');
+		$this->db->order_by("distribute_at DESC", "product_id ASC");
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);
@@ -93,6 +94,26 @@ class Product_model extends CI_Model {
 		}
 	}
 
+	function getProductCombine() {
+		$this->db->select('*');
+		$query = $this->db->get('product_combine');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
+	function getProductCombineItem() {
+		$this->db->select('*');
+		$query = $this->db->get('product_combine_item');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
 	function get_product_category_name($id) {
 		$this->db->select('product_category_name');
 		$this->db->limit(1);
@@ -119,12 +140,9 @@ class Product_model extends CI_Model {
 	function getSingleProduct($id) {
 		$this->db->select('*');
 		$this->db->where('product_id', $id);
-		$query = $this->db->get('product');
-		if ($query->num_rows() > 0) {
-			return $query->row_array();
-		} else {
-			return false;
-		}
+		$this->db->limit(1);
+		$row = $this->db->get('product')->row_array();
+		return (!empty($row)?$row:false);
 	}
 
 	function getProduct_Specification($id) {
@@ -214,6 +232,14 @@ class Product_model extends CI_Model {
 		$this->db->like('manufacturer_type', 's');
 		$query = $this->db->get('manufacturer');
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
+	}
+
+	function getSpecificationStr($id) {
+		$this->db->select('specification');
+		$this->db->where('id',$id);
+		$this->db->limit(1);
+		$row = $this->db->get('product_specification')->row_array();
+		return (!empty($row)?$row['specification']:'');
 	}
 
 }

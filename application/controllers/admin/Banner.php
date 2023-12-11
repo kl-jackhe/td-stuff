@@ -10,35 +10,19 @@ class Banner extends Admin_Controller {
 
     public function index()
     {
-        $this->data['page_title'] = 'Banner';
-
-        $data = array();
-        //total rows count
-        $totalRec = count($this->banner_model->getRows());
-        //pagination configuration
-        $config['target']      = '#datatable';
-        $config['base_url']    = base_url().'admin/banner/ajaxData';
-        $config['total_rows']  = $totalRec;
-        $config['per_page']    = $this->perPage;
-        $config['link_func']   = 'searchFilter';
-        $this->ajax_pagination_admin->initialize($config);
-        //get the posts data
-        $this->data['banner'] = $this->banner_model->getRows(array('limit'=>$this->perPage));
-
+        $this->data['page_title'] = '首頁輪播';
         $this->render('admin/banner/index');
     }
 
     function ajaxData()
     {
         $conditions = array();
-        //calc offset number
         $page = $this->input->get('page');
         if(!$page){
             $offset = 0;
         }else{
             $offset = $page;
         }
-        //set conditions for search
         $keywords = $this->input->get('keywords');
         $sortBy = $this->input->get('sortBy');
         $category = $this->input->get('category');
@@ -55,21 +39,16 @@ class Banner extends Admin_Controller {
         if(!empty($status)){
             $conditions['search']['status'] = $status;
         }
-        //total rows count
-        $totalRec = count($this->banner_model->getRows($conditions));
-        //pagination configuration
+        $totalRec = (!empty($this->banner_model->getRows($conditions)) ? count($this->banner_model->getRows($conditions)) : 0 );
         $config['target']      = '#datatable';
         $config['base_url']    = base_url().'admin/banner/ajaxData';
         $config['total_rows']  = $totalRec;
         $config['per_page']    = $this->perPage;
         $config['link_func']   = 'searchFilter';
         $this->ajax_pagination_admin->initialize($config);
-        //set start and limit
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;
-        //get posts data
         $this->data['banner'] = $this->banner_model->getRows($conditions);
-        //load the view
         $this->load->view('admin/banner/ajax-data', $this->data, false);
     }
 

@@ -23,15 +23,28 @@ class Update extends Admin_Controller {
                         $query = $this->db->query("SHOW TABLES LIKE 'update_log'");
                         if ($query->num_rows() > 0) {
                             // 已經存在
-                            $this->update_202309051540();
-                            $this->update_202308301910();
-                            $this->update_202308231510();
-                            $this->update_202308212210();
-                            $this->update_202308212140();
-                            $this->update_202308201555();
-                            $this->update_202308191205();
-                            $this->update_202308161230();
                             $this->update_202308161240();
+                            $this->update_202308161230();
+                            $this->update_202308191205();
+                            $this->update_202308201555();
+                            $this->update_202308212140();
+                            $this->update_202308212210();
+                            $this->update_202308231510();
+                            $this->update_202308301910();
+                            $this->update_202309051540();
+                            $this->update_202309051755();
+                            $this->update_202309061300();
+                            $this->update_202309061750();
+                            $this->update_202309071240();
+                            $this->update_202309121800();
+                            $this->update_202309191500();
+                            $this->update_202310251330();
+                            $this->update_202310251800();
+                            $this->update_202310311530();
+                            $this->update_202311081430();
+                            $this->update_202311211630();
+                            $this->update_202312051900();
+                            $this->update_202312062000();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -42,6 +55,400 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312062000() {
+        $version = '202312062000';
+        $description = '[product]新增欄位[discontinued_at]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'discontinued_at'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `discontinued_at` datetime NOT NULL  AFTER `updater_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+    function update_202312051900() {
+        $version = '202312051900';
+        $description = '[product]新增欄位[distribute_at]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'distribute_at'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `distribute_at` datetime NOT NULL  AFTER `updater_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202311211630() {
+        $version = '202311211630';
+        $description = '新增資料表[lottery][lottery_pool]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'lottery'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `lottery` (
+                  `id` int(8) NOT NULL,
+                  `name` varchar(255) NOT NULL,
+                  `email_subject` varchar(100) NOT NULL,
+                  `email_content` text NOT NULL,
+                  `sms_subject` varchar(255) NOT NULL,
+                  `sms_content` varchar(255) NOT NULL,
+                  `product_id` int(8) NOT NULL,
+                  `number_limit` int(8) NOT NULL,
+                  `number_remain` int(8) NOT NULL,
+                  `number_alternate` int(8) NOT NULL,
+                  `star_time` datetime NOT NULL,
+                  `end_time` datetime NOT NULL,
+                  `draw_date` datetime NOT NULL,
+                  `fill_up_date` datetime NOT NULL,
+                  `draw_over` int(8) NOT NULL,
+                  `fill_up_over` int(8) NOT NULL,
+                  `filter_black` int(8) NOT NULL,
+                  `state` varchar(255) NOT NULL,
+                  `lottery_end` int(8) NOT NULL,
+                  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `lottery` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `lottery` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `lottery` ADD INDEX(`product_id`);");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'lottery_pool'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `lottery_pool` (
+                  `id` int(8) NOT NULL,
+                  `lottery_id` int(8) NOT NULL,
+                  `users_id` int(8) NOT NULL,
+                  `send_mail` text NOT NULL,
+                  `abstain` int(8) NOT NULL,
+                  `winner` int(8) NOT NULL,
+                  `alternate` int(8) NOT NULL,
+                  `fill_up` int(8) NOT NULL,
+                  `blacklist` int(8) NOT NULL,
+                  `abandon` int(8) NOT NULL,
+                  `order_state` varchar(255) NOT NULL,
+                  `order_id` int(11) NOT NULL,
+                  `order_number` varchar(15) NOT NULL,
+                  `msg_mail` varchar(255) NOT NULL,
+                  `msg` varchar(255) NOT NULL,
+                  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`lottery_id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`users_id`);");
+                $this->db->query("ALTER TABLE `lottery_pool` ADD INDEX(`order_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202311081430() {
+        $version = '202311081430';
+        $description = '[users]資料表[email]移除唯一值';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'email'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users` DROP INDEX `uc_email`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202310311530() {
+        $version = '202310311530';
+        $description = '新增資料表[delivery_range_list]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'delivery_range_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `delivery_range_list` (
+                    `id` int(11) NOT NULL,
+                    `delivery_id` int(11) NOT NULL,
+                    `source` varchar(100) NOT NULL,
+                    `source_id` int(11) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `delivery_range_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD INDEX(`delivery_id`);");
+                $this->db->query("ALTER TABLE `delivery_range_list` ADD INDEX(`source_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202310251800() {
+        $version = '20231025180';
+        $description = '新增資料表[tab_store]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'tab_store'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `tab_store` (
+                    `id` int(11) NOT NULL,
+                    `name` varchar(100) NOT NULL,
+                    `sort` decimal(13,4) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `tab_store` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `tab_store` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202310251330() {
+        $version = '202310251330';
+        $description = 'delivery insertData[home_delivery]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'delivery';");
+            if ($query->num_rows() > 0) {
+                $this->db->select('id');
+                $this->db->where('delivery_name_code','home_delivery');
+                $this->db->limit(1);
+                $d_row = $this->db->get('delivery')->row_array();
+                if (empty($d_row)) {
+                    $insertData = array(
+                        'delivery_name_code' => 'home_delivery',
+                        'delivery_name' => '一般宅配',
+                    );
+                    $this->db->insert('delivery',$insertData);
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309191500() {
+        $version = '202309191500';
+        $description = 'setting_general insertData[join_member_info]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'setting_general';");
+            if ($query->num_rows() > 0) {
+                $insertList = array('join_member_info');
+                for ($i=0;$i<count($insertList);$i++) {
+                    $this->db->select('setting_general_id');
+                    $this->db->where('setting_general_name',$insertList[$i]);
+                    $this->db->limit(1);
+                    $sg_row = $this->db->get('setting_general')->row_array();
+                    if (empty($sg_row)) {
+                        $this->db->insert('setting_general',array('setting_general_name' => $insertList[$i]));
+                    }
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309121800() {
+        $version = '202309121800';
+        $description = '[order_item]新增欄位[specification_str]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'specification_str'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `order_item` ADD `specification_str` varchar(300) NOT NULL  AFTER `specification_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309071240() {
+        $version = '202309071240';
+        $description = '[product]新增欄位[product_sku]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'product_sku'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `product_sku` varchar(50) NOT NULL  AFTER `product_name`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309061750() {
+        $version = '202309061750';
+        $description = '[product]新增欄位[stock_overbought]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'stock_overbought'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `stock_overbought` TINYINT(2) NOT NULL DEFAULT '1' AFTER `excluding_inventory`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309061300() {
+        $version = '202309061300';
+        $description = '新增資料表[notify]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'notify'");
+            if ($query->num_rows() > 0) {
+                // 已經存在
+            } else {
+                // 不存在
+                $this->db->query("CREATE TABLE `notify` (
+                    `id` int(11) NOT NULL,
+                    `title` varchar(50) NOT NULL,
+                    `content` varchar(500) NOT NULL,
+                    `source` varchar(20) NOT NULL,
+                    `read` TINYINT(2) NOT NULL DEFAULT '1',
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `notify` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `notify` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202309051755() {
+        $version = '202309051755';
+        $description = '[product]新增欄位[excluding_inventory]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'excluding_inventory'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `excluding_inventory` TINYINT(2) NOT NULL DEFAULT '1' AFTER `inventory`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

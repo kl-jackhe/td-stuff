@@ -1,4 +1,3 @@
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
 <?php
 $count = 0;
 foreach ($this->cart->contents() as $items) {
@@ -80,6 +79,10 @@ foreach ($this->cart->contents() as $items) {
             background: #f6d523;
             color: #000;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
+            color: #000;
+        <?}?>
     }
 
     .wizard > .steps .disabled p {
@@ -87,6 +90,10 @@ foreach ($this->cart->contents() as $items) {
             background: #B5ABB6;
         <?}?>
         <?if ($this->is_liqun_food) {?>
+            background: #cfcdcd;
+            color: #807e7e;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
             background: #cfcdcd;
             color: #807e7e;
         <?}?>
@@ -99,6 +106,10 @@ foreach ($this->cart->contents() as $items) {
             background: #f6d523;
             color: #252020;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
+            color: #252020;
+        <?}?>
     }
     .wizard > .steps .done p {
         <?if ($this->is_td_stuff) {?>
@@ -106,6 +117,10 @@ foreach ($this->cart->contents() as $items) {
         <?}?>
         <?if ($this->is_liqun_food) {?>
             background: #f6d523;
+            color: #252020;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);;
             color: #252020;
         <?}?>
     }
@@ -142,6 +157,9 @@ foreach ($this->cart->contents() as $items) {
         <?if ($this->is_liqun_food) {?>
             background-color:#cfcdcd;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background-color:rgba(239,132,104,1.0);
+        <?}?>
         height: 1.5px;
     }
     .progress_box_bar {
@@ -151,6 +169,9 @@ foreach ($this->cart->contents() as $items) {
         <?}?>
         <?if ($this->is_liqun_food) {?>
             background: #f6d523;
+        <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background: rgba(239,132,104,1.0);
         <?}?>
     }
     @media (max-width: 767.98px) {
@@ -181,8 +202,21 @@ foreach ($this->cart->contents() as $items) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1;?>
-                                <?php foreach ($this->cart->contents() as $items): ?>
+                                <?php $i = 1;
+                                $product_list = array();
+                                foreach ($this->cart->contents() as $items):
+                                    $this->db->select('product_category_id');
+                                    $this->db->where('product_id', $items['product_id']);
+                                    $this->db->limit(1);
+                                    $p_row = $this->db->get('product')->row_array();
+                                    if (!empty($p_row)) {
+                                        $product_list[] = array(
+                                            'product_category_id' => $p_row['product_category_id'],
+                                            'product_id' => $items['product_id'],
+                                            'product_combine_id' => $items['id'],
+                                        );
+                                    }
+                                ?>
                                 <tr style="border-top:1px solid dimgray;">
                                     <td><?=$i?></td>
                                     <td>
@@ -255,6 +289,7 @@ foreach ($this->cart->contents() as $items) {
                             <div class="row">
                                 <div class="col-12">
                                     <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
+                                    <input type="hidden" id="cart_total" value="<?php echo '$' . $this->cart->total() ?>">
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -270,18 +305,70 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
-                                    <? $delivery_count = 0;
-                                    foreach ($delivery as $row) {?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
-                                        <label class="form-check-label" for="checkout_delivery<?=$delivery_count?>">
-                                            <?=$row['delivery_name']?>
-                                        </label>
-                                        <?if (!empty($row['delivery_info'])) {?>
-                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$row['delivery_info'];?></p>
-                                        <?}?>
-                                    </div>
-                                    <?$delivery_count++;}?>
+                                    <?
+                                    $deliveryList = array();
+                                    if (!empty($product_list)) {
+                                        foreach ($product_list as $pl_row) {
+                                            if ($pl_row['product_category_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'ProductCategory');
+                                                $this->db->where('source_id', $pl_row['product_category_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCategory';
+                                                    }
+                                                }
+                                            }
+                                            if ($pl_row['product_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'Product');
+                                                $this->db->where('source_id', $pl_row['product_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'Product';
+                                                    }
+                                                }
+                                            }
+                                            if ($pl_row['product_combine_id'] > 0) {
+                                                $this->db->select('delivery_id,source,source_id');
+                                                $this->db->where('source', 'ProductCombine');
+                                                $this->db->where('source_id', $pl_row['product_combine_id']);
+                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                                if (!empty($drl_query)) {
+                                                    foreach ($drl_query as $drl_row) {
+                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCombine';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    $this->db->select('delivery_name_code,delivery_name,delivery_info');
+                                    if (!empty($deliveryList)) {
+                                        $deliveryIdList = array();
+                                        foreach ($deliveryList as $key => $value) {
+                                            $deliveryIdList[] = $key;
+                                        }
+                                        $this->db->where_in('id', $deliveryIdList);
+                                    }
+                                    $this->db->where('delivery_status', 1);
+                                    $d_query = $this->db->get('delivery')->result_array();
+
+                                    $delivery_count = 0;
+                                    foreach ($d_query as $d_row) {?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?=$delivery_count?>" value="<?=$d_row['delivery_name_code'];?>" <?php echo($delivery_count==0?'checked':'') ?>>
+                                            <label class="form-check-label" for="checkout_delivery<?=$d_row['delivery_name_code'];?>">
+                                                <?=$d_row['delivery_name']?>
+                                            </label>
+                                            <?if (!empty($d_row['delivery_info'])) {?>
+                                                <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?=$d_row['delivery_info'];?></p>
+                                            <?}?>
+                                        </div>
+                                        <?
+                                        $delivery_count++;
+                                    }?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
@@ -289,7 +376,7 @@ foreach ($this->cart->contents() as $items) {
                                     foreach ($payment as $row) {?>
                                         <div class="form-check <?php // echo ($row['payment_code']=='ecpay'?'d-none':'') ?>">
                                             <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?=$payment_count?>" value="<?=$row['payment_code'];?>" <?php echo($payment_count==0?'checked':'') ?>>
-                                            <label class="form-check-label" for="checkout_payment<?=$payment_count?>">
+                                            <label class="form-check-label" for="checkout_payment<?=$row['payment_code'];?>">
                                                 <?=$row['payment_name']?>
                                             </label>
                                             <?if (!empty($row['payment_info'])) {?>
@@ -303,6 +390,7 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12">
                                     <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
+                                    <input type="hidden" id="total_amount" value="<?php echo '$' . $this->cart->total() ?>">
                                 </div>
                             </div>
                         </div>
@@ -337,19 +425,19 @@ foreach ($this->cart->contents() as $items) {
                                         <div id="twzipcode"></div>
                                     </div>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
+                                <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
-                                    <input type="text" class="form-control" name="address" placeholder="請輸入詳細地址">
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
                                     <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市地址</span>
                                     </div>
@@ -358,16 +446,64 @@ foreach ($this->cart->contents() as $items) {
                                         <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
                                     </div>
                                 </div>
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">訂單備註</span>
+                                    </div>
+                                    <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
+                                </div>
+                                <div class="input-group col-12 col-sm-8 mb-3" style="display: <?=($this->session->userdata('member_join_status') == 'IsJoin' ? 'none' : 'show' )?>;">
+                                    <div class="input-group-prepend become_member_quickly" onclick="changeBecomeMemberQuickly()" style="cursor: pointer;">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-square"></i>
+                                            <i class="fa-regular fa-square-check" style="display:none;"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" value="快速成為會員" disabled>
+                                </div>
+                                <div class="input-group col-12 col-sm-8 mb-3 joinMember" style="display:none;">
+                                    <input type="hidden" value="" id="become_member_quickly" name="become_member_quickly">
+                                    <div class="input-group pb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">帳號</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="account" name="account" value="" readonly>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
+                                    </div>
+                                    <div class="input-group pb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密碼</span>
+                                        </div>
+                                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="請輸入密碼">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="passwordShowOrHide('password')">
+                                                <i class="fa-solid fa-eye" id="password_eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密碼確認</span>
+                                        </div>
+                                        <input type="password" class="form-control" id="password_confirm" name="password_confirm" value="" placeholder="請輸入密碼確認">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
+                                                <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </section>
-                    <h3>訂單備註</h3>
+                    <h3>確認下單</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="row p-3 justify-content-center">
-                                <div class="form-group col-12">
-                                    <label class="col-form-label">訂單備註</label>
-                                    <textarea class="form-control" name="remark" rows="3"></textarea>
+                                <div class="col-12">
+                                    <span class="confirm_info" style="font-size: 18px;"></span>
                                 </div>
                                 <div class="col-12 py-3" id="NotesOnBankRemittance">
                                     <p>＊銀行匯款＊<br>注意事項：完成付款後，記得聯繫客服，確認付款完成！</p>
@@ -381,8 +517,7 @@ foreach ($this->cart->contents() as $items) {
                                 <!-- <div class="col-12 py-5">
                                     <p>服務條款： 按一下按鈕送出訂單，即表示您確認已詳閱隱私政策，並且同意 龍寶嚴選 的<a href="./PrivacyPolicy.html" target="_blank">使用條款</a>。</p>
                                 </div> -->
-                                <div class="col-6">
-                                    <!-- <button type="submit" class="btn btn-primary w-100">下單購買</button> -->
+                                <div class="col-6 my-5">
                                     <span onclick="form_check()" class="btn btn-primary w-100">下單購買</span>
                                 </div>
                             </div>
@@ -406,7 +541,7 @@ $("#wizard").steps({
     headerTag: "h3",
     bodyTag: "section",
     transitionEffect: "slideLeft",
-    enableFinishButton: false,
+    // enableFinishButton: false,
     saveState: true,
     <?php if($this->input->get('step')!=''){
         echo 'startIndex: '.$this->input->get('step').',';
@@ -430,7 +565,7 @@ $("#wizard").steps({
         cancel: "取消",
         current: "current step:",
         pagination: "Pagination",
-        finish: "完成",
+        finish: "下單購買",
         next: "下一步",
         previous: "上一步",
         loading: "載入中..."
@@ -443,12 +578,24 @@ $("#wizard").steps({
             inputValue = inputValue.slice(0, 10);
             $(this).val(inputValue);
         });
+        var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+        var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
         // console.log(currentIndex)
         // console.log(event)
         // console.log(newIndex)
+        // console.log(delivery);
+
+        if (delivery == '711_pickup') {
+            $('.delivery_address').hide();
+            $('.supermarket').show();
+        }
+        if (delivery == 'home_delivery') {
+            $('.delivery_address').show();
+            $('.supermarket').hide();
+        }
         if (newIndex === 3) {
-            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
-            var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
+            // var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            // var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
             if($('#name').val()==''){
                 alert('請輸入收件姓名');
                 return false;
@@ -472,10 +619,78 @@ $("#wizard").steps({
             } else {
                 $('#NotesOnBankRemittance').show();
             }
+            if ($('#become_member_quickly').val() == 'yes') {
+                if ($('#password').val() == '') {
+                    alert('請輸入密碼！');
+                    return false;
+                }
+                if ($('#password_confirm').val() == '') {
+                    alert('請輸入密碼確認！');
+                    return false;
+                }
+                if ($('#password').val().length < 8) {
+                    alert('密碼請輸入 8 位(含)以上的數字或英文！');
+                    return false;
+                }
+                if ($('#password_confirm').val().length < 8) {
+                    alert('密碼確認請輸入 8 位(含)以上的數字或英文！');
+                    return false;
+                }
+                if ($('#password').val() != $('#password_confirm').val()) {
+                    alert('密碼不匹配！請在確認輸入的密碼。');
+                    return false;
+                }
+            }
         }
+        checkConfirmInfo();
         return true;
+    },
+    onFinishing: function (event, currentIndex) { 
+        form_check();
+        return true; 
     }
 });
+function checkConfirmInfo() {
+    var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
+    var checkoutDeliveryLabel = $('label[for="checkout_delivery'+ selectedCheckoutDelivery +'"]').text();
+    var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
+    var checkoutPaymentLabel = $('label[for="checkout_payment'+ selectedCheckoutPayment +'"]').text();
+    var data = '';
+    data += '<table class="table table-bordered table-striped"><tbody>';
+    data += '<tr><td class="text-center" colspan="3"><h2 class="m-0">訂購資訊確認</h2></td></tr>';
+    if ($('#name').val() != '') {
+        data += '<tr><td>姓名</td><td>'+$('#name').val()+'</td></tr>';
+    }
+    if ($('#phone').val() != '') {
+        data += '<tr><td>電話</td><td>'+$('#phone').val()+'</td></tr>';
+    }
+    if ($('#email').val() != '') {
+        data += '<tr><td>信箱</td><td>'+$('#email').val()+'</td></tr>';
+    }
+    if ($('#address').val() != '') {
+        data += '<tr><td>地址</td><td>'+$('#address').val()+'</td></tr>';
+    }
+    if ($('#storename').val() != '') {
+        data += '<tr><td>取件門市</td><td>'+$('#storename').val()+'</td></tr>';
+    }
+    if ($('#storeaddress').val() != '') {
+        data += '<tr><td>取件地址</td><td>'+$('#storeaddress').val()+'</td></tr>';
+    }
+    data += '<tr><td>訂單備註</td><td>'+$('#remark').val()+'</td></tr>';
+    data += '<tr><td>運送方式</td><td>'+checkoutDeliveryLabel+'</td></tr>';
+    data += '<tr><td>付款方式</td><td>'+checkoutPaymentLabel+'</td></tr>';
+    // if ($('#xxxxx').val() != '') {
+    //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
+    // }
+    if ($('#cart_total').val() != '') {
+        data += '<tr><td>購物車小計</td><td>'+$('#cart_total').val()+'</td></tr>';
+    }
+    if ($('#total_amount').val() != '') {
+        data += '<tr><td>總計</td><td style="color:red;font-size:20px">'+$('#total_amount').val()+'</td></tr>';
+    }
+    data += "</tbody></table>";
+    $(".confirm_info").html(data);
+}
 </script>
 <!-- purchase-steps -->
 <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
@@ -490,12 +705,19 @@ $("#wizard").steps({
 </script>
 <script>
     $(document).ready(function() {
+        $('#account').val('');
+        $('#password').val('');
+        $('#password_confirm').val('');
+        $(".confirm_info").html('');
         $('#phone').on('input', function() {
             var inputValue = $(this).val();
             inputValue = inputValue.replace(/\D/g, '');
             inputValue = inputValue.slice(0, 10);
             $(this).val(inputValue);
         });
+        document.getElementById("phone").onchange = function() {
+            $('#account').val($('#phone').val());
+        };
         $(function() {
             var h = $(window).height();
             var header_h = $("#header").height();
@@ -561,5 +783,52 @@ $("#wizard").steps({
             }
         }
         $('#checkout_form').submit();
+    }
+
+    function passwordShowOrHide(source) {
+        if ($('#'+source).attr("type") === "password") {
+            $('#'+source).attr("type", "text");
+            $('#'+source+'_eye').removeClass("fa-eye");
+            $('#'+source+'_eye').addClass("fa-eye-slash");
+        } else {
+            $('#'+source).attr("type", "password");
+            $('#'+source+'_eye').removeClass("fa-eye-slash");
+            $('#'+source+'_eye').addClass("fa-eye");
+        }
+    }
+
+    function changeBecomeMemberQuickly() {
+        if ($('#phone').val().length < 10) {
+            if ($('#become_member_quickly').val() == 'yes') {
+                $('#become_member_quickly').val('');
+                $('.become_member_quickly .fa-square-check').hide();
+                $('.become_member_quickly .fa-square').show();
+                $('.joinMember').css('display', 'none');
+                $('#account').val('');
+                $('#password').val('');
+                $('#password_confirm').val('');
+                return false;
+            }
+            alert('請輸入完整的收件電話');
+            return false;
+        }
+        if ($('#become_member_quickly').val() == 'yes') {
+            $('#become_member_quickly').val('');
+            $('.become_member_quickly .fa-square-check').hide();
+            $('.become_member_quickly .fa-square').show();
+        } else {
+            $('#become_member_quickly').val('yes');
+            $('.become_member_quickly .fa-square-check').show();
+            $('.become_member_quickly .fa-square').hide();
+        }
+        if ($('#become_member_quickly').val() == 'yes') {
+            $('#account').val($('#phone').val());
+            $('.joinMember').css('display', 'block');
+        } else {
+            $('.joinMember').css('display', 'none');
+            $('#account').val('');
+            $('#password').val('');
+            $('#password_confirm').val('');
+        }
     }
 </script>

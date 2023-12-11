@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12" style="padding-bottom: 10px;">
-        <?if ($SingleSalesDetail['status'] != 'Closure') {?>
+        <?if ($SingleSalesDetail['status'] != 'Closure' && $SingleSalesDetail['status'] != 'Finish') {?>
         <span class="btn btn-primary" data-toggle="modal" data-target="#createAgent">
             建立代言人數量 <i class="fa-solid fa-plus"></i>
         </span>
@@ -87,7 +87,7 @@
                     </td>
                     <td>
                         <div class="input-group">
-                            <input type="number" max="100" min="0" id="profit_percentage_<?=$row['single_sales_agent_id']?>" value="<?=format_number($row['profit_percentage'])?>" class="form-control">
+                            <input type="number" max="100" min="0" id="profit_percentage_<?=$row['single_sales_agent_id']?>" value="<?=($row['profit_percentage'] > 0 ? format_number($row['profit_percentage']) : format_number($SingleSalesDetail['default_profit_percentage']))?>" class="form-control">
                             <span class="input-group-addon">%</span>
                         </div>
                     </td>

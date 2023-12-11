@@ -62,6 +62,10 @@
             background-color: #f6d523;
             color: #000 !important;
         <?}?>
+        <?if ($this->is_partnertoys) {?>
+            background-color: rgba(239,132,104,1.0);
+            color: #fff !important;
+        <?}?>
     }
 @media (max-width: 767px) {
     .num_box {

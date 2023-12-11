@@ -1,5 +1,5 @@
 <div class="row">
-    <?php $attributes = array('class' => 'submit_form', 'id' => 'submit_form');?>
+    <?php $attributes = array('class' => 'submit_form', 'id' => 'submit_form'); ?>
     <?php echo form_open('admin/product/insert', $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
@@ -25,24 +25,42 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <?if (!empty($product_category)) {?>
-                                    <label for="product_category">分類</label>
+                                    <? if (!empty($product_category)) { ?>
+                                        <label for="product_category">分類</label>
                                     <?php $att = 'id="product_category" class="form-control chosen" data-rule-required="true"';
-                                    	$data = array();
-                                    	foreach ($product_category as $c) {
-                                    		$data[$c['product_category_id']] = $c['product_category_name'];
-                                    	}
-                                    	echo form_dropdown('product_category', $data, '0', $att);
+                                        $data = array();
+                                        foreach ($product_category as $c) {
+                                            $data[$c['product_category_id']] = $c['product_category_name'];
+                                        }
+                                        echo form_dropdown('product_category', $data, '0', $att);
                                     } else {
-                                    	echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
-                                    }?>
-                                  </div>
+                                        echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
+                                    } ?>
+                                </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="distribute_at">上架日期</label>
+                                    <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" required>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="discontinued_at">下架日期</label>
+                                    <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" required>
+                                </div>
+                            </div> -->
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_name">商品名稱</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" required>
                                     <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="product_sku">品號</label>
+                                    <input type="text" class="form-control" id="product_sku" name="product_sku" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
