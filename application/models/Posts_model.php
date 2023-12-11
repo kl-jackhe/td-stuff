@@ -85,6 +85,4 @@ class Posts_model extends CI_Model
         $query = $this->db->get('post_category');
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
     }
-
-    
 }

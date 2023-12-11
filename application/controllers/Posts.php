@@ -26,7 +26,13 @@ class Posts extends Public_Controller
         //get the posts data
         $this->data['posts'] = $this->posts_model->getPosts(array('limit' => 5));
         $this->data['posts_category'] = $this->posts_model->getPostCategoryId();
-        $this->render('posts/partnertoys_index');
+
+        if ($this->is_liqun_food || $this->is_td_stuff) {
+            $this->render('posts/index');
+        }
+        if ($this->is_partnertoys) {
+            $this->render('posts/partnertoys_index');
+        }
     }
 
     function ajaxData()

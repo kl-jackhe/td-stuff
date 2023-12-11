@@ -23,11 +23,16 @@ class Product extends Public_Controller {
 		$this->ajax_pagination->initialize($config);
 		//get the posts data
 		$this->data['products'] = $this->product_model->getProducts();
-		$this->data['product_combine'] = $this->product_model->getProductCombine();
-		$this->data['product_combine_item'] = $this->product_model->getProductCombineItem();
 		$this->data['product_category'] = $this->product_model->get_product_category();
 
-		$this->render('product/partnertoys_index');
+		if($this->is_liqun_food || $this->is_td_stuff){
+			$this->render('product/index');
+		}
+		if($this->is_partnertoys){
+			$this->data['product_combine'] = $this->product_model->getProductCombine();
+			$this->data['product_combine_item'] = $this->product_model->getProductCombineItem();
+			$this->render('product/partnertoys_index');
+		}
 	}
 
 	function ajaxData() {

@@ -28,9 +28,11 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+    <?php if ($this->is_partnertoys) : ?>
+        <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+        <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <?php endif; ?>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vue-router@4"></script>

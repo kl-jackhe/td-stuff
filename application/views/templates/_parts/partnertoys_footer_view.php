@@ -112,19 +112,23 @@
 </div>
 <script src="/assets/bootstrap-4.2.1-dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
+<?php if ($this->is_partnertoys) : ?>
+    <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+<?php endif; ?>
 <script>
-    const footer = Vue.createApp({
-        data() {
-            return {
-                postCategory: <?php echo json_encode($post_category); ?>,
-                productCategory: <?php echo json_encode($product_category); ?>,
-            };
-        },
-    });
-    // 掛載 footer Vue 應用到 #footer 元素
-    footer.mount('#footer');
+    <?php if ($this->is_partnertoys) : ?>
+        const footer = Vue.createApp({
+            data() {
+                return {
+                    postCategory: <?php echo json_encode($post_category); ?>,
+                    productCategory: <?php echo json_encode($product_category); ?>,
+                };
+            },
+        });
+        // 掛載 footer Vue 應用到 #footer 元素
+        footer.mount('#footer');
+    <?php endif; ?>
 
     $(document).ready(function() {
         $('#home-carousel').carousel({
