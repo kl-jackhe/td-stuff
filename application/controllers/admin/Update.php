@@ -46,6 +46,7 @@ class Update extends Admin_Controller {
                             $this->update_202312051900();
                             $this->update_202312062000();
                             $this->update_202312112300();
+                            $this->update_202312121520();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -56,6 +57,65 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312121520() {
+        $version = '202312121520';
+        $description = '[product,delivery]新增欄位[product_weight,volume_length,volume_width,volume_height,volume_weight]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'product_weight'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `product_weight` varchar(255) NOT NULL AFTER `product_sku`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_length'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_length` varchar(255) NOT NULL AFTER `product_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_width'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_width` varchar(255) NOT NULL AFTER `volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_height'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_high` varchar(255) NOT NULL AFTER `volume_width`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_weight'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_weight` varchar(255) NOT NULL AFTER `volume_high`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'product_weight'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `product_weight` varchar(255) NOT NULL AFTER `shipping_cost`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_length'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `volume_length` varchar(255) NOT NULL AFTER `product_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_width'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `volume_width` varchar(255) NOT NULL AFTER `volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_height'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `volume_high` varchar(255) NOT NULL AFTER `volume_width`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_weight'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `volume_weight` varchar(255) NOT NULL AFTER `volume_high`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -112,6 +172,7 @@ class Update extends Admin_Controller {
             }
         }
     }
+
     function update_202312051900() {
         $version = '202312051900';
         $description = '[product]新增欄位[distribute_at]';
