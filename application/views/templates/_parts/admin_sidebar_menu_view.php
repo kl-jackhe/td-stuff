@@ -37,7 +37,7 @@ $sales_current = $this->uri->segment(3);?>
       </a>
     </li> -->
     <?}?>
-    <?if ($this->is_td_stuff) {?>
+    <?if ($this->is_td_stuff || $this->is_liqun_food) {?>
     <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa-solid fa-file-circle-check"></i>
@@ -52,13 +52,31 @@ $sales_current = $this->uri->segment(3);?>
           <a href="/admin/sales/history">銷售紀錄</a>
         </li>
       </ul>
-    <li>
-      <li class="<?php if ($current == "agent") {echo "active";}?>">
+    </li>
+    <li class="<?php if ($current == "agent") {echo "active";}?>">
       <a href="/admin/agent">
         <i class="fa-solid fa-handshake"></i>
         <span>代言人管理</span>
       </a>
-    <li>
+    </li>
+    <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
+      <a href="#" class="dropdown-toggle">
+        <i class="fa-solid fa-id-card-clip"></i>
+        <span>加盟主管理</span>
+        <b class="arrow fa fa-angle-right"></b>
+      </a>
+      <ul class="submenu">
+        <li <?php if ($sales_current == "history") {echo 'class="active"';}?>>
+          <a href="/admin/franchise/history">銷售紀錄</a>
+        </li>
+        <li <?php if ($sales_current == "pages") {echo 'class="active"';}?>>
+          <a href="/admin/franchise/pages">頁面管理</a>
+        </li>
+        <li <?php if ($sales_current == "auth") {echo 'class="active"';}?>>
+          <a href="/admin/franchise/auth">帳號管理</a>
+        </li>
+      </ul>
+    </li>
     <?}?>
     <li class="<?php if ($current == "delivery") {echo "active";}?>">
       <a href="/admin/delivery">
