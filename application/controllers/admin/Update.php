@@ -48,6 +48,9 @@ class Update extends Admin_Controller {
                             $this->update_202312112300();
                             $this->update_202312121540();
                             $this->update_202312121541();
+                            $this->update_202312122310();
+                            $this->update_202312122315();
+                            $this->update_202312122325();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -60,6 +63,225 @@ class Update extends Admin_Controller {
             echo '</body></html>';
         }
     }
+
+    function update_202312122325() {
+        $version = '202312122325';
+        $description = '[orders]新增欄位參數';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'order_pay_status'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `order_pay_status` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `order_payment`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'merID'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `merID` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `order_status`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'authCode'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `authCode` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `merID`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'lidm'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `lidm` varchar(19) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `authCode`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'authAmt'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `authAmt` decimal(13,2) NOT NULL AFTER `lidm`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'xid'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `xid` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `authAmt`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'MerchantID'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `MerchantID` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `xid`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'MerchantTradeNo'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `MerchantTradeNo` varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `MerchantID`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'PaymentDate'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `PaymentDate` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `MerchantTradeNo`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'PaymentType'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `PaymentType` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `PaymentDate`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'PaymentTypeChargeFee'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `PaymentTypeChargeFee` decimal(13,2) NOT NULL AFTER `PaymentType`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'RtnCode'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `RtnCode` int(11) NOT NULL AFTER `PaymentTypeChargeFee`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'RtnMsg'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `RtnMsg` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `RtnCode`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'SimulatePaid'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `SimulatePaid` int(1) NOT NULL AFTER `RtnMsg`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'TradeAmt'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `TradeAmt` decimal(13,2) NOT NULL AFTER `SimulatePaid`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'PayAmt'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `PayAmt` decimal(13,2) NOT NULL AFTER `TradeAmt`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'TradeNo'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `TradeNo` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `PayAmt`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'TradeDate'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `TradeDate` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `TradeNo`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'PaymentNo'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `PaymentNo` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `TradeDate`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'VirtualAccount'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `VirtualAccount` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `PaymentNo`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'BankCode'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `BankCode` varchar(3) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `VirtualAccount`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'ExpireDate'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `ExpireDate` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `BankCode`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'invoid'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `invoid` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `ExpireDate`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'send_date'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `send_date` date NOT NULL AFTER `invoid`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'send_type'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `send_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `send_date`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'send_no'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `send_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `send_type`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'upay_no'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `upay_no` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `send_no`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'upay_price'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `upay_price` decimal(13,2) NOT NULL AFTER `upay_no`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'upay_name'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `upay_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `upay_price`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'upay_date'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `upay_date` date NOT NULL AFTER `upay_name`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'upay_memo'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `upay_memo` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `upay_date`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'stock_makeup'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `stock_makeup` int(8) NOT NULL AFTER `upay_memo`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'point_enabled'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `point_enabled` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `stock_makeup`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'point_price'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `orders` ADD `point_price` decimal(13,2) NOT NULL AFTER `point_enabled`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312122315() {
+        $version = '202312122315';
+        $description = '[users&users_address]變更[address]長度->300';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'address'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users` CHANGE `address` `address` VARCHAR(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users_address LIKE 'address'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users_address` CHANGE `address` `address` VARCHAR(300) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312122310() {
+        $version = '202312122310';
+        $description = '[users]新增欄位[register_source,black_tag,point,fb_id,is_send_email]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'black_tag'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `black_tag` int(11) NOT NULL AFTER `status`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'register_source'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `register_source` int(11) NOT NULL AFTER `black_tag`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'point'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `point` int(11) NOT NULL AFTER `company`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'fb_id'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `fb_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `id`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'is_send_email'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `is_send_email` tinyint(1) NOT NULL;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
 
     function update_202312121541() {
         $version = '202312121541';
