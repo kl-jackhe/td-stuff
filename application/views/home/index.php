@@ -220,11 +220,3 @@
         </div>
     </section>
 </div>
-
-<script>
-    $('#home-carousel').carousel({
-          interval: 6000
-    })
-</script>
-
-<!-- data-plugin-options='{"items": 2, "loop": true, "nav":true, "dots":true,"autoplay": true,"autoplayTimeout": 6000}' -->
