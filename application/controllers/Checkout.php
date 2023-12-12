@@ -34,11 +34,12 @@ class Checkout extends Public_Controller
 			$this->data['user_data']['address'] = get_cookie("user_address", true);
 		}
 		$this->setMemberInfo($this->data['user_data']['phone']);
+
 		if ($this->is_liqun_food || $this->is_td_stuff) {
 			$this->render('checkout/index');
 		}
 		if ($this->is_partnertoys) {
-			$this->data['ECpay'] = $this->mysql_model->_select('features_pay', 'pay_id', '1');
+			// $this->data['ECPayVal'] = $this->mysql_model->_select('features_pay', 'pay_id', 1);
 			$this->render('checkout/partnertoys_index');
 		}
 	}
@@ -252,10 +253,9 @@ class Checkout extends Public_Controller
 			 */
 
 			//載入SDK(路徑可依系統規劃自行調整)
-			require('ECPay.Payment.Integration.php');
 			try {
-
-				$obj = new ECPay_AllInOne();
+				$this->load->library('ecpay_payment'); //用前述建立的library來取得ECPay_AllInOne物件
+				$obj = $this->ecpay_payment->load();
 
 				// 測試環境
 				// $obj->ServiceURL  = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
