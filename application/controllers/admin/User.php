@@ -15,7 +15,7 @@ class User extends Admin_Controller {
 
 	public function index()
     {
-        $this->data['page_title'] = '使用者管理';
+        $this->data['page_title'] = '會員管理';
 
         $query = $this->ion_auth_model->getUsers();
         $data = array();

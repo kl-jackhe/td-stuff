@@ -10,7 +10,7 @@ class Posts extends Admin_Controller {
 
     public function index()
     {
-        $this->data['page_title'] = '文章';
+        $this->data['page_title'] = '最新消息';
 
         $data = array();
         //total rows count

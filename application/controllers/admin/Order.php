@@ -22,7 +22,7 @@ class Order extends Admin_Controller {
 	}
 
 	public function index() {
-		$this->data['page_title'] = '訂單';
+		$this->data['page_title'] = '訂單管理';
 		$this->data['payment'] = $this->order_model->getPaymentList();
 		$this->data['delivery'] = $this->order_model->getDeliveryList();
 		$this->data['single_sales'] = $this->sales_model->getSingleSalesList();
