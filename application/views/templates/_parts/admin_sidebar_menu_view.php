@@ -30,12 +30,12 @@ $sales_current = $this->uri->segment(3);?>
         <span>抽選管理</span>
       </a>
     </li>
-    <li class="<?php if ($current == "mail") {echo "active";}?>">
+    <!-- <li class="<?php if ($current == "mail") {echo "active";}?>">
       <a href="/admin/mail">
         <i class="fa-solid fa-envelopes-bulk"></i>
         <span>郵件管理</span>
       </a>
-    </li>
+    </li> -->
     <?}?>
     <?if ($this->is_td_stuff) {?>
     <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
@@ -84,20 +84,17 @@ $sales_current = $this->uri->segment(3);?>
         <span>首頁輪播</span>
       </a>
     </li>
-    <li <?php if ($current == "user" || $current == "driver" || $current == "auth") {echo "class='active'";}?>>
-      <a href="#" class="dropdown-toggle">
-        <i class="fa fa-users"></i>
-        <span>帳號管理</span>
-        <b class="arrow fa fa-angle-right"></b>
+    <li class="<?php if ($current == "user") {echo "active";}?>">
+      <a href="/admin/user">
+        <i class="fa-solid fa-people-group"></i>
+        <span>會員管理</span>
       </a>
-      <ul class="submenu">
-        <li <?php if ($current == "user") {echo 'class="active"';}?>>
-          <a href="/admin/user">使用者管理</a>
-        </li>
-        <li <?php if ($current == "auth") {echo 'class="active"';}?>>
-          <a href="/admin/auth">管理員系統</a>
-        </li>
-      </ul>
+    </li>
+    <li class="<?php if ($current == "auth") {echo "active";}?>">
+      <a href="/admin/auth">
+        <i class="fa-solid fa-user-gear"></i>
+        <span>管理員</span>
+      </a>
     </li>
     <li class="<?php if ($current == "setting") {echo "active";}?>">
       <a href="/admin/setting/general">
