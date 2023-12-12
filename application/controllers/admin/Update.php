@@ -46,7 +46,8 @@ class Update extends Admin_Controller {
                             $this->update_202312051900();
                             $this->update_202312062000();
                             $this->update_202312112300();
-                            $this->update_202312121520();
+                            $this->update_202312121540();
+                            $this->update_202312121541();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -60,53 +61,62 @@ class Update extends Admin_Controller {
         }
     }
 
-    function update_202312121520() {
-        $version = '202312121520';
-        $description = '[product,delivery]新增欄位[product_weight,volume_length,volume_width,volume_height,volume_weight]';
+    function update_202312121541() {
+        $version = '202312121541';
+        $description = '[delivery]新增欄位*limit*[product_weight,volume_length,volume_width,volume_height]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_product_weight'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_product_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `shipping_cost`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_length'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_product_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_width'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_width` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_height'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_volume_width`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312121540() {
+        $version = '202312121540';
+        $description = '[product]新增欄位[product_weight,volume_length,volume_width,volume_height]';
         $this->db->select('id');
         $this->db->where('version',$version);
         $row = $this->db->get('update_log')->row_array();
         if (empty($row)) {
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'product_weight'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `product` ADD `product_weight` varchar(255) NOT NULL AFTER `product_sku`;");
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `product_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `product_sku`;");
             }
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_length'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `product` ADD `volume_length` varchar(255) NOT NULL AFTER `product_weight`;");
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `product_weight`;");
             }
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_width'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `product` ADD `volume_width` varchar(255) NOT NULL AFTER `volume_length`;");
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_width` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_length`;");
             }
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_height'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `product` ADD `volume_high` varchar(255) NOT NULL AFTER `volume_width`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_weight'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `product` ADD `volume_weight` varchar(255) NOT NULL AFTER `volume_high`;");
-            }
-
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'product_weight'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `product_weight` varchar(255) NOT NULL AFTER `shipping_cost`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_length'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `volume_length` varchar(255) NOT NULL AFTER `product_weight`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_width'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `volume_width` varchar(255) NOT NULL AFTER `volume_length`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_height'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `volume_high` varchar(255) NOT NULL AFTER `volume_width`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'volume_weight'")->result_array();
-            if (!empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `volume_weight` varchar(255) NOT NULL AFTER `volume_high`;");
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_width`;");
             }
 
             $insertData = array(
