@@ -45,6 +45,7 @@ class Update extends Admin_Controller {
                             $this->update_202311211630();
                             $this->update_202312051900();
                             $this->update_202312062000();
+                            $this->update_202312112300();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -55,6 +56,37 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312112300() {
+        $version = '202312112200';
+        $description = '新增資料表[features_pay]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'features_pay'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `features_pay` (
+                    `pay_id` int(2) NOT NULL,
+                    `pay_name` varchar(30) NOT NULL,
+                    `ECPAY_ACTIVE` char(1) NOT NULL,
+                    `ECPAY_OPEN` char(1) NOT NULL,
+                    `ECPAY_MerchantID` varchar(10) NOT NULL,
+                    `ECPAY_HashKey` varchar(64) NOT NULL,
+                    `ECPAY_HashIV` varchar(64) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `features_pay` ADD PRIMARY KEY (`pay_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

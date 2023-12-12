@@ -96,99 +96,112 @@
     </div>
 </div>
 <script src="/assets/bootstrap-4.2.1-dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
-<!-- <script defer src="/assets/fullPage.js-master/dist/jquery.fullpage.min.js"></script>
-<script defer src="/assets/fullPage.js-master/vendors/jquery.easings.min.js"></script> -->
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script><script>
 $(document).ready(function() {
-    get_cart_qty();
-});
-</script>
-<!-- MyCart -->
-<script>
-function get_cart_qty() {
-    $.ajax({
-        url: "/cart/check_cart_is_empty",
-        method: "GET",
-        data: {},
-        success: function(data) {
-            $('#cart-qty span').html(data);
-        }
-    });
-}
-function get_mini_cart() {
-    $('#my_cart .modal-body').load("/cart/mini_cart");
-}
-function view_form_check() {
-    $.ajax({
-        url: "/cart/check_cart_is_empty",
-        method: "GET",
-        data: {},
-        success: function(data) {
-            if (data > 0) {
-                // $('#view_form').submit();
-                $(location).attr('href', '/checkout');
+        $('#home-carousel').carousel({
+            interval: 5000
+        });
+        get_cart_qty();
+        var $navbarToggler = $("#navbarToggler");
+        var $menuToggle = $(".navbar-toggler");
+        var isOpen = false;
+        $menuToggle.click(function() {
+            if (isOpen) {
+                $navbarToggler.animate({
+                    left: "-100%"
+                }, 500, function() {
+                    isOpen = false;
+                });
             } else {
-                alert('購物車是空的，請添加商品。');
+                $navbarToggler.animate({
+                    left: 0
+                }, 500, function() {
+                    isOpen = true;
+                });
             }
-        }
-    });
-}
-</script>
-<!-- MyCart -->
-<script>
-$(document).ready(function() {
-    //<!-- Window Height -->
-    $(function() {
-        var h = $(window).height();
-        var header_h = $("#header").height();
-        var footer_h = $("#footer").height();
-        var content_auto_h = $(".content_auto_h").height();
-        var main_h = $(".main").height();
-        var h_sum = h - header_h - footer_h;
-        // var h_checkout = h_sum * 0.6;
-        if (h_sum >= content_auto_h) {
-            $(".content_auto_h").css('height', h_sum);
+        });
+        //Window Height
+        $(function() {
+            var h = $(window).height();
+            var header_h = $("#header").height();
+            var footer_h = $("#footer").height();
+            var content_auto_h = $(".content_auto_h").height();
+            var main_h = $(".main").height();
+            var h_sum = h - header_h - footer_h;
+            // var h_checkout = h_sum * 0.6;
+            if (h_sum >= content_auto_h) {
+                $(".content_auto_h").css('height', h_sum);
+            } else {
+                $(".content_auto_h").css('height', '100%');
+            }
+            // $(".wizard > .content").css('min-height', h_checkout);
+        });
+        //<!-- scrollTop -->
+        $(function() {
+            var $win = $(window);
+            $win.scroll(function() {
+                if ($win.scrollTop() > 100) {
+                    $('#fa-angles-up').slideDown();
+                } else {
+                    $('#fa-angles-up').slideUp();
+                }
+            });
+            $('#fa-angles-up').click(function() {
+                $('html, body').animate({ scrollTop: 0 }, 200);
+            });
+        });
+        //<!-- scrollDown -->
+        $(function() {
+            $('#scrollToBottomBtn').click(function() {
+                $('html, body').animate({scrollTop: $(document).height()}, 1000);
+            });
+        });
+        //裝置辨認
+        var ua = navigator.userAgent;
+        var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
+        var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
+        if (android == true) {
+            $('#facebook_href').attr('href', 'fb://page/114764431237605')
+            // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
+        } else if (iOS == true) {
+            $('#facebook_href').attr('href', 'fb://page/?id=114764431237605')
+            // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
         } else {
-            $(".content_auto_h").css('height', '100%');
+            // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
         }
-        // $(".wizard > .content").css('min-height', h_checkout);
     });
-    //<!-- scrollTop -->
-    $(function() {
-        var $win = $(window);
-        $win.scroll(function() {
-            if ($win.scrollTop() > 100) {
-                $('#fa-angles-up').slideDown();
-            } else {
-                $('#fa-angles-up').slideUp();
+    //MyCart
+    function get_cart_qty() {
+        $.ajax({
+            url: "/cart/check_cart_is_empty",
+            method: "GET",
+            data: {},
+            success: function(data) {
+                $('#cart-qty span').html(data);
             }
         });
-        $('#fa-angles-up').click(function() {
-            $('html, body').animate({ scrollTop: 0 }, 200);
-        });
-    });
-    //<!-- scrollDown -->
-    $(function() {
-        $('#scrollToBottomBtn').click(function() {
-            $('html, body').animate({scrollTop: $(document).height()}, 1000);
-        });
-    });
-    //裝置辨認
-    var ua = navigator.userAgent;
-    var android = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1; // android
-    var iOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios
-    if(android==true){
-        $('#facebook_href').attr('href','fb://page/114764431237605')
-    // document.getElementById('resoult').innerHTML = '您的裝置是 Android';
-    }else if(iOS==true){
-        $('#facebook_href').attr('href','fb://page/?id=114764431237605')
-    // document.getElementById('resoult').innerHTML = '您的裝置是 iOS';
-    }else{
-    // document.getElementById('resoult').innerHTML = '您目前非行動裝置';
     }
-});
+
+    function get_mini_cart() {
+        $('#my_cart .modal-body').load("/cart/mini_cart");
+    }
+
+    function view_form_check() {
+        $.ajax({
+            url: "/cart/check_cart_is_empty",
+            method: "GET",
+            data: {},
+            success: function(data) {
+                if (data > 0) {
+                    // $('#view_form').submit();
+                    $(location).attr('href', '/checkout');
+                } else {
+                    alert('購物車是空的，請添加商品。');
+                }
+            }
+        });
+    }
+    //MyCart
 </script>
 </body>
 

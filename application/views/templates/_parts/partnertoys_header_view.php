@@ -30,9 +30,11 @@
     <?php if ($this->is_partnertoys) : ?>
         <link href="/assets/css/mostPage.css" rel="stylesheet">
         <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
-        <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
     <?php endif; ?>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <?php if ($this->is_partnertoys) : ?>
+        <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
     <script src="https://unpkg.com/vue@next"></script>
     <script src="https://unpkg.com/vue-router@4"></script>

@@ -1,17 +1,20 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Checkout extends Public_Controller {
+class Checkout extends Public_Controller
+{
 
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
 	}
 
-	public function index() {
+	public function index()
+	{
 		$this->data['page_title'] = '結帳';
 
 		$this->db->select('*');
 		$this->db->where('payment_status', 1);
-		$this->db->order_by('sort','asc');
+		$this->db->order_by('sort', 'asc');
 		$this->data['payment'] = $this->db->get('payment')->result_array();
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 
@@ -31,10 +34,17 @@ class Checkout extends Public_Controller {
 			$this->data['user_data']['address'] = get_cookie("user_address", true);
 		}
 		$this->setMemberInfo($this->data['user_data']['phone']);
-		$this->render('checkout/index');
+		if ($this->is_liqun_food || $this->is_td_stuff) {
+			$this->render('checkout/index');
+		}
+		if ($this->is_partnertoys) {
+			$this->data['ECpay'] = $this->mysql_model->_select('features_pay', 'pay_id', '1');
+			$this->render('checkout/partnertoys_index');
+		}
 	}
 
-	function setMemberInfo($phone) {
+	function setMemberInfo($phone)
+	{
 		unset($_SESSION['member_id']);
 		unset($_SESSION['member_join_status']);
 		unset($_SESSION['member_username']);
@@ -61,14 +71,16 @@ class Checkout extends Public_Controller {
 		$this->session->set_userdata($sessionData);
 	}
 
-	function set_user_data() {
+	function set_user_data()
+	{
 		set_cookie("user_name", $this->input->post('name'), time() + 31536000);
 		set_cookie("user_phone", $this->input->post('phone'), time() + 31536000);
 		set_cookie("user_email", $this->input->post('email'), time() + 31536000);
 		set_cookie("user_address", $this->input->post('address'), time() + 31536000);
 	}
 
-	public function save_order() {
+	public function save_order()
+	{
 		$this->data['page_title'] = '結帳';
 		$this->load->model('product_model');
 
@@ -98,7 +110,7 @@ class Checkout extends Public_Controller {
 			$u_row = $this->checkThereAreMembers($this->input->post('phone'));
 			if (empty($u_row)) {
 				$this->createUsers($this->input->post('name'), $this->input->post('phone'), $this->input->post('email'), $this->input->post('password'), $this->input->post('become_member_quickly'));
-			} 
+			}
 			if (!empty($u_row)) {
 				if ($u_row['join_status'] == 'NotJoin') {
 					$this->updateJoinUser($u_row, $this->input->post('password'));
@@ -144,14 +156,14 @@ class Checkout extends Public_Controller {
 			'order_pay_status' => $order_pay_status,
 			'order_step' => 'confirm',
 			'order_remark' => $this->input->post('remark'),
-			'single_sales_id' => ($this->session->userdata('single_sales_id') != ''?$this->session->userdata('single_sales_id'):''),
-			'agent_id' => ($this->session->userdata('agent_id') != ''?$this->session->userdata('agent_id'):''),
+			'single_sales_id' => ($this->session->userdata('single_sales_id') != '' ? $this->session->userdata('single_sales_id') : ''),
+			'agent_id' => ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : ''),
 			// 'creator_id' => $this->ion_auth->user()->row()->id,
 			'created_at' => $created_at,
 		);
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
-		foreach ($this->cart->contents() as $cart_item):
+		foreach ($this->cart->contents() as $cart_item) :
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
@@ -175,7 +187,7 @@ class Checkout extends Public_Controller {
 						'created_at' => $created_at,
 					);
 					$this->db->insert('order_item', $order_item);
-					if (array_key_exists($items['product_id'],$inventory)) {
+					if (array_key_exists($items['product_id'], $inventory)) {
 						$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
 					} else {
 						$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
@@ -184,12 +196,12 @@ class Checkout extends Public_Controller {
 				if (!empty($inventory)) {
 					foreach ($inventory as $key => $value) {
 						$this->db->select('excluding_inventory');
-						$this->db->where('product_id',$key);
+						$this->db->where('product_id', $key);
 						$p_row = $this->db->get('product')->row_array();
 						if (!empty($p_row)) {
 							if ($p_row['excluding_inventory'] == false) {
 								$this->db->set('inventory', 'inventory - ' . $value, FALSE);
-								$this->db->where('product_id',$key);
+								$this->db->where('product_id', $key);
 								$this->db->update('product');
 
 								$inventory_log = array(
@@ -240,7 +252,7 @@ class Checkout extends Public_Controller {
 			 */
 
 			//載入SDK(路徑可依系統規劃自行調整)
-			include 'ECPay.Payment.Integration.php';
+			require('ECPay.Payment.Integration.php');
 			try {
 
 				$obj = new ECPay_AllInOne();
@@ -264,7 +276,7 @@ class Checkout extends Public_Controller {
 				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
 				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); //交易時間
 				$obj->Send['TotalAmount'] = $order_total; //交易金額
-				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: '.$this->input->post('remark')); //交易描述
+				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: ' . $this->input->post('remark')); //交易描述
 				$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式:Credit
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
@@ -273,11 +285,11 @@ class Checkout extends Public_Controller {
 				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
 				//訂單的商品資料
 				array_push($obj->Send['Items'], array(
-				    'Name' => "網購商品",
-				    'Price' => (int)$order_total,
-				    'Currency' => "元",
-				    'Quantity' => (int) "1筆",
-				    'URL' => "dedwed"
+					'Name' => "網購商品",
+					'Price' => (int)$order_total,
+					'Currency' => "元",
+					'Quantity' => (int) "1筆",
+					'URL' => "dedwed"
 				));
 				// if ($cart = $this->cart->contents()):
 				// 	foreach ($cart as $item):
@@ -305,117 +317,118 @@ class Checkout extends Public_Controller {
 
 				//產生訂單(auto submit至ECPay)
 				$obj->CheckOut();
-
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
 
-		// Line Pay
-		} elseif ($this->input->post('checkout_payment')=='line_pay') {
+			// Line Pay
+		} elseif ($this->input->post('checkout_payment') == 'line_pay') {
 
-            // Line Pay
-            // New -----
-            $channelId     = "2000014653"; // 通路ID
-            $channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
-            // Get Base URL path without filename
-            // $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
-            $input = $_POST;
-            // $input['isSandbox'] = (isset($input['isSandbox'])) ? true : false;
-            // $input['isSandbox'] = true;
-            $input['isSandbox'] = false;
-            // Create LINE Pay client
-            $linePay = new \yidas\linePay\Client([
-                'channelId' => $channelId,
-                'channelSecret' => $channelSecret,
-                'isSandbox' => $input['isSandbox'],
-            ]);
-            // Create an order based on Reserve API parameters
-            $orderParams = [
-                "amount" => $order_total,
-                "currency" => 'TWD',
-                "orderId" => $order_number,
-                "packages" => [
-                    [
-                        "id" => "test1",
-                        "amount" => $order_total,
-                        "name" => "package name",
-                        "products" => [
-                            [
-                                "name" => '網購商品',
-                                "quantity" => 1,
-                                "price" => $order_total,
-                                "imageUrl" => 'https://td-stuff.com/assets/uploads/web_logo_td.png',
-                            ],
-                        ],
-                    ],
-                ],
-                "redirectUrls" => [
-                    "confirmUrl" => base_url()."checkout/line_pay_confirm",
-                    "cancelUrl" => base_url(),
-                ],
-                "options" => [
-                    "display" => [
-                        "checkConfirmUrlBrowser" => true,
-                    ],
-                ],
-            ];
-            // Online Reserve API
-            $response = $linePay->request($orderParams);
-            // Check Reserve API result
-            if (!$response->isSuccessful()) {
-                die("<script>alert('ErrorCode {$response['returnCode']}: " . addslashes($response['returnMessage']) . "');history.back();</script>");
-            }
-            // Save the order info to session for confirm
-            $_SESSION['linePayOrder'] = [
-                'transactionId' => (string) $response["info"]["transactionId"],
-                'params' => $orderParams,
-                'isSandbox' => $input['isSandbox'],
-            ];
-            // Save input for next process and next form
-            $_SESSION['config'] = $input;
-            // Redirect to LINE Pay payment URL
-            header('Location: '. $response->getPaymentUrl() );
-
-        } else {
+			// Line Pay
+			// New -----
+			$channelId     = "2000014653"; // 通路ID
+			$channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
+			// Get Base URL path without filename
+			// $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
+			$input = $_POST;
+			// $input['isSandbox'] = (isset($input['isSandbox'])) ? true : false;
+			// $input['isSandbox'] = true;
+			$input['isSandbox'] = false;
+			// Create LINE Pay client
+			$linePay = new \yidas\linePay\Client([
+				'channelId' => $channelId,
+				'channelSecret' => $channelSecret,
+				'isSandbox' => $input['isSandbox'],
+			]);
+			// Create an order based on Reserve API parameters
+			$orderParams = [
+				"amount" => $order_total,
+				"currency" => 'TWD',
+				"orderId" => $order_number,
+				"packages" => [
+					[
+						"id" => "test1",
+						"amount" => $order_total,
+						"name" => "package name",
+						"products" => [
+							[
+								"name" => '網購商品',
+								"quantity" => 1,
+								"price" => $order_total,
+								"imageUrl" => 'https://td-stuff.com/assets/uploads/web_logo_td.png',
+							],
+						],
+					],
+				],
+				"redirectUrls" => [
+					"confirmUrl" => base_url() . "checkout/line_pay_confirm",
+					"cancelUrl" => base_url(),
+				],
+				"options" => [
+					"display" => [
+						"checkConfirmUrlBrowser" => true,
+					],
+				],
+			];
+			// Online Reserve API
+			$response = $linePay->request($orderParams);
+			// Check Reserve API result
+			if (!$response->isSuccessful()) {
+				die("<script>alert('ErrorCode {$response['returnCode']}: " . addslashes($response['returnMessage']) . "');history.back();</script>");
+			}
+			// Save the order info to session for confirm
+			$_SESSION['linePayOrder'] = [
+				'transactionId' => (string) $response["info"]["transactionId"],
+				'params' => $orderParams,
+				'isSandbox' => $input['isSandbox'],
+			];
+			// Save input for next process and next form
+			$_SESSION['config'] = $input;
+			// Redirect to LINE Pay payment URL
+			header('Location: ' . $response->getPaymentUrl());
+		} else {
 			redirect(base_url() . 'checkout/success/' . encode($order_id));
 		}
 	}
 
-	function checkThereAreMembers($phone) {
+	function checkThereAreMembers($phone)
+	{
 		$this->db->select('id,join_status,username,email,full_name,phone,status');
-		$this->db->where('username',trim($phone));
+		$this->db->where('username', trim($phone));
 		$this->db->limit(1);
 		$row = $this->db->get('users')->row_array();
-		return ((!empty($row))?$row:false);
+		return ((!empty($row)) ? $row : false);
 	}
 
-	function createUsers($name,$phone,$email,$password,$become_member_quickly = '') {
+	function createUsers($name, $phone, $email, $password, $become_member_quickly = '')
+	{
 		$additional_data = array(
-            'join_status' => ($become_member_quickly == 'yes' ? 'IsJoin' : 'NotJoin' ),
-            'full_name' => $name,
-            'phone' => $phone,
-            'created_at' => date('Y-m-d H:i:s'),
-        );
-        $this->ion_auth->register($phone, $password, $email, $additional_data, array('2'));
+			'join_status' => ($become_member_quickly == 'yes' ? 'IsJoin' : 'NotJoin'),
+			'full_name' => $name,
+			'phone' => $phone,
+			'created_at' => date('Y-m-d H:i:s'),
+		);
+		$this->ion_auth->register($phone, $password, $email, $additional_data, array('2'));
 	}
 
 	function get_users_id()
-    {
-        $users_id = 0;
-        $row = $this->checkThereAreMembers($this->input->post('phone'));
-        if (!empty($row)) {
-            $users_id = $row['id'];
-        } else {
-            $this->createUsers($this->input->post('name'), $this->input->post('phone'), $this->input->post('email'),get_random_string(10));
-            $u_row = $this->checkThereAreMembers($this->input->post('phone'));
-            if (!empty($u_row)) {
-                $users_id = $u_row['id'];
-            }
-        }
-        return $users_id;
-    }
+	{
+		$users_id = 0;
+		$row = $this->checkThereAreMembers($this->input->post('phone'));
+		if (!empty($row)) {
+			$users_id = $row['id'];
+		} else {
+			$this->createUsers($this->input->post('name'), $this->input->post('phone'), $this->input->post('email'), get_random_string(10));
+			$u_row = $this->checkThereAreMembers($this->input->post('phone'));
+			if (!empty($u_row)) {
+				$users_id = $u_row['id'];
+			}
+		}
+		return $users_id;
+	}
 
-    function updateJoinUser($userData,$password) {
+	function updateJoinUser($userData, $password)
+	{
 		if (!empty($userData)) {
 			$data = array(
 				'join_status' => 'IsJoin',
@@ -426,7 +439,8 @@ class Checkout extends Public_Controller {
 		}
 	}
 
-	public function success($order_id) {
+	public function success($order_id)
+	{
 		$this->data['page_title'] = '訂單完成';
 		$this->cart->destroy();
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', decode($order_id), 'row');
@@ -436,120 +450,122 @@ class Checkout extends Public_Controller {
 	}
 
 	public function check_pay($order_number)
-    {
-        $rtncode = $_POST['RtnCode'];
-        // echo $rtncode.'<br>';
-        $merchanttradeno = $_POST['MerchantTradeNo'];
-        // $merchanttradeno = substr($merchanttradeno, 0, 14);
-        // echo $merchanttradeno.'<br>';
-        // $order_number = substr($merchanttradeno, 0, 14);
+	{
+		$rtncode = $_POST['RtnCode'];
+		// echo $rtncode.'<br>';
+		$merchanttradeno = $_POST['MerchantTradeNo'];
+		// $merchanttradeno = substr($merchanttradeno, 0, 14);
+		// echo $merchanttradeno.'<br>';
+		// $order_number = substr($merchanttradeno, 0, 14);
 
-        // 查詢訂單資訊
-        $order_id = 0;
-        $this->db->select('order_id');
-        $this->db->where('order_number', $order_number);
-        $this->db->limit(1);
-        $query = $this->db->get('orders');
-        if($query->num_rows()>0){
-            $row = $query->row_array();
-            $order_id = $row['order_id'];
-        }
+		// 查詢訂單資訊
+		$order_id = 0;
+		$this->db->select('order_id');
+		$this->db->where('order_number', $order_number);
+		$this->db->limit(1);
+		$query = $this->db->get('orders');
+		if ($query->num_rows() > 0) {
+			$row = $query->row_array();
+			$order_id = $row['order_id'];
+		}
 
-        if($rtncode == '1' && $order_id > 0){
+		if ($rtncode == '1' && $order_id > 0) {
 
-            $data = array(
-                'order_pay_status' => 'paid',
-                'order_pay_feedback' => get_empty($merchanttradeno),
-            );
-            $this->db->where('order_id', $order_id);
-            $this->db->update('orders', $data);
+			$data = array(
+				'order_pay_status' => 'paid',
+				'order_pay_feedback' => get_empty($merchanttradeno),
+			);
+			$this->db->where('order_id', $order_id);
+			$this->db->update('orders', $data);
 
-            redirect(base_url() . 'checkout/success/' . $order_id);
-        } else {
-            // redirect(base_url() . 'checkout/success/' . $order_id);
-        }
-    }
+			redirect(base_url() . 'checkout/success/' . $order_id);
+		} else {
+			// redirect(base_url() . 'checkout/success/' . $order_id);
+		}
+	}
 
-    public function line_pay_confirm()
-    {
-        // New -----
-        $channelId     = "2000014653"; // 通路ID
-        $channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
-        // Get saved config
-        $config = $_SESSION['config'];
-        // Create LINE Pay client
-        $linePay = new \yidas\linePay\Client([
-            'channelId' => $channelId,
-            'channelSecret' => $channelSecret,
-            'isSandbox' => ($config['isSandbox']) ? true : false,
-        ]);
-        // Successful page URL
-        $successUrl = base_url();
-        // Get the transactionId from query parameters
-        $transactionId = (string) $_GET['transactionId'];
-        // Get the order from session
-        $order = $_SESSION['linePayOrder'];
-        // Check transactionId (Optional)
-        if ($order['transactionId'] != $transactionId) {
-            die("<script>alert('TransactionId doesn\'t match');location.href=".base_url().";</script>");
-        }
-        // Online Confirm API
-        try {
-            $response = $linePay->confirm($order['transactionId'], [
-                'amount' => (integer) $order['params']['amount'],
-                'currency' => $order['params']['currency'],
-            ]);
-        } catch (\yidas\linePay\exception\ConnectException $e) {
+	public function line_pay_confirm()
+	{
+		// New -----
+		$channelId     = "2000014653"; // 通路ID
+		$channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
+		// Get saved config
+		$config = $_SESSION['config'];
+		// Create LINE Pay client
+		$linePay = new \yidas\linePay\Client([
+			'channelId' => $channelId,
+			'channelSecret' => $channelSecret,
+			'isSandbox' => ($config['isSandbox']) ? true : false,
+		]);
+		// Successful page URL
+		$successUrl = base_url();
+		// Get the transactionId from query parameters
+		$transactionId = (string) $_GET['transactionId'];
+		// Get the order from session
+		$order = $_SESSION['linePayOrder'];
+		// Check transactionId (Optional)
+		if ($order['transactionId'] != $transactionId) {
+			die("<script>alert('TransactionId doesn\'t match');location.href=" . base_url() . ";</script>");
+		}
+		// Online Confirm API
+		try {
+			$response = $linePay->confirm($order['transactionId'], [
+				'amount' => (int) $order['params']['amount'],
+				'currency' => $order['params']['currency'],
+			]);
+		} catch (\yidas\linePay\exception\ConnectException $e) {
 
-            // Implement recheck process
-            die("Confirm API timeout! A recheck mechanism should be implemented.");
-        }
-        // Save error info if confirm fails
-        if (!$response->isSuccessful()) {
-            $_SESSION['linePayOrder']['confirmCode'] = $response['returnCode'];
-            $_SESSION['linePayOrder']['confirmMessage'] = $response['returnMessage'];
-            $_SESSION['linePayOrder']['isSuccessful'] = false;
-            die("<script>alert('Refund Failed\\nErrorCode: {$_SESSION['linePayOrder']['confirmCode']}\\nErrorMessage: {$_SESSION['linePayOrder']['confirmMessage']}');location.href='{$successUrl}';</script>");
-        }
-        // Code for saving the successful order into your application database...
-        $_SESSION['linePayOrder']['isSuccessful'] = true;
+			// Implement recheck process
+			die("Confirm API timeout! A recheck mechanism should be implemented.");
+		}
+		// Save error info if confirm fails
+		if (!$response->isSuccessful()) {
+			$_SESSION['linePayOrder']['confirmCode'] = $response['returnCode'];
+			$_SESSION['linePayOrder']['confirmMessage'] = $response['returnMessage'];
+			$_SESSION['linePayOrder']['isSuccessful'] = false;
+			die("<script>alert('Refund Failed\\nErrorCode: {$_SESSION['linePayOrder']['confirmCode']}\\nErrorMessage: {$_SESSION['linePayOrder']['confirmMessage']}');location.href='{$successUrl}';</script>");
+		}
+		// Code for saving the successful order into your application database...
+		$_SESSION['linePayOrder']['isSuccessful'] = true;
 
-        $rtncode = $response['returnCode'];
-        $return_order_id = $response['info']['orderId'];
-        $order_number = $return_order_id;
+		$rtncode = $response['returnCode'];
+		$return_order_id = $response['info']['orderId'];
+		$order_number = $return_order_id;
 
-        // 查詢訂單資訊
-        $order_id = 0;
-        $this->db->select('order_id');
-        $this->db->where('order_number', $order_number);
-        $this->db->limit(1);
-        $query = $this->db->get('orders');
-        if($query->num_rows()>0){
-            $row = $query->row_array();
-            $order_id = $row['order_id'];
-        }
+		// 查詢訂單資訊
+		$order_id = 0;
+		$this->db->select('order_id');
+		$this->db->where('order_number', $order_number);
+		$this->db->limit(1);
+		$query = $this->db->get('orders');
+		if ($query->num_rows() > 0) {
+			$row = $query->row_array();
+			$order_id = $row['order_id'];
+		}
 
-        if($rtncode == '0000' && $order_id > 0){
-            $update_data = array(
-                'order_pay_status' => 'paid',
-                'order_pay_feedback' => get_empty($transactionId),
-            );
-            $this->db->where('order_id', $order_id);
-            $this->db->update('orders', $update_data);
+		if ($rtncode == '0000' && $order_id > 0) {
+			$update_data = array(
+				'order_pay_status' => 'paid',
+				'order_pay_feedback' => get_empty($transactionId),
+			);
+			$this->db->where('order_id', $order_id);
+			$this->db->update('orders', $update_data);
 
-            redirect(base_url() . 'checkout/success/' . $order_id);
-        } else {
-        	// redirect(base_url() . 'checkout/success/' . $order_id);
-        }
-        // Redirect to successful page
-        // header("Location: {$successUrl}");
-    }
+			redirect(base_url() . 'checkout/success/' . $order_id);
+		} else {
+			// redirect(base_url() . 'checkout/success/' . $order_id);
+		}
+		// Redirect to successful page
+		// header("Location: {$successUrl}");
+	}
 
-	public function get_store_info() {
+	public function get_store_info()
+	{
 		$this->load->view('checkout/get_store_info');
 	}
 
-	public function form_check() {
+	public function form_check()
+	{
 		// 如果是今天的話
 		// $delivery_date = $this->session->userdata('delivery_date');
 		// $delivery_time = $this->session->userdata('delivery_time');
@@ -569,7 +585,8 @@ class Checkout extends Public_Controller {
 		echo 'yes';
 	}
 
-	public function send_order_email($order_id) {
+	public function send_order_email($order_id)
+	{
 		// 查詢訂單資訊
 		// $this->db->join('users', 'users.id = orders.customer_id');
 		$this->db->where('order_id', $order_id);
@@ -681,7 +698,9 @@ class Checkout extends Public_Controller {
 					$content .= '</tbody>';
 					$total += $items['order_item_qty'] * $items['order_item_price'];
 					$i++;
-				}}};
+				}
+			}
+		};
 
 		$content .= '<tr><td colspan="3"><hr></td></tr>';
 		$content .= '<tr>';
@@ -729,14 +748,14 @@ class Checkout extends Public_Controller {
         </table>
         <br>';
 
-        if (get_setting_general('mail_footer_text') != '') {
-        	$information .= '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
-        }
+		if (get_setting_general('mail_footer_text') != '') {
+			$information .= '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
+		}
 
-        if (get_setting_general('official_line_1_qrcode') != '') {
-        	$information .= '<h3>【官方客服LINE QR Code】</h3>
+		if (get_setting_general('official_line_1_qrcode') != '') {
+			$information .= '<h3>【官方客服LINE QR Code】</h3>
         		<img src="' . base_url() . 'assets/uploads/' . get_setting_general('official_line_1_qrcode') . '" height="150px">';
-        }
+		}
 
 		$footer = '<div style="width:100%;height:50px;;background:#f0f6fa;"><span style="display:block;padding:15px;font-size:12px;">此郵件是系統自動傳送，請勿直接回覆此郵件</span><div>';
 
@@ -799,7 +818,8 @@ class Checkout extends Public_Controller {
 		}
 	}
 
-	public function test_send_email() {
+	public function test_send_email()
+	{
 		echo 'ccc___';
 		//Load email library
 		$this->load->library('email');
@@ -829,7 +849,8 @@ class Checkout extends Public_Controller {
 		}
 	}
 
-	function test_qpay($order_id = 0) {
+	function test_qpay($order_id = 0)
+	{
 		if ($order_id == 0) {
 			exit;
 		}
@@ -863,8 +884,8 @@ class Checkout extends Public_Controller {
 		}
 	}
 
-	function test_qpay_return() {
+	function test_qpay_return()
+	{
 		print_r($_POST);
 	}
-
 }
