@@ -63,18 +63,22 @@ class Update extends Admin_Controller {
 
     function update_202312121541() {
         $version = '202312121541';
-        $description = '[delivery]新增欄位*limit*[product_weight,volume_length,volume_width,volume_height]';
+        $description = '[delivery]新增欄位*limit*[weight,weight_unit,volume_length,volume_width,volume_height]';
         $this->db->select('id');
         $this->db->where('version',$version);
         $row = $this->db->get('update_log')->row_array();
         if (empty($row)) {
-            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_product_weight'")->result_array();
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_weight'")->result_array();
             if (empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `limit_product_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `shipping_cost`;");
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `shipping_cost`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_weight_unit'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_weight_unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_weight`;");
             }
             $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_length'")->result_array();
             if (empty($query)) {
-                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_product_weight`;");
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_weight_unit`;");
             }
             $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_width'")->result_array();
             if (empty($query)) {

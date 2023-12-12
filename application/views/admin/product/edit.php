@@ -122,7 +122,26 @@
                                         </div>
                                         <div class="input-group" style="margin-bottom: 10px;">
                                             <span class="input-group-addon">當前庫存量</span>
-                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?= intval($product['inventory']) ?>">
+                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?=intval($product['inventory']) ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="input-group" style="margin-bottom: 10px;">
+                                            <span class="input-group-addon">商品重量</span>
+                                            <input type="number" class="form-control" id="product_weight" name="product_weight" value="<?=intval($product['product_weight']) ?>">
+                                        </div>
+                                        材積設定/單位cm
+                                        <div class="input-group" style="margin-bottom: 10px;">
+                                            <span class="input-group-addon">長度</span>
+                                            <input type="number" class="form-control" id="volume_length" name="volume_length" value="<?=intval($product['volume_length']) ?>">
+                                        </div>
+                                        <div class="input-group" style="margin-bottom: 10px;">
+                                            <span class="input-group-addon">寬度</span>
+                                            <input type="number" class="form-control" id="volume_width" name="volume_width" value="<?=intval($product['volume_width']) ?>">
+                                        </div>
+                                        <div class="input-group" style="margin-bottom: 10px;">
+                                            <span class="input-group-addon">高度</span>
+                                            <input type="number" class="form-control" id="volume_height" name="volume_height" value="<?=intval($product['volume_height']) ?>">
                                         </div>
                                     </div>
                                     <? if (!empty($delivery)) { ?>
