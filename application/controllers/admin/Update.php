@@ -46,6 +46,8 @@ class Update extends Admin_Controller {
                             $this->update_202312051900();
                             $this->update_202312062000();
                             $this->update_202312112300();
+                            $this->update_202312121540();
+                            $this->update_202312121541();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -56,6 +58,78 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312121541() {
+        $version = '202312121541';
+        $description = '[delivery]新增欄位*limit*[weight,weight_unit,volume_length,volume_width,volume_height]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_weight'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `shipping_cost`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_weight_unit'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_weight_unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_length'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_weight_unit`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_width'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_width` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'limit_volume_height'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `delivery` ADD `limit_volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `limit_volume_width`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312121540() {
+        $version = '202312121540';
+        $description = '[product]新增欄位[product_weight,volume_length,volume_width,volume_height]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'product_weight'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `product_weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `product_sku`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_length'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `product_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_width'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_width` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_height'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD `volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_width`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -112,6 +186,7 @@ class Update extends Admin_Controller {
             }
         }
     }
+
     function update_202312051900() {
         $version = '202312051900';
         $description = '[product]新增欄位[distribute_at]';

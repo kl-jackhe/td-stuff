@@ -40,6 +40,7 @@
             <th>配送名稱</th>
             <!-- <th>依照方式</th> -->
             <th>運費</th>
+            <th>限制</th>
             <th>描述</th>
             <th>狀態</th>
             <th>操作</th>
@@ -54,6 +55,20 @@
             <?}else{echo '無';}?>
             </td> -->
             <td>$<?php echo $data['shipping_cost'] ?></td>
+            <td>
+              <?
+              $count = 0;
+              if ($data['limit_weight'] != '' && $data['limit_weight_unit'] != '') {
+                echo '重量限制：' . $data['limit_weight'] . ' ' . $data['limit_weight_unit'];
+                $count++;
+              }
+              if ($data['limit_volume_length'] != '' || $data['limit_volume_width'] != '' || $data['limit_volume_height'] != '') {
+                if ($count > 0) {
+                  echo '<br>';
+                }
+                echo '材積限制：' . '長 ' . $data['limit_volume_length'] . 'cm, 寬 ' . $data['limit_volume_width'] . 'cm, 高 ' . $data['limit_volume_height'] . 'cm';
+              }?>
+            </td>
             <td><?php echo $data['delivery_info'] ?></td>
             <td><?if ($data['delivery_status'] == 1) {?>
               <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>

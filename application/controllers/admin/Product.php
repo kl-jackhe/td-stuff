@@ -72,6 +72,11 @@ class Product extends Admin_Controller
 
 	public function insert()
 	{
+		if ($this->checkSKUIsDuplicated(0, $this->input->post('product_sku')) == 'No') {
+			$this->session->set_flashdata('message', '品號重複');
+			redirect($_SERVER['HTTP_REFERER']);
+			exit;
+		}
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
@@ -148,6 +153,10 @@ class Product extends Admin_Controller
 			'distribute_at' => $this->input->post('distribute_at'), //tmp
 			'discontinued_at' => $this->input->post('discontinued_at'), //tmp
 			'product_sku' => $this->input->post('product_sku'),
+			'product_weight' => $this->input->post('product_weight'),
+			'volume_length' => $this->input->post('volume_length'),
+			'volume_width' => $this->input->post('volume_width'),
+			'volume_height' => $this->input->post('volume_height'),
 			'product_price' => $this->input->post('product_price'),
 			'product_add_on_price' => $this->input->post('product_add_on_price'),
 			'product_category_id' => $this->input->post('product_category'),
@@ -270,10 +279,12 @@ class Product extends Admin_Controller
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	function checkSKUIsDuplicated($product_id, $product_sku)
+	function checkSKUIsDuplicated($product_id = 0, $product_sku)
 	{
 		$this->db->select('product_id');
-		$this->db->where('product_id !=', $product_id);
+		if ($product_id > 0) {
+			$this->db->where('product_id !=', $product_id);
+		}
 		$this->db->where('product_sku', $product_sku);
 		$this->db->limit(1);
 		$row = $this->db->get('product')->row_array();

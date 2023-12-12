@@ -13,21 +13,25 @@ class Delivery extends Admin_Controller {
 		$this->render('admin/delivery/index');
 	}
 
-	public function insert_delivery() {
-		$this->data['page_title'] = '新增配送方式';
+	// public function insert_delivery() {
+	// 	$this->data['page_title'] = '新增配送方式';
 
-		$data = array(
-			'delivery_name' => $this->input->post('delivery_name'),
-			'shipping_cost' => $this->input->post('shipping_cost'),
-			'delivery_info' => $this->input->post('delivery_info'),
-			'delivery_status' => $this->input->post('delivery_status'),
-			// 'creator_id' => $this->current_user->id,
-			// 'created_at' => date('Y-m-d H:i:s'),
-		);
+	// 	$data = array(
+	// 		'delivery_name' => $this->input->post('delivery_name'),
+	// 		'shipping_cost' => $this->input->post('shipping_cost'),
+	// 		'limit_weight' => $this->input->post('limit_weight'),
+	// 		'limit_weight_unit' => $this->input->post('limit_weight_unit'),
+	// 		'limit_volume_length' => $this->input->post('limit_volume_length'),
+	// 		'limit_volume_width' => $this->input->post('limit_volume_width'),
+	// 		'limit_volume_height' => $this->input->post('limit_volume_height'),
+	// 		'delivery_info' => $this->input->post('delivery_info'),
+	// 		'delivery_status' => $this->input->post('delivery_status'),
+	// 		'created_at' => date('Y-m-d H:i:s'),
+	// 	);
 
-		$this->db->insert('delivery', $data);
-		redirect(base_url() . 'admin/delivery');
-	}
+	// 	$this->db->insert('delivery', $data);
+	// 	redirect(base_url() . 'admin/delivery');
+	// }
 
 	public function edit_delivery($id) {
 		$this->data['page_title'] = '編輯配送方式';
@@ -40,10 +44,14 @@ class Delivery extends Admin_Controller {
 		$data = array(
 			'delivery_name' => $this->input->post('delivery_name'),
 			'shipping_cost' => $this->input->post('shipping_cost'),
+			'limit_weight' => $this->input->post('limit_weight'),
+			'limit_weight_unit' => $this->input->post('limit_weight_unit'),
+			'limit_volume_length' => $this->input->post('limit_volume_length'),
+			'limit_volume_width' => $this->input->post('limit_volume_width'),
+			'limit_volume_height' => $this->input->post('limit_volume_height'),
 			'delivery_info' => $this->input->post('delivery_info'),
 			'delivery_status' => $this->input->post('delivery_status'),
-			// 'updater_id' => $this->current_user->id,
-			// 'updated_at' => date('Y-m-d H:i:s'),
+			'updated_at' => date('Y-m-d H:i:s'),
 		);
 		$this->db->where('id', $id);
 		$this->db->update('delivery', $data);
