@@ -59,6 +59,7 @@ $lang['create_user_fname_label']                               = 'First Name:';
 $lang['create_user_lname_label']                               = 'Last Name:';
 $lang['create_user_company_label']                             = 'Company Name:';
 $lang['create_user_identity_label']                            = 'Identity:';
+$lang['create_user_store_code_label']                          = 'Store Code:';
 $lang['create_user_email_label']                               = 'Email:';
 $lang['create_user_phone_label']                               = 'Phone:';
 $lang['create_user_password_label']                            = 'Password:';

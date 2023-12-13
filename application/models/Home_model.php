@@ -6,7 +6,7 @@ class Home_model extends CI_Model {
         parent::__construct();
     }
 
-    public function GetBanner()
+    public function getBanner()
     {
         $this->db->where('banner_on_the_shelf <=', date('Y-m-d H:i:s'));
         $this->db->where('banner_off_the_shelf >=', date('Y-m-d H:i:s'));

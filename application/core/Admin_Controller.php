@@ -10,7 +10,15 @@ class Admin_Controller extends MY_Controller
 		{
 			redirect('admin/login', 'refresh');
 		}
-		if (!$this->ion_auth->is_admin())
+
+		$accessBackend = false;
+		if ($this->ion_auth_model->in_group('admin') && !$accessBackend) {
+			$accessBackend = true;
+		}
+		if ($this->ion_auth_model->in_group('franchisee') && !$accessBackend) {
+			$accessBackend = true;
+		}
+		if (!$accessBackend)
 		{
 			redirect(base_url(), 'refresh');
 		}
