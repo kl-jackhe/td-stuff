@@ -62,6 +62,7 @@ $lang['create_user_lname_label']                               = '姓氏:';
 $lang['create_user_identity_label']                            = '帳號:';
 $lang['create_user_company_label']                             = '公司名稱:';
 $lang['create_user_address_label']                             = '地址:';
+$lang['create_user_store_code_label']                          = '店主代號:';
 $lang['create_user_email_label']                               = '電子郵件:';
 $lang['create_user_phone_label']                               = '電話:';
 $lang['create_user_password_label']                            = '密碼:';

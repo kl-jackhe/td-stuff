@@ -67,13 +67,13 @@ $sales_current = $this->uri->segment(3);?>
       </a>
       <ul class="submenu">
         <li <?php if ($sales_current == "history") {echo 'class="active"';}?>>
-          <a href="/admin/franchise/history">銷售紀錄</a>
+          <a href="/admin/franchisee/history">銷售紀錄</a>
         </li>
         <li <?php if ($sales_current == "pages") {echo 'class="active"';}?>>
-          <a href="/admin/franchise/pages">頁面管理</a>
+          <a href="/admin/franchisee/pages">頁面管理</a>
         </li>
         <li <?php if ($sales_current == "auth") {echo 'class="active"';}?>>
-          <a href="/admin/franchise/auth">帳號管理</a>
+          <a href="/admin/franchisee/auth">帳號管理</a>
         </li>
       </ul>
     </li>
@@ -123,8 +123,7 @@ $sales_current = $this->uri->segment(3);?>
   </ul>
   <!-- END Navlist -->
   <!-- BEGIN Sidebar Collapse Button -->
-  <div id="sidebar-collapse" class="hidden-print">
-  </div>
+  <!-- <div id="sidebar-collapse" class="hidden-print"></div> -->
   <!-- END Sidebar Collapse Button -->
 </div>
 <!-- END Sidebar -->

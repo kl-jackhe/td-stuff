@@ -497,6 +497,125 @@ class Auth extends Admin_Controller {
         }
     }
 
+    // create a new user
+	public function create_franchisee_user()
+    {
+    	$this->data['page_title'] = '建立店主';
+        //$this->data['title'] = $this->lang->line('create_user_heading');
+
+        if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin())
+        {
+            redirect('/admin/login', 'refresh');
+        }
+
+        $tables = $this->config->item('tables','ion_auth');
+        $identity_column = $this->config->item('identity','ion_auth');
+        $this->data['identity_column'] = $identity_column;
+
+        // validate form input
+        if($identity_column!=='email')
+        {
+            $this->form_validation->set_rules('identity',$this->lang->line('create_user_validation_identity_label'),'required|is_unique['.$tables['users'].'.'.$identity_column.']');
+            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email');
+        }
+        else
+        {
+            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'required|valid_email|is_unique[' . $tables['users'] . '.email]');
+        }
+        $this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
+		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+
+        if ($this->form_validation->run() == true)
+        {
+
+        	$this->db->where('email', $this->input->post('email'));
+        	$this->db->limit(1);
+        	$query = $this->db->get('users');
+        	if($query->num_rows()>0){
+        		$this->session->set_flashdata('message', '此電子郵件已經被註冊過了。');
+            	redirect("admin/auth/create_franchisee_user", 'refresh');
+        	}
+
+        	$this->db->where('username', $this->input->post('identity'));
+        	$this->db->limit(1);
+        	$query = $this->db->get('users');
+        	if($query->num_rows()>0){
+        		$this->session->set_flashdata('message', '此帳號已經被註冊過了。');
+            	redirect("admin/auth/create_franchisee_user", 'refresh');
+        	}
+
+            $email    = strtolower($this->input->post('email'));
+            $identity = ($identity_column==='email') ? $email : $this->input->post('identity');
+            $store_code = strtoupper($this->input->post('store_code'));
+            $password = $this->input->post('password');
+            $group = array('99');
+
+            $additional_data = array(
+            	'store_code'  => $store_code,
+            	'full_name'  => $identity,
+				'creator_id' => $this->ion_auth->user()->row()->id,
+				'created_at' => date('Y-m-d H:i:s'),
+            );
+        }
+        if ($this->form_validation->run() == true && $id = $this->ion_auth->register($identity, $password, $email, $additional_data, $group))
+        {
+            // check to see if we are creating the user
+            // redirect them back to the admin page
+            $this->session->set_flashdata('message', $this->ion_auth->messages());
+            //redirect("auth", 'refresh');
+            redirect("admin/auth", 'refresh');
+        }
+        else
+        {
+            // display the create user form
+            // set the flash data error message if there is one
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+
+            $this->data['identity'] = array(
+                'name'  => 'identity',
+                'id'    => 'identity',
+                'type'  => 'text',
+                'value' => $this->form_validation->set_value('identity'),
+                'class' => 'form-control',
+                'required' => 'required'
+            );
+            $this->data['store_code'] = array(
+                'name'  => 'store_code',
+                'id'    => 'store_code',
+                'type'  => 'text',
+                'value' => $this->form_validation->set_value('store_code'),
+                'class' => 'form-control',
+                'required' => 'required'
+            );
+            $this->data['email'] = array(
+                'name'  => 'email',
+                'id'    => 'email',
+                'type'  => 'text',
+                'value' => $this->form_validation->set_value('email'),
+                'class' => 'form-control',
+                'required' => 'required'
+            );
+            $this->data['password'] = array(
+                'name'  => 'password',
+                'id'    => 'password',
+                'type'  => 'password',
+                'value' => $this->form_validation->set_value('password'),
+                'class' => 'form-control',
+                'required' => 'required'
+            );
+            $this->data['password_confirm'] = array(
+                'name'  => 'password_confirm',
+                'id'    => 'password_confirm',
+                'type'  => 'password',
+                'value' => $this->form_validation->set_value('password_confirm'),
+                'class' => 'form-control',
+                'required' => 'required'
+            );
+
+            $this->render('admin/auth/create_franchisee_user','admin_master');
+        }
+    }
+
 	// edit a user
 	public function edit_user($id)
 	{

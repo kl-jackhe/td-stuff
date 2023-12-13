@@ -1,6 +1,7 @@
 <div class="row">
   	<div class="col-md-6">
     	<a href="/admin/auth/create_user" class="btn btn-primary">新增管理員</a>
+    	<a href="/admin/auth/create_franchisee_user" class="btn btn-primary">新增加盟主</a>
     	<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
   	</div>
   	<div class="col-md-6">
