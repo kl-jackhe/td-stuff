@@ -16,33 +16,18 @@
         <?}?>
         <div id="scrollToBottomBtn" class="my-3 icon_pointer">
             <a href="#" style="outline: none;">
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_buynow-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_buynow.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/web icon_buynow-2.png" alt="">
             </a>
         </div>
         <div id="fa-bag-shopping" class="my-3 icon_pointer">
             <a href="#" data-toggle="modal" style="position: relative;outline: none;" data-target="#my_cart" onclick="get_mini_cart();">
                 <div id="cart-qty"><span>0</span></div>
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_shopping car-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_shopping car.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/web icon_shopping car-2.png" alt="">
             </a>
         </div>
         <div id="fa-angles-up" class="my-3 icon_pointer">
             <a href="#" style="color:black;outline: none;">
-                <?if ($this->is_td_stuff) {?>
-                    <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png" alt="">
-                <?}?>
-                <?if ($this->is_liqun_food) {?>
-                    <img class="fixed_icon_style" src="/assets/images/liqun/web icon_top.png" alt="">
-                <?}?>
+                <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png" alt="">
             </a>
         </div>
     </div>
@@ -57,7 +42,6 @@
         <div class="footer-copyright" style="background-color: #000;padding-bottom: 15px; padding-top:15px;">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <?if ($this->is_td_stuff) {?>
                     <div class="col-md-12" id="v-pills-tab-other" style="padding-bottom: 6px;">
                         <span style="color: #fff;">
                             ｜ <a href="/policy?target=disclaimer">免責聲明</a>
@@ -68,7 +52,6 @@
                             　維星行銷國際企業有限公司  統編：90696281
                         </span>
                     </div>
-                    <?}?>
                     <div class="col-md-12">
                         <span style="color: #fff;">Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.</span>
                     </div>

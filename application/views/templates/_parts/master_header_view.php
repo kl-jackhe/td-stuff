@@ -1,7 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -82,26 +81,14 @@
         padding: 5px;
     }
     .nav_user_login_edit {
-        <?if ($this->is_td_stuff) {?>
-            border: 1px solid #534431;
-            color: #808080 !important;
-        <?}?>
-        <?if ($this->is_liqun_food) {?>
-            border: 1px solid #f6d523;
-            color: #000 !important;
-        <?}?>
+        border: 1px solid #534431;
+        color: #808080 !important;
         padding: 2px 12px 2px 12px !important;
         outline: none;
     }
     .nav_user_register_logout {
-        <?if ($this->is_td_stuff) {?>
-            background: #534431;
-            color: #fff !important;
-        <?}?>
-        <?if ($this->is_liqun_food) {?>
-            background: #f6d523;
-            color: #000 !important;
-        <?}?>
+        background: #534431;
+        color: #fff !important;
         padding: 2px 12px 2px 12px !important;
         outline: none;
     }
@@ -153,14 +140,8 @@
         .top_logo_style {
             position: relative;
             transform: none;
-            <?if ($this->is_td_stuff) {?>
-                left: -35%;
-                top: 0;
-            <?}?>
-            <?if ($this->is_liqun_food) {?>
-                left: -20%;
-                top: 5px;
-            <?}?>
+            left: -35%;
+            top: 0;
         }
         .nav_user_style {
             position: relative;
@@ -174,9 +155,6 @@
         .header_fixed_icon {
             right: 9px;
         }
-        ./*fixed_icon_style {
-            max-width: 30px;
-        }*/
     }
 </style>
 

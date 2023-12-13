@@ -76,7 +76,7 @@
           </div>
         </div>
         <hr>
-        <h5 class="text-center">Copyright © 2022  <?=get_setting_general('name')?>.<br>All rights reserved.</h5>
+        <h5 class="text-center">Copyright © 2023  <?=get_setting_general('name')?>.<br>All rights reserved.</h5>
       <?php echo form_close(); ?>
       <script src="/node_modules/jquery/dist/jquery.min.js"></script>
       <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->

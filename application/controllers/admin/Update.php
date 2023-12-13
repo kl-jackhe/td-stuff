@@ -52,6 +52,7 @@ class Update extends Admin_Controller {
                             $this->update_202312122315();
                             $this->update_202312122325();
                             $this->update_202312131400();
+                            $this->update_202312132220();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -62,6 +63,100 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312132220() {
+        $version = '202312132220';
+        $description = '優化資料庫-新增索引';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'product_category_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product` ADD INDEX(`product_category_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_combine LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_combine` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_combine_item LIKE 'product_combine_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_combine_item` ADD INDEX(`product_combine_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_combine_item LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_combine_item` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_specification LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_specification` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_unit LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_unit` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_product_combine LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_product_combine` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_product_combine_item LIKE 'product_combine_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_product_combine_item` ADD INDEX(`product_combine_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_product_combine_item LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_product_combine_item` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_product_specification LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_product_specification` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_product_unit LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_product_unit` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `order_item` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'product_combine_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `order_item` ADD INDEX(`product_combine_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'specification_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `order_item` ADD INDEX(`specification_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM single_sales LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `single_sales` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'fb_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD INDEX(`fb_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM users_address LIKE 'user_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `users_address` ADD INDEX(`user_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_category_list LIKE 'product_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_category_list` ADD INDEX(`product_id`);");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_category_list LIKE 'product_category_id'")->result_array();
+            if (!empty($query)) {
+                $this->db->query("ALTER TABLE `product_category_list` ADD INDEX(`product_category_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

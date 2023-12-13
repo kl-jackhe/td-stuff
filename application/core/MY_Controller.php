@@ -35,6 +35,9 @@ class MY_Controller extends CI_Controller
 			if ($this->is_partnertoys && $template == 'master') {
 				$template = 'partnertoys';
 			}
+			if ($this->is_liqun_food && $template == 'master') {
+				$template = 'liqun';
+			}
 			$this->load->view('templates/' . $template . '_view', $this->data);
 		}
 	}
