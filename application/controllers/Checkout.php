@@ -321,21 +321,21 @@ class Checkout extends Public_Controller
 				// $obj->SendExtend['ExecTimes']    = '' ;    //執行次數，預設空字串
 
 				// 電子發票參數
-				$obj->Send['InvoiceMark'] = ECPay_InvoiceState::Yes;
-				$obj->SendExtend['RelateNumber'] = "Test" . time();
-				$obj->SendExtend['CustomerEmail'] = 'test@ecpay.com.tw';
-				$obj->SendExtend['CustomerPhone'] = '0911222333';
-				$obj->SendExtend['TaxType'] = ECPay_TaxType::Dutiable;
-				$obj->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
-				$obj->SendExtend['InvoiceItems'] = array();
-				// 將商品加入電子發票商品列表陣列
-				foreach ($obj->Send['Items'] as $info) {
-					array_push($obj->SendExtend['InvoiceItems'], array('Name' => $info['Name'], 'Count' =>
-					$info['Quantity'], 'Word' => '個', 'Price' => $info['Price'], 'TaxType' => ECPay_TaxType::Dutiable));
-				}
-				$obj->SendExtend['InvoiceRemark'] = '測試發票備註';
-				$obj->SendExtend['DelayDay'] = '0';
-				$obj->SendExtend['InvType'] = ECPay_InvType::General;
+				// $obj->Send['InvoiceMark'] = ECPay_InvoiceState::Yes;
+				// $obj->SendExtend['RelateNumber'] = "Test" . time();
+				// $obj->SendExtend['CustomerEmail'] = 'test@ecpay.com.tw';
+				// $obj->SendExtend['CustomerPhone'] = '0911222333';
+				// $obj->SendExtend['TaxType'] = ECPay_TaxType::Dutiable;
+				// $obj->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
+				// $obj->SendExtend['InvoiceItems'] = array();
+				// // 將商品加入電子發票商品列表陣列
+				// foreach ($obj->Send['Items'] as $info) {
+				// 	array_push($obj->SendExtend['InvoiceItems'], array('Name' => $info['Name'], 'Count' =>
+				// 	$info['Quantity'], 'Word' => '個', 'Price' => $info['Price'], 'TaxType' => ECPay_TaxType::Dutiable));
+				// }
+				// $obj->SendExtend['InvoiceRemark'] = '測試發票備註';
+				// $obj->SendExtend['DelayDay'] = '0';
+				// $obj->SendExtend['InvType'] = ECPay_InvType::General;
 
 				//產生訂單(auto submit至ECPay)
 				$obj->CheckOut();
