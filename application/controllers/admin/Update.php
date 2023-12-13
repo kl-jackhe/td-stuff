@@ -51,6 +51,7 @@ class Update extends Admin_Controller {
                             $this->update_202312122310();
                             $this->update_202312122315();
                             $this->update_202312122325();
+                            $this->update_202312131400();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -61,6 +62,36 @@ class Update extends Admin_Controller {
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312131400() {
+        $version = '202312131400';
+        $description = '[users]新增欄位[store_code]&[groups]新增參數[franchisee]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'store_code'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `users` ADD `store_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `ip_address`;");
+            }
+
+            $this->db->select('id');
+            $this->db->where('name', 'franchisee');
+            $this->db->limit(1);
+            $g_row = $this->db->get('groups')->row_array();
+            if (empty($g_row)) {
+                $this->db->insert('groups', array('id' => 99, 'name' => 'franchisee', 'description' => '加盟主'));
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -281,7 +312,6 @@ class Update extends Admin_Controller {
             }
         }
     }
-
 
     function update_202312121541() {
         $version = '202312121541';
