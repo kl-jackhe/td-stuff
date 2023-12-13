@@ -907,14 +907,14 @@ input.qtyminus {
 }
 
 .cartBtn {
-    background-color: #ffbd2f;
-    border: 1px solid #ffbd2f;
+    background-color: #ffae00;
+    border: 1px solid #ffae00;
 }
 
 .cartBtn:hover {
     cursor: pointer;
     /* 懸停時顯示手型游標 */
-    background-color: #ffae00;
+    background-color: #ffcc00;
     box-shadow: 0 0 20px #eba10071;
 }
 

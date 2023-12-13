@@ -440,21 +440,38 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
+                                        <span class="input-group-text">門市編號</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="storeid" id="storeid" value="<?php echo $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
+                                    <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
                                     <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
                                 </div>
+                                <!-- 地圖無編號 -->
+                                <!-- <div class="input-group mb-3 col-12 col-sm-8 supermarket">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">門市地址</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php // echo $this->input->get('storeaddress') 
+                                                                                                                            ?>" placeholder="門市地址" readonly>
+                                    <div style="width: 100%; margin-top: 15px;">
+                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
+                                    </div>
+                                </div> -->
 
-                                <!-- 地圖 -->
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
                                     <div style="width: 100%; margin-top: 15px;">
-                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
+                                        <span class="btn btn-primary" onclick="locationToCvsMap();">選擇門市</span>
                                     </div>
                                 </div>
+                                <!--  -->
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">訂單備註</span>
@@ -680,6 +697,9 @@ foreach ($this->cart->contents() as $items) {
         if ($('#address').val() != '') {
             data += '<tr><td>地址</td><td>' + $('#address').val() + '</td></tr>';
         }
+        if ($('#storeid').val() != '') {
+            data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
+        }
         if ($('#storename').val() != '') {
             data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
         }
@@ -750,28 +770,25 @@ foreach ($this->cart->contents() as $items) {
     });
 
     // 地圖
-    function select_store_info() {
+    function locationToCvsMap() {
         set_user_data();
+        // checked radio val
         var selectedDelivery = $("input[name='checkout_delivery']:checked").val();
+        // 手機版cookie存取checked radio val
         document.cookie = "selectedDelivery=" + selectedDelivery;
-        var mobileMap = "";
-        var pcMap = "";
+        // 是否為手機
         var isMobile = <?php echo json_encode(wp_is_mobile()) ?>;
-        if (selectedDelivery == 'family_pickup') {
-            mobileMap = 'https://mfme.map.com.tw/default.aspx?cvsname=logistics.ecpay.com.tw&cvsid=partnertoys&cvstemp=&exchange=true&cvslink=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>';
-            pcMap = 'https://mfme.map.com.tw/default.aspx?cvsname=logistics.ecpay.com.tw&cvsid=partnertoys&cvstemp=&exchange=true&cvslink=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>';
-        } else if (selectedDelivery == '711_pickup') {
-            mobileMap = 'https://emap.presco.com.tw/c2cemap.ashx?eshopid=partnertoys&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>';
-            pcMap = 'https://emap.presco.com.tw/c2cemap.ashx?eshopid=partnertoys&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>';
-        }
+        // 串至綠界地圖
+        var route = '<?php echo base_url(); ?>checkout/cvsmap?checkout=' + selectedDelivery + '';
         if (isMobile) {
-            // 如果是移動端，使用 location.href 開啟
-            window.location.href = mobileMap;
+            // 導入串綠界地圖並給cvsmap判斷是否為mobile
+            window.location.href = (route + '&device=mobile');
         } else {
-            // 如果是桌面端，使用 window.open 打開
-            window.open(pcMap, "選擇門市", "width=1024,height=768");
+            // 開新視窗串綠界地圖cvsmap
+            window.open(route, "選擇門市", "width=1024,height=768");
         }
     }
+
 
     // 解析 URL 中的參數
     function getParameterByName(name, url) {
@@ -785,14 +802,21 @@ foreach ($this->cart->contents() as $items) {
     }
 
     // 獲取 checkout_delivery 的值
-    var selectedDeliveryValue = getParameterByName('checkout_delivery');
+    var selectedDeliveryValue = getParameterByName('checkout');
 
     // 如果值為 'family_pickup'，則設定相應的 radio 按鈕為選中狀態
-    if (selectedDeliveryValue === 'family_pickup') {
+    if (selectedDeliveryValue === 'family_pickup' || selectedDeliveryValue === '711_pickup') {
+        $('.delivery_address').hide();
+        $('.supermarket').show();
+    }
+    if (selectedDeliveryValue === '711_pickup') {
+        $("input[name='checkout_delivery'][value='711_pickup']").prop('checked', true);
+    } else if (selectedDeliveryValue === 'family_pickup') {
         $("input[name='checkout_delivery'][value='family_pickup']").prop('checked', true);
     }
 
-    function set_store_info(storename = '', storeaddress = '') {
+    function set_store_info(storeid = '', storename = '', storeaddress = '') {
+        $("#storeid").val(storeid);
         $("#storename").val(storename);
         $("#storeaddress").val(storeaddress);
     }

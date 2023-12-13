@@ -58,20 +58,8 @@
                     <div class="row">
                         <!--商品名稱-->
                         <h2 class="cargoText col-bg-12 col-md-12 col-lg-12">{{ selectedProduct.product_name }}</h2>
-                        <!--價格-->
-                        <div class="cargoText col-bg-12 col-md-12 col-lg-12">
-                            <!--一律顯示原售價-->
-                            <div v-if="selectedCombine && (selectedCombine.price !== selectedCombine.current_price)" class="clearfix">
-                                <div class="item">方案價</div>
-                                <div class="info">$ {{ selectedCombine?.current_price }}</div>
-                            </div>
-                            <div class="clearfix">
-                                <div class="item">原價</div>
-                                <div class="info">$ {{ selectedProduct.product_price }}</div>
-                            </div>
-                        </div>
                         <!--商品簡介:多行文字欄位-->
-                        <div class="cargoText col-bg-12 col-md-12 col-lg-12">
+                        <!-- <div class="cargoText col-bg-12 col-md-12 col-lg-12">
                             變種吉娃娃 2<br>
                             Godgwawa 2<br>
                             <br>
@@ -79,10 +67,24 @@
                             尺寸：每隻角色約5-7cm​<br>
                             材質：PVC塑膠<br>
                             售價：一中盒720元 / 一中盒必含基礎5款+1款隨機重複基礎款或夥伴賞。
+                        </div> -->
+                        <!--價格-->
+                        <div class="cargoText col-bg-12 col-md-12 col-lg-12">
+                            <!--一律顯示原售價，方案價則判斷後顯示-->
+                            <div v-if="selectedProductCombine && (selectedProductCombine.current_price !== 0)" class="clearfix">
+                                <div class="item">方案價</div>
+                                <div class="info">$ {{ selectedProductCombine.current_price }}</div>
+                            </div>
+                            <div v-else class="clearfix">
+                                <div class="item">原價</div>
+                                <div class="info">$ {{ selectedProduct.product_price }}</div>
+                            </div>
                         </div>
-                        <select class="cargoBtn col-bg-12 col-md-12 col-lg-12">
-                            <option value="">請選擇規格</option>
-                            <option selected="">變種吉娃娃2 一中盒(內含6小盒)</option>
+                        <select v-if="selectedCombine" @change="updateSelectedCombine($event)" class="cargoBtn col-bg-12 col-md-12 col-lg-12">
+                            <option value="" select="">請選擇方案</option>
+                            <option v-for="combineItem in selectedCombine" :key="combineItem.id" :value="combineItem.name">
+                                {{ combineItem.name }}
+                            </option>
                         </select>
                         <div class="row cargoBtn col-bg-12 col-md-12 col-lg-6">
                             <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
@@ -96,7 +98,7 @@
                             <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>馬上購買</span>
                         </div>
                         <div class="cargoBtn col-bg-12 col-md-12 col-lg-6">
-                            <span class="cargoClick cartBtn"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                            <span class="cargoClick cartBtn" @click=""><i class="fas fa-cart-plus"></i>加入購物車</span>
                         </div>
                         <div class="cargoBtn col-bg-12 col-md-12 col-lg-6">
                             <span class="cargoClick likeBtn"><i class="fas fa-heart"></i>加入追蹤</span>
@@ -120,10 +122,11 @@
     const productApp = Vue.createApp({
         data() {
             return {
+                selectedProductCombine: null, // 新增這個變數
                 selectedProduct: null, // 選中的商品
-                selectedCombine: null, // 選中的商品
-                selectedCombineItem: null, // 選中的商品
-                selectedCategoryId: 1, // 目前顯示頁面主題, null為全部顯示
+                selectedCombine: null, // 選中商品的規格
+                selectedCombineItem: null, // 選中商品規格的單位
+                selectedCategoryId: 1, // 目前顯示頁面主題, 1為全部顯示
                 combine: <?php echo json_encode($productCombine); ?>, // 取得指定商品之combine物件
                 combine_item: <?php echo json_encode($productCombineItem); ?>, // 取得指定商品之combine_item物件
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
@@ -227,16 +230,23 @@
                     mainClass: 'mfp-zoom-in',
                 });
             },
+            // 更新選擇方案對應的價格
+            updateSelectedCombine(event) {
+                const selectedCombineName = event.target.value;
+                const selectedCombineItem = this.selectedCombine.find(item => item.name === selectedCombineName);
+                this.selectedProductCombine = selectedCombineItem;
+            },
             // 選中獨立商品
             showProductDetails(selected) {
                 this.selectedProduct = selected;
 
                 // 查找combine中的對應物件
-                this.selectedCombine = this.combine.find(item => item.product_id === selected.product_id) || {};
+                this.selectedCombine = this.combine.filter(item => item.product_id === selected.product_id) || [];
 
                 // 查找combine_item中的對應物件
-                this.selectedCombineItem = this.combine_item.find(item => item.product_id === selected.product_id) || {};
+                this.selectedCombineItem = this.combine_item.filter(item => item.product_id === selected.product_id) || [];
 
+                // 檢查bug
                 console.log(this.selectedCombine, this.selectedCombineItem);
             },
             // 商品數量選擇
@@ -248,6 +258,36 @@
                 // 當按下 "-" 按鈕時，減少數量，但確保數量不小於 1
                 this.quantity = Math.max(1, this.quantity - 1);
             },
+            // 加入購物車
+            // add_cart(combine_id) {
+            //     var qty = document.getElementById("qty_" + combine_id).value;
+            //     var form = $('#multitude_specification');
+            //     var url = form.attr('action');
+            //     var specification_name = $("input[name='" + combine_id + "specification_name[]']").map(function() {
+            //         return $(this).val();
+            //     }).get();
+            //     var specification_id = $("input[name='" + combine_id + "specification_id[]']").map(function() {
+            //         return $(this).val();
+            //     }).get();
+            //     var specification_qty = $("input[name='" + combine_id + "specification_qty[]']").map(function() {
+            //         return $(this).val();
+            //     }).get();
+            //     $.ajax({
+            //         url: "/cart/add_combine",
+            //         method: "POST",
+            //         data: {
+            //             combine_id: combine_id,
+            //             qty: qty,
+            //             specification_name: specification_name,
+            //             specification_id: specification_id,
+            //             specification_qty: specification_qty,
+            //         },
+            //         success: function(data) {
+            //             alert('加入成功');
+            //             get_cart_qty();
+            //         }
+            //     });
+            // },
             // 搜尋攔篩選
             filterproductsBySearch() {
                 return this.products.filter(product => {
