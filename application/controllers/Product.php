@@ -29,8 +29,8 @@ class Product extends Public_Controller {
 			$this->render('product/index');
 		}
 		if($this->is_partnertoys){
-			$this->data['product_combine'] = $this->product_model->getProductCombine();
-			$this->data['product_combine_item'] = $this->product_model->getProductCombineItem();
+			$this->data['productCombine'] = $this->product_model->getProductCombine();
+			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 			$this->render('product/partnertoys_index');
 		}
 	}

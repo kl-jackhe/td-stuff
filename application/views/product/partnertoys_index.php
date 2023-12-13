@@ -124,8 +124,8 @@
                 selectedCombine: null, // 選中的商品
                 selectedCombineItem: null, // 選中的商品
                 selectedCategoryId: 1, // 目前顯示頁面主題, null為全部顯示
-                combine: <?php echo json_encode($product_combine); ?>, // 取得指定商品之combine物件
-                combine_item: <?php echo json_encode($product_combine_item); ?>, // 取得指定商品之combine_item物件
+                combine: <?php echo json_encode($productCombine); ?>, // 取得指定商品之combine物件
+                combine_item: <?php echo json_encode($productCombineItem); ?>, // 取得指定商品之combine_item物件
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
                 products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
