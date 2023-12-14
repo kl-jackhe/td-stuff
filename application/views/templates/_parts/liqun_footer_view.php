@@ -81,7 +81,7 @@
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
                     <div class="col-11 col-md-12">
-                        Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.
+                        Copyright © 2023 li-group food 阿凱的冰箱. All rights reserved.
                     </div>
                 </div>
             </div>

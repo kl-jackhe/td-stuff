@@ -11,11 +11,14 @@ class Home extends Public_Controller {
 		$this->load->helper('cookie');
 		$this->data['page_title'] = '首頁';
 		$this->data['products'] = $this->product_model->getHomeProducts();
+		$this->data['product_category'] = $this->product_model->get_product_category();
 		$this->data['banner'] = $this->home_model->getBanner();
 		$this->data['franchisee'] = $franchisee;
 		$this->data['uid'] = (isset($_GET['uid'])?$_GET['uid']:null);
 		if ($this->is_partnertoys) {
 			$this->render('home/partnertoys_index');
+		} else if ($this->is_liqun_food) {
+			$this->render('home/liqun_index');
 		} else {
 			$this->render('home/index');
 		}
