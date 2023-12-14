@@ -114,6 +114,7 @@
         right: 0;
     }
     .footer-copyright {
+        color: #7d7d7d;
         padding-bottom: 20px;
     }
     @media (min-width: 768px) and (max-width: 991.98px) {
@@ -131,13 +132,13 @@
                         <div class="row justify-content-end">
                             <!-- 回首頁 | 登入 | 註冊 | 會員中心 | 查詢訂單 | 追蹤清單 | 購物車 ( 0 ) -->
                             <div class="col-12 text-right ">
-                                <a href="/product" class="nav_item_style">夥伴商城</a>
+                                <!-- <a href="/product" class="nav_item_style">夥伴商城</a>
                                 <a href="/about" class="nav_item_style">關於夥伴</a>
                                 <a href="/posts" class="nav_item_style">最新訊息</a>
                                 <a href="#" class="nav_item_style">合作介紹</a>
                                 <a href="#" class="nav_item_style">經銷通路</a>
                                 <a href="#" class="nav_item_style">會員專區</a>
-                                <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px; background-color: transparent;">登入</a>
+                                <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px; background-color: transparent;">登入</a> -->
                             </div>
                         </div>
                     </div>
