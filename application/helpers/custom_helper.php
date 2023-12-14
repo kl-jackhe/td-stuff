@@ -439,6 +439,8 @@ function get_image($data) {
 function get_front_image($data) {
 	if (!empty($data)) {
 		$result = '<img src="/assets/uploads/' . $data . '" class="img-fluid">';
+	}else{
+		$result = '<img src="/assets/uploads/notfound.jpg" class="img-fluid">';
 	}
 	return $result;
 }

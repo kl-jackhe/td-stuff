@@ -5,10 +5,9 @@
     $excuteUrl = ($device != 'mobile') ? 'get_store_info.php' : 'get_store_info_location.php';
     $returnUrl = base_url() . $excuteUrl;
     try {
-        include("ECPay.Logistics.Integration.php");
-        $obj = new ECPayLogistics();
         $storeType = ($checkout != "711_pickup") ? LogisticsSubType::FAMILY_C2C : LogisticsSubType::UNIMART_C2C;
         $deviceType = ($device != 'mobile') ? Device::PC : Device::MOBILE;
+        // controller有引入ECPay.Logistics.Integration並new物件回傳至obj
         $obj->Send = array(
             'MerchantID' => '3382155',
             'HashKey' => 'ZtzbR917Xc6Dn5qf',

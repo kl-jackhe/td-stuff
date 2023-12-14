@@ -66,6 +66,29 @@ class Update extends Admin_Controller {
         }
     }
 
+    // function update_202312142100() {
+    //     $version = '202312142100';
+    //     $description = '[orders]新增欄位[discontinued_at]';
+    //     $this->db->select('id');
+    //     $this->db->where('version',$version);
+    //     $row = $this->db->get('update_log')->row_array();
+    //     if (empty($row)) {
+    //         $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'discontinued_at'");
+    //         if ($query->num_rows() > 0) {
+    //         } else {
+    //             $this->db->query("ALTER TABLE `product` ADD `discontinued_at` datetime NOT NULL  AFTER `updater_id`;");
+    //         }
+
+    //         $insertData = array(
+    //             'version' => $version,
+    //             'description' => $description,
+    //         );
+    //         if ($this->db->insert('update_log', $insertData)) {
+    //             echo '<p>' . $version . ' - ' . $description . '</p>';
+    //         }
+    //     }
+    // }
+
     function update_202312132220() {
         $version = '202312132220';
         $description = '優化資料庫-新增索引';

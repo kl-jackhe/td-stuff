@@ -347,8 +347,9 @@ foreach ($this->cart->contents() as $items) {
                                             }
                                         }
                                     }
+                                    // 抓資料庫的物流方式
                                     $this->db->select('delivery_name_code,delivery_name,delivery_info');
-                                    // 暫時先註解
+                                    // 暫時先註解code有點意義不明
                                     // if (!empty($deliveryList)) {
                                     //     $deliveryIdList = array();
                                     //     foreach ($deliveryList as $key => $value) {
@@ -356,6 +357,8 @@ foreach ($this->cart->contents() as $items) {
                                     //     }
                                     //     $this->db->where_in('id', $deliveryIdList);
                                     // }
+
+                                    // 開放使用的物流方式
                                     $this->db->where('delivery_status', 1);
                                     $d_query = $this->db->get('delivery')->result_array();
 
@@ -379,8 +382,7 @@ foreach ($this->cart->contents() as $items) {
                                     <h3 class="mt-0">付款方式</h3>
                                     <? $payment_count = 0;
                                     foreach ($payment as $row) { ?>
-                                        <div class="form-check <?php // echo ($row['payment_code']=='ecpay'?'d-none':'') 
-                                                                ?>">
+                                        <div class="form-check">
                                             <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>" <?php echo ($payment_count == 0 ? 'checked' : '') ?>>
                                             <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
                                                 <?= $row['payment_name'] ?>
@@ -432,12 +434,14 @@ foreach ($this->cart->contents() as $items) {
                                         <div id="twzipcode"></div>
                                     </div>
                                 </div>
+                                <!-- 指定地點運送地址 -->
                                 <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
                                 </div>
+                                <!-- 超商取貨地址 -->
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市編號</span>
@@ -450,18 +454,6 @@ foreach ($this->cart->contents() as $items) {
                                     </div>
                                     <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
                                 </div>
-                                <!-- 地圖無編號 -->
-                                <!-- <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">門市地址</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php // echo $this->input->get('storeaddress') 
-                                                                                                                            ?>" placeholder="門市地址" readonly>
-                                    <div style="width: 100%; margin-top: 15px;">
-                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
-                                    </div>
-                                </div> -->
-
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市地址</span>
@@ -471,7 +463,7 @@ foreach ($this->cart->contents() as $items) {
                                         <span class="btn btn-primary" onclick="locationToCvsMap();">選擇門市</span>
                                     </div>
                                 </div>
-                                <!--  -->
+                                <!-- 備註 -->
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">訂單備註</span>
@@ -634,8 +626,8 @@ foreach ($this->cart->contents() as $items) {
                     alert('請輸入完整的電子郵件');
                     return false;
                 }
-                if (delivery == '711_pickup') {
-                    if ($('#storename').val() == '' || $('#storeaddress').val() == '') {
+                if (delivery == '711_pickup' || delivery == 'family_pickup') {
+                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
                         alert('請選擇取貨門市');
                         return false;
                     }
@@ -788,7 +780,6 @@ foreach ($this->cart->contents() as $items) {
             window.open(route, "選擇門市", "width=1024,height=768");
         }
     }
-
 
     // 解析 URL 中的參數
     function getParameterByName(name, url) {
