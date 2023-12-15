@@ -53,6 +53,10 @@ class Update extends Admin_Controller {
                             $this->update_202312122325();
                             $this->update_202312131400();
                             $this->update_202312132220();
+                            $this->update_202312151515();
+                            $this->update_202312151520();
+                            $this->update_202312151530();
+                            $this->update_202312151535();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -88,6 +92,165 @@ class Update extends Admin_Controller {
     //         }
     //     }
     // }
+
+    function update_202312151535() {
+        $version = '202312151535';
+        $description = '[product_unit]新增欄位[weight,volume_length,volume_width,volume_height]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product_unit LIKE 'weight'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_unit` ADD `weight` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `unit`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_unit LIKE 'volume_length'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_unit` ADD `volume_length` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_unit LIKE 'volume_width'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_unit` ADD `volume_width` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_length`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_unit LIKE 'volume_height'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_unit` ADD `volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_width`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312151530() {
+        $version = '202312151530';
+        $description = '新增資料表[menu][sub_menu][menu_list]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'menu'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `menu` (
+                    `id` int(11) NOT NULL,
+                    `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `name` varchar(100) NOT NULL,
+                    `sort` decimal(13,4) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `menu` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `menu` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'sub_menu'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `sub_menu` (
+                    `id` int(11) NOT NULL,
+                    `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `name` varchar(100) NOT NULL,
+                    `sort` decimal(13,4) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `sub_menu` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `sub_menu` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'menu_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `menu_list` (
+                    `id` int(11) NOT NULL,
+                    `sub_menu_id` int(11) NOT NULL,
+                    `upper_layer_id` int(11) NOT NULL,
+                    `upper_layer_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `menu_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `menu_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `menu_list` ADD INDEX(`sub_menu_id`);");
+                $this->db->query("ALTER TABLE `menu_list` ADD INDEX(`upper_layer_id`);");
+                $this->db->query("ALTER TABLE `menu_list` ADD INDEX(`upper_layer_code`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312151520() {
+        $version = '202312151520';
+        $description = '[tab_store]新增欄位[code]&新增資料表[tab_category_list]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM tab_store LIKE 'code'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `tab_store` ADD `code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `id`;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'tab_category_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `tab_category_list` (
+                    `id` int(11) NOT NULL,
+                    `product_category_id` int(11) NOT NULL,
+                    `upper_layer_id` int(11) NOT NULL,
+                    `upper_layer_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `tab_category_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `tab_category_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `tab_category_list` ADD INDEX(`product_category_id`);");
+                $this->db->query("ALTER TABLE `tab_category_list` ADD INDEX(`upper_layer_id`);");
+                $this->db->query("ALTER TABLE `tab_category_list` ADD INDEX(`upper_layer_code`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312151515() {
+        $version = '202312151515';
+        $description = '[product_category]新增欄位[product_category_sort][product_category_code]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product_category LIKE 'product_category_sort'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_category` ADD `product_category_sort` int(8) NOT NULL AFTER `product_category_print`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM product_category LIKE 'product_category_code'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `product_category` ADD `product_category_code` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `product_category_parent`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
 
     function update_202312132220() {
         $version = '202312132220';
