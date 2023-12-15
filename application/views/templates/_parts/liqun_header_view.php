@@ -27,52 +27,57 @@
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
 </head>
 <style>
     body {
         font-family: Open Sans, "Microsoft JhengHei";
     }
-    #cart-qty {
-        color: #BE2633;
-        position: absolute;
-        top: -10px;
-        right: 20px;
-        background: #D1D1D1;
-        border-radius: 50px;
-        width: 23px;
-        height: 23px;
-        text-align: center;
+    a {
+        outline: none !important;
     }
     #header {
+        position: fixed;
         background-color: #eecfb9;
         color: #161313;
+        width: 100%;
+        top: 0;
+        z-index: 1030;
     }
-    .top_logo_style {
-        max-width: <?=(get_setting_general('logo_max_width') != '' ? get_setting_general('logo_max_width') .'px' : '130px')?>;
+    .nav_item_style span{
+        color: #595757;
+    }
+    .nav_item_style a{
+        align-self: center;
+        font-size: 14px;
+        color: #161313;
+        position: relative;
+        text-decoration: none;
+    }
+    .nav_item_style a::before {
+        content: "";
         position: absolute;
-        transform: translate(-50%, -50%);
-        left: 50%;
-        top: 40%;
+        bottom: 0;
+        left: 0;
+        right: 100%;
+        height: 1px; /* 底線高度 */
+        background-color: #161313; /* 底線颜色 */
+        transition: right 0.3s ease; /* 過渡效果，使底線動畫顯示 */
     }
-    .nav_user_style {
-        position:absolute;
-        right: 35px;
+    .nav_item_style a:hover::before {
+        right: 0;
     }
-    .nav_user_style li {
-        padding: 5px;
+    .nav_item_mb_style li {
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
-    .nav_user_login_edit {
-        border: 1px solid #f6d523;
-        color: #000 !important;
-        padding: 2px 12px 2px 12px !important;
-        outline: none;
-    }
-    .nav_user_register_logout {
-        background: #f6d523;
-        color: #000 !important;
-        padding: 2px 12px 2px 12px !important;
-        outline: none;
+    #navbarToggler {
+        position: fixed;
+        top: 7%;
+        z-index: 9999;
+        background-color: rgb(245, 242, 236);
+        height: 100%;
+        min-height: 2000px;
+        padding: 6% 20px 15px 20px;
     }
     .fixed_icon_style {
         max-width: 50px;
@@ -106,9 +111,9 @@
         bottom: 0;
         left: 0;
         right: 100%;
-        height: 1.5px; /* 底线高度 */
-        background-color: #323232; /* 底线颜色 */
-        transition: right 0.3s ease; /* 过渡效果，使底线动画显示 */
+        height: 2px; /* 底線高度 */
+        background-color: #323232; /* 底線颜色 */
+        transition: right 0.3s ease; /* 過渡效果，使底線動畫顯示 */
     }
     .footer-company-info a:hover::before {
         right: 0;
@@ -118,37 +123,70 @@
         padding-bottom: 20px;
     }
     @media (min-width: 768px) and (max-width: 991.98px) {
+
     }
     @media (max-width: 767px) {
+        #cart-qty {
+            color: #BE2633;
+            position: absolute;
+            top: -18px;
+            right: 2px;
+            background: #D1D1D1;
+            border-radius: 50px;
+            width: 23px;
+            height: 23px;
+            text-align: center;
+        }
     }
 </style>
 
 <body>
     <div class="body h-100">
         <header id="header">
-            <div class="container-fluid">
+            <div class="container">
                 <div class="row py-2 justify-content-center header_fixed_top">
-                    <div class="col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
+                    <div class="col-md-12 col-lg-12 d-none d-md-block d-lg-block d-xl-block" style="align-self: center;">
                         <div class="row justify-content-end">
-                            <!-- 回首頁 | 登入 | 註冊 | 會員中心 | 查詢訂單 | 追蹤清單 | 購物車 ( 0 ) -->
-                            <div class="col-12 text-right ">
-                                <!-- <a href="/product" class="nav_item_style">夥伴商城</a>
-                                <a href="/about" class="nav_item_style">關於夥伴</a>
-                                <a href="/posts" class="nav_item_style">最新訊息</a>
-                                <a href="#" class="nav_item_style">合作介紹</a>
-                                <a href="#" class="nav_item_style">經銷通路</a>
-                                <a href="#" class="nav_item_style">會員專區</a>
-                                <a href="#" class="nav_item_style" style="border: 2px solid #615d56;border-radius: 30px;padding: 1px 15px 1px 15px; background-color: transparent;">登入</a> -->
+                            <div class="col-12 text-right nav_item_style">
+                                <a href="/">回首頁</a>
+                                <span> ｜ </span>
+                                <a href="#">會員中心</a>
+                                <span> ｜ </span>
+                                <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
+                                    <span id="cart-qty">購物車（<span>0</span>）</span>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
-                        <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
-                                <!-- <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;"> -->
-                            </button>
-                        </nav>
+                    <div class="col-12 d-block d-md-none d-lg-none d-xl-none p-0" style="align-self: center;">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-3">
+                                <nav class="navbar navbar-expand-lg navbar-light">
+                                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                                        <i class="fa-solid fa-bars"></i>
+                                    </button>
+                                </nav>
+                            </div>
+                            <div class="col-3 text-center">
+                                <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
+                                    <div id="cart-qty"><span>0</span></div>
+                                    <i class="fa-solid fa-cart-shopping fixed_icon_style" style="font-size: 28px;color: #fff;"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
+        <div class="row" style="position: relative;z-index: 99;">
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav nav_item_mb_style nav_item_style">
+                    <li>
+                        <a href="/">回首頁</a>
+                    <li>
+                    <li>
+                        <a href="#">會員中心</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
