@@ -96,6 +96,7 @@ class Update extends Admin_Controller
             if (empty($query)) {
                 $this->db->query("ALTER TABLE `product_unit` ADD `volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_width`;");
             }
+
             $insertData = array(
                 'version' => $version,
                 'description' => $description,
@@ -257,6 +258,7 @@ class Update extends Admin_Controller
             } else {
                 $this->db->query("ALTER TABLE `orders` ADD `InvoiceNumber` varchar(10) NOT NULL  AFTER `order_payment`;");
             }
+            
             $insertData = array(
                 'version' => $version,
                 'description' => $description,

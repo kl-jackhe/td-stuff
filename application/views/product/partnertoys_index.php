@@ -70,6 +70,7 @@
                         </div> -->
 
                         <!-- 有方案顯示 -->
+                        <!-- 會判斷點選的商品是否有方案 -->
                         <!--價格-->
                         <div class="cargoText col-bg-12 col-md-12 col-lg-12">
                             <div v-if="selectedProductCombine && selectedProductCombine.product_id === selectedProduct.product_id && (selectedProductCombine.current_price !== 0)">
@@ -99,11 +100,14 @@
                         </div>
                         <!--購買按鍵-->
                         <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
-                            <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                            <span v-if="selectedProduct.sale_status === 0" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                            <span v-else-if="selectedProduct.sale_status === 2" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                            <span v-else class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
                         </div>
                         <!--加入購物車-->
                         <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
-                            <span class="cargoClick cartBtn" @click=""><i class="fas fa-cart-plus"></i>加入購物車</span>
+                            <span v-if="selectedProduct.sale_status === 0 || selectedProduct.sale_status === 2" class="cargoClick cartBtn"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                            <span v-else class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
                         </div>
                         <!--追蹤商品-->
                         <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
@@ -172,10 +176,10 @@
         data() {
             return {
                 selectedProduct: null, // 選中的商品
-                selectedProductCombine: null, // 選中的方案
+                selectedProductCombine: null, // 選中商品的規格
                 selectedProductCategoryId: null, // 選中商品的類別
-                selectedCombine: null, // 選中商品的規格
-                selectedCombineItem: null, // 選中商品規格的單位
+                selectedCombine: null, // 選中商品的所有規格
+                selectedCombineItem: null, // 選中商品的所有單位
                 selectedCategoryId: 1, // 目前顯示頁面主題, 1為全部顯示
                 combine: <?php echo json_encode($productCombine); ?>, // 取得指定商品之combine物件
                 combine_item: <?php echo json_encode($productCombineItem); ?>, // 取得指定商品之combine_item物件
@@ -280,7 +284,7 @@
                     mainClass: 'mfp-zoom-in',
                 });
             },
-            // 更新選擇方案對應的價格
+            // 更新選擇方案對應的價格(selected option)
             updateSelectedCombine(event) {
                 const selectedCombineName = event.target.value;
                 const selectedCombineItem = this.selectedCombine.find(item => item.name === selectedCombineName);
@@ -308,42 +312,36 @@
             // 商品數量選擇
             increment() {
                 // 當按下 "+" 按鈕時，增加數量
+                this.quantity = parseInt(this.quantity, 10);
                 this.quantity += 1;
             },
             decrement() {
                 // 當按下 "-" 按鈕時，減少數量，但確保數量不小於 1
+                this.quantity = parseInt(this.quantity, 10);
                 this.quantity = Math.max(1, this.quantity - 1);
             },
-            // 加入購物車
-            // add_cart(combine_id) {
-            //     var qty = document.getElementById("qty_" + combine_id).value;
-            //     var form = $('#multitude_specification');
-            //     var url = form.attr('action');
-            //     var specification_name = $("input[name='" + combine_id + "specification_name[]']").map(function() {
-            //         return $(this).val();
-            //     }).get();
-            //     var specification_id = $("input[name='" + combine_id + "specification_id[]']").map(function() {
-            //         return $(this).val();
-            //     }).get();
-            //     var specification_qty = $("input[name='" + combine_id + "specification_qty[]']").map(function() {
-            //         return $(this).val();
-            //     }).get();
-            //     $.ajax({
-            //         url: "/cart/add_combine",
-            //         method: "POST",
-            //         data: {
-            //             combine_id: combine_id,
-            //             qty: qty,
-            //             specification_name: specification_name,
-            //             specification_id: specification_id,
-            //             specification_qty: specification_qty,
-            //         },
-            //         success: function(data) {
-            //             alert('加入成功');
-            //             get_cart_qty();
-            //         }
-            //     });
-            // },
+            // 加入購物車(待修)
+            add_cart() {
+                if(this.quantity < 1){
+                    alert('商品不能低於1個');
+                    return;
+                }
+                $.ajax({
+                    url: "/cart/add_combine",
+                    method: "POST",
+                    data: {
+                        combine_id: this.selectedProductCombine.id,
+                        qty: this.quantity,
+                        specification_name: 'Testname',
+                        specification_id: 'Testid',
+                        specification_qty: 'Textqty',
+                    },
+                    success: function(data) {
+                        alert('加入成功');
+                        get_cart_qty();
+                    }
+                });
+            },
             // 搜尋攔篩選
             filterproductsBySearch() {
                 return this.products.filter(product => {
