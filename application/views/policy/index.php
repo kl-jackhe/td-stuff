@@ -33,7 +33,12 @@
     padding-bottom: 10px;
 }
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-    background-color: #68396D;
+    <?if ($this->is_td_stuff) {?>
+        background-color: #68396D;
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        background-color: #585656;
+    <?}?>
 }
 .nav-link {
     font-weight: bold;
@@ -80,7 +85,9 @@
                                 <a href="#" class="nav-link btn" id="terms_of_service-tab" data-toggle="pill" data-target="#terms_of_service" role="tab" aria-controls="terms_of_service" aria-selected="false">服務條款</a>
                                 <a href="#" class="nav-link btn" id="intellectual_property-tab" data-toggle="pill" data-target="#intellectual_property" role="tab" aria-controls="intellectual_property" aria-selected="false">知識產權</a>
                                 <a href="#" class="nav-link btn" id="return_policy-tab" data-toggle="pill" data-target="#return_policy" role="tab" aria-controls="return_policy" aria-selected="false">退貨政策</a>
-                                <a href="#" class="nav-link btn" id="logistics_payment_method-tab" data-toggle="pill" data-target="#logistics_payment_method" role="tab" aria-controls="logistics_payment_method" aria-selected="false">物流/支付方式</a>
+                                <?if ($this->is_td_stuff) {?>
+                                    <a href="#" class="nav-link btn" id="logistics_payment_method-tab" data-toggle="pill" data-target="#logistics_payment_method" role="tab" aria-controls="logistics_payment_method" aria-selected="false">物流/支付方式</a>
+                                <?}?>
                             </div>
                         </div>
                         <div class="col-12 m_border"></div>

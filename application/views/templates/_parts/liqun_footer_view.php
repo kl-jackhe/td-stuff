@@ -46,10 +46,10 @@
         <div class="footer-company-logo">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <div class="col-6 col-md-2">
+                    <div class="col-6 col-md-2 pl-5 pr-3">
                         <img src="/assets/images/liqun/index_logo_footer-AKai.png" class="img-fluid">
                     </div>
-                    <div class="col-6 col-md-2">
+                    <div class="col-6 col-md-2 pr-5 pl-3">
                         <img src="/assets/images/liqun/index_logo_footer-LGFD.png" class="img-fluid">
                     </div>
                 </div>
