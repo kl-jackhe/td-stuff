@@ -217,24 +217,47 @@
 $('#v-pills-tab a').on('click', function(event) {
     event.preventDefault()
     $(this).tab('show')
+    var w = $(window).width();
     var h = $(window).height();
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var h_sum = h - header_h - footer_h;
-    $(".tab-pane").css('height', h_sum*0.95);
+    <?if ($this->is_td_stuff) {?>
+        $(".tab-pane").css('height', h_sum*0.95);
+    <?}?>
+    <?if ($this->is_liqun_food) {?>
+        if (w < 769) {
+            $(".tab-pane").css('height', h_sum*3);
+        } else {
+            $(".tab-pane").css('height', h_sum*1);
+        }
+    <?}?>
 })
 </script>
 <!-- Window Height -->
 <script>
 $(function() {
+    var w = $(window).width();
     var h = $(window).height();
     var main_h = $(".main").height();
     var header_h = $("#header").height();
     var footer_h = $("#footer").height();
     var h_sum = h - header_h - footer_h;
-    var line_h = h_sum+50;
-    $(".tab-pane").css('height', h_sum*0.95);
-    $(".straight_line").css('height', line_h);
+    <?if ($this->is_td_stuff) {?>
+        $(".tab-pane").css('height', h_sum*0.95);
+    <?}?>
+    $(".straight_line").css('height', h_sum+50);
+    <?if ($this->is_liqun_food) {?>
+        if (w < 768) {
+            $(".main").css('padding-top', header_h*1.2);
+            $(".main").css('padding-bottom', header_h*0.5);
+            $(".tab-pane").css('height', h_sum*3);
+        } else {
+            $(".main").css('padding-top', header_h*2);
+            $(".main").css('padding-bottom', header_h*1.2);
+            $(".tab-pane").css('height', h_sum*1);
+        }
+    <?}?>
 });
 </script>
 <!-- Window Height -->
