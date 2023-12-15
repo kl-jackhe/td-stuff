@@ -38,7 +38,7 @@ $route['backup_db']                      = 'others/backup_db';
 $route['SingleSales/checkSingleSalesDate'] = 'SingleSales/checkSingleSalesDate';
 $route['SingleSales/(:any)'] 			 = 'SingleSales/index/$1';
 
-$route['(:any)'] 			 		 	 = 'Home/index/$1';
+// $route['(:any)'] 			 		 	 = 'Home/index/$1';
 
 //////////////////////////////////////////////////////////////////////////////////////
 
