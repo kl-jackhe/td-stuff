@@ -53,6 +53,7 @@ class Update extends Admin_Controller {
                             $this->update_202312122325();
                             $this->update_202312131400();
                             $this->update_202312132220();
+                            $this->update_202312142100();
                         } else {
                             // 不存在
                             $this->update_202308161130();
@@ -66,28 +67,38 @@ class Update extends Admin_Controller {
         }
     }
 
-    // function update_202312142100() {
-    //     $version = '202312142100';
-    //     $description = '[orders]新增欄位[discontinued_at]';
-    //     $this->db->select('id');
-    //     $this->db->where('version',$version);
-    //     $row = $this->db->get('update_log')->row_array();
-    //     if (empty($row)) {
-    //         $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'discontinued_at'");
-    //         if ($query->num_rows() > 0) {
-    //         } else {
-    //             $this->db->query("ALTER TABLE `product` ADD `discontinued_at` datetime NOT NULL  AFTER `updater_id`;");
-    //         }
+    function update_202312142100() {
+        $version = '202312142100';
+        $description = '[orders]新增欄位[InvoiceNumber]&[AllPayLogisticsID]&[CVSPaymentNo]';
+        $this->db->select('id');
+        $this->db->where('version',$version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'CVSPaymentNo'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `CVSPaymentNo` varchar(20) NOT NULL  AFTER `order_payment`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'AllPayLogisticsID'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `AllPayLogisticsID` varchar(10) NOT NULL  AFTER `order_payment`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'InvoiceNumber'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `InvoiceNumber` varchar(10) NOT NULL  AFTER `order_payment`;");
+            }
 
-    //         $insertData = array(
-    //             'version' => $version,
-    //             'description' => $description,
-    //         );
-    //         if ($this->db->insert('update_log', $insertData)) {
-    //             echo '<p>' . $version . ' - ' . $description . '</p>';
-    //         }
-    //     }
-    // }
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
 
     function update_202312132220() {
         $version = '202312132220';
