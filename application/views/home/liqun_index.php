@@ -12,6 +12,10 @@
 #fridge_box {
     cursor: pointer;
 }
+#fridge_item {
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
 #fridge_item a {
     color: #fff;
     position: relative;
@@ -191,7 +195,7 @@
                                 <div class="py-2" id="fridge_box">
                                     <i class="fa-solid fa-bars"></i>&ensp;冰箱裡有什麼？
                                 </div>
-                                <div class="row justify-content-center py-4" id="fridge_item">
+                                <div class="row justify-content-center" id="fridge_item">
                                     <div class="col-md-12 py-3"><a href="#">新春年菜&ensp;強強滾</a></div>
                                     <div class="col-md-12 py-3"><a href="#">餐廳美食&ensp;帶回家</a></div>
                                     <div class="col-md-12 py-3"><a href="#">嚴格挑選&ensp;頂級牛</a></div>
