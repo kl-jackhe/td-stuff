@@ -17,7 +17,7 @@
     <? if (get_setting_general('official_line_1') != '') { ?>
         <div id="fa-line" class="my-3 icon_pointer">
             <a href="<?= get_setting_general('official_line_1') ?>" target="_blank">
-                <img class="fixed_icon_style" src="/assets/images/web icon_line service.png">
+                <img class="fixed_icon_style" src="/assets/images/liqun/index_icon_talk.png">
             </a>
         </div>
     <? } ?>
@@ -34,11 +34,6 @@
             <i class="fa-solid fa-cart-shopping fixed_icon_style"></i>
         </a>
     </div> -->
-    <div id="fa-talk-square" class="my-3 icon_pointer">
-        <a href="#">
-            <img class="fixed_icon_style" src="/assets/images/liqun/index_icon_talk.png">
-        </a>
-    </div>
     <div id="fa-angles-up" class="my-3 icon_pointer">
         <a href="#">
             <img class="fixed_icon_style" src="/assets/images/liqun/index_icon_arrow.png">
@@ -51,10 +46,10 @@
         <div class="footer-company-logo">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <div class="col-11 col-md-2">
+                    <div class="col-6 col-md-2">
                         <img src="/assets/images/liqun/index_logo_footer-AKai.png" class="img-fluid">
                     </div>
-                    <div class="col-11 col-md-2">
+                    <div class="col-6 col-md-2">
                         <img src="/assets/images/liqun/index_logo_footer-LGFD.png" class="img-fluid">
                     </div>
                 </div>
@@ -63,15 +58,28 @@
         <div class="footer-company-info">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <div class="col-11 col-md-12">
+                    <div class="col-12 col-md-12">
                         <span>
                             <a href="/about">關於我們</a>
-                            ｜ <a href="#">常見Ｑ＆Ａ</a>
-                            ｜ <a href="#">防詐騙宣導資訊</a>
-                            ｜ <a href="/policy?target=disclaimer">免責聲明</a>
-                            ｜ <a href="/policy?target=terms_of_service">服務條款</a>
-                            ｜ <a href="/policy?target=intellectual_property">知識產權</a>
-                            ｜ <a href="/policy?target=return_policy">退貨政策</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="#">常見Ｑ＆Ａ</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="#">防詐騙宣導資訊</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="/policy?target=disclaimer">免責聲明</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="/policy?target=terms_of_service">服務條款</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="/policy?target=intellectual_property">知識產權</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
+                            <a href="/policy?target=return_policy">退貨政策</a>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                         </span>
                     </div>
                 </div>
@@ -104,15 +112,34 @@
         </div>
     </div>
 </div>
-</div>
-<script src="/assets/bootstrap-4.2.1-dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
 <script>
     $(document).ready(function() {
+        var isFridgeBoxOpen = true;
+        $(document).click(function(event) {
+            var target = $(event.target);
+            if (!target.closest('#fridge_box').length && !target.closest('#fridge_item').length) {
+                $('#fridge_item').not(target.closest('#fridge_box').find('#fridge_item')).hide();
+                isFridgeBoxOpen = false;
+            }
+        });
+        $('#fridge_box').click(function(event) {
+            if (isFridgeBoxOpen == false) {
+                $('#fridge_item').show();
+                isFridgeBoxOpen = true;
+            } else {
+                $('#fridge_item').hide();
+                isFridgeBoxOpen = false;
+            }
+        });
+
         $('#home-carousel').carousel({
             interval: 5000
         });
+
         get_cart_qty();
         var $navbarToggler = $("#navbarToggler");
         var $menuToggle = $(".navbar-toggler");
@@ -134,7 +161,7 @@
         });
         //Window Height
         var header_h = $(".header_fixed_top").height();
-        $(".content_auto_h").css('padding-top', header_h * 1.5);
+        $(".content_auto_h").css('padding-top', header_h * 1.8);
         //scrollTop
         $(function() {
             var $win = $(window);
