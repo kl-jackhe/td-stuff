@@ -59,6 +59,7 @@ class Update extends Admin_Controller
                 $this->update_202312151520();
                 $this->update_202312151530();
                 $this->update_202312151535();
+                $this->update_202312161325();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -69,6 +70,62 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312161325()
+    {
+        $version = '202312161325';
+        $description = '新增資料表[standard_page_list][franchisee_data_list]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'standard_page_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `standard_page_list` (
+                    `id` int(11) NOT NULL,
+                    `page_name` varchar(50) NOT NULL,
+                    `page_title` varchar(50) NOT NULL,
+                    `page_info` text NOT NULL,
+                    `page_img` varchar(50) NOT NULL,
+                    `page_lang` varchar(50) NOT NULL,
+                    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `standard_page_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `standard_page_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'franchisee_data_list'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `franchisee_data_list` (
+                    `id` int(11) NOT NULL,
+                    `users_id` int(11) NOT NULL,
+                    `store_code` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+                    `start_date` DATETIME NOT NULL,
+                    `end_date` DATETIME NOT NULL,
+                    `sort` decimal(13,4) NOT NULL,
+                    `status` TINYINT(4) NOT NULL DEFAULT TRUE,
+                    `updated_at` DATETIME NOT NULL,
+                    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `franchisee_data_list` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `franchisee_data_list` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+                $this->db->query("ALTER TABLE `franchisee_data_list` ADD INDEX(`users_id`);");
+                $this->db->query("ALTER TABLE `franchisee_data_list` ADD INDEX(`store_code`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
