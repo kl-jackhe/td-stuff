@@ -329,7 +329,7 @@ class Checkout extends Public_Controller
 				// $obj->SendExtend['Frequency']    = '' ;    //執行頻率，預設空字串
 				// $obj->SendExtend['ExecTimes']    = '' ;    //執行次數，預設空字串
 
-				// 電子發票參數
+				// // 電子發票參數
 				// $obj->Send['InvoiceMark'] = ECPay_InvoiceState::Yes;
 				// $obj->SendExtend['RelateNumber'] = "Test" . time();
 				// $obj->SendExtend['CustomerEmail'] = 'test@ecpay.com.tw';
@@ -337,7 +337,7 @@ class Checkout extends Public_Controller
 				// $obj->SendExtend['TaxType'] = ECPay_TaxType::Dutiable;
 				// $obj->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
 				// $obj->SendExtend['InvoiceItems'] = array();
-				// 將商品加入電子發票商品列表陣列
+				// // 將商品加入電子發票商品列表陣列
 				// foreach ($obj->Send['Items'] as $info) {
 				// 	array_push($obj->SendExtend['InvoiceItems'], array('Name' => $info['Name'], 'Count' =>
 				// 	$info['Quantity'], 'Word' => '個', 'Price' => $info['Price'], 'TaxType' => ECPay_TaxType::Dutiable));
@@ -515,10 +515,10 @@ class Checkout extends Public_Controller
 	// type=POST
 	public function check_pay($order_number)
 	{
-		// 檢查回傳值
-		echo '<pre>';
-		print_r($_POST);
-		echo '</pre>';
+		// 檢查金流回傳值
+		// echo '<pre>';
+		// print_r($_POST);
+		// echo '</pre>';
 
 		// 查詢訂單資訊
 		$this->db->select('*');
@@ -537,7 +537,18 @@ class Checkout extends Public_Controller
 			// 更新訂單是否付款成功及付款成功後
 			$data = array(
 				'order_pay_status' => 'paid', // 已付款
-				'order_pay_feedback' => get_empty($this->input->post('MerchantTradeNo')), // 綠界訂單編號
+				'order_pay_feedback' => get_empty($this->input->post('MerchantTradeNo')),
+				'MerchantID' => get_empty($this->input->post('MerchantID')),
+				'MerchantTradeNo' => get_empty($this->input->post('MerchantTradeNo')),
+				'PaymentDate' => get_empty($this->input->post('PaymentDate')),
+				'PaymentType' => get_empty($this->input->post('PaymentType')),
+				'PaymentTypeChargeFee' => get_empty($this->input->post('PaymentTypeChargeFee')),
+				'RtnCode' => get_empty($this->input->post('RtnCode')),
+				'RtnMsg' => get_empty($this->input->post('RtnMsg')),
+				'SimulatePaid' => get_empty($this->input->post('SimulatePaid')),
+				'TradeAmt' => get_empty($this->input->post('TradeAmt')),
+				'TradeNo' => get_empty($this->input->post('TradeNo')),
+				'TradeDate' => get_empty($this->input->post('TradeDate')),
 			);
 			$this->db->where('order_id', $order_id);
 			$this->db->update('orders', $data);
@@ -548,16 +559,17 @@ class Checkout extends Public_Controller
 				$this->load->library('ecpay_invoices');
 				$obj = $this->ecpay_invoices->load();
 
-				//服務參數 (正式環境)
-				// $obj->Invoice_Url = 'https://einvoice.ecpay.com.tw/Invoice/Issue';
-				// $obj->MerchantID = '3382155';
-				// $obj->HashKey = 'ZtzbR917Xc6Dn5qf';
-				// $obj->HashIV = 'lpsDZrOpn8dxLSgM';
-				//服務參數 (測試環境)
+				// 服務參數 (測試環境)
 				$obj->Invoice_Url = 'https://einvoice-stage.ecpay.com.tw/Invoice/Issue';
 				$obj->MerchantID = '2000132';
 				$obj->HashKey = 'ejCk326UnaZWKisg';
 				$obj->HashIV = 'q9jcZX8Ib9LM8wYk';
+
+				// 服務參數 (正式環境)
+				// $obj->Invoice_Url = 'https://einvoice.ecpay.com.tw/Invoice/Issue';
+				// $obj->MerchantID = '3382155';
+				// $obj->HashKey = 'ZtzbR917Xc6Dn5qf';
+				// $obj->HashIV = 'lpsDZrOpn8dxLSgM';
 
 				// 商品資訊
 				array_push(
@@ -596,85 +608,88 @@ class Checkout extends Public_Controller
 				// 送出
 				$invoice = $obj->Check_Out();
 
+				if ($invoice['RtnCode'] == '1') {
+					// print_r($invoice['InvoiceNumber']);
+					$data = array(
+						'InvoiceNumber' => get_empty($invoice['InvoiceNumber']),
+					);
+					$this->db->where('order_id', $order_id);
+					$this->db->update('orders', $data);
+				}
+
 				// 檢查發票資料
-				echo '<pre>';
-				print_r($invoice);
-				echo '</pre>';
+				// echo '<pre>';
+				// print_r($invoice);
+				// echo '</pre>';
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
 
-			// 託運單(待解決)
+			// 託運單
 			try {
 				// 載入綠界託運API
 				$this->load->library('ecpay_logistics');
 				$obj = $this->ecpay_logistics->load();
-				//服務參數 (正式環境)
-				// $obj->MerchantID = '3382155';
-				// $obj->HashKey = 'ZtzbR917Xc6Dn5qf';
-				// $obj->HashIV = 'lpsDZrOpn8dxLSgM';
-				//服務參數 (測試環境)
-				$obj->MerchantID = '2000132';
-				$obj->HashKey = '5294y06JbISpM5x9';
-				$obj->HashIV = 'v77hoKGq4kWxNNIS';
+
+				// 服務參數 (測試環境)
+				// $obj->Send['MerchantID'] = '2000132';
+				// $obj->HashKey = '5294y06JbISpM5x9';
+				// $obj->HashIV = 'v77hoKGq4kWxNNIS';
+
+				// 服務參數 (正式環境)
+				$obj->Send['MerchantID'] = '3382155';
+				$obj->HashKey = 'ZtzbR917Xc6Dn5qf';
+				$obj->HashIV = 'lpsDZrOpn8dxLSgM';
+
 
 				$LogisticsSubType = ($row['order_delivery'] != '711_pickup') ? LogisticsSubType::FAMILY_C2C : LogisticsSubType::UNIMART_C2C;
 
-				$obj->Send = array(
-					'MerchantID' => '2000132',
-					'HashKey' => '5294y06JbISpM5x9',
-					'HashIV' => 'v77hoKGq4kWxNNIS',
-					'MerchantTradeNo' => $this->input->post('MerchantTradeNo'),
-					'MerchantTradeDate' => date('Y/m/d H:i:s'),
-					'LogisticsType' => LogisticsType::CVS,
-					'LogisticsSubType' => $LogisticsSubType,
-					'GoodsAmount' => (int)$this->input->post('TradeAmt'),
-					'GoodsName' => 'TEST',
-					'SenderName' => '夥伴玩具',
-					'SenderPhone' => '0422029095',
-					'SenderCellPhone' => '0912345678',
-					'ReceiverName' => $row['customer_name'],
-					'ReceiverCellPhone' => $row['customer_phone'],
-					'ServerReplyURL' => base_url() . 'checkout/success/' . encode($order_id),
-					'LogisticsC2CReplyURL' => base_url() . 'checkout/success/' . encode($order_id),
-					'ReceiverStoreID' => '985654'
-				);
+				$obj->Send['MerchantTradeNo'] = $this->input->post('MerchantTradeNo'); //綠界訂單編號
+				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); // 物流單生成時間
+				$obj->Send['LogisticsType'] = LogisticsType::CVS; // 超商物流選擇
+				$obj->Send['LogisticsSubType'] = $LogisticsSubType; // 超商選擇
+				$obj->Send['GoodsAmount'] = (int)$this->input->post('TradeAmt'); // 商品總價
+				$obj->Send['GoodsName'] = 'Cargo'; // 商品名稱
+				$obj->Send['SenderName'] = '夥伴玩具'; // 電商名稱
+				$obj->Send['SenderPhone'] = '0422029095'; // 電商電話
+				$obj->Send['SenderCellPhone'] = '0912345678'; // 電商手機
+				$obj->Send['ReceiverName'] = $row['customer_name'];
+				$obj->Send['ReceiverPhone'] = '';
+				$obj->Send['ReceiverCellPhone'] = $row['customer_phone'];
+				$obj->Send['ReceiverEmail'] = '';
+				$obj->Send['TradeDesc'] = '';
+				$obj->Send['ServerReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
+				$obj->Send['ClientReplyURL'] = '';
+				$obj->Send['LogisticsC2CReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
+				$obj->Send['Remark'] = '';
+				$obj->PostParams['ReceiverStoreID'] = $row['store_id'];
+				// $obj->SendExtend['ReturnStoreID'] = $row['store_id'];
 
-				// $obj->Send['MerchantTradeNo'] = $this->input->post('MerchantTradeNo'); //綠界訂單編號
-				// $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); // 物流單生成時間
-				// $obj->Send['LogisticsType'] = LogisticsType::CVS; // 超商物流選擇
-				// $obj->Send['LogisticsSubType'] = $LogisticsSubType; // 超商選擇
-				// $obj->Send['GoodsAmount'] = (int)$this->input->post('TradeAmt'); // 商品總價
-				// $obj->Send['GoodsName'] = 'TEST'; // 商品名稱
-				// $obj->Send['SenderName'] = '夥伴玩具'; // 電商名稱
-				// $obj->Send['SenderPhone'] = '0422029095'; // 電商電話
-				// $obj->Send['SenderCellPhone'] = '0912345678'; // 電商手機
-				// $obj->Send['ReceiverName'] = $row['customer_name'];
-				// $obj->Send['ReceiverPhone'] = '';
-				// $obj->Send['ReceiverCellPhone'] = $row['customer_phone'];
-				// $obj->Send['ReceiverEmail'] = '';
-				// $obj->Send['TradeDesc'] = '';
-				// $obj->Send['ServerReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
-				// $obj->Send['ClientReplyURL'] = '';
-				// $obj->Send['LogisticsC2CReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
-				// $obj->Send['Remark'] = '';
-				// $obj->Send['ReceiverStoreID'] = $row['store_id'];
-				// $obj->Send['ReturnStoreID'] = $row['store_id'];
+				// 送出(記得這邊API要改動不然有BUG)
+				$response = $obj->BGCreateShippingOrder($row['store_id']);
 
-				// 送出
-				$response = $obj->CreateShippingOrder();
+				if ($response['ResCode'] == '1') {
+					// print_r($response['AllPayLogisticsID']);
+					// print_r($response['CVSPaymentNo']);
+					$data = array(
+						'AllPayLogisticsID' => get_empty($response['AllPayLogisticsID']),
+						'CVSPaymentNo' => get_empty($response['CVSPaymentNo']),
+					);
+					$this->db->where('order_id', $order_id);
+					$this->db->update('orders', $data);
+				}
 
-				// 檢查發票資料
-				echo '<pre>';
-				print_r($response);
-				echo '</pre>';
+				// 檢查託運單資料
+				// echo '<pre>';
+				// print_r($response);
+				// echo '</pre>';
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
 
 			// 訂單ID加密
 			// redirect(base_url() . 'checkout/success/' . $order_id);
-			// redirect(base_url() . 'checkout/success/' . encode($order_id));
+			redirect(base_url() . 'checkout/success/' . encode($order_id));
 		} else {
 			// 訂單ID加密
 			// redirect(base_url() . 'checkout/success/' . $order_id);

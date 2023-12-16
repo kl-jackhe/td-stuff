@@ -442,7 +442,7 @@ class ECPayLogistics
 	 * @category	SDK
 	 * @return		Array
 	 */
-	public function BGCreateShippingOrder()
+	public function BGCreateShippingOrder($ReceiverStoreID)
 	{
 		// 參數初始化
 		$ParamList = array(
@@ -495,9 +495,9 @@ class ECPayLogistics
 					'ReturnStoreID' => ''
 				);
 				$this->PostParams = $this->GetPostParams($this->SendExtend, $CvsParamList, $this->PostParams);
+				$this->PostParams['ReceiverStoreID'] = $ReceiverStoreID;
 
 				$this->ValidateMixTypeID('ReceiverStoreID', $this->PostParams['ReceiverStoreID'], 6);
-				// $this->ValidateMixTypeID('ReceiverStoreID', $this->PostParams['ReceiverStoreID'], 6, true); //測試
 				$this->ValidateMixTypeID('ReturnStoreID', $this->PostParams['ReturnStoreID'], 6, true);
 				break;
 			case LogisticsType::HOME:

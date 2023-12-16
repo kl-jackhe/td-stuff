@@ -35,22 +35,31 @@
         <div ref="postDetail" id="postDetailStyle" class="postDetailStyle" v-if="selectedPost">
             <div class="container">
                 <!-- Post Start -->
-                <div id="view_position" class="row">
-                    <div class="col-md-10 offset-md-1">
+                <div class="detailTitle newsTitle">
+                    <h1 class="text-center">{{ selectedPostCategoryId[0].post_category_name }}</h1>
+                </div>
+                <div class="row newsText">
+                    <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <p>{{ selectedPost.created_at.substr(0, 10) }}</p>
+                            <h1 class="font-weight-bold text-center">{{ selectedPost.post_title }}</h1>
+                        </div>
+                    </div>
+                    <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             <img :src="'/assets/uploads/' + selectedPost.post_image" class="img-fluid">
                         </div>
+                    </div>
+                    <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <p>{{ selectedPost.created_at.substr(0, 10) }}</p>
-                            <h2 class="font-weight-bold">{{ selectedPost.post_title }}</h2>
-                            <p>{{ selectedPost.post_content }}</p>
+                            <p v-html="selectedPost.post_content"></p>
                         </div>
                     </div>
                 </div>
                 <!-- Post End -->
             </div>
             <!-- Add a button for scrolling to the top -->
-            <span @click="scrollToPostDetailTop" class="scrollToPostDetailTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
+            <span @click="scrollToDetailTop" class="scrollToDetailTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
         </div>
     </section>
 </div>
@@ -60,6 +69,7 @@
         data() {
             return {
                 selectedPost: null, // 選中的消息
+                selectedPostCategoryId: null, // 選中的消息
                 selectedCategoryId: 1, // 目前顯示頁面主題, 1為最新消息
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
                 posts_categorys: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
@@ -160,6 +170,8 @@
             // 選中獨立商品
             showPostDetails(post) {
                 this.selectedPost = post;
+                this.selectedPostCategoryId = this.posts_categorys.filter(category => category.post_category_id === post.post_category);
+
             },
             // 搜尋攔篩選
             filterPostsBySearch() {
@@ -210,7 +222,7 @@
                 });
             },
             // Method to scroll to the top of the postDetailStyle box
-            scrollToPostDetailTop() {
+            scrollToDetailTop() {
                 // Get the postDetailStyle element
                 const postDetailStyle = this.$refs.postDetail;
 
