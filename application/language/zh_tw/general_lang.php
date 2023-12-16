@@ -70,3 +70,12 @@ $lang['OnSale'] = '銷售中';
 $lang['OutSale'] = '停售中';
 $lang['ForSale'] = '待販售';
 $lang['Finish'] = '結案';
+
+$lang['FraudPreventionInformation'] = '防詐騙宣導資訊';
+$lang['TermsOfService'] = '服務條款';
+$lang['PrivacyPolicy'] = '隱私權政策';
+$lang['Disclaimer'] = '免責聲明';
+$lang['IntellectualProperty'] = '知識產權';
+$lang['LogisticsAndPayment'] = '物流/支付方式';
+$lang['ReturnPolicy'] = '退貨政策';
+$lang['FrequentlyQA'] = '常見Ｑ＆Ａ';

@@ -59,6 +59,8 @@ $sales_current = $this->uri->segment(3);?>
         <span>代言人管理</span>
       </a>
     </li>
+    <?}
+    if ($this->is_liqun_food) {?>
     <li <?php if ($sales_current == "page" || $sales_current == "history") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa-solid fa-id-card-clip"></i>
@@ -100,6 +102,12 @@ $sales_current = $this->uri->segment(3);?>
       <a href="/admin/banner">
         <i class="fas fa-ad"></i>
         <span>首頁輪播</span>
+      </a>
+    </li>
+    <li class="<?php if ($current == "user") {echo "active";}?>">
+      <a href="/admin/StandardPage">
+        <i class="fa-regular fa-file-word"></i>
+        <span>制式頁面管理</span>
       </a>
     </li>
     <li class="<?php if ($current == "user") {echo "active";}?>">

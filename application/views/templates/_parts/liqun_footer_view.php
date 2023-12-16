@@ -63,22 +63,22 @@
                             <a href="/about">關於我們</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="#">常見Ｑ＆Ａ</a>
+                            <a href="/policy?target=FrequentlyQA">常見Ｑ＆Ａ</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="#">防詐騙宣導資訊</a>
+                            <a href="/policy?target=FraudPreventionInformation">防詐騙宣導資訊</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="/policy?target=disclaimer">免責聲明</a>
+                            <a href="/policy?target=Disclaimer">免責聲明</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="/policy?target=terms_of_service">服務條款</a>
+                            <a href="/policy?target=TermsOfService">服務條款</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="/policy?target=intellectual_property">知識產權</a>
+                            <a href="/policy?target=IntellectualProperty">知識產權</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
-                            <a href="/policy?target=return_policy">退貨政策</a>
+                            <a href="/policy?target=ReturnPolicy">退貨政策</a>
                             <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
                         </span>
                     </div>

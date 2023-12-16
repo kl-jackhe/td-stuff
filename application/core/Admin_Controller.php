@@ -23,7 +23,6 @@ class Admin_Controller extends MY_Controller
 			redirect(base_url(), 'refresh');
 		}
 		$this->load->library('Ajax_pagination_admin');
-		$this->lang->load('general', 'zh_tw');
 
 		$this->data['current_user'] = $this->ion_auth->user()->row();
 		$this->data['admin_user_menu'] = '';
