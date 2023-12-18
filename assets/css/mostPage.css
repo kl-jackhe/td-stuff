@@ -1058,6 +1058,15 @@ input.qtyminus {
     color: #773ba8;
 }
 
+#aboutContent{
+    margin-bottom: 100px;
+}
+
+#aboutImg{
+    height: auto;
+    width: 60%;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;
