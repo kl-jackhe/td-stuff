@@ -175,6 +175,7 @@
     const productApp = Vue.createApp({
         data() {
             return {
+                getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
                 selectedProduct: null, // 選中的商品
                 selectedProductCombine: null, // 選中商品的規格
                 selectedProductCategoryId: null, // 選中商品的類別
@@ -209,6 +210,11 @@
             if (this.products_categories.length > 0) {
                 this.selectedCategoryId = this.products_categories[0].product_category_id;
                 this.pageTitle = this.products_categories[0].product_category_name;
+                if (this.getID.length > 0) {
+                    this.selectedCategoryId = this.getID;
+                    const tmpSet = this.products_categories.filter(self => self.product_category_id === this.getID);
+                    this.pageTitle = tmpSet[0].product_category_name;
+                }
             }
             // 商品詳細資訊
             $('.productMagnificPopupTrigger').magnificPopup({
@@ -352,7 +358,7 @@
             },
             // 按鈕篩選
             filterproductsByCategory() {
-                if (this.selectedCategoryId == 1) {
+                if (this.selectedCategoryId == 0) {
                     return this.products;
                 } else {
                     return this.products.filter(product => product.product_category_id === this.selectedCategoryId);

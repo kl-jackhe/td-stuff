@@ -8,13 +8,6 @@
             <!--M_contents-->
             <div id="M_contents" class="animated fadeIn" bis_skin_checked="1">
                 <!--內文區塊↓-->
-                <style>
-                    /* 編輯器圖片 */
-                    .edit img {
-                        max-width: 100%;
-                        height: auto !important;
-                    }
-                </style>
                 <div class="edit" bis_skin_checked="1">
                     <p style="text-align: center;">
                         <span style="font-size: 14pt; font-family: 微軟正黑體, 'Microsoft JhengHei';">
@@ -32,7 +25,8 @@
                     <p style="text-align: center;">
                         <img id="aboutImg" src="/assets/uploads/aboutContent.jpg" alt="">
                     </p>
-                </div> <!--內文區塊↑-->
+                </div>
+                <!--內文區塊↑-->
             </div>
     </section>
 </div>
