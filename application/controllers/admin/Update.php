@@ -60,6 +60,7 @@ class Update extends Admin_Controller
                 $this->update_202312151530();
                 $this->update_202312151535();
                 $this->update_202312161325();
+                $this->update_202312171935();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -70,6 +71,29 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312171935()
+    {
+        $version = '202312171935';
+        $description = '[menu]新增欄位[type]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM menu LIKE 'type'")->result_array();
+            if (empty($query)) {
+                $this->db->query("ALTER TABLE `menu` ADD `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `sort`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
