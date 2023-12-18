@@ -1,5 +1,5 @@
 <div id="aboutApp" role="main" class="main pt-signinfo">
-    <section id="post_rejust">
+    <section class="sectionRejust">
         <?php require('about-menu.php'); ?>
         <div id="aboutContent" class="section-contents">
             <div class="container">

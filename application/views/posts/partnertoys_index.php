@@ -1,5 +1,5 @@
 <div id="postApp" role="main" class="main pt-signinfo">
-    <section id="post_rejust">
+    <section class="sectionRejust">
         <?php require('posts-menu.php'); ?>
         <div class="section-contents">
             <div class="container">
@@ -70,8 +70,8 @@
             return {
                 getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
-                selectedPostCategoryId: null, // 選中的消息
-                selectedCategoryId: null, // 目前顯示頁面主題, 1為最新消息
+                selectedPostCategoryId: null, // 選中的消息類別
+                selectedCategoryId: null, // 目前顯示頁面主題
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
                 posts_categorys: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤

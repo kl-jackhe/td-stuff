@@ -1,5 +1,5 @@
 <div id="productApp" role="main" class="main pt-signinfo">
-    <section id="product_rejust">
+    <section class="sectionRejust">
         <!-- Menu -->
         <?php require('product-menu.php'); ?>
 
@@ -181,7 +181,7 @@
                 selectedProductCategoryId: null, // 選中商品的類別
                 selectedCombine: null, // 選中商品的所有規格
                 selectedCombineItem: null, // 選中商品的所有單位
-                selectedCategoryId: 1, // 目前顯示頁面主題, 1為全部顯示
+                selectedCategoryId: null, // 目前顯示頁面主題
                 combine: <?php echo json_encode($productCombine); ?>, // 取得指定商品之combine物件
                 combine_item: <?php echo json_encode($productCombineItem); ?>, // 取得指定商品之combine_item物件
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
@@ -192,7 +192,7 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
-                quantity: 1, // 商品選擇數量
+                quantity: 0, // 商品選擇數量
             };
         },
         watch: {

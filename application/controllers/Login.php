@@ -1,6 +1,7 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Login extends Public_Controller {
+class Login extends Public_Controller
+{
 
 	public function __construct()
 	{
@@ -21,39 +22,38 @@ class Login extends Public_Controller {
 	{
 		$this->data['page_title'] = '登入';
 
-		if ($this->ion_auth->logged_in())
-		{
-			// redirect('/', 'refresh');
-			redirect($_SERVER['HTTP_REFERER']);
+		if (!$this->is_partnertoys) {
+			if ($this->ion_auth->logged_in()) {
+				// redirect('/', 'refresh');
+				redirect($_SERVER['HTTP_REFERER']);
+			}
 		}
+
 
 		// validate form input
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
 		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
 
-		if ($this->form_validation->run() == true)
-		{
+		if ($this->form_validation->run() == true) {
 			// check to see if the user is logging in
 			// check for "remember me"
 			$remember = true;
 
-			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
-			{
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
 				//if the login is successful
 				$data = array(
 					'ip_address' => $this->input->ip_address(),
 					'user_id'    => $this->ion_auth->user()->row()->id,
 					'datetime'   => date('Y-m-d H:i:s'),
-	            );
-	            $this->db->insert('login_log', $data);
+				);
+				$this->db->insert('login_log', $data);
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				if($this->ion_auth->in_group('admin'))
-				{
+				if ($this->ion_auth->in_group('admin')) {
 					redirect('admin', 'refresh');
 				}
 				//
-				if($this->input->post('now_url')!=''){
+				if ($this->input->post('now_url') != '') {
 					redirect($this->input->post('now_url'));
 				} else {
 					redirect('/');
@@ -65,33 +65,44 @@ class Login extends Public_Controller {
 				// 	// redirect('/', 'refresh');
 				// 	redirect($_SERVER['HTTP_REFERER']);
 				// }
-			}
-			else
-			{
+			} else {
 				// if the login was un-successful
 				// redirect them back to the login page
 				// $this->session->set_flashdata('message', '使用者名稱或是密碼錯誤 , 請重新輸入。');
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('loginMessage', $this->ion_auth->errors());
+					$this->session->set_flashdata('identity', $this->input->post('identity'));
+					redirect('auth/index?id=1', 'refresh');
+				}
 				redirect('login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
+
 			}
-		}
-		else
-		{
+		} else {
 			// the user is not logging in so display the login page
 			// set the flash data error message if there is one
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-			$this->data['identity'] = array('name' => 'identity',
+			$this->data['identity'] = array(
+				'name' => 'identity',
 				'id'    => 'identity',
 				'type'  => 'text',
 				'value' => $this->form_validation->set_value('identity'),
 			);
-			$this->data['password'] = array('name' => 'password',
+			$this->data['password'] = array(
+				'name' => 'password',
 				'id'   => 'password',
 				'type' => 'password',
 			);
 
 			$this->session->set_flashdata('message', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				$this->session->set_flashdata('identity', $this->input->post('identity'));
+				redirect('auth/index?id=1', 'refresh');
+			}
+
 			$this->render('auth/login');
 		}
 	}
@@ -100,8 +111,7 @@ class Login extends Public_Controller {
 	{
 		$this->data['page_title'] = '登入';
 
-		if ($this->ion_auth->logged_in())
-		{
+		if ($this->ion_auth->logged_in()) {
 			// redirect('/', 'refresh');
 			redirect($_SERVER['HTTP_REFERER']);
 		}
@@ -110,29 +120,26 @@ class Login extends Public_Controller {
 		$this->form_validation->set_rules('identity', str_replace(':', '', $this->lang->line('login_identity_label')), 'required');
 		$this->form_validation->set_rules('password', str_replace(':', '', $this->lang->line('login_password_label')), 'required');
 
-		if ($this->form_validation->run() == true)
-		{
+		if ($this->form_validation->run() == true) {
 			// check to see if the user is logging in
 			// check for "remember me"
 			$remember = true;
 
-			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember))
-			{
+			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
 				//if the login is successful
 				$data = array(
 					'ip_address' => $this->input->ip_address(),
 					'user_id'    => $this->ion_auth->user()->row()->id,
 					'datetime'   => date('Y-m-d H:i:s'),
-	            );
-	            $this->db->insert('login_log', $data);
+				);
+				$this->db->insert('login_log', $data);
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				if($this->ion_auth->in_group('admin'))
-				{
+				if ($this->ion_auth->in_group('admin')) {
 					redirect('admin', 'refresh');
 				}
 				//
-				if($this->input->post('now_url')!=''){
+				if ($this->input->post('now_url') != '') {
 					redirect($this->input->post('now_url'));
 				} else {
 					redirect('/');
@@ -144,35 +151,33 @@ class Login extends Public_Controller {
 				// 	// redirect('/', 'refresh');
 				// 	redirect($_SERVER['HTTP_REFERER']);
 				// }
-			}
-			else
-			{
+			} else {
 				// if the login was un-successful
 				// redirect them back to the login page
 				// $this->session->set_flashdata('message', '使用者名稱或是密碼錯誤 , 請重新輸入。');
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
-				$this->load->view('auth/login_v2',$this->data);
+				$this->load->view('auth/login_v2', $this->data);
 				// redirect('login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
-		}
-		else
-		{
+		} else {
 			// the user is not logging in so display the login page
 			// set the flash data error message if there is one
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 
-			$this->data['identity'] = array('name' => 'identity',
+			$this->data['identity'] = array(
+				'name' => 'identity',
 				'id'    => 'identity',
 				'type'  => 'text',
 				'value' => $this->form_validation->set_value('identity'),
 			);
-			$this->data['password'] = array('name' => 'password',
+			$this->data['password'] = array(
+				'name' => 'password',
 				'id'   => 'password',
 				'type' => 'password',
 			);
 
 			$this->session->set_flashdata('message', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
-			$this->load->view('auth/login_v2',$this->data);
+			$this->load->view('auth/login_v2', $this->data);
 		}
 	}
 
@@ -184,18 +189,14 @@ class Login extends Public_Controller {
 		$this->data['page_title'] = '忘記密碼';
 
 		// setting validation rules by checking whether identity is username or email
-		if ($this->config->item('identity', 'ion_auth') != 'email')
-		{
+		if ($this->config->item('identity', 'ion_auth') != 'email') {
 			$this->form_validation->set_rules('identity', $this->lang->line('forgot_password_identity_label'), 'required');
-		}
-		else
-		{
+		} else {
 			$this->form_validation->set_rules('identity', $this->lang->line('forgot_password_validation_email_label'), 'required|valid_email');
 		}
 
 
-		if ($this->form_validation->run() === FALSE)
-		{
+		if ($this->form_validation->run() === FALSE) {
 			$this->data['type'] = $this->config->item('identity', 'ion_auth');
 			// setup the input
 			$this->data['identity'] = [
@@ -204,12 +205,9 @@ class Login extends Public_Controller {
 				'class' => 'form-control'
 			];
 
-			if ($this->config->item('identity', 'ion_auth') != 'email')
-			{
+			if ($this->config->item('identity', 'ion_auth') != 'email') {
 				$this->data['identity_label'] = $this->lang->line('forgot_password_identity_label');
-			}
-			else
-			{
+			} else {
 				$this->data['identity_label'] = $this->lang->line('forgot_password_email_identity_label');
 			}
 
@@ -217,21 +215,15 @@ class Login extends Public_Controller {
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data);
 			$this->render('auth/forgot_password');
-		}
-		else
-		{
+		} else {
 			$identity_column = $this->config->item('identity', 'ion_auth');
 			$identity = $this->ion_auth->where($identity_column, $this->input->post('identity'))->users()->row();
 
-			if (empty($identity))
-			{
+			if (empty($identity)) {
 
-				if ($this->config->item('identity', 'ion_auth') != 'email')
-				{
+				if ($this->config->item('identity', 'ion_auth') != 'email') {
 					$this->ion_auth->set_error('forgot_password_identity_not_found');
-				}
-				else
-				{
+				} else {
 					$this->ion_auth->set_error('forgot_password_email_not_found');
 				}
 
@@ -242,14 +234,11 @@ class Login extends Public_Controller {
 			// run the forgotten password method to email an activation code to the user
 			$forgotten = $this->ion_auth->forgotten_password($identity->{$this->config->item('identity', 'ion_auth')});
 
-			if ($forgotten)
-			{
+			if ($forgotten) {
 				// if there were no errors
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				redirect("login", 'refresh'); //we should display a confirmation page here instead of the login page
-			}
-			else
-			{
+			} else {
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				redirect("forgot_password", 'refresh');
 			}
@@ -286,13 +275,13 @@ class Login extends Public_Controller {
 	/**
 	 * @return bool Whether the posted CSRF token matches
 	 */
-	public function _valid_csrf_nonce(){
+	public function _valid_csrf_nonce()
+	{
 		$csrfkey = $this->input->post($this->session->flashdata('csrfkey'));
-		if ($csrfkey && $csrfkey === $this->session->flashdata('csrfvalue'))
-		{
+		if ($csrfkey && $csrfkey === $this->session->flashdata('csrfvalue')) {
 			return TRUE;
 		}
-			return FALSE;
+		return FALSE;
 	}
 
 	/**
@@ -302,7 +291,7 @@ class Login extends Public_Controller {
 	 *
 	 * @return mixed
 	 */
-	public function _render_page($view, $data = NULL, $returnhtml = FALSE)//I think this makes more sense
+	public function _render_page($view, $data = NULL, $returnhtml = FALSE) //I think this makes more sense
 	{
 
 		$viewdata = (empty($data)) ? $this->data : $data;
@@ -310,10 +299,8 @@ class Login extends Public_Controller {
 		$view_html = $this->load->view($view, $viewdata, $returnhtml);
 
 		// This will return html on 3rd argument being true
-		if ($returnhtml)
-		{
+		if ($returnhtml) {
 			return $view_html;
 		}
 	}
-
 }
