@@ -28,9 +28,15 @@ class Auth extends Public_Controller
 	{
 		if ($this->is_partnertoys) :
 			$this->data['title'] = '會員專區';
+
 			if (empty($this->session->userdata('user_id'))) :
 				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
 			else :
+				// 抓使用者資料
+				$id = $this->session->userdata('user_id');
+				$user = $this->ion_auth->user($id)->row();
+				$this->data['user'] = $user;
+				$this->data['orders'] = $this->auth_model->getOrders($id);
 				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
 			endif;
 			$this->render('auth/partnertoys_index');
@@ -57,7 +63,7 @@ class Auth extends Public_Controller
 				//if the login is successful
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
-				echo '<script>alert("登入成功");</script>';
+				// echo '<script>alert("登入成功");</script>';
 				redirect('/', 'refresh');
 			} else {
 				// if the login was un-successful
@@ -161,6 +167,10 @@ class Auth extends Public_Controller
 
 			// render
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				redirect('auth/index?id=6', 'refresh');
+			}
 			$this->render('auth/change_password', 'admin_master');
 		} else {
 			$identity = $this->session->userdata('identity');
@@ -173,6 +183,10 @@ class Auth extends Public_Controller
 				$this->logout();
 			} else {
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->messages());
+					redirect('auth/index?id=6', 'refresh');
+				}
 				redirect('auth/change_password', 'refresh');
 			}
 		}
@@ -490,6 +504,7 @@ class Auth extends Public_Controller
 				// redirect them back to the login page
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('form_values', $this->input->post());
 					$this->session->set_flashdata('registerMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=2', 'refresh');
 				}
@@ -531,6 +546,7 @@ class Auth extends Public_Controller
 
 			//$this->_render_page('auth/create_user', $this->data);
 			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('form_values', $this->input->post());
 				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message'))));
 				redirect('auth/index?id=2', 'refresh');
 			}
@@ -606,6 +622,10 @@ class Auth extends Public_Controller
 			if ($this->ion_auth->update($user->id, $data)) {
 				// redirect them back to the admin page if admin, or to the base url if non admin
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				if ($this->is_partnertoys) {
+					echo '<script>alert("修改成功");</script>';
+					redirect('auth/index?id=5', 'refresh');
+				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');
 					redirect($_SERVER['HTTP_REFERER']);
@@ -616,6 +636,10 @@ class Auth extends Public_Controller
 			} else {
 				// redirect them back to the admin page if admin, or to the base url if non admin
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('editMessage', $this->ion_auth->errors());
+					redirect('auth/index?id=5', 'refresh');
+				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');
 					redirect($_SERVER['HTTP_REFERER']);

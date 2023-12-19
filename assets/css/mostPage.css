@@ -23,6 +23,22 @@ a {
     text-decoration: none;
 }
 
+/* 添加红色 * 的样式 */
+label.required::before {
+    content: '* ';
+    color: red;
+}
+
+.memberForm input,
+.memberForm select,
+.memberForm textarea,
+#memberLoginForm input {
+    background: #f9f9f9;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid #e3e3e3;
+}
+
 .header_relative_top {
     background-color: #fff;
     position: relative;
@@ -1086,16 +1102,44 @@ input.qtyminus {
     width: 60%;
 }
 
-.memberForm {
+#memberLoginForm {
+    /* border: 8px solid #efefef; */
     box-shadow: 6px 6px 20px grey;
     padding: 30px;
     margin: 50px 10px 60px 10px;
+}
+
+.memberForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px 100px;
+    margin: 50px 10px 60px 10px;
+}
+
+@media (max-width:767px) {
+    .memberForm {
+        padding: 30px;
+    }
 }
 
 .memberTitleMember {
     font-family: 'Brush Script MT', cursive;
     font-size: 28px;
     color: #ff6b6b;
+}
+
+@media (max-width:500px) {
+    .input-group-prepend .input-group-text {
+        font-size: 12px;
+    }
+
+    .input-group-prepend input {
+        font-size: 12px;
+    }
+
+    .memberTitleMember {
+        font-size: 20px;
+    }
 }
 
 .memberTitleLogin {
@@ -1205,7 +1249,11 @@ input.qtyminus {
     text-decoration: none;
 }
 
-#joinBtn {
+#joinBtn,
+#editBtn,
+#changeBtn,
+#forgotSendBtn,
+#contactSendBtn {
     border: none;
     color: #ffffff;
     font-size: 1em;
@@ -1218,18 +1266,22 @@ input.qtyminus {
     -o-transition: all .3s ease-in-out;
 }
 
-#joinBtn:hover {
+#joinBtn:hover,
+#editBtn:hover,
+#changeBtn:hover,
+#forgotSendBtn:hover,
+#contactSendBtn:hover {
     text-decoration: none;
     cursor: pointer;
     background: #ff3333;
 }
 
-#forgotSendBtn {
+#contactEraseBtn {
     border: none;
     color: #ffffff;
     font-size: 1em;
     font-weight: bold;
-    background: #e30020;
+    background: #333;
     padding: 8px 80px;
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
@@ -1237,14 +1289,49 @@ input.qtyminus {
     -o-transition: all .3s ease-in-out;
 }
 
-#forgotSendBtn:hover {
+#contactEraseBtn:hover {
     text-decoration: none;
     cursor: pointer;
-    background: #ff3333;
+    background: #000000;
+}
+
+@media (max-width:1522px) {
+
+    #contactSendBtn,
+    #contactEraseBtn {
+        padding: 8px 20px;
+    }
+}
+
+@media (max-width:576px) {
+
+    #joinBtn,
+    #editBtn,
+    #changeBtn,
+    #forgotSendBtn {
+        padding: 8px 30px;
+    }
+
+    #contactSendBtn,
+    #contactEraseBtn {
+        padding: 8px 15px;
+    }
 }
 
 .alert {
     margin-bottom: 50px;
+}
+
+#orderListHeader {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#memberOrderList {
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px;
+    margin: 50px 0 60px 0;
 }
 
 /* 修改滾動條 */
