@@ -15,33 +15,41 @@
                         <ol class="col-2 align-self-center text-center">付款狀態</ol>
                         <ol class="col-3 align-self-center text-center">出貨狀態</ol>
                     </li>
-                    <a v-if="order" v-for="self in order" class="orderInformation" @click="showOrderDetails(self)">
-                        <li class="row">
-                            <ol class="col-5 align-self-center text-center">
-                                <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;{{ self.order_number }}</span>
-                                <span><br></span>
-                                <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ self.created_at }}</span>
-                            </ol>
-                            <ol class="col-2 align-self-center text-center">{{ self.order_total }}</ol>
-                            <ol class="col-2 align-self-center text-center">{{ (self.order_pay_status == 'paid') ? '已付款' : '未付款' }}</ol>
-                            <ol class="col-3 align-self-center text-center">{{ self.CVSPaymentNo ? "已開設貨運單" : "未出貨" }}</ol>
-                        </li>
-                    </a>
+                    <?php if (!empty($order)) : ?>
+                        <?php foreach ($order as $self) : ?>
+                            <a class="orderInformation">
+                                <li class="row">
+                                    <ol class="col-5 align-self-center text-center">
+                                        <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;<?php echo $self['order_number']; ?></span>
+                                        <span><br></span>
+                                        <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;<?php echo $self['created_at']; ?></span>
+                                    </ol>
+                                    <ol class="col-2 align-self-center text-center"><?php echo $self['order_total']; ?></ol>
+                                    <ol class="col-2 align-self-center text-center"><?php echo ($self['order_pay_status'] == 'paid') ? '已付款' : '未付款'; ?></ol>
+                                    <ol class="col-3 align-self-center text-center"><?php echo !empty($self['CVSPaymentNo']) ? "已開設貨運單" : "未出貨"; ?></ol>
+                                </li>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <!-- Your alternative display for small screens goes here -->
                 <div class="d-md-none">
                     <li id="orderListHeader" class="row">
                         <ol class="col-12 text-center">訂單資訊</ol>
                     </li>
-                    <a v-if="order" v-for="self in order" class="orderInformation" @click="showOrderDetails(self)">
-                        <li class="row">
-                            <ol class="col-12 text-center">
-                                <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;{{ self.order_number }}</span>
-                                <span><br></span>
-                                <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ self.created_at }}</span>
-                            </ol>
-                        </li>
-                    </a>
+                    <?php if (!empty($order)) : ?>
+                        <?php foreach ($order as $self) : ?>
+                            <a class="orderInformation">
+                                <li class="row">
+                                    <ol class="col-12 text-center">
+                                        <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;<?php echo $self['order_number']; ?></span>
+                                        <span><br></span>
+                                        <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;<?php echo $self['created_at']; ?></span>
+                                    </ol>
+                                </li>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
