@@ -51,7 +51,7 @@
                         <h2>最新消息</h2>
                         <hr>
                         <p v-for="post in postCategory" @click="filterByFooterCategory(post.post_category_id)">
-                            <a href="/posts">{{ post.post_category_name }}</a>
+                            <a :href="'/posts/index?id=' + post.post_category_id">{{ post.post_category_name }}</a>
                         </p>
                     </div>
 
@@ -60,7 +60,7 @@
                         <h2>夥伴商城</h2>
                         <hr>
                         <p v-for="product in productCategory" @click="filterByFooterCategory(product.product_category_id)">
-                            <a href="/product">{{ product.product_category_name }}</a>
+                            <a :href="'/product/index?id=' + product.product_category_id">{{ product.product_category_name }}</a>
                         </p>
                     </div>
                     <div class="col-12 col-md-2">

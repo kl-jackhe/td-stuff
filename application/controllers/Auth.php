@@ -1,13 +1,15 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Class Auth
  * @property Ion_auth|Ion_auth_model $ion_auth        The ION Auth spark
  * @property CI_Form_validation      $form_validation The form validation library
  */
-class Auth extends Public_Controller {
+class Auth extends Public_Controller
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->database();
 		$this->load->library(['ion_auth', 'form_validation']);
@@ -16,12 +18,36 @@ class Auth extends Public_Controller {
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
 
 		$this->lang->load('auth');
+
+		if ($this->is_partnertoys) :
+			$this->load->model('auth_model');
+		endif;
+	}
+
+	public function index()
+	{
+		if ($this->is_partnertoys) :
+			$this->data['title'] = '會員專區';
+
+			if (empty($this->session->userdata('user_id'))) :
+				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
+			else :
+				// 抓使用者資料
+				$id = $this->session->userdata('user_id');
+				$user = $this->ion_auth->user($id)->row();
+				$this->data['user'] = $user;
+				$this->data['orders'] = $this->auth_model->getOrders($id);
+				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
+			endif;
+			$this->render('auth/partnertoys_index');
+		endif;
 	}
 
 	/**
 	 * Log the user in
 	 */
-	public function login() {
+	public function login()
+	{
 		$this->data['title'] = $this->lang->line('login_heading');
 
 		// validate form input
@@ -37,11 +63,18 @@ class Auth extends Public_Controller {
 				//if the login is successful
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				// echo '<script>alert("登入成功");</script>';
 				redirect('/', 'refresh');
 			} else {
 				// if the login was un-successful
 				// redirect them back to the login page
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('loginMessage', $this->ion_auth->errors());
+					$this->session->set_flashdata('identity', $this->input->post('identity'));
+					redirect('auth/index?id=1', 'refresh');
+				}
 				redirect('auth/login', 'refresh'); // use redirects instead of loading views for compatibility with MY_Controller libraries
 			}
 		} else {
@@ -62,6 +95,12 @@ class Auth extends Public_Controller {
 				'type' => 'password',
 			];
 
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				$this->session->set_flashdata('identity', $this->input->post('identity'));
+				redirect('auth/index?id=1', 'refresh');
+			}
+
 			$this->_render_page('auth' . DIRECTORY_SEPARATOR . 'login', $this->data);
 		}
 	}
@@ -69,19 +108,23 @@ class Auth extends Public_Controller {
 	/**
 	 * Log the user out
 	 */
-	public function logout() {
+	public function logout()
+	{
 		// log the user out
 		$this->ion_auth->logout();
 
 		// redirect them to the login page
 		$this->session->set_flashdata('message', $this->ion_auth->messages());
-		redirect('auth/login', 'refresh');
+
+		// redirect home page
+		redirect(base_url(), 'refresh');
 	}
 
 	/**
 	 * Change password
 	 */
-	public function change_password() {
+	public function change_password()
+	{
 		$this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
 		$this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[new_confirm]');
 		$this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
@@ -124,6 +167,10 @@ class Auth extends Public_Controller {
 
 			// render
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				redirect('auth/index?id=6', 'refresh');
+			}
 			$this->render('auth/change_password', 'admin_master');
 		} else {
 			$identity = $this->session->userdata('identity');
@@ -136,6 +183,10 @@ class Auth extends Public_Controller {
 				$this->logout();
 			} else {
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->messages());
+					redirect('auth/index?id=6', 'refresh');
+				}
 				redirect('auth/change_password', 'refresh');
 			}
 		}
@@ -144,7 +195,8 @@ class Auth extends Public_Controller {
 	/**
 	 * Forgot password
 	 */
-	public function forgot_password() {
+	public function forgot_password()
+	{
 		$this->data['page_title'] = '忘記密碼';
 
 		// setting validation rules by checking whether identity is username or email
@@ -171,6 +223,10 @@ class Auth extends Public_Controller {
 			// set any errors and display the form
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data);
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('forgotMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				redirect('auth/index?id=3', 'refresh');
+			}
 			$this->render('auth/forgot_password');
 		} else {
 			$identity_column = $this->config->item('identity', 'ion_auth');
@@ -186,6 +242,10 @@ class Auth extends Public_Controller {
 				}
 
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
+					redirect('auth/index?id=3', 'refresh');
+				}
 				redirect("forgot_password", 'refresh');
 			}
 
@@ -200,9 +260,17 @@ class Auth extends Public_Controller {
 			if ($forgotten) {
 				// if there were no errors
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				if ($this->is_partnertoys) {
+					echo '<script>alert("已發送認證信");</script>';
+					redirect("auth", 'refresh');
+				}
 				redirect("login", 'refresh'); //we should display a confirmation page here instead of the login page
 			} else {
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
+					redirect('auth/index?id=3', 'refresh');
+				}
 				redirect("forgot_password", 'refresh');
 			}
 		}
@@ -213,7 +281,8 @@ class Auth extends Public_Controller {
 	 *
 	 * @param string|null $code The reset code
 	 */
-	public function reset_password($code = NULL) {
+	public function reset_password($code = NULL)
+	{
 		if (!$code) {
 			show_404();
 		}
@@ -303,7 +372,8 @@ class Auth extends Public_Controller {
 	 * @param int         $id   The user ID
 	 * @param string|bool $code The activation code
 	 */
-	public function activate($id, $code = FALSE) {
+	public function activate($id, $code = FALSE)
+	{
 		$activation = FALSE;
 
 		if ($code !== FALSE) {
@@ -328,7 +398,8 @@ class Auth extends Public_Controller {
 	 *
 	 * @param int|string|null $id The user ID
 	 */
-	public function deactivate($id = NULL) {
+	public function deactivate($id = NULL)
+	{
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
 			// redirect them to the home page because they must be an administrator to view this
 			show_error('You must be an administrator to view this page.');
@@ -367,7 +438,8 @@ class Auth extends Public_Controller {
 	}
 
 	// create a new user
-	public function create_user() {
+	public function create_user()
+	{
 		$this->data['page_title'] = '會員註冊';
 
 		// if ($this->ion_auth->logged_in())
@@ -416,6 +488,7 @@ class Auth extends Public_Controller {
 				$this->db->insert('login_log', $data);
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				echo '<script>alert("成功加入會員");</script>';
 				redirect('/', 'refresh');
 				// if ($this->input->post('now_url') != '') {
 				// 	if ($this->input->post('now_url') == base_url() . '/register' || $this->input->post('now_url') == base_url() . '/register/') {
@@ -430,9 +503,13 @@ class Auth extends Public_Controller {
 				// if the login was un-successful
 				// redirect them back to the login page
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('form_values', $this->input->post());
+					$this->session->set_flashdata('registerMessage', $this->ion_auth->errors());
+					redirect('auth/index?id=2', 'refresh');
+				}
 				redirect('register', 'refresh');
 			}
-
 		} else {
 			// display the create user form
 			// set the flash data error message if there is one
@@ -468,12 +545,18 @@ class Auth extends Public_Controller {
 			);
 
 			//$this->_render_page('auth/create_user', $this->data);
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('form_values', $this->input->post());
+				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message'))));
+				redirect('auth/index?id=2', 'refresh');
+			}
 			$this->render('auth/register');
 		}
 	}
 
 	// edit a user
-	public function edit_user() {
+	public function edit_user()
+	{
 		$this->data['page_title'] = '編輯個人資料';
 
 		// $id = $this->ion_auth->user()->row()->id;
@@ -532,7 +615,6 @@ class Auth extends Public_Controller {
 					foreach ($groupData as $grp) {
 						$this->ion_auth->add_to_group($grp, $id);
 					}
-
 				}
 			}
 
@@ -540,6 +622,10 @@ class Auth extends Public_Controller {
 			if ($this->ion_auth->update($user->id, $data)) {
 				// redirect them back to the admin page if admin, or to the base url if non admin
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				if ($this->is_partnertoys) {
+					echo '<script>alert("修改成功");</script>';
+					redirect('auth/index?id=5', 'refresh');
+				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');
 					redirect($_SERVER['HTTP_REFERER']);
@@ -547,10 +633,13 @@ class Auth extends Public_Controller {
 					// redirect('/', 'refresh');
 					redirect($_SERVER['HTTP_REFERER']);
 				}
-
 			} else {
 				// redirect them back to the admin page if admin, or to the base url if non admin
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				if ($this->is_partnertoys) {
+					$this->session->set_flashdata('editMessage', $this->ion_auth->errors());
+					redirect('auth/index?id=5', 'refresh');
+				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');
 					redirect($_SERVER['HTTP_REFERER']);
@@ -591,7 +680,8 @@ class Auth extends Public_Controller {
 	}
 
 	// join a user
-	public function join_user() {
+	public function join_user()
+	{
 		$order_id = decode($this->input->post('order_id'));
 		$this->db->select('customer_id,customer_name,customer_phone,customer_email');
 		$this->db->where('order_id', $order_id);
@@ -627,7 +717,8 @@ class Auth extends Public_Controller {
 	/**
 	 * Create a new group
 	 */
-	public function create_group() {
+	public function create_group()
+	{
 		$this->data['title'] = $this->lang->line('create_group_title');
 
 		if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
@@ -673,7 +764,8 @@ class Auth extends Public_Controller {
 	 *
 	 * @param int|string $id
 	 */
-	public function edit_group($id) {
+	public function edit_group($id)
+	{
 		// bail if no group id given
 		if (!$id || empty($id)) {
 			redirect('auth', 'refresh');
@@ -729,7 +821,8 @@ class Auth extends Public_Controller {
 		$this->render('auth/edit_group', 'admin_master');
 	}
 
-	public function identity_check() {
+	public function identity_check()
+	{
 		if ($this->ion_auth_model->identity_check($this->input->get('identity'))) {
 			echo '1';
 		} else {
@@ -737,7 +830,8 @@ class Auth extends Public_Controller {
 		}
 	}
 
-	public function email_check() {
+	public function email_check()
+	{
 		if ($this->ion_auth->email_check($this->input->get('email'))) {
 			echo '1';
 		} else {
@@ -745,14 +839,16 @@ class Auth extends Public_Controller {
 		}
 	}
 
-	public function identity_check_with_id() {
+	public function identity_check_with_id()
+	{
 		echo $this->db->where('username', $this->input->get('identity'))
 			->where('id !=', $this->input->get('id'))
 			->limit(1)
 			->count_all_results('users');
 	}
 
-	public function get_user_recommend_code_by_line_id() {
+	public function get_user_recommend_code_by_line_id()
+	{
 		$this->db->where('oauth_uid', $this->input->get('line_id'));
 		$query = $this->db->get('users');
 		if ($query->num_rows() > 0) {
@@ -763,7 +859,8 @@ class Auth extends Public_Controller {
 		}
 	}
 
-	public function check_is_login() {
+	public function check_is_login()
+	{
 		if ($this->ion_auth->logged_in()) {
 			echo '1';
 		} else {
@@ -774,7 +871,8 @@ class Auth extends Public_Controller {
 	/**
 	 * @return array A CSRF key-value pair
 	 */
-	public function _get_csrf_nonce() {
+	public function _get_csrf_nonce()
+	{
 		$this->load->helper('string');
 		$key = random_string('alnum', 8);
 		$value = random_string('alnum', 20);
@@ -787,7 +885,8 @@ class Auth extends Public_Controller {
 	/**
 	 * @return bool Whether the posted CSRF token matches
 	 */
-	public function _valid_csrf_nonce() {
+	public function _valid_csrf_nonce()
+	{
 		$csrfkey = $this->input->post($this->session->flashdata('csrfkey'));
 		if ($csrfkey && $csrfkey === $this->session->flashdata('csrfvalue')) {
 			return TRUE;
@@ -814,5 +913,4 @@ class Auth extends Public_Controller {
 			return $view_html;
 		}
 	}
-
 }

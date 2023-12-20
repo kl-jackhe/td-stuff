@@ -1,5 +1,5 @@
 <div id="productApp" role="main" class="main pt-signinfo">
-    <section id="product_rejust">
+    <section class="sectionRejust">
         <!-- Menu -->
         <?php require('product-menu.php'); ?>
 
@@ -120,41 +120,7 @@
                         <!-- 有方案顯示 -->
 
                         <!-- 無方案顯示(聯絡方式) -->
-                        <? if ($agentID == '' && get_setting_general('phone1') != '') { ?>
-                            <div v-if="selectedCombine.length === 0" id="fa-phone-square" class="my-3 icon_pointer col-3 link_href">
-                                <a id="phone_href" href="tel:<?= get_setting_general('phone1') ?>" target="_blank">
-                                    <i class="fa fa-phone-square fixed_icon_style" aria-hidden="true"></i><br>Number
-                                </a>
-                            </div>
-                        <? } ?>
-                        <? if ($agentID == '' && get_setting_general('email') != '') { ?>
-                            <div v-if="selectedCombine.length === 0" id="fa-email-square" class="my-3 icon_pointer col-3 link_href">
-                                <a id="email_href" href="mailto:<?= get_setting_general('email') ?>" target="_blank">
-                                    <i class="fa fa-envelope fixed_icon_style" aria-hidden="true"></i><br>Email
-                                </a>
-                            </div>
-                        <? } ?>
-                        <? if ($agentID == '' && get_setting_general('official_facebook_1') != '') { ?>
-                            <div v-if="selectedCombine.length === 0" id="fa-facebook-square" class="my-3 icon_pointer col-3 link_href">
-                                <a id="facebook_href" href="<?= get_setting_general('official_facebook_1') ?>" target="_blank">
-                                    <i class="fa-brands fa-facebook fixed_icon_style" aria-hidden="true"></i><br>Facebook
-                                </a>
-                            </div>
-                        <? } ?>
-                        <? if ($agentID == '' && get_setting_general('official_instagram_1') != '') { ?>
-                            <div v-if="selectedCombine.length === 0" id="fa-instagram-square" class="my-3 icon_pointer col-3 link_href">
-                                <a id="instagram_href" href="<?= get_setting_general('official_instagram_1') ?>" target="_blank">
-                                    <i class="fa-brands fa-instagram fixed_icon_style" aria-hidden="true"></i><br>Instagram
-                                </a>
-                            </div>
-                        <? } ?>
-                        <? if (get_setting_general('official_line_1') != '') { ?>
-                            <div v-if="selectedCombine.length === 0" id="fa-line" class="my-3 icon_pointer col-3 link_href">
-                                <a href="<?= get_setting_general('official_line_1') ?>" target="_blank">
-                                    <img class="fixed_icon_style" src="/assets/images/web icon_line service.png">
-                                </a>
-                            </div>
-                        <? } ?>
+                        <?php require('product-contact.php'); ?>
                         <!-- 無方案顯示 -->
                     </div>
                 </div>
@@ -175,23 +141,24 @@
     const productApp = Vue.createApp({
         data() {
             return {
+                getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
                 selectedProduct: null, // 選中的商品
                 selectedProductCombine: null, // 選中商品的規格
                 selectedProductCategoryId: null, // 選中商品的類別
                 selectedCombine: null, // 選中商品的所有規格
                 selectedCombineItem: null, // 選中商品的所有單位
-                selectedCategoryId: 1, // 目前顯示頁面主題, 1為全部顯示
+                selectedCategoryId: null, // 目前顯示頁面主題
                 combine: <?php echo json_encode($productCombine); ?>, // 取得指定商品之combine物件
                 combine_item: <?php echo json_encode($productCombineItem); ?>, // 取得指定商品之combine_item物件
                 products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
                 products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
-                perpage: 9, // 一頁的資料數
+                perpage: 12, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
-                quantity: 1, // 商品選擇數量
+                quantity: 0, // 商品選擇數量
             };
         },
         watch: {
@@ -206,9 +173,14 @@
             // Initialize Magnific Popup on mount
             this.initMagnificPopup();
             // init btn state
-            if (this.products_categories.length > 0) {
+            if (this.products_categories && this.products_categories.length > 0) {
                 this.selectedCategoryId = this.products_categories[0].product_category_id;
                 this.pageTitle = this.products_categories[0].product_category_name;
+                if (this.getID && this.getID.length > 0) {
+                    this.selectedCategoryId = this.getID;
+                    const tmpSet = this.products_categories.filter(self => self.product_category_id === this.getID);
+                    this.pageTitle = tmpSet[0].product_category_name;
+                }
             }
             // 商品詳細資訊
             $('.productMagnificPopupTrigger').magnificPopup({
@@ -322,7 +294,7 @@
             },
             // 加入購物車(待修)
             add_cart() {
-                if(this.quantity < 1){
+                if (this.quantity < 1) {
                     alert('商品不能低於1個');
                     return;
                 }
@@ -352,7 +324,7 @@
             },
             // 按鈕篩選
             filterproductsByCategory() {
-                if (this.selectedCategoryId == 1) {
+                if (this.selectedCategoryId == 0) {
                     return this.products;
                 } else {
                     return this.products.filter(product => product.product_category_id === this.selectedCategoryId);

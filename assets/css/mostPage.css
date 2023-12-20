@@ -23,6 +23,22 @@ a {
     text-decoration: none;
 }
 
+/* 添加红色 * 的样式 */
+label.required::before {
+    content: '* ';
+    color: red;
+}
+
+.memberForm input,
+.memberForm select,
+.memberForm textarea,
+#memberLoginForm input {
+    background: #f9f9f9;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid #e3e3e3;
+}
+
 .header_relative_top {
     background-color: #fff;
     position: relative;
@@ -42,6 +58,27 @@ a {
     width: 70%;
 }
 
+.logBtn {
+    font-weight: bold;
+    align-self: center;
+    margin-right: 20px;
+    font-size: 18px;
+    color: #000;
+    padding: 10px;
+    /* padding: 1px 15px 1px 15px; */
+    border: none;
+    background-color: transparent;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.logBtn:hover,
+.logBtn:focus {
+    color: rgba(239, 132, 104, 1.0);
+}
+
 #navbarToggler {
     position: fixed;
     top: 7%;
@@ -59,10 +96,15 @@ a {
     font-size: 18px;
     color: #000;
     padding: 10px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
 }
 
 .nav_item_style:hover {
     color: rgba(239, 132, 104, 1.0) !important;
+    text-decoration: none;
 }
 
 .nav_item_mb_style {
@@ -249,13 +291,7 @@ a {
     color: rgba(211, 84, 72, 0.5);
 }
 
-#product_rejust {
-    padding-top: 25px;
-    padding-bottom: 25px;
-    margin-top: 90px;
-}
-
-#post_rejust {
+.sectionRejust {
     padding-top: 25px;
     padding-bottom: 25px;
     margin-top: 90px;
@@ -989,7 +1025,6 @@ input.qtyminus {
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
-
 }
 
 .cargoDescription {
@@ -1056,6 +1091,247 @@ input.qtyminus {
 
 #email_href:hover {
     color: #773ba8;
+}
+
+#aboutContent {
+    margin-bottom: 100px;
+}
+
+#aboutImg {
+    height: auto;
+    width: 60%;
+}
+
+#memberLoginForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px;
+    margin: 50px 10px 60px 10px;
+}
+
+.memberForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px 100px;
+    margin: 50px 10px 60px 10px;
+}
+
+@media (max-width:767px) {
+    .memberForm {
+        padding: 30px;
+    }
+}
+
+.memberTitleMember {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 28px;
+    color: #ff6b6b;
+}
+
+@media (max-width:500px) {
+    .input-group-prepend .input-group-text {
+        font-size: 12px;
+    }
+
+    .input-group-prepend input {
+        font-size: 12px;
+    }
+
+    .memberTitleMember {
+        font-size: 20px;
+    }
+}
+
+.memberTitleLogin {
+    font-weight: bold;
+    color: #e62626;
+}
+
+.memberTitleChinese {
+    font-weight: bold;
+    padding: 10px;
+    margin: 0 0 30px 0;
+}
+
+#separator {
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
+@media (max-width:767px) {
+    #separator {
+        padding-top: 20px;
+        border-left: none;
+        border-top: 1px solid rgb(221, 221, 221);
+    }
+}
+
+#formBtnStyle {
+    padding: 10px;
+}
+
+#loginBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 20px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#loginBtn:hover {
+    text-decoration: none;
+    background: #ff3333;
+}
+
+#eraseBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #333;
+    padding: 8px 20px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#eraseBtn:hover {
+    text-decoration: none;
+    background: rgba(0, 0, 0);
+}
+
+#memberTxt {
+    font-size: 12px;
+}
+
+#memberTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#addMember {
+    margin: 20px;
+}
+
+#addMemberBtn {
+    color: #ddd;
+    font-size: 1em;
+    font-weight: bold;
+    background: #666;
+    padding: 8px 20px;
+    margin: 20px auto 0;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#addMemberBtn:hover {
+    text-decoration: none;
+    background: #000;
+}
+
+#forgotBtn {
+    color: #007bff;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#forgotBtn:hover {
+    color: #00c3ff;
+    text-decoration: none;
+}
+
+#joinBtn,
+#editBtn,
+#changeBtn,
+#forgotSendBtn,
+#contactSendBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#joinBtn:hover,
+#editBtn:hover,
+#changeBtn:hover,
+#forgotSendBtn:hover,
+#contactSendBtn:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #ff3333;
+}
+
+#contactEraseBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #333;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#contactEraseBtn:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #000000;
+}
+
+@media (max-width:1522px) {
+
+    #contactSendBtn,
+    #contactEraseBtn {
+        padding: 8px 20px;
+    }
+}
+
+@media (max-width:576px) {
+
+    #joinBtn,
+    #editBtn,
+    #changeBtn,
+    #forgotSendBtn {
+        padding: 8px 30px;
+    }
+
+    #contactSendBtn,
+    #contactEraseBtn {
+        padding: 8px 15px;
+    }
+}
+
+.alert {
+    margin-bottom: 50px;
+}
+
+#orderListHeader {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#memberOrderList {
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px;
+    margin: 50px 0 60px 0;
 }
 
 /* 修改滾動條 */

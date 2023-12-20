@@ -1,5 +1,5 @@
 <div id="postApp" role="main" class="main pt-signinfo">
-    <section id="post_rejust">
+    <section class="sectionRejust">
         <?php require('posts-menu.php'); ?>
         <div class="section-contents">
             <div class="container">
@@ -68,9 +68,10 @@
     const postApp = Vue.createApp({
         data() {
             return {
+                getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
-                selectedPostCategoryId: null, // 選中的消息
-                selectedCategoryId: 1, // 目前顯示頁面主題, 1為最新消息
+                selectedPostCategoryId: null, // 選中的消息類別
+                selectedCategoryId: null, // 目前顯示頁面主題
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
                 posts_categorys: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
@@ -91,9 +92,14 @@
         },
         mounted() {
             // 在 mounted 鉤子中設定 selectedCategoryId 的值
-            if (this.posts_categorys.length > 0) {
+            if (this.posts_categorys && this.posts_categorys.length > 0) {
                 this.selectedCategoryId = this.posts_categorys[0].post_category_id;
                 this.pageTitle = this.posts_categorys[0].post_category_name;
+                if (this.getID && this.getID.length > 0) {
+                    this.selectedCategoryId = this.getID;
+                    const tmpSet = this.posts_categorys.filter(self => self.post_category_id === this.getID);
+                    this.pageTitle = tmpSet[0].post_category_name;
+                }
             }
             // 最新資訊
             $('.postMagnificPopupTrigger').magnificPopup({
@@ -183,7 +189,7 @@
             },
             // 按鈕篩選
             filterPostsByCategory() {
-                if (this.selectedCategoryId == 1) {
+                if (this.selectedCategoryId == 0) {
                     return this.posts;
                 } else {
                     return this.posts.filter(post => post.post_category === this.selectedCategoryId);

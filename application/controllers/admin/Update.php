@@ -60,6 +60,8 @@ class Update extends Admin_Controller
                 $this->update_202312151530();
                 $this->update_202312151535();
                 $this->update_202312161325();
+                $this->update_202312181700();
+                $this->update_202312181730();
                 $this->update_202312171935();
             } else {
                 // 不存在
@@ -85,6 +87,65 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM menu LIKE 'type'")->result_array();
             if (empty($query)) {
                 $this->db->query("ALTER TABLE `menu` ADD `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `sort`;");
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312181730()
+    {
+        $version = '202312181730';
+        $description = '新增資料表[auth_member_category]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'auth_member_category'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `auth_member_category` (
+                    `auth_category_id` int(11) NOT NULL,
+                    `auth_category_name` varchar(20) NOT NULL,
+                    `created_at` datetime NOT NULL,
+                    `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `auth_member_category` ADD PRIMARY KEY (`auth_category_id`);");
+                $this->db->query("ALTER TABLE `auth_member_category` MODIFY `auth_category_id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312181700()
+    {
+        $version = '202312181700';
+        $description = '新增資料表[auth_visiter_category]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'auth_visiter_category'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `auth_visiter_category` (
+                    `auth_category_id` int(11) NOT NULL,
+                    `auth_category_name` varchar(20) NOT NULL,
+                    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    `updated_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `auth_visiter_category` ADD PRIMARY KEY (`auth_category_id`);");
+                $this->db->query("ALTER TABLE `auth_visiter_category` MODIFY `auth_category_id` int(11) NOT NULL AUTO_INCREMENT;");
             }
 
             $insertData = array(
