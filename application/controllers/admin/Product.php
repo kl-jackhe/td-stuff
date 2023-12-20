@@ -80,7 +80,7 @@ class Product extends Admin_Controller
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
-			'product_category_id' => $this->input->post('product_category'),
+			// 'product_category_id' => $this->input->post('product_category'),
 			'product_sku' => $this->input->post('product_sku'),
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
@@ -92,6 +92,19 @@ class Product extends Admin_Controller
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
 		$product_id = $this->mysql_model->_insert('product', $data);
+
+		$product_category_id_list = $this->input->post('product_category');
+		if (isset($product_category_id_list) && !empty($product_category_id_list)) {
+			for ($i=0;$i<count($product_category_id_list);$i++) {
+				$this->db->select('product_category_id');
+				$this->db->where('product_id', $product_id);
+				$this->db->where('product_category_id', $product_category_id_list[$i]);
+				$pcl_row = $this->db->get('product_category_list')->row_array();
+				if (empty($pcl_row)) {
+					$this->db->insert('product_category_list', array('product_id' => $product_id, 'product_category_id' => $product_category_id_list[$i]));
+				}
+			}
+		}
 
 		$this->session->set_flashdata('message', '商品建立成功！');
 		redirect('admin/product/edit/' . $product_id);
@@ -105,6 +118,16 @@ class Product extends Admin_Controller
 		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id);
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
 		$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		$this->db->select('product_category_id');
+		$this->db->where('product_id', $id);
+		$pcl_query = $this->db->get('product_category_list')->result_array();
+		$select_product_category = array();
+		if (!empty($pcl_query)) {
+			foreach ($pcl_query as $pcl_row) {
+				$select_product_category[] = $pcl_row['product_category_id'];
+			}
+		}
+		$this->data['select_product_category'] = $select_product_category;
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 		$this->db->select('delivery_id');
 		$this->db->where('source', 'Product');
@@ -159,7 +182,7 @@ class Product extends Admin_Controller
 			'volume_height' => $this->input->post('volume_height'),
 			'product_price' => $this->input->post('product_price'),
 			'product_add_on_price' => $this->input->post('product_add_on_price'),
-			'product_category_id' => $this->input->post('product_category'),
+			// 'product_category_id' => $this->input->post('product_category'),
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
 			'product_image' => $this->input->post('product_image'),
@@ -171,6 +194,22 @@ class Product extends Admin_Controller
 		);
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
+
+		$product_category_id_list = $this->input->post('product_category');
+		if (isset($product_category_id_list) && !empty($product_category_id_list)) {
+			$this->db->where_not_in('product_category_id', $product_category_id_list);
+			$this->db->where('product_id', $id);
+			$this->db->delete('product_category_list');
+			for ($i=0;$i<count($product_category_id_list);$i++) {
+				$this->db->select('product_category_id');
+				$this->db->where('product_id', $id);
+				$this->db->where('product_category_id', $product_category_id_list[$i]);
+				$pcl_row = $this->db->get('product_category_list')->row_array();
+				if (empty($pcl_row)) {
+					$this->db->insert('product_category_list', array('product_id' => $id, 'product_category_id' => $product_category_id_list[$i]));
+				}
+			}
+		}
 
 		$inventory_log = array(
 			'product_id' => $id,
@@ -263,7 +302,7 @@ class Product extends Admin_Controller
 		$this->db->where('source_id', $id);
 		$this->db->delete('delivery_range_list');
 		$delivery = $this->input->post('delivery');
-		if (count($delivery) > 0) {
+		if (isset($delivery) && !empty($delivery)) {
 			// 新增配送方式
 			for ($i = 0; $i < count($delivery); $i++) {
 				$insertData = array(

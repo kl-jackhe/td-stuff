@@ -25,16 +25,15 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <? if (!empty($product_category)) { ?>
+                                    <?if (!empty($product_category)) { ?>
                                         <label for="product_category">分類</label>
-                                    <?php $att = 'id="product_category" class="form-control chosen" data-rule-required="true"';
-                                        $data = array();
-                                        foreach ($product_category as $c) {
-                                            $data[$c['product_category_id']] = $c['product_category_name'];
-                                        }
-                                        echo form_dropdown('product_category', $data, '0', $att);
-                                    } else {
-                                        echo '<label>沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="0" readonly>';
+                                        <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
+                                            <?foreach ($product_category as $pc_row) {?>
+                                                <option value="<?=$pc_row['product_category_id']?>"><?=$pc_row['product_category_name']?></option>
+                                            <?}?>
+                                        </select>
+                                    <?} else {
+                                        echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
                                     } ?>
                                 </div>
                             </div>
