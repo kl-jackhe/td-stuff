@@ -1,8 +1,4 @@
 <div class="row">
-  <div class="col-md-12">
-    <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
-    <hr>
-  </div>
   <div class="col-md-4">
     <div class="content-box-large">
     <?php $attributes = array('class' => 'product_category', 'id' => 'product_category');?>
