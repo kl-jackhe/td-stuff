@@ -29,11 +29,7 @@ label {
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
-            <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) . '/category' ?>" class="btn btn-info btn-sm hidden-print" style="margin-right: 10px;">返回上一頁</a>
-            <button type="submit" class="btn btn-primary btn-sm">儲存</button>
-            <?if ($this->is_td_stuff) {?>
-                <span class="btn btn-success" onclick="createSingleSales(<?= $product['product_id'] ?>)">建立銷售頁面</span>
-            <?}?>
+            <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2)?>" class="btn btn-info btn-sm hidden-print" style="margin-right: 10px;">返回上一頁</a>
             <a href="/admin/product/delete/<?php echo $product['product_id'] ?>" class="btn btn-danger btn-sm" style="float: right;" onClick="return confirm('您確定要刪除嗎?')">刪除商品</a>
             <a href="/admin/product/update_product_status/<?php echo $product['product_id'] ?>" class="btn btn-<?= ($product['product_status'] == 1 ? 'success' : 'danger') ?> btn-sm" style="float: right;margin-right: 15px;" onClick="return confirm('確定要<?= ($product['product_status'] == 1 ? '下' : '上') ?>架嗎?')"></i>
             <span><?=($product['product_status'] == 1 ? '上架中' : '已下架') ?></span></a>
@@ -47,6 +43,12 @@ label {
                     <li role="presentation" class="active">
                         <a href="#general" aria-controls="general" role="tab" data-toggle="tab">基本資料</a>
                     </li>
+                    <li role="presentation">
+                        <a href="#product_description" aria-controls="product_description" role="tab" data-toggle="tab">商品描述</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#product_note" aria-controls="product_note" role="tab" data-toggle="tab">注意事項</a>
+                    </li>
                     <!-- <li role="presentation">
                         <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">方案</a>
                     </li> -->
@@ -54,6 +56,15 @@ label {
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-sm">儲存</button>
+                                <?if ($this->is_td_stuff || $this->is_liqun_food) {?>
+                                    <span class="btn btn-success btn-sm" onclick="createSingleSales(<?= $product['product_id'] ?>)">建立銷售頁面</span>
+                                <?}?>
+                                <hr>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-3 col-sm-12">
                                 <div class="row">
@@ -181,7 +192,8 @@ label {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>單位</label>
-                                    <a href="javascript:void(0);" class="btn btn-primary" onclick="add_unit();">新增</a>
+                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="add_unit();">新增</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">儲存</button>
                                 </div>
                                 <table class="table table-bordered" id="paramsFields">
                                     <tr class="info">
@@ -228,7 +240,8 @@ label {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>規格</label>
-                                    <a href="javascript:void(0);" class="btn btn-primary" onclick="add_specification();">新增</a>
+                                    <a href="javascript:void(0);" class="btn btn-warning btn-sm" onclick="add_specification();">新增</a>
+                                    <button type="submit" class="btn btn-primary btn-sm">儲存</button>
                                 </div>
                                 <table class="table table-bordered" id="paramsFields">
                                     <tr class="info">
@@ -309,7 +322,7 @@ label {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>方案</label>
-                                    <a href="/admin/product/create_plan/<?php echo $product['product_id'] ?>" class="btn btn-primary modal-btn">新增</a>
+                                    <a href="/admin/product/create_plan/<?php echo $product['product_id'] ?>" class="btn btn-warning modal-btn btn-sm">新增 <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                                 </div>
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
@@ -342,19 +355,25 @@ label {
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="product_description">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_description">商品描述</label>
-                                    <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="10"><?php echo $product['product_description']; ?></textarea>
+                                    <button type="submit" class="btn btn-primary btn-sm">儲存</button>
+                                    <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="30"><?php echo $product['product_description']; ?></textarea>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="product_note">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="product_note">注意事項</label>
-                                    <textarea class="form-control" id="product_note" name="product_note" cols="30" rows="10"><?php echo $product['product_note']; ?></textarea>
+                                    <button type="submit" class="btn btn-primary btn-sm">儲存</button>
+                                    <textarea class="form-control" id="product_note" name="product_note" cols="30" rows="30"><?php echo $product['product_note']; ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -389,6 +408,31 @@ label {
 </div> -->
 <script>
     $(document).ready(function() {
+        if (location.hash) {
+            $('a[href=\'' + location.hash + '\']').tab('show');
+        }
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('a[href="' + activeTab + '"]').tab('show');
+        }
+        $('body').on('click', 'a[data-toggle=\'tab\']', function (e) {
+            e.preventDefault()
+            var tab_name = this.getAttribute('href')
+            if (history.pushState) {
+                history.pushState(null, null, tab_name)
+            } else {
+                location.hash = tab_name
+            }
+            localStorage.setItem('activeTab', tab_name)
+            $(this).tab('show');
+            return false;
+        });
+        $(window).on('popstate', function () {
+            var anchor = location.hash ||
+                $('a[data-toggle=\'tab\']').first().attr('href');
+            $('a[href=\'' + anchor + '\']').tab('show');
+        });
+
         $(document).on('click', '.x', function() {
             $(this).parent().parent().remove();
         });

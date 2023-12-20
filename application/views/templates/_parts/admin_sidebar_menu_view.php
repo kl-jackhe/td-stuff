@@ -11,7 +11,7 @@ $sub_current = $this->uri->segment(3);?>
         <span>控制台</span>
       </a>
     </li>
-    <li <?php if (($current == "product" && $sub_current == "") || ($current == "product" && $sub_current == "category")) {echo "class='active'";}?>>
+    <li <?php if (($current == "product" && $sub_current != "category") || ($current == "product" && $sub_current == "category")) {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa fa-shopping-basket"></i>
         <span>商品管理</span>
@@ -21,7 +21,7 @@ $sub_current = $this->uri->segment(3);?>
         <li <?php if ($current == "product" && $sub_current == "category") {echo 'class="active"';}?>>
           <a href="/admin/product/category">商品分類</a>
         </li>
-        <li <?php if ($current == "product" && $sub_current == "") {echo 'class="active"';}?>>
+        <li <?php if ($current == "product" && $sub_current != "category") {echo 'class="active"';}?>>
           <a href="/admin/product">商品清單</a>
         </li>
       </ul>
