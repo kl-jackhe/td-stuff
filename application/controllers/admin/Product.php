@@ -113,28 +113,18 @@ class Product extends Admin_Controller
 	public function edit($id)
 	{
 		$this->data['page_title'] = '編輯商品';
-		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
+		$this->data['product'] = $this->product_model->getSingleProduct($id);
 		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $id);
-		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $id);
-		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
+		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
+		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
 		$this->data['product_category'] = $this->mysql_model->_select('product_category');
-		$this->db->select('product_category_id');
-		$this->db->where('product_id', $id);
-		$pcl_query = $this->db->get('product_category_list')->result_array();
-		$select_product_category = array();
-		if (!empty($pcl_query)) {
-			foreach ($pcl_query as $pcl_row) {
-				$select_product_category[] = $pcl_row['product_category_id'];
-			}
-		}
-		$this->data['select_product_category'] = $select_product_category;
+		$this->data['select_product_category'] = $this->product_model->getSelectProductCategory($id);
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 		$this->db->select('delivery_id');
 		$this->db->where('source', 'Product');
 		$this->db->where('source_id', $id);
 		$this->db->where('status', 1);
 		$this->data['use_delivery_list'] = $this->db->get('delivery_range_list')->result_array();
-		// $this->data['change_log'] = get_change_log('product', $id);
 		$this->render('admin/product/edit');
 	}
 
@@ -588,6 +578,12 @@ class Product extends Admin_Controller
 	{
 		$this->db->where('product_category_id', $id);
 		$this->db->delete('product_category');
+
+		$this->db->where('product_category_id', $id);
+		$this->db->delete('product_category_list');
+
+		$this->db->where('product_category_id', $id);
+		$this->db->update('product', array('product_category_id' => 0));
 
 		redirect(base_url() . 'admin/product/category');
 	}
