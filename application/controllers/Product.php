@@ -51,11 +51,35 @@ class Product extends Public_Controller
 		//set conditions for search
 		$keywords = $this->input->get('keywords');
 		$product_category = $this->input->get('product_category');
+
+		$product_category_list = array();
+		$product_category_list[] = $product_category;
+		$count = 0;
+		$isParentAvailable = true;
+		while ($isParentAvailable) {
+			$this->db->select('product_category_id');
+			$this->db->where('product_category_parent', $product_category_list[$count]);
+			$query = $this->db->get('product_category')->result_array();
+			if (!empty($query)) {
+				foreach ($query as $row) {
+					$product_category_list[] = $row['product_category_id'];
+				}
+			} else {
+				$isParentAvailable = false;
+				break;
+			}
+			$count++;
+			if ($count == 100) {
+				$isParentAvailable = false;
+				break;
+			}
+		}
+
 		if (!empty($keywords)) {
 			$conditions['search']['keywords'] = $keywords;
 		}
 		if (!empty($product_category)) {
-			$conditions['search']['product_category_id'] = $product_category;
+			$conditions['search']['product_category_id'] = $product_category_list;
 		}
 		//total rows count
 		$conditions['returnType'] = 'count';

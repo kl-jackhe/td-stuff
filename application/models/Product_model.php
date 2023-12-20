@@ -9,7 +9,6 @@ class Product_model extends CI_Model {
 	function getRows($params = array()) {
 		$this->db->select('*');
 		$this->db->from('product');
-		$this->db->order_by("distribute_at DESC", "product_id ASC");
 		//filter data by searched keywords
 		if (!empty($params['search']['keywords'])) {
 			$this->db->like('product_name', $params['search']['keywords']);
@@ -32,6 +31,9 @@ class Product_model extends CI_Model {
 		// } else {
 		// 	$this->db->order_by('product.product_id', 'desc');
 		// }
+		$this->db->order_by('product.product_sku', 'asc');
+		$this->db->order_by('product.product_id', 'asc');
+		$this->db->order_by("distribute_at", 'desc');
 		//set start and limit
 		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
 			$this->db->limit($params['limit'], $params['start']);
@@ -50,12 +52,13 @@ class Product_model extends CI_Model {
 	}
 
 	function getProducts($params = array()) {
-		$this->db->select('*');
+		$this->db->select('product.*');
 		$this->db->from('product');
 		if (!empty($params['search']['product_category_id'])) {
-			$this->db->where('product_category_id', $params['search']['product_category_id']);
+			$this->db->join('product_category_list', 'product_category_list.product_id = product.product_id');
+			$this->db->where_in('product_category_list.product_category_id', $params['search']['product_category_id']);
 		}
-		$this->db->where('product_status', '1');
+		$this->db->where('product.product_status', '1');
 		if (array_key_exists("returnType", $params) && $params['returnType'] == 'count') {
 			$result = $this->db->count_all_results();
 		} else {
@@ -86,6 +89,19 @@ class Product_model extends CI_Model {
 
 	function get_product_category() {
 		$this->db->select('*');
+		$this->db->where('product_category_type !=', 'MAIN');
+		$query = $this->db->get('product_category');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
+	function getMainProductCategory() {
+		$this->db->select('*');
+		$this->db->where('product_category_type', 'MAIN');
+		$this->db->order_by('product_category_sort','asc');
 		$query = $this->db->get('product_category');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();

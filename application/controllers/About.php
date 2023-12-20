@@ -16,7 +16,7 @@ class About extends Public_Controller
 			$this->load->view('pages/about', $this->data);
 		}
 		if ($this->is_liqun_food) {
-			$this->load->view('pages/about', $this->data);
+			$this->render('about/liqun_index');
 		}
 		if ($this->is_partnertoys) {
 			$this->render('about/partnertoys_index');

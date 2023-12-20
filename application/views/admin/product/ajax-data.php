@@ -24,7 +24,7 @@
     foreach ($product as $data) {
       $selectProductCategoryList = $this->product_model->getSelectProductCategory($data['product_id'])?>
       <tr>
-        <td class="text-center"><?php echo $count ?></td>
+        <td class="text-center"><?php echo $data['product_id'] ?></td>
         <td class="text-center">
           <?if (!empty($selectProductCategoryList)) {
             $count = 0;

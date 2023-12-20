@@ -273,13 +273,24 @@
         </div>
         <div class="container">
             <div class="row justify-content-center py-5">
-                <?for ($i=1;$i<=6;$i++) {?>
+                <!-- <?for ($i=1;$i<=6;$i++) {?>
                     <div class="col-5 col-md-2 my-3">
                         <a href="#" class="image-link-<?=$i?>">
                             <img src="/assets/images/liqun/index_icon_pots-<?=$i?>.png" class="img-fluid">
                         </a>
                     </div>
-                <?}?>
+                <?}?> -->
+                <?if (!empty($main_product_category)) {
+                    $count = 0;
+                    foreach ($main_product_category as $mpc_row) {
+                        $count++;?>
+                        <div class="col-5 col-md-2 my-3">
+                            <a href="/product?cid=<?=$mpc_row['product_category_id']?>" target="_blank" style="text-decoration: none;" class="image-link-<?=$count?>">
+                                <img src="<?=$mpc_row['product_category_image']?>" class="img-fluid">
+                            </a>
+                        </div>
+                    <?}
+                }?>
             </div>
         </div>
         <div class="container">
@@ -347,7 +358,9 @@
                     <?if (!empty($product_category)) {
                         $count = 0;
                         foreach ($product_category as $pc_row) {?>
-                            <span class="text-center" style="border-radius: 15px; border: 1px solid #b9b9b9;background-color: #f4f2f2;color: #1d1e1e;min-width: 120px;padding: 5px 12px;font-size: 14px;display: inline-block; cursor: pointer;margin-bottom: 25px;margin-left: 10px;margin-right: 10px;text-align: center;"><?=$pc_row['product_category_name']?></span>
+                            <a href="/product?cid=<?=$pc_row['product_category_id']?>" target="_blank" style="text-decoration: none;">
+                                <span class="text-center" style="border-radius: 15px; border: 1px solid #b9b9b9;background-color: #f4f2f2;color: #1d1e1e;min-width: 120px;padding: 5px 12px;font-size: 14px;display: inline-block; cursor: pointer;margin-bottom: 25px;margin-left: 10px;margin-right: 10px;text-align: center;"><?=$pc_row['product_category_name']?></span>
+                            </a>
                         <?}
                     }?>
                 </div>

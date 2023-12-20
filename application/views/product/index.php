@@ -95,7 +95,7 @@
 <div role="main" class="main">
     <section class="form-section content_auto_h">
         <div class="container">
-            <div class="row product_box">
+            <div class="row product_box my-5">
                 <div class="col-12">
                     <div class="row justify-content-center text-center">
                         <!-- <div class="col-12 pb-3">
@@ -104,7 +104,7 @@
                         <!-- <input type="text" id="keywords" class="form-control" placeholder="請輸入商品名稱" size="50"> -->
                         <?if (!empty($product_category)) {
                             foreach ($product_category as $row) {?>
-                                <div class="col-3 col-md-2">
+                                <div class="col-3 col-md-2 mb-2">
                                     <span class="product_category btn" id="<?echo 'product_category_id_'.$row['product_category_id']?>" onClick="searchFilter(<?echo $row['product_category_id'];?>)"><?echo $row['product_category_name'];?></span>
                                 </div>
                             <?}
@@ -120,13 +120,19 @@
     </section>
 </div>
 <script>
-    function searchFilter(product_category) {
-    // var keywords = $('#keywords').val();
-    // var product_category = $('#product_category').val();
-    // alert(product_category);
+$(document).ready(function() {
+    // 取得完整的查詢字串（包括問號）
+    var queryString = window.location.search;
+    // 解析查詢字串，並建立一個包含參數和值的物件
+    var params = new URLSearchParams(queryString);
+    // 取得 id 參數的值
+    var idValue = params.get('cid');
+    searchFilter(idValue);
+});
+function searchFilter(product_category) {
     $.ajax({
         type: 'GET',
-        url: 'product/ajaxData',
+        url: '/product/ajaxData',
         // data: 'keywords=' + keywords + '&product_category=' + product_category,
         data: 'product_category=' + product_category,
         beforeSend: function() {

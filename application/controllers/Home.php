@@ -12,6 +12,7 @@ class Home extends Public_Controller {
 		$this->data['page_title'] = '首頁';
 		$this->data['products'] = $this->product_model->getHomeProducts();
 		$this->data['product_category'] = $this->product_model->get_product_category();
+		$this->data['main_product_category'] = $this->product_model->getMainProductCategory();
 		$this->data['banner'] = $this->home_model->getBanner();
 		$this->data['franchisee'] = $franchisee;
 		$this->data['uid'] = (isset($_GET['uid'])?$_GET['uid']:null);
