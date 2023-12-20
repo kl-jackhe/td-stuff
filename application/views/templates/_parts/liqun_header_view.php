@@ -150,7 +150,13 @@
                             <div class="col-12 text-right nav_item_style">
                                 <a href="/">回首頁</a>
                                 <span> ｜ </span>
-                                <a href="#">會員中心</a>
+                                <?php if (!$this->ion_auth->logged_in()){ ?>
+                                    <a href="/login">登入</a>
+                                <? } else { ?>
+                                    <a href="/auth/edit_user">會員中心</a>
+                                    <span> ｜ </span>
+                                    <a href="/logout">登出</a>
+                                <? } ?>
                                 <span> ｜ </span>
                                 <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
                                     <span id="cart-qty">購物車（<span>0</span>）</span>
@@ -180,12 +186,51 @@
         </header>
         <div class="row" style="position: relative;z-index: 99;">
             <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav nav_item_mb_style nav_item_style">
+                <ul class="navbar-nav nav_item_mb_style nav_item_style" style="width: 120px;">
                     <li>
                         <a href="/">回首頁</a>
+                    </li>
+                    <?php if (!$this->ion_auth->logged_in()){ ?>
+                        <li>
+                            <a href="/login">登入 <i class="fa-solid fa-right-to-bracket"></i></a>
+                        </li>
+                    <? } else { ?>
+                        <li>
+                            <a href="/auth/edit_user">會員中心</a>
+                        </li>
+                        <li>
+                            <a href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>
+                        </li>
+                    <? } ?>
                     <li>
+                        <hr>
+                    </li>
                     <li>
-                        <a href="#">會員中心</a>
+                        冰箱裡有什麼？
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 新春年菜&ensp;強強滾</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 餐廳美食&ensp;帶回家</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 嚴格挑選&ensp;頂級牛</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 露營必備&ensp;不可少</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 即食加熱&ensp;超便利</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 烤肉必備&ensp;香噴噴</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 低卡蔬食&ensp;輕食區</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 常溫可食&ensp;免煩惱</a>
                     </li>
                 </ul>
             </div>

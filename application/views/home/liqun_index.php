@@ -176,8 +176,9 @@
         padding-right: 52px;
     }
     .fridge_style {
-        position: relative;
-        margin-bottom: 15px;
+        display: none;
+       /*  position: relative;
+        margin-bottom: 15px; */
     }
 }
 </style>
