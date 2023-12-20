@@ -329,16 +329,31 @@
                     </div>
                     <div class="col-md-12 text-center">
                         <div class="row justify-content-center product_box_list" id="home_product">
-                            <?if (!empty($products)) {
+                            <?if (!empty($product_combine)) {
                                 $count = 0;
-                                foreach ($products as $product){
+                                foreach ($product_combine as $product){
                                     if ($count < 6) {?>
                                     <div class="col-md-2 pb-4 ipad_w">
                                         <a href="/product/view/<?=$product['product_id']?>" target="_blank">
-                                            <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['product_image'])?$product['product_image']:'Product/img-600x600.png')?>">
+                                            <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['picture'])?$product['picture']:'Product/img-600x600.png')?>">
                                             <div class="product_name">
                                                 <span><?=$product['product_name'];?></span>
                                             </div>
+                                            <div class="product_combine_name">
+                                                <span><?=$product['product_combine_name'];?></span>
+                                            </div>
+                                            <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">
+                                                <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">$
+                                                    <?= $product['current_price']; ?>
+                                                </span>
+                                            </span>
+                                            <?php if ($product['price'] != $product['current_price'] && $product['price'] != 0) { ?>
+                                                <span style="color: gray;font-size: 12px;font-style: oblique;text-decoration: line-through;">原價
+                                                    <span style="color: gray;font-size: 12px;font-style: oblique;"> $
+                                                        <?= $product['price']; ?>
+                                                    </span>
+                                                </span>
+                                            <? } ?>
                                         </a>
                                     </div>
                                     <?}

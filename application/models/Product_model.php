@@ -87,6 +87,14 @@ class Product_model extends CI_Model {
 		}
 	}
 
+	function getHomeProductCombineList() {
+		$this->db->select('product_combine.*, product.product_name, product_combine.name as product_combine_name');
+		$this->db->join('product', 'product.product_id = product_combine.product_id', 'left');
+		$this->db->where('product.product_status', 1);
+		$query = $this->db->get('product_combine')->result_array();
+		return (!empty($query)?$query:false);
+	}
+
 	function get_product_category() {
 		$this->db->select('*');
 		$this->db->where('product_category_type !=', 'MAIN');
