@@ -1,3 +1,27 @@
+<style>
+.product_edit_style {
+    padding-bottom: 20px;
+    white-space: nowrap;
+}
+.product_edit_style a {
+    color: #0080FF;
+    position: relative;
+    text-decoration: none;
+}
+.product_edit_style a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    height: 1.5px; /* 底線高度 */
+    background-color: #0080FF; /* 底線颜色 */
+    transition: right 0.3s ease; /* 過渡效果，使底線動畫顯示 */
+}
+.product_edit_style a:hover::before {
+  right: 0;
+}
+</style>
 <div class="row">
   <div class="col-md-4">
     <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>

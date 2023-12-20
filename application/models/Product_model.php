@@ -228,4 +228,12 @@ class Product_model extends CI_Model {
 		return $select_product_category;
 	}
 
+	function checkProductCategoryNameIsExist($name) {
+		$this->db->select('product_category_id');
+		$this->db->where('product_category_name', $name);
+		$this->db->limit(1);
+		$pc_row = $this->db->get('product_category')->row_array();
+		return (!empty($pc_row)?$pc_row:false);
+	}
+
 }

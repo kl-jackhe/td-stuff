@@ -11,6 +11,10 @@
 			    	<label for="product_category_name">分類名稱</label>
 			    	<input type="text" class="form-control" name="product_category_name" value="<?php echo $category['product_category_name']; ?>">
 			  	</div>
+			  	<div class="form-group">
+			    	<label for="product_category_sort">分類排序</label>
+			    	<input type="text" class="form-control" name="product_category_sort" value="<?php echo $category['product_category_sort']; ?>">
+			  	</div>
 			  	<?if (!empty($delivery)) {?>
                     <div class="form-group">
                         <p style="color: red;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>

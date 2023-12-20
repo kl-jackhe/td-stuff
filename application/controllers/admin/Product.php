@@ -166,10 +166,10 @@ class Product extends Admin_Controller
 			'distribute_at' => $this->input->post('distribute_at'), //tmp
 			'discontinued_at' => $this->input->post('discontinued_at'), //tmp
 			'product_sku' => $this->input->post('product_sku'),
-			'product_weight' => $this->input->post('product_weight'),
-			'volume_length' => $this->input->post('volume_length'),
-			'volume_width' => $this->input->post('volume_width'),
-			'volume_height' => $this->input->post('volume_height'),
+			// 'product_weight' => $this->input->post('product_weight'),
+			// 'volume_length' => $this->input->post('volume_length'),
+			// 'volume_width' => $this->input->post('volume_width'),
+			// 'volume_height' => $this->input->post('volume_height'),
 			'product_price' => $this->input->post('product_price'),
 			'product_add_on_price' => $this->input->post('product_add_on_price'),
 			// 'product_category_id' => $this->input->post('product_category'),
@@ -197,8 +197,13 @@ class Product extends Admin_Controller
 				$pcl_row = $this->db->get('product_category_list')->row_array();
 				if (empty($pcl_row)) {
 					$this->db->insert('product_category_list', array('product_id' => $id, 'product_category_id' => $product_category_id_list[$i]));
+				} else {
+
 				}
 			}
+		} else {
+			$this->db->where('product_id', $id);
+			$this->db->delete('product_category_list');
 		}
 
 		$inventory_log = array(
@@ -212,16 +217,28 @@ class Product extends Admin_Controller
 		// 商品單位
 		$unitStr = array();
 		$unit = $this->input->post('unit');
-		if (is_array($unit)) {
-			for ($i = 0; $i < count($unit); $i++) {
-				if (!empty($unit)) {
-					$unitStr[] = $unit[$i];
-					$unit_data = array('unit' => $unit[$i]);
+		$weight = $this->input->post('weight');
+		$volume_length = $this->input->post('volume_length');
+		$volume_width = $this->input->post('volume_width');
+		$volume_height = $this->input->post('volume_height');
+		if (isset($unit) && !empty($unit)) {
+			$this->db->where_not_in('unit', $unit);
+			$this->db->where('product_id', $id);
+			$this->db->delete('product_unit');
+			for ($i=0;$i<count($unit);$i++) {
+				if ($unit[$i] != '') {
 					$this->db->select('id');
 					$this->db->where('product_id', $id);
 					$this->db->where('unit', $unit[$i]);
 					$this->db->limit(1);
 					$pu_row = $this->db->get('product_unit')->row_array();
+					$unit_data = array(
+						'unit' => $unit[$i],
+						'weight' => $weight[$i],
+						'volume_length' => $volume_length[$i],
+						'volume_width' => $volume_width[$i],
+						'volume_height' => $volume_height[$i],
+					);
 					if (!empty($pu_row)) {
 						$this->db->where('id', $pu_row['id']);
 						$this->db->update('product_unit', $unit_data);
@@ -231,12 +248,11 @@ class Product extends Admin_Controller
 					}
 				}
 			}
-			//刪除不要的單位
+		} else {
 			$this->db->where('product_id', $id);
-			$this->db->where_not_in('unit', $unitStr);
 			$this->db->delete('product_unit');
 		}
-
+		
 		// 商品規格
 		$specificationStr = array();
 		$specification = $this->input->post('specification');
@@ -440,6 +456,22 @@ class Product extends Admin_Controller
 	{
 		$this->db->where('product_id', $id);
 		$this->db->delete('product');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_category_list');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_unit');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_combine');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_combine_item');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_specification');
+		
 		redirect(base_url() . 'admin/product');
 	}
 
@@ -483,7 +515,7 @@ class Product extends Admin_Controller
 		);
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
-		redirect(base_url() . 'admin/product');
+		redirect(base_url() . 'admin/product/edit/' . $id);
 	}
 
 	// 其他功能 ---------------------------------------------------------------------------------
@@ -515,12 +547,12 @@ class Product extends Admin_Controller
 	{
 		$this->data['page_title'] = '新增商品分類';
 		$product_category_name = $this->input->post('product_category_name');
-		$this->data['product_category'] = $this->mysql_model->_select('product_category', 'product_category_name', $product_category_name);
-		if ($this->data['product_category'] > 0) {
+		if (!empty($this->product_model->checkProductCategoryNameIsExist($product_category_name))) {
 			$this->session->set_flashdata('message', '新增失敗「名稱重複」');
 		} else {
 			$data = array(
 				'product_category_name' => $product_category_name,
+				'product_category_sort' => $this->input->post('product_category_sort'),
 				'creator_id' => $this->current_user->id,
 			);
 			$this->db->insert('product_category', $data);
@@ -548,6 +580,7 @@ class Product extends Admin_Controller
 	{
 		$data = array(
 			'product_category_name' => $this->input->post('product_category_name'),
+			'product_category_sort' => $this->input->post('product_category_sort'),
 			'updater_id' => $this->current_user->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
@@ -559,7 +592,7 @@ class Product extends Admin_Controller
 		$this->db->where('source_id', $id);
 		$this->db->delete('delivery_range_list');
 		$delivery = $this->input->post('delivery');
-		if (count($delivery) > 0) {
+		if (isset($delivery) & !empty($delivery)) {
 			// 新增配送方式
 			for ($i = 0; $i < count($delivery); $i++) {
 				$insertData = array(
@@ -570,7 +603,6 @@ class Product extends Admin_Controller
 				$this->db->insert('delivery_range_list', $insertData);
 			}
 		}
-
 		redirect(base_url() . 'admin/product/category');
 	}
 

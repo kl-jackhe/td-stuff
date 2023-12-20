@@ -1,27 +1,27 @@
 <style>
-    .add-to-links {
-        display: none;
-    }
-
-    .featured-products-grid .item {
-        padding-bottom: 30px;
-        padding-top: 30px i !important;
-    }
-
-    .featured-products-grid .item .product-info {
-        min-height: 200px;
-        position: relative;
-    }
-
-    .featured-products-grid .item .product-info .price-box {
-        position: absolute;
-        bottom: 40px;
-    }
-
-    .featured-products-grid .item .product-info .actions {
-        position: absolute;
-        bottom: 0px;
-    }
+label {
+    font-weight: bold;
+    font-size: 16px;
+}
+.add-to-links {
+    display: none;
+}
+.featured-products-grid .item {
+    padding-bottom: 30px;
+    padding-top: 30px i !important;
+}
+.featured-products-grid .item .product-info {
+    min-height: 200px;
+    position: relative;
+}
+.featured-products-grid .item .product-info .price-box {
+    position: absolute;
+    bottom: 40px;
+}
+.featured-products-grid .item .product-info .actions {
+    position: absolute;
+    bottom: 0px;
+}
 </style>
 
 <div class="row">
@@ -29,10 +29,14 @@
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
-            <button type="submit" class="btn btn-primary">修改</button>
-            <? if ($this->is_td_stuff) { ?>
+            <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) . '/category' ?>" class="btn btn-info btn-sm hidden-print" style="margin-right: 10px;">返回上一頁</a>
+            <button type="submit" class="btn btn-primary btn-sm">儲存</button>
+            <?if ($this->is_td_stuff) {?>
                 <span class="btn btn-success" onclick="createSingleSales(<?= $product['product_id'] ?>)">建立銷售頁面</span>
-            <? } ?>
+            <?}?>
+            <a href="/admin/product/delete/<?php echo $product['product_id'] ?>" class="btn btn-danger btn-sm" style="float: right;" onClick="return confirm('您確定要刪除嗎?')">刪除商品</a>
+            <a href="/admin/product/update_product_status/<?php echo $product['product_id'] ?>" class="btn btn-<?= ($product['product_status'] == 1 ? 'success' : 'danger') ?> btn-sm" style="float: right;margin-right: 15px;" onClick="return confirm('確定要<?= ($product['product_status'] == 1 ? '下' : '上') ?>架嗎?')"></i>
+            <span><?=($product['product_status'] == 1 ? '上架中' : '已下架') ?></span></a>
         </div>
     </div>
     <div class="col-md-12">
@@ -47,14 +51,25 @@
                         <a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">方案</a>
                     </li> -->
                 </ul>
-
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-10 col-sm-12">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="row">
-                                    <div class="col-md-3 col-sm-12">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="product_sku">品號</label>
+                                            <input type="text" class="form-control" id="product_sku" name="product_sku" value="<?php echo $product['product_sku']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="product_name">商品名稱</label>
+                                            <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <?if (!empty($product_category)) { ?>
                                                 <label for="product_category">分類</label>
@@ -68,141 +83,111 @@
                                             } ?>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="distribute_at">上架日期</label>
-                                            <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" value="<?php echo $product['distribute_at']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="discontinued_at">下架日期</label>
-                                            <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="product_name">商品名稱</label>
-                                            <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="product_sku">品號</label>
-                                            <input type="text" class="form-control" id="product_sku" name="product_sku" value="<?php echo $product['product_sku']; ?>" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="product_price">預設價格</label>
                                             <input type="text" class="form-control" id="product_price" name="product_price" value="<?php echo $product['product_price']; ?>" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-12" style="display: none;">
+                                    <div class="col-md-12" style="display: none;">
                                         <div class="form-group">
                                             <label for="product_add_on_price">加購價格</label>
                                             <input type="text" class="form-control" id="product_add_on_price" name="product_add_on_price" value="<?php echo $product['product_add_on_price']; ?>">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-12">
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">是否計算庫存</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="distribute_at">上架日期</label>
+                                            <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" value="<?php echo $product['distribute_at']; ?>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="discontinued_at">下架日期</label>
+                                            <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
+                                        </div>
+                                    </div>
+                                     <? if (!empty($delivery)) { ?>
+                                        <div class="col-md-12">
+                                            <label for="delivery">指定配送方式</label>
+                                            <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
+                                                <? foreach ($delivery as $d_row) {
+                                                    $is_use = '';
+                                                    if (!empty($use_delivery_list)) {
+                                                        foreach ($use_delivery_list as $udl_row) {
+                                                            if ($udl_row['delivery_id'] == $d_row['id']) {
+                                                                $is_use = 'selected';
+                                                                break;
+                                                            }
+                                                        }
+                                                    } ?>
+                                                    <option value="<?= $d_row['id'] ?>" <?= ($is_use != '' ? $is_use : '') ?>><?= $d_row['delivery_name'] ?></option>
+                                                <? } ?>
+                                            </select>
+                                            <p style="color: red;font-size: 12px;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>
+                                        </div>
+                                    <? } ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="excluding_inventory">是否計算庫存</label>
                                             <select class="form-control" id="excluding_inventory" name="excluding_inventory">
                                                 <option value="0" <?= ($product['excluding_inventory'] == false ? 'selected' : '') ?>>是</option>
                                                 <option value="1" <?= ($product['excluding_inventory'] == true ? 'selected' : '') ?>>否</option>
                                             </select>
                                         </div>
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">低於庫存時轉預購</span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="stock_overbought">低於庫存時轉預購</label>
                                             <select class="form-control" id="stock_overbought" name="stock_overbought">
                                                 <option value="0" <?= ($product['stock_overbought'] == false ? 'selected' : '') ?>>否</option>
                                                 <option value="1" <?= ($product['stock_overbought'] == true ? 'selected' : '') ?>>是</option>
                                             </select>
                                         </div>
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">當前庫存量</span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="inventory">當前庫存量</label>
                                             <input type="text" class="form-control" id="inventory" name="inventory" value="<?=intval($product['inventory']) ?>">
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-12">
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">商品重量</span>
-                                            <input type="number" class="form-control" id="product_weight" name="product_weight" value="<?=intval($product['product_weight']) ?>">
-                                        </div>
-                                        材積設定/單位cm
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">長度</span>
-                                            <input type="number" class="form-control" id="volume_length" name="volume_length" value="<?=intval($product['volume_length']) ?>">
-                                        </div>
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">寬度</span>
-                                            <input type="number" class="form-control" id="volume_width" name="volume_width" value="<?=intval($product['volume_width']) ?>">
-                                        </div>
-                                        <div class="input-group" style="margin-bottom: 10px;">
-                                            <span class="input-group-addon">高度</span>
-                                            <input type="number" class="form-control" id="volume_height" name="volume_height" value="<?=intval($product['volume_height']) ?>">
-                                        </div>
-                                    </div>
-                                    <? if (!empty($delivery)) { ?>
-                                        <div class="col-md-4 col-sm-12">
-                                            <p style="color: red;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon">指定配送方式</span>
-                                                        <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
-                                                            <? foreach ($delivery as $d_row) {
-                                                                $is_use = '';
-                                                                if (!empty($use_delivery_list)) {
-                                                                    foreach ($use_delivery_list as $udl_row) {
-                                                                        if ($udl_row['delivery_id'] == $d_row['id']) {
-                                                                            $is_use = 'selected';
-                                                                            break;
-                                                                        }
-                                                                    }
-                                                                } ?>
-                                                                <option value="<?= $d_row['id'] ?>" <?= ($is_use != '' ? $is_use : '') ?>><?= $d_row['delivery_name'] ?></option>
-                                                            <? } ?>
-                                                        </select>
-                                                    </div>
-                                                    <? if (!empty($product_combine)) { ?>
-                                                        <!-- <div class="input-group">
-                                                    <span class="input-group-addon">方案指定配送方式</span>
-                                                    <select name="delivery_product_combine" id="delivery_product_combine" class="form-control chosen" multiple>
-                                                        <? foreach ($product_combine as $pc_row) { ?>
-                                                            <option value="<?= $pc_row['id'] ?>"><?= $pc_row['name'] ?></option>
-                                                        <? } ?>
-                                                    </select>
-                                                </div> -->
-                                                    <? } ?>
-                                        </div>
-                                    <? } ?>
                                 </div>
                             </div>
-                            <div class="col-md-2 col-sm-12">
+                            <div class="col-md-3 col-sm-12">
                                 <div class="form-group">
                                     <label for="product_image" class="control-label">封面圖片</label>
-                                    <div class="form-group">
-                                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
-                                    </div>
+                                    <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary btn-sm fancybox" type="button" style="float: right;">選擇圖片</a>
                                     <?php if (!empty($product['product_image'])) { ?>
-                                        <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {
-                                                                                                                                                                                                                echo 'display: none';
-                                                                                                                                                                                                            } ?>">
+                                        <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';} ?>">
                                     <?php } else { ?>
                                         <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
                                     <?php } ?>
                                     <input type="hidden" id="product_image<?php echo $product['product_id']; ?>" name="product_image" value="<?php echo $product['product_image']; ?>" />
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>單位</label>
                                     <a href="javascript:void(0);" class="btn btn-primary" onclick="add_unit();">新增</a>
                                 </div>
                                 <table class="table table-bordered" id="paramsFields">
                                     <tr class="info">
-                                        <th class="text-center" style="width: 80%;">單位</th>
+                                        <th class="text-center">單位</th>
+                                        <th class="text-center">重量/kg <span style="color:red;font-size:12px;">(設定0時則不套用)</span></th>
+                                        <th class="text-center">材積/cm <span style="color:red;font-size:12px;">(設定0時則不套用)</span></th>
                                         <th class="text-center"></th>
                                     </tr>
                                     <tbody id="product-unit-list">
@@ -213,15 +198,34 @@
                                                         <input type="hidden" class="form-control" name="id[]" value="<?php echo $row['id']; ?>">
                                                         <input type="text" class="form-control unit" name="unit[]" value="<?php echo $row['unit']; ?>">
                                                     </td>
+                                                    <td>
+                                                        <input type="number" class="form-control" name="weight[]" value="<?=$row['weight']?>">
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-group" style="margin-bottom: 10px;">
+                                                            <span class="input-group-addon">長度</span>
+                                                            <input type="number" class="form-control" name="volume_length[]" min="0" value="<?=intval($row['volume_length']) ?>">
+                                                        </div>
+                                                        <div class="input-group" style="margin-bottom: 10px;">
+                                                            <span class="input-group-addon">寬度</span>
+                                                            <input type="number" class="form-control" name="volume_width[]" min="0" value="<?=intval($row['volume_width']) ?>">
+                                                        </div>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon">高度</span>
+                                                            <input type="number" class="form-control" name="volume_height[]" min="0" value="<?=intval($row['volume_height']) ?>">
+                                                        </div>
+                                                    </td>
                                                     <td class="text-center"><i class="fa-solid fa-trash x"></i></td>
                                                 </tr>
-                                        <? }
+                                            <? }
                                         } ?>
                                     </tbody>
                                 </table>
                                 <hr>
                             </div>
-                            <div class="col-md-6">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>規格</label>
                                     <a href="javascript:void(0);" class="btn btn-primary" onclick="add_specification();">新增</a>
@@ -249,9 +253,7 @@
                                                             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=picture<?php echo $row['id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
                                                         </div>
                                                         <?php if (!empty($row['picture'])) { ?>
-                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive" style="<?php if (empty($row['picture'])) {
-                                                                                                                                                                                                        echo 'display: none';
-                                                                                                                                                                                                    } ?>;max-width: 100px;width: 100%;">
+                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive" style="<?php if (empty($row['picture'])) {echo 'display: none';} ?>;max-width: 100px;width: 100%;">
                                                         <?php } else { ?>
                                                             <img src="" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive">
                                                         <?php } ?>
@@ -357,13 +359,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div role="tabpanel" class="tab-pane" id="plan">
-                        <div class="row">
-                            <div class="col-md-12">
-
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -410,7 +405,7 @@
     }
 
     function add_unit() {
-        $("#product-unit-list").append('<tr><td><input type="text" name="unit[]" class="form-control unit"/></td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
+        $("#product-unit-list").append('<tr><td><input type="text" name="unit[]" class="form-control unit"/></td><td><input type="number" class="form-control" name="weight[]" min="0" value="0"></td><td><div class="input-group" style="margin-bottom: 10px;"><span class="input-group-addon">長度</span><input type="number" class="form-control" name="volume_length[]" min="0" value="0"></div><div class="input-group" style="margin-bottom: 10px;"><span class="input-group-addon">寬度</span><input type="number" class="form-control" name="volume_width[]" min="0" value="0"></div><div class="input-group"><span class="input-group-addon">高度</span><input type="number" class="form-control" name="volume_height[]" min="0" value="0"></div></td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
     }
 
     function add_specification() {

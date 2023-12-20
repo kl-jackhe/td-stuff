@@ -8,6 +8,10 @@
         <input type="text" class="form-control" name="product_category_name">
       </div>
       <div class="form-group">
+        <label for="product_category_sort">分類排序</label>
+        <input type="text" class="form-control" name="product_category_sort" value="50">
+      </div>
+      <div class="form-group">
         <button type="submit" class="btn btn-primary">新增分類</button>
       </div>
     <?php echo form_close(); ?>
@@ -19,6 +23,7 @@
         <thead>
           <tr>
             <th>分類名稱</th>
+            <th>排序</th>
             <th>配送方式</th>
             <th>操作</th>
           </tr>
@@ -43,6 +48,7 @@
             }?>
   	        <tr>
   	          <td><?php echo $data['product_category_name'] ?></td>
+              <td><?php echo $data['product_category_sort']?></td>
               <td><?=($deliveryStr != '' ? $deliveryStr : '任何配送方式')?></td>
   	          <td>
   	            <a href="/admin/product/edit_category/<?php echo $data['product_category_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
