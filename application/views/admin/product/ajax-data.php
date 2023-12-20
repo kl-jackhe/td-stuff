@@ -4,7 +4,7 @@
     <tr class="info">
       <th class="text-center">#</th>
       <th class="text-center">分類</th>
-      <th>商品封面</th>
+      <th>封面圖</th>
       <th>品號</th>
       <th>名稱</th>
       <th class="text-center">預設價格</th>
@@ -21,11 +21,32 @@
   <?php
   $count = 1;
   if (!empty($product)) {
-    foreach ($product as $data) { ?>
+    foreach ($product as $data) {
+      $selectProductCategoryList = $this->product_model->getSelectProductCategory($data['product_id'])?>
       <tr>
         <td class="text-center"><?php echo $count ?></td>
-        <td class="text-center"><?php echo get_product_category_name($data['product_category_id']) ?></td>
-        <td style="width: 75px;"><?php echo get_image($data['product_image']) ?></td>
+        <td class="text-center">
+          <?if (!empty($selectProductCategoryList)) {
+            $count = 0;
+            foreach ($selectProductCategoryList as $spcl_row) {
+              if ($count > 0) {
+                 echo '<br>';
+              }
+              echo get_product_category_name($spcl_row);
+              $count++;
+            }
+          }?>
+        </td>
+        <!-- <td style="width: 75px;">
+          <?php echo get_image($data['product_image']) ?>
+        </td> -->
+        <td class="text-center product_edit_style">
+          <?if ($data['product_image'] != '') {?>
+            <a href="/assets/uploads/<?=$data['product_image']?>" data-fancybox data-caption="<?=$data['product_image']?>" style="font-size: 18px;"><i class="fa-solid fa-image"></i></a>
+          <?} else {?>
+            <i class="fa-solid fa-xmark" style="color: red; font-size: 18px;"></i>
+          <?}?>
+        </td>
         <td><?php echo $data['product_sku'] ?></td>
         <td class="product_edit_style">
           <a href="/admin/product/edit/<?php echo $data['product_id'] ?>" target="_blank"><?php echo $data['product_name'] ?></a>
