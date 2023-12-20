@@ -33,4 +33,16 @@ class Auth_model extends CI_Model
 			return false;
 		}
     }
+
+    function getOrderItem($id)
+    {
+        $this->db->select('*');
+        $this->db->where('customer_id', $id);
+        $query = $this->db->get('order_item');
+        if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+    }
 }

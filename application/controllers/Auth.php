@@ -36,7 +36,8 @@ class Auth extends Public_Controller
 				$id = $this->session->userdata('user_id');
 				$user = $this->ion_auth->user($id)->row();
 				$this->data['user'] = $user;
-				$this->data['orders'] = $this->auth_model->getOrders($id);
+				$this->data['order'] = $this->auth_model->getOrders($id);
+				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
 			endif;
 			$this->render('auth/partnertoys_index');

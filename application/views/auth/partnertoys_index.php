@@ -60,7 +60,6 @@
                 pageTitle: null, // 目前標籤
                 order: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
-                product: <? echo json_encode($product); ?>,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 authCategory: <?php echo json_encode($auth_category); ?>, // 篩選標籤
