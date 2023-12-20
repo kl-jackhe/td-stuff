@@ -1,13 +1,16 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Product extends Public_Controller {
+class Product extends Public_Controller
+{
 
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
 		$this->load->model('product_model');
 	}
 
-	public function index() {
+	public function index()
+	{
 		$this->data['page_title'] = '商品';
 
 		$data = array();
@@ -25,17 +28,18 @@ class Product extends Public_Controller {
 		$this->data['products'] = $this->product_model->getProducts();
 		$this->data['product_category'] = $this->product_model->get_product_category();
 
-		if($this->is_liqun_food || $this->is_td_stuff){
+		if ($this->is_liqun_food || $this->is_td_stuff) {
 			$this->render('product/index');
 		}
-		if($this->is_partnertoys){
+		if ($this->is_partnertoys) {
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 			$this->render('product/partnertoys_index');
 		}
 	}
 
-	function ajaxData() {
+	function ajaxData()
+	{
 		$conditions = array();
 		//calc offset number
 		$page = $this->input->get('page');
@@ -73,7 +77,8 @@ class Product extends Public_Controller {
 		$this->load->view('product/ajax-data', $this->data, false);
 	}
 
-	public function view($id = 0) {
+	public function view($id = 0)
+	{
 		if ($id == 0) {
 			redirect(base_url() . 'product');
 		}

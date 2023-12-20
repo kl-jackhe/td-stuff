@@ -100,13 +100,13 @@
                         </div>
                         <!--購買按鍵-->
                         <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
-                            <span v-if="selectedProduct.sale_status === 0" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
-                            <span v-else-if="selectedProduct.sale_status === 2" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                            <span v-if="selectedProduct.sales_status == 0" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                            <span v-else-if="selectedProduct.sales_status == 2" class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上預購</span>
                             <span v-else class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
                         </div>
                         <!--加入購物車-->
                         <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
-                            <span v-if="selectedProduct.sale_status === 0 || selectedProduct.sale_status === 2" class="cargoClick cartBtn"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                            <span v-if="selectedProduct.sales_status === 0 || selectedProduct.sale_status === 2" class="cargoClick cartBtn"><i class="fas fa-cart-plus"></i>加入購物車</span>
                             <span v-else class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
                         </div>
                         <!--追蹤商品-->

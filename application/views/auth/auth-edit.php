@@ -44,7 +44,7 @@
                                     <span class="input-group-text">電子郵件</span>
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email; ?>">
+                                <input type="text" class="form-control" name="email" id="email" onchange="check_email()" value="<?php echo $user->email; ?>">
                             </div>
                         </div>
                     </div>
