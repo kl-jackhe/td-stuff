@@ -176,10 +176,13 @@ class Checkout extends Public_Controller
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
 		foreach ($this->cart->contents() as $cart_item) :
+			$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $cart_item['id']);
+			$this_product = $this->mysql_model->_select('product', 'product_id', $this_product_combine['product_id']);
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
-				'product_id' => 0,
+				'customer_id' => $customer_id,
+				'product_id' => $this_product['product_id'],
 				'order_item_qty' => $cart_item['qty'],
 				'order_item_price' => $cart_item['price'],
 				'created_at' => $created_at,
@@ -193,6 +196,7 @@ class Checkout extends Public_Controller
 					$order_item = array(
 						'order_id' => $order_id,
 						'product_combine_id' => $items['product_combine_id'],
+						'customer_id' => $customer_id,
 						'product_id' => $items['product_id'],
 						'order_item_qty' => ($cart_item['qty'] * $items['qty']),
 						'order_item_price' => 0,
