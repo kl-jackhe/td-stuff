@@ -26,7 +26,8 @@
             <?php else : ?>
                 <!-- 登入狀態 -->
                 <div v-if="selectedCategoryId == 1">
-                    <?php require('auth-orders.php'); ?>
+                    <div v-if='!selectedOrder'><?php require('auth-orders.php'); ?></div>
+                    <div v-else><?php require('auth-orders-information.php'); ?></div>
                 </div>
                 <div v-else-if="selectedCategoryId == 2">
                 </div>
@@ -57,7 +58,11 @@
             return {
                 getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
-                orders: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($orders) : json_encode(''); ?>, // 指定會員訂單
+                order: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
+                order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                product: <? echo json_encode($product); ?>,
+                selectedOrder: null, // 該會員被選中的訂單
+                selectedOrderItem: null, // 該會員被選中的訂單內容物
                 authCategory: <?php echo json_encode($auth_category); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
@@ -82,9 +87,17 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
+                this.selectedOrder = null;
                 this.selectedCategoryId = categoryId;
                 const selectedCategory = this.authCategory.find(category => category.auth_category_id === categoryId);
                 this.pageTitle = selectedCategory.auth_category_name;
+            },
+            // 選中獨立訂單
+            showOrderDetails(selected) {
+                // 抓被點到的訂單
+                this.selectedOrder = selected;
+                this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
+                // console.log(this.selectedOrder, this.order_item);
             },
         },
     }).mount('#authApp');
