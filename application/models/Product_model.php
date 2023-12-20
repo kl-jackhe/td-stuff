@@ -231,4 +231,12 @@ class Product_model extends CI_Model {
 		return (!empty($pc_row)?$pc_row:false);
 	}
 
+	function getSearchProductResults($keywords) {
+		$this->db->select('*');
+		$this->db->like('product_name', $keywords);
+		$this->db->where('product_status', 1);
+		$query = $this->db->get('product')->result_array();
+		return (!empty($query)?$query:false);
+	}
+
 }

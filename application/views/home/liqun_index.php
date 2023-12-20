@@ -215,10 +215,12 @@
                             <div id="search_box">
                                 <div class="tb">
                                     <div class="td">
-                                        <input type="text" placeholder="嫩肩菲力" required>
+                                        <input type="text" id="SearchContent" placeholder="嫩肩菲力" required>
                                     </div>
                                     <div class="td text-right">
-                                        <a>搜尋 <i class="fa-solid fa-magnifying-glass"></i></a>
+                                        <span id="searchAllProduct" onClick="searchAllProduct()">
+                                            <a>搜尋 <i class="fa-solid fa-magnifying-glass"></i></a>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -264,6 +266,7 @@
                             </a> -->
                         </div>
                         <?}?>
+                        <div id="searchProductResults"></div>
                     </div>
                 </div>
             </div>
@@ -291,7 +294,7 @@
                             foreach ($products as $product){
                                 if ($count < 4) {?>
                                 <div class="col-md-3 pb-4 ipad_w">
-                                    <a href="/product/view/<?=$product['product_id']?>">
+                                    <a href="/product/view/<?=$product['product_id']?>" target="_blank">
                                         <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['product_image'])?$product['product_image']:'Product/img-600x600.png')?>">
                                         <div class="product_name">
                                             <span><?=$product['product_name'];?></span>
@@ -319,7 +322,7 @@
                                 foreach ($products as $product){
                                     if ($count < 6) {?>
                                     <div class="col-md-2 pb-4 ipad_w">
-                                        <a href="/product/view/<?=$product['product_id']?>">
+                                        <a href="/product/view/<?=$product['product_id']?>" target="_blank">
                                             <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['product_image'])?$product['product_image']:'Product/img-600x600.png')?>">
                                             <div class="product_name">
                                                 <span><?=$product['product_name'];?></span>
@@ -352,3 +355,40 @@
         </div>
     </section>
 </div>
+<script>
+$(document).ready(function() {
+    $('#SearchContent').on('keyup', function(event) {
+        // 檢查按下的鍵是否是 Enter 鍵 (keyCode 13 代表 Enter)
+        if (event.keyCode === 13) {
+            // 模擬點擊按鈕事件
+            $('#searchAllProduct').click();
+        }
+    });
+});
+function searchAllProduct() {
+    $.ajax({
+        type: "POST",
+        url: '/home/searchAllProduct',
+        // dataType: 'json',
+        data: {
+            keywords: $('#SearchContent').val(),
+        },
+        success: function(data) {
+            console.log(data);
+            if (data != 'noProductData') {
+                $('#home-carousel').hide();
+                $('#searchProductResults').show();
+                $('#searchProductResults').html(data);
+            } else {
+                $('#home-carousel').show();
+                $('#searchProductResults').hide();
+                $('#searchProductResults').html('');
+            }
+        },
+        error: function(data) {
+            console.log(data);
+            alert('異常錯誤！');
+        }
+    });
+}
+</script>

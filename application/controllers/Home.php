@@ -24,4 +24,16 @@ class Home extends Public_Controller {
 		}
 	}
 
+	function searchAllProduct() {
+		$keywords = $this->input->post('keywords');
+		$this->data['products'] = $this->product_model->getSearchProductResults($keywords);
+		if (!empty($this->data['products']) && $keywords != '') {
+			$this->load->view('home/search_product_results', $this->data);
+			return;
+		} else {
+			echo 'noProductData';
+			return;
+		}
+	}
+
 }
