@@ -1,21 +1,75 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed.');
 
-function get_product_category_option($parent_id = 0, $sub_mark = '') {
+function get_product_category_td($parent_id = 0, $sub_mark = '') {
 	$CI = &get_instance();
 	$CI->db->where('product_category_parent', $parent_id);
+	$CI->db->order_by('product_category_sort', 'asc');
 	$query = $CI->db->get('product_category');
 	if ($query->num_rows() > 0) {
 		foreach ($query->result_array() as $row) {
-			echo '<option value="' . $row['product_category_id'] . '">' . $sub_mark . $row['product_category_name'] . '</option>';
-			get_product_category_option($row['product_category_id'], $sub_mark . '－');
+			$deliveryStr = '';
+            $CI->db->select('delivery.id,delivery.delivery_name');
+            $CI->db->join('delivery', 'delivery.id = delivery_range_list.delivery_id');
+            $CI->db->where('source', 'ProductCategory');
+            $CI->db->where('source_id', $row['product_category_id']);
+            $drl_query = $CI->db->get('delivery_range_list')->result_array();
+            if (!empty($drl_query)) {
+              	$count = 0;
+              	foreach ($drl_query as $drl_row) {
+                	if ($count > 0) {
+                  		$deliveryStr .= ' , ';
+                	}
+                	$deliveryStr .= $drl_row['delivery_name'];
+                	$count++;
+              	}
+            }
+			echo '<tr>';
+			echo '<td>' . $sub_mark . $row['product_category_name'] . '</td>';
+			echo '<td>' . $row['product_category_sort'] . '</td>';
+			echo '<td>' . $deliveryStr . '</td>';
+			echo '<td>';
+			echo '<a href="/admin/product/edit_category/' . $row['product_category_id'] . '" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> ';
+			echo '<a href="/admin/product/delete_category/' . $row['product_category_id'] . '" class="btn btn-danger btn-sm" onclick="return confirm("確定要刪除嗎?")"><i class="fa-solid fa-trash"></i></a>';
+			echo '</td>';
+			echo '</tr>';
+			get_product_category_td($row['product_category_id'], $sub_mark . '－');
 		}
 	}
-	return false;
+}
+
+function get_product_category_option($parent_id = 0, $sub_mark = '', $product_category_parent = '')
+{
+	$CI =& get_instance();
+	$CI->db->where('product_category_parent', $parent_id);
+	$CI->db->order_by('product_category_sort', 'asc');
+	$query = $CI->db->get('product_category');
+	if ($query->num_rows() > 0) {
+		$selected = '';
+        foreach($query->result_array() as $row){
+        	if($row['product_category_id']==$product_category_parent){$selected='selected';};
+            echo '<option value="'.$row['product_category_id'].'" '.$selected.'>';
+            if($sub_mark=='－'){
+            	echo '　';
+            } elseif($sub_mark=='－－'){
+            	echo '　　';
+            } elseif($sub_mark=='－－－'){
+            	echo '　　';
+            }
+            echo $sub_mark;
+            echo $row['product_category_name'].' - '.$row['product_category_code'];
+            echo '</option>';
+            get_product_category_option($row['product_category_id'], $sub_mark.'－', $product_category_parent);
+            $selected = '';
+        }
+    } else {
+    	return false;
+    }
 }
 
 function get_product_category_checkbox($parent_id = 0, $sub_mark = '') {
 	$CI = &get_instance();
 	$CI->db->where('product_category_parent', $parent_id);
+	$CI->db->order_by('product_category_sort', 'asc');
 	$query = $CI->db->get('product_category');
 	if ($query->num_rows() > 0) {
 		foreach ($query->result_array() as $row) {
@@ -31,19 +85,22 @@ function get_product_category_checkbox($parent_id = 0, $sub_mark = '') {
 	return false;
 }
 
-function get_product_category_li($parent_id = 0, $sub_mark = '') {
-	$CI = &get_instance();
+function get_product_category_li($parent_id = 0, $sub_mark = '')
+{
+	$CI =& get_instance();
 	$CI->db->where('product_category_parent', $parent_id);
+	$CI->db->order_by('product_category_sort', 'asc');
 	$query = $CI->db->get('product_category');
 	if ($query->num_rows() > 0) {
-		foreach ($query->result_array() as $row) {
-			echo '<li role="presentation">';
-			echo '<a href="#' . $row["product_category_id"] . '" aria-controls="' . $row["product_category_id"] . '" role="tab" data-toggle="tab">' . $sub_mark . $row["product_category_name"] . '</a>';
+        foreach($query->result_array() as $row){
+            echo '<li role="presentation">';
+			echo '<a href="#'.$row["product_category_id"].'" aria-controls="'.$row["product_category_id"].'" role="tab" data-toggle="tab">'.($sub_mark=='－'?'　':'').$sub_mark.$row["product_category_name"].' - '.$row["product_category_code"].'</a>';
 			echo '</li>';
-			get_product_category_li($row['product_category_id'], $sub_mark . '－');
-		}
-	}
-	return false;
+            get_product_category_li($row['product_category_id'], $sub_mark.'－');
+        }
+    } else {
+    	return false;
+    }
 }
 
 function get_product_category_checkbox_checked($product_id, $parent_id = 0, $sub_mark = '') {
@@ -73,28 +130,6 @@ function get_product_category_checkbox_checked($product_id, $parent_id = 0, $sub
 		}
 	}
 	return false;
-}
-
-function get_product_category_td($parent_id = 0, $sub_mark = '') {
-	$CI = &get_instance();
-	$CI->db->where('product_category_parent', $parent_id);
-	$query = $CI->db->get('product_category');
-	if ($query->num_rows() > 0) {
-		foreach ($query->result_array() as $row) {
-			echo '<tr>';
-			echo '<td width="50px">' . get_image($row['product_category_image']) . '</td>';
-			echo '<td>' . $sub_mark . $row['product_category_name'] . '</td>';
-			echo '<td>' . get_product_category_type_name($row['product_category_type']) . '</td>';
-			echo '<td>' . $row['product_category_print'] . '</td>';
-			echo '<td>' . get_yes_no($row['get_option']) . '</td>';
-			echo '<td>';
-			echo '<a href="category/edit/' . $row['product_category_id'] . '" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> ';
-			echo '<a href="category/delete/' . $row['product_category_id'] . '" class="btn btn-danger btn-sm" onclick="return confirm("確定要刪除嗎?")"><i class="fa fa-trash-o"></i></a>';
-			echo '</td>';
-			echo '</tr>';
-			get_product_category_td($row['product_category_id'], $sub_mark . '－');
-		}
-	}
 }
 
 function get_product_id_by_name($data) {

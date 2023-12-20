@@ -551,6 +551,7 @@ class Product extends Admin_Controller
 			$this->session->set_flashdata('message', '新增失敗「名稱重複」');
 		} else {
 			$data = array(
+				'product_category_parent' => $this->input->post('product_category_parent'),
 				'product_category_name' => $product_category_name,
 				'product_category_sort' => $this->input->post('product_category_sort'),
 				'creator_id' => $this->current_user->id,
@@ -579,6 +580,7 @@ class Product extends Admin_Controller
 	public function update_category($id)
 	{
 		$data = array(
+			'product_category_parent' => $this->input->post('product_category_parent'),
 			'product_category_name' => $this->input->post('product_category_name'),
 			'product_category_sort' => $this->input->post('product_category_sort'),
 			'updater_id' => $this->current_user->id,

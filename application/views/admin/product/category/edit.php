@@ -12,6 +12,13 @@
 			    	<input type="text" class="form-control" name="product_category_name" value="<?php echo $category['product_category_name']; ?>">
 			  	</div>
 			  	<div class="form-group">
+        			<label>上層分類</label>
+        			<select class="form-control" name="product_category_parent">
+          				<option value="0">選擇分類</option>
+          				<?php echo get_product_category_option(0,'',$category['product_category_parent']) ?>
+        			</select>
+      			</div>
+			  	<div class="form-group">
 			    	<label for="product_category_sort">分類排序</label>
 			    	<input type="text" class="form-control" name="product_category_sort" value="<?php echo $category['product_category_sort']; ?>">
 			  	</div>

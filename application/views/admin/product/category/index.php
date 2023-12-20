@@ -8,6 +8,13 @@
         <input type="text" class="form-control" name="product_category_name">
       </div>
       <div class="form-group">
+        <label>上層分類</label>
+        <select name="product_category_parent" class="form-control">
+          <option value="0">選擇分類</option>
+          <?php echo get_product_category_option() ?>
+        </select>
+      </div>
+      <div class="form-group">
         <label for="product_category_sort">分類排序</label>
         <input type="text" class="form-control" name="product_category_sort" value="50">
       </div>
@@ -28,39 +35,9 @@
             <th>操作</th>
           </tr>
         </thead>
-        <?php if (!empty($category)) {
-          foreach ($category as $data){
-            $deliveryStr = '';
-            $this->db->select('delivery.id,delivery.delivery_name');
-            $this->db->join('delivery', 'delivery.id = delivery_range_list.delivery_id');
-            $this->db->where('source', 'ProductCategory');
-            $this->db->where('source_id', $data['product_category_id']);
-            $drl_query = $this->db->get('delivery_range_list')->result_array();
-            if (!empty($drl_query)) {
-              $count = 0;
-              foreach ($drl_query as $drl_row) {
-                if ($count > 0) {
-                  $deliveryStr .= ' , ';
-                }
-                $deliveryStr .= $drl_row['delivery_name'];
-                $count++;
-              }
-            }?>
-  	        <tr>
-  	          <td><?php echo $data['product_category_name'] ?></td>
-              <td><?php echo $data['product_category_sort']?></td>
-              <td><?=($deliveryStr != '' ? $deliveryStr : '任何配送方式')?></td>
-  	          <td>
-  	            <a href="/admin/product/edit_category/<?php echo $data['product_category_id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-  	            <a href="/admin/product/delete_category/<?php echo $data['product_category_id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
-  	          </td>
-  	        </tr>
-	        <?}
-        } else {?>
-          <tr>
-            <td colspan="4"><center>對不起, 沒有資料 !</center></td>
-          </tr>
-        <?}?>
+        <tbody>
+          <?php get_product_category_td() ?>
+        </tbody>
       </table>
   	</div>
   </div>

@@ -170,18 +170,13 @@ class Product_model extends CI_Model {
 	function getTopCategory() {
 		$this->db->where('product_category_parent', '0');
 		$query = $this->db->get('product_category');
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
-		}
-		//return ($query->num_rows() > 0)?$query->result_array():false;
+		return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
 	function getSubCategory() {
 		$this->db->where('product_category_parent !=', '0');
 		$query = $this->db->get('product_category');
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
-		}
+		return ($query->num_rows() > 0)?$query->result_array():false;
 	}
 
 	function getRows_list($params = array()) {
