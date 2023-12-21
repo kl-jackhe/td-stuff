@@ -35,7 +35,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group col-12 text-center clearfix">
+          <div class="form-group col-12 text-center paddingFixTop">
             <button type="submit" id="changeBtn">
               <i class="fas fa-check" aria-hidden="true"></i>&nbsp;確認更改
             </button>

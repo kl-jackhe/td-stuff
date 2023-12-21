@@ -18,7 +18,7 @@
                     <label>請輸入您當初註冊時所使用的手機號碼或E-mail，以接收密碼。</label>
                     <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼或E-mail" required>
                 </div>
-                <div class="form-group text-center clearfix">
+                <div class="form-group text-center paddingFixTop">
                     <button type="submit" id="forgotSendBtn"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;送出認證信</button>
                 </div>
                 <?php echo form_close() ?>

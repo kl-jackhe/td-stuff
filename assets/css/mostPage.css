@@ -598,7 +598,7 @@ label.required::before {
     color: #fff;
 }
 
-.clearfix {
+.paddingFixTop{
     padding: 30px;
 }
 

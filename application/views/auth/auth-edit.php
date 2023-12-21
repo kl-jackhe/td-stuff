@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group clearfix text-center">
+                <div class="form-group paddingFixTop text-center">
                     <button type="submit" id="editBtn"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;儲存</button>
                 </div>
                 <?php echo form_close() ?>

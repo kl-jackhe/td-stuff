@@ -537,6 +537,24 @@ class Ion_auth_model extends CI_Model
 	}
 
 	/**
+	 * MD5 the password to be stored in the database.
+	 *
+	 * @param  string	$password
+	 * @param  string	$hash
+	 *
+	 * @return false|string
+	 * @author Mathew
+	 */
+	public function md5_verify($password, $hash)
+	{	
+		if (strlen($hash) !== 32 OR strlen(md5($password)) !== 32)
+		{
+			return FALSE;
+		}
+		return (md5($password) === $hash);
+	}
+
+	/**
 	 * This function takes a password and validates it
 	 * against an entry in the users table.
 	 *
@@ -560,8 +578,8 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// password_hash always starts with $
-		if (strpos($hash_password_db, '$') === 0) {
-			return password_verify($password, $hash_password_db);
+		if (strpos($hash_password_db, '$') === 0 || strlen($hash_password_db) == 32) {
+			return ($this->md5_verify($password, $hash_password_db)) ? $this->md5_verify($password, $hash_password_db) : password_verify($password, $hash_password_db);
 		} else {
 			// Handle legacy SHA1 @TODO to delete in later revision
 			return $this->_password_verify_sha1_legacy($identity, $password, $hash_password_db);
@@ -1115,7 +1133,6 @@ class Ion_auth_model extends CI_Model
 		if ($this->is_max_login_attempts_exceeded($identity)) {
 			// Hash something anyway, just to take up time
 			$this->hash_password($password);
-
 			$this->trigger_events('post_login_unsuccessful');
 			$this->set_error('login_timeout');
 
@@ -1149,7 +1166,7 @@ class Ion_auth_model extends CI_Model
 				}
 
 				// Rehash if needed
-				$this->rehash_password_if_needed($user->password, $identity, $password);
+				// $this->rehash_password_if_needed($user->password, $identity, $password);
 
 				// Regenerate the session (for security purpose: to avoid session fixation)
 				// $this->session->sess_regenerate(FALSE);

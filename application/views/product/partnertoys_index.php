@@ -79,7 +79,7 @@
                             <div v-else-if="selectedCombine.length !== 0">
                                 <div class="item">❌尚未選擇方案</div>
                             </div>
-                            <div v-else class="clearfix">
+                            <div v-else class="paddingFixTop">
                                 <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
                                 <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
                                 <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>

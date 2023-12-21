@@ -76,7 +76,7 @@
                     <input type="hidden" id="identity_ok" value="0">
                     <!-- <input type="hidden" name="now_url" value="<?php // echo base_url() . $_SERVER['REQUEST_URI'] 
                                                                     ?>"> -->
-                    <div class="form-action clearfix text-center">
+                    <div class="form-action paddingFixTop text-center">
                         <span id="joinBtn" onclick="form_check()"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;加入會員</span>
                         <!-- <input type="submit" value="免費註冊" class="btn btn-info btn-lg btn-block mt-xl mr-lg"> -->
                     </div>

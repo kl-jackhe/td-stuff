@@ -91,10 +91,10 @@
                         <label class="required" for="content">訊息內容</label>
                         <textarea class="form-control" id="content" name="content" placeholder="請輸入您的訊息內容" required></textarea>
                     </div>
-                    <div class="col-6 form-group text-center clearfix">
+                    <div class="col-6 form-group text-center paddingFixTop">
                         <button type="reset" id="contactEraseBtn"><i class="fas fa-times" aria-hidden="true"></i>&nbsp;清除</button>
                     </div>
-                    <div class="col-6 form-group text-center clearfix">
+                    <div class="col-6 form-group text-center paddingFixTop">
                         <button type="submit" id="contactSendBtn"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;送出</button>
                     </div>
                 </div>
