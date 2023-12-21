@@ -95,6 +95,16 @@ class Product_model extends CI_Model {
 		return (!empty($query)?$query:false);
 	}
 
+	function getHomeLimitedTimeProductsList() {
+		$this->db->select('product_combine.*, product.product_name, product.discontinued_at, product_combine.name as product_combine_name');
+		$this->db->join('product', 'product.product_id = product_combine.product_id', 'left');
+		$this->db->where('product.product_status', 1);
+		$this->db->where('discontinued_at >=', date('Y-m-d H:i:s'));
+		$this->db->where('discontinued_at !=', '0000-00-00 00:00:00');
+		$query = $this->db->get('product_combine')->result_array();
+		return (!empty($query)?$query:false);
+	}
+
 	function get_product_category() {
 		$this->db->select('*');
 		$this->db->where('product_category_type !=', 'MAIN');

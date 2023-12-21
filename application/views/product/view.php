@@ -54,10 +54,12 @@
     }
 
     .add_product {
-        <? if ($this->is_td_stuff) { ?>background-color: #68396D;
-        color: #fff !important;
-        <? } ?><? if ($this->is_liqun_food) { ?>background-color: #f6d523;
-        color: #000 !important;
+        <? if ($this->is_td_stuff) { ?>
+            background-color: #68396D;
+            color: #fff !important;
+        <? } ?><? if ($this->is_liqun_food) { ?>
+            background-color: #f4f2f2;
+            color: #fff !important;
         <? } ?>width: 100%;
         line-height: 1.8;
         padding: 0;

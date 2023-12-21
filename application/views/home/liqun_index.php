@@ -301,16 +301,32 @@
                 </div>
                 <div class="col-md-12 text-center">
                     <div class="row justify-content-center product_box_list" id="home_product">
-                        <?if (!empty($products)) {
+                        <?if (!empty($limited_time_products)) {
                             $count = 0;
-                            foreach ($products as $product){
+                            foreach ($limited_time_products as $product){
                                 if ($count < 4) {?>
                                 <div class="col-md-3 pb-4 ipad_w">
                                     <a href="/product/view/<?=$product['product_id']?>" target="_blank">
-                                        <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['product_image'])?$product['product_image']:'Product/img-600x600.png')?>">
+                                        <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['picture'])?$product['picture']:'Product/img-600x600.png')?>">
                                         <div class="product_name">
                                             <span><?=$product['product_name'];?></span>
                                         </div>
+                                        <input type="hidden" name="countdown_count[]" value="<?=$count?>">
+                                        <input type="hidden" name="countdown_limited_time[]" value="<?=$product['discontinued_at']?>">
+                                        <div id="countdown_<?=$count?>" style="background-color: #7f0d20;display: inline-block;padding: 3px 15px 3px 15px;border-radius: 15px;color: #fff;font-weight: bold; margin-top: 10px; margin-bottom: 10px;"></div>
+                                        <br>
+                                        <span style="color:#bf0029; font-size: 16px; font-weight: bold;font-style: oblique;">
+                                            <span style="color:#bf0029; font-size: 16px; font-weight: bold;font-style: oblique;">$
+                                                    <?= $product['current_price']; ?>
+                                            </span>
+                                        </span>
+                                        <?php if ($product['price'] != $product['current_price'] && $product['price'] != 0) { ?>
+                                            <span style="color: gray;font-size: 12px;font-style: oblique;text-decoration: line-through;">原價
+                                                <span style="color: gray;font-size: 12px;font-style: oblique;"> $
+                                                    <?= $product['price']; ?>
+                                                </span>
+                                            </span>
+                                        <? } ?>
                                     </a>
                                 </div>
                                 <?}
@@ -339,11 +355,11 @@
                                             <div class="product_name">
                                                 <span><?=$product['product_name'];?></span>
                                             </div>
-                                            <div class="product_combine_name">
+                                            <div class="product_combine_name my-2">
                                                 <span><?=$product['product_combine_name'];?></span>
                                             </div>
-                                            <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">
-                                                <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">$
+                                            <span style="color:#bf0029; font-size: 16px; font-weight: bold;font-style: oblique;">
+                                                <span style="color:#bf0029; font-size: 16px; font-weight: bold;font-style: oblique;">$
                                                     <?= $product['current_price']; ?>
                                                 </span>
                                             </span>
@@ -386,6 +402,34 @@
 </div>
 <script>
 $(document).ready(function() {
+    var countdown_count = $('input[name="countdown_count[]"]').map(function() {
+        return $(this).val();
+    }).get();
+    var countdown_limited_time = $('input[name="countdown_limited_time[]"]').map(function() {
+        return $(this).val();
+    }).get();
+    countdown_count.forEach((count, index) => {
+        const endTime = new Date(countdown_limited_time[index]).getTime();
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = endTime - now;
+            const countdownElement = $('#countdown_' + count);
+
+            if (distance <= 0) {
+                countdownElement.html('已結束！');
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.html(`限量倒數 ${days} 天 ${hours} : ${minutes} : ${seconds}`);
+            }
+        };
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    });
+
     $('#SearchContent').on('keyup', function(event) {
         // 檢查按下的鍵是否是 Enter 鍵 (keyCode 13 代表 Enter)
         if (event.keyCode === 13) {

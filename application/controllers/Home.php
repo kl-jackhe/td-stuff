@@ -12,6 +12,7 @@ class Home extends Public_Controller {
 		$this->data['page_title'] = '首頁';
 		$this->data['products'] = $this->product_model->getHomeProducts();
 		$this->data['product_combine'] = $this->product_model->getHomeProductCombineList();
+		$this->data['limited_time_products'] = $this->product_model->getHomeLimitedTimeProductsList();
 		$this->data['product_category'] = $this->product_model->get_product_category();
 		$this->data['main_product_category'] = $this->product_model->getMainProductCategory();
 		$this->data['banner'] = $this->home_model->getBanner();
