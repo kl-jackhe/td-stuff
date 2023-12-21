@@ -70,7 +70,7 @@ $sub_current = $this->uri->segment(3);?>
     </li>
     <?}
     if ($this->is_liqun_food) {?>
-    <li <?php if ($sub_current == "page" || $sub_current == "history") {echo "class='active'";}?>>
+    <!-- <li <?php if ($sub_current == "page" || $sub_current == "history") {echo "class='active'";}?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa-solid fa-id-card-clip"></i>
         <span>加盟主管理</span>
@@ -87,7 +87,7 @@ $sub_current = $this->uri->segment(3);?>
           <a href="/admin/franchisee/auth">帳號管理</a>
         </li>
       </ul>
-    </li>
+    </li> -->
     <?}?>
     <li class="<?php if ($current == "delivery") {echo "active";}?>">
       <a href="/admin/delivery">
@@ -113,12 +113,12 @@ $sub_current = $this->uri->segment(3);?>
         <span>首頁輪播</span>
       </a>
     </li>
-    <li class="<?php if ($current == "menu") {echo "active";}?>">
+    <!-- <li class="<?php if ($current == "menu") {echo "active";}?>">
       <a href="/admin/menu">
         <i class="fa-solid fa-file-lines"></i>
         <span>選單管理</span>
       </a>
-    </li>
+    </li> -->
     <li class="<?php if ($current == "StandardPage") {echo "active";}?>">
       <a href="/admin/StandardPage">
         <i class="fa-regular fa-file-word"></i>

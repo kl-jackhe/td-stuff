@@ -28,8 +28,10 @@ function get_product_category_td($parent_id = 0, $sub_mark = '') {
 			echo '<td>' . $row['product_category_sort'] . '</td>';
 			echo '<td>' . $deliveryStr . '</td>';
 			echo '<td>';
+			if ($row['product_category_type'] != 'MAIN') {
 			echo '<a href="/admin/product/edit_category/' . $row['product_category_id'] . '" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> ';
 			echo '<a href="/admin/product/delete_category/' . $row['product_category_id'] . '" class="btn btn-danger btn-sm" onclick="return confirm("確定要刪除嗎?")"><i class="fa-solid fa-trash"></i></a>';
+			}
 			echo '</td>';
 			echo '</tr>';
 			get_product_category_td($row['product_category_id'], $sub_mark . '－');
