@@ -97,7 +97,7 @@ class Auth extends Public_Controller
 			];
 
 			if ($this->is_partnertoys) {
-				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('loginMessage'));
 				$this->session->set_flashdata('identity', $this->input->post('identity'));
 				redirect('auth/index?id=1', 'refresh');
 			}
@@ -169,7 +169,7 @@ class Auth extends Public_Controller
 			// render
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
 			if ($this->is_partnertoys) {
-				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('changePasswordMessage'));
 				redirect('auth/index?id=6', 'refresh');
 			}
 			$this->render('auth/change_password', 'admin_master');
@@ -185,7 +185,7 @@ class Auth extends Public_Controller
 			} else {
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
-					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->messages());
+					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=6', 'refresh');
 				}
 				redirect('auth/change_password', 'refresh');
@@ -225,7 +225,7 @@ class Auth extends Public_Controller
 			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data);
 			if ($this->is_partnertoys) {
-				$this->session->set_flashdata('forgotMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('message'));
+				$this->session->set_flashdata('forgotMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('forgotMessage'));
 				redirect('auth/index?id=3', 'refresh');
 			}
 			$this->render('auth/forgot_password');
@@ -548,7 +548,7 @@ class Auth extends Public_Controller
 			//$this->_render_page('auth/create_user', $this->data);
 			if ($this->is_partnertoys) {
 				$this->session->set_flashdata('form_values', $this->input->post());
-				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message'))));
+				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('registerMessage'))));
 				redirect('auth/index?id=2', 'refresh');
 			}
 			$this->render('auth/register');

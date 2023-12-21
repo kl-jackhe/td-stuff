@@ -598,7 +598,7 @@ label.required::before {
     color: #fff;
 }
 
-.paddingFixTop{
+.paddingFixTop {
     padding: 30px;
 }
 
@@ -1381,6 +1381,16 @@ input.qtyminus {
     line-height: 40px;
     border-radius: 3px;
     padding-left: 20px
+}
+
+.noneOrder {
+    width: 100%;
+    font-size: 15px;
+    color: #DC0003;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 0 auto 50px;
 }
 
 /* 修改滾動條 */

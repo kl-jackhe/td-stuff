@@ -751,7 +751,7 @@ foreach ($this->cart->contents() as $items) {
             // alert(h);
             var main_h = $(".main").height();
             var h_sum = h - header_h - footer_h;
-            var h_checkout = h_sum * 0.7;
+            var h_checkout = h_sum * 1.6;
             if (h_sum >= content_auto_h) {
                 $(".content_auto_h").css('height', h_sum * 0.9);
             } else {

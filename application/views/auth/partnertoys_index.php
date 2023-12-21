@@ -26,6 +26,7 @@
             <?php else : ?>
                 <!-- 登入狀態 -->
                 <div v-if="selectedCategoryId == 1">
+                    <!-- 訂單查詢 -->
                     <div v-if='!selectedOrder'><?php require('auth-orders.php'); ?></div>
                     <div v-else><?php require('auth-orders-information.php'); ?></div>
                 </div>
@@ -51,6 +52,10 @@
         </div>
     </section>
 </div>
+
+<!-- 引入 Facebook JavaScript SDK -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
 
 <script>
     const authApp = Vue.createApp({
@@ -143,5 +148,54 @@
         } else {
             $('#error_text').html('密碼與確認密碼不符。');
         }
+    }
+
+
+    // facebook暫定
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+    }
+
+    // 初始化 Facebook SDK
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: '698560304200225',
+            cookie: true,
+            xfbml: true,
+            version: 'v14.0'
+        });
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    // 處理登入狀態的回呼函數
+    function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+            // 使用者已登入，你可以在這裡處理相應的操作
+            console.log('Logged in');
+        } else {
+            // 使用者未登入，你可以在這裡處理相應的操作
+            console.log('Not logged in');
+        }
+    }
+
+    // 登入按鈕被點擊時執行的函數
+    function loginWithFacebook() {
+        FB.login(function(response) {
+            statusChangeCallback(response);
+        }, {
+            scope: 'public_profile,email'
+        });
     }
 </script>
