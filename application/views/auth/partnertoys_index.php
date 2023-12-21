@@ -70,8 +70,8 @@
         },
         mounted() {
             if (this.authCategory && this.authCategory.length > 0) {
-                this.selectedCategoryId = this.authCategory[0].auth_category_id;
-                this.pageTitle = this.authCategory[0].auth_category_name;
+                this.selectedCategoryId = <?php echo json_encode($auth_category[0]['auth_category_id']); ?>;
+                this.pageTitle = <?php echo json_encode($auth_category[0]['auth_category_name']); ?>;
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
                     const tmpSet = this.authCategory.filter(self => self.auth_category_id === this.getID);
@@ -92,11 +92,9 @@
                 this.pageTitle = selectedCategory.auth_category_name;
             },
             // 選中獨立訂單
-            showOrderDetails(selected) {
+            showOrderDetails($id) {
                 // 抓被點到的訂單
-                this.selectedOrder = selected;
-                this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
-                // console.log(this.selectedOrder, this.order_item);
+                this.selectedOrder = $id;
             },
         },
     }).mount('#authApp');

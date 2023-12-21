@@ -17,7 +17,7 @@
                     </li>
                     <?php if (!empty($order)) : ?>
                         <?php foreach ($order as $self) : ?>
-                            <a class="orderInformation">
+                            <a class="orderInformation" @click="showOrderDetails(<?php echo $self['order_number'];?>)">
                                 <li class="row">
                                     <ol class="col-5 align-self-center text-center">
                                         <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;<?php echo $self['order_number']; ?></span>

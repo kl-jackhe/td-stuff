@@ -21,8 +21,8 @@
                     <?php echo form_member_login_open('auth/login', $attributes); ?>
 
                     <div class="col-12 form-group">
-                        <label class="required" for="identity">行動電話</label>
-                        <input type="tel" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼" pattern="[0-9]{10}" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>
+                        <label class="required" for="identity">行動電話|E-MAIL</label>
+                        <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼或E-MAIL" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>
                     </div>
                     <div class="col-12 form-group">
                         <label class="required" for="password">密碼</label>
