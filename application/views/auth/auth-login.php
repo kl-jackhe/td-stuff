@@ -20,7 +20,8 @@
                     <?php $attributes = array('id' => 'login'); ?>
                     <?php echo form_member_login_open('auth/login', $attributes); ?>
 
-                    <a class="col-12 form-group" onclick="loginWithFacebook()">以 Facebook 登入</a>
+                    <!-- <a class="col-12 form-group" onclick="loginWithFacebook()">以 Facebook 登入</a> -->
+                    
                     <div class="col-12 form-group">
                         <label class="required" for="identity">行動電話|E-MAIL</label>
                         <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼或E-MAIL" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>

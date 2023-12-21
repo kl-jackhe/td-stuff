@@ -150,7 +150,6 @@
         }
     }
 
-
     // facebook暫定
     function checkLoginState() {
         FB.getLoginStatus(function(response) {

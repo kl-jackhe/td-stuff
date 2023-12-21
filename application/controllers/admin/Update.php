@@ -64,6 +64,7 @@ class Update extends Admin_Controller
                 $this->update_202312181730();
                 $this->update_202312171935();
                 $this->update_202312201430();
+                $this->update_202312211000();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -74,6 +75,36 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312211000()
+    {
+        $version = '202312211000';
+        $description = '[order_item]新增欄位[product_combine_name]&[product_name]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'product_combine_name'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `order_item` ADD `product_combine_name` varchar(128) NOT NULL  AFTER `product_combine_id`;");
+            }
+            
+            $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'product_name'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `order_item` ADD `product_name` varchar(128) NOT NULL  AFTER `product_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -90,7 +121,7 @@ class Update extends Admin_Controller
             } else {
                 $this->db->query("ALTER TABLE `order_item` ADD `customer_id` int(11) NOT NULL  AFTER `product_combine_id`;");
             }
-            
+
             $insertData = array(
                 'version' => $version,
                 'description' => $description,
@@ -113,12 +144,13 @@ class Update extends Admin_Controller
             if (empty($query)) {
                 $this->db->query("ALTER TABLE `menu` ADD `type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `sort`;");
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
+                $insertData = array(
+                    'version' => $version,
+                    'description' => $description,
+                );
+                if ($this->db->insert('update_log', $insertData)) {
+                    echo '<p>' . $version . ' - ' . $description . '</p>';
+                }
             }
         }
     }
@@ -425,7 +457,7 @@ class Update extends Admin_Controller
             } else {
                 $this->db->query("ALTER TABLE `orders` ADD `InvoiceNumber` varchar(10) NOT NULL  AFTER `order_payment`;");
             }
-            
+
             $insertData = array(
                 'version' => $version,
                 'description' => $description,

@@ -6,6 +6,7 @@ class Checkout extends Public_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model('checkout_model');
 	}
 
 	public function index()
@@ -176,13 +177,24 @@ class Checkout extends Public_Controller
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
 		foreach ($this->cart->contents() as $cart_item) :
+			// echo '<pre>';
+			// print_r ($cart_item);
+			// echo '</pre>';
 			$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $cart_item['id']);
-			$this_product = $this->mysql_model->_select('product', 'product_id', $this_product_combine['product_id']);
+			// echo '<pre>';
+			// print_r ($this_product_combine);
+			// echo '</pre>';
+			$this_product = $this->mysql_model->_select('product', 'product_id', $cart_item['product_id']);
+			// echo '<pre>';
+			// print_r ($this_product);
+			// echo '</pre>';
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
+				'product_combine_name' => $this_product_combine[0]['name'],
 				'customer_id' => $customer_id,
-				'product_id' => $this_product['product_id'],
+				'product_id' => $this_product[0]['product_id'],
+				'product_name' => $this_product[0]['product_name'],
 				'order_item_qty' => $cart_item['qty'],
 				'order_item_price' => $cart_item['price'],
 				'created_at' => $created_at,
@@ -272,20 +284,23 @@ class Checkout extends Public_Controller
 				// 載入綠界金流API
 				$this->load->library('ecpay_payment');
 				$obj = $this->ecpay_payment->load();
+				$ECPay = $this->checkout_model->getECPay();
 
-				// 測試環境
-				$obj->ServiceURL  = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-				$obj->HashKey     = '5294y06JbISpM5x9'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
-				$obj->HashIV      = 'v77hoKGq4kWxNNIS'; //測試用HashIV，請自行帶入ECPay提供的HashIV
-				$obj->MerchantID  = '2000132'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
-				$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
-
-				// 正式環境
-				// $obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-				// $obj->HashKey = 'ZtzbR917Xc6Dn5qf';
-				// $obj->HashIV = 'lpsDZrOpn8dxLSgM';
-				// $obj->MerchantID = '3382155';
-				// $obj->EncryptType = '1';
+				if ($ECPay['ECPAY_OPEN'] == 'y') :
+					// 正式環境
+					$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
+					$obj->HashKey = $ECPay['ECPAY_HashKey'];
+					$obj->HashIV = $ECPay['ECPAY_HashIV'];
+					$obj->MerchantID = $ECPay['ECPAY_MerchantID'];
+					$obj->EncryptType = '1';
+				else :
+					// 測試環境
+					$obj->ServiceURL  = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
+					$obj->HashKey     = '5294y06JbISpM5x9'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
+					$obj->HashIV      = 'v77hoKGq4kWxNNIS'; //測試用HashIV，請自行帶入ECPay提供的HashIV
+					$obj->MerchantID  = '2000132'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
+					$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
+				endif;
 
 				//基本參數(請依系統規劃自行調整)
 				$MerchantTradeNo = $order_number . substr(time(), 4, 6);
@@ -562,18 +577,21 @@ class Checkout extends Public_Controller
 				// 載入綠界發票API
 				$this->load->library('ecpay_invoices');
 				$obj = $this->ecpay_invoices->load();
+				$ECPay = $this->checkout_model->getECPay();
 
-				// 服務參數 (測試環境)
-				$obj->Invoice_Url = 'https://einvoice-stage.ecpay.com.tw/Invoice/Issue';
-				$obj->MerchantID = '2000132';
-				$obj->HashKey = 'ejCk326UnaZWKisg';
-				$obj->HashIV = 'q9jcZX8Ib9LM8wYk';
-
-				// 服務參數 (正式環境)
-				// $obj->Invoice_Url = 'https://einvoice.ecpay.com.tw/Invoice/Issue';
-				// $obj->MerchantID = '3382155';
-				// $obj->HashKey = 'ZtzbR917Xc6Dn5qf';
-				// $obj->HashIV = 'lpsDZrOpn8dxLSgM';
+				if ($ECPay['ECPAY_OPEN'] == 'y') :
+					// 服務參數 (正式環境)
+					$obj->Invoice_Url = 'https://einvoice.ecpay.com.tw/Invoice/Issue';
+					$obj->MerchantID = $ECPay['ECPAY_MerchantID'];
+					$obj->HashKey = $ECPay['ECPAY_HashKey'];
+					$obj->HashIV = $ECPay['ECPAY_HashIV'];
+				else :
+					// 服務參數 (測試環境)
+					$obj->Invoice_Url = 'https://einvoice-stage.ecpay.com.tw/Invoice/Issue';
+					$obj->MerchantID = '2000132';
+					$obj->HashKey = 'ejCk326UnaZWKisg';
+					$obj->HashIV = 'q9jcZX8Ib9LM8wYk';
+				endif;
 
 				// 商品資訊
 				array_push(
@@ -634,17 +652,19 @@ class Checkout extends Public_Controller
 				// 載入綠界託運API
 				$this->load->library('ecpay_logistics');
 				$obj = $this->ecpay_logistics->load();
+				$ECPay = $this->checkout_model->getECPay();
 
-				// 服務參數 (測試環境)
-				// $obj->Send['MerchantID'] = '2000132';
-				// $obj->HashKey = '5294y06JbISpM5x9';
-				// $obj->HashIV = 'v77hoKGq4kWxNNIS';
-
-				// 服務參數 (正式環境)
-				$obj->Send['MerchantID'] = '3382155';
-				$obj->HashKey = 'ZtzbR917Xc6Dn5qf';
-				$obj->HashIV = 'lpsDZrOpn8dxLSgM';
-
+				if ($ECPay['ECPAY_OPEN'] == 'y') :
+					// 服務參數 (正式環境)
+					$obj->Send['MerchantID'] = $ECPay['ECPAY_MerchantID'];
+					$obj->HashKey = $ECPay['ECPAY_HashKey'];
+					$obj->HashIV = $ECPay['ECPAY_HashIV'];
+				else :
+					// 服務參數 (測試環境)
+					$obj->Send['MerchantID'] = '2000132';
+					$obj->HashKey = '5294y06JbISpM5x9';
+					$obj->HashIV = 'v77hoKGq4kWxNNIS';
+				endif;
 
 				$LogisticsSubType = ($row['order_delivery'] != '711_pickup') ? LogisticsSubType::FAMILY_C2C : LogisticsSubType::UNIMART_C2C;
 
