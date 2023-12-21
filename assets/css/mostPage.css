@@ -1365,7 +1365,7 @@ input.qtyminus {
     margin: 10px 0;
 }
 
-#memberOrderContent {
+.memberOrderContent {
     /* box-shadow: 6px 6px 20px grey; */
     /* padding: 30px 30px; */
     margin: 50px 0 60px 0;
@@ -1391,6 +1391,31 @@ input.qtyminus {
     border: 1px solid #ccc;
     padding: 20px;
     margin: 0 auto 50px;
+}
+
+.selectedOrderList {
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.computeTable {
+    text-align: right;
+    padding: 20px 0px;
+    margin: 60px auto;
+    border: 8px solid #efefef;
+}
+
+.tableOut {
+    height: auto;
+    width: 100%;
+}
+
+.tableOut tbody tr th{
+    padding: 10px;
+}
+
+.partitionLine {
+    border-bottom: 1px dotted #ccc;
 }
 
 /* 修改滾動條 */

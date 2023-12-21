@@ -92,14 +92,16 @@
             },
             filterByCategory(categoryId) {
                 this.selectedOrder = null;
+                this.selectedOrderItem = null;
                 this.selectedCategoryId = categoryId;
                 const selectedCategory = this.authCategory.find(category => category.auth_category_id === categoryId);
                 this.pageTitle = selectedCategory.auth_category_name;
             },
             // 選中獨立訂單
-            showOrderDetails($id) {
+            showOrderDetails(selected) {
                 // 抓被點到的訂單
-                this.selectedOrder = $id;
+                this.selectedOrder = selected;
+                this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
             },
         },
     }).mount('#authApp');
