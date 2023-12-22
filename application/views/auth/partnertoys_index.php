@@ -1,3 +1,6 @@
+<!-- 引入 Facebook JavaScript SDK -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
 <div id="authApp">
     <section class="sectionRejust">
         <?php require('auth-menu.php'); ?>
@@ -52,10 +55,6 @@
         </div>
     </section>
 </div>
-
-<!-- 引入 Facebook JavaScript SDK -->
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
-
 
 <script>
     const authApp = Vue.createApp({
@@ -152,21 +151,17 @@
         }
     }
 
-    // facebook暫定
-    function checkLoginState() {
-        FB.getLoginStatus(function(response) {
-            statusChangeCallback(response);
-        });
-    }
-
     // 初始化 Facebook SDK
     window.fbAsyncInit = function() {
         FB.init({
-            appId: '698560304200225',
+            appId: '375467955018014',
             cookie: true,
             xfbml: true,
-            version: 'v14.0'
+            version: 'v18.0'
         });
+        FB.AppEvents.logPageView();
+        // 在這裡檢查登入狀態
+        checkLoginState();
     };
 
     (function(d, s, id) {
@@ -180,23 +175,70 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    // 處理登入狀態的回呼函數
-    function statusChangeCallback(response) {
-        if (response.status === 'connected') {
-            // 使用者已登入，你可以在這裡處理相應的操作
-            console.log('Logged in');
-        } else {
-            // 使用者未登入，你可以在這裡處理相應的操作
-            console.log('Not logged in');
-        }
+
+    function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
     }
 
-    // 登入按鈕被點擊時執行的函數
-    function loginWithFacebook() {
+    function customFacebookLogin() {
+        // 使用 Facebook JavaScript SDK 的 FB.login 函數
         FB.login(function(response) {
+            // 處理登入後的回應
             statusChangeCallback(response);
         }, {
             scope: 'public_profile,email'
-        });
+        }); // 指定權限
+    }
+
+    function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+            const accessToken = response.authResponse.accessToken;
+
+            // 調用 FB.logout 將用戶登出
+            FB.logout();
+
+            // 使用 Facebook Graph API 取得使用者資訊
+            FB.api('/me', {
+                fields: 'email,name',
+                access_token: accessToken
+            }, function(graphResponse) {
+                const userData = {
+                    accessToken: accessToken,
+                    userID: response.authResponse.userID,
+                    email: graphResponse.email,
+                    name: graphResponse.name
+                };
+
+                // 使用 AJAX 發送 POST 請求到後端
+                $.ajax({
+                    type: 'POST',
+                    url: 'auth/FB_login',
+                    contentType: 'application/json',
+                    data: JSON.stringify(userData),
+                    success: function(data) {
+                        // 在這裡處理後端的回應
+                        if (data == 'unsuccessful') {
+                            alert('登入失敗，請嘗試其他方式登入。');
+                            window.location.href = '/auth';
+                        }
+                        else if (data !== null) {
+                            window.location.href = '/';
+                        }
+                        console.log(data);
+                    },
+                    error: function(error) {
+                        if (data !== null) {
+                            alert('登入失敗');
+                            window.location.href = '/auth';
+                        }
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        } else {
+            // console.log('Not logged in');
+        }
     }
 </script>

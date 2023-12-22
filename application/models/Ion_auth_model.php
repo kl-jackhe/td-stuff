@@ -546,9 +546,8 @@ class Ion_auth_model extends CI_Model
 	 * @author Mathew
 	 */
 	public function md5_verify($password, $hash)
-	{	
-		if (strlen($hash) !== 32 OR strlen(md5($password)) !== 32)
-		{
+	{
+		if (strlen($hash) !== 32 or strlen(md5($password)) !== 32) {
 			return FALSE;
 		}
 		return (md5($password) === $hash);
@@ -1093,6 +1092,59 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('post_register');
 
 		return (isset($id)) ? $id : FALSE;
+	}
+
+	/**
+	 * FB_acesses
+	 *
+	 * @param    string $email
+	 * @param    string $userID
+	 * @param    bool   $remember
+	 *
+	 * @return    bool
+	 * @author    Mathew
+	 */
+	public function FB_acesses($user_data)
+	{
+		// 適當的業務邏輯處理，例如檢查用戶，更新數據庫等
+		$this->db->select('email, id, fb_id, password, active, last_login');
+		$this->db->where('email', $user_data['email']);
+		$query = $this->db->get('users');
+
+		if ($query->num_rows() === 1) {
+			$user = $query->row();
+			// 原本有註冊帳號用FB登入
+			if (empty($user->fb_id)) {
+				$user_item = [
+					'id' => $user->id,
+					'fb_id' => $user_data['userID']
+				];
+				$this->db->update('users', $user_item, ['id' => $user->id]);
+				return $this->FB_acesses($user_data);
+			}
+			$this->set_session($user);
+			return TRUE;
+		} else {
+			$password = $this->hash_password($user_data['userID']);
+			$ip_address = $this->input->ip_address();
+			$manual_activation = $this->config->item('manual_activation', 'ion_auth');
+
+			$user_item = [
+				'full_name' => $user_data['name'],
+				'phone' => '',
+				'fb_id' => $user_data['userID'],
+				'username' => $user_data['userID'],
+				'password' => $password,
+				'email' => $user_data['email'],
+				'ip_address' => $ip_address,
+				'created_on' => time(),
+				'active' => ($manual_activation === FALSE ? 1 : 0)
+			];
+			$user_data = array_merge($this->_filter_data('users', []), $user_item);
+			$this->db->insert('users', $user_data);
+
+			return $this->FB_acesses($user_data);
+		}
 	}
 
 	/**

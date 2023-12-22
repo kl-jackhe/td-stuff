@@ -45,6 +45,31 @@ class Auth extends Public_Controller
 	}
 
 	/**
+	 * FB_Log the user in
+	 */
+	public function FB_login()
+	{
+		$this->load->model('ion_auth_model');
+		// 讀取 POST 資料
+		$post_data = file_get_contents("php://input");
+
+		// 解析 JSON 資料
+		$user_data = json_decode($post_data, true);
+
+		if ($user_data['accessToken'] != null && $user_data['email'] != null && $user_data['name'] != null && $user_data['userID'] != null) {
+			// $user_data 包含從前端傳來的使用者資訊
+			// echo json_encode($user_data);
+			if ($this->ion_auth_model->FB_acesses($user_data)) :
+				echo json_encode('successful');
+			else :
+				echo json_encode('unsuccessful');
+			endif;
+		} else {
+			echo json_encode('unsuccessful');
+		}
+	}
+
+	/**
 	 * Log the user in
 	 */
 	public function login()

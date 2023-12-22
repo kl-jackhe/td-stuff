@@ -20,8 +20,10 @@
                     <?php $attributes = array('id' => 'login'); ?>
                     <?php echo form_member_login_open('auth/login', $attributes); ?>
 
-                    <!-- <a class="col-12 form-group" onclick="loginWithFacebook()">以 Facebook 登入</a> -->
-                    
+                    <!-- <div id="fb-login-button"></div> -->
+                    <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button> -->
+                    <a id="FBgraph" onclick="customFacebookLogin()"><i class="fa-brands fa-facebook"></i>&nbsp;使用Facebook登入</a>
+
                     <div class="col-12 form-group">
                         <label class="required" for="identity">行動電話|E-MAIL</label>
                         <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼或E-MAIL" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>
@@ -45,7 +47,7 @@
                         </div>
                     </div>
                     <div class="col-12 form-group">
-                        <a href="/forgot_password" class="pull-right" id="forgotBtn">
+                        <a class="pull-right" id="forgotBtn" @click="filterByCategory('3')">
                             <i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;忘記登入資訊
                         </a>
                     </div>
@@ -58,7 +60,7 @@
                             <span id="memberTxt">加入會員即可在官網自由選購或詢價商品，您可輕鬆掌握每筆訂單的最新處理狀態。</span>
                         </div>
                         <div class="text-center" id="addMember">
-                            <a href="/register" id="addMemberBtn">
+                            <a id="addMemberBtn" @click="filterByCategory('2')">
                                 <i class="fas fa-user-plus"></i>&nbsp;立即加入會員
                             </a>
                         </div>

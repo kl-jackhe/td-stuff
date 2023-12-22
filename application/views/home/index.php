@@ -62,7 +62,6 @@
 #home_product {
     font-size: 18px;
     line-height: 20px;
-    align-items: end;
 }
 
 #home_product a {

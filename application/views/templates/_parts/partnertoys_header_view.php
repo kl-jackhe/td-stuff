@@ -70,13 +70,13 @@
                                     <a href="#" class="nav_item_style">經銷通路</a>
                                     <a href="/auth" class="nav_item_style">會員專區</a>
                                     <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                        <button class="logBtn" @click="confirmLogout">
+                                        <a class="logBtn" @click="confirmLogout">
                                             <i class="fa fa-sign-out" aria-hidden="true"></i>登出
-                                        </button>
+                                        </a>
                                     <?php else : ?>
-                                        <button class="logBtn" @click="confirmLogin">
+                                        <a class="logBtn" @click="confirmLogin">
                                             <i class="fa fa-sign-in" aria-hidden="true"></i>登入
-                                        </button>
+                                        </a>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                             </li>
                             <li class="nav_item_mb_style">
                                 <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                    <button class="logBtn"@click="confirmLogout">
+                                    <button class="logBtn" @click="confirmLogout">
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>登出
                                     </button>
                                 <?php else : ?>
@@ -131,7 +131,7 @@
         <script>
             const headerapp = Vue.createApp({
                 methods: {
-                    confirmLogin(){
+                    confirmLogin() {
                         window.location.href = '/auth';
                     },
                     confirmLogout() {

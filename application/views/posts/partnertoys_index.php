@@ -7,7 +7,7 @@
             </div>
             <div class="container">
                 <!-- Post Start -->
-                <div class="row">
+                <div class="row alignItemBaseLine">
                     <div class="col-bg-12 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
                         <div class="touch_effect">
                             <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
