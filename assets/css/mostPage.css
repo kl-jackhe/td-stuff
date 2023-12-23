@@ -74,7 +74,7 @@ a.logBtn {
     -o-transition: all .3s ease-in-out;
 }
 
-a.logBtn:hover{
+a.logBtn:hover {
     cursor: pointer;
     color: rgba(239, 132, 104, 1.0) !important;
 }
@@ -1473,8 +1473,8 @@ input.qtyminus {
     box-shadow: 1px 1px 10px #0088ff;
 }
 
-#FBgraph img {
-    width: 100%;
+#FBLoginPosition {
+    margin-top: 50px;
 }
 
 /* 修改滾動條 */
