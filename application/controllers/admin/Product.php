@@ -12,7 +12,31 @@ class Product extends Admin_Controller
 	public function index()
 	{
 		$this->data['page_title'] = '商品管理';
+		if ($this->is_partnertoys) {
+			$this->data['enable_status'] = $this->product_model->getProductContradiction(1);
+		}
 		$this->render('admin/product/index');
+	}
+
+	function contradiction()
+	{
+		$status = $this->input->post('status');
+		$this->db->select('*');
+		$this->db->where('id', 1);
+		$query = $this->db->get('contradiction');
+		if ($query->num_rows() === 1) {
+			$self = $query->row();
+			if ($status == '1') {
+				$this->db->update('contradiction', ['contradiction_status' => 0], ['id' => $self->id]);
+			} else if ($status == '0') {
+				$this->db->update('contradiction', ['contradiction_status' => 1], ['id' => $self->id]);
+			}
+			echo 'successful';
+			return;
+		} else {
+			echo 'unsuccessful';
+			return;
+		}
 	}
 
 	function ajaxData()
@@ -95,7 +119,7 @@ class Product extends Admin_Controller
 
 		$product_category_id_list = $this->input->post('product_category');
 		if (isset($product_category_id_list) && !empty($product_category_id_list)) {
-			for ($i=0;$i<count($product_category_id_list);$i++) {
+			for ($i = 0; $i < count($product_category_id_list); $i++) {
 				$this->db->select('product_category_id');
 				$this->db->where('product_id', $product_id);
 				$this->db->where('product_category_id', $product_category_id_list[$i]);
@@ -190,7 +214,7 @@ class Product extends Admin_Controller
 			$this->db->where_not_in('product_category_id', $product_category_id_list);
 			$this->db->where('product_id', $id);
 			$this->db->delete('product_category_list');
-			for ($i=0;$i<count($product_category_id_list);$i++) {
+			for ($i = 0; $i < count($product_category_id_list); $i++) {
 				$this->db->select('product_category_id');
 				$this->db->where('product_id', $id);
 				$this->db->where('product_category_id', $product_category_id_list[$i]);
@@ -198,7 +222,6 @@ class Product extends Admin_Controller
 				if (empty($pcl_row)) {
 					$this->db->insert('product_category_list', array('product_id' => $id, 'product_category_id' => $product_category_id_list[$i]));
 				} else {
-
 				}
 			}
 		} else {
@@ -225,7 +248,7 @@ class Product extends Admin_Controller
 			$this->db->where_not_in('unit', $unit);
 			$this->db->where('product_id', $id);
 			$this->db->delete('product_unit');
-			for ($i=0;$i<count($unit);$i++) {
+			for ($i = 0; $i < count($unit); $i++) {
 				if ($unit[$i] != '') {
 					$this->db->select('id');
 					$this->db->where('product_id', $id);
@@ -252,7 +275,7 @@ class Product extends Admin_Controller
 			$this->db->where('product_id', $id);
 			$this->db->delete('product_unit');
 		}
-		
+
 		// 商品規格
 		$specificationStr = array();
 		$specification = $this->input->post('specification');
@@ -471,7 +494,7 @@ class Product extends Admin_Controller
 
 		$this->db->where('product_id', $id);
 		$this->db->delete('product_specification');
-		
+
 		redirect(base_url() . 'admin/product');
 	}
 

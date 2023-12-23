@@ -65,6 +65,8 @@ class Update extends Admin_Controller
                 $this->update_202312171935();
                 $this->update_202312201430();
                 $this->update_202312211000();
+                $this->update_202312231600();
+                $this->update_202312231630();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -75,6 +77,60 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312231630()
+    {
+        $version = '202312231630';
+        $description = '[contradiction]新增欄位[name]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM contradiction LIKE 'name'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `contradiction` ADD `name` varchar(128) NOT NULL  AFTER `id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202312231600()
+    {
+        $version = '202312231600';
+        $description = '新增資料表[contradiction]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'contradiction'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `contradiction` (
+                    `id` int(11) NOT NULL,
+                    `contradiction_status` int(1) NOT NULL,
+                    `created_at` datetime NOT NULL,
+                    `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `contradiction` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `contradiction` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -91,7 +147,7 @@ class Update extends Admin_Controller
             } else {
                 $this->db->query("ALTER TABLE `order_item` ADD `product_combine_name` varchar(128) NOT NULL  AFTER `product_combine_id`;");
             }
-            
+
             $query = $this->db->query("SHOW COLUMNS FROM order_item LIKE 'product_name'");
             if ($query->num_rows() > 0) {
             } else {

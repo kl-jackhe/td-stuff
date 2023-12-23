@@ -1,12 +1,15 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Product_model extends CI_Model {
+class Product_model extends CI_Model
+{
 
-	function __construct() {
+	function __construct()
+	{
 		parent::__construct();
 	}
 
-	function getRows($params = array()) {
+	function getRows($params = array())
+	{
 		$this->db->select('*');
 		$this->db->from('product');
 		//filter data by searched keywords
@@ -51,7 +54,8 @@ class Product_model extends CI_Model {
 		return $result;
 	}
 
-	function getProducts($params = array()) {
+	function getProducts($params = array())
+	{
 		$this->db->select('product.*');
 		$this->db->from('product');
 		if (!empty($params['search']['product_category_id'])) {
@@ -70,13 +74,15 @@ class Product_model extends CI_Model {
 		return $result;
 	}
 
-	function getProductList() {
+	function getProductList()
+	{
 		$this->db->select('*');
 		$query = $this->db->get('product')->result_array();
-		return (!empty($query)?$query:false);
+		return (!empty($query) ? $query : false);
 	}
 
-	function getHomeProducts() {
+	function getHomeProducts()
+	{
 		$this->db->select('*');
 		$this->db->where('product_status', 1);
 		$query = $this->db->get('product');
@@ -87,25 +93,28 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getHomeProductCombineList() {
+	function getHomeProductCombineList()
+	{
 		$this->db->select('product_combine.*, product.product_name, product_combine.name as product_combine_name');
 		$this->db->join('product', 'product.product_id = product_combine.product_id', 'left');
 		$this->db->where('product.product_status', 1);
 		$query = $this->db->get('product_combine')->result_array();
-		return (!empty($query)?$query:false);
+		return (!empty($query) ? $query : false);
 	}
 
-	function getHomeLimitedTimeProductsList() {
+	function getHomeLimitedTimeProductsList()
+	{
 		$this->db->select('product_combine.*, product.product_name, product.discontinued_at, product_combine.name as product_combine_name');
 		$this->db->join('product', 'product.product_id = product_combine.product_id', 'left');
 		$this->db->where('product.product_status', 1);
 		$this->db->where('discontinued_at >=', date('Y-m-d H:i:s'));
 		$this->db->where('discontinued_at !=', '0000-00-00 00:00:00');
 		$query = $this->db->get('product_combine')->result_array();
-		return (!empty($query)?$query:false);
+		return (!empty($query) ? $query : false);
 	}
 
-	function get_product_category() {
+	function get_product_category()
+	{
 		$this->db->select('*');
 		$this->db->where('product_category_type !=', 'MAIN');
 		$query = $this->db->get('product_category');
@@ -116,10 +125,11 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getMainProductCategory() {
+	function getMainProductCategory()
+	{
 		$this->db->select('*');
 		$this->db->where('product_category_type', 'MAIN');
-		$this->db->order_by('product_category_sort','asc');
+		$this->db->order_by('product_category_sort', 'asc');
 		$query = $this->db->get('product_category');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
@@ -128,7 +138,8 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getProductCombine() {
+	function getProductCombine()
+	{
 		$this->db->select('*');
 		$query = $this->db->get('product_combine');
 		if ($query->num_rows() > 0) {
@@ -138,7 +149,8 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getProductCombineItem() {
+	function getProductCombineItem()
+	{
 		$this->db->select('*');
 		$query = $this->db->get('product_combine_item');
 		if ($query->num_rows() > 0) {
@@ -148,7 +160,8 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function get_product_category_name($id) {
+	function get_product_category_name($id)
+	{
 		$this->db->select('product_category_name');
 		$this->db->limit(1);
 		$this->db->where('product_category_id', $id);
@@ -160,7 +173,8 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function get_product_combine_item($id) {
+	function get_product_combine_item($id)
+	{
 		$this->db->select('*');
 		$this->db->where('product_combine_id', $id);
 		$query = $this->db->get('product_combine_item');
@@ -171,15 +185,17 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getSingleProduct($id) {
+	function getSingleProduct($id)
+	{
 		$this->db->select('*');
 		$this->db->where('product_id', $id);
 		$this->db->limit(1);
 		$row = $this->db->get('product')->row_array();
-		return (!empty($row)?$row:false);
+		return (!empty($row) ? $row : false);
 	}
 
-	function getProduct_Specification($id) {
+	function getProduct_Specification($id)
+	{
 		$this->db->select('*');
 		$this->db->where('product_id', $id);
 		$query = $this->db->get('product_specification');
@@ -190,7 +206,8 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getProduct_Combine($id) {
+	function getProduct_Combine($id)
+	{
 		$this->db->select('*');
 		$this->db->where('product_id', $id);
 		$query = $this->db->get('product_combine');
@@ -201,26 +218,30 @@ class Product_model extends CI_Model {
 		}
 	}
 
-	function getTopCategory() {
+	function getTopCategory()
+	{
 		$this->db->where('product_category_parent', '0');
 		$query = $this->db->get('product_category');
-		return ($query->num_rows() > 0)?$query->result_array():false;
+		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
-	function getSubCategory() {
+	function getSubCategory()
+	{
 		$this->db->where('product_category_parent !=', '0');
 		$query = $this->db->get('product_category');
-		return ($query->num_rows() > 0)?$query->result_array():false;
+		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
-	function getRows_list($params = array()) {
+	function getRows_list($params = array())
+	{
 		$this->db->select('*');
 		$this->db->from('product');
 		$query = $this->db->get();
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
-	function get_sub_category_product($id) {
+	function get_sub_category_product($id)
+	{
 		$this->db->join('product', 'product.product_id = product_category_list.product_id');
 		$this->db->where('product_category_id', $id);
 		//set start and limit
@@ -229,22 +250,25 @@ class Product_model extends CI_Model {
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
-	function getManufacturer() {
+	function getManufacturer()
+	{
 		$this->db->where('manufacturer_status', '1');
 		$this->db->like('manufacturer_type', 's');
 		$query = $this->db->get('manufacturer');
 		return ($query->num_rows() > 0) ? $query->result_array() : false;
 	}
 
-	function getSpecificationStr($id) {
+	function getSpecificationStr($id)
+	{
 		$this->db->select('specification');
-		$this->db->where('id',$id);
+		$this->db->where('id', $id);
 		$this->db->limit(1);
 		$row = $this->db->get('product_specification')->row_array();
-		return (!empty($row)?$row['specification']:'');
+		return (!empty($row) ? $row['specification'] : '');
 	}
 
-	function getSelectProductCategory($productID) {
+	function getSelectProductCategory($productID)
+	{
 		$select_product_category = array();
 		$this->db->select('product_category_id');
 		$this->db->where('product_id', $productID);
@@ -257,20 +281,33 @@ class Product_model extends CI_Model {
 		return $select_product_category;
 	}
 
-	function checkProductCategoryNameIsExist($name) {
+	function checkProductCategoryNameIsExist($name)
+	{
 		$this->db->select('product_category_id');
 		$this->db->where('product_category_name', $name);
 		$this->db->limit(1);
 		$pc_row = $this->db->get('product_category')->row_array();
-		return (!empty($pc_row)?$pc_row:false);
+		return (!empty($pc_row) ? $pc_row : false);
 	}
 
-	function getSearchProductResults($keywords) {
+	function getSearchProductResults($keywords)
+	{
 		$this->db->select('*');
 		$this->db->like('product_name', $keywords);
 		$this->db->where('product_status', 1);
 		$query = $this->db->get('product')->result_array();
-		return (!empty($query)?$query:false);
+		return (!empty($query) ? $query : false);
 	}
 
+	function getProductContradiction($id = 1)
+	{
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$query = $this->db->get('contradiction');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
 }

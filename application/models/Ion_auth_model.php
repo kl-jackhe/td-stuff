@@ -1106,6 +1106,11 @@ class Ion_auth_model extends CI_Model
 	 */
 	public function FB_acesses($user_data)
 	{
+		if (empty($user_data)) {
+			$this->set_error('unsuccessful');
+			return FALSE;
+		}
+
 		// 適當的業務邏輯處理，例如檢查用戶，更新數據庫等
 		$this->db->select('email, id, fb_id, password, active, last_login');
 		$this->db->where('email', $user_data['email']);
@@ -1117,11 +1122,13 @@ class Ion_auth_model extends CI_Model
 			if (empty($user->fb_id)) {
 				$user_item = [
 					'id' => $user->id,
-					'fb_id' => $user_data['userID']
+					'fb_id' => $user_data['userID'],
+					'updated_at' => date('Y-m-d H:i:s')
 				];
 				$this->db->update('users', $user_item, ['id' => $user->id]);
 				return $this->FB_acesses($user_data);
 			}
+			$this->db->update('users', ['last_login' => time()], ['id' => $user->id]);
 			$this->set_session($user);
 			return TRUE;
 		} else {
@@ -1138,6 +1145,9 @@ class Ion_auth_model extends CI_Model
 				'email' => $user_data['email'],
 				'ip_address' => $ip_address,
 				'created_on' => time(),
+				'last_login' => time(),
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s'),
 				'active' => ($manual_activation === FALSE ? 1 : 0)
 			];
 			$user_data = array_merge($this->_filter_data('users', []), $user_item);

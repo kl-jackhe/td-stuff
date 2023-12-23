@@ -1,22 +1,32 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cart extends Public_Controller {
+class Cart extends Public_Controller
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
-	public function index() {
+	public function index()
+	{
 		$this->data['page_title'] = '購物車';
 		$this->render('checkout/cart');
 	}
 
-	public function mini_cart() {
+	public function mini_cart()
+	{
 		$this->load->view('checkout/mini-cart');
 	}
 
-	function add_combine() {
+	function add_combine()
+	{
 		$i = 0;
+
+		// echo '<pre>';
+		// print_r($this->cart->contents(true));
+		// echo '</pre>';
+
 		$specification_name = $this->input->post('specification_name');
 		$specification_qty = $this->input->post('specification_qty');
 		$specification_id = $this->input->post('specification_id');
@@ -26,6 +36,21 @@ class Cart extends Public_Controller {
 
 		$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $combine_id, 'row');
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
+		$this_contradiction = $this->mysql_model->_select('contradiction', 'name', 'product', 'row');
+
+		if ($this->is_partnertoys) {
+			if ($this_contradiction['contradiction_status'] == 1) {
+				if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
+					$cart_item = $this->cart->contents(true);
+					foreach ($cart_item as $self) {
+						if (($self['product_category_id'] == '1' && $this_product['product_category_id'] != '1') || ($self['product_category_id'] != '1' && $this_product['product_category_id'] == '1')) {
+							echo 'contradiction';
+							return;
+						}
+					}
+				}
+			}
+		}
 
 		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
 		$price = $this_product_combine['current_price'];
@@ -41,6 +66,7 @@ class Cart extends Public_Controller {
 		}
 		$insert_data = array(
 			'product_id' => $this_product_combine['product_id'],
+			'product_category_id' => $this_product['product_category_id'],
 			'id' => $this_product_combine['id'],
 			'name' => $name,
 			'price' => $price,
@@ -63,7 +89,8 @@ class Cart extends Public_Controller {
 		}
 	}
 
-	function add_single_sales_combine() {
+	function add_single_sales_combine()
+	{
 		$i = 0;
 		$specification_name = $this->input->post('specification_name');
 		$specification_qty = $this->input->post('specification_qty');
@@ -111,7 +138,8 @@ class Cart extends Public_Controller {
 		}
 	}
 
-	public function update_qty() {
+	public function update_qty()
+	{
 		$data = array(
 			'rowid' => $this->input->post('rowid'),
 			'qty' => $this->input->post('qty'),
@@ -119,7 +147,8 @@ class Cart extends Public_Controller {
 		$this->cart->update($data);
 	}
 
-	public function update_price() {
+	public function update_price()
+	{
 		$data = array(
 			'rowid' => $this->input->post('rowid'),
 			'price' => $this->input->post('price'),
@@ -127,7 +156,8 @@ class Cart extends Public_Controller {
 		$this->cart->update($data);
 	}
 
-	public function remove() {
+	public function remove()
+	{
 		$data = array(
 			'rowid' => $this->input->post('rowid'),
 			'qty' => 0,
@@ -135,11 +165,13 @@ class Cart extends Public_Controller {
 		$this->cart->update($data);
 	}
 
-	public function remove_all() {
+	public function remove_all()
+	{
 		$this->cart->destroy();
 	}
 
-	public function check_cart_is_empty() {
+	public function check_cart_is_empty()
+	{
 		$count = 0;
 		if (!empty($this->cart->contents())) {
 			foreach ($this->cart->contents() as $items) {
@@ -151,11 +183,11 @@ class Cart extends Public_Controller {
 
 	/////////////////////////////////////////
 
-	public function view() {
+	public function view()
+	{
 		$array = $this->cart->contents();
 		header('Content-Type: application/json');
 		echo json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 		exit;
 	}
-
 }

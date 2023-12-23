@@ -309,7 +309,11 @@
                         specification_qty: 'Textqty',
                     },
                     success: function(data) {
-                        alert('加入成功');
+                        if (data == 'contradiction') {
+                            alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
+                        } else {
+                            alert('加入成功');
+                        }
                         get_cart_qty();
                     }
                 });
