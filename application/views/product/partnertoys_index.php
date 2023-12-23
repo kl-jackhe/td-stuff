@@ -141,7 +141,7 @@
     const productApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
+                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedProduct: null, // 選中的商品
                 selectedProductCombine: null, // 選中商品的規格
                 selectedProductCategoryId: null, // 選中商品的類別

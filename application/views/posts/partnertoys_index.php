@@ -68,7 +68,7 @@
     const postApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id')); ?>, // 若透過header或footer篩選
+                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
                 selectedPostCategoryId: null, // 選中的消息類別
                 selectedCategoryId: null, // 目前顯示頁面主題
