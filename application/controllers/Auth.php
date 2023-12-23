@@ -156,6 +156,10 @@ class Auth extends Public_Controller
 		$this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
 
 		if (!$this->ion_auth->logged_in()) {
+			if ($this->is_partnertoys) {
+				$this->session->set_flashdata('changePasswordMessage', '<br>FB登入者無法使用此功能<br><br>');
+				redirect('auth/index?id=6', 'refresh');
+			}
 			redirect('auth/login', 'refresh');
 		}
 
