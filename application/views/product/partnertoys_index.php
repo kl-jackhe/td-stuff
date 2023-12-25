@@ -110,13 +110,13 @@
                             <span v-else class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
                         </div>
                         <!--追蹤商品-->
-                        <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                        <!-- <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
                             <span class="cargoClick likeBtn"><i class="fas fa-heart"></i>加入追蹤</span>
-                        </div>
+                        </div> -->
                         <!--運費說明-->
-                        <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                        <!-- <div v-if="selectedCombine.length !== 0 && selectedProductCombine" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
                             <span class="cargoClick explainBtn"><i class="fas fa-truck"></i>運費說明</span>
-                        </div>
+                        </div> -->
                         <!-- 有方案顯示 -->
 
                         <!-- 無方案顯示(聯絡方式) -->
@@ -158,7 +158,7 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
-                quantity: 0, // 商品選擇數量
+                quantity: 1, // 商品選擇數量
             };
         },
         watch: {
@@ -265,6 +265,8 @@
             // 選中獨立商品
             showProductDetails(selected) {
                 // 初始化方案選項
+                this.quantity = 1;
+
                 this.selectedProductCombine = null;
                 $('#combineSelect').val('請選擇方案');
                 this.selectedProductCategoryId = this.products_categories.filter(category => category.product_category_id === selected.product_category_id);
