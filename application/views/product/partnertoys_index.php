@@ -174,8 +174,8 @@
             this.initMagnificPopup();
             // init btn state
             if (this.products_categories && this.products_categories.length > 0) {
-                this.selectedCategoryId = this.products_categories[0].product_category_id;
-                this.pageTitle = this.products_categories[0].product_category_name;
+                this.selectedCategoryId = 0;
+                this.pageTitle = '全部商品';
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
                     const tmpSet = this.products_categories.filter(self => self.product_category_id === this.getID);

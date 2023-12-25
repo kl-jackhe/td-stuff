@@ -93,8 +93,8 @@
         mounted() {
             // 在 mounted 鉤子中設定 selectedCategoryId 的值
             if (this.posts_categorys && this.posts_categorys.length > 0) {
-                this.selectedCategoryId = this.posts_categorys[0].post_category_id;
-                this.pageTitle = this.posts_categorys[0].post_category_name;
+                this.selectedCategoryId = 0;
+                this.pageTitle = '全部消息';
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
                     const tmpSet = this.posts_categorys.filter(self => self.post_category_id === this.getID);
