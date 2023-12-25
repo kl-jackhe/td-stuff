@@ -11,7 +11,7 @@
         <label>上層分類</label>
         <select name="product_category_parent" class="form-control">
           <option value="0">選擇分類</option>
-          <?php echo get_product_category_option() ?>
+          <?php get_product_category_option() ?>
         </select>
       </div>
       <div class="form-group">

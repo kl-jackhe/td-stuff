@@ -1,42 +1,51 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed.');
 
-function get_product_category_td($parent_id = 0, $sub_mark = '') {
-	$CI = &get_instance();
+function get_product_category_td($parent_id = 0, $sub_mark = '')
+{
+	$CI =& get_instance();
 	$CI->db->where('product_category_parent', $parent_id);
 	$CI->db->order_by('product_category_sort', 'asc');
 	$query = $CI->db->get('product_category');
 	if ($query->num_rows() > 0) {
-		foreach ($query->result_array() as $row) {
-			$deliveryStr = '';
-            $CI->db->select('delivery.id,delivery.delivery_name');
-            $CI->db->join('delivery', 'delivery.id = delivery_range_list.delivery_id');
-            $CI->db->where('source', 'ProductCategory');
-            $CI->db->where('source_id', $row['product_category_id']);
-            $drl_query = $CI->db->get('delivery_range_list')->result_array();
-            if (!empty($drl_query)) {
-              	$count = 0;
-              	foreach ($drl_query as $drl_row) {
-                	if ($count > 0) {
-                  		$deliveryStr .= ' , ';
-                	}
-                	$deliveryStr .= $drl_row['delivery_name'];
-                	$count++;
-              	}
-            }
-			echo '<tr>';
-			echo '<td>' . $sub_mark . $row['product_category_name'] . '</td>';
-			echo '<td>' . $row['product_category_sort'] . '</td>';
-			echo '<td>' . $deliveryStr . '</td>';
-			echo '<td>';
-			if ($row['product_category_type'] != 'MAIN') {
-			echo '<a href="/admin/product/edit_category/' . $row['product_category_id'] . '" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> ';
-			echo '<a href="/admin/product/delete_category/' . $row['product_category_id'] . '" class="btn btn-danger btn-sm" onclick="return confirm("確定要刪除嗎?")"><i class="fa-solid fa-trash"></i></a>';
-			}
-			echo '</td>';
-			echo '</tr>';
-			get_product_category_td($row['product_category_id'], $sub_mark . '－');
-		}
-	}
+        foreach($query->result_array() as $row){
+        	$is_sub = 0;
+        	if($parent_id>0){
+        		$is_sub = 1;
+        	}
+        	$class_pcp = '';
+        	echo '<tr class="pc_'.$row['product_category_id'].' '.$class_pcp.' '.($is_sub>0?'is_sub':'').'">';
+        	echo '<td>';
+        	if($sub_mark=='－'){
+				echo '　';
+			};
+			if($sub_mark=='－－'){
+				echo '　　';
+			};
+			if($sub_mark=='－－－'){
+				echo '　　　';
+			};
+        	echo $row['product_category_code'];
+        	echo '</td>';
+            echo '<td>';
+            if($sub_mark=='－'){
+				echo '　';
+			};
+			if($sub_mark=='－－'){
+				echo '　　';
+			};
+			if($sub_mark=='－－－'){
+				echo '　　　';
+			};
+            echo $sub_mark.$row['product_category_name'];
+            echo '</td>';
+            echo '<td>';
+            echo '<a href="/product/edit_category/'.$row['product_category_id'].'" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> ';
+            echo '<a href="/product/delete_category/'.$row['product_category_id'].'" class="btn btn-danger btn-sm" onclick="return confirm("確定要刪除嗎?")"><i class="fa fa-trash-o"></i></a>';
+            echo '</td>';
+            echo '</tr>';
+            get_product_category_td($row['product_category_id'], $sub_mark.'－');
+        }
+    }
 }
 
 function get_product_category_option($parent_id = 0, $sub_mark = '', $product_category_parent = '')
