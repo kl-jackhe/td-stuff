@@ -84,18 +84,27 @@
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
-                        <div class="row">
+                        <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
                             <div class="col-12 text-center">
                                 <h2>送貨及備註資訊</h2>
                             </div>
                             <div class="col-4 text-right">取貨方式：</div>
-                            <div class="col-8">{{ (selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup') ? '超商取貨' : '宅配到府' }}</div>
+                            <div class="col-8">超商取貨</div>
                             <div class="col-4 text-right">超商編號：</div>
                             <div class="col-8">{{ selectedOrder.store_id }}</div>
                             <div class="col-4 text-right">超商名稱：</div>
                             <div class="col-8">{{ selectedOrder.order_store_name }}</div>
                             <div class="col-4 text-right">超商地址：</div>
                             <div class="col-8">{{ selectedOrder.order_store_address }}</div>
+                        </div>
+                        <div v-else class="row">
+                            <div class="col-12 text-center">
+                                <h2>送貨及備註資訊</h2>
+                            </div>
+                            <div class="col-4 text-right">取貨方式：</div>
+                            <div class="col-8">宅配到府</div>
+                            <div class="col-4 text-right">到貨地址：</div>
+                            <div class="col-8">待新增</div>
                         </div>
                     </div>
                 </div>
