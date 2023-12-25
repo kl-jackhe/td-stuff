@@ -1,6 +1,6 @@
 <!-- 分頁 -->
 <ul v-if="totalPages !== 0" class="pagination" id="pagination_bottom">
-    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="setPage(1)">
+    <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="currentPage !== 1 && setPage(1)">
         <a class="page_link" href="" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
         </a>
@@ -11,7 +11,7 @@
         </a>
     </li>
     <li v-for="n in limitedPages" :key="n" :class="{'active': (currentPage === n)}" @click.prevent="setPage(n)">
-        <a class="page_link" href="">{{ n }}</a>
+        <a class="page_link" href="" >{{ n }}</a>
     </li>
     <li class="page-item" :class="{'disabled': (currentPage === totalPages) || (totalPages === 0)}" @click.prevent="setPage(currentPage+1)">
         <a class="page_link" href="" aria-label="Next">

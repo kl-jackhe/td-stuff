@@ -60,7 +60,7 @@
                                 <img class="header_logo" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                             </a>
                         </div>
-                        <div class="col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
+                        <div class="header-main-nav col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
                             <div class="row justify-content-end">
                                 <div class="col-12 text-right ">
                                     <a href="/product" class="nav_item_style">夥伴商城</a>
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
+                        <div class="header-main-nav col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
                             <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
                                     <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">

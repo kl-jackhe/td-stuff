@@ -395,6 +395,12 @@ a.logBtn:hover {
     display: block;
 }
 
+@media (max-width: 767px) {
+    .pagination {
+        font-size: 12px;
+    }
+}
+
 .pagination li {
     display: inline-block;
     margin-right: 5px;
@@ -570,17 +576,17 @@ a.logBtn:hover {
     }
 
     /* 主NAV */
-    .d-none,
-    .d-md-none,
-    .d-lg-block,
-    .d-xl-block {
+    .header-main-nav.d-none,
+    .header-main-nav.d-md-none,
+    .header-main-nav.d-lg-block,
+    .header-main-nav.d-xl-block {
         display: none !important;
     }
 
-    .d-block,
-    .d-md-block,
-    .d-lg-none,
-    .d-xl-none {
+    .header-main-nav.d-block,
+    .header-main-nav.d-md-block,
+    .header-main-nav.d-lg-none,
+    .header-main-nav.d-xl-none {
         display: block !important;
     }
 
@@ -1195,16 +1201,20 @@ input.qtyminus {
     margin: 0 0 30px 0;
 }
 
-#separator {
+.separator {
     border-left: 1px solid rgb(221, 221, 221);
 }
 
 @media (max-width:767px) {
-    #separator {
+    .separator {
         padding-top: 20px;
         border-left: none;
         border-top: 1px solid rgb(221, 221, 221);
     }
+}
+
+#separatorBottom {
+    border-bottom: 3px double rgb(221, 221, 221);
 }
 
 #formBtnStyle {
@@ -1489,8 +1499,6 @@ input.qtyminus {
     }
 }
 
-
-
 #FBgraph:hover {
     cursor: pointer;
     box-shadow: 1px 1px 10px #0088ff;
@@ -1498,6 +1506,84 @@ input.qtyminus {
 
 #FBLoginPosition {
     margin-top: 50px;
+}
+
+.orderMarginBottom {
+    margin-bottom: 50px;
+    font-size: 10pt;
+}
+
+.orderDetailButton {
+    margin-bottom: 40px;
+}
+
+.orderDetailButton #goBack {
+    padding: 10px;
+    cursor: pointer;
+    color: #d35448;
+    background-color: #fff;
+    border: 1px solid #d35448;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.orderDetailButton #goBack:hover {
+    color: #fff;
+    background-color: #d35448;
+}
+
+.operateBtn {
+    margin: 40px 0;
+    text-align: center;
+}
+
+#completePay {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#completePay:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #ff3333;
+}
+
+#cancelOrder {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #333;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#cancelOrder:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #000;
+}
+
+@media (max-width:600px) {
+
+    #completePay,
+    #cancelOrder {
+        padding: 8px 20px;
+    }
 }
 
 /* 修改滾動條 */

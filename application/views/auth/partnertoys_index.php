@@ -70,6 +70,8 @@
                 selectedCategoryId: null, // 目前顯示頁面主題
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                perpage: 5, // 一頁的資料數
+                currentPage: 1, // 目前page
             }
         },
         mounted() {
@@ -83,7 +85,68 @@
                 }
             }
         },
+        computed: {
+            // 頁碼
+            limitedPages() {
+                const maxPages = 2;
+                const middlePage = Math.ceil(maxPages / 2);
+
+                if (this.totalPages <= maxPages) {
+                    return Array.from({
+                        length: this.totalPages
+                    }, (_, i) => i + 1);
+                } else if (this.currentPage <= middlePage) {
+                    return Array.from({
+                        length: maxPages
+                    }, (_, i) => i + 1);
+                } else if (this.currentPage > this.totalPages - middlePage) {
+                    return Array.from({
+                        length: maxPages
+                    }, (_, i) => this.totalPages - maxPages + i + 1);
+                } else {
+                    return Array.from({
+                        length: maxPages
+                    }, (_, i) => this.currentPage - middlePage + i + 1);
+                }
+            },
+            totalPages() {
+                return Math.ceil(this.order.length / this.perpage);
+            },
+            pageStart() {
+                return (this.currentPage - 1) * this.perpage
+                //取得該頁第一個值的index
+            },
+            pageEnd() {
+                const end = this.currentPage * this.perpage;
+                return Math.min(end, this.order.length);
+                //取得該頁最後一個值的index
+            },
+        },
         methods: {
+            // 完成付款
+            completePay(id) {
+                window.location.href = <?php echo json_encode(base_url()); ?> + "/checkout/repay_order/" + id;
+            },
+            cancelOrder(id) {
+                var self = this;
+
+                var userConfirmed = confirm('確定要取消訂單嗎？');
+
+                if (userConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/auth/cancel_order/' + id,
+                        contentType: 'application/json',
+                        success: function(data) {
+                            if (data == 'successful') {
+                                self.clearSelectedOrder();
+                                location.reload();
+                            }
+                            console.log(data);
+                        },
+                    });
+                }
+            },
             // 篩選清單呼叫
             toggleNav() {
                 this.isNavOpen = !this.isNavOpen;
@@ -91,6 +154,7 @@
             },
             filterByCategory(categoryId) {
                 this.scrollToTop();
+                this.currentPage = 1; // 將頁碼設置為1
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
                 this.selectedCategoryId = categoryId;
@@ -103,6 +167,19 @@
                 this.scrollToTop();
                 this.selectedOrder = selected;
                 this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
+            },
+            clearSelectedOrder() {
+                this.selectedOrder = null;
+                this.selectedOrderItem = null;
+            },
+            // 頁碼
+            setPage(page) {
+                if (page <= 0 || page > this.totalPages || (page === this.totalPages && this.currentPage === this.totalPages)) {
+                    return;
+                }
+                this.isNavOpen = false;
+                this.currentPage = page;
+                this.scrollToTop();
             },
             // 將頁面滾動到頂部
             scrollToTop() {

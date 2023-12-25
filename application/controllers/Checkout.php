@@ -89,6 +89,77 @@ class Checkout extends Public_Controller
 		set_cookie("user_address", $this->input->post('address'), time() + 31536000);
 	}
 
+	// 重新付款
+	public function repay_order($order_id)
+	{
+		$this->data['page_title'] = '結帳';
+		$this->load->model('checkout_model');
+
+		$pay_order = $this->checkout_model->getSelectedOrder($order_id);
+		// 綠界-信用卡
+		if (isset($pay_order) && $pay_order['order_payment'] == 'ecpay') {
+			/**
+			 *    Credit信用卡付款產生訂單範例
+			 */
+
+			//載入SDK(路徑可依系統規劃自行調整)
+			try {
+				// 載入綠界金流API
+				$this->load->library('ecpay_payment');
+				$obj = $this->ecpay_payment->load();
+				$ECPay = $this->checkout_model->getECPay();
+
+				if ($ECPay['payment_status'] == 1) :
+					// 正式環境
+					$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
+					$obj->HashKey = $ECPay['HashKey'];
+					$obj->HashIV = $ECPay['HashIV'];
+					$obj->MerchantID = $ECPay['MerchantID'];
+					$obj->EncryptType = '1';
+				else :
+					// 測試環境
+					$obj->ServiceURL  = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
+					$obj->HashKey     = '5294y06JbISpM5x9'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
+					$obj->HashIV      = 'v77hoKGq4kWxNNIS'; //測試用HashIV，請自行帶入ECPay提供的HashIV
+					$obj->MerchantID  = '2000132'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
+					$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
+				endif;
+
+				//基本參數(請依系統規劃自行調整)
+				$MerchantTradeNo = $pay_order['order_number'] . substr(time(), 4, 6);
+				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
+				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); //交易時間
+				$obj->Send['TotalAmount'] = (int)$pay_order['order_total']; //交易金額
+				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: ' . $pay_order['order_remark']); //交易描述
+				// 可以決定ATM或Credit支付
+				$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式:Credit
+				// POST會傳到這
+				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
+				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $pay_order['order_number']; //付款完成通知回傳的網址
+				//$obj->Send['ClientBackURL']     = base_url(); //付款完成後，顯示返回商店按鈕
+
+				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
+				//訂單的商品資料
+				array_push($obj->Send['Items'], array(
+					'Name' => "網購商品",
+					'Price' => (int)$pay_order['order_total'],
+					'Currency' => "元",
+					'Quantity' => (int) "1筆",
+					'URL' => "dedwed"
+				));
+				$obj->SendExtend['CreditInstallment'] = 0; //分期期數，預設0(不分期)
+				$obj->SendExtend['InstallmentAmount'] = 0; //使用刷卡分期的付款金額，預設0(不分期)
+				$obj->SendExtend['Redeem'] = false; //是否使用紅利折抵，預設false
+				$obj->SendExtend['UnionPay'] = false; //是否為聯營卡，預設false;
+
+				//產生訂單(auto submit至ECPay)
+				$obj->CheckOut();
+			} catch (Exception $e) {
+				echo $e->getMessage();
+			}
+		}
+	}
+
 	public function save_order()
 	{
 		$this->data['page_title'] = '結帳';
@@ -201,76 +272,77 @@ class Checkout extends Public_Controller
 			);
 			$this->db->insert('order_item', $order_item);
 
-			$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
-			if (!empty($this_product_combine_item)) {
-				$inventory = array();
-				foreach ($this_product_combine_item as $items) {
-					$order_item = array(
-						'order_id' => $order_id,
-						'product_combine_id' => $items['product_combine_id'],
-						'customer_id' => $customer_id,
-						'product_id' => $items['product_id'],
-						'order_item_qty' => ($cart_item['qty'] * $items['qty']),
-						'order_item_price' => 0,
-						'created_at' => $created_at,
-					);
-					$this->db->insert('order_item', $order_item);
-					if (array_key_exists($items['product_id'], $inventory)) {
-						$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
-					} else {
-						$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
-					}
-				}
-				if (!empty($inventory)) {
-					foreach ($inventory as $key => $value) {
-						$this->db->select('excluding_inventory');
-						$this->db->where('product_id', $key);
-						$p_row = $this->db->get('product')->row_array();
-						if (!empty($p_row)) {
-							if ($p_row['excluding_inventory'] == false) {
-								$this->db->set('inventory', 'inventory - ' . $value, FALSE);
-								$this->db->where('product_id', $key);
-								$this->db->update('product');
+		// $this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
+		// if (!empty($this_product_combine_item)) {
+		// 	$inventory = array();
+		// 	foreach ($this_product_combine_item as $items) {
+		// 		$order_item = array(
+		// 			'order_id' => $order_id,
+		// 			'product_combine_id' => $items['product_combine_id'],
+		// 			'customer_id' => $customer_id,
+		// 			'product_id' => $items['product_id'],
+		// 			'order_item_qty' => ($cart_item['qty'] * $items['qty']),
+		// 			'order_item_price' => 0,
+		// 			'created_at' => $created_at,
+		// 		);
+		// 		$this->db->insert('order_item', $order_item);
+		// 		if (array_key_exists($items['product_id'], $inventory)) {
+		// 			$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
+		// 		} else {
+		// 			$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
+		// 		}
+		// 	}
+		// 	if (!empty($inventory)) {
+		// 		foreach ($inventory as $key => $value) {
+		// 			$this->db->select('excluding_inventory');
+		// 			$this->db->where('product_id', $key);
+		// 			$p_row = $this->db->get('product')->row_array();
+		// 			if (!empty($p_row)) {
+		// 				if ($p_row['excluding_inventory'] == false) {
+		// 					$this->db->set('inventory', 'inventory - ' . $value, FALSE);
+		// 					$this->db->where('product_id', $key);
+		// 					$this->db->update('product');
 
-								$inventory_log = array(
-									'product_id' => $key,
-									'source' => 'Order',
-									'change_history' => -$value,
-									'change_notes' => $order_number,
-								);
-								$this->db->insert('inventory_log', $inventory_log);
-							}
-						}
-					}
-				}
-			}
-			if (!empty($cart_item['specification']['specification_id'])) {
-				$sp_qty = 0;
-				$qty_array = 0;
-				foreach ($cart_item['specification']['specification_qty'] as $row) {
-					$specification_id[$sp_qty] = $row;
-					$sp_qty++;
-				}
-				foreach ($cart_item['specification']['specification_id'] as $row) {
-					$order_item = array(
-						'order_id' => $order_id,
-						'product_combine_id' => $items['product_combine_id'],
-						'product_id' => $items['product_id'],
-						'order_item_qty' => 0,
-						'order_item_price' => 0,
-						'specification_id' => $row,
-						'specification_str' => $this->product_model->getSpecificationStr($row),
-						'specification_qty' => $specification_id[$qty_array],
-						'created_at' => $created_at,
-					);
-					$this->db->insert('order_item', $order_item);
-					$qty_array++;
-				}
-			}
+		// 					$inventory_log = array(
+		// 						'product_id' => $key,
+		// 						'source' => 'Order',
+		// 						'change_history' => -$value,
+		// 						'change_notes' => $order_number,
+		// 					);
+		// 					$this->db->insert('inventory_log', $inventory_log);
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		// if (!empty($cart_item['specification']['specification_id'])) {
+		// 	$sp_qty = 0;
+		// 	$qty_array = 0;
+		// 	foreach ($cart_item['specification']['specification_qty'] as $row) {
+		// 		$specification_id[$sp_qty] = $row;
+		// 		$sp_qty++;
+		// 	}
+		// 	foreach ($cart_item['specification']['specification_id'] as $row) {
+		// 		$order_item = array(
+		// 			'order_id' => $order_id,
+		// 			'product_combine_id' => $items['product_combine_id'],
+		// 			'product_id' => $items['product_id'],
+		// 			'order_item_qty' => 0,
+		// 			'order_item_price' => 0,
+		// 			'specification_id' => $row,
+		// 			'specification_str' => $this->product_model->getSpecificationStr($row),
+		// 			'specification_qty' => $specification_id[$qty_array],
+		// 			'created_at' => $created_at,
+		// 		);
+		// 		$this->db->insert('order_item', $order_item);
+		// 		$qty_array++;
+		// 	}
+		// }
 		endforeach;
 
 		// Start 寄信給買家、賣家
 		$this->send_order_email($order_id);
+		$this->cart->destroy();
 
 		// 綠界-信用卡
 		if ($this->input->post('checkout_payment') == 'ecpay') {
@@ -286,12 +358,12 @@ class Checkout extends Public_Controller
 				$obj = $this->ecpay_payment->load();
 				$ECPay = $this->checkout_model->getECPay();
 
-				if ($ECPay['ECPAY_OPEN'] == 'y') :
+				if ($ECPay['payment_status'] == 1) :
 					// 正式環境
 					$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-					$obj->HashKey = $ECPay['ECPAY_HashKey'];
-					$obj->HashIV = $ECPay['ECPAY_HashIV'];
-					$obj->MerchantID = $ECPay['ECPAY_MerchantID'];
+					$obj->HashKey = $ECPay['HashKey'];
+					$obj->HashIV = $ECPay['HashIV'];
+					$obj->MerchantID = $ECPay['MerchantID'];
 					$obj->EncryptType = '1';
 				else :
 					// 測試環境
@@ -499,7 +571,7 @@ class Checkout extends Public_Controller
 		// }
 
 		$this->data['page_title'] = '訂單完成';
-		$this->cart->destroy();
+		// $this->cart->destroy();
 		// 訂單ID解密
 		// $this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
@@ -579,12 +651,12 @@ class Checkout extends Public_Controller
 				$obj = $this->ecpay_invoices->load();
 				$ECPay = $this->checkout_model->getECPay();
 
-				if ($ECPay['ECPAY_OPEN'] == 'y') :
+				if ($ECPay['payment_status'] == 1) :
 					// 服務參數 (正式環境)
 					$obj->Invoice_Url = 'https://einvoice.ecpay.com.tw/Invoice/Issue';
-					$obj->MerchantID = $ECPay['ECPAY_MerchantID'];
-					$obj->HashKey = $ECPay['ECPAY_HashKey'];
-					$obj->HashIV = $ECPay['ECPAY_HashIV'];
+					$obj->MerchantID = $ECPay['MerchantID'];
+					$obj->HashKey = $ECPay['HashKey'];
+					$obj->HashIV = $ECPay['HashIV'];
 				else :
 					// 服務參數 (測試環境)
 					$obj->Invoice_Url = 'https://einvoice-stage.ecpay.com.tw/Invoice/Issue';
@@ -654,11 +726,11 @@ class Checkout extends Public_Controller
 				$obj = $this->ecpay_logistics->load();
 				$ECPay = $this->checkout_model->getECPay();
 
-				if ($ECPay['ECPAY_OPEN'] == 'y') :
+				if ($ECPay['payment_status'] == 1) :
 					// 服務參數 (正式環境)
-					$obj->Send['MerchantID'] = $ECPay['ECPAY_MerchantID'];
-					$obj->HashKey = $ECPay['ECPAY_HashKey'];
-					$obj->HashIV = $ECPay['ECPAY_HashIV'];
+					$obj->Send['MerchantID'] = $ECPay['MerchantID'];
+					$obj->HashKey = $ECPay['HashKey'];
+					$obj->HashIV = $ECPay['HashIV'];
 				else :
 					// 服務參數 (測試環境)
 					$obj->Send['MerchantID'] = '2000132';

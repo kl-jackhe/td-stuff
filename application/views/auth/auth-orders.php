@@ -18,7 +18,7 @@
                         <ol class="col-2 align-self-center text-center">付款狀態</ol>
                         <ol class="col-3 align-self-center text-center">出貨狀態</ol>
                     </li>
-                    <a v-for="self in order" class="orderInformation" @click="showOrderDetails(self)">
+                    <a v-for="self in order.slice(pageStart, pageEnd)" class="orderInformation" @click="showOrderDetails(self)">
                         <li class="row">
                             <ol class="col-5 align-self-center text-center">
                                 <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;{{ self.order_number }}</span>
@@ -26,8 +26,11 @@
                                 <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ self.created_at }}</span>
                             </ol>
                             <ol class="col-2 align-self-center text-center">{{ self.order_total }}</ol>
-                            <ol class="col-2 align-self-center text-center">{{ (self.order_pay_status == 'paid') ? '已付款' : '未付款' }}</ol>
-                            <ol class="col-3 align-self-center text-center">{{ self.CVSPaymentNo ? "已開設貨運單" : "未出貨" }}</ol>
+
+                            <ol class="col-2 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ (self.order_pay_status == 'paid') ? '已付款' : '未付款' }}</ol>
+                            <ol class="col-3 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ self.CVSPaymentNo ? "已開設貨運單" : "未出貨" }}</ol>
+                            <ol class="col-2 align-self-center text-center" v-if="self.order_step != 'confirm'">訂單已取消</ol>
+                            <ol class="col-3 align-self-center text-center" v-if="self.order_step != 'confirm'">訂單已取消</ol>
                         </li>
                     </a>
                 </div>
@@ -46,6 +49,7 @@
                         </li>
                     </a>
                 </div>
+                <?php require('pagination.php'); ?>
             </div>
         </div>
     </div>

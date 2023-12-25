@@ -26,6 +26,7 @@ class Auth_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->where('customer_id', $id);
+        $this->db->order_by('created_at', 'desc');
         $query = $this->db->get('orders');
         if ($query->num_rows() > 0) {
 			return $query->result_array();

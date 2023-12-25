@@ -44,6 +44,23 @@ class Auth extends Public_Controller
 		endif;
 	}
 
+	public function cancel_order($id)
+	{
+		$this->load->model('checkout_model');
+		$sel = $this->checkout_model->getSelectedOrder($id);
+		if (isset($sel)) :
+			$this->db->select('order_id, order_step');
+			$this->db->where('order_id', $id);
+			$query = $this->db->get('orders');
+			if ($query->num_rows() === 1) {
+				$this->db->update('orders', ['order_step' => 'cancel'], ['order_id' => $id]);
+			}
+			echo 'successful';
+		else :
+			echo 'unsuccessful';
+		endif;
+	}
+
 	/**
 	 * FB_Log the user in
 	 */

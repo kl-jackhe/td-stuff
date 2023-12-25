@@ -48,7 +48,7 @@
                         </a>
                     </div>
                     <?php echo form_close(); ?>
-                    <div id="separator" class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="col-sm-12 col-md-6 col-lg-6 separator">
                         <div class="text-center">
                             <span id="memberTitle">還不是「夥伴玩具有限公司」會員嗎？</span>
                         </div>
