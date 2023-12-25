@@ -90,6 +90,7 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
+                this.scrollToTop();
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
                 this.selectedCategoryId = categoryId;
@@ -99,8 +100,16 @@
             // 選中獨立訂單
             showOrderDetails(selected) {
                 // 抓被點到的訂單
+                this.scrollToTop();
                 this.selectedOrder = selected;
                 this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
+            },
+            // 將頁面滾動到頂部
+            scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 若要有平滑的滾動效果
+                });
             },
         },
     }).mount('#authApp');
@@ -222,8 +231,7 @@
                         if (data == 'unsuccessful') {
                             alert('登入失敗，請嘗試其他方式登入。');
                             window.location.href = '/auth';
-                        }
-                        else if (data !== null) {
+                        } else if (data !== null) {
                             window.location.href = '/';
                         }
                         console.log(data);

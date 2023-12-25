@@ -43,10 +43,6 @@
         </div>
         <!-- 商品詳情 -->
         <div ref="productDetail" id="productDetailStyle" class="productDetailStyle" v-if="selectedProduct">
-            <!-- 關閉商品詳情 -->
-            <!-- <span class="returnBtn" @click="hideProductDetails">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </span> -->
             <div class="detailTitle">
                 <h1>【{{ selectedProductCategoryId[0].product_category_name }}】</h1>
             </div>
@@ -330,6 +326,7 @@
             },
             // 按鈕篩選
             filterproductsByCategory() {
+
                 if (this.selectedCategoryId == 0) {
                     return this.products;
                 } else {

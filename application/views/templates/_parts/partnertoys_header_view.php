@@ -73,10 +73,6 @@
                                         <a class="logBtn" @click="confirmLogout">
                                             <i class="fa fa-sign-out" aria-hidden="true"></i>登出
                                         </a>
-                                    <?php else : ?>
-                                        <a class="logBtn" @click="confirmLogin">
-                                            <i class="fa fa-sign-in" aria-hidden="true"></i>登入
-                                        </a>
                                     <?php endif; ?>
                                 </div>
                             </div>

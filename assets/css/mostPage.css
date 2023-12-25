@@ -496,6 +496,8 @@ a.logBtn:hover {
     }
 }
 
+
+
 @media (max-width: 1401px) {
 
     /* 初始時 nav 是關閉的狀態 */
@@ -565,6 +567,25 @@ a.logBtn:hover {
         display: flex;
         align-items: center;
         /* 如果需要給右邊內容添加樣式 */
+    }
+
+    /* 主NAV */
+    .d-none,
+    .d-md-none,
+    .d-lg-block,
+    .d-xl-block {
+        display: none !important;
+    }
+
+    .d-block,
+    .d-md-block,
+    .d-lg-none,
+    .d-xl-none {
+        display: block !important;
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: block !important;
     }
 }
 
@@ -1467,6 +1488,8 @@ input.qtyminus {
         font-size: 14px;
     }
 }
+
+
 
 #FBgraph:hover {
     cursor: pointer;
