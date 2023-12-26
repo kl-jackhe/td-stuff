@@ -1587,6 +1587,7 @@ input.qtyminus {
 }
 
 #randomCheckcode {
+    cursor: pointer;
     height: 56%;
     max-width: 100%;
     overflow: hidden;

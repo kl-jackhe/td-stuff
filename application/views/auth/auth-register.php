@@ -1,3 +1,4 @@
+<?php require('auth-captcha.php'); ?>
 <!-- Auth function -->
 <div role="main" class="main pt-xlg-main">
     <div class="container">
@@ -14,6 +15,7 @@
                         $registerIdentity = isset($form_values['identity']) ? $form_values['identity'] : '';
                         $registerName = isset($form_values['name']) ? $form_values['name'] : '';
                         $registerEmail = isset($form_values['email']) ? $form_values['email'] : '';
+                        $registerSex = isset($form_values['sex']) ? $form_values['sex'] : '';
                     } ?>
                     <?php $attributes = array('id' => 'register'); ?>
                     <?php echo form_open('register', $attributes); ?>
@@ -43,9 +45,9 @@
                                 <div class="form-group">
                                     <label class="required" for="sex">性別</label>
                                     <select name="sex" id="sex" class="form-control" required>
-                                        <option class="form-control" value="" disabled selected>請選擇性別</option>
-                                        <option class="form-control" value="男">男</option>
-                                        <option class="form-control" value="女">女</option>
+                                        <option class="form-control" value="" disabled <?php echo (empty($registerSex)) ? 'selected' : ''; ?>>請選擇性別</option>
+                                        <option class="form-control" value="男" <?php echo (!empty($registerSex) && $registerSex == '男') ? 'selected' : ''; ?>>男</option>
+                                        <option class="form-control" value="女" <?php echo (!empty($registerSex) && $registerSex == '女') ? 'selected' : ''; ?>>女</option>
                                     </select>
                                 </div>
                             </div>
@@ -71,18 +73,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group" style="position: relative;">
+                            <div class="col-sm-12">
+                                <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">驗證碼</label>
                                     <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" required>
-                                    <a href="" onclick="refresh_code()"><img id="imgcode" src="captcha.php" /></a>
+                                    <a @click="randomCheckcode()"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image" style="position:absolute; top:30px; right:0;"></a>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="checkbox">
-                                    <label>
+                                <div class="form-group checkbox">
+                                    <label class="required">
                                         <input type="checkbox" id="agree" name="agree"> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>
                                     </label>
                                 </div>
@@ -93,6 +95,9 @@
                     <span id="error_text" style="color: red; font-weight: bold;"></span>
                     <input type="hidden" id="email_ok" value="0">
                     <input type="hidden" id="identity_ok" value="0">
+                    <div class="form-group">
+                        <input type="hidden" id="captcha" name="captcha" value="<?= $this->session->flashdata('captcha') ?>">
+                    </div>
                     <div class="form-action paddingFixTop text-center">
                         <span id="joinBtn" onclick="form_check()"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;加入會員</span>
                     </div>

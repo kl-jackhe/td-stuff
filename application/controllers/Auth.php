@@ -493,6 +493,24 @@ class Auth extends Public_Controller
 		// {
 		//     redirect($_SERVER['HTTP_REFERER']);
 		// }
+
+		// echo '<script>alert("' . $this->input->post('captcha') . '")</script>';
+		// echo '<script>alert("' . $this->input->post('sex') . '")</script>';
+
+		if ($this->is_partnertoys && empty($this->input->post('checkcode'))) {
+			$this->session->set_flashdata('form_values', $this->input->post());
+			$this->session->set_flashdata('registerMessage', '<br>【驗證碼】欄位為必填項目<br><br>');
+			redirect('auth/index?id=2', 'refresh');
+		} elseif (!empty($this->input->post('checkcode')) && !empty($this->input->post('captcha'))) {
+			$checkcode = $this->input->post('checkcode');
+			$captcha = $this->input->post('captcha');
+			if ($checkcode != $captcha) {
+				$this->session->set_flashdata('form_values', $this->input->post());
+				$this->session->set_flashdata('registerMessage', '<br>【驗證碼錯誤】請重新填寫驗證碼<br><br>');
+				redirect('auth/index?id=2', 'refresh');
+			}
+		}
+
 		if ($this->is_partnertoys && empty($this->input->post('sex'))) {
 			$this->session->set_flashdata('form_values', $this->input->post());
 			$this->session->set_flashdata('registerMessage', '<br>【性別】欄位為必填項目<br><br>');
@@ -514,7 +532,7 @@ class Auth extends Public_Controller
 		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
 
 		if ($this->form_validation->run() == true) {
-			$gender = ($this->input->post('gender') == '女' ? 'Female' : 'Male');
+			$gender = ($this->input->post('sex') == '女' ? 'Female' : 'Male');
 			$email = strtolower($this->input->post('email'));
 			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
 			$password = $this->input->post('password');

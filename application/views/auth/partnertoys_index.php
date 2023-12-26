@@ -147,6 +147,9 @@
                     });
                 }
             },
+            randomCheckcode() {
+                window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
+            },
             // 篩選清單呼叫
             toggleNav() {
                 this.isNavOpen = !this.isNavOpen;
@@ -217,21 +220,31 @@
         var email_ok = $('#email_ok').val();
         var password = $('#password').val();
         var password_confirm = $('#password_confirm').val();
-        // var agree = $('#agree:checkbox:checked').length;
+        var check_code = $('#checkcode').val();
+        var agreeCheckbox = document.getElementById('agree');
+        var sexSelect = document.getElementById('sex');
+
+        if (sexSelect.value === '') {
+            $('#error_text').html('請選擇性別');
+            return;
+        }
+
+        if (check_code != <?= json_encode($this->session->flashdata('captcha')) ?>) {
+            $('#error_text').html('驗證碼錯誤請重新填寫');
+            return;
+        }
+
+        if (!agreeCheckbox.checked) {
+            $('#error_text').html('請勾選同意網站服務條款');
+            return;
+        }
+
         if (password == password_confirm) {
-            // if(agree>0){
-            // } else {
-            //   $('#error_text').html('請勾選');
-            //   return false;
-            // }
             if (email_ok == 1) {} else {
                 $('#error_text').html('電子郵件不正確。');
                 return false;
             }
-            // if(email_ok==1 && agree>0){
-            // alert('Submit');
             document.getElementById("register").submit();
-            // }
         } else {
             $('#error_text').html('密碼與確認密碼不符。');
         }

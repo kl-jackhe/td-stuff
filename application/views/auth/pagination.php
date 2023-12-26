@@ -1,5 +1,5 @@
 <!-- 分頁 -->
-<ul v-if="totalPages !== 0" class="pagination" id="pagination_bottom">
+<ul v-if="order && totalPages !== 0" class="pagination" id="pagination_bottom">
     <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="currentPage !== 1 && setPage(1)">
         <a class="page_link" href="" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
