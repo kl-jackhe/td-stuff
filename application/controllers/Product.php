@@ -39,6 +39,28 @@ class Product extends Public_Controller
 		}
 	}
 
+	public function product_detail($product_id = null)
+	{
+		$this->data['page_title'] = '商品詳情';
+
+		$this->data['product_category'] = $this->product_model->get_product_category();
+
+		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
+		$this->data['productCategory'] = $this->product_model->get_product_category_name($this->data['product']['product_category_id']);
+
+		$this->data['productCombine'] = $this->product_model->getProduct_Combine($product_id);
+		$tmp = array(); // 用來儲存 $self['name'] 和 $self['current_price'] 的陣列
+		if (!empty($this->data['productCombine'])) {
+			foreach ($this->data['productCombine'] as $self) {
+				$tmp[] = ['id' =>  $self['id'], 'name' => $self['name'], 'current_price' => $self['current_price']];
+			}
+		}
+		// print_r($tmp);
+		$this->data['combineName'] = $tmp;
+		$this->data['productCombineItem'] = $this->product_model->get_product_combine_item($product_id);
+		$this->render('product/product-detail');
+	}
+
 	function ajaxData()
 	{
 		$conditions = array();

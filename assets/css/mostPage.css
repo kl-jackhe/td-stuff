@@ -480,7 +480,7 @@ a.logBtn:hover {
 .section-sidemenu {
     margin-right: 30px;
     margin-bottom: 50px;
-    margin-left: 16%;
+    margin-left: 12.5%;
     float: left;
     width: 15%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
@@ -488,7 +488,7 @@ a.logBtn:hover {
 
 .section-contents {
     float: left;
-    width: 50%;
+    width: 60%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
@@ -662,7 +662,7 @@ a.logBtn:hover {
     font-size: 22px;
     line-height: 40px;
     border-bottom: 2px solid;
-    border-image: linear-gradient(to right, #d35448, #ffffff);
+    border-image: linear-gradient(to right, #d35448, #ebabab 50%, #ebabab 50%, #d35448);
     border-image-slice: 1;
     padding: 0;
     margin: 0 0 20px 0;
@@ -828,31 +828,10 @@ input.qtyminus {
 
 .productDetail {
     padding: 20px;
-    margin: 60px 0;
 }
 
 #productApp {
     position: relative;
-}
-
-.productDetailStyle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: auto;
-    z-index: 1031;
-    /* background-color: #fff; */
-    background-color: #fff7eb;
-    border: 5px solid #cecece;
-    margin: 5% 15%;
-}
-
-@media (max-width:767px) {
-    .productDetailStyle {
-        margin: 0;
-    }
 }
 
 .postDetailStyle {
@@ -900,23 +879,6 @@ input.qtyminus {
     background-color: #007bff;
 }
 
-.detailTitle {
-    text-align: center;
-    color: #000000;
-    height: 80px;
-    line-height: 70px;
-    border-bottom: 2px solid;
-    border-image: linear-gradient(to right, #c3def5 0%, #000000 50%, #c3def5 100%);
-    border-image-slice: 1;
-    padding: 0;
-    margin: 40px 20px 0 35px;
-}
-
-.detailTitle h1 {
-    font-weight: bold;
-    font-size: 48px;
-}
-
 .scrollToDetailTop {
     position: fixed;
     bottom: 20px;
@@ -951,7 +913,6 @@ input.qtyminus {
 
 .cargoBtn {
     margin: 10px 0 10px 0;
-    font-family: 'Brush Script MT', cursive;
     padding: 10px;
     text-align: center;
 }
@@ -959,13 +920,11 @@ input.qtyminus {
 .cargoText {
     color: #e30020;
     font-size: 18px;
-    font-family: 'Brush Script MT', cursive;
     margin: 10px 0 10px 0;
     padding: 10px;
 }
 
 .cargoTitle {
-    font-family: 'Brush Script MT', cursive;
     margin: 10px 0 10px 0;
     padding: 10px;
 }
@@ -1105,11 +1064,6 @@ input.qtyminus {
 
 .newsText {
     font-size: 18px;
-    font-family: 'Brush Script MT', cursive;
-}
-
-.newsTitle {
-    font-family: 'Brush Script MT', cursive;
 }
 
 .link_href {
@@ -1493,6 +1447,12 @@ input.qtyminus {
     -o-transition: all .3s ease-in-out;
 }
 
+@media (max-width:1000px) {
+    #FBgraph {
+        font-size: 18px;
+    }
+}
+
 @media (max-width:450px) {
     #FBgraph {
         font-size: 14px;
@@ -1592,6 +1552,40 @@ input.qtyminus {
     max-width: 100%;
     overflow: hidden;
     border: 1px solid #efefef;
+}
+
+.tab.reset {
+    list-style: none;
+    font-size: 16px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    padding-left: 10px;
+}
+
+.tab.reset .current {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 2px;
+}
+
+.tab.reset span {
+    color: #fff;
+    text-decoration: none;
+    border-top-color: #333;
+    border-left-color: #333;
+    border-right-color: #333;
+    background-color: #333;
+    cursor: default;
+    position: relative;
+    display: block;
+    height: 40px;
+    font-size: 1rem;
+    line-height: 26px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 1px solid;
+    border-bottom: none;
+    padding: 7px 50px;
 }
 
 /* 修改滾動條 */
