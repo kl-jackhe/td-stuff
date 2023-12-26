@@ -9,7 +9,7 @@ class Product extends Public_Controller
 		$this->load->model('product_model');
 	}
 
-	public function index()
+	public function index($id = 1)
 	{
 		$this->data['page_title'] = '商品';
 
@@ -32,6 +32,7 @@ class Product extends Public_Controller
 			$this->render('product/index');
 		}
 		if ($this->is_partnertoys) {
+			$this->data['current_page'] = $id;
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 			$this->render('product/partnertoys_index');

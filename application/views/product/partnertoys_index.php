@@ -124,8 +124,6 @@
                 <div class="col-12 cargoDescription">
                     <div v-html="selectedProduct.product_description"></div>
                 </div>
-                <!-- Add a button for scrolling to the top -->
-                <span @click="scrollToDetailTop" class="scrollToDetailTop"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
             </div>
         </div>
         <?php // require('product-detail.php'); 
@@ -170,6 +168,7 @@
             this.initMagnificPopup();
             // init btn state
             if (this.products_categories && this.products_categories.length > 0) {
+                this.currentPage = parseInt(<? echo json_encode($current_page); ?>); // 目前page
                 this.selectedCategoryId = 0;
                 this.pageTitle = '全部商品';
                 if (this.getID && this.getID.length > 0) {
@@ -326,7 +325,6 @@
             },
             // 按鈕篩選
             filterproductsByCategory() {
-
                 if (this.selectedCategoryId == 0) {
                     return this.products;
                 } else {
@@ -334,24 +332,23 @@
                 }
             },
             filterByCategory(categoryId) {
-                this.selectedCategoryId = categoryId;
-                this.currentPage = 1; // 將頁碼設置為1
-                const selectedCategory = this.products_categories.find(category => category.product_category_id === categoryId);
-                this.pageTitle = selectedCategory.product_category_name;
+                window.location.href = <?= json_encode(base_url()) ?> + 'product/index' + (categoryId != null ? '?id=' + categoryId : '');
             },
             // 頁碼
             setPage(page) {
-                if (page <= 0 || page > this.totalPages || (page === this.totalPages && this.currentPage === this.totalPages)) {
+                console.log(page);
+                if (page <= 0 || page > this.totalPages || (page > this.totalPages && this.currentPage === this.totalPages) || (page === this.totalPages && this.currentPage === this.totalPages)) {
                     return;
                 }
                 this.isNavOpen = false;
                 this.currentPage = page;
-                this.scrollToTop();
+
+                window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
             },
             // 清除搜尋攔
             clearSearch() {
                 this.searchText = '';
-                this.filterByCategory(this.products_categories[0].product_category_id); // 在清除搜尋欄後自動執行第一個篩選
+                this.filterByCategory(0); // 在清除搜尋欄後自動執行篩選全部商品
             },
             // 篩選清單呼叫
             toggleNav() {
@@ -364,19 +361,6 @@
                     top: 0,
                     behavior: 'smooth' // 若要有平滑的滾動效果
                 });
-            },
-            // Method to scroll to the top of the productDetailStyle box
-            scrollToDetailTop() {
-                // Get the productDetailStyle element
-                const productDetailStyle = this.$refs.productDetail;
-
-                // Scroll to the top of the productDetailStyle element
-                if (productDetailStyle) {
-                    productDetailStyle.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                }
             },
         },
     });
