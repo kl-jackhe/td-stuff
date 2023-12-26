@@ -28,7 +28,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="required" for="identity">行動電話 <small style="color: #C52B29;">以行動電話作為登入帳號</small></label>
-                                    <input type="text" class="form-control" id="identity" name="identity" placeholder="09xxxxxxxx" value="<?php echo !empty($registerIdentity) ? $registerIdentity : ''; ?>" required>
+                                    <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼" value="<?php echo !empty($registerIdentity) ? $registerIdentity : ''; ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -37,6 +37,16 @@
                                 <div class="form-group">
                                     <label class="required" for="name">姓名</label>
                                     <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" value="<?php echo !empty($registerName) ? $registerName : ''; ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="required" for="sex">性別</label>
+                                    <select name="sex" id="sex" class="form-control" required>
+                                        <option class="form-control" value="" disabled selected>請選擇性別</option>
+                                        <option class="form-control" value="男">男</option>
+                                        <option class="form-control" value="女">女</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -60,25 +70,31 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="row d-none">
-                                <div class="col-sm-12">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" id="agree" name="agree"> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>及<a href="/about/privacy_policy" class="use-modal-btn">隱私政策</a>
-                                        </label>
-                                    </div>
-                                    <label id="agree-error" class="error" for="agree"></label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group" style="position: relative;">
+                                    <label class="required" for="checkcode">驗證碼</label>
+                                    <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" required>
+                                    <a href="" onclick="refresh_code()"><img id="imgcode" src="captcha.php" /></a>
                                 </div>
-                            </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="agree" name="agree"> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>
+                                    </label>
+                                </div>
+                                <label id="agree-error" class="error" for="agree"></label>
+                            </div>
+                        </div>
                     </div>
                     <span id="error_text" style="color: red; font-weight: bold;"></span>
                     <input type="hidden" id="email_ok" value="0">
                     <input type="hidden" id="identity_ok" value="0">
-                    <!-- <input type="hidden" name="now_url" value="<?php // echo base_url() . $_SERVER['REQUEST_URI'] 
-                                                                    ?>"> -->
                     <div class="form-action paddingFixTop text-center">
                         <span id="joinBtn" onclick="form_check()"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;加入會員</span>
-                        <!-- <input type="submit" value="免費註冊" class="btn btn-info btn-lg btn-block mt-xl mr-lg"> -->
                     </div>
                     <?php echo form_close() ?>
                 </div>

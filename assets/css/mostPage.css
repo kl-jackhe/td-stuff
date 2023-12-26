@@ -1586,6 +1586,13 @@ input.qtyminus {
     }
 }
 
+#randomCheckcode {
+    height: 56%;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid #efefef;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

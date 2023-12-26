@@ -493,6 +493,11 @@ class Auth extends Public_Controller
 		// {
 		//     redirect($_SERVER['HTTP_REFERER']);
 		// }
+		if ($this->is_partnertoys && empty($this->input->post('sex'))) {
+			$this->session->set_flashdata('form_values', $this->input->post());
+			$this->session->set_flashdata('registerMessage', '<br>【性別】欄位為必填項目<br><br>');
+			redirect('auth/index?id=2', 'refresh');
+		}
 
 		$tables = $this->config->item('tables', 'ion_auth');
 		$identity_column = $this->config->item('identity', 'ion_auth');
@@ -509,6 +514,7 @@ class Auth extends Public_Controller
 		$this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
 
 		if ($this->form_validation->run() == true) {
+			$gender = ($this->input->post('gender') == '女' ? 'Female' : 'Male');
 			$email = strtolower($this->input->post('email'));
 			$identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
 			$password = $this->input->post('password');
@@ -516,6 +522,7 @@ class Auth extends Public_Controller
 			$group = array('2');
 
 			$additional_data = array(
+				'gender'	   => $gender,
 				'full_name'    => $full_name,
 				'phone'        => $this->input->post('identity'),
 				'creator_id'   => 0,
