@@ -68,6 +68,7 @@ class Update extends Admin_Controller
                 $this->update_202312231600();
                 $this->update_202312231630();
                 $this->update_202312251830();
+                $this->update_202312271600();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -81,6 +82,29 @@ class Update extends Admin_Controller
         }
     }
 
+    function update_202312271600()
+    {
+        $version = '202312271600';
+        $description = '[product_combine]新增欄位[limit_qty]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product_combine LIKE 'limit_qty'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product_combine` ADD `limit_qty` varchar(64) NOT NULL  AFTER `limit_enable`;");
+            }
+            
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
     function update_202312251830()
     {
         $version = '202312251830';

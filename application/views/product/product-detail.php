@@ -18,14 +18,12 @@
                         <div class="col-bg-12 col-md-6 col-lg-6">
                             <div class="row">
                                 <!--商品名稱-->
-                                <h2 class="cargoTitle col-bg-12 col-md-12 col-lg-12"><?= $product['product_name']; ?></h2>
-                                <!--商品簡介:多行文字欄位-->
-                                <!-- <div class="cargoText col-bg-12 col-md-12 col-lg-12">待新增</div> -->
+                                <h2 class="cargoTitle col-sm-12 col-md-12 col-lg-12"><?= $product['product_name']; ?></h2>
                                 <!--價格-->
-                                <div class="cargoText col-bg-12 col-md-12 col-lg-12">
+                                <div class="cargoText col-sm-12 col-md-12 col-lg-12">
                                     <?php if (!empty($productCombine)) : ?>
                                         <div v-if="selectedCombineName != '請選擇方案'" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
-                                        <div v-if="selectedCombineName == '請選擇方案'" class="item">❌尚未選擇方案</div>
+                                        <div v-else class="item">❌尚未選擇方案</div>
                                     <?php else : ?>
                                         <div class="paddingFixTop">
                                             <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
@@ -34,6 +32,10 @@
                                         </div>
                                     <?php endif; ?>
                                 </div>
+                                <!--商品簡介:多行文字欄位-->
+                                <?php if (!empty($productCombine)) : ?>
+                                    <div v-if="selectedCombineName != '請選擇方案'" v-html="selectedCombine.description" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
+                                <?php endif; ?>
                                 <?php if (!empty($productCombine)) : ?>
                                     <!--方案選擇-->
                                     <select @change="updateSelectedCombine($event)" v-model="selectedCombineName" id="combineSelect" class="cargoBtn col-bg-12 col-md-12 col-lg-12">
@@ -45,13 +47,13 @@
                                         <?php endforeach; ?>
                                     </select>
                                     <!--商品數量-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }"  class="row cargoBtn col-12">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-12">
                                         <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
                                         <input class="col-8 cargoCountText" type="text" v-model="quantity">
                                         <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
                                     </div>
                                     <!--購買按鍵-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }"  class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
                                         <?php if ($product['sales_status'] == 0) : ?>
                                             <span class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
                                         <?php elseif ($product['sales_status'] == 2) : ?>
@@ -61,7 +63,7 @@
                                         <?php endif; ?>
                                     </div>
                                     <!--加入購物車-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }"  class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
                                         <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
                                     </div>
                                 <?php endif; ?>
@@ -75,7 +77,7 @@
                         <div class="col-12 cargoDescription">
                             <ul class="tab reset">
                                 <li class="current">
-                                    <span>商品介紹</span>
+                                    <span>商品介紹&nbsp;<i class='fas fa-angle-down'></i></span>
                                 </li>
                             </ul>
                             <?php echo $product['product_description']; ?>
@@ -134,7 +136,11 @@
             // 加入購物車(待修)
             add_cart() {
                 if (this.quantity < 1) {
-                    alert('商品不能低於1個');
+                    alert('商品數量不得低於1個');
+                    return;
+                }
+                if (this.selectedCombine.limit_enable == 'YES' && this.quantity > this.selectedCombine.limit_qty) {
+                    alert('商品數量不得超過' + this.selectedCombine.limit_qty + '個');
                     return;
                 }
                 $.ajax({

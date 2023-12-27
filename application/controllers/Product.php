@@ -49,14 +49,22 @@ class Product extends Public_Controller
 		$this->data['productCategory'] = $this->product_model->get_product_category_name($this->data['product']['product_category_id']);
 
 		$this->data['productCombine'] = $this->product_model->getProduct_Combine($product_id);
-		$tmp = array(); // 用來儲存 $self['name'] 和 $self['current_price'] 的陣列
+
+		$tmp = array();
 		if (!empty($this->data['productCombine'])) {
 			foreach ($this->data['productCombine'] as $self) {
-				$tmp[] = ['id' =>  $self['id'], 'name' => $self['name'], 'current_price' => $self['current_price']];
+				$tmp[] = [
+					'id' =>  $self['id'],
+					'name' => $self['name'],
+					'current_price' => $self['current_price'],
+					'description' => $self['description'],
+					'limit_enable' => $self['limit_enable'],
+					'limit_qty' => $self['limit_qty']
+				];
 			}
 		}
-		// print_r($tmp);
 		$this->data['combineName'] = $tmp;
+
 		$this->data['productCombineItem'] = $this->product_model->get_product_combine_item($product_id);
 		$this->render('product/product-detail');
 	}

@@ -650,6 +650,8 @@ a.logBtn:hover {
     padding: 30px;
 }
 
+
+
 .clearfix::after {
     content: "";
     display: table;
@@ -912,21 +914,35 @@ input.qtyminus {
 }
 
 .cargoBtn {
-    margin: 10px 0 10px 0;
+    font-size: 16px;
+    margin: 10px 0;
     padding: 10px;
     text-align: center;
 }
 
 .cargoText {
     color: #e30020;
-    font-size: 18px;
-    margin: 10px 0 10px 0;
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 10px;
     padding: 10px;
 }
 
+.cargoText .paddingFixTop {
+    font-size: 18px;
+}
+
 .cargoTitle {
-    margin: 10px 0 10px 0;
+    font-size: 22px;
+    margin-bottom: 10px;
     padding: 10px;
+}
+
+.cargoDetail {
+    color: rgb(72, 79, 83);
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .cargoCountBtn {

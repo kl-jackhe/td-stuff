@@ -449,6 +449,7 @@ class Product extends Admin_Controller
 			'description' => $this->input->post('product_combine_description'),
 			'type' => $this->input->post('any_specification'),
 			'limit_enable' => $this->input->post('limit_enable'),
+			'limit_qty' => $this->input->post('limit_qty'),
 		);
 		$this->db->where('id', $id);
 		$this->db->update('product_combine', $update_data);

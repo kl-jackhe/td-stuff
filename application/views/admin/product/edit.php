@@ -1,27 +1,32 @@
 <style>
-label {
-    font-weight: bold;
-    font-size: 16px;
-}
-.add-to-links {
-    display: none;
-}
-.featured-products-grid .item {
-    padding-bottom: 30px;
-    padding-top: 30px i !important;
-}
-.featured-products-grid .item .product-info {
-    min-height: 200px;
-    position: relative;
-}
-.featured-products-grid .item .product-info .price-box {
-    position: absolute;
-    bottom: 40px;
-}
-.featured-products-grid .item .product-info .actions {
-    position: absolute;
-    bottom: 0px;
-}
+    label {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .add-to-links {
+        display: none;
+    }
+
+    .featured-products-grid .item {
+        padding-bottom: 30px;
+        padding-top: 30px i !important;
+    }
+
+    .featured-products-grid .item .product-info {
+        min-height: 200px;
+        position: relative;
+    }
+
+    .featured-products-grid .item .product-info .price-box {
+        position: absolute;
+        bottom: 40px;
+    }
+
+    .featured-products-grid .item .product-info .actions {
+        position: absolute;
+        bottom: 0px;
+    }
 </style>
 
 <div class="row">
@@ -29,10 +34,10 @@ label {
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
-            <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2)?>" class="btn btn-info btn-sm hidden-print" style="margin-right: 10px;">返回上一頁</a>
+            <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info btn-sm hidden-print" style="margin-right: 10px;">返回上一頁</a>
             <a href="/admin/product/delete/<?php echo $product['product_id'] ?>" class="btn btn-danger btn-sm" style="float: right;" onClick="return confirm('您確定要刪除嗎?')">刪除商品</a>
             <a href="/admin/product/update_product_status/<?php echo $product['product_id'] ?>" class="btn btn-<?= ($product['product_status'] == 1 ? 'success' : 'danger') ?> btn-sm" style="float: right;margin-right: 15px;" onClick="return confirm('確定要<?= ($product['product_status'] == 1 ? '下' : '上') ?>架嗎?')"></i>
-            <span><?=($product['product_status'] == 1 ? '上架中' : '已下架') ?></span></a>
+                <span><?= ($product['product_status'] == 1 ? '上架中' : '已下架') ?></span></a>
         </div>
     </div>
     <div class="col-md-12">
@@ -59,9 +64,9 @@ label {
                         <div class="row">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-primary btn-sm">儲存</button>
-                                <?if ($this->is_td_stuff || $this->is_liqun_food) {?>
+                                <? if ($this->is_td_stuff || $this->is_liqun_food) { ?>
                                     <span class="btn btn-success btn-sm" onclick="createSingleSales(<?= $product['product_id'] ?>)">建立銷售頁面</span>
-                                <?}?>
+                                <? } ?>
                                 <hr>
                             </div>
                         </div>
@@ -82,14 +87,14 @@ label {
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <?if (!empty($product_category)) { ?>
+                                            <? if (!empty($product_category)) { ?>
                                                 <label for="product_category">分類</label>
                                                 <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
-                                                    <?foreach ($product_category as $pc_row) {?>
-                                                        <option value="<?=$pc_row['product_category_id']?>" <?=(!empty($select_product_category) && in_array($pc_row['product_category_id'], $select_product_category)?'selected':'')?>><?=$pc_row['product_category_name']?></option>
-                                                    <?}?>
+                                                    <? foreach ($product_category as $pc_row) { ?>
+                                                        <option value="<?= $pc_row['product_category_id'] ?>" <?= (!empty($select_product_category) && in_array($pc_row['product_category_id'], $select_product_category) ? 'selected' : '') ?>><?= $pc_row['product_category_name'] ?></option>
+                                                    <? } ?>
                                                 </select>
-                                            <?} else {
+                                            <? } else {
                                                 echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
                                             } ?>
                                         </div>
@@ -122,7 +127,7 @@ label {
                                             <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
                                         </div>
                                     </div>
-                                     <? if (!empty($delivery)) { ?>
+                                    <? if (!empty($delivery)) { ?>
                                         <div class="col-md-12">
                                             <label for="delivery">指定配送方式</label>
                                             <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
@@ -167,7 +172,7 @@ label {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="inventory">當前庫存量</label>
-                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?=intval($product['inventory']) ?>">
+                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?= intval($product['inventory']) ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +182,9 @@ label {
                                     <label for="product_image" class="control-label">封面圖片</label>
                                     <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=product_image<?php echo $product['product_id']; ?>&relative_url=1" class="btn btn-primary btn-sm fancybox" type="button" style="float: right;">選擇圖片</a>
                                     <?php if (!empty($product['product_image'])) { ?>
-                                        <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {echo 'display: none';} ?>">
+                                        <img src="/assets/uploads/<?php echo $product['product_image']; ?>" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive" style="<?php if (empty($product['product_image'])) {
+                                                                                                                                                                                                                echo 'display: none';
+                                                                                                                                                                                                            } ?>">
                                     <?php } else { ?>
                                         <img src="" id="product_image<?php echo $product['product_id']; ?>_preview" class="img-responsive">
                                     <?php } ?>
@@ -211,32 +218,32 @@ label {
                                                         <input type="text" class="form-control unit" name="unit[]" value="<?php echo $row['unit']; ?>">
                                                     </td>
                                                     <td>
-                                                        <input type="number" class="form-control" name="weight[]" value="<?=$row['weight']?>">
+                                                        <input type="number" class="form-control" name="weight[]" value="<?= $row['weight'] ?>">
                                                     </td>
                                                     <td>
                                                         <div class="input-group" style="margin-bottom: 10px;">
                                                             <span class="input-group-addon">長度</span>
-                                                            <input type="number" class="form-control" name="volume_length[]" min="0" value="<?=intval($row['volume_length']) ?>">
+                                                            <input type="number" class="form-control" name="volume_length[]" min="0" value="<?= intval($row['volume_length']) ?>">
                                                         </div>
                                                         <div class="input-group" style="margin-bottom: 10px;">
                                                             <span class="input-group-addon">寬度</span>
-                                                            <input type="number" class="form-control" name="volume_width[]" min="0" value="<?=intval($row['volume_width']) ?>">
+                                                            <input type="number" class="form-control" name="volume_width[]" min="0" value="<?= intval($row['volume_width']) ?>">
                                                         </div>
                                                         <div class="input-group">
                                                             <span class="input-group-addon">高度</span>
-                                                            <input type="number" class="form-control" name="volume_height[]" min="0" value="<?=intval($row['volume_height']) ?>">
+                                                            <input type="number" class="form-control" name="volume_height[]" min="0" value="<?= intval($row['volume_height']) ?>">
                                                         </div>
                                                     </td>
                                                     <td class="text-center"><i class="fa-solid fa-trash x"></i></td>
                                                 </tr>
-                                            <? }
+                                        <? }
                                         } ?>
                                     </tbody>
                                 </table>
                                 <hr>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" hidden>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>規格</label>
@@ -266,7 +273,9 @@ label {
                                                             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=picture<?php echo $row['id']; ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
                                                         </div>
                                                         <?php if (!empty($row['picture'])) { ?>
-                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive" style="<?php if (empty($row['picture'])) {echo 'display: none';} ?>;max-width: 100px;width: 100%;">
+                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive" style="<?php if (empty($row['picture'])) {
+                                                                                                                                                                                                        echo 'display: none';
+                                                                                                                                                                                                    } ?>;max-width: 100px;width: 100%;">
                                                         <?php } else { ?>
                                                             <img src="" id="picture<?php echo $row['id']; ?>_preview" class="img-responsive">
                                                         <?php } ?>
@@ -327,11 +336,12 @@ label {
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
                                         <th style="width: 20%;">名稱</th>
-                                        <th style="width: 20%;">原價</th>
-                                        <th style="width: 20%;">方案價</th>
+                                        <th style="width: 10%;">原價</th>
+                                        <th style="width: 10%;">方案價</th>
+                                        <th style="width: 10%;">限購數量</th>
                                         <th style="width: 20%;">描述</th>
                                         <th style="width: 20%;">圖片</th>
-                                        <th style="width: 20%;">操作</th>
+                                        <th style="width: 10%;">操作</th>
                                     </tr>
                                     <?php if (!empty($product_combine)) {
                                         foreach ($product_combine as $row) { ?>
@@ -339,6 +349,22 @@ label {
                                                 <td><?php echo $row['name']; ?></td>
                                                 <td><?php echo $row['price']; ?></td>
                                                 <td><?php echo $row['current_price']; ?></td>
+                                                <td>
+                                                    <select class="form-control" name="limit_enable[]" disabled>
+                                                        <? if (!empty($row['limit_enable'])) { ?>
+                                                            <option value="YES" selected>啟用</option>
+                                                            <option value="">停用</option>
+                                                        <? } else { ?>
+                                                            <option value="YES">啟用</option>
+                                                            <option value="" selected>停用</option>
+                                                        <? } ?>
+                                                    </select>
+                                                    <? if ($row['limit_qty'] > 0) { ?>
+                                                        <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" value="<?= $row['limit_qty'] ?>" disabled>
+                                                    <? } else { ?>
+                                                        <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" disabled>
+                                                    <? } ?>
+                                                </td>
                                                 <td><?php echo $row['description']; ?></td>
                                                 <td>
                                                     <?php if (!empty($row['picture'])) { ?>
@@ -415,7 +441,7 @@ label {
         if (activeTab) {
             $('a[href="' + activeTab + '"]').tab('show');
         }
-        $('body').on('click', 'a[data-toggle=\'tab\']', function (e) {
+        $('body').on('click', 'a[data-toggle=\'tab\']', function(e) {
             e.preventDefault()
             var tab_name = this.getAttribute('href')
             if (history.pushState) {
@@ -427,7 +453,7 @@ label {
             $(this).tab('show');
             return false;
         });
-        $(window).on('popstate', function () {
+        $(window).on('popstate', function() {
             var anchor = location.hash ||
                 $('a[data-toggle=\'tab\']').first().attr('href');
             $('a[href=\'' + anchor + '\']').tab('show');
