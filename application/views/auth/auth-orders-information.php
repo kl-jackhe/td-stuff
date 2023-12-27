@@ -77,10 +77,13 @@
                             </div>
                             <div class="col-4 text-right">訂購人：</div>
                             <div class="col-8">{{ selectedOrder.customer_name }}</div>
+                            <div class="col-4 text-right">付款方式：</div>
+                            <div class="col-8">{{ (selectedOrder.order_payment == 'ecpay') ? '綠界金流' : '貨到付款' }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
                             <div class="col-8">{{ selectedOrder.customer_email }}</div>
+                            
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">

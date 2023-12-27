@@ -1,21 +1,27 @@
+<button type="button" onclick="returnMainMenu()" class="btn btn-primary" style="margin-bottom: 20px;">
+    <i class="fa fa-reply" aria-hidden="true"></i>&nbsp;返回
+</button>
 <div class="row">
     <div class="col-md-3">
         <div class="content-box-large">
-            <?php $attributes = array('class' => 'menu', 'id' => 'menu'); ?>
-            <?php echo form_open('admin/menu/insert', $attributes); ?>
+            <?php $attributes = array('class' => 'sub-menu', 'id' => 'sub-menu'); ?>
+            <?php echo form_open('admin/menu/sub_insert', $attributes); ?>
             <div class="form-group">
                 <label for="menu_name">選單名稱</label>
-                <input type="text" class="form-control" id="menu_name" name="menu_name" required>
+                <input type="text" class="form-control" name="menu_name" required>
             </div>
             <div class="form-group">
                 <label for="menu_type">類型</label>
                 <select class="form-control" name="menu_type">
-                    <option value="Main" selected>主要選單</option>
+                    <option value="Sub">次要選單</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="menu_sort">排序</label>
-                <input type="number" class="form-control" id="menu_sort" name="menu_sort" min="1" value="1">
+                <input type="number" class="form-control" name="menu_sort" min="1" value="1">
+            </div>
+            <div hidden class="form-group">
+                <input class="form-control" name="parent_id" value="<?= $parent_id; ?>">
             </div>
             <div class="form-group">
                 <button type="button" onclick="form_check()" class="btn btn-primary">新增</button>
@@ -32,7 +38,6 @@
                         <th class="text-center">類型</th>
                         <th class="text-center">排序</th>
                         <th class="text-center">狀態</th>
-                        <th class="text-center">子項目操作</th>
                         <th class="text-center">操作</th>
                     </tr>
                 </thead>
@@ -44,11 +49,8 @@
                             <td class="text-center"><?= $data['sort'] ?></td>
                             <td class="text-center"><?= $data['status'] == 1 ? '開啟中' : '關閉中'; ?></td>
                             <td class="text-center">
-                                <a href="/admin/menu/sub_index/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></a>
-                            </td>
-                            <td class="text-center">
                                 <a href="/admin/menu/edit/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="/admin/menu/delete/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
+                                <a href="/admin/menu/sub_delete/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
                     <? }
@@ -65,6 +67,10 @@
 </div>
 
 <script>
+    function returnMainMenu() {
+        window.location.href = <?= json_encode(base_url()) ?> + 'admin/menu';
+    }
+
     function form_check() {
         var menu_name = $('#menu_name').val();
         var menu_sort = $('#menu_sort').val();
@@ -83,6 +89,6 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        document.getElementById("menu").submit();
+        document.getElementById("sub-menu").submit();
     }
 </script>
