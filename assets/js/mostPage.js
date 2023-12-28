@@ -22,7 +22,7 @@ $(document).ready(function () {
     if (scrolled > 40) {
       headerFixed.css('top', '0')
     } else {
-      headerFixed.css('top', '37px')
+      headerFixed.css('top', '35px')
     }
   }
 
@@ -39,7 +39,8 @@ $(document).ready(function () {
 
   // 检查是否在特定页面
   if (
-    currentPageUrl.indexOf('/product') !== -1 ||
+    (currentPageUrl.indexOf('/product/product_detail') === -1 &&
+      currentPageUrl.indexOf('/product') !== -1) ||
     currentPageUrl.indexOf('/posts') !== -1
   ) {
     // 在特定页面显示搜索图标
@@ -55,4 +56,3 @@ document.getElementById('searchLink').addEventListener('click', function () {
   var event = new Event('toggleSearch')
   document.dispatchEvent(event)
 })
-
