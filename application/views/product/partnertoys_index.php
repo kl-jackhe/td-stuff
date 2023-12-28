@@ -1,58 +1,62 @@
 <div id="productApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <!-- Menu -->
-        <?php require('product-menu.php'); ?>
+        <?php if (!empty($product_category)) : ?>
+            <?php require('product-menu.php'); ?>
+        <?php endif; ?>
 
-        <div class="section-contents">
-            <div class="container">
-                <h1><span>{{ pageTitle }}</span></h1>
-            </div>
+        <?php if (!empty($products)) : ?>
+            <div class="section-contents">
+                <div class="container">
+                    <h1><span>{{ pageTitle }}</span></h1>
+                </div>
 
-            <!-- 全部商品 -->
-            <div class="container">
-                <!-- Product Start -->
-                <div class="row">
-                    <div id="data" class="col-12">
-                        <div class="text-center">
-                            <div class="row" id="product_index">
-                                <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
-                                    <a class="productMagnificPopupTrigger" @click="showProductDetails(self.product_id)">
-                                        <div class="product_view_style_in">
-                                            <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
-                                            <div class="product_name">
-                                                <span>{{ self.product_name }}</span>
-                                                <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
-                                                <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
-                                                <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
+                <!-- 全部商品 -->
+                <div class="container">
+                    <!-- Product Start -->
+                    <div class="row">
+                        <div id="data" class="col-12">
+                            <div class="text-center">
+                                <div class="row" id="product_index">
+                                    <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
+                                        <a class="productMagnificPopupTrigger" @click="showProductDetails(self.product_id)">
+                                            <div class="product_view_style_in">
+                                                <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
+                                                <div class="product_name">
+                                                    <span>{{ self.product_name }}</span>
+                                                    <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
+                                                    <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
+                                                    <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div v-if="filteredProducts.length === 0" class="col-12 text-center">
-                    <p style="height: 300px;">------目前暫無對應商品------</p>
-                </div>
-                <!-- Product End -->
+                    <div v-if="filteredProducts.length === 0" class="col-12 text-center">
+                        <p style="height: 300px;">------目前暫無對應商品------</p>
+                    </div>
+                    <!-- Product End -->
 
-                <!-- Pagination -->
-                <?php require('pagination.php'); ?>
+                    <!-- Pagination -->
+                    <?php require('pagination.php'); ?>
+                </div>
             </div>
-        </div>
     </section>
+<?php endif; ?>
 </div>
 
 <script>
     const productApp = Vue.createApp({
         data() {
             return {
-                hiddenSearch: false,
+                hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
-                products: <?php echo json_encode($products); ?>, // products資料庫所有類及項目
-                products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
+                products: <?php echo json_encode(!empty($products) ? $products : ''); ?>, // products資料庫所有類及項目
+                products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
                 perpage: 12, // 一頁的資料數
                 currentPage: 1, // 目前page
@@ -64,7 +68,7 @@
         mounted() {
             // init btn state
             if (this.products_categories && this.products_categories.length > 0) {
-                this.currentPage = parseInt(<? echo json_encode($current_page); ?>); // 目前page
+                this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
                 this.selectedCategoryId = 0;
                 this.pageTitle = '全部商品';
                 if (this.getID && this.getID.length > 0) {
@@ -73,6 +77,13 @@
                     this.pageTitle = tmpSet[0].product_category_name;
                 }
             }
+            // 監聽是否有按下搜尋
+            document.addEventListener('toggleSearch', () => {
+                // 处理事件触发后的逻辑
+                // 显示搜寻栏的逻辑
+                this.hiddenSearch = !this.hiddenSearch;
+                console.log(this.hiddenSearch);
+            });
         },
         computed: {
             // 篩選&搜尋
@@ -128,7 +139,7 @@
             // 選中獨立商品
             showProductDetails(selected) {
                 // 初始化方案選項
-                window.location.href = <?= json_encode(base_url());?> + 'product/product_detail/' + selected + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
+                window.location.href = <?= json_encode(base_url()); ?> + 'product/product_detail/' + selected + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
             },
             // 搜尋攔篩選
             filterproductsBySearch() {

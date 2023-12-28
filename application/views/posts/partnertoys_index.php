@@ -68,6 +68,7 @@
     const postApp = Vue.createApp({
         data() {
             return {
+                hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
                 selectedPostCategoryId: null, // 選中的消息類別
@@ -110,6 +111,13 @@
                     type: 'inline'
                 },
                 mainClass: 'mfp-zoom-in', // Add a zoom-in effect if you like
+            });
+            // 監聽是否有按下搜尋
+            document.addEventListener('toggleSearch', () => {
+                // 处理事件触发后的逻辑
+                // 显示搜寻栏的逻辑
+                this.hiddenSearch = !this.hiddenSearch;
+                console.log(this.hiddenSearch);
             });
         },
         computed: {

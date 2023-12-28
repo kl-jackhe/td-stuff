@@ -73,7 +73,7 @@
                             <!-- 常駐ICON -->
                             <ul class="header-icons">
                                 <li>
-                                    <a href="#" class="">
+                                    <a href="javascript:void(0);" id="searchLink" class="search-icon">
                                         <i class="fas fa-search"></i>
                                     </a>
                                 </li>
@@ -145,40 +145,3 @@
                 </div>
             </div>
         </header>
-
-        <script>
-            const headerapp = Vue.createApp({
-                methods: {
-                    confirmLogout() {
-                        // 使用原生的 confirm 对话框
-                        const confirmLogout = confirm('確定要登出嗎？');
-
-                        if (confirmLogout) {
-                            // 用户点击确认后，执行登出操作
-                            window.location.href = '/auth/logout';
-                        }
-                    },
-                },
-            }).mount('#headerApp');
-
-            $(document).ready(function() {
-                var headerFixed = $(".header_fixed_top");
-
-                // 滚动事件处理函数
-                function handleScroll() {
-                    var scrolled = $(window).scrollTop();
-
-                    if (scrolled > 40) {
-                        headerFixed.css("top", "0");
-                    } else {
-                        headerFixed.css("top", "37px");
-                    }
-                }
-
-                // 刷新后立即触发一次滚动事件
-                handleScroll();
-
-                // 监听滚动事件
-                $(window).scroll(handleScroll);
-            });
-        </script>
