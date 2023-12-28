@@ -51,6 +51,45 @@ label.required::before {
     color: white;
 }
 
+#absoluteHeader .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-icons {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header-icons li {
+    position: relative;
+    float: left;
+    padding: 0 13px;
+}
+
+.header-icons li:after {
+    content: '';
+    position: absolute;
+    top: 11px;
+    right: 0;
+    width: 1px;
+    height: 10px;
+    background: rgba(255, 255, 255, .5);
+}
+
+.header-icons a {
+    font-size: 20px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-icons a:hover {
+    color: #ffe747;
+}
+
 #mem_login {
     display: flex;
     align-items: center;
@@ -73,10 +112,6 @@ label.required::before {
     width: 100%;
     top: 37px;
     z-index: 1030;
-    transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -webkit-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
 }
 
 .header_logo {
@@ -1641,6 +1676,7 @@ input.qtyminus {
 }
 
 #termsOfMembership {
+    font-size: 14px;
     position: fixed;
     width: 1000px;
     height: auto;
@@ -1665,6 +1701,14 @@ input.qtyminus {
     margin: 20px 0 10px;
     overflow-y: auto;
     box-sizing: border-box;
+    padding-right: 15px;
+}
+
+
+@media (max-width: 600px) {
+    #termsOfMembership {
+        padding: 15px;
+    }
 }
 
 @media (max-width: 1100px) {
@@ -1678,10 +1722,7 @@ input.qtyminus {
     }
 
     .membershipContent {
-        max-height: 100%;
-        /* 100% 表示完整高度 */
         margin: 20px auto 10px;
-        /* 调整底部 margin 以留白 */
     }
 }
 

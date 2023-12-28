@@ -114,7 +114,9 @@
                 </div>
                 <div class="memberTitleChinese col-12 text-center">會員加入條款</div>
                 <div class="membershipLine"></div>
-                <div class="membershipContent" v-html="membership"></div>
+                <div class="membershipContent">
+                    <?php echo !empty($membership['page_info']) ? $membership['page_info'] : ''; ?>
+                </div>
             </div>
         </div>
     </div>

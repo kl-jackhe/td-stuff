@@ -47,13 +47,17 @@
                                         <?php endforeach; ?>
                                     </select>
                                     <!--商品數量-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-12">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
                                         <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
                                         <input class="col-8 cargoCountText" type="text" v-model="quantity">
                                         <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
                                     </div>
+                                    <!--運費說明-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
+                                    </div>
                                     <!--購買按鍵-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
                                         <?php if ($product['sales_status'] == 0) : ?>
                                             <span class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
                                         <?php elseif ($product['sales_status'] == 2) : ?>
@@ -63,8 +67,12 @@
                                         <?php endif; ?>
                                     </div>
                                     <!--加入購物車-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-bg-12 col-md-12 col-lg-6">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
                                         <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                                    </div>
+                                    <!--加入追蹤清單-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick likeBtn"><i class="fas fa-heart"></i>加入追蹤清單</span>
                                     </div>
                                 <?php endif; ?>
 
@@ -87,6 +95,19 @@
             </div>
         </div>
     </section>
+    <!-- mfp -->
+    <div id="termsPopupWrapper">
+        <div id="termsOfMembership" class="mfp-hide">
+            <div class="col-12 text-center">
+                <span class="memberTitleMember">FREIGHT<span class="memberTitleLogin">&nbsp;DESCRIPTION</span></span>
+            </div>
+            <div class="memberTitleChinese col-12 text-center">運費說明</div>
+            <div class="membershipLine"></div>
+            <div class="membershipContent">
+                <?php echo !empty($instructions['page_info']) ? $instructions['page_info'] : ''; ?>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -95,8 +116,8 @@
             return {
                 hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
-                products_categories: <?php echo json_encode($product_category); ?>, // products_category資料庫所有類及項目
-                combineName: <?php echo json_encode($combineName); ?>,
+                products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
+                combineName: <?php echo json_encode(!empty($combineName) ? $combineName : ''); ?>,
                 selectedCombine: null,
                 selectedCombineName: '請選擇方案',
                 selectedCategoryId: 0,
@@ -107,6 +128,8 @@
             };
         },
         mounted() {
+            // 初始化 Magnific Popup
+            this.initMagnificPopup();
             // init btn state
             if (this.products_categories && this.products_categories.length > 0) {
                 this.selectedCategoryId = 0;
@@ -116,6 +139,32 @@
             }
         },
         methods: {
+            // 初始化 Magnific Popup
+            initMagnificPopup() {
+                // 使用 Magnific Popup 的初始化逻辑，例如：
+                $('.popup-link').magnificPopup({
+                    type: 'inline',
+                    midClick: true // 允许使用中键点击
+                    // 更多配置项可以根据需求添加
+                });
+            },
+            toggleTermsPopup() {
+                // 获取 Magnific Popup 插件实例
+                const magnificPopup = $.magnificPopup.instance;
+
+                // 切换弹窗的显示状态
+                if (magnificPopup.isOpen) {
+                    magnificPopup.close();
+                } else {
+                    magnificPopup.open({
+                        items: {
+                            src: '#termsOfMembership'
+                        },
+                        type: 'inline'
+                        // 更多 Magnific Popup 配置项可根据需要添加
+                    });
+                }
+            },
             updateSelectedCombine(event) {
                 // 取得所選方案的名稱
                 this.selectedCombineName = event.target.value;

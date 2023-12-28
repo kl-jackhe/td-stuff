@@ -7,6 +7,9 @@ class Product extends Public_Controller
 	{
 		parent::__construct();
 		$this->load->model('product_model');
+		if ($this->is_partnertoys) :
+			$this->load->model('auth_model');
+		endif;
 	}
 
 	public function index($id = 1)
@@ -49,6 +52,8 @@ class Product extends Public_Controller
 		$this->data['productCategory'] = $this->product_model->get_product_category_name($this->data['product']['product_category_id']);
 
 		$this->data['productCombine'] = $this->product_model->getProduct_Combine($product_id);
+
+		$this->data['instructions'] = $this->auth_model->getStandardPageList('LogisticsAndPayment');
 
 		$tmp = array();
 		if (!empty($this->data['productCombine'])) {

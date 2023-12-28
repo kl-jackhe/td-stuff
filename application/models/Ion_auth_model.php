@@ -1112,7 +1112,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// 適當的業務邏輯處理，例如檢查用戶，更新數據庫等
-		$this->db->select('email, id, fb_id, password, active, last_login');
+		$this->db->select('email, id, username, fb_id, password, active, last_login');
 		$this->db->where('email', $user_data['email']);
 		$query = $this->db->get('users');
 
@@ -1130,6 +1130,7 @@ class Ion_auth_model extends CI_Model
 			}
 			$this->db->update('users', ['last_login' => time()], ['id' => $user->id]);
 			$this->set_session($user);
+			
 			return TRUE;
 		} else {
 			$password = $this->hash_password($user_data['userID']);

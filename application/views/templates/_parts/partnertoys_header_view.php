@@ -56,12 +56,33 @@
                 <div class="container-fluid">
                     <div id="absoluteHeader">
                         <div class="container">
-                            <?php if (!empty($this->session->userdata('username'))) :  ?>
-                                <div id="mem_login">
+                            <!-- 登入顯示 -->
+                            <div id="mem_login">
+                                <?php
+                                // echo '<pre>';
+                                // print_r($this->session->userdata());
+                                // echo '</pre>';
+                                ?>
+                                <?php if (!empty($this->session->userdata('username'))) :  ?>
                                     <i class="fas fa-user"></i>：<?= $this->session->userdata('username') ?>
                                     <span class="logoutBnt" @click="confirmLogout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</span>
-                                </div>
-                            <?php endif; ?>
+                                <?php else : ?>
+                                    <i class="fas fa-user"></i>：訪客
+                                <?php endif; ?>
+                            </div>
+                            <!-- 常駐ICON -->
+                            <ul class="header-icons">
+                                <li>
+                                    <a href="#" class="">
+                                        <i class="fas fa-search"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/auth">
+                                        <i class="fas fa-user"></i>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="row py-2 justify-content-center header_fixed_top">
@@ -143,20 +164,21 @@
             $(document).ready(function() {
                 var headerFixed = $(".header_fixed_top");
 
-                var scrollPrev = 0;
-
-                $(window).scroll(function() {
+                // 滚动事件处理函数
+                function handleScroll() {
                     var scrolled = $(window).scrollTop();
 
-                    // 如果滚动距离超过30px且往上滚动，则逐渐隐藏 header
                     if (scrolled > 40) {
                         headerFixed.css("top", "0");
                     } else {
-                        // 否则，完全显示 header
                         headerFixed.css("top", "37px");
                     }
+                }
 
-                    scrollPrev = scrolled;
-                });
+                // 刷新后立即触发一次滚动事件
+                handleScroll();
+
+                // 监听滚动事件
+                $(window).scroll(handleScroll);
             });
         </script>

@@ -31,7 +31,7 @@ class Auth extends Public_Controller
 
 			if (empty($this->session->userdata('user_id'))) :
 				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
-				$this->data['membership'] = $this->auth_model->getStandardPageList(2);
+				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
 				else :
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');

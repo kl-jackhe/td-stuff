@@ -68,7 +68,6 @@
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
-                membership: <?php echo json_encode(!empty($membership[0]['page_info']) ? $membership[0]['page_info'] : ''); ?>,
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
                 perpage: 5, // 一頁的資料數

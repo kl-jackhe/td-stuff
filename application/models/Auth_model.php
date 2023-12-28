@@ -47,17 +47,19 @@ class Auth_model extends CI_Model
         }
     }
 
-    function getStandardPageList($id = null)
+    function getStandardPageList($name = null)
     {
         $this->db->select('*');
-        if (!empty($id)) {
-            $this->db->where('id', $id);
+        if (!empty($name)) {
+            $this->db->where('page_name', $name);
             $query = $this->db->get('standard_page_list');
         } else {
             $query = $this->db->get('standard_page_list');
         }
 
-        if ($query->num_rows() > 0) {
+        if (!empty($name) && $query->num_rows() > 0) {
+            return $query->row_array();
+        } elseif (empty($name) && $query->num_rows() > 0) {
             return $query->result_array();
         } else {
             return false;
