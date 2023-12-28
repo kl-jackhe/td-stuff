@@ -38,7 +38,6 @@
                         <th class="text-center">類型</th>
                         <th class="text-center">排序</th>
                         <th class="text-center">狀態</th>
-                        <th class="text-center">次子項目操作</th>
                         <th class="text-center">操作</th>
                     </tr>
                 </thead>
@@ -50,9 +49,6 @@
                             <td class="text-center"><?= $data['sort'] ?></td>
                             <td class="text-center"><?= $data['status'] == 1 ? '開啟中' : '關閉中'; ?></td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></a>
-                            </td>
-                            <td class="text-center">
                                 <a href="/admin/menu/edit/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="/admin/menu/sub_delete/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
                             </td>
@@ -60,7 +56,7 @@
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="5">
                             <br>
                             <br>
                             <br>
@@ -99,6 +95,4 @@
 
         document.getElementById("sub-menu").submit();
     }
-
-
 </script>

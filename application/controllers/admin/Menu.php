@@ -57,6 +57,50 @@ class Menu extends Admin_Controller
         redirect(base_url() . 'admin/menu/sub_index/' . $parent_id);
     }
 
+    function update()
+    {
+        $this->data['menu'] = $this->getMenuData();
+        $id = $this->input->post('id');
+        $name = $this->input->post('name');
+        $sort = $this->input->post('sort');
+        $status = $this->input->post('status');
+        $message = '更新失敗';
+
+        if (!empty($this->data['menu'])) {
+            foreach ($this->data['menu'] as $self) {
+                if ($sort == $self['sort']) {
+                    if ($id != $self['id']) {
+                        echo $message;
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (!empty($id) && !empty($name) && !empty($sort) && !empty($status)) {
+            try {
+                $updateData = array(
+                    'id' => $id,
+                    'name' => $name,
+                    'sort' => $sort,
+                    'status' => $status,
+                );
+                $this->db->where('id', $id);
+                $this->db->update('menu', $updateData);
+                $message = '更新成功';
+            } catch (Exception $e) {
+                $message = $e->getMessage();
+            }
+        }
+        $this->session->set_flashdata('message', $message);
+        echo $message;
+        return;
+    }
+
+    function sub_update()
+    {
+    }
+
     function delete($id)
     {
         $this->db->where('id', $id);

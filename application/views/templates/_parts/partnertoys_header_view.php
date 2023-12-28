@@ -54,6 +54,16 @@
         <header id="header">
             <div id="headerApp">
                 <div class="container-fluid">
+                    <div id="absoluteHeader">
+                        <div class="container">
+                            <?php if (!empty($this->session->userdata('username'))) :  ?>
+                                <div id="mem_login">
+                                    <i class="fas fa-user"></i>：<?= $this->session->userdata('username') ?>
+                                    <span class="logoutBnt" @click="confirmLogout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</span>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                     <div class="row py-2 justify-content-center header_fixed_top">
                         <div class="col-5 col-md-3 col-lg-2" style="align-self: center;">
                             <a href="<?php echo base_url() ?>">
@@ -69,11 +79,6 @@
                                     <a href="#" class="nav_item_style">合作介紹</a>
                                     <a href="#" class="nav_item_style">經銷通路</a>
                                     <a href="/auth" class="nav_item_style">會員專區</a>
-                                    <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                        <a class="logBtn" @click="confirmLogout">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i>登出
-                                        </a>
-                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -109,13 +114,9 @@
                             </li>
                             <li class="nav_item_mb_style">
                                 <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                    <button class="logBtn" @click="confirmLogout">
+                                    <span class="logoutPhone" @click="confirmLogout">
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>登出
-                                    </button>
-                                <?php else : ?>
-                                    <button class="logBtn" @click="confirmLogin">
-                                        <i class="fa fa-sign-in" aria-hidden="true"></i>登入
-                                    </button>
+                                    </span>
                                 <?php endif; ?>
                             </li>
                         </ul>
@@ -127,9 +128,6 @@
         <script>
             const headerapp = Vue.createApp({
                 methods: {
-                    confirmLogin() {
-                        window.location.href = '/auth';
-                    },
                     confirmLogout() {
                         // 使用原生的 confirm 对话框
                         const confirmLogout = confirm('確定要登出嗎？');
@@ -141,4 +139,24 @@
                     },
                 },
             }).mount('#headerApp');
+
+            $(document).ready(function() {
+                var headerFixed = $(".header_fixed_top");
+
+                var scrollPrev = 0;
+
+                $(window).scroll(function() {
+                    var scrolled = $(window).scrollTop();
+
+                    // 如果滚动距离超过30px且往上滚动，则逐渐隐藏 header
+                    if (scrolled > 40) {
+                        headerFixed.css("top", "0");
+                    } else {
+                        // 否则，完全显示 header
+                        headerFixed.css("top", "37px");
+                    }
+
+                    scrollPrev = scrolled;
+                });
+            });
         </script>

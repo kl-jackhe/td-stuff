@@ -39,6 +39,25 @@ label.required::before {
     border: 1px solid #e3e3e3;
 }
 
+#absoluteHeader {
+    position: absolute;
+    z-index: 1031;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 37px;
+    background-color: rgba(239, 132, 104, 1.0);
+    padding: 0;
+    color: white;
+}
+
+#mem_login {
+    display: flex;
+    align-items: center;
+    margin: 7px;
+    font-size: 14px;
+}
+
 .header_relative_top {
     background-color: #fff;
     position: relative;
@@ -49,9 +68,15 @@ label.required::before {
     background-color: #fff;
     position: fixed;
     box-shadow: 0 5px 30px 5px #E0E0E0;
+    background: url(/assets/uploads/bg_nav.png) 0 0 repeat-x;
+    height: 80px;
     width: 100%;
-    top: 0;
+    top: 37px;
     z-index: 1030;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
 }
 
 .header_logo {
@@ -65,7 +90,6 @@ a.logBtn {
     font-size: 18px;
     color: #000;
     padding: 10px;
-    /* padding: 1px 15px 1px 15px; */
     border: none;
     background-color: transparent;
     transition: all .3s ease-in-out;
@@ -74,29 +98,40 @@ a.logBtn {
     -o-transition: all .3s ease-in-out;
 }
 
-a.logBtn:hover {
+.logoutBnt {
     cursor: pointer;
-    color: rgba(239, 132, 104, 1.0) !important;
+    display: inline-block;
+    padding-left: 20px;
+    color: #ffe747;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
 }
 
-.logBtn {
+.logoutBnt:hover {
+    color: #990000;
+}
+
+
+.logoutPhone {
     font-weight: bold;
     align-self: center;
     margin-right: 20px;
     font-size: 18px;
     color: #000;
     padding: 10px;
-    /* padding: 1px 15px 1px 15px; */
-    border: none;
+    cursor: pointer;
     background-color: transparent;
+    display: inline-block;
+    padding-left: 10px;
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
 }
 
-.logBtn:hover,
-.logBtn:focus {
+.logoutPhone:hover {
     color: rgba(239, 132, 104, 1.0);
 }
 
@@ -107,7 +142,7 @@ a.logBtn:hover {
     background-color: rgb(245, 242, 236);
     height: 100%;
     min-height: 2000px;
-    padding: 6% 20px 15px 20px;
+    padding: 15% 20px 15px 20px;
 }
 
 .nav_item_style {
@@ -315,7 +350,7 @@ a.logBtn:hover {
 .sectionRejust {
     padding-top: 25px;
     padding-bottom: 25px;
-    margin-top: 90px;
+    margin-top: 120px;
 }
 
 .clear-search {
