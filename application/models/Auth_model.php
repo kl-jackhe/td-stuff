@@ -29,10 +29,10 @@ class Auth_model extends CI_Model
         $this->db->order_by('created_at', 'desc');
         $query = $this->db->get('orders');
         if ($query->num_rows() > 0) {
-			return $query->result_array();
-		} else {
-			return false;
-		}
+            return $query->result_array();
+        } else {
+            return false;
+        }
     }
 
     function getOrderItem($id)
@@ -41,9 +41,26 @@ class Auth_model extends CI_Model
         $this->db->where('customer_id', $id);
         $query = $this->db->get('order_item');
         if ($query->num_rows() > 0) {
-			return $query->result_array();
-		} else {
-			return false;
-		}
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
+    function getStandardPageList($id = null)
+    {
+        $this->db->select('*');
+        if (!empty($id)) {
+            $this->db->where('id', $id);
+            $query = $this->db->get('standard_page_list');
+        } else {
+            $query = $this->db->get('standard_page_list');
+        }
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
     }
 }

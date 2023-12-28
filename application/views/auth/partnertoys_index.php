@@ -66,8 +66,9 @@
                 order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
-                authCategory: <?php echo json_encode($auth_category); ?>, // 篩選標籤
+                authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
+                membership: <?php echo json_encode(!empty($membership[0]['page_info']) ? $membership[0]['page_info'] : ''); ?>,
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
                 perpage: 5, // 一頁的資料數
@@ -75,6 +76,9 @@
             }
         },
         mounted() {
+            // 初始化 Magnific Popup
+            this.initMagnificPopup();
+            // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
                 this.selectedCategoryId = <?php echo json_encode($auth_category[0]['auth_category_id']); ?>;
                 this.pageTitle = <?php echo json_encode($auth_category[0]['auth_category_name']); ?>;
@@ -123,6 +127,32 @@
             },
         },
         methods: {
+            // 初始化 Magnific Popup
+            initMagnificPopup() {
+                // 使用 Magnific Popup 的初始化逻辑，例如：
+                $('.popup-link').magnificPopup({
+                    type: 'inline',
+                    midClick: true // 允许使用中键点击
+                    // 更多配置项可以根据需求添加
+                });
+            },
+            toggleTermsPopup() {
+                // 获取 Magnific Popup 插件实例
+                const magnificPopup = $.magnificPopup.instance;
+
+                // 切换弹窗的显示状态
+                if (magnificPopup.isOpen) {
+                    magnificPopup.close();
+                } else {
+                    magnificPopup.open({
+                        items: {
+                            src: '#termsOfMembership'
+                        },
+                        type: 'inline'
+                        // 更多 Magnific Popup 配置项可根据需要添加
+                    });
+                }
+            },
             // 完成付款
             completePay(id) {
                 window.location.href = <?php echo json_encode(base_url()); ?> + "/checkout/repay_order/" + id;

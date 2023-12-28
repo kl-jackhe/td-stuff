@@ -76,7 +76,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">驗證碼</label>
-                                    <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" required>
+                                    <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" autocomplete="off" required>
                                     <a @click="randomCheckcode()"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image" style="position:absolute; top:30px; right:0;"></a>
                                 </div>
                             </div>
@@ -85,7 +85,8 @@
                             <div class="col-sm-12">
                                 <div class="form-group checkbox">
                                     <label class="required">
-                                        <input type="checkbox" id="agree" name="agree"> 我同意<a href="/about/rule" class="use-modal-btn">網站服務條款</a>
+                                        <!-- mfp click -->
+                                        <input type="checkbox" id="agree" name="agree"> 我同意<a @click="toggleTermsPopup" class="popup-link mfpMember">會員加入條款</a>
                                     </label>
                                 </div>
                                 <label id="agree-error" class="error" for="agree"></label>
@@ -103,6 +104,17 @@
                     </div>
                     <?php echo form_close() ?>
                 </div>
+            </div>
+        </div>
+        <!-- mfp -->
+        <div id="termsPopupWrapper">
+            <div id="termsOfMembership" class="mfp-hide">
+                <div class="col-12 text-center">
+                    <span class="memberTitleMember">MEMBER<span class="memberTitleLogin">&nbsp;TERMS</span></span>
+                </div>
+                <div class="memberTitleChinese col-12 text-center">會員加入條款</div>
+                <div class="membershipLine"></div>
+                <div class="membershipContent" v-html="membership"></div>
             </div>
         </div>
     </div>

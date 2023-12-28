@@ -515,7 +515,7 @@ a.logBtn {
 .section-sidemenu {
     margin-right: 30px;
     margin-bottom: 50px;
-    margin-left: 12.5%;
+    margin-left: 14%;
     float: left;
     width: 15%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
@@ -523,7 +523,7 @@ a.logBtn {
 
 .section-contents {
     float: left;
-    width: 60%;
+    width: 55%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
@@ -949,7 +949,7 @@ input.qtyminus {
 }
 
 .cargoBtn {
-    font-size: 16px;
+    font-size: 14px;
     margin: 10px 0;
     padding: 10px;
     text-align: center;
@@ -1638,6 +1638,69 @@ input.qtyminus {
     border: 1px solid;
     border-bottom: none;
     padding: 7px 50px;
+}
+
+#termsOfMembership {
+    position: fixed;
+    width: 1000px;
+    height: auto;
+    background: #fff;
+    top: 20px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid #efefef;
+    box-sizing: border-box;
+    padding: 50px;
+    overflow: hidden;
+    /* 防止内容被滚动条遮挡 */
+}
+
+.membershipContent {
+    max-height: calc(100% - 160px);
+    max-width: 100%;
+    color: #333;
+    line-height: 2em;
+    text-align: justify;
+    margin: 20px 0 10px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+    #termsOfMembership {
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        transform: none;
+    }
+
+    .membershipContent {
+        max-height: 100%;
+        /* 100% 表示完整高度 */
+        margin: 20px auto 10px;
+        /* 调整底部 margin 以留白 */
+    }
+}
+
+.membershipLine {
+    width: 100%;
+    height: auto;
+    line-height: 20px;
+    background: url(/assets/uploads/line_repeat_x.png) repeat-x 0 top;
+    overflow: hidden;
+    padding-top: 20px;
+}
+
+.mfpMember {
+    color: #e30020 !important;
+}
+
+.mfpMember:hover {
+    cursor: pointer;
+    color: #ff7083 !important;
 }
 
 /* 修改滾動條 */
