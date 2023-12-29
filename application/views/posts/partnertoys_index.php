@@ -68,7 +68,6 @@
     const postApp = Vue.createApp({
         data() {
             return {
-                hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
                 selectedPostCategoryId: null, // 選中的消息類別
@@ -81,6 +80,7 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                hiddenSearch: false, // search-box
             };
         },
         watch: {

@@ -71,6 +71,7 @@ class Update extends Admin_Controller
                 $this->update_202312271600();
                 $this->update_202312271800();
                 $this->update_202312281830();
+                $this->update_202312291830();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -84,6 +85,30 @@ class Update extends Admin_Controller
         }
     }
 
+    function update_202312291830()
+    {
+        $version = '202312291830';
+        $description = '[sub_menu_list]新增欄位[grandparent_id]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'grandparent_id'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `sub_menu_list` ADD `grandparent_id` int(11) NOT NULL  AFTER `parent_id`;");
+            }
+            
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
     function update_202312281830()
     {
         $version = '202312281830';

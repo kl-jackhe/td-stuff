@@ -40,7 +40,7 @@
                     <?php foreach ($menu as $data) : ?>
                         <tr>
                             <td class="text-center" id="name"><?= $data['name'] ?></td>
-                            <td class="text-center" id="type"><?= $data['type'] ?></td>
+                            <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
                             <td class="text-center" id="status"><?= $data['status'] == 1 ? '開啟中' : '關閉中'; ?></td>
                             <td class="text-center">
@@ -49,7 +49,7 @@
                             <td hidden><input type="hidden" id="menuId" value="<?= $data['id'] ?>"></td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a>
-                                <!-- <a href="/admin/menu/delete/<?= $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a> -->
+                                <!-- <a href="/admin/menu/delete/menu/<?= $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -94,7 +94,6 @@
     function editRow(link) {
         var row = $(link).closest('tr');
 
-
         // 获取每个单元格的内容
         var name = row.find('#name').text();
         var sort = row.find('#sort').text();
@@ -120,9 +119,32 @@
         var editStatus = row.find('#editStatus').val();
         var editMenuId = row.find('#editMenuId').val();
 
+        if (editSort == 0) {
+            alert('更新失敗排序不可為NULL');
+            return;
+        }
+
+        <?php if (!empty($menu)) : ?>
+            <?php foreach ($menu as $self) : ?>
+                if (editSort == <?= json_encode($self['sort']) ?>) {
+                    if (editMenuId != <?= json_encode($self['id']) ?>) {
+                        alert('更新失敗排序不可重複');
+                        return;
+                    }
+                }
+                if (editName == <?= json_encode($self['name']) ?>) {
+                    if (editMenuId != <?= json_encode($self['id']) ?>) {
+                        alert('更新失敗名稱不可重複');
+                        return;
+                    }
+                }
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+
         // 将输入字段的值更新到数据库（这里需要使用 Ajax 请求）
         $.ajax({
-            url: '/admin/menu/update', // 替换成你的更新数据的后端接口
+            url: '/admin/menu/update/menu', // 替换成你的更新数据的后端接口
             type: 'POST',
             data: {
                 id: editMenuId,
@@ -134,9 +156,6 @@
                 // 处理成功的回调，可以根据需要进行其他操作
                 if (response == '更新成功') {
                     location.reload();
-                } else {
-                    alert('更新失敗排序不可重複');
-                    return;
                 }
             },
         });

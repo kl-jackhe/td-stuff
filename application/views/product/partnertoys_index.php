@@ -52,7 +52,6 @@
     const productApp = Vue.createApp({
         data() {
             return {
-                hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 products: <?php echo json_encode(!empty($products) ? $products : ''); ?>, // products資料庫所有類及項目
@@ -63,6 +62,7 @@
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                hiddenSearch: false, // search-box
             };
         },
         mounted() {
@@ -82,7 +82,6 @@
                 // 处理事件触发后的逻辑
                 // 显示搜寻栏的逻辑
                 this.hiddenSearch = !this.hiddenSearch;
-                console.log(this.hiddenSearch);
             });
         },
         computed: {

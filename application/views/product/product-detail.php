@@ -114,7 +114,6 @@
     const productApp = Vue.createApp({
         data() {
             return {
-                hiddenSearch: true,
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
                 combineName: <?php echo json_encode(!empty($combineName) ? $combineName : ''); ?>,
@@ -124,6 +123,7 @@
                 searchText: '', // debug
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                hiddenSearch: false, // search-box
                 quantity: 1, // 商品選擇數量
             };
         },
@@ -184,6 +184,7 @@
             },
             // 加入購物車(待修)
             add_cart() {
+                this.quantity = parseInt(this.quantity, 10);
                 if (this.quantity < 1) {
                     alert('商品數量不得低於1個');
                     return;

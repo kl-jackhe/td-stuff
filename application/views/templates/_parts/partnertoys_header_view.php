@@ -18,6 +18,7 @@
     <meta name="twitter:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />
     <title><?php echo $page_title; ?> | <?php echo get_setting_general('name') ?></title>
     <!-- Web Fonts  -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
     <link href="/assets/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="/assets/fontawesome-free-6.1.1-web/css/all.css" rel="stylesheet">
@@ -93,13 +94,21 @@
                         </div>
                         <div class="header-main-nav col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
                             <div class="row justify-content-end">
-                                <div class="col-12 text-right ">
-                                    <a href="/product" class="nav_item_style">夥伴商城</a>
-                                    <a href="/about" class="nav_item_style">關於夥伴</a>
-                                    <a href="/posts" class="nav_item_style">最新訊息</a>
-                                    <a href="#" class="nav_item_style">合作介紹</a>
-                                    <a href="#" class="nav_item_style">經銷通路</a>
-                                    <a href="/auth" class="nav_item_style">會員專區</a>
+                                <div class="col-12 text-right">
+                                    <!-- MY_Controller -->
+                                    <?php if (!empty($menu)) : ?>
+                                        <?php foreach ($menu as $self) : ?>
+                                            <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
+                                                <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a>
+                                            <?php else : ?>
+                                                <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)') : ?>
+                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                <?php elseif (empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

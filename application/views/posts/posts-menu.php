@@ -11,7 +11,7 @@
     <!-- 篩選清單呼叫鈕 -->
 
     <!-- 搜尋攔 -->
-    <div v-if="hiddenSearch == false" class="right-content breadcrumb">
+    <div :class="{ 'right-content': true, 'breadcrumb': true, 'section-sidesearch': true, 'search-open': hiddenSearch }">
         <input type="text" class="search" placeholder="搜尋欄" v-model="searchText">
         <span v-if="searchText !== ''" @click="clearSearch" class="clear-search"><i class="fa fa-times" aria-hidden="true"></i></span>
     </div>

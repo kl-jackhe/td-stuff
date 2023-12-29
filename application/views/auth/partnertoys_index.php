@@ -177,7 +177,15 @@
                 }
             },
             randomCheckcode() {
-                window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
+                // 获取当前页面的 URL
+                var currentPageUrl = window.location.href
+
+                // 检查是否在特定页面
+                if ((currentPageUrl.indexOf(<?= json_encode(base_url()) ?> + 'auth/index?id=2') !== -1)) {
+                    window.location.reload();
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
+                }
             },
             // 篩選清單呼叫
             toggleNav() {

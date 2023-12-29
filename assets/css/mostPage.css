@@ -396,6 +396,30 @@ a.logBtn {
     color: rgba(211, 84, 72, 0.5);
 }
 
+/* 初始時 nav 是關閉的狀態 */
+.section-sidesearch {
+    position: absolute;
+    top: -100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-100%);
+    /* 將 nav 隱藏在畫面左側 */
+}
+
+/* 當 isNavOpen 為 true（即 nav 是打開的狀態）時，將其顯示在畫面中間 */
+.section-sidesearch.search-open {
+    position: relative;
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    /* 添加過渡效果 */
+    transform: translateY(0);
+}
+
 .sectionRejust {
     padding-top: 25px;
     padding-bottom: 25px;
@@ -585,8 +609,6 @@ a.logBtn {
         margin-top: 100px;
     }
 }
-
-
 
 @media (max-width: 1401px) {
 

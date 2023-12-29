@@ -23,6 +23,10 @@ class MY_Controller extends CI_Controller
 
 	protected function render($the_view = NULL, $template = 'master')
 	{
+		if($this->is_partnertoys){
+			$this->load->model('menu_model');
+			$this->data['menu'] = $this->menu_model->getMenuData();
+		}
 		$this->data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
 		$this->data['post_category'] = $this->posts_model->getPostCategoryId();
 		$this->data['product_category'] = $this->product_model->get_product_category();
