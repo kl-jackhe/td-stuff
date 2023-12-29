@@ -9,13 +9,15 @@ class Menu_model extends CI_Model
     function getMenuData($id = 0)
     {
         $this->db->select('id, code, name, sort, type, status');
-        if ($id != 0) {
+        if ($id == 0) {
+            // 主選單
+            $this->db->order_by('sort', 'ASC');
+            $query = $this->db->get('menu')->result_array();
+        } else {
+            // 找parent(son找parent用)
             $this->db->where('id', $id);
             $this->db->limit(1);
             $query = $this->db->get('menu')->row_array();
-        } else {
-            $this->db->order_by('sort', 'ASC');
-            $query = $this->db->get('menu')->result_array();
         }
         return (!empty($query) ? $query : false);
     }
@@ -24,10 +26,12 @@ class Menu_model extends CI_Model
     {
         $this->db->select('id, parent_id, code, name, sort, type, status');
         if ($id == 0) {
+            // 找son
             $this->db->where('parent_id', $parent_id);
             $this->db->order_by('sort', 'ASC');
             $query = $this->db->get('sub_menu')->result_array();
         } else {
+            // 找parent(son找parent用)
             $this->db->where('id', $id);
             $this->db->limit(1);
             $query = $this->db->get('sub_menu')->row_array();
@@ -38,6 +42,7 @@ class Menu_model extends CI_Model
     function getSubSonMenuData($parent_id = 0)
     {
         $this->db->select('id, parent_id, grandparent_id, code, name, sort, type, status');
+        // 找son
         $this->db->where('parent_id', $parent_id);
         $this->db->order_by('sort', 'ASC');
         $query = $this->db->get('sub_son_menu')->result_array();

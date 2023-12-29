@@ -59,7 +59,7 @@ label.required::before {
 
 .header-icons {
     list-style: none;
-    margin: 0;
+    margin: 4px;
     padding: 0;
     display: flex;
 }
@@ -90,11 +90,78 @@ label.required::before {
     color: #ffe747;
 }
 
-#mem_login {
-    display: flex;
-    align-items: center;
-    margin: 7px;
-    font-size: 14px;
+.main-menu {
+    position: relative;
+}
+
+.menu-item {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-item a {
+    padding: 10px;
+    display: inline-block;
+    position: relative;
+}
+
+.sub-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 2px solid #ee8369;
+}
+
+.sub-menu li {
+    cursor: pointer;
+    display: inline-block;
+    /* 讓 <li> 橫向排列 */
+    white-space: nowrap;
+    /* 防止文字換行 */
+    padding: 0px 10px 0px 25px;
+    border-bottom: 1px solid rgba(196, 196, 196, .5);
+    width: 100%;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.sub-menu li:hover {
+    background: rgba(243, 243, 243, 1);
+}
+
+.sub-menu li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+    font-size: .95rem;
+    color: #383838;
+}
+
+.sub-menu>li>a:after {
+    content: '';
+    position: absolute;
+    top: 17px;
+    left: -10px;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #383838;
+    border-bottom: 2px solid #383838;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 
 .header_relative_top {
@@ -204,7 +271,7 @@ a.logBtn {
     margin-right: 20px;
     font-size: 18px;
     color: #000;
-    padding: 10px;
+    padding: 0 10px 0;
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
@@ -610,7 +677,7 @@ a.logBtn {
     }
 }
 
-@media (max-width: 1401px) {
+@media (max-width: 1412px) {
 
     /* 初始時 nav 是關閉的狀態 */
     .section-sidemenu {

@@ -56,3 +56,20 @@ document.getElementById('searchLink').addEventListener('click', function () {
   var event = new Event('toggleSearch')
   document.dispatchEvent(event)
 })
+
+function switchMenu (mainMenuItem, submenuId, eventType) {
+  var submenu = document.getElementById(submenuId) // 取得子選單
+
+  if (eventType === 'MouseOver') {
+    // 顯示子選單
+    submenu.style.display = 'block'
+  } else if (eventType === 'MouseOut') {
+    // 隱藏子選單
+    submenu.style.display = 'none'
+  }
+}
+
+function hideSubMenu (submenuId) {
+  var submenu = document.getElementById(submenuId)
+  submenu.style.display = 'none'
+}
