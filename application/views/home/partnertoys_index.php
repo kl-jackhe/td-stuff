@@ -124,15 +124,6 @@
         padding: 25px;
     }
 
-    .carousel_box {
-        padding: 0px 25px 0px 25px;
-    }
-
-    .page-header {
-        padding-left: 30px;
-        padding-right: 30px;
-    }
-
     @media (min-width: 768px) and (max-width: 991.98px) {
         .ipad_w {
             max-width: 50%;
@@ -153,52 +144,91 @@
             padding: 30px 0px 0px 0px;
             ;
         }
-
-        .carousel_box {
-            padding: 0px;
-        }
-
-        .page-header {
-            padding-left: 0px;
-            padding-right: 0px;
-        }
     }
 </style>
 <div role="main" class="main">
-    <section class="page-header no-padding sm-slide-fix content_auto_h">
+    <section class="no-padding sm-slide-fix content_auto_h">
         <? if (!empty($banner)) { ?>
             <div class="container">
-                <div class="carousel_box">
-                    <div id="home-carousel" class="carousel slide carousel-fade" data-touch="false" data-interval="false">
-                        <ol class="carousel-indicators" style="bottom: -20px;">
-                            <? for ($i = 0; $i < count($banner); $i++) { ?>
-                                <li data-target="#home-carousel" data-slide-to="<?= $i ?>" <?= ($i == 0 ? 'class="active"' : '') ?>></li>
-                            <? } ?>
-                        </ol>
-                        <div class="carousel-inner">
-                            <?php $count = 0;
-                            foreach ($banner as $data) { ?>
-                                <div class="carousel-item <?= ($count == 0 ? 'active' : '') ?>">
-                                    <a href="<?= $data['banner_link'] ?>" target="<?= ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
-                                        <img class="d-block w-100" style="width: 100%;" src="/assets/uploads/<?= $data['banner_image'] ?>">
-                                    </a>
-                                </div>
-                            <?php $count++;
-                            } ?>
-                        </div>
-                        <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="font-size: 24px;">
-                            <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="font-size: 24px;">
-                            <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
-                            <span class="sr-only">Next</span>
-                        </a>
+                <div id="home-carousel" class="carousel slide carousel-fade" data-touch="false" data-interval="false">
+                    <ol class="carousel-indicators" style="bottom: -20px;">
+                        <? for ($i = 0; $i < count($banner); $i++) { ?>
+                            <li data-target="#home-carousel" data-slide-to="<?= $i ?>" <?= ($i == 0 ? 'class="active"' : '') ?>></li>
+                        <? } ?>
+                    </ol>
+                    <div class="carousel-inner">
+                        <?php $count = 0;
+                        foreach ($banner as $data) { ?>
+                            <div class="carousel-item <?= ($count == 0 ? 'active' : '') ?>">
+                                <a href="<?= $data['banner_link'] ?>" target="<?= ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
+                                    <img class="d-block w-100" src="/assets/uploads/<?= $data['banner_image'] ?>">
+                                </a>
+                            </div>
+                        <?php $count++;
+                        } ?>
                     </div>
+                    <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="font-size: 24px;">
+                        <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="font-size: 24px;">
+                        <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
+                        <span class="sr-only">Next</span>
+                    </a>
                 </div>
             </div>
         <? } ?>
-        <div class="container">
+
+        <div class="header-second-container">
+            <div class="container">
+                <div class="homeAppear">
+                    <p class="mainText">Products</p>
+                    <div class="yukaline"></div>
+                    <p class="subText">CARGOS / INFORMATION</p>
+                </div>
+            </div>
+            <div class="product-container">
+                <div class="product-row-container">
+                    <div class="product-row">
+                        <!-- 商品展示區域 -->
+                        <?php if (!empty($products)) : ?>
+                            <?php $count = 0; ?>
+                            <?php foreach ($products as $self) : ?>
+                                <?php if ($count < 12) : ?>
+                                    <div class="homeProductPreview">
+                                        <a href="/product/product-detail/<?= $self['product_id']?>" title="">
+                                            <div class="homepic">
+                                                <img src="/assets/uploads/<?= $self['product_image'] ?>">
+                                            </div>
+                                            <div class="hometxt">
+                                                <span><?= $self['product_name'] ?></span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <!-- 左右按鈕 -->
+                <div class="nav-btn prev-btn" onclick="changeProduct(-1)">
+                    <span>&lt;</span>
+                </div>
+                <div class="nav-btn next-btn" onclick="changeProduct(1)">
+                    <span>&gt;</span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="homeMoreAppear">
+                    <a href="/product" class="link sd appear">
+                        <p class="text sd appear">❯ More Products</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- origin -->
+            <!-- <div class="container">
             <div class="row product_box">
                 <div class="col-md-12">
                     <span style="font-size:24px;">最新商品</span>
@@ -222,10 +252,6 @@
                                                     <?= $product['product_name']; ?></span>
                                             </div>
                                         </a>
-                                        <!-- <div class="product_price">
-                                        $<span style="color:#68396D">
-                                            <?= $product['product_price']; ?></span>
-                                    </div> -->
                                         <? if ($product['sales_status'] == 0) { ?>
                                             <a class="btn select_product my-2" href="/product/view/<?= $product['product_id'] ?>">
                                                 <span>現貨</span>
@@ -249,6 +275,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
 </div>

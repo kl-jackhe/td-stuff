@@ -12,6 +12,7 @@ const headerapp = Vue.createApp({
   }
 }).mount('#headerApp')
 
+// 置頂fixed-nav
 $(document).ready(function () {
   var headerFixed = $('.header_fixed_top')
 
@@ -33,6 +34,7 @@ $(document).ready(function () {
   $(window).scroll(handleScroll)
 })
 
+// search-icon event
 $(document).ready(function () {
   // 获取当前页面的 URL
   var currentPageUrl = window.location.href
@@ -51,12 +53,14 @@ $(document).ready(function () {
   }
 })
 
+// search-icon event listener
 document.getElementById('searchLink').addEventListener('click', function () {
   // 触发自定义事件
   var event = new Event('toggleSearch')
   document.dispatchEvent(event)
 })
 
+// nav-menu-list
 function switchMenu (mainMenuItem, submenuId, eventType) {
   var submenu = document.getElementById(submenuId) // 取得子選單
 
@@ -73,3 +77,78 @@ function hideSubMenu (submenuId) {
   var submenu = document.getElementById(submenuId)
   submenu.style.display = 'none'
 }
+
+// home page product preview effect
+var currentIndex = 0;
+var totalProducts = document.querySelectorAll('.homeProductPreview').length;
+var productRow = document.querySelector('.product-row');
+var productRowContainer = document.querySelector('.product-row-container');
+var isAnimating = false;
+var autoInterval;
+
+function changeProduct(direction) {
+  if (!isAnimating) {
+    clearInterval(autoInterval); // 重置計時器
+    isAnimating = true;
+    currentIndex += direction;
+
+    if (currentIndex < 0) {
+      currentIndex = totalProducts - getVisibleProductCount();
+    } else if (currentIndex > totalProducts - getVisibleProductCount()) {
+      currentIndex = 0;
+    }
+
+    var translateValue = -currentIndex * getProductWidthWithMargin();
+    
+    productRow.style.transition = 'transform 0.3s ease';
+    productRow.style.transform = 'translateX(' + translateValue + 'px)';
+
+    document.querySelector('.prev-btn').disabled = currentIndex === 0;
+    document.querySelector('.next-btn').disabled =
+      currentIndex >= totalProducts - getVisibleProductCount();
+
+    productRow.addEventListener(
+      'transitionend',
+      function () {
+        isAnimating = false;
+        productRow.style.transition = 'none';
+        startAutoSlide(); // 動畫結束後重新啟動自動輪播
+      },
+      { once: true }
+    );
+  }
+}
+
+function startAutoSlide() {
+  autoInterval = setInterval(function () {
+    changeProduct(1);
+  }, 3000); // 輪播速度3秒換一張
+}
+
+function stopAutoSlide() {
+  clearInterval(autoInterval);
+}
+
+function getProductWidthWithMargin() {
+  var productWidth = 270; // 商品寬度
+  var margin = 25; // 間距
+  return productWidth + margin;
+}
+
+function getVisibleProductCount() {
+  var screenWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+
+  if (screenWidth < 768) {
+    return 1; // 在螢幕小於768px時，顯示一張商品
+  } else {
+    return 4; // 在螢幕大於等於768px時，顯示四張商品
+  }
+}
+
+startAutoSlide();
+
+productRowContainer.addEventListener('mouseenter', stopAutoSlide);
+productRowContainer.addEventListener('mouseleave', startAutoSlide);
