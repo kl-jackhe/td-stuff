@@ -50,7 +50,7 @@
                             <td class="text-center" id="name"><?= $data['name'] ?></td>
                             <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
-                            <td class="text-center" id="status"><?= $data['status'] == 1 ? '開啟中' : '關閉中'; ?></td>
+                            <td class="text-center" id="status"><?= $data['status'] == 1 ? '✔️開啟' : '❌關閉'; ?></td>
                             <td hidden><input type="hidden" id="menuId" value="<?= $data['id'] ?>"></td>
                             <td class="text-center">
                                 <a href="#" class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a>
@@ -112,7 +112,7 @@
         // 将内容替换为输入字段
         row.find('#name').html('<input type="text" class="form-control" id="editName" value="' + name + '">');
         row.find('#sort').html('<input type="number" class="form-control" id="editSort" value="' + sort + '">');
-        row.find('#status').html('<select class="form-control" id="editStatus"><option value="1" ' + (status == '開啟中' ? 'selected' : '') + '>開啟中</option><option value="0" ' + (status == '關閉中' ? 'selected' : '') + '>關閉中</option></select>');
+        row.find('#status').html('<select class="form-control" id="editStatus"><option value="1" ' + (status == '✔️開啟' ? 'selected' : '') + '>✔️開啟</option><option value="0" ' + (status == '❌關閉' ? 'selected' : '') + '>❌關閉</option></select>');
         row.find('#menuId').html('<input type="hidden" class="form-control" id="editMenuId" value="' + id + '">');
 
         // 添加“完成”按钮

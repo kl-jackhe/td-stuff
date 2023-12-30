@@ -42,7 +42,7 @@
                             <td class="text-center" id="name"><?= $data['name'] ?></td>
                             <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
-                            <td class="text-center" id="status"><?= $data['status'] == 1 ? '開啟中' : '關閉中'; ?></td>
+                            <td class="text-center" id="status"><?= $data['status'] == 1 ? '✔️開啟' : '❌關閉'; ?></td>
                             <td class="text-center">
                                 <a href="/admin/menu/sub_index/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></a>
                             </td>
@@ -103,7 +103,7 @@
         // 将内容替换为输入字段
         row.find('#name').html('<input type="text" class="form-control" id="editName" value="' + name + '">');
         row.find('#sort').html('<input type="number" class="form-control" id="editSort" value="' + sort + '">');
-        row.find('#status').html('<select class="form-control" id="editStatus"><option value="1" ' + (status == '開啟中' ? 'selected' : '') + '>開啟中</option><option value="0" ' + (status == '關閉中' ? 'selected' : '') + '>關閉中</option></select>');
+        row.find('#status').html('<select class="form-control" id="editStatus"><option value="1" ' + (status == '✔️開啟' ? 'selected' : '') + '>✔️開啟</option><option value="0" ' + (status == '❌關閉' ? 'selected' : '') + '>❌關閉</option></select>');
         row.find('#menuId').html('<input type="hidden" class="form-control" id="editMenuId" value="' + id + '">');
 
         // 添加“完成”按钮
@@ -156,6 +156,8 @@
                 // 处理成功的回调，可以根据需要进行其他操作
                 if (response == '更新成功') {
                     location.reload();
+                }else{
+                    console.log(response);
                 }
             },
         });

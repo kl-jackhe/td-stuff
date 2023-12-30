@@ -94,34 +94,36 @@
                         </div>
                         <div class="header-main-nav col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
                             <div class="row justify-content-end">
-                                <?php if (!empty($menu)) : ?>
-                                    <?php foreach ($menu as $key => $self) : ?>
-                                        <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
-                                            <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
-                                                <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= $self['name'] ?></a>
-                                                <!-- 子選單 -->
-                                                <?php if (!empty($sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                    <ul id="SubMenu<?= $key ?>" class="sub-menu">
-                                                        <?php foreach ($sub_menu as $sub_key => $sub_self) : ?>
-                                                            <li><a><?= $sub_self['name'] ?></a></li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
-                                                <?php endif; ?>
-                                            </div>
-                                        <?php else : ?>
-                                            <!-- 會員選單 -->
-                                            <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
+                                    <?php foreach ($header_menu as $key => $self) : ?>
+                                        <?php if (!empty($self['status'])) : ?>
+                                            <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
                                                 <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
-                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= $self['name'] ?></a>
                                                     <!-- 子選單 -->
-                                                    <?php if (!empty($sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                    <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
                                                         <ul id="SubMenu<?= $key ?>" class="sub-menu">
-                                                            <?php foreach ($sub_menu as $sub_key => $sub_self) : ?>
-                                                                <li><a><?= $sub_self['name'] ?></a></li>
+                                                            <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                                <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
                                                             <?php endforeach; ?>
                                                         </ul>
                                                     <?php endif; ?>
                                                 </div>
+                                            <?php else : ?>
+                                                <!-- 會員選單 -->
+                                                <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                                    <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
+                                                        <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                        <!-- 子選單 -->
+                                                        <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                            <ul id="SubMenu<?= $key ?>" class="sub-menu">
+                                                                <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>

@@ -4,7 +4,6 @@ class Menu extends Admin_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model('menu_model');
     }
 
     function index()
@@ -93,9 +92,7 @@ class Menu extends Admin_Controller
         $name = $this->input->post('name');
         $sort = $this->input->post('sort');
         $status = $this->input->post('status');
-        $message = '更新失敗';
-
-        if (!empty($id) && !empty($name) && !empty($sort) && !empty($status)) {
+        if (!empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
             try {
                 $updateData = array(
                     'id' => $id,
