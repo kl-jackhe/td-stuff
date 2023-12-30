@@ -1,4 +1,3 @@
-<?php require('auth-captcha.php'); ?>
 <!-- Auth function -->
 <div role="main" class="main pt-xlg-main">
     <div class="container">
@@ -77,7 +76,7 @@
                                 <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">驗證碼</label>
                                     <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" autocomplete="off" required>
-                                    <a @click="randomCheckcode()"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image" style="position:absolute; top:30px; right:0;"></a>
+                                    <a @click="randomCheckcode"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image"></a>
                                 </div>
                             </div>
                         </div>

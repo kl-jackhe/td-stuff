@@ -53,7 +53,13 @@
                         </div>
                     <? } ?>
                 </div>
-                <?php echo form_open('auth/cantactUs'); ?>
+                <?php
+                // echo '<pre>';
+                // print_r($this->session->userdata());
+                // echo '</pre>';
+                ?>
+                <?php $attributes = array('id' => 'cantact_us'); ?>
+                <?php echo form_open('auth/cantact_us', $attributes); ?>
                 <div class="row">
                     <div class="col-bg-12 col-md-6 col-lg-6 form-group">
                         <label>留言項目</label>
@@ -72,12 +78,12 @@
                         </select>
                     </div>
                     <div class="col-12 form-group">
-                        <label class="required" for="company">公司名稱</label>
-                        <input type="text" class="form-control" id="company" name="company" placeholder="請輸入您的公司名稱" required>
+                        <label for="company">公司名稱</label>
+                        <input type="text" class="form-control" id="company" name="company" placeholder="請輸入您的公司名稱">
                     </div>
                     <div class="col-bg-12 col-md-6 col-lg-6 form-group">
                         <label class="required" for="number">聯絡電話</label>
-                        <input type="text" class="form-control" id="number" name="number" placeholder="請輸入您的連絡電話" required>
+                        <input type="text" class="form-control" id="number" name="number" placeholder="請輸入您的連絡電話" value="<?= !empty($this->session->userdata('identity')) ? $this->session->userdata('identity') : '' ?>" required>
                     </div>
                     <div class="col-bg-12 col-md-6 col-lg-6 form-group">
                         <label class="required" for="name">姓名</label>
@@ -85,19 +91,31 @@
                     </div>
                     <div class="col-12 form-group">
                         <label class="required" for="email">E-MAIL</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="請輸入您的E-MAIL" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="請輸入您的E-MAIL" value="<?= !empty($this->session->userdata('email')) ? $this->session->userdata('email') : '' ?>" required>
                     </div>
                     <div class="col-12 form-group">
                         <label class="required" for="content">訊息內容</label>
                         <textarea class="form-control" id="content" name="content" placeholder="請輸入您的訊息內容" required></textarea>
                     </div>
+                    <div class="form-group">
+                        <input type="hidden" id="captcha" name="captcha" value="<?= $this->session->flashdata('captcha') ?>">
+                    </div>
+                    <div class="col-12 form-group" style="position:relative;">
+                        <label class="required" for="checkcode">驗證碼</label>
+                        <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" autocomplete="off" required>
+                        <a @click="randomCheckcodeContact"><img id="randomCheckcodeContact" src="<?php echo $imageBase64; ?>" alt="Captcha Image"></a>
+                    </div>
+                    <div class="col-12 form-group">
+                        <span id="error_text" style="color: red; font-weight: bold;"></span>
+                    </div>
                     <div class="col-6 form-group text-center paddingFixTop">
                         <button type="reset" id="contactEraseBtn"><i class="fas fa-times" aria-hidden="true"></i>&nbsp;清除</button>
                     </div>
                     <div class="col-6 form-group text-center paddingFixTop">
-                        <button type="submit" id="contactSendBtn"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;送出</button>
+                        <button type="button" id="contactSendBtn" onclick="contact_check()"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;送出</button>
                     </div>
                 </div>
+
                 <?php echo form_close() ?>
             </div>
         </div>

@@ -1,3 +1,4 @@
+<?php require('auth-captcha.php'); ?>
 <!-- 引入 Facebook JavaScript SDK -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
@@ -187,7 +188,25 @@
                     window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
                 }
             },
-            // 篩選清單呼叫
+            randomCheckcodeContact() {
+                // 获取当前页面的 URL
+                var currentPageUrl = window.location.href
+                // 检查是否在特定页面
+                <?php if (empty($this->session->userdata('user_id'))) : ?>
+                    if ((currentPageUrl.indexOf(<?= json_encode(base_url()) ?> + 'auth/index?id=4') !== -1)) {
+                        window.location.reload();
+                    } else {
+                        window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=4';
+                    }
+                <?php else : ?>
+                    if ((currentPageUrl.indexOf(<?= json_encode(base_url()) ?> + 'auth/index?id=7') !== -1)) {
+                        window.location.reload();
+                    } else {
+                        window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=7';
+                    }
+                <?php endif; ?>
+            },
+            // 篩選清單呼叫(手機版)
             toggleNav() {
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
@@ -254,20 +273,48 @@
     }
 
     function form_check() {
-        var email_ok = $('#email_ok').val();
+        var identity = $('#identity').val();
+        var name = $('#name').val();
+        var sexSelect = document.getElementById('sex');
+        var email = $('#email').val();
         var password = $('#password').val();
         var password_confirm = $('#password_confirm').val();
         var check_code = $('#checkcode').val();
         var agreeCheckbox = document.getElementById('agree');
-        var sexSelect = document.getElementById('sex');
+        var email_ok = $('#email_ok').val();
+
+        if (identity == '') {
+            $('#error_text').html('尚未填寫行動電話');
+            return;
+        }
+
+        if (name == '') {
+            $('#error_text').html('尚未填寫姓名');
+            return;
+        }
 
         if (sexSelect.value === '') {
-            $('#error_text').html('請選擇性別');
+            $('#error_text').html('尚未選擇性別');
+            return;
+        }
+
+        if (email == '') {
+            $('#error_text').html('尚未填寫E-MAIL');
+            return;
+        }
+
+        if (password == '') {
+            $('#error_text').html('尚未填寫密碼');
+            return;
+        }
+
+        if (password_confirm == '') {
+            $('#error_text').html('尚未填寫確認密碼');
             return;
         }
 
         if (check_code != <?= json_encode($this->session->flashdata('captcha')) ?>) {
-            $('#error_text').html('驗證碼錯誤請重新填寫');
+            $('#error_text').html('驗證碼錯誤請重新確認');
             return;
         }
 
@@ -276,15 +323,50 @@
             return;
         }
 
+        // 待修正
         if (password == password_confirm) {
             if (email_ok == 1) {} else {
                 $('#error_text').html('電子郵件不正確。');
-                return false;
+                return;
             }
             document.getElementById("register").submit();
         } else {
             $('#error_text').html('密碼與確認密碼不符。');
+            return;
         }
+    }
+
+    function contact_check() {
+        var number = $('#number').val();
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var content = $('#content').val();
+        var check_code = $('#checkcode').val();
+
+        if (number == '') {
+            $('#error_text').html('尚未填寫聯絡方式');
+            return;
+        }
+
+        if (name == '') {
+            $('#error_text').html('尚未填寫姓名');
+            return;
+        }
+        if (email == '') {
+            $('#error_text').html('尚未填寫E-MAIL');
+            return;
+        }
+        if (content == '') {
+            $('#error_text').html('尚未填寫內容');
+            return;
+        }
+
+        if (check_code != <?= json_encode($this->session->flashdata('captcha')) ?>) {
+            $('#error_text').html('驗證碼錯誤請重新填寫');
+            return;
+        }
+
+        document.getElementById("cantact_us").submit();
     }
 
     // 初始化 Facebook SDK
@@ -372,8 +454,6 @@
                     }
                 });
             });
-        } else {
-            // console.log('Not logged in');
         }
     }
 </script>

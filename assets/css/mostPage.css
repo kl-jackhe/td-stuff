@@ -1741,7 +1741,19 @@ input.qtyminus {
     height: 56%;
     max-width: 100%;
     overflow: hidden;
-    border: 1px solid #efefef;
+    position: absolute;
+    top: 30.5px;
+    right: 0;
+}
+
+#randomCheckcodeContact {
+    cursor: pointer;
+    height: 55%;
+    max-width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 30.5px;
+    right: 15px;
 }
 
 .tab.reset {
