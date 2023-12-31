@@ -72,6 +72,7 @@ class Update extends Admin_Controller
                 $this->update_202312271800();
                 $this->update_202312281830();
                 $this->update_202312291830();
+                $this->update_202312311830();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -82,6 +83,31 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202312311830()
+    {
+        $version = '202312311830';
+        $description = '[banner]新增欄位[banner_type]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM banner LIKE 'banner_type'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `banner` ADD `banner_type` varchar(30) NOT NULL  AFTER `banner_id`;");
+            }
+
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -98,7 +124,7 @@ class Update extends Admin_Controller
             } else {
                 $this->db->query("ALTER TABLE `sub_menu_list` ADD `grandparent_id` int(11) NOT NULL  AFTER `parent_id`;");
             }
-            
+
 
             $insertData = array(
                 'version' => $version,

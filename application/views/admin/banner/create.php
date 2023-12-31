@@ -1,10 +1,10 @@
 <div class="row">
   <?php $attributes = array('class' => 'banner', 'id' => 'banner'); ?>
-  <?php echo form_open('admin/banner/insert' , $attributes); ?>
+  <?php echo form_open('admin/banner/insert', $attributes); ?>
   <div class="col-md-12">
     <div class="form-group">
       <button type="submit" class="btn btn-primary">建立</button>
-      <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
+      <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     </div>
     <div class="content-box-large">
 
@@ -15,6 +15,15 @@
               <label for="banner_name" class="col-sm-3 control-label">＊標題：</label>
               <div class="col-sm-9">
                 <input type="text" class="form-control" name="banner_name" id="banner_name" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="banner_name" class="col-sm-3 control-label">＊標題：</label>
+              <div class="col-sm-9">
+                <select class="form-control" name="banner_type" id="banner_type">
+                  <option class="form-control" value="pc" selected>電腦(PC)</option>
+                  <option class="form-control" value="mobile">手機(MOBILE)</option>
+                </select>
               </div>
             </div>
             <div class="form-group">
@@ -77,13 +86,13 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
 <script>
-$.validator.setDefaults({
+  $.validator.setDefaults({
     submitHandler: function() {
-        document.getElementById("banner").submit();
-        //alert("submitted!");
+      document.getElementById("banner").submit();
+      //alert("submitted!");
     }
-});
-$(document).ready(function() {
-  $("#banner").validate({});
-});
+  });
+  $(document).ready(function() {
+    $("#banner").validate({});
+  });
 </script>

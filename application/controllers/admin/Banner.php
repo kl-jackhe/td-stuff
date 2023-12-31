@@ -67,6 +67,7 @@ class Banner extends Admin_Controller {
         }
         $data = array(
             'banner_name'         => $this->input->post('banner_name'),
+            'banner_type'         => $this->input->post('banner_type'),
             'banner_on_the_shelf'  => $this->input->post('banner_on_the_shelf'),
             'banner_off_the_shelf' => $this->input->post('banner_off_the_shelf'),
             'banner_image'         => $image,
@@ -98,6 +99,7 @@ class Banner extends Admin_Controller {
         }
         $data = array(
             'banner_name'         => $this->input->post('banner_name'),
+            'banner_type'         => $this->input->post('banner_type'),
             'banner_on_the_shelf'  => $this->input->post('banner_on_the_shelf'),
             'banner_off_the_shelf' => $this->input->post('banner_off_the_shelf'),
             'banner_image'         => $image,

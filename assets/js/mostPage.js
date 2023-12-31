@@ -152,3 +152,4 @@ startAutoSlide();
 
 productRowContainer.addEventListener('mouseenter', stopAutoSlide);
 productRowContainer.addEventListener('mouseleave', startAutoSlide);
+
