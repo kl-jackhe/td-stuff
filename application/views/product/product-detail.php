@@ -67,13 +67,13 @@
                                         <?php endif; ?>
                                     </div>
                                     <!--加入購物車-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                    <!-- <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
                                         <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
-                                    </div>
+                                    </div> -->
                                     <!--加入追蹤清單-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                    <!-- <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
                                         <span class="cargoClick likeBtn"><i class="fas fa-heart"></i>加入追蹤清單</span>
-                                    </div>
+                                    </div> -->
                                 <?php endif; ?>
 
                                 <?php if (empty($productCombine)) : ?>

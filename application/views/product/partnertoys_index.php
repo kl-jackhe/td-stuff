@@ -4,7 +4,6 @@
         <?php if (!empty($product_category)) : ?>
             <?php require('product-menu.php'); ?>
         <?php endif; ?>
-
         <?php if (!empty($products)) : ?>
             <div class="section-contents">
                 <div class="container">
@@ -73,8 +72,8 @@
                 this.pageTitle = '全部商品';
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
-                    const tmpSet = this.products_categories.filter(self => self.product_category_id === this.getID);
-                    this.pageTitle = tmpSet[0].product_category_name;
+                    const tmpSet = this.products_categories.filter(self => self.sort === this.getID);
+                    this.pageTitle = tmpSet[0].name;
                 }
             }
             // 監聽是否有按下搜尋

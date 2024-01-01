@@ -20,6 +20,7 @@ class Auth extends Public_Controller
 		$this->lang->load('auth');
 
 		if ($this->is_partnertoys) :
+			$this->load->model('menu_model');
 			$this->load->model('auth_model');
 		endif;
 	}
@@ -30,8 +31,8 @@ class Auth extends Public_Controller
 			$this->data['title'] = '會員專區';
 
 			if (empty($this->session->userdata('user_id'))) :
-				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
+				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 6);
 				else :
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');
@@ -39,7 +40,7 @@ class Auth extends Public_Controller
 				$this->data['user'] = $user;
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
-				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
+				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 17);
 			endif;
 			$this->render('auth/partnertoys_index');
 		endif;

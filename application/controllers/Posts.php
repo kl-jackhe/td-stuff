@@ -6,7 +6,6 @@ class Posts extends Public_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('posts_model');
     }
 
     public function index()
@@ -25,12 +24,13 @@ class Posts extends Public_Controller
         $this->ajax_pagination->initialize($config);
         //get the posts data
         $this->data['posts'] = $this->posts_model->getPosts(array('limit' => 5));
-        $this->data['posts_category'] = $this->posts_model->getPostCategoryId();
+        // $this->data['posts_category'] = $this->posts_model->getPostCategoryId();
 
         if ($this->is_liqun_food || $this->is_td_stuff) {
             $this->render('posts/index');
         }
         if ($this->is_partnertoys) {
+            $this->data['posts_category'] = $this->menu_model->getSubMenuData(0, 3);
             $this->render('posts/partnertoys_index');
         }
     }

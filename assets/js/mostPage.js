@@ -79,77 +79,78 @@ function hideSubMenu (submenuId) {
 }
 
 // home page product preview effect
-var currentIndex = 0;
-var totalProducts = document.querySelectorAll('.homeProductPreview').length;
-var productRow = document.querySelector('.product-row');
-var productRowContainer = document.querySelector('.product-row-container');
-var isAnimating = false;
-var autoInterval;
+var currentIndex = 0
+var totalProducts = document.querySelectorAll('.homeProductPreview').length
+var productRow = document.querySelector('.product-row')
+var productRowContainer = document.querySelector('.product-row-container')
+var isAnimating = false
+var autoInterval
 
-function changeProduct(direction) {
+function changeProduct (direction) {
   if (!isAnimating) {
-    clearInterval(autoInterval); // 重置計時器
-    isAnimating = true;
-    currentIndex += direction;
+    clearInterval(autoInterval) // 重置計時器
+    isAnimating = true
+    currentIndex += direction
 
     if (currentIndex < 0) {
-      currentIndex = totalProducts - getVisibleProductCount();
+      currentIndex = totalProducts - getVisibleProductCount()
     } else if (currentIndex > totalProducts - getVisibleProductCount()) {
-      currentIndex = 0;
+      currentIndex = 0
     }
 
-    var translateValue = -currentIndex * getProductWidthWithMargin();
-    
-    productRow.style.transition = 'transform 0.3s ease';
-    productRow.style.transform = 'translateX(' + translateValue + 'px)';
+    var translateValue = -currentIndex * getProductWidthWithMargin()
 
-    document.querySelector('.prev-btn').disabled = currentIndex === 0;
+    productRow.style.transition = 'transform 0.3s ease'
+    productRow.style.transform = 'translateX(' + translateValue + 'px)'
+
+    document.querySelector('.prev-btn').disabled = currentIndex === 0
     document.querySelector('.next-btn').disabled =
-      currentIndex >= totalProducts - getVisibleProductCount();
+      currentIndex >= totalProducts - getVisibleProductCount()
 
     productRow.addEventListener(
       'transitionend',
       function () {
-        isAnimating = false;
-        productRow.style.transition = 'none';
-        startAutoSlide(); // 動畫結束後重新啟動自動輪播
+        isAnimating = false
+        productRow.style.transition = 'none'
+        startAutoSlide() // 動畫結束後重新啟動自動輪播
       },
       { once: true }
-    );
+    )
   }
 }
 
-function startAutoSlide() {
+function startAutoSlide () {
   autoInterval = setInterval(function () {
-    changeProduct(1);
-  }, 3000); // 輪播速度3秒換一張
+    changeProduct(1)
+  }, 3000) // 輪播速度3秒換一張
 }
 
-function stopAutoSlide() {
-  clearInterval(autoInterval);
+function stopAutoSlide () {
+  clearInterval(autoInterval)
 }
 
-function getProductWidthWithMargin() {
-  var productWidth = 270; // 商品寬度
-  var margin = 25; // 間距
-  return productWidth + margin;
+function getProductWidthWithMargin () {
+  var productWidth = 270 // 商品寬度
+  var margin = 25 // 間距
+  return productWidth + margin
 }
 
-function getVisibleProductCount() {
+function getVisibleProductCount () {
   var screenWidth =
     window.innerWidth ||
     document.documentElement.clientWidth ||
-    document.body.clientWidth;
+    document.body.clientWidth
 
   if (screenWidth < 768) {
-    return 1; // 在螢幕小於768px時，顯示一張商品
+    return 1 // 在螢幕小於768px時，顯示一張商品
+  } else if (screenWidth < 769) {
+    return 2 // 在螢幕小於768px時，顯示一張商品
   } else {
-    return 4; // 在螢幕大於等於768px時，顯示四張商品
+    return 4 // 在螢幕大於等於768px時，顯示四張商品
   }
 }
 
-startAutoSlide();
+startAutoSlide()
 
-productRowContainer.addEventListener('mouseenter', stopAutoSlide);
-productRowContainer.addEventListener('mouseleave', startAutoSlide);
-
+productRowContainer.addEventListener('mouseenter', stopAutoSlide)
+productRowContainer.addEventListener('mouseleave', startAutoSlide)

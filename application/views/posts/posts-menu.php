@@ -21,9 +21,11 @@
     <h1 class=""><span>最新消息</span></h1>
     <!-- 篩選清單 -->
     <ul v-if="searchText === ''" class="menu-main">
-        <li v-for="category in posts_categorys" :key="category.post_category_id">
-            <input type="button" :value="'>&nbsp;' + category.post_category_name" @click="filterByCategory(category.post_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.post_category_id}">
-        </li>
+        <div v-for="category in posts_categorys">
+            <li v-if="category.status == 1" :key="category.sort">
+                <input type="button" :value="'>&nbsp;' + category.name" @click="filterByCategory(category.sort)" :class="{ category_btn: true, active: selectedCategoryId === category.sort}">
+            </li>
+        </div>
     </ul>
     <ul v-else class="menu-main">
         <li>

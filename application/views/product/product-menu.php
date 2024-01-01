@@ -21,9 +21,11 @@
     <h1 class=""><span>夥伴商城</span></h1>
     <!-- 篩選清單 -->
     <ul v-if="searchText === ''" class="menu-main">
-        <li v-for="category in products_categories" :key="category.product_category_id">
-            <input type="button" :value="'>&nbsp;' + category.product_category_name" @click="filterByCategory(category.product_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.product_category_id}">
-        </li>
+        <div v-for="category in products_categories">
+            <li v-if="category.status == 1" :key="category.sort">
+                <input type="button" :value="'>&nbsp;' + category.name" @click="filterByCategory(category.sort)" :class="{ category_btn: true, active: selectedCategoryId === category.sort}">
+            </li>
+        </div>
     </ul>
     <ul v-else class="menu-main">
         <li>

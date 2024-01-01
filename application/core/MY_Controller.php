@@ -21,14 +21,18 @@ class MY_Controller extends CI_Controller
 		$this->is_partnertoys = (strpos(base_url(), 'partnertoys') !== false ? true : false);
 		if ($this->is_partnertoys) {
 			$this->load->model('menu_model');
+			$this->load->model('auth_model');
+			$this->load->model('home_model');
+			$this->load->model('order_model');
+			$this->load->model('lottery_model');
+			$this->load->model('users_model');
 		}
 	}
 
 	protected function render($the_view = NULL, $template = 'master')
 	{
 		$this->data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
-		$this->data['post_category'] = $this->posts_model->getPostCategoryId();
-		$this->data['product_category'] = $this->product_model->get_product_category();
+		$this->data['footer_category'] = $this->menu_model->getSubMenuData();
 		if ($template == 'json' || $this->input->is_ajax_request()) {
 			header('Content-Type: application/json');
 			echo json_encode($this->data);

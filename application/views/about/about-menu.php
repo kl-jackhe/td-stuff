@@ -14,9 +14,11 @@
     <h1 class=""><span>關於我們</span></h1>
     <!-- 篩選清單 -->
     <ul class="menu-main">
-        <li>
-            <input type="button" value=">&nbsp;品牌介紹" :class="{category_btn: true, 'active' : true}">
-        </li>
+        <div v-for="category in about_category">
+            <li v-if="category.status == 1" :key="category.sort">
+                <input type="button" :value="'>&nbsp;' + category.name" @click="filterByCategory(category.sort)" :class="{ category_btn: true, active: selectedCategoryId === category.sort}">
+            </li>
+        </div>
     </ul>
     <!-- 篩選清單 -->
 </div>

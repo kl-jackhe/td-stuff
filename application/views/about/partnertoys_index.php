@@ -1,14 +1,14 @@
 <div id="aboutApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <?php require('about-menu.php'); ?>
-        <div id="aboutContent" class="section-contents">
+        <div class="contentMarginBottom section-contents">
             <div class="container">
                 <h1><span>{{ pageTitle }}</span></h1>
             </div>
             <!--M_contents-->
-            <div id="M_contents" class="animated fadeIn" bis_skin_checked="1">
+            <div id="M_contents" class="animated fadeIn">
                 <!--內文區塊↓-->
-                <div class="edit" bis_skin_checked="1">
+                <div class="edit">
                     <p style="text-align: center;">
                         <span style="font-size: 14pt; font-family: 微軟正黑體, 'Microsoft JhengHei';">
                             <strong>品牌介紹</strong>
@@ -35,9 +35,24 @@
     const aboutApp = Vue.createApp({
         data() {
             return {
-                pageTitle: '品牌介紹', // 目前標籤
+                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                selectedCategoryId: null, // 目前顯示頁面主題
+                about_category: <?php echo json_encode(!empty($about_category) ? $about_category : ''); ?>,
+                pageTitle: '', // 目前標籤
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+            }
+        },
+        mounted() {
+            // init btn state
+            if (this.about_category && this.about_category.length > 0) {
+                this.selectedCategoryId = this.about_category[0].sort;
+                this.pageTitle = this.about_category[0].name;
+                if (this.getID && this.getID.length > 0) {
+                    this.selectedCategoryId = this.getID;
+                    const tmpSet = this.about_category.find(self => self.sort === this.getID);
+                    this.pageTitle = tmpSet.name;
+                }
             }
         },
         methods: {
@@ -45,6 +60,9 @@
             toggleNav() {
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
+            },
+            filterByCategory(categoryId) {
+                window.location.href = <?= json_encode(base_url()) ?> + 'about/index' + (categoryId != null ? '?id=' + categoryId : '');
             },
         },
     });

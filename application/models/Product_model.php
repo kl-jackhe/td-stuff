@@ -81,10 +81,24 @@ class Product_model extends CI_Model
 		return (!empty($query) ? $query : false);
 	}
 
+	function getHomePosts()
+	{
+		$this->db->select('*');
+		$this->db->where('post_status', 1);
+		$this->db->order_by('updated_at', 'DESC');
+		$query = $this->db->get('posts');
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
 	function getHomeProducts()
 	{
 		$this->db->select('*');
 		$this->db->where('product_status', 1);
+		$this->db->order_by('distribute_at', 'DESC');
 		$query = $this->db->get('product');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();

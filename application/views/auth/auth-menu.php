@@ -14,9 +14,11 @@
     <h1 class=""><span>會員專區</span></h1>
     <!-- 篩選清單 -->
     <ul class="menu-main">
-        <li v-for="category in authCategory" :key="category.auth_category_id">
-            <input type="button" :value="'>&nbsp;' + category.auth_category_name" @click="filterByCategory(category.auth_category_id)" :class="{ category_btn: true, active: selectedCategoryId === category.auth_category_id}">
-        </li>
+        <div v-for="category in authCategory">
+            <li v-if="category.status == 1" :key="category.sort">
+                <input type="button" :value="'>&nbsp;' + category.name" @click="filterByCategory(category.sort)" :class="{ category_btn: true, active: selectedCategoryId === category.sort}">
+            </li>
+        </div>
     </ul>
     <!-- 篩選清單 -->
 </div>

@@ -2,9 +2,7 @@
 class Lottery extends Admin_Controller {
     function __construct() {
         parent::__construct();
-        $this->load->model('lottery_model');
-        $this->load->model('users_model');
-        $this->load->model('product_model');
+        
     }
 
     function autoLottery() {

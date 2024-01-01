@@ -4,8 +4,7 @@ class Order extends Public_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model('home_model');
-		$this->load->model('order_model');
+		
 		if (!$this->ion_auth->logged_in()) {
 			redirect('login', 'refresh');
 		}

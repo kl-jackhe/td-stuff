@@ -80,12 +80,12 @@
             this.initMagnificPopup();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
-                this.selectedCategoryId = <?php echo json_encode($auth_category[0]['auth_category_id']); ?>;
-                this.pageTitle = <?php echo json_encode($auth_category[0]['auth_category_name']); ?>;
+                this.selectedCategoryId = this.authCategory[0].sort;
+                this.pageTitle = this.authCategory[0].name;
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
-                    const tmpSet = this.authCategory.filter(self => self.auth_category_id === this.getID);
-                    this.pageTitle = tmpSet[0].auth_category_name;
+                    const tmpSet = this.authCategory.find(self => self.sort === this.getID);
+                    this.pageTitle = tmpSet.name;
                 }
             }
         },

@@ -77,7 +77,7 @@
 
 <script>
     function returnMainMenu() {
-        window.location.href = <?php echo json_encode(base_url()) ?> + 'admin/menu';
+        window.history.back();
     }
 
     function form_check() {

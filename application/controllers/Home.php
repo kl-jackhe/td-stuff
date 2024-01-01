@@ -34,6 +34,7 @@ class Home extends Public_Controller
 			}
 			$this->data['pcBannerCount'] = $pcBannerCount;
 			$this->data['mobileBannerCount'] = $mobileBannerCount;
+			$this->data['posts'] = $this->product_model->getHomePosts();
 			$this->render('home/partnertoys_index');
 		} else if ($this->is_liqun_food) {
 			$this->render('home/liqun_index');

@@ -6,10 +6,6 @@ class Product extends Public_Controller
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model('product_model');
-		if ($this->is_partnertoys) :
-			$this->load->model('auth_model');
-		endif;
 	}
 
 	public function index($id = 1)
@@ -29,13 +25,14 @@ class Product extends Public_Controller
 		$this->ajax_pagination->initialize($config);
 		//get the posts data
 		$this->data['products'] = $this->product_model->getProducts();
-		$this->data['product_category'] = $this->product_model->get_product_category();
+		// $this->data['product_category'] = $this->product_model->get_product_category();
 
 		if ($this->is_liqun_food || $this->is_td_stuff) {
 			$this->render('product/index');
 		}
 		if ($this->is_partnertoys) {
 			$this->data['current_page'] = $id;
+			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 			$this->render('product/partnertoys_index');
@@ -46,7 +43,7 @@ class Product extends Public_Controller
 	{
 		$this->data['page_title'] = '商品詳情';
 
-		$this->data['product_category'] = $this->product_model->get_product_category();
+		$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
 		$this->data['productCategory'] = $this->product_model->get_product_category_name($this->data['product']['product_category_id']);

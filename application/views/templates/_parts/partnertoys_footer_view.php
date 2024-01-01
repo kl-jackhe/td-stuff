@@ -50,18 +50,25 @@
                     <div class="col-12 col-md-2">
                         <h2>最新消息</h2>
                         <hr>
-                        <p v-for="post in postCategory" @click="filterByFooterCategory(post.post_category_id)">
-                            <a :href="'/posts/index?id=' + post.post_category_id">{{ post.post_category_name }}</a>
-                        </p>
+                        <?php if (!empty($footer_category)) : ?>
+                            <?php foreach ($footer_category as $self) : ?>
+                                <?php if ($self['parent_id'] == 3 && $self['status'] == 1) : ?>
+                                    <p><a href="/posts/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
-
                     <!-- 夥伴商城 -->
                     <div class="col-12 col-md-2">
                         <h2>夥伴商城</h2>
                         <hr>
-                        <p v-for="product in productCategory" @click="filterByFooterCategory(product.product_category_id)">
-                            <a :href="'/product/index?id=' + product.product_category_id">{{ product.product_category_name }}</a>
-                        </p>
+                        <?php if (!empty($footer_category)) : ?>
+                            <?php foreach ($footer_category as $self) : ?>
+                                <?php if ($self['parent_id'] == 1 && $self['status'] == 1) : ?>
+                                    <p><a href="/product/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                     <div class="col-12 col-md-2">
                         <h2>其他連結</h2>
@@ -118,19 +125,6 @@
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 <?php endif; ?>
 <script>
-    <?php if ($this->is_partnertoys) : ?>
-        const footer = Vue.createApp({
-            data() {
-                return {
-                    postCategory: <?php echo json_encode($post_category); ?>,
-                    productCategory: <?php echo json_encode($product_category); ?>,
-                };
-            },
-        });
-        // 掛載 footer Vue 應用到 #footer 元素
-        footer.mount('#footer');
-    <?php endif; ?>
-
     $(document).ready(function() {
         $('#home-carousel').carousel({
             interval: 5000

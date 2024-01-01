@@ -19,6 +19,8 @@ class About extends Public_Controller
 			$this->render('about/liqun_index');
 		}
 		if ($this->is_partnertoys) {
+			$this->load->model('menu_model');
+			$this->data['about_category'] = $this->menu_model->getSubMenuData(0, 2);
 			$this->render('about/partnertoys_index');
 		}
 	}

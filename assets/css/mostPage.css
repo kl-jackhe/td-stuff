@@ -1285,7 +1285,7 @@ input.qtyminus {
     color: #773ba8;
 }
 
-#aboutContent {
+.contentMarginBottom {
     margin-bottom: 100px;
 }
 
@@ -1953,13 +1953,23 @@ input.qtyminus {
     /* 添加過渡效果 */
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .product-row-container {
         width: calc((257.8px) * 12);
     }
 
     .product-row {
         width: 121.2%;
+    }
+}
+
+@media (max-width: 540px) {
+    .product-row-container {
+        width: calc((255.8px) * 12);
+    }
+
+    .product-row {
+        width: 124%;
     }
 }
 

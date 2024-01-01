@@ -98,8 +98,8 @@
                 this.pageTitle = '全部消息';
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
-                    const tmpSet = this.posts_categorys.filter(self => self.post_category_id === this.getID);
-                    this.pageTitle = tmpSet[0].post_category_name;
+                    const tmpSet = this.posts_categorys.find(self => self.sort === this.getID);
+                    this.pageTitle = tmpSet.name;
                 }
             }
             // 最新資訊

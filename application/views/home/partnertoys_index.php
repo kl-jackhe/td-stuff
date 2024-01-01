@@ -260,57 +260,44 @@
                     </a>
                 </div>
             </div>
-
-            
-
-            <!-- origin -->
-            <!-- <div class="container">
-            <div class="row product_box">
-                <div class="col-md-12">
-                    <span style="font-size:24px;">最新商品</span>
-                    <hr style="border-top: 1px solid #988B7A;margin: 10px 0px 25px 0px;">
-                </div>
-                <div class="col-md-12 text-center">
-                    <div class="row justify-content-center product_box_list" id="home_product">
-                        <? if (!empty($products)) {
-                            $count = 0;
-                            foreach ($products as $product) {
-                                if ($count < 12) { ?>
-                                    <div class="col-md-4 pb-5 ipad_w">
-                                        <a href="/product/view/<?= $product['product_id'] ?>">
-                                            <? if (!empty($product['product_image'])) { ?>
-                                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['product_image']; ?>">
-                                            <? } else { ?>
-                                                <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
-                                            <? } ?>
-                                            <div class="product_name">
-                                                <span>
-                                                    <?= $product['product_name']; ?></span>
-                                            </div>
-                                        </a>
-                                        <? if ($product['sales_status'] == 0) { ?>
-                                            <a class="btn select_product my-2" href="/product/view/<?= $product['product_id'] ?>">
-                                                <span>現貨</span>
-                                            </a>
-                                        <? } ?>
-                                        <? if ($product['sales_status'] == 1) { ?>
-                                            <a class="btn select_product my-2" style="background: #817F82;" href="/product/view/<?= $product['product_id'] ?>">
-                                                <span>售完</span>
-                                            </a>
-                                        <? } ?>
-                                        <? if ($product['sales_status'] == 2) { ?>
-                                            <a class="btn select_product my-2" style="background: #A60747;" href="/product/view/<?= $product['product_id'] ?>">
-                                                <span>預購</span>
-                                            </a>
-                                        <? } ?>
-                                    </div>
-                        <? }
-                                $count++;
-                            }
-                        } ?>
-                    </div>
-                </div>
-            </div> -->
         </div>
+        <!-- Third Presentation -->
+        <!-- <div class="header-third-container">
+            <div class="container">
+                <div class="homeAppear">
+                    <p class="mainText">News</p>
+                    <div class="yukaline"></div>
+                    <p class="subText">TOPICS / INFORMATION</p>
+                </div>
+            </div>
+            <div class="container">
+                <?php if (!empty($posts)) : ?>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="/assets/uploads/<?= $posts[0]['post_image'] ?>" style="max-width:100%; heigth:auto;">
+                        </div>
+                        <div class="col-md-8">
+                            <?php $count = 0; ?>
+                            <?php foreach ($posts as $key => $self) : ?>
+                                <?php if ($count < 3) : ?>
+                                    <div>
+                                        <span><?= substr($self['updated_at'], 0, 10) ?></span>
+                                        <span><?= $self['post_title'] ?></span>
+                                    </div>
+                                <?php endif; ?>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="container">
+                <div class="homeMoreAppear">
+                    <a href="/posts" class="link sd appear">
+                        <p class="text sd appear">❯ More News</p>
+                    </a>
+                </div>
+            </div>
+        </div> -->
     </section>
 </div>
