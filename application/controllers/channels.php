@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
-class Cargo_intro extends Public_Controller
+class Channels extends Public_Controller
 {
     function __construct()
     {

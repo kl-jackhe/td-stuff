@@ -793,6 +793,9 @@ a.logBtn {
 }
 
 .category_btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 100%;
     border: none;
     background: none;
@@ -864,6 +867,32 @@ a.logBtn {
 
 .menu-main li {
     border-bottom: 1px solid rgba(84, 110, 122, .35);
+}
+
+.menu-sub {
+    list-style: none;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.menu-sub li {
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1)
+}
+
+.menu-sub-enter-active,
+.menu-sub-leave-active {
+    transition: opacity 0.3s;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.menu-sub-enter,
+.menu-sub-leave-to {
+    opacity: 0;
 }
 
 .price {
@@ -2240,6 +2269,26 @@ input.qtyminus {
 
 .homeMoreAppear a:hover {
     color: #fff !important;
+}
+
+.cargoIntro {
+    margin-bottom: 20px;
+    text-align: center;
+    visibility: visible;
+    animation-name: fadeIn;
+}
+
+.cargoIntroText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 2px solid;
+    border-radius: 10px;
+    height: 38px;
+    padding: 5px 5px;
+    background-color: #D35549;
+    color: #FFFFFF;
+    text-align: center;
 }
 
 /* 修改滾動條 */

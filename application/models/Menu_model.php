@@ -32,6 +32,7 @@ class Menu_model extends CI_Model
             $query = $this->db->get('sub_menu')->result_array();
         } else if ($id != 0 && $parent_id == 0) {
             // 找parent(son找parent用)
+            $this->db->where('id', $id);
             $this->db->limit(1);
             $query = $this->db->get('sub_menu')->row_array();
         } else {

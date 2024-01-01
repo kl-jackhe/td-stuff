@@ -73,6 +73,7 @@ class Update extends Admin_Controller
                 $this->update_202312281830();
                 $this->update_202312291830();
                 $this->update_202312311830();
+                $this->update_202401012000();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -83,6 +84,31 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401012000()
+    {
+        $version = '202401012000';
+        $description = '[sub_menu]新增欄位[switch]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM sub_menu LIKE 'switch'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `sub_menu` ADD `switch` tinyint(4) NOT NULL DEFAULT 0 AFTER `status`;");
+            }
+
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

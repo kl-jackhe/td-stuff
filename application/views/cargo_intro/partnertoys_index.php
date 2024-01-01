@@ -8,6 +8,14 @@
             <div class="container">
                 <img src="/assets/uploads/Editor/images/creator/20230208153251.jpg" style="width: 100%;">
             </div>
+            <div class="row">
+                <div v-for="self in cargo_son_category" class="cargoIntro col-lg-3 col-md-6 col-xs-6 list wow fadeIn">
+                    <a @click="filterBySubCategory(1, self.id)">
+                        <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
+                        <p class="cargoIntroText">{{ self.name }}</p>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 </div>
@@ -17,28 +25,22 @@
         data() {
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
+                selectedSubCategoryId: null,
                 cargo_category: <?php echo json_encode(!empty($cargo_category) ? $cargo_category : ''); ?>,
-                cargo_son_category: <?php echo json_encode(!empty($cargo_son_category) ? $cargo_son_category : ''); ?>,
+                cargo_son_category: null,
                 pageTitle: '', // 目前標籤
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
+                isExpanded: [],
             }
-        },
-        computed: {
-            nestedCargoCategories() {
-                return this.cargo_category.map(category => {
-                    return {
-                        ...category,
-                        isExpanded: false, // 初始状态为折叠
-                    };
-                });
-            },
         },
         mounted() {
             // init btn state
             if (this.cargo_category && this.cargo_category.length > 0) {
                 this.selectedCategoryId = this.cargo_category[0].sort;
+                this.toggleCategory(this.cargo_category[0].id);
                 this.pageTitle = this.cargo_category[0].name;
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
@@ -53,16 +55,28 @@
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
             },
-            filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'cargo_intro/index' + (categoryId != null ? '?id=' + categoryId : '');
+            filterBySubCategory(Id, subId) {
+                this.selectedSubCategoryId = subId;
             },
             // 获取关联的子项
-            getSubCategories(parentSort) {
-                return this.cargo_son_category.filter(subCategory => subCategory.parent_id === parentSort);
-            },
-            toggleCategory(categorySort) {
-                const category = this.nestedCargoCategories.find(cat => cat.id === categorySort);
-                category.isExpanded = !category.isExpanded;
+            toggleCategory(categoryId) {
+                $.ajax({
+                    url: '/cargo_intro/selected_son/' + categoryId,
+                    method: 'post',
+                    success: (response) => {
+                        this.cargo_son_category = response;
+                        // 確定上一個選擇類別決定開關狀態
+                        this.isExpanded = this.cargo_category.find(self => self.id === categoryId);
+                        this.selectedSubCategoryId = null;
+                        if (this.isExpanded.sort != this.selectedCategoryId) {
+                            this.isExpanded.switch = true;
+                        } else {
+                            this.isExpanded.switch = !this.isExpanded.switch;
+                        }
+                        // 更新選擇類別
+                        this.selectedCategoryId = this.isExpanded.sort;
+                    }
+                })
             },
         },
     });
