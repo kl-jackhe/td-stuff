@@ -22,7 +22,7 @@
                 <transition name="menu-sub">
                     <ul v-show="isExpanded.switch && isExpanded.id === category.id" class="menu-sub">
                         <li v-for="subCategory in cargo_son_category" :key="subCategory.sort">
-                            <input type="button" :value="'．&nbsp;' + subCategory.name" @click="filterBySubCategory(category.sort, subCategory.sort)" :class="{ category_btn: true, active: selectedSubCategoryId === subCategory.sort}">
+                            <input type="button" :value="'&nbsp;' + subCategory.name" @click="filterBySubCategory(category.sort, subCategory.sort)" :class="{ category_btn: true, active: selectedSubCategoryId === subCategory.sort}">
                         </li>
                     </ul>
                 </transition>

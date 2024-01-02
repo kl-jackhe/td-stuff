@@ -10,7 +10,7 @@
                     <img src="/assets//uploads/Editor/images/20200710164258.jpg" style="width: 100%;">
                 </div>
                 <div class="row">
-                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-xs-6 list wow fadeIn">
+                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a @click="filterBySubCategory(1, self.id)">
                             <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
                             <p class="cargoIntroText">{{ self.name }}</p>
@@ -23,7 +23,7 @@
                     <img src="/assets//uploads/Editor/images/20200710164301.jpg" style="width: 100%;">
                 </div>
                 <div class="row">
-                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-xs-6 list wow fadeIn">
+                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a @click="filterBySubCategory(1, self.id)">
                             <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
                             <p class="cargoIntroText">{{ self.name }}</p>
@@ -54,13 +54,15 @@
         mounted() {
             // init btn state
             if (this.artist_category && this.artist_category.length > 0) {
-                this.selectedCategoryId = this.artist_category[0].sort;
-                this.toggleCategory(this.artist_category[0].id);
-                this.pageTitle = this.artist_category[0].name;
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
+                    this.toggleCategory(this.artist_category[parseInt(this.getID) - 1].id);
                     const tmpSet = this.artist_category.find(self => self.sort === this.getID);
                     this.pageTitle = tmpSet.name;
+                } else {
+                    this.selectedCategoryId = this.artist_category[0].sort;
+                    this.pageTitle = this.artist_category[0].name;
+                    this.toggleCategory(this.artist_category[0].id);
                 }
             }
         },

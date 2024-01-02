@@ -92,6 +92,7 @@
                                 <img class="header_logo" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
                             </a>
                         </div>
+                        <!-- PC -->
                         <div class="header-main-nav col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
                             <div class="row justify-content-end">
                                 <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
@@ -140,21 +141,29 @@
                     </div>
                 </div>
                 <!-- 待修 -->
+                <!-- Mobile -->
                 <div class="row" style="position: relative;z-index: 99;">
                     <div class="collapse navbar-collapse" id="navbarToggler">
                         <ul class="navbar-nav">
-                            <li class="nav_item_mb_style">
-                                <a href="/product" class="nav_item_style">夥伴商城</a>
-                            </li>
-                            <li class="nav_item_mb_style">
-                                <a href="/about" class="nav_item_style">關於夥伴</a>
-                            </li>
-                            <li class="nav_item_mb_style">
-                                <a href="/posts" class="nav_item_style">最新訊息</a>
-                            </li>
-                            <li class="nav_item_mb_style">
-                                <a href="/auth" class="nav_item_style">會員專區</a>
-                            </li>
+                            <!-- Mobile Header -->
+                            <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
+                                <?php foreach ($header_menu as $self) : ?>
+                                    <?php if (!empty($self['status'])) : ?>
+                                        <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
+                                            <li class="nav_item_mb_style">
+                                                <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a>
+                                            </li>
+                                        <?php else : ?>
+                                            <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                                <li class="nav_item_mb_style">
+                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                </li>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            <!-- Logout -->
                             <li class="nav_item_mb_style">
                                 <?php if (!empty($this->session->userdata('user_id'))) : ?>
                                     <span class="logoutPhone" @click="confirmLogout">

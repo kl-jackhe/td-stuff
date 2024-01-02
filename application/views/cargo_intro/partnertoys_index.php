@@ -5,15 +5,17 @@
             <div class="container">
                 <h1><span>{{ pageTitle }}</span></h1>
             </div>
-            <div class="container">
-                <img src="/assets/uploads/Editor/images/creator/20230208153251.jpg" style="width: 100%;">
-            </div>
-            <div class="row">
-                <div v-for="self in cargo_son_category" class="cargoIntro col-lg-3 col-md-6 col-xs-6 list wow fadeIn">
-                    <a @click="filterBySubCategory(1, self.id)">
-                        <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
-                        <p class="cargoIntroText">{{ self.name }}</p>
-                    </a>
+            <div v-if="selectedCategoryId == 1">
+                <div class="container">
+                    <img src="/assets/uploads/Editor/images/creator/20230208153251.jpg" style="width: 100%;">
+                </div>
+                <div class="row">
+                    <div v-for="self in cargo_son_category" class="cargoIntro col-lg-3 col-md-6 col-6 list wow fadeIn">
+                        <a @click="filterBySubCategory(1, self.id)">
+                            <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
+                            <p class="cargoIntroText">{{ self.name }}</p>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,13 +41,15 @@
         mounted() {
             // init btn state
             if (this.cargo_category && this.cargo_category.length > 0) {
-                this.selectedCategoryId = this.cargo_category[0].sort;
-                this.toggleCategory(this.cargo_category[0].id);
-                this.pageTitle = this.cargo_category[0].name;
                 if (this.getID && this.getID.length > 0) {
                     this.selectedCategoryId = this.getID;
+                    this.toggleCategory(this.cargo_category[parseInt(this.getID) - 1].id);
                     const tmpSet = this.cargo_category.find(self => self.sort === this.getID);
                     this.pageTitle = tmpSet.name;
+                } else {
+                    this.selectedCategoryId = this.cargo_category[0].sort;
+                    this.toggleCategory(this.cargo_category[0].id);
+                    this.pageTitle = this.cargo_category[0].name;
                 }
             }
         },
