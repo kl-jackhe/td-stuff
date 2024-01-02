@@ -20,6 +20,7 @@ class About extends Public_Controller
 		}
 		if ($this->is_partnertoys) {
 			$this->load->model('menu_model');
+			$this->data['page_title'] = '關於夥伴';
 			$this->data['about_category'] = $this->menu_model->getSubMenuData(0, 2);
 			$this->render('about/partnertoys_index');
 		}

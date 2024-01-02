@@ -23,9 +23,9 @@ class Cart extends Public_Controller
 	{
 		$i = 0;
 
-		// echo '<pre>';
-		// print_r($this->cart->contents(true));
-		// echo '</pre>';
+		echo '<pre>';
+		print_r($this->cart->contents(true));
+		echo '</pre>';
 
 		$specification_name = $this->input->post('specification_name');
 		$specification_qty = $this->input->post('specification_qty');
@@ -46,6 +46,9 @@ class Cart extends Public_Controller
 						if (($self['product_category_id'] == '1' && $this_product['product_category_id'] != '1') || ($self['product_category_id'] != '1' && $this_product['product_category_id'] == '1')) {
 							echo 'contradiction';
 							return;
+						}
+						if ($self['id'] == $this_product_combine['id']) {
+							$self[''];
 						}
 					}
 				}

@@ -14,14 +14,14 @@
     <h1 class=""><span><?= !empty($page_title) ? $page_title : '' ?></span></h1>
     <!-- 篩選清單 -->
     <ul class="menu-main">
-        <div v-for="category in artist_category">
+        <div v-for="category in channels_category">
             <li v-if="category.status == 1" :key="category.sort">
                 <div class="category-header" @click="toggleCategory(category.id)">
                     <input type="button" :value="'>&nbsp;' + category.name" :class="{ category_btn: true, active: selectedCategoryId === category.sort}">
                 </div>
                 <transition name="menu-sub">
                     <ul v-show="isExpanded.switch && isExpanded.id === category.id" class="menu-sub">
-                        <li v-for="subCategory in artist_son_category" :key="subCategory.sort">
+                        <li v-for="subCategory in channels_son_category" :key="subCategory.sort">
                             <input type="button" :value="'&nbsp;' + subCategory.name" @click="filterBySubCategory(subCategory.id)" :class="{ category_btn: true, active: selectedSubCategoryId === subCategory.id}">
                         </li>
                     </ul>

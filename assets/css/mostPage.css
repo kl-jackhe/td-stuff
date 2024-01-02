@@ -2271,20 +2271,19 @@ input.qtyminus {
     color: #fff !important;
 }
 
-.cargoIntro {
+.intro {
     margin-bottom: 20px;
     text-align: center;
     visibility: visible;
     animation-name: fadeIn;
 }
 
-.cargoIntroText {
+.introText {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     border: 2px solid;
     border-radius: 10px;
-    height: 38px;
     padding: 5px 5px;
     background-color: #D35549;
     color: #FFFFFF;

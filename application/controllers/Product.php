@@ -10,7 +10,7 @@ class Product extends Public_Controller
 
 	public function index($id = 1)
 	{
-		$this->data['page_title'] = '商品';
+		$this->data['page_title'] = '夥伴商城';
 
 		$data = array();
 		//total rows count

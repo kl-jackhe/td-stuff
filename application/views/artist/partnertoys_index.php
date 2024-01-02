@@ -5,28 +5,28 @@
             <div class="container">
                 <h1><span>{{ pageTitle }}</span></h1>
             </div>
-            <div v-if="selectedCategoryId == 1">
+            <div v-if="selectedCategoryId == 1 && selectedSubCategoryId == null">
                 <div class="container">
                     <img src="/assets//uploads/Editor/images/20200710164258.jpg" style="width: 100%;">
                 </div>
                 <div class="row">
-                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-6 list wow fadeIn">
-                        <a @click="filterBySubCategory(1, self.id)">
+                    <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
+                        <a @click="filterBySubCategory(self.id)">
                             <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
-                            <p class="cargoIntroText">{{ self.name }}</p>
+                            <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>
                 </div>
             </div>
-            <div v-if="selectedCategoryId == 2">
+            <div v-if="selectedCategoryId == 2 && selectedSubCategoryId == null">
                 <div class="container">
                     <img src="/assets//uploads/Editor/images/20200710164301.jpg" style="width: 100%;">
                 </div>
                 <div class="row">
-                    <div v-for="self in artist_son_category" class="cargoIntro col-lg-3 col-md-6 col-6 list wow fadeIn">
-                        <a @click="filterBySubCategory(1, self.id)">
+                    <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
+                        <a @click="filterBySubCategory(self.id)">
                             <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
-                            <p class="cargoIntroText">{{ self.name }}</p>
+                            <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
             },
-            filterBySubCategory(Id, subId) {
+            filterBySubCategory(subId) {
                 this.selectedSubCategoryId = subId;
             },
             // 获取关联的子项
@@ -84,12 +84,12 @@
                         this.artist_son_category = response;
                         // 確定上一個選擇類別決定開關狀態
                         this.isExpanded = this.artist_category.find(self => self.id === categoryId);
-                        this.selectedSubCategoryId = null;
-                        if (this.isExpanded.sort != this.selectedCategoryId) {
+                        if (this.isExpanded.sort != this.selectedCategoryId || this.selectedSubCategoryId !== null) {
                             this.isExpanded.switch = true;
                         } else {
                             this.isExpanded.switch = !this.isExpanded.switch;
                         }
+                        this.selectedSubCategoryId = null;
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
                     }

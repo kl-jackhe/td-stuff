@@ -11,7 +11,7 @@
     <!-- 篩選清單呼叫鈕 -->
 </div>
 <div :class="{ 'section-sidemenu': true, 'nav-open': isNavOpen }">
-    <h1 class=""><span>關於我們</span></h1>
+    <h1 class=""><span><?= !empty($page_title) ? $page_title : '' ?></span></h1>
     <!-- 篩選清單 -->
     <ul class="menu-main">
         <div v-for="category in about_category">
