@@ -11,7 +11,7 @@ $sub_current = $this->uri->segment(3); ?>
         <span>控制台</span>
       </a>
     </li>
-    <li <?= (($current == "product" && $sub_current != "category") || ($current == "product" && $sub_current == "category")) ? "class='active'" : ''; ?>>
+    <!-- <li <?= (($current == "product" && $sub_current != "category") || ($current == "product" && $sub_current == "category")) ? "class='active'" : ''; ?>>
       <a href="#" class="dropdown-toggle">
         <i class="fa fa-shopping-basket"></i>
         <span>商品管理</span>
@@ -25,6 +25,12 @@ $sub_current = $this->uri->segment(3); ?>
           <a href="/admin/product">商品清單</a>
         </li>
       </ul>
+    </li> -->
+    <li class="<?= ($current == "product") ? "active" : ''; ?>">
+      <a href="/admin/product">
+        <i class="fa fa-shopping-basket"></i>
+        <span>商品管理</span>
+      </a>
     </li>
     <li class="<?= ($current == "order") ? "active" : ''; ?>">
       <a href="/admin/order">

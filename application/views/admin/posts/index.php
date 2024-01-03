@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-6">
     <a href="/admin/posts/create" class="btn btn-primary hidden-print">新增公布欄</a>
-    <a href="/admin/posts/category" class="btn btn-success">分類</a>
+    <!-- <a href="/admin/posts/category" class="btn btn-success">分類</a> -->
   </div>
   <div class="col-md-6">
     <div class="form-inline text-right">
