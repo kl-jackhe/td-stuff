@@ -123,9 +123,11 @@ function changeProduct (direction) {
 }
 
 function startAutoSlide () {
+  stopAutoSlide(); // 先停止之前的定时器
+
   autoInterval = setInterval(function () {
     changeProduct(1)
-  }, 3000) // 輪播速度3秒換一張
+  }, 3000); // 輪播速度3秒換一張
 }
 
 function stopAutoSlide () {
@@ -147,15 +149,22 @@ function getVisibleProductCount () {
   if (screenWidth < 768) {
     return 1 // 在螢幕小於768px時，顯示一張商品
   } else if (screenWidth < 769) {
-    return 2 // 在螢幕小於768px時，顯示一張商品
+    return 2 // 在螢幕小於769px時，顯示一張商品
   } else {
-    return 4 // 在螢幕大於等於768px時，顯示四張商品
+    return 4 // 在螢幕大於等於769px時，顯示四張商品
   }
 }
 
 if (productRowContainer) {
   startAutoSlide()
 
-  productRowContainer.addEventListener('mouseenter', stopAutoSlide)
-  productRowContainer.addEventListener('mouseleave', startAutoSlide)
+  productRowContainer.addEventListener('mouseenter', function () {
+    isAnimating = true
+    stopAutoSlide()
+  })
+
+  productRowContainer.addEventListener('mouseleave', function () {
+    isAnimating = false
+    startAutoSlide()
+  })
 }
