@@ -90,6 +90,15 @@ label.required::before {
     color: #ffe747;
 }
 
+.header-icons .search-icon {
+    display: none;
+}
+
+.header-icons .search-icon.visible {
+    display: inline-block;
+    /* 或其他您想要的顯示屬性 */
+}
+
 .main-menu {
     position: relative;
 }
@@ -2280,6 +2289,10 @@ input.qtyminus {
     background-color: #D35549;
     color: #FFFFFF;
     text-align: center;
+}
+
+.cursorPoint {
+    cursor: pointer;
 }
 
 /* 修改滾動條 */

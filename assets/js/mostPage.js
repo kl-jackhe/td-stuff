@@ -45,11 +45,8 @@ $(document).ready(function () {
       currentPageUrl.indexOf('/product') !== -1) ||
     currentPageUrl.indexOf('/posts') !== -1
   ) {
-    // 在特定页面显示搜索图标
-    $('.header-icons .search-icon').show()
-  } else {
-    // 在其他页面隐藏搜索图标
-    $('.header-icons .search-icon').hide()
+    // 在特定页面添加一个类，使搜索图标可见
+    $('.header-icons .search-icon').addClass('visible')
   }
 })
 
@@ -123,11 +120,11 @@ function changeProduct (direction) {
 }
 
 function startAutoSlide () {
-  stopAutoSlide(); // 先停止之前的定时器
+  stopAutoSlide() // 先停止之前的定时器
 
   autoInterval = setInterval(function () {
     changeProduct(1)
-  }, 3000); // 輪播速度3秒換一張
+  }, 3000) // 輪播速度3秒換一張
 }
 
 function stopAutoSlide () {

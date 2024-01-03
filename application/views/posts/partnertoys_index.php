@@ -184,7 +184,7 @@
             // 選中獨立商品
             showPostDetails(post) {
                 this.selectedPost = post;
-                this.selectedPostCategoryId = this.posts_categorys.filter(category => category.post_category_id === post.post_category);
+                this.selectedPostCategoryId = this.posts_categorys.filter(category => category.sort === post.post_category);
 
             },
             // 搜尋攔篩選
