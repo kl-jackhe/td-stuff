@@ -2,11 +2,15 @@
 
 class Checkout extends Public_Controller
 {
+	private $aesKey;
+	private $aesIv;
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->load->model('checkout_model');
+		$this->aesKey = openssl_random_pseudo_bytes(32); // 256 bits (32 bytes) key
+		$this->aesIv = openssl_random_pseudo_bytes(16);  // 128 bits (16 bytes) IV
 	}
 
 	public function index()
@@ -578,6 +582,17 @@ class Checkout extends Public_Controller
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', decode($order_id), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', decode($order_id));
 		$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
+		// debug unknow users relogin
+		if (empty($this->session->userdata('user_id'))) {
+			$query = $this->db->select('username, email, id, password, active, last_login')
+				->where('username', $this->data['order']['customer_name'])
+				->limit(1)
+				->order_by('id', 'desc')
+				->get($this->ion_auth_model->tables['users']);
+			$user = $query->row();
+			$this->ion_auth_model->set_session($user);
+			$this->ion_auth_model->update_last_login($user->id);
+		}
 
 		$this->render('checkout/checkout_success');
 	}
@@ -766,7 +781,7 @@ class Checkout extends Public_Controller
 
 				if ($response['ResCode'] == '1') {
 					// print_r($response['AllPayLogisticsID']);
-					// print_r($response['CVSPaymentNo']);
+					// print_r($response['CVSPaymentNo']);check_pay
 					$data = array(
 						'AllPayLogisticsID' => get_empty($response['AllPayLogisticsID']),
 						'CVSPaymentNo' => get_empty($response['CVSPaymentNo']),
