@@ -280,14 +280,15 @@ if (!empty($this->cart->contents())) {
                 if (currentVal > input.attr('min')) {
                     input.val(currentVal - 1).change();
                 }
-                if (parseInt(input.val()) == input.attr('min')) {
+                else if (parseInt(input.val()) == input.attr('min')) {
+                    alert('商品數量不得小於1。');
                     $(this).attr('disabled', true);
                 }
             } else if (type == 'plus') {
                 if (currentVal < input.attr('max')) {
                     input.val(currentVal + 1).change();
                 }
-                if (parseInt(input.val()) == input.attr('max')) {
+                else if (parseInt(input.val()) == input.attr('max')) {
                     alert('已達商品限制最大數量，敬請見諒。');
                     $(this).attr('disabled', true);
                 }
