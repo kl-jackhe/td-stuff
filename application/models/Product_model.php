@@ -152,14 +152,17 @@ class Product_model extends CI_Model
 		}
 	}
 
-	function getProductCombine()
+	function getProductCombine($id = null)
 	{
 		$this->db->select('*');
-		$query = $this->db->get('product_combine');
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
+		if ($id == null) {
+			$query = $this->db->get('product_combine');
+			return ($query->num_rows() > 0) ? $query->result_array() : false;
 		} else {
-			return false;
+			$this->db->limit(1);
+			$this->db->where('id', $id);
+			$query = $this->db->get('product_combine');
+			return ($query->num_rows() > 0) ? $query->row_array() : false;
 		}
 	}
 

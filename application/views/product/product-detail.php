@@ -206,8 +206,14 @@
                     success: function(data) {
                         if (data == 'contradiction') {
                             alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
-                        } else {
+                        } else if (data == 'exceed') {
+                            alert('超過限制數量故無法下單，敬請見諒');
+                        } else if (data == 'updateSuccessful') {
+                            alert('更新成功');
+                        } else if (data == 'successful') {
                             alert('加入成功');
+                        } else {
+                            console.log(data);
                         }
                         get_cart_qty();
                     }
