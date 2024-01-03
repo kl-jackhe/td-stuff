@@ -62,7 +62,7 @@ class Cart extends Public_Controller
 						}
 						$rowid = $self['rowid'];
 						$new_qty = (int)$self['qty'] + (int)$qty;
-						
+
 						$data = array(
 							'rowid' => $rowid,
 							'qty'	=> $new_qty
@@ -76,18 +76,38 @@ class Cart extends Public_Controller
 			}
 		}
 
+		// $name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
+		// $price = $this_product_combine['current_price'];
+		// if (!empty($specification_qty)) {
+		// 	foreach ($specification_qty as $row) {
+		// 		if ($row != 0) {
+		// 			$specification_name_array[] = $specification_name[$i];
+		// 			$specification_id_array[] = $specification_id[$i];
+		// 			$specification_qty_array[] = $row;
+		// 		}
+		// 		$i++;
+		// 	}
+		// }
+		// $insert_data = array(
+		// 	'product_id' => $this_product_combine['product_id'],
+		// 	'product_category_id' => $this_product['product_category_id'],
+		// 	'id' => $this_product_combine['id'],
+		// 	'name' => $name,
+		// 	'price' => $price,
+		// 	'qty' => $qty,
+		// 	'specification' => array(
+		// 		'specification_name' => $specification_name_array,
+		// 		'specification_id' => $specification_id_array,
+		// 		'specification_qty' => $specification_qty_array,
+		// 	),
+		// 	'image' => $this_product_combine['picture'],
+		// 	'options' => array(
+		// 		'time' => get_random_string(15),
+		// 	),
+		// );
+
 		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
 		$price = $this_product_combine['current_price'];
-		if (!empty($specification_qty)) {
-			foreach ($specification_qty as $row) {
-				if ($row != 0) {
-					$specification_name_array[] = $specification_name[$i];
-					$specification_id_array[] = $specification_id[$i];
-					$specification_qty_array[] = $row;
-				}
-				$i++;
-			}
-		}
 		$insert_data = array(
 			'product_id' => $this_product_combine['product_id'],
 			'product_category_id' => $this_product['product_category_id'],
@@ -95,11 +115,6 @@ class Cart extends Public_Controller
 			'name' => $name,
 			'price' => $price,
 			'qty' => $qty,
-			'specification' => array(
-				'specification_name' => $specification_name_array,
-				'specification_id' => $specification_id_array,
-				'specification_qty' => $specification_qty_array,
-			),
 			'image' => $this_product_combine['picture'],
 			'options' => array(
 				'time' => get_random_string(15),
@@ -107,10 +122,11 @@ class Cart extends Public_Controller
 		);
 		$rowid = $this->cart->insert($insert_data);
 		if ($rowid) {
-			return 'successful';
+			echo 'successful';
 		} else {
-			return 'unsuccessful';
+			echo 'unsuccessful';
 		}
+		return;
 	}
 
 	function add_single_sales_combine()

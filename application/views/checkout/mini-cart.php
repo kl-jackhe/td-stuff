@@ -279,16 +279,28 @@ if (!empty($this->cart->contents())) {
             if (type == 'minus') {
                 if (currentVal > input.attr('min')) {
                     input.val(currentVal - 1).change();
-                }
-                else if (parseInt(input.val()) == input.attr('min')) {
-                    alert('商品數量不得小於1。');
+                } else if (parseInt(input.val()) == input.attr('min')) {
+                    // alert('商品數量不得小於1。');
+                    const delect = confirm("貼心提醒，是否指定商品將從購物車清除。");
+                    if (delect) {
+                        var rowid = this.id;
+                        $.ajax({
+                            url: "/cart/remove",
+                            method: "POST",
+                            data: {
+                                rowid: rowid
+                            },
+                            success: function(data) {
+                                get_mini_cart();
+                            }
+                        });
+                    }
                     $(this).attr('disabled', true);
                 }
             } else if (type == 'plus') {
                 if (currentVal < input.attr('max')) {
                     input.val(currentVal + 1).change();
-                }
-                else if (parseInt(input.val()) == input.attr('max')) {
+                } else if (parseInt(input.val()) == input.attr('max')) {
                     alert('已達商品限制最大數量，敬請見諒。');
                     $(this).attr('disabled', true);
                 }

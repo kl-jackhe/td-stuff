@@ -1992,7 +1992,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 541px) {
     .product-row-container {
         width: calc((255.8px) * 12);
     }
@@ -2002,7 +2002,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 451px) {
     .product-row-container {
         width: calc((255.8px) * 12);
     }
@@ -2012,17 +2012,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 450px) {
-    .product-row-container {
-        width: calc((255.8px) * 12);
-    }
-
-    .product-row {
-        width: 121.2%;
-    }
-}
-
-@media (max-width: 430px) {
+@media (max-width: 441px) {
     .product-row-container {
         width: calc((254.2px) * 12);
     }
@@ -2032,7 +2022,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 414px) {
+@media (max-width: 421px) {
     .product-row-container {
         width: calc((254.2px) * 12);
     }
@@ -2042,7 +2032,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 412px) {
+@media (max-width: 413px) {
     .product-row-container {
         width: calc((253.1px) * 12);
     }
@@ -2052,17 +2042,17 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 395px) {
+@media (max-width: 396px) {
     .product-row-container {
         width: calc((251.9px) * 12);
     }
 
     .product-row {
-        width: 121.2%;
+        width: 121.3%;
     }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 391px) {
     .product-row-container {
         width: calc((254.1px) * 12);
     }
@@ -2072,7 +2062,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 376px) {
     .product-row-container {
         width: calc((253px) * 12);
     }
@@ -2082,9 +2072,9 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 361px) {
     .product-row-container {
-        width: calc((252.2px) * 12);
+        width: calc((252.1px) * 12);
     }
 
     .product-row {
@@ -2092,9 +2082,9 @@ input.qtyminus {
     }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 321px) {
     .product-row-container {
-        width: calc((249.1px) * 12);
+        width: calc((249.2px) * 12);
     }
 
     .product-row {
@@ -2103,6 +2093,7 @@ input.qtyminus {
 }
 
 .homeProductPreview:hover {
+    cursor: pointer;
     filter: brightness(0.8);
     /* 滑鼠懸停時降低亮度（變暗） */
 }
@@ -2144,15 +2135,16 @@ input.qtyminus {
     background: url(/assets/uploads/ic_listmask.png) no-repeat;
     background-size: 70px 70px;
     opacity: 0;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) rotate(0deg);
+    /* 添加 rotate 属性 */
     transition: all .3s ease-in-out;
     z-index: 10;
-    /* 調整 z-index 的值 */
 }
 
 .homeProductPreview:hover:after {
+    transform: translate(-50%, -50%) rotate(360deg);
+    /* 鼠标悬停时旋转360度 */
     opacity: 1;
-    /* 滑鼠懸停時顯示圖標 */
 }
 
 .hometxt {

@@ -112,7 +112,10 @@ function changeProduct (direction) {
       function () {
         isAnimating = false
         productRow.style.transition = 'none'
-        startAutoSlide() // 動畫結束後重新啟動自動輪播
+        if (productRowContainer) {
+          startAutoSlide()
+        }
+        // startAutoSlide() // 動畫結束後重新啟動自動輪播
       },
       { once: true }
     )
@@ -150,7 +153,9 @@ function getVisibleProductCount () {
   }
 }
 
-startAutoSlide()
+if (productRowContainer) {
+  startAutoSlide()
 
-productRowContainer.addEventListener('mouseenter', stopAutoSlide)
-productRowContainer.addEventListener('mouseleave', startAutoSlide)
+  productRowContainer.addEventListener('mouseenter', stopAutoSlide)
+  productRowContainer.addEventListener('mouseleave', startAutoSlide)
+}

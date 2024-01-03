@@ -105,7 +105,9 @@
                                                     <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
                                                         <ul id="SubMenu<?= $key ?>" class="sub-menu">
                                                             <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                                <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                <?php if (!empty($sub_self['status'])) : ?>
+                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                <?php endif; ?>
                                                             <?php endforeach; ?>
                                                         </ul>
                                                     <?php endif; ?>
@@ -119,7 +121,9 @@
                                                         <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
                                                             <ul id="SubMenu<?= $key ?>" class="sub-menu">
                                                                 <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                    <?php if (!empty($sub_self['status'])) : ?>
+                                                                        <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                    <?php endif; ?>
                                                                 <?php endforeach; ?>
                                                             </ul>
                                                         <?php endif; ?>
