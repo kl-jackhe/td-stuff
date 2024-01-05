@@ -286,7 +286,115 @@ foreach ($this->cart->contents() as $items) {
                         <br>
                         <br>
                     </section>
-                    <h3>付款方式</h3>
+                    <h3>訂購資訊</h3>
+                    <section>
+                        <div class="container-fluid">
+                            <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
+                                <div class="input-group mb-3 col-12 col-sm-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">姓名</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">電話</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Email</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">通訊地址</span>
+                                    </div>
+                                    <select class="form-control" id="Country">
+                                        <option value="請選擇國家" selected>請選擇國家</option>
+                                        <option value="臺灣">臺灣</option>
+                                        <option value="中國">中國</option>
+                                        <option value="香港">香港</option>
+                                        <option value="澳門">澳門</option>
+                                        <option value="其它">其它</option>
+                                    </select>
+                                </div>
+                                <!-- zip of taiwan -->
+                                <div id="twzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
+                                    <div class="mb-2 col-md-4 col-12" data-role="county"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="district"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode"></div>
+                                </div>
+                                <!-- zip of china -->
+                                <div id="cnzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
+                                    <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="province"></div>
+                                    <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="county"></div>
+                                    <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="district"></div>
+                                    <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="zipcode"></div>
+                                </div>
+                                <!-- 指定地點運送地址 -->
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">詳細地址</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
+                                </div>
+                                <!-- 備註 -->
+                                <div class="input-group mb-3 col-12 col-sm-8">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">訂單備註</span>
+                                    </div>
+                                    <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
+                                </div>
+                                <div class="input-group col-12 col-sm-8 mb-3" style="display: <?= ($this->session->userdata('member_join_status') == 'IsJoin' ? 'none' : 'show') ?>;">
+                                    <div class="input-group-prepend become_member_quickly" onclick="changeBecomeMemberQuickly()" style="cursor: pointer;">
+                                        <span class="input-group-text">
+                                            <i class="fa-regular fa-square"></i>
+                                            <i class="fa-regular fa-square-check" style="display:none;"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" value="快速成為會員" disabled>
+                                </div>
+                                <div class="input-group col-12 col-sm-8 mb-3 joinMember" style="display:none;">
+                                    <input type="hidden" value="" id="become_member_quickly" name="become_member_quickly">
+                                    <div class="input-group pb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">帳號</span>
+                                        </div>
+                                        <input type="text" class="form-control" id="account" name="account" value="" readonly>
+                                    </div>
+                                    <div>
+                                        <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
+                                    </div>
+                                    <div class="input-group pb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密碼</span>
+                                        </div>
+                                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="請輸入密碼">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="passwordShowOrHide('password')">
+                                                <i class="fa-solid fa-eye" id="password_eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">密碼確認</span>
+                                        </div>
+                                        <input type="password" class="form-control" id="password_confirm" name="password_confirm" value="" placeholder="請輸入密碼確認">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
+                                                <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <h3>取貨方式</h3>
                     <section>
                         <div class="container-fluid py-3">
                             <div class="row">
@@ -404,118 +512,6 @@ foreach ($this->cart->contents() as $items) {
                             </div>
                         </div>
                     </section>
-                    <h3>收件資訊</h3>
-                    <section>
-                        <div class="container-fluid">
-                            <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
-                                <div class="input-group mb-3 col-12 col-sm-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">姓名</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">電話</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Email</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">縣/市</label>
-                                    </div>
-                                    <div style="width: 89.9%;">
-                                        <div id="twzipcode"></div>
-                                    </div>
-                                </div>
-                                <!-- 指定地點運送地址 -->
-                                <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">地址</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
-                                </div>
-                                <!-- 超商取貨地址 -->
-                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">門市編號</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storeid" id="storeid" value="<?php echo $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">取貨門市</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">門市地址</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
-                                    <div style="width: 100%; margin-top: 15px;">
-                                        <span class="btn btn-primary" onclick="locationToCvsMap();">選擇門市</span>
-                                    </div>
-                                </div>
-                                <!-- 備註 -->
-                                <div class="input-group mb-3 col-12 col-sm-8">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">訂單備註</span>
-                                    </div>
-                                    <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
-                                </div>
-                                <div class="input-group col-12 col-sm-8 mb-3" style="display: <?= ($this->session->userdata('member_join_status') == 'IsJoin' ? 'none' : 'show') ?>;">
-                                    <div class="input-group-prepend become_member_quickly" onclick="changeBecomeMemberQuickly()" style="cursor: pointer;">
-                                        <span class="input-group-text">
-                                            <i class="fa-regular fa-square"></i>
-                                            <i class="fa-regular fa-square-check" style="display:none;"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control" value="快速成為會員" disabled>
-                                </div>
-                                <div class="input-group col-12 col-sm-8 mb-3 joinMember" style="display:none;">
-                                    <input type="hidden" value="" id="become_member_quickly" name="become_member_quickly">
-                                    <div class="input-group pb-2">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">帳號</span>
-                                        </div>
-                                        <input type="text" class="form-control" id="account" name="account" value="" readonly>
-                                    </div>
-                                    <div>
-                                        <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
-                                    </div>
-                                    <div class="input-group pb-2">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">密碼</span>
-                                        </div>
-                                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="請輸入密碼">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" onclick="passwordShowOrHide('password')">
-                                                <i class="fa-solid fa-eye" id="password_eye"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">密碼確認</span>
-                                        </div>
-                                        <input type="password" class="form-control" id="password_confirm" name="password_confirm" value="" placeholder="請輸入密碼確認">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
-                                                <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
                     <h3>確認下單</h3>
                     <section>
                         <div class="container-fluid">
@@ -603,13 +599,13 @@ foreach ($this->cart->contents() as $items) {
             // console.log(newIndex)
             // console.log(delivery);
 
-            if (delivery == '711_pickup' || delivery == 'family_pickup') {
-                $('.delivery_address').hide();
-                $('.supermarket').show();
-            } else {
-                $('.delivery_address').show();
-                $('.supermarket').hide();
-            }
+            // if (delivery == '711_pickup' || delivery == 'family_pickup') {
+            //     $('.delivery_address').hide();
+            //     $('.supermarket').show();
+            // } else {
+            //     $('.delivery_address').show();
+            //     $('.supermarket').hide();
+            // }
 
             if (newIndex === 3) {
                 // var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
@@ -715,18 +711,82 @@ foreach ($this->cart->contents() as $items) {
     }
 </script>
 <!-- purchase-steps -->
-<script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
+<script src="/assets/twzipcode/jquery.twzipcode.min.js"></script>
+<script src="/assets/jQuery-cn-zipcode-master/jquery-cn-zipcode.min.js"></script>
 <script>
-    $('#twzipcode').twzipcode({
-        // 'detect': true, // 預設值為 false
-        zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
-        'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-        // 'countySel': '<?php // echo $user->county 
-                            ?>',
-        // 'districtSel': '<?php // echo $user->district 
-                            ?>'
+    // twzipcode
+    $(document).ready(function() {
+        // 初始化 twzipcode
+        $("#twzipcode").twzipcode();
+        
+        $("#Country").change(function() {
+            if ($(this).val() === '臺灣') {
+                $("#twzipcode").show();
+            }else {
+                $("#twzipcode").hide();
+            }
+        });
+
+        // 禁用郵遞區號的輸入框
+        $("[name='zipcode']").prop('disabled', true);
+
+        // 選擇縣市、鄉鎮市區下拉選單
+        var countySelect = $("#twzipcode select[name='county']");
+        var districtSelect = $("#twzipcode select[name='district']");
+        var zipcodeInput = $("#twzipcode input[name='zipcode']");
+
+        if (countySelect.length > 0) {
+            countySelect.addClass('form-control');
+        }
+
+        if (districtSelect.length > 0) {
+            districtSelect.addClass('form-control');
+        }
+
+        if (zipcodeInput.length > 0) {
+            zipcodeInput.addClass('form-control');
+        }
+    });
+    // cnzipcode
+    $(document).ready(function() {
+        // 初始化 cnzipcode
+        $("#cnzipcode").cnzipcode();
+        
+        $("#Country").change(function() {
+            if ($(this).val() === '中國') {
+                $("#cnzipcode").show();
+            }else {
+                $("#cnzipcode").hide();
+            }
+        });
+
+        // 禁用郵遞區號的輸入框
+        $("[name='zipcode']").prop('disabled', true);
+
+        // 選擇縣市、鄉鎮市區下拉選單
+        var provinceSelect = $("#cnzipcode select[name='province']");
+        var countySelect = $("#cnzipcode select[name='county']");
+        var districtSelect = $("#cnzipcode select[name='district']");
+        var zipcodeInput = $("#cnzipcode input[name='zipcode']");
+
+        if (provinceSelect.length > 0) {
+            provinceSelect.addClass('form-control');
+        }
+
+        if (countySelect.length > 0) {
+            countySelect.addClass('form-control');
+        }
+
+        if (districtSelect.length > 0) {
+            districtSelect.addClass('form-control');
+        }
+
+        if (zipcodeInput.length > 0) {
+            zipcodeInput.addClass('form-control');
+        }
     });
 </script>
+<!-- gomi rejust -->
 <script>
     $(document).ready(function() {
         $('#account').val('');

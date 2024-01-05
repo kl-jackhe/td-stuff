@@ -960,7 +960,6 @@ function utf8_to_big5_array($array)
  * @update 2014-10-10 10:10
  * @return String
  */
-// KUANGLIP
 function encode($string = '', $skey = 'KUANGLIP')
 {
 	$strArr = str_split(base64_encode($string));
