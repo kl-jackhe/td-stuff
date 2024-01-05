@@ -991,16 +991,3 @@ function decode($string = '', $skey = 'KUANGLIP')
 
 	return base64_decode(join('', $strArr));
 }
-
-
-function aesEncrypt($data, $key, $iv)
-{
-    $encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
-    return base64_encode($encrypted);
-}
-
-function aesDecrypt($data, $key, $iv)
-{
-    $decrypted = openssl_decrypt(base64_decode($data), 'aes-256-cbc', $key, 0, $iv);
-    return $decrypted;
-}

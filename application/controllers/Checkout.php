@@ -9,8 +9,21 @@ class Checkout extends Public_Controller
 	{
 		parent::__construct();
 		$this->load->model('checkout_model');
-		$this->aesKey = openssl_random_pseudo_bytes(32); // 256 bits (32 bytes) key
-		$this->aesIv = openssl_random_pseudo_bytes(16);  // 128 bits (16 bytes) IV
+
+		// Check if aesKey and aesIv are already set in flashdata
+		if (!$this->session->flashdata('aesKey') || !$this->session->flashdata('aesIv')) {
+			// If not set, generate new random values
+			$this->aesKey = openssl_random_pseudo_bytes(32); // 256 bits (32 bytes) key
+			$this->aesIv = openssl_random_pseudo_bytes(16);  // 128 bits (16 bytes) IV
+
+			// Save them in flashdata
+			$this->session->set_flashdata('aesKey', $this->aesKey);
+			$this->session->set_flashdata('aesIv', $this->aesIv);
+		} else {
+			// If already set, retrieve them from flashdata
+			$this->aesKey = $this->session->flashdata('aesKey');
+			$this->aesIv = $this->session->flashdata('aesIv');
+		}
 	}
 
 	public function index()
@@ -344,7 +357,7 @@ class Checkout extends Public_Controller
 		// }
 		endforeach;
 
-		// Start 寄信給買家、賣家
+		// Start 寄信給買家、賣家(可以砍掉echo部分)
 		$this->send_order_email($order_id);
 		$this->cart->destroy();
 
@@ -514,7 +527,7 @@ class Checkout extends Public_Controller
 			// 貨到付款
 			// 訂單ID加密
 			// redirect(base_url() . 'checkout/success/' . $order_id);
-			redirect(base_url() . 'checkout/success/' . encode($order_id));
+			redirect(base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv));
 		}
 	}
 
@@ -579,8 +592,8 @@ class Checkout extends Public_Controller
 		// 訂單ID解密
 		// $this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
-		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', decode($order_id), 'row');
-		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', decode($order_id));
+		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
+		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
 		$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
 		// debug unknow users relogin
 		if (empty($this->session->userdata('user_id'))) {
@@ -769,9 +782,9 @@ class Checkout extends Public_Controller
 				$obj->Send['ReceiverCellPhone'] = $row['customer_phone'];
 				$obj->Send['ReceiverEmail'] = '';
 				$obj->Send['TradeDesc'] = '';
-				$obj->Send['ServerReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
+				$obj->Send['ServerReplyURL'] = base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv); // 訂單ID加密
 				$obj->Send['ClientReplyURL'] = '';
-				$obj->Send['LogisticsC2CReplyURL'] = base_url() . 'checkout/success/' . encode($order_id); // 訂單ID加密
+				$obj->Send['LogisticsC2CReplyURL'] = base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv); // 訂單ID加密
 				$obj->Send['Remark'] = '';
 				$obj->PostParams['ReceiverStoreID'] = $row['store_id'];
 				// $obj->SendExtend['ReturnStoreID'] = $row['store_id'];
@@ -800,11 +813,11 @@ class Checkout extends Public_Controller
 
 			// 訂單ID加密
 			// redirect(base_url() . 'checkout/success/' . $order_id);
-			redirect(base_url() . 'checkout/success/' . encode($order_id));
+			redirect(base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv));
 		} else {
 			// 訂單ID加密
 			// redirect(base_url() . 'checkout/success/' . $order_id);
-			redirect(base_url() . 'checkout/success/' . encode($order_id));
+			redirect(base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv));
 		}
 	}
 
@@ -1211,5 +1224,17 @@ class Checkout extends Public_Controller
 	function test_qpay_return()
 	{
 		print_r($_POST);
+	}
+
+	function aesEncrypt($data, $key, $iv)
+	{
+		$encrypted = openssl_encrypt($data, 'aes-256-cbc', $key, 0, $iv);
+		return base64_encode($encrypted);
+	}
+
+	function aesDecrypt($data, $key, $iv)
+	{
+		$decrypted = openssl_decrypt(base64_decode($data), 'aes-256-cbc', $key, 0, $iv);
+		return $decrypted;
 	}
 }
