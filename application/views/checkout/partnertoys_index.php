@@ -310,7 +310,7 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">通訊地址</span>
+                                        <span class="input-group-text">國家</span>
                                     </div>
                                     <select class="form-control" id="Country">
                                         <option value="請選擇國家" selected>請選擇國家</option>
@@ -456,7 +456,7 @@ foreach ($this->cart->contents() as $items) {
                                         }
                                     }
                                     // 抓資料庫的物流方式
-                                    $this->db->select('delivery_name_code,delivery_name,delivery_info');
+                                    $this->db->select('delivery_name_code, delivery_name, delivery_info, delivery_type');
                                     // 暫時先註解code有點意義不明
                                     // if (!empty($deliveryList)) {
                                     //     $deliveryIdList = array();
@@ -470,28 +470,50 @@ foreach ($this->cart->contents() as $items) {
                                     $this->db->where('delivery_status', 1);
                                     $d_query = $this->db->get('delivery')->result_array();
 
-                                    $delivery_count = 0;
-                                    foreach ($d_query as $d_row) { ?>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
-                                            <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
-                                                <?= $d_row['delivery_name'] ?>
-                                            </label>
-                                            <? if (!empty($d_row['delivery_info'])) { ?>
-                                                <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $d_row['delivery_info']; ?></p>
-                                            <? } ?>
+                                    $delivery_count = 0; ?>
+                                    <?php if (!empty($d_query)) : ?>
+                                        <div id="taiwanDeliveryOptions">
+                                            <?php foreach ($d_query as $d_row) : ?>
+                                                <?php if ($d_row['delivery_type'] != 3) : ?>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                                        <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
+                                                            <?= $d_row['delivery_name'] ?>
+                                                        </label>
+                                                        <? if (!empty($d_row['delivery_info'])) { ?>
+                                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $d_row['delivery_info']; ?></p>
+                                                        <? } ?>
+                                                    </div>
+                                                    <br>
+                                                <?php endif; ?>
+                                                <?php $delivery_count++; ?>
+                                            <?php endforeach; ?>
                                         </div>
-                                        <br>
-                                    <?
-                                        $delivery_count++;
-                                    } ?>
+                                        <div id="othersDeliveryOptions">
+                                            <?php foreach ($d_query as $d_row) : ?>
+                                                <?php if ($d_row['delivery_type'] == 3) : ?>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                                        <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
+                                                            <?= $d_row['delivery_name'] ?>
+                                                        </label>
+                                                        <? if (!empty($d_row['delivery_info'])) { ?>
+                                                            <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $d_row['delivery_info']; ?></p>
+                                                        <? } ?>
+                                                    </div>
+                                                    <br>
+                                                <?php endif; ?>
+                                                <?php $delivery_count++; ?>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
                                     <? $payment_count = 0;
                                     foreach ($payment as $row) { ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>" <?php echo ($payment_count == 0 ? 'checked' : '') ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>">
                                             <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
                                                 <?= $row['payment_name'] ?>
                                             </label>
@@ -501,6 +523,36 @@ foreach ($this->cart->contents() as $items) {
                                         </div>
                                     <? $payment_count++;
                                     } ?>
+                                </div>
+                                <div class="row col-12 supermarket">
+                                    <div class="col-12">
+                                        <hr>
+                                    </div>
+                                    <h3 class="mt-0 col-12">超商門市選擇</h3>
+                                    <!-- 超商取貨地址 -->
+                                    <div class="input-group mb-3 col-sm-12 col-md-12 col-lg-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">門市編號</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="storeid" id="storeid" value="<?php echo $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
+                                    </div>
+                                    <div class="input-group mb-3 col-sm-12 col-md-12 col-lg-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">取貨門市</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                    </div>
+                                    <div class="input-group mb-3 col-sm-12 col-md-12 col-lg-6">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">門市地址</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
+                                    </div>
+                                    <div class="input-group mb-3 col-sm-12 col-md-12 col-lg-6">
+                                        <div style="width: 100%;">
+                                            <span class="btn btn-primary" onclick="locationToCvsMap();">選擇門市</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -551,6 +603,53 @@ foreach ($this->cart->contents() as $items) {
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
 <script>
+    $(document).on('change', '#Country', function() {
+        var selectedCountry = $(this).val();
+        var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');
+        var othersDeliveryOptions = $('#othersDeliveryOptions');
+
+        if (selectedCountry === '臺灣') {
+            taiwanDeliveryOptions.show();
+            othersDeliveryOptions.hide();
+        } else {
+            taiwanDeliveryOptions.hide();
+            othersDeliveryOptions.show();
+        }
+    });
+
+    $(document).ready(function() {
+        // 監聽 #Country 元素的變化事件
+        $('#Country', '#checkout_form').on('change', function() {
+            handleDynamicChanges();
+        });
+
+        // 監聽 delivery 元素的變化事件
+        $('input[name=checkout_delivery]', '#checkout_form').on('change', function() {
+            handleDynamicChanges();
+        });
+
+        // 初始處理
+        handleDynamicChanges();
+
+        // 定義處理動態變化的函數
+        function handleDynamicChanges() {
+            var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+            var County = $('#Country', '#checkout_form').val();
+            // console.log("Country:", County);
+            // console.log("Delivery:", delivery);
+
+            // 根據新的 #Country 和 delivery 值執行相應的邏輯
+            if (County == '臺灣' && (delivery == '711_pickup' || delivery == 'family_pickup')) {
+                $('.supermarket').show();
+            } else {
+                $('.supermarket').hide();
+                // $('#storeid').val(''); // 清空 storeid 的值
+                // $('#storename').val(''); // 清空 storename 的值
+                // $('#storeaddress').val(''); // 清空 storeaddress 的值
+            }
+        }
+    });
+
     $("#wizard").steps({
         headerTag: "h3",
         bodyTag: "section",
@@ -599,15 +698,10 @@ foreach ($this->cart->contents() as $items) {
             // console.log(newIndex)
             // console.log(delivery);
 
-            // if (delivery == '711_pickup' || delivery == 'family_pickup') {
-            //     $('.delivery_address').hide();
-            //     $('.supermarket').show();
-            // } else {
-            //     $('.delivery_address').show();
-            //     $('.supermarket').hide();
-            // }
 
-            if (newIndex === 3) {
+
+            // step 2.
+            if (newIndex === 2) {
                 // var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
                 // var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
                 if ($('#name').val() == '') {
@@ -622,11 +716,50 @@ foreach ($this->cart->contents() as $items) {
                     alert('請輸入完整的電子郵件');
                     return false;
                 }
-                if (delivery == '711_pickup' || delivery == 'family_pickup') {
-                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
-                        alert('請選擇取貨門市');
+                if ($('#Country').val() == '請選擇國家') {
+                    alert('請選擇所在國家');
+                    return false;
+                } else if ($('#Country').val() == '臺灣') {
+                    var countySelect = $("#twzipcode select[name='county']").val();
+                    var districtSelect = $("#twzipcode select[name='district']").val();
+
+                    // 檢查所在縣市
+                    if (countySelect == '') {
+                        alert('請選擇所在縣市');
                         return false;
                     }
+
+                    // 檢查所在鄉鎮市區
+                    if (districtSelect == '') {
+                        alert('請選擇所在鄉鎮市區');
+                        return false;
+                    }
+                } else if ($('#Country').val() == '中國') {
+                    var provinceSelect = $("#cnzipcode select[name='province']").val();
+                    var countySelect = $("#cnzipcode select[name='county']").val();
+                    var districtSelect = $("#cnzipcode select[name='district']").val();
+
+                    // 檢查所在省份
+                    if (provinceSelect == '') {
+                        alert('請選擇所在省份');
+                        return false;
+                    }
+
+                    // 檢查所在縣市
+                    if (countySelect == '') {
+                        alert('請選擇所在縣市');
+                        return false;
+                    }
+
+                    // 檢查所在鄉鎮市區
+                    if (districtSelect == '') {
+                        alert('請選擇所在鄉鎮市區');
+                        return false;
+                    }
+                }
+                if ($('#address').val() == '') {
+                    alert('請輸入詳細地址');
+                    return false;
                 }
                 if (payment != 'bank_transfer') {
                     $('#NotesOnBankRemittance').hide();
@@ -656,6 +789,24 @@ foreach ($this->cart->contents() as $items) {
                     }
                 }
             }
+
+            // step 3.
+            if (newIndex === 3) {
+                if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery')) {
+                    alert('請選擇運送方式');
+                    return false;
+                }
+                if (payment == '' || payment == null) {
+                    alert('請選擇付款方式');
+                    return false;
+                }
+                if ($('#Country').val() == '臺灣' && (delivery == '711_pickup' || delivery == 'family_pickup')) {
+                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
+                        alert('請選擇取貨門市');
+                        return false;
+                    }
+                }
+            }
             checkConfirmInfo();
             return true;
         },
@@ -666,6 +817,19 @@ foreach ($this->cart->contents() as $items) {
     });
 
     function checkConfirmInfo() {
+        var provinceSelect = '';
+        var countySelect = '';
+        var districtSelect = '';
+
+        if ($('#Country').val() == '中國') {
+            provinceSelect = $("#cnzipcode select[name='province']").val();
+            countySelect = $("#cnzipcode select[name='county']").val();
+            districtSelect = $("#cnzipcode select[name='district']").val();
+        } else if ($('#Country').val() == '臺灣') {
+            countySelect = $("#twzipcode select[name='county']").val();
+            districtSelect = $("#twzipcode select[name='district']").val();
+        }
+
         var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
         var checkoutDeliveryLabel = $('label[for="checkout_delivery' + selectedCheckoutDelivery + '"]').text();
         var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
@@ -682,17 +846,36 @@ foreach ($this->cart->contents() as $items) {
         if ($('#email').val() != '') {
             data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
         }
-        if ($('#address').val() != '') {
-            data += '<tr><td>地址</td><td>' + $('#address').val() + '</td></tr>';
+        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup') {
+            if ($('#Country').val() != '') {
+                data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
+            }
+            if (provinceSelect != '') {
+                data += '<tr><td>省分</td><td>' + provinceSelect + '</td></tr>';
+            }
+            if (countySelect != '') {
+                data += '<tr><td>縣市</td><td>' + countySelect + '</td></tr>';
+            }
+            if (districtSelect != '') {
+                data += '<tr><td>鄉鎮市區</td><td>' + districtSelect + '</td></tr>';
+            }
+            if ($("[name='zipcode']").val() != '') {
+                data += '<tr><td>郵遞區號</td><td>' + $("[name='zipcode']").val() + '</td></tr>';
+            }
+            if ($('#address').val() != '') {
+                data += '<tr><td>詳細地址</td><td>' + $('#address').val() + '</td></tr>';
+            }
         }
-        if ($('#storeid').val() != '') {
-            data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
-        }
-        if ($('#storename').val() != '') {
-            data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
-        }
-        if ($('#storeaddress').val() != '') {
-            data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
+        if (selectedCheckoutDelivery == '711_pickup' || selectedCheckoutDelivery == 'family_pickup') {
+            if ($('#storeid').val() != '') {
+                data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
+            }
+            if ($('#storename').val() != '') {
+                data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
+            }
+            if ($('#storeaddress').val() != '') {
+                data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
+            }
         }
         data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
         data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
@@ -718,11 +901,11 @@ foreach ($this->cart->contents() as $items) {
     $(document).ready(function() {
         // 初始化 twzipcode
         $("#twzipcode").twzipcode();
-        
+
         $("#Country").change(function() {
             if ($(this).val() === '臺灣') {
                 $("#twzipcode").show();
-            }else {
+            } else {
                 $("#twzipcode").hide();
             }
         });
@@ -751,11 +934,12 @@ foreach ($this->cart->contents() as $items) {
     $(document).ready(function() {
         // 初始化 cnzipcode
         $("#cnzipcode").cnzipcode();
-        
+
         $("#Country").change(function() {
             if ($(this).val() === '中國') {
                 $("#cnzipcode").show();
-            }else {
+
+            } else {
                 $("#cnzipcode").hide();
             }
         });
@@ -783,6 +967,8 @@ foreach ($this->cart->contents() as $items) {
 
         if (zipcodeInput.length > 0) {
             zipcodeInput.addClass('form-control');
+            // 設定 input 的 placeholder
+            zipcodeInput.attr('placeholder', '邮政编码');
         }
     });
 </script>
@@ -852,19 +1038,20 @@ foreach ($this->cart->contents() as $items) {
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
 
-    // 獲取 checkout_delivery 的值
-    var selectedDeliveryValue = getParameterByName('checkout');
+    // // 獲取 checkout_delivery 的值
+    // var selectedDeliveryValue = getParameterByName('checkout');
 
-    // 如果值為 'family_pickup'，則設定相應的 radio 按鈕為選中狀態
-    if (selectedDeliveryValue === 'family_pickup' || selectedDeliveryValue === '711_pickup') {
-        $('.delivery_address').hide();
-        $('.supermarket').show();
-    }
-    if (selectedDeliveryValue === '711_pickup') {
-        $("input[name='checkout_delivery'][value='711_pickup']").prop('checked', true);
-    } else if (selectedDeliveryValue === 'family_pickup') {
-        $("input[name='checkout_delivery'][value='family_pickup']").prop('checked', true);
-    }
+    // // 如果值為 'family_pickup'，則設定相應的 radio 按鈕為選中狀態
+    // if (selectedDeliveryValue == '711_pickup' || selectedDeliveryValue == 'family_pickup') {
+    //     $('.supermarket').show();
+    // } else {
+    //     $('.supermarket').hide();
+    // }
+    // if (selectedDeliveryValue === '711_pickup') {
+    //     $("input[name='checkout_delivery'][value='711_pickup']").prop('checked', true);
+    // } else if (selectedDeliveryValue === 'family_pickup') {
+    //     $("input[name='checkout_delivery'][value='family_pickup']").prop('checked', true);
+    // }
 
     function set_store_info(storeid = '', storename = '', storeaddress = '') {
         $("#storeid").val(storeid);

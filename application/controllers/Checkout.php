@@ -221,6 +221,9 @@ class Checkout extends Public_Controller
 
 		$order_delivery_address = '';
 		if ($this->input->post('county') != '') {
+			$order_delivery_address .= $this->input->post('province');
+		}
+		if ($this->input->post('county') != '') {
 			$order_delivery_address .= $this->input->post('county');
 		}
 		if ($this->input->post('district') != '') {
