@@ -11,7 +11,7 @@
                 </div>
                 <div class="row">
                     <div v-for="self in channels_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
-                        <a class="cursorPoint" @click="filterBySubCategory(self.id)">
+                        <a class="cursorPoint" @click="toggleSubCategory(self.id)">
                             <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
                             <p class="introText">{{ self.name }}</p>
                         </a>
@@ -28,14 +28,18 @@
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
-                selectedCategoryId: null, // 目前顯示頁面主題
-                selectedSubCategoryId: null,
-                channels_category: <?php echo json_encode(!empty($channels_category) ? $channels_category : ''); ?>,
-                channels_son_category: null,
+                getSubSubID: <?php echo json_encode($this->input->get('subsubid', TRUE)); ?>, // 若透過header或footer篩選
+                selectedCategoryId: null, // 選中項目類別
+                selectedSubCategoryId: null, // 選中子項目類別
+                selectedSubSubCategoryId: null, // 選中子子項目類別
+                channels_category: <?php echo json_encode(!empty($channels_category) ? $channels_category : ''); ?>, // 項目類別
+                channels_son_category: null, // 子項目類別
+                channels_sub_son_category: null, // 子子項目類別
                 pageTitle: '', // 目前標籤
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
-                isExpanded: [],
+                isExpanded: [], // 打開子項目
+                isSubExpanded: [], // 打開子子項目
             }
         },
         mounted() {
@@ -59,12 +63,13 @@
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
             },
-            filterBySubCategory(subId) {
-                this.selectedSubCategoryId = subId;
-                console.log(this.selectedSubCategoryId);
+            filterBySubSubCategory(subsubId) {
+                this.scrollToTop();
+                this.selectedSubSubCategoryId = subsubId;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
+                this.scrollToTop();
                 $.ajax({
                     url: '/channels/selected_son/' + categoryId,
                     method: 'post',
@@ -77,11 +82,42 @@
                         } else {
                             this.isExpanded.switch = !this.isExpanded.switch;
                         }
+                        // 當點回最上層將其他層關閉
                         this.selectedSubCategoryId = null;
+                        this.selectedSubSubCategoryId = null;
+                        this.isSubExpanded = [];
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
                     }
                 })
+            },
+            // 获取关联的子子项
+            toggleSubCategory(categoryId) {
+                this.scrollToTop();
+                $.ajax({
+                    url: '/channels/selected_sub_son/' + categoryId,
+                    method: 'post',
+                    success: (response) => {
+                        this.channels_sub_son_category = response;
+                        // 確定上一個選擇類別決定開關狀態
+                        this.isSubExpanded = this.channels_son_category.find(self => self.id === categoryId);
+                        if (this.isSubExpanded.sort != this.selectedSubCategoryId || this.selectedSubSubCategoryId !== null) {
+                            this.isSubExpanded.switch = true;
+                        } else {
+                            this.isSubExpanded.switch = !this.isSubExpanded.switch;
+                        }
+                        this.selectedSubSubCategoryId = null;
+                        // 更新選擇類別
+                        this.selectedSubCategoryId = this.isSubExpanded.sort;
+                    }
+                })
+            },
+            // 將頁面滾動到頂部
+            scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 若要有平滑的滾動效果
+                });
             },
         },
     });

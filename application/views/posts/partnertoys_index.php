@@ -7,10 +7,10 @@
             </div>
             <div class="container">
                 <!-- Post Start -->
-                <div class="row alignItemBaseLine">
-                    <div class="col-bg-12 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
-                        <div class="touch_effect">
-                            <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
+                <div class="row postItemPosition">
+                    <div class="col-6 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
+                        <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
+                            <div class="touch_effect">
                                 <div class="postImg text-center">
                                     <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
                                 </div>
@@ -19,8 +19,8 @@
                                     <h3 class="postTitle font-weight-bold">{{ self.post_title }}</h3>
                                     <p class="text-right" style="color:#e30020; margin:0;">more+</p>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div v-if="filteredPosts.length === 0" class="col-12 text-center">
@@ -29,6 +29,7 @@
                 <!-- Post End -->
 
                 <!-- Pagination -->
+                <div style="margin-top:50px;"></div>
                 <?php require('pagination.php'); ?>
             </div>
         </div>

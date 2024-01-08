@@ -597,17 +597,20 @@ class Checkout extends Public_Controller
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
-		$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
-		// debug unknow users relogin
-		if (empty($this->session->userdata('user_id'))) {
-			$query = $this->db->select('username, email, id, password, active, last_login')
-				->where('username', $this->data['order']['customer_name'])
-				->limit(1)
-				->order_by('id', 'desc')
-				->get($this->ion_auth_model->tables['users']);
-			$user = $query->row();
-			$this->ion_auth_model->set_session($user);
-			$this->ion_auth_model->update_last_login($user->id);
+
+		if (!empty($this->data['order'])) {
+			$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
+			// debug unknow users relogin
+			if (empty($this->session->userdata('user_id'))) {
+				$query = $this->db->select('username, email, id, password, active, last_login')
+					->where('username', $this->data['order']['customer_name'])
+					->limit(1)
+					->order_by('id', 'desc')
+					->get($this->ion_auth_model->tables['users']);
+				$user = $query->row();
+				$this->ion_auth_model->set_session($user);
+				$this->ion_auth_model->update_last_login($user->id);
+			}
 		}
 
 		$this->render('checkout/checkout_success');

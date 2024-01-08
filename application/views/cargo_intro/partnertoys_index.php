@@ -60,10 +60,12 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterBySubCategory(subId) {
+                this.scrollToTop();
                 this.selectedSubCategoryId = subId;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
+                this.scrollToTop();
                 $.ajax({
                     url: '/cargo_intro/selected_son/' + categoryId,
                     method: 'post',
@@ -81,6 +83,13 @@
                         this.selectedCategoryId = this.isExpanded.sort;
                     }
                 })
+            },
+            // 將頁面滾動到頂部
+            scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 若要有平滑的滾動效果
+                });
             },
         },
     });

@@ -173,6 +173,27 @@ label.required::before {
     -webkit-transform: rotate(-45deg);
 }
 
+#mobileMenu {
+    position: relative;
+    z-index: 99;
+    overflow: hidden;
+}
+
+.mobileSubMenu {
+    list-style: none;
+    padding: 10px 0;
+    border-bottom: 1px dashed #a5a5a5;
+}
+
+.mobileSubMenu a {
+    color: #000;
+    text-decoration: none;
+}
+
+.mobileSubMenu a:hover {
+    color: rgba(239, 132, 104, 1.0);
+}
+
 .header_relative_top {
     background-color: #fff;
     position: relative;
@@ -246,6 +267,12 @@ a.logBtn {
     color: rgba(239, 132, 104, 1.0);
 }
 
+
+.mobile-header-container {
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
 #navbarToggler {
     position: fixed;
     top: 7%;
@@ -254,6 +281,9 @@ a.logBtn {
     height: 100%;
     min-height: 2000px;
     padding: 5% 20px 15px 20px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
 }
 
 @media (max-width:1300px) {
@@ -929,6 +959,7 @@ a.logBtn {
 }
 
 .touch_effect {
+    height: 94%;
     border: 1px solid #eaeaea;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background: #fff;
@@ -1654,6 +1685,15 @@ input.qtyminus {
     border-bottom: 1px dotted #ccc;
 }
 
+.postItemPosition {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.alignItemEnd {
+    align-items: end;
+}
+
 .alignItemBaseLine {
     align-items: baseline;
 }
@@ -2027,11 +2067,41 @@ input.qtyminus {
     }
 
     .product-row {
+        width: 121.6%;
+    }
+}
+
+@media (max-width: 436px) {
+    .product-row-container {
+        width: calc((254.2px) * 12);
+    }
+
+    .product-row {
+        width: 121.5%;
+    }
+}
+
+@media (max-width: 431px) {
+    .product-row-container {
+        width: calc((254.2px) * 12);
+    }
+
+    .product-row {
         width: 121.2%;
     }
 }
 
 @media (max-width: 421px) {
+    .product-row-container {
+        width: calc((254.2px) * 12);
+    }
+
+    .product-row {
+        width: 121%;
+    }
+}
+
+@media (max-width: 416px) {
     .product-row-container {
         width: calc((254.2px) * 12);
     }
@@ -2058,6 +2128,16 @@ input.qtyminus {
 
     .product-row {
         width: 121.3%;
+    }
+}
+
+@media (max-width: 394px) {
+    .product-row-container {
+        width: calc((251.8px) * 12);
+    }
+
+    .product-row {
+        width: 121.2%;
     }
 }
 
@@ -2293,6 +2373,10 @@ input.qtyminus {
 
 .cursorPoint {
     cursor: pointer;
+}
+
+.none-order {
+    margin: 200px auto 200px auto;
 }
 
 /* 修改滾動條 */

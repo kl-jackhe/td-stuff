@@ -42,13 +42,43 @@ class Menu_model extends CI_Model
         return (!empty($query) ? $query : false);
     }
 
-    function getSubSonMenuData($parent_id = 0)
+    function getSubSonMenuData($id = 0, $parent_id = 0)
     {
         $this->db->select('id, parent_id, grandparent_id, code, name, sort, type, status');
-        // 找son
-        $this->db->where('parent_id', $parent_id);
-        $this->db->order_by('sort', 'ASC');
-        $query = $this->db->get('sub_son_menu')->result_array();
+        if ($id == 0 && $parent_id != 0) {
+            // 找son
+            $this->db->where('parent_id', $parent_id);
+            $this->db->order_by('sort', 'ASC');
+            $query = $this->db->get('sub_son_menu')->result_array();
+        } else if ($id != 0 && $parent_id == 0) {
+            // 找parent(son找parent用)
+            $this->db->where('id', $id);
+            $this->db->limit(1);
+            $query = $this->db->get('sub_son_menu')->row_array();
+        } else {
+            $this->db->order_by('sort', 'ASC');
+            $query = $this->db->get('sub_son_menu')->result_array();
+        }
+        return (!empty($query) ? $query : false);
+    }
+
+    function getSubSubSonMenuData($id = 0, $parent_id = 0)
+    {
+        $this->db->select('id, parent_id, grandparent_id, grandparent_parent_id, code, name, sort, type, status');
+        if ($id == 0 && $parent_id != 0) {
+            // 找son
+            $this->db->where('parent_id', $parent_id);
+            $this->db->order_by('sort', 'ASC');
+            $query = $this->db->get('sub_sub_son_menu')->result_array();
+        } else if ($id != 0 && $parent_id == 0) {
+            // 找parent(son找parent用)
+            $this->db->where('id', $id);
+            $this->db->limit(1);
+            $query = $this->db->get('sub_sub_son_menu')->row_array();
+        } else {
+            $this->db->order_by('sort', 'ASC');
+            $query = $this->db->get('sub_sub_son_menu')->result_array();
+        }
         return (!empty($query) ? $query : false);
     }
 }

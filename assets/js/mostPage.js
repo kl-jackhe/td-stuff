@@ -12,6 +12,11 @@ const headerapp = Vue.createApp({
   }
 }).mount('#headerApp')
 
+// mobile header sub-menu
+function toggleMobileMenu (id) {
+  $(`#mobileMenu${id}`).slideToggle()
+}
+
 // 置頂fixed-nav
 $(document).ready(function () {
   var headerFixed = $('.header_fixed_top')

@@ -74,6 +74,8 @@ class Update extends Admin_Controller
                 $this->update_202312291830();
                 $this->update_202312311830();
                 $this->update_202401012000();
+                $this->update_202401081500();
+                $this->update_202401081530();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -87,6 +89,68 @@ class Update extends Admin_Controller
         }
     }
 
+    function update_202401081530()
+    {
+        $version = '202401081530';
+        $description = '新增資料表[sub_sub_son_menu]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'sub_sub_son_menu'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `sub_sub_son_menu` (
+                    `id` int(11) NOT NULL,
+                    `parent_id` int(11) NOT NULL,
+                    `grandparent_id` int(11) NOT NULL,
+                    `grandparent_parent_id` int(11) NOT NULL,
+                    `code` varchar(30) NOT NULL,
+                    `name` varchar(100) NOT NULL,
+                    `sort` int(11) NOT NULL,
+                    `type` varchar(30) NOT NULL,
+                    `status` tinyint(4) NOT NULL,
+                    `switch` tinyint(4) NOT NULL,
+                    `updated_at` datetime NOT NULL,
+                    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `sub_sub_son_menu` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `sub_sub_son_menu` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202401081500()
+    {
+        $version = '202401081500';
+        $description = '[sub_son_menu]新增欄位[switch]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM sub_son_menu LIKE 'switch'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `sub_son_menu` ADD `switch` tinyint(4) NOT NULL DEFAULT 0 AFTER `status`;");
+            }
+
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
     function update_202401012000()
     {
         $version = '202401012000';

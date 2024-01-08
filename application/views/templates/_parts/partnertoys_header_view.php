@@ -112,23 +112,21 @@
                                                         </ul>
                                                     <?php endif; ?>
                                                 </div>
-                                            <?php else : ?>
+                                            <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
                                                 <!-- 會員選單 -->
-                                                <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
-                                                    <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
-                                                        <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
-                                                        <!-- 子選單 -->
-                                                        <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                            <ul id="SubMenu<?= $key ?>" class="sub-menu">
-                                                                <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                                    <?php if (!empty($sub_self['status'])) : ?>
-                                                                        <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
-                                                                    <?php endif; ?>
-                                                                <?php endforeach; ?>
-                                                            </ul>
-                                                        <?php endif; ?>
-                                                    </div>
-                                                <?php endif; ?>
+                                                <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
+                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                    <!-- 子選單 -->
+                                                    <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                        <ul id="SubMenu<?= $key ?>" class="sub-menu">
+                                                            <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                                <?php if (!empty($sub_self['status'])) : ?>
+                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; ?>
+                                                        </ul>
+                                                    <?php endif; ?>
+                                                </div>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endforeach; ?>
@@ -146,37 +144,58 @@
                 </div>
                 <!-- 待修 -->
                 <!-- Mobile -->
-                <div class="row" style="position: relative;z-index: 99;">
+                <div id="mobileMenu" class="row">
                     <div class="collapse navbar-collapse" id="navbarToggler">
-                        <ul class="navbar-nav">
-                            <!-- Mobile Header -->
-                            <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
+                        <div class="mobile-header-container">
+                            <ul class="navbar-nav" id="mobileNav">
+                                <!-- Mobile Header -->
                                 <?php foreach ($header_menu as $self) : ?>
                                     <?php if (!empty($self['status'])) : ?>
                                         <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
                                             <li class="nav_item_mb_style">
-                                                <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a>
+                                                <div>
+                                                    <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a> -->
+                                                    <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= $self['name'] ?></a>
+                                                </div>
+                                                <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                    <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
+                                                        <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                            <?php if (!empty($sub_self['status'])) : ?>
+                                                                <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php endif; ?>
                                             </li>
-                                        <?php else : ?>
-                                            <?php if (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
-                                                <li class="nav_item_mb_style">
-                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
-                                                </li>
-                                            <?php endif; ?>
+                                        <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                            <li class="nav_item_mb_style">
+                                                <div>
+                                                    <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a> -->
+                                                    <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                </div>
+                                                <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                    <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
+                                                        <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                            <?php if (!empty($sub_self['status'])) : ?>
+                                                                <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    </ul>
+                                                <?php endif; ?>
+                                            </li>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
-                            <?php endif; ?>
-                            <!-- Logout -->
-                            <li class="nav_item_mb_style">
-                                <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                    <span class="logoutPhone" @click="confirmLogout">
-                                        <i class="fa fa-sign-out" aria-hidden="true"></i>登出
-                                    </span>
-                                <?php endif; ?>
-                            </li>
-                        </ul>
+                                <!-- Logout -->
+                                <li class="nav_item_mb_style">
+                                    <?php if (!empty($this->session->userdata('user_id'))) : ?>
+                                        <span class="logoutPhone" @click="confirmLogout">
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i>登出
+                                        </span>
+                                    <?php endif; ?>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
         </header>

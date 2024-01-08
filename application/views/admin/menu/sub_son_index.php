@@ -41,6 +41,7 @@
                         <th class="text-center">類型</th>
                         <th class="text-center">排序</th>
                         <th class="text-center">狀態</th>
+                        <th class="text-center">次次子項目操作</th>
                         <th class="text-center">操作</th>
                     </tr>
                 </thead>
@@ -51,9 +52,12 @@
                             <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
                             <td class="text-center" id="status"><?= $data['status'] == 1 ? '✔️開啟' : '❌關閉'; ?></td>
+                            <td class="text-center">
+                                <a href="/admin/menu/sub_sub_son_index/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></a>
+                            </td>
                             <td hidden><input type="hidden" id="menuId" value="<?= $data['id'] ?>"></td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a>
                                 <a href="/admin/menu/delete/sub_son_menu/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
