@@ -135,67 +135,60 @@
                         </div>
                         <div class="header-main-nav col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
                             <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
-                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
+                                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
                                     <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
-                                </button>
+                                </button> -->
+                                <a onclick="toggleMobile()">
+                                    <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
+                                </a>
                             </nav>
                         </div>
                     </div>
                 </div>
                 <!-- 待修 -->
                 <!-- Mobile -->
-                <div id="mobileMenu" class="row">
-                    <div class="collapse navbar-collapse" id="navbarToggler">
-                        <div class="mobile-header-container">
-                            <ul class="navbar-nav" id="mobileNav">
-                                <!-- Mobile Header -->
-                                <?php foreach ($header_menu as $self) : ?>
-                                    <?php if (!empty($self['status'])) : ?>
-                                        <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
-                                            <li class="nav_item_mb_style">
-                                                <div>
-                                                    <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a> -->
-                                                    <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= $self['name'] ?></a>
-                                                </div>
-                                                <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                    <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
-                                                        <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                            <?php if (!empty($sub_self['status'])) : ?>
-                                                                <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </ul>
-                                                <?php endif; ?>
-                                            </li>
-                                        <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
-                                            <li class="nav_item_mb_style">
-                                                <div>
-                                                    <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a> -->
-                                                    <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
-                                                </div>
-                                                <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                    <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
-                                                        <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                            <?php if (!empty($sub_self['status'])) : ?>
-                                                                <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
-                                                            <?php endif; ?>
-                                                        <?php endforeach; ?>
-                                                    </ul>
-                                                <?php endif; ?>
-                                            </li>
-                                        <?php endif; ?>
+                <div id="mobileMenu" style="display: none;">
+                    <div class="mobile-header-container">
+                        <ul class="navbar-nav" id="mobileNav">
+                            <!-- Mobile Header -->
+                            <?php foreach ($header_menu as $self) : ?>
+                                <?php if (!empty($self['status'])) : ?>
+                                    <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
+                                        <li class="navBorderBottom">
+                                            <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= $self['name'] ?></a> -->
+                                            <div class="nav_item_mb_style">
+                                                <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= $self['name'] ?></a>
+                                            </div>
+                                            <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
+                                                    <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                        <?php if (!empty($sub_self['status'])) : ?>
+                                                            <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        </li>
+                                    <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                        <li class="navBorderBottom">
+                                            <div class="nav_item_mb_style">
+                                                <!-- <a href="/<?= $self['code'] ?>" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a> -->
+                                                <a onclick="toggleMobileMenu('<?= $self['id'] ?>')" class="nav_item_style"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                            </div>
+                                            <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                <ul class="mobile-menu-list" id="mobileMenu<?= $self['id'] ?>" style="display: none;">
+                                                    <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                        <?php if (!empty($sub_self['status'])) : ?>
+                                                            <li class="mobileSubMenu"><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        </li>
                                     <?php endif; ?>
-                                <?php endforeach; ?>
-                                <!-- Logout -->
-                                <li class="nav_item_mb_style">
-                                    <?php if (!empty($this->session->userdata('user_id'))) : ?>
-                                        <span class="logoutPhone" @click="confirmLogout">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i>登出
-                                        </span>
-                                    <?php endif; ?>
-                                </li>
-                            </ul>
-                        </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
                 </div>
         </header>

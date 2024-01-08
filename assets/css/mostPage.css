@@ -174,24 +174,49 @@ label.required::before {
 }
 
 #mobileMenu {
-    position: relative;
+    top: 0;
     z-index: 99;
+    width: 100%;
+    height: 100%;
+    position: fixed;
     overflow: hidden;
+    background-color: #fff;
 }
 
 .mobileSubMenu {
     list-style: none;
-    padding: 10px 0;
-    border-bottom: 1px dashed #a5a5a5;
+    padding: 20px 0 15px 55px;
+    border-bottom: 1px solid #a5a5a5;
+}
+
+.mobileSubMenu:hover {
+    background-color: rgba(239, 132, 104, 1.0);
 }
 
 .mobileSubMenu a {
+    width: 100%;
+    height: 100%;
     color: #000;
+    display: block;
     text-decoration: none;
 }
 
-.mobileSubMenu a:hover {
-    color: rgba(239, 132, 104, 1.0);
+.mobileSubMenu a::after {
+    content: '';
+    position: relative;
+    /* 使用相對定位 */
+    left: -15px;
+    top: -13px;
+    /* 調整 top 的值以適應你的設計 */
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #383838;
+    border-bottom: 2px solid #383838;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 
 .header_relative_top {
@@ -267,10 +292,16 @@ a.logBtn {
     color: rgba(239, 132, 104, 1.0);
 }
 
-
 .mobile-header-container {
     overflow-y: auto;
-    max-height: 100vh;
+    max-height: 80%;
+}
+
+.mobile-menu-list {
+    margin-top: 0;
+    padding-left: 0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
 }
 
 #navbarToggler {
@@ -323,8 +354,30 @@ a.logBtn {
 }
 
 .nav_item_mb_style {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding: 15px 0 15px 30px;
+    width: 100%;
+}
+
+.nav_item_mb_style.active {
+    background-color: rgba(239, 132, 104, 1.0);
+}
+
+.nav_item_mb_style .nav_item_style {
+    display: block;
+    width: 100%;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.nav_item_mb_style .nav_item_style:hover {
+    color: #fff !important;
+}
+
+.navBorderBottom {
+    width: 100%;
+    border-bottom: 1px solid #afafaf;
 }
 
 .fixed_icon_style {

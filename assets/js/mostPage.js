@@ -13,12 +13,38 @@ const headerapp = Vue.createApp({
 }).mount('#headerApp')
 
 // mobile header sub-menu
+function toggleMobile () {
+  $(`#mobileMenu`).slideToggle()
+}
+
 function toggleMobileMenu (id) {
-  $(`#mobileMenu${id}`).slideToggle()
+  const mobileMenu = $(`#mobileMenu${id}`)
+
+  if (mobileMenu.is(':visible')) {
+    // 如果已經是可見的，則收起
+    mobileMenu.slideUp()
+  } else {
+    // 如果不可見，則展開
+    $(`.mobile-menu-list:visible`).slideUp()
+    mobileMenu.slideDown()
+  }
+
+  // 移除所有 .nav_item_mb_style 的 active 類別
+  const mobileItems = document.querySelectorAll('.nav_item_mb_style')
+  mobileItems.forEach(item => item.classList.remove('active'))
+
+  // 為被點擊的 .nav_item_mb_style 添加 active 類別
+  const clickedItem = document.querySelector(
+    `.nav_item_mb_style a[onclick="toggleMobileMenu('${id}')"]`
+  )
+  if (clickedItem) {
+    clickedItem.closest('.nav_item_mb_style').classList.add('active')
+  }
 }
 
 // 置頂fixed-nav
 $(document).ready(function () {
+  var navFixed = $('#mobileMenu')
   var headerFixed = $('.header_fixed_top')
 
   // 滚动事件处理函数
@@ -26,8 +52,10 @@ $(document).ready(function () {
     var scrolled = $(window).scrollTop()
 
     if (scrolled > 40) {
+      navFixed.css('top', '79px')
       headerFixed.css('top', '0')
     } else {
+      navFixed.css('top', '114px')
       headerFixed.css('top', '35px')
     }
   }
