@@ -71,6 +71,63 @@ class Product extends Public_Controller
 		$this->render('product/product-detail');
 	}
 
+	function add_like()
+	{
+		// 獲取所有的 cookie
+		// $all_cookies = $this->input->cookie();
+		// echo '<pre>';
+		// print_r($all_cookies);
+		// echo '</pre>';
+
+		$combine_id = $this->input->post('combine_id');
+		if (!empty($combine_id)) {
+			$selectedCombine = $this->product_model->getProductCombine($combine_id);
+			$selectedProduct = $this->product_model->getSingleProduct($selectedCombine['product_id']);
+
+			// check repetity
+			// 獲取所有的 cookie
+			$all_cookies = $this->input->cookie();
+			$filtered_cookies = preg_grep('/^prefix_like_\d+$/', array_keys($all_cookies));
+
+			// 遍歷所有的 cookie
+			if (!empty($filtered_cookies)) {
+				foreach ($filtered_cookies as $cookie_name) {
+					$value = $all_cookies[$cookie_name];
+					$decoded_value = json_decode($value, true);
+
+					// 檢查是否有相同 product_id 的 cookie
+					if ($decoded_value['product_id'] == $selectedProduct['product_id']) {
+						echo 'repetity';
+						return;
+					}
+				}
+			}
+
+			if (!empty($selectedCombine) && !empty($selectedProduct)) {
+				$cookie_data = array(
+					'name'          => 'like_' . $selectedProduct['product_id'], // 為每個產品建立唯一的 cookie 名稱
+					'value'         => json_encode(array(
+						'user_id'       => $this->session->userdata('user_id'),
+						'product_id'    => $selectedProduct['product_id'],
+						'product_name'  => $selectedProduct['product_name'],
+						'product_image' => $selectedProduct['product_image'],
+					)),
+					'expire'        => strtotime('+1 year'), // 1年後過期
+					'domain'        => '', // 可以留空，由瀏覽器自動判斷
+					'path'          => '/',
+					'prefix'        => 'prefix_',
+					'secure'        => TRUE,
+				);
+				$this->input->set_cookie($cookie_data);
+				echo 'successful';
+				return;
+			}
+		} else {
+			echo 'unsuccessful';
+			return;
+		}
+	}
+
 	function ajaxData()
 	{
 		$conditions = array();

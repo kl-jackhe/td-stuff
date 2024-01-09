@@ -59,21 +59,21 @@
                                     <!--購買按鍵-->
                                     <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
                                         <?php if ($product['sales_status'] == 0) : ?>
-                                            <span class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上購買</span>
                                         <?php elseif ($product['sales_status'] == 2) : ?>
-                                            <span class="cargoClick buyBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上預購</span>
                                         <?php else : ?>
                                             <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
                                         <?php endif; ?>
                                     </div>
                                     <!--加入購物車-->
-                                    <!-- <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
                                         <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
-                                    </div> -->
+                                    </div>
                                     <!--加入追蹤清單-->
-                                    <!-- <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                        <span class="cargoClick likeBtn"><i class="fas fa-heart"></i>加入追蹤清單</span>
-                                    </div> -->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick likeBtn" @click="add_like()"><i class="fas fa-heart"></i>加入追蹤清單</span>
+                                    </div>
                                 <?php endif; ?>
 
                                 <?php if (empty($productCombine)) : ?>
@@ -183,7 +183,15 @@
                 this.quantity = Math.max(1, this.quantity - 1);
             },
             // 加入購物車(待修)
-            add_cart() {
+            add_cart(hrefTarget) {
+                // 檢查登入
+                <?php if (empty($this->session->userdata('user_id'))) : ?>
+                    alert('請先登入再進行操作。');
+                    window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
+                    return;
+                <?php endif; ?>
+
+                // 檢查商品數量及限制數量
                 this.quantity = parseInt(this.quantity, 10);
                 if (this.quantity < 1) {
                     alert('商品數量不得低於1個');
@@ -209,13 +217,46 @@
                         } else if (data == 'exceed') {
                             alert('超過限制數量故無法下單，敬請見諒');
                         } else if (data == 'updateSuccessful') {
-                            alert('更新成功');
+                            if (hrefTarget != '' && hrefTarget != null) {
+                                window.location.href = hrefTarget;
+                            } else {
+                                alert('成功更新購物車');
+                            }
                         } else if (data == 'successful') {
-                            alert('加入成功');
+                            if (hrefTarget != '' && hrefTarget != null) {
+                                window.location.href = hrefTarget;
+                            } else {
+                                alert('成功加入購物車');
+                            }
                         } else {
                             console.log(data);
                         }
                         get_cart_qty();
+                    }
+                });
+            },
+            add_like() {
+                // 檢查登入
+                <?php if (empty($this->session->userdata('user_id'))) : ?>
+                    alert('請先登入再進行操作。');
+                    window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
+                    return;
+                <?php endif; ?>
+
+                $.ajax({
+                    url: "/product/add_like",
+                    method: "POST",
+                    data: {
+                        combine_id: this.selectedCombine.id,
+                    },
+                    success: function(data) {
+                        if (data == 'successful') {
+                            alert('成功加入追蹤清單');
+                        } else if (data == 'repetity') {
+                            alert('該商品已在追蹤清單內');
+                        } else {
+                            console.log(data);
+                        }
                     }
                 });
             },

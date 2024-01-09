@@ -217,8 +217,8 @@
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
                 this.selectedCategoryId = categoryId;
-                const selectedCategory = this.authCategory.find(category => category.auth_category_id === categoryId);
-                this.pageTitle = selectedCategory.auth_category_name;
+                const selectedCategory = this.authCategory.find(category => category.sort === categoryId);
+                this.pageTitle = selectedCategory.name;
             },
             // 選中獨立訂單
             showOrderDetails(selected) {
