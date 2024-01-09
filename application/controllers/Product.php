@@ -71,6 +71,26 @@ class Product extends Public_Controller
 		$this->render('product/product-detail');
 	}
 
+	function get_like()
+	{
+		$all_cookies = $this->input->cookie();
+		$filtered_cookies = preg_grep('/^prefix_like_\d+$/', array_keys($all_cookies));
+		$result = array(); // 用於存儲所有數據
+
+		if (!empty($filtered_cookies)) {
+			foreach ($filtered_cookies as $cookie_name) {
+				$value = $all_cookies[$cookie_name];
+				$decoded_value = json_decode($value, true);
+				$result[] = $decoded_value; // 將數據添加到結果數組中
+			}
+		}
+
+		// 返回所有數據
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($result));
+	}
+
 	function add_like()
 	{
 		// 獲取所有的 cookie
@@ -94,11 +114,12 @@ class Product extends Public_Controller
 				foreach ($filtered_cookies as $cookie_name) {
 					$value = $all_cookies[$cookie_name];
 					$decoded_value = json_decode($value, true);
-
-					// 檢查是否有相同 product_id 的 cookie
-					if ($decoded_value['product_id'] == $selectedProduct['product_id']) {
-						echo 'repetity';
-						return;
+					if (!empty($decoded_value)) {
+						// 檢查是否有相同 product_id 的 cookie
+						if ($decoded_value['product_id'] == $selectedProduct['product_id']) {
+							echo 'repetity';
+							return;
+						}
 					}
 				}
 			}
@@ -112,7 +133,7 @@ class Product extends Public_Controller
 						'product_name'  => $selectedProduct['product_name'],
 						'product_image' => $selectedProduct['product_image'],
 					)),
-					'expire'        => strtotime('+1 year'), // 1年後過期
+					'expire'        => time() + 31536000, // 1年後過期
 					'domain'        => '', // 可以留空，由瀏覽器自動判斷
 					'path'          => '/',
 					'prefix'        => 'prefix_',
@@ -126,6 +147,28 @@ class Product extends Public_Controller
 			echo 'unsuccessful';
 			return;
 		}
+	}
+
+	function delect_like($id)
+	{
+		// 設定 cookie 的過期時間為過去的時間
+		$cookie_data = array(
+			'name'   => 'like_' . $id,
+			'value'  => json_encode(''),
+			'expire' => time() - (31536000 * 10), // 過去的時間
+			'domain' => '', // 可以留空，由瀏覽器自動判斷
+			'path'   => '/',
+			'prefix' => 'prefix_',
+			'secure' => TRUE,
+		);
+
+		$this->input->set_cookie($cookie_data);
+		// $all_cookies = $this->input->cookie();
+		// echo '<pre>';
+		// print_r($all_cookies);
+		// echo '</pre>';
+
+		echo "successful";
 	}
 
 	function ajaxData()

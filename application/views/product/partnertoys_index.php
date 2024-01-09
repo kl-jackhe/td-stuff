@@ -23,9 +23,9 @@
                                                 <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
                                                 <div class="product_name">
                                                     <span>{{ self.product_name }}</span>
-                                                    <p class="price" v-if="self.sales_status === '0'">【現貨】 $ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '1'">【售完】 $ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '2'">【預購】 $ {{ self.product_price }}</p>
+                                                    <p class="price" v-if="self.sales_status === '0'">【現貨】$ {{ self.product_price }}</p>
+                                                    <p class="price" v-else-if="self.sales_status === '1'">【售完】$ {{ self.product_price }}</p>
+                                                    <p class="price" v-else-if="self.sales_status === '2'">【預購】$ {{ self.product_price }}</p>
                                                 </div>
                                             </div>
                                         </a>

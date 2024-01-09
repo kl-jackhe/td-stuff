@@ -35,6 +35,8 @@
                     <div v-else><?php require('auth-orders-information.php'); ?></div>
                 </div>
                 <div v-else-if="selectedCategoryId == 2">
+                    <!-- 追蹤清單 -->
+                    <?php require('auth-follow.php'); ?>
                 </div>
                 <div v-else-if="selectedCategoryId == 3">
                 </div>
@@ -65,6 +67,8 @@
                 pageTitle: null, // 目前標籤
                 order: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                followData: null,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
@@ -76,6 +80,8 @@
             }
         },
         mounted() {
+            // init tracking list
+            this.getFollow();
             // 初始化 Magnific Popup
             this.initMagnificPopup();
             // 初始化篩選標籤
@@ -153,10 +159,42 @@
                     });
                 }
             },
+            // 獲取追蹤清單
+            getFollow() {
+                $.ajax({
+                    type: 'post',
+                    url: '/product/get_like',
+                    contentType: 'application/json',
+                    success: (data) => {
+                        this.followData = data;
+                    },
+                })
+            },
+            // 刪除指定追蹤商品
+            delect_follow(id) {
+                $.ajax({
+                    type: 'post',
+                    url: '/product/delect_like/' + id,
+                    contentType: 'application/json',
+                    success: function(data) {
+                        if (data == 'successful') {
+                            alert('刪除成功');
+                            window.location.href = <?php echo json_encode(base_url()); ?> + "auth?id=2";
+                        } else {
+                            console.log(data);
+                        }
+                    },
+                })
+            },
+            // 指向指定商品
+            href_product(id) {
+                window.location.href = <?php echo json_encode(base_url()); ?> + "product/product_detail/" + id;
+            },
             // 完成付款
             completePay(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "/checkout/repay_order/" + id;
+                window.location.href = <?php echo json_encode(base_url()); ?> + "checkout/repay_order/" + id;
             },
+            // 取消訂單
             cancelOrder(id) {
                 var self = this;
 
