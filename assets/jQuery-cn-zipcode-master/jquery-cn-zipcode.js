@@ -3765,21 +3765,21 @@
     function CNzipcode(container, options) {
         var defaults = {
             'provinceTitle': '省份',
-            'provinceName': 'province',
+            'provinceName': 'cn_province',
             'provinceDefault': null,
             'provinceClass': null,
 
             'countyTitle': '縣市',
-            'countyName': 'county',
+            'countyName': 'cn_county',
             'countyDefault': null,
             'countyClass': null,
 
             'districtTitle': '鄉鎮市區',
-            'districtName': 'district',
+            'districtName': 'cn_district',
             'districtDefault': null,
             'districtClass': null,
 
-            'zipcodeName': 'zipcode',
+            'zipcodeName': 'cn_zipcode',
             'zipcodeDefault': null,
             'zipcodeClass': null,
 

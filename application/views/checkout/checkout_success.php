@@ -222,7 +222,7 @@
                             <div class="row">
                                 <? if ($agentID == '') { ?>
                                     <div class="col-12 col-md-6 py-2">
-                                        <a href="/order" class="btn btn-secondary btn-block">查看歷史訂單</a>
+                                        <a href="/auth" class="btn btn-secondary btn-block">查看歷史訂單</a>
                                     </div>
                                 <? } ?>
                                 <div <?= ($agentID == '' ? 'class="col-12 col-md-6 py-2"' : 'class="col-12 col-md-12 py-2"') ?>>

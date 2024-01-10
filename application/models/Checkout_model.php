@@ -27,4 +27,16 @@ class Checkout_model extends CI_Model
             return false;
         }
     }
+
+    public function getDelivery($name_code)
+    {
+        $this->db->select('*');
+        $this->db->where('delivery_name_code', $name_code);
+        $query = $this->db->get('delivery');
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        } else {
+            return false;
+        }
+    }
 }

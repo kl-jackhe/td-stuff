@@ -141,10 +141,10 @@
          * @type {Object}
          */
         var defaults = {
-            'countyName'          : 'county',
+            'countyName'          : 'tw_county',
             'css'                 : [],
             'detect'              : false,             // v1.6.7
-            'districtName'        : 'district',
+            'districtName'        : 'tw_district',
             'googleMapsKey'       : '', // v1.6.9
             'hideCounty'          : [], // v1.7.9
             'hideDistrict'        : [], // v1.7.9
@@ -152,7 +152,7 @@
             'onDistrictSelect'    : null,    // v1.5
             'onZipcodeKeyUp'      : null,      // v1.5
             'readonly'            : false,
-            'zipcodeName'         : 'zipcode',
+            'zipcodeName'         : 'tw_zipcode',
             'zipcodePlaceholder'  : '郵遞區號',
             'zipcodeIntoDistrict' : false, // v1.6.6
         };

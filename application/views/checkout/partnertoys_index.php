@@ -312,7 +312,7 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">國家</span>
                                     </div>
-                                    <select class="form-control" id="Country">
+                                    <select class="form-control" name="Country" id="Country">
                                         <option value="請選擇國家" selected>請選擇國家</option>
                                         <option value="臺灣">臺灣</option>
                                         <option value="中國">中國</option>
@@ -720,8 +720,8 @@ foreach ($this->cart->contents() as $items) {
                     alert('請選擇所在國家');
                     return false;
                 } else if ($('#Country').val() == '臺灣') {
-                    var countySelect = $("#twzipcode select[name='county']").val();
-                    var districtSelect = $("#twzipcode select[name='district']").val();
+                    var countySelect = $("#twzipcode select[name='tw_county']").val();
+                    var districtSelect = $("#twzipcode select[name='tw_district']").val();
 
                     // 檢查所在縣市
                     if (countySelect == '') {
@@ -735,9 +735,9 @@ foreach ($this->cart->contents() as $items) {
                         return false;
                     }
                 } else if ($('#Country').val() == '中國') {
-                    var provinceSelect = $("#cnzipcode select[name='province']").val();
-                    var countySelect = $("#cnzipcode select[name='county']").val();
-                    var districtSelect = $("#cnzipcode select[name='district']").val();
+                    var provinceSelect = $("#cnzipcode select[name='cn_province']").val();
+                    var countySelect = $("#cnzipcode select[name='cn_county']").val();
+                    var districtSelect = $("#cnzipcode select[name='cn_district']").val();
 
                     // 檢查所在省份
                     if (provinceSelect == '') {
@@ -792,7 +792,7 @@ foreach ($this->cart->contents() as $items) {
 
             // step 3.
             if (newIndex === 3) {
-                if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery')) {
+                if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery') || (($('#Country').val() != '臺灣') && delivery != 'sf_express_delivery')) {
                     alert('請選擇運送方式');
                     return false;
                 }
@@ -817,19 +817,6 @@ foreach ($this->cart->contents() as $items) {
     });
 
     function checkConfirmInfo() {
-        var provinceSelect = '';
-        var countySelect = '';
-        var districtSelect = '';
-
-        if ($('#Country').val() == '中國') {
-            provinceSelect = $("#cnzipcode select[name='province']").val();
-            countySelect = $("#cnzipcode select[name='county']").val();
-            districtSelect = $("#cnzipcode select[name='district']").val();
-        } else if ($('#Country').val() == '臺灣') {
-            countySelect = $("#twzipcode select[name='county']").val();
-            districtSelect = $("#twzipcode select[name='district']").val();
-        }
-
         var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
         var checkoutDeliveryLabel = $('label[for="checkout_delivery' + selectedCheckoutDelivery + '"]').text();
         var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
@@ -850,18 +837,31 @@ foreach ($this->cart->contents() as $items) {
             if ($('#Country').val() != '') {
                 data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
             }
-            if (provinceSelect != '') {
-                data += '<tr><td>省分</td><td>' + provinceSelect + '</td></tr>';
+            if ($('#Country').val() == '臺灣') {
+                if ($("#twzipcode select[name='tw_county']").val() != '') {
+                    data += '<tr><td>縣市</td><td>' + $("#twzipcode select[name='tw_county']").val() + '</td></tr>';
+                }
+                if ($("#twzipcode select[name='tw_district']").val() != '') {
+                    data += '<tr><td>鄉鎮市區</td><td>' + $("#twzipcode select[name='tw_district']").val() + '</td></tr>';
+                }
+                if ($("#twzipcode input[name='tw_zipcode']").val() != '') {
+                    data += '<tr><td>郵遞區號</td><td>' + $("#twzipcode input[name='tw_zipcode']").val() + '</td></tr>';
+                }
+            } else if ($('#Country').val() == '中國') {
+                if ($("#cnzipcode select[name='cn_province']").val() != '') {
+                    data += '<tr><td>省分</td><td>' + $("#cnzipcode select[name='cn_province']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode select[name='cn_county']").val() != '') {
+                    data += '<tr><td>縣市</td><td>' + $("#cnzipcode select[name='cn_county']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode select[name='cn_district']").val() != '') {
+                    data += '<tr><td>鄉鎮市區</td><td>' + $("#cnzipcode select[name='cn_district']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode input[name='cn_zipcode']").val() != '') {
+                    data += '<tr><td>郵遞區號</td><td>' + $("#cnzipcode input[name='cn_zipcode']").val() + '</td></tr>';
+                }
             }
-            if (countySelect != '') {
-                data += '<tr><td>縣市</td><td>' + countySelect + '</td></tr>';
-            }
-            if (districtSelect != '') {
-                data += '<tr><td>鄉鎮市區</td><td>' + districtSelect + '</td></tr>';
-            }
-            if ($("[name='zipcode']").val() != '') {
-                data += '<tr><td>郵遞區號</td><td>' + $("[name='zipcode']").val() + '</td></tr>';
-            }
+
             if ($('#address').val() != '') {
                 data += '<tr><td>詳細地址</td><td>' + $('#address').val() + '</td></tr>';
             }
@@ -911,12 +911,12 @@ foreach ($this->cart->contents() as $items) {
         });
 
         // 禁用郵遞區號的輸入框
-        $("[name='zipcode']").prop('disabled', true);
+        $("[name='tw_zipcode']").prop('readonly', true);
 
         // 選擇縣市、鄉鎮市區下拉選單
-        var countySelect = $("#twzipcode select[name='county']");
-        var districtSelect = $("#twzipcode select[name='district']");
-        var zipcodeInput = $("#twzipcode input[name='zipcode']");
+        var countySelect = $("select[name='tw_county']");
+        var districtSelect = $("select[name='tw_district']");
+        var zipcodeInput = $("input[name='tw_zipcode']");
 
         if (countySelect.length > 0) {
             countySelect.addClass('form-control');
@@ -945,13 +945,13 @@ foreach ($this->cart->contents() as $items) {
         });
 
         // 禁用郵遞區號的輸入框
-        $("[name='zipcode']").prop('disabled', true);
+        $("[name='cn_zipcode']").prop('readonly', true);
 
         // 選擇縣市、鄉鎮市區下拉選單
-        var provinceSelect = $("#cnzipcode select[name='province']");
-        var countySelect = $("#cnzipcode select[name='county']");
-        var districtSelect = $("#cnzipcode select[name='district']");
-        var zipcodeInput = $("#cnzipcode input[name='zipcode']");
+        var provinceSelect = $("select[name='cn_province']");
+        var countySelect = $("select[name='cn_county']");
+        var districtSelect = $("select[name='cn_district']");
+        var zipcodeInput = $("input[name='cn_zipcode']");
 
         if (provinceSelect.length > 0) {
             provinceSelect.addClass('form-control');

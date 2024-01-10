@@ -23,13 +23,13 @@
                                 <img :src="'/assets/uploads/' + self.product_image" style="width: 100%;">
                             </ol>
                             <ol class="col-6 align-self-center">
-                                <span class="">{{ self.product_name }}</span>
+                                <span>{{ self.product_name }}</span>
                             </ol>
                             <ol class="col-2 align-self-center text-center">
-                                <span class="" @click="delect_follow(self.product_id)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+                                <span class="trackingButton" @click="delect_follow(self.product_id)"><i class="fa fa-trash" aria-hidden="true"></i></span>
                             </ol>
                             <ol class="col-2 align-self-center text-center">
-                                <span class="" @click="href_product(self.product_id)"><i class="fa fa-cart-plus" aria-hidden="true"></i></span>
+                                <span class="trackingButton" @click="href_product(self.product_id)"><i class="fa fa-cart-plus" aria-hidden="true"></i></span>
                             </ol>
                         </li>
                     </a>

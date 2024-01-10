@@ -51,13 +51,13 @@
                             <tr>
                                 <th class="col-lg-10 col-sm-9 col-xs-7">金額小計</th>
                                 <td class="col-lg-2 col-sm-3 col-xs-5">
-                                    <span class="price">{{ selectedOrder.order_total }}</span>&nbsp;元
+                                    <span class="price">{{ (selectedOrder.order_total - selectedOrder.order_delivery_cost).toFixed(2) }}</span>&nbsp;元
                                 </td>
                             </tr>
                             <tr class="partitionLine">
                                 <th class="col-lg-10 col-sm-9 col-xs-7">運費</th>
                                 <td class="col-lg-2 col-sm-3 col-xs-5">
-                                    <span class="price">0.00</span>&nbsp;元
+                                    <span class="price">{{ selectedOrder.order_delivery_cost }}</span>&nbsp;元
                                 </td>
                             </tr>
                             <tr>
@@ -107,7 +107,7 @@
                             <div class="col-4 text-right">取貨方式：</div>
                             <div class="col-8">宅配到府</div>
                             <div class="col-4 text-right">到貨地址：</div>
-                            <div class="col-8">待新增</div>
+                            <div class="col-8">{{ selectedOrder.order_delivery_address }}</div>
                         </div>
                     </div>
                 </div>

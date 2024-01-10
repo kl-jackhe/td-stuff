@@ -218,22 +218,43 @@ class Checkout extends Public_Controller
 		$customer_id = (isset($this->current_user->id) ? $this->current_user->id : $this->get_users_id());
 
 		$delivery_cost = 0;
+		if (!empty($this->input->post('checkout_delivery'))) {
+			$self = $this->checkout_model->getDelivery($this->input->post('checkout_delivery'));
+			$delivery_cost = $self['shipping_cost'];
+		}
 
 		$order_delivery_address = '';
-		if ($this->input->post('county') != '') {
-			$order_delivery_address .= $this->input->post('province');
+		if (!empty($this->input->post('Country'))) {
+			$order_delivery_address .= $this->input->post('Country');
 		}
-		if ($this->input->post('county') != '') {
-			$order_delivery_address .= $this->input->post('county');
+		if (!empty($this->input->post('Country')) && $this->input->post('Country') == '中國') {
+			if (!empty($this->input->post('cn_province'))) {
+				$order_delivery_address .= $this->input->post('cn_province');
+			}
+			if (!empty($this->input->post('cn_county'))) {
+				$order_delivery_address .= $this->input->post('cn_county');
+			}
+			if (!empty($this->input->post('cn_district'))) {
+				$order_delivery_address .= $this->input->post('cn_district');
+			}
+		} else if (!empty($this->input->post('Country')) && $this->input->post('Country') == '臺灣') {
+			if (!empty($this->input->post('tw_county'))) {
+				$order_delivery_address .= $this->input->post('tw_county');
+			}
+			if (!empty($this->input->post('tw_district'))) {
+				$order_delivery_address .= $this->input->post('tw_district');
+			}
 		}
-		if ($this->input->post('district') != '') {
-			$order_delivery_address .= $this->input->post('district');
-		}
-		if ($this->input->post('address') != '') {
+		if (!empty($this->input->post('address'))) {
 			$order_delivery_address .= $this->input->post('address');
 		}
+		if (!empty($this->input->post('cn_zipcode'))) {
+			$order_delivery_address .= '(' . $this->input->post('cn_zipcode') . ')';
+		} else if (!empty($this->input->post('tw_zipcode'))) {
+			$order_delivery_address .= '(' . $this->input->post('tw_zipcode') . ')';
+		}
 
-		$order_total = intval($this->cart->total() + $delivery_cost);
+		$order_total = intval($this->cart->total() + (int)$delivery_cost);
 
 		$order_pay_status = 'not_paid';
 

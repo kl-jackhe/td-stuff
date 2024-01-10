@@ -46,14 +46,14 @@
                             <h1 class="font-weight-bold text-center">{{ selectedPost.post_title }}</h1>
                         </div>
                     </div>
-                    <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
+                    <!-- <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
                         <div class="form-group">
                             <img :src="'/assets/uploads/' + selectedPost.post_image" class="img-fluid">
                         </div>
-                    </div>
+                    </div> -->
                     <div class="postContentStyle col-bg-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <p v-html="selectedPost.post_content"></p>
+                            <p class="text-center" v-html="selectedPost.post_content"></p>
                         </div>
                     </div>
                 </div>

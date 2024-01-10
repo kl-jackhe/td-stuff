@@ -1177,9 +1177,9 @@ input.qtyminus {
 }
 
 .scrollToDetailTop {
-    position: fixed;
+    position: sticky;
     bottom: 20px;
-    right: 20px;
+    left: 96%;
     margin: 20px;
     padding: 10px 14px;
     color: #007bff8a;
@@ -1372,6 +1372,11 @@ input.qtyminus {
 
 .postContentStyle {
     padding: 20px 50px;
+}
+
+.postContentStyle img {
+    max-width: 100%;
+    height: auto;
 }
 
 .newsText {
@@ -2430,6 +2435,10 @@ input.qtyminus {
 
 .none-order {
     margin: 200px auto 200px auto;
+}
+
+.trackingButton {
+    cursor: pointer;
 }
 
 /* 修改滾動條 */
