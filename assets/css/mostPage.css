@@ -2441,6 +2441,16 @@ input.qtyminus {
     cursor: pointer;
 }
 
+.shippingInformation {
+    height: 29px;
+    color: #e30020;
+    font-size: 1.3em;
+    background: url(/assets/uploads/bg_title.png) no-repeat 0 0px;
+    line-height: 10px;
+    padding-left: 22px;
+    margin: 4% auto 0;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

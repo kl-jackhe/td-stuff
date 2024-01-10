@@ -83,7 +83,7 @@
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
                             <div class="col-8">{{ selectedOrder.customer_email }}</div>
-                            
+
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
@@ -111,12 +111,53 @@
                         </div>
                     </div>
                 </div>
+                <div style=" padding-top: 20px;">
+                    <div class="form-group">
+                        <div class="shippingInformation">出貨資訊</div>
+                    </div>
+                    <div v-if="!selectedOrder.AllPayLogisticsID && !selectedOrder.CVSPaymentNo" class="noneOrder">
+                        <span class="">尚未出貨</span>
+                    </div>
+                    <div v-else class="row" id="separatorBottom">
+                        <div class="col-md-6 orderMarginBottom">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <h2>物流資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-8">{{ selectedOrder.AllPayLogisticsID }}</div>
+                                <div class="col-4 text-right">寄貨編號：</div>
+                                <div class="col-8">{{ selectedOrder.CVSPaymentNo }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 orderMarginBottom separator">
+                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                                <div class="col-12 text-center">
+                                    <h2>發票資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">發票類型：</div>
+                                <div class="col-8">電子發票</div>
+                                <div class="col-4 text-right">發票號碼：</div>
+                                <div class="col-8">{{ selectedOrder.InvoiceNumber }}</div>
+                            </div>
+                            <div v-else class="row">
+                                <div class="col-12 text-center">
+                                    <h2>發票資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">發票類型：</div>
+                                <div class="col-8">暫無</div>
+                                <div class="col-4 text-right">發票號碼：</div>
+                                <div class="col-8">暫無</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay'">
                     <div class="operateBtn col-6">
-                        <a id="completePay" @click="completePay(selectedOrder.order_id)" >完成付款</a>
+                        <a id="completePay" @click="completePay(selectedOrder.order_id)">完成付款</a>
                     </div>
                     <div class="operateBtn col-6">
-                        <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)" >取消訂單</a>
+                        <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
                     </div>
                 </div>
             </div>
