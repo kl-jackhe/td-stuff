@@ -111,16 +111,19 @@
                         </div>
                     </div>
                 </div>
-                <div style=" padding-top: 20px;">
+                <div style="padding-top: 20px;">
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
-                    <div v-if="!selectedOrder.AllPayLogisticsID && !selectedOrder.CVSPaymentNo" class="noneOrder">
-                        <span class="">尚未出貨</span>
+                    <div v-if="selectedOrder.order_step != 'confirm'" class="noneOrder">
+                        <span>訂單已取消</span>
+                    </div>
+                    <div v-else-if="!selectedOrder.SelfLogistics && !selectedOrder.AllPayLogisticsID && !selectedOrder.CVSPaymentNo" class="noneOrder">
+                        <span>尚未出貨</span>
                     </div>
                     <div v-else class="row" id="separatorBottom">
                         <div class="col-md-6 orderMarginBottom">
-                            <div class="row">
+                            <div v-if="selectedOrder.AllPayLogisticsID && selectedOrder.CVSPaymentNo" class="row">
                                 <div class="col-12 text-center">
                                     <h2>物流資訊</h2>
                                 </div>
@@ -128,6 +131,20 @@
                                 <div class="col-8">{{ selectedOrder.AllPayLogisticsID }}</div>
                                 <div class="col-4 text-right">寄貨編號：</div>
                                 <div class="col-8">{{ selectedOrder.CVSPaymentNo }}</div>
+                            </div>
+                            <div v-else-if="selectedOrder.SelfLogistics" class="row">
+                                <div class="col-12 text-center">
+                                    <h2>物流資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-8">{{ selectedOrder.SelfLogistics }}</div>
+                            </div>
+                            <div v-else class="row">
+                                <div class="col-12 text-center">
+                                    <h2>物流資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-8">暫無</div>
                             </div>
                         </div>
                         <div class="col-md-6 orderMarginBottom separator">

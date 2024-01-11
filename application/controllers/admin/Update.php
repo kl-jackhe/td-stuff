@@ -76,6 +76,7 @@ class Update extends Admin_Controller
                 $this->update_202401012000();
                 $this->update_202401081500();
                 $this->update_202401081530();
+                $this->update_202401111630();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -86,6 +87,31 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401111630()
+    {
+        $version = '202401111630';
+        $description = '[orders]新增欄位[SelfLogistics]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'SelfLogistics'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `SelfLogistics` varchar(30) AFTER `InvoiceNumber`;");
+            }
+
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -108,8 +134,8 @@ class Update extends Admin_Controller
                     `name` varchar(100) NOT NULL,
                     `sort` int(11) NOT NULL,
                     `type` varchar(30) NOT NULL,
-                    `status` tinyint(4) NOT NULL,
-                    `switch` tinyint(4) NOT NULL,
+                    `status` tinyint(4) NOT NULL DEFAULT 1,
+                    `switch` tinyint(4) NOT NULL DEFAULT 0,
                     `updated_at` datetime NOT NULL,
                     `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");

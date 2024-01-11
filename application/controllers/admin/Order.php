@@ -1,8 +1,10 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Order extends Admin_Controller {
+class Order extends Admin_Controller
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 		$this->load->model('order_model');
 		$this->load->model('sales_model');
@@ -18,10 +20,11 @@ class Order extends Admin_Controller {
 			'complete' => '完成',
 			'order_cancel' => '訂單取消',
 			'invalid' => '訂單不成立',
-        );
+		);
 	}
 
-	public function index() {
+	public function index()
+	{
 		$this->data['page_title'] = '訂單管理';
 		$this->data['payment'] = $this->order_model->getPaymentList();
 		$this->data['delivery'] = $this->order_model->getDeliveryList();
@@ -31,17 +34,18 @@ class Order extends Admin_Controller {
 		$this->render('admin/order/index');
 	}
 
-	function ajaxData() {
+	function ajaxData()
+	{
 		$conditions = array();
 		//calc offset number
 		$page = $this->input->get('page');
-        if (!$page) {
-            $offset = 0;
-            $this->input->set_cookie("order_page", '0', 3600);
-        } else {
-            $offset = $page;
-            $this->input->set_cookie("order_page", $page, 3600);
-        }
+		if (!$page) {
+			$offset = 0;
+			$this->input->set_cookie("order_page", '0', 3600);
+		} else {
+			$offset = $page;
+			$this->input->set_cookie("order_page", $page, 3600);
+		}
 		//set conditions for search
 		$keywords = $this->input->get('keywords');
 		$product = $this->input->get('product');
@@ -108,21 +112,23 @@ class Order extends Admin_Controller {
 		$this->load->view('admin/order/ajax-data', $this->data, false);
 	}
 
-	public function view($id) {
+	public function view($id)
+	{
 		$this->data['page_title'] = '訂單明細';
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
 		$this->db->select_sum('order_item_qty');
 		$this->db->select('order_id,product_combine_id,order_item_price');
-		$this->db->where('order_id',$id);
-		$this->db->where('product_id',0);
+		$this->db->where('order_id', $id);
+		$this->db->where('product_id', 0);
 		$this->db->group_by('product_combine_id');
-		$this->db->order_by('order_item_id','asc');
+		$this->db->order_by('order_item_id', 'asc');
 		$this->data['order_item'] = $this->db->get('order_item')->result_array();
 		$this->render('admin/order/view');
 	}
 
-	public function update_remittance_account($id) {
+	public function update_remittance_account($id)
+	{
 		$data = array(
 			'remittance_account' => $this->input->post('remittance_account'),
 			// 'updater_id' => $this->current_user->id,
@@ -135,13 +141,26 @@ class Order extends Admin_Controller {
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	function selectBoxChangeStep() {
+	public function updata_self_logistics($id)
+	{
+		$data = array(
+			'SelfLogistics' => $this->input->post('self_logistics'),
+		);
+		$this->db->where('order_id', $id);
+		$this->db->update('orders', $data);
+
+		$this->session->set_flashdata('message', '訂單更新成功！');
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+	function selectBoxChangeStep()
+	{
 		foreach ($this->input->post('id_list') as $id) {
 			$this->update_step($id, $this->input->post('step'));
 		}
 	}
 
-	public function update_step($id = '',$step = '') {
+	public function update_step($id = '', $step = '')
+	{
 		if ($id == '') {
 			$id = $this->input->post('id');
 		}
@@ -274,7 +293,8 @@ class Order extends Admin_Controller {
 					$content .= '<td style="text-align:right">$ ' . number_format($items['order_item_qty'] * $items['order_item_price']) . '</td>';
 					$content .= '</tr>';
 					$i++;
-				}}
+				}
+			}
 
 			$content .= '<tr><td colspan="4"><hr></td></tr>';
 			$content .= '<tr>';
@@ -418,7 +438,7 @@ class Order extends Admin_Controller {
 			$inventory = array();
 			foreach ($this_order_item as $toi_row) {
 				if ($toi_row['product_id'] > 0) {
-					if (array_key_exists($toi_row['product_id'],$inventory)) {
+					if (array_key_exists($toi_row['product_id'], $inventory)) {
 						$inventory[$toi_row['product_id']] += $toi_row['order_item_qty'];
 					} else {
 						$inventory[$toi_row['product_id']] = $toi_row['order_item_qty'];
@@ -428,12 +448,12 @@ class Order extends Admin_Controller {
 			if (!empty($inventory)) {
 				foreach ($inventory as $key => $value) {
 					$this->db->select('excluding_inventory');
-					$this->db->where('product_id',$key);
+					$this->db->where('product_id', $key);
 					$p_row = $this->db->get('product')->row_array();
 					if (!empty($p_row)) {
 						if ($p_row['excluding_inventory'] == false) {
 							$this->db->set('inventory', 'inventory + ' . $value, FALSE);
-							$this->db->where('product_id',$key);
+							$this->db->where('product_id', $key);
 							$this->db->update('product');
 
 							$inventory_log = array(
@@ -452,7 +472,8 @@ class Order extends Admin_Controller {
 		// redirect($_SERVER['HTTP_REFERER']);
 	}
 
-	public function multiple_action() {
+	public function multiple_action()
+	{
 		if (!empty($this->input->post('order_id'))) {
 			foreach ($this->input->post('order_id') as $order_id) {
 				if ($this->input->post('action') == 'accept') {
@@ -538,7 +559,8 @@ class Order extends Admin_Controller {
 		// redirect( base_url() . 'admin/order');
 	}
 
-	public function line_pay_refund($order_id) {
+	public function line_pay_refund($order_id)
+	{
 		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
 		if (!empty($this_order['order_pay_feedback'])) {
 			// header("Location: ".base_url()."admin/order");
@@ -568,7 +590,7 @@ class Order extends Admin_Controller {
 			// API
 			try {
 				// Online Refund API
-				$refundParams = ($this_order['order_discount_total'] != "") ? ['refundAmount' => (integer) $this_order['order_discount_total']] : null;
+				$refundParams = ($this_order['order_discount_total'] != "") ? ['refundAmount' => (int) $this_order['order_discount_total']] : null;
 				// $response = $linePay->refund($order['transactionId'], $refundParams);
 				$response = $linePay->refund($this_order['order_pay_feedback'], $refundParams);
 
@@ -599,328 +621,332 @@ class Order extends Admin_Controller {
 	}
 
 	function order_synchronize($order_id, $action = 'do')
-    {
-        $api_url = '';
-        if ($this->is_td_stuff) {
-        	$api_url = 'http://erp.vei-star.com';
-        }
+	{
+		$api_url = '';
+		if ($this->is_td_stuff) {
+			$api_url = 'http://erp.vei-star.com';
+		}
 
-        $this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
-        $array = array(
-            'ErrorCode' => '',
-            'Errors' => null,
-            'Message' => 'ok',
-            'IsSuccess' => true,
-            'Data' => array(
-                'order' => array(),
-                'order_item' => array(),
-                'product_item' => array(),
-            )
-        );
-        $order = $this_order;
-        $order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
-        $order['order_payment_name'] = get_payment($this_order['order_payment']);
-        $array['Data']['order'] = $order;
+		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+		$array = array(
+			'ErrorCode' => '',
+			'Errors' => null,
+			'Message' => 'ok',
+			'IsSuccess' => true,
+			'Data' => array(
+				'order' => array(),
+				'order_item' => array(),
+				'product_item' => array(),
+			)
+		);
+		$order = $this_order;
+		$order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
+		$order['order_payment_name'] = get_payment($this_order['order_payment']);
+		$array['Data']['order'] = $order;
 
-        // $this->db->select('order_item.*');
-        // $this->db->join('product', 'product.product_id = order_item.product_id');
-        $this->db->where('order_id', $this_order['order_id']);
-        // $this->db->where('product_id', 0);
-        $query = $this->db->get('order_item');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $item) {
-            	if($item['product_id']==0){
-                	$order_item = $item;
+		// $this->db->select('order_item.*');
+		// $this->db->join('product', 'product.product_id = order_item.product_id');
+		$this->db->where('order_id', $this_order['order_id']);
+		// $this->db->where('product_id', 0);
+		$query = $this->db->get('order_item');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result_array() as $item) {
+				if ($item['product_id'] == 0) {
+					$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+					$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+					$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_sku'] = $product['product_sku'];
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
+					$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+					$order_item['product_sku'] = $product['product_sku'];
+					$order_item['product_name'] = $product['product_name'];
+					$order_item['product_price'] = $product['product_price'];
 
-                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
-                	if(!empty($pci)) { foreach($pci as $qqq) {
-                		$order_item['product_combine_item'][] = $qqq;
-                	}}
+					$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+					if (!empty($pci)) {
+						foreach ($pci as $qqq) {
+							$order_item['product_combine_item'][] = $qqq;
+						}
+					}
 
-                    array_push($array['Data']['order_item'], $order_item);
-                }
+					array_push($array['Data']['order_item'], $order_item);
+				}
 
-                // if($item['product_id']>0){
-                	$order_item = $item;
+				// if($item['product_id']>0){
+				$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+				$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+				$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_sku'] = $product['product_sku'];
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
-                	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
+				$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+				$order_item['product_sku'] = $product['product_sku'];
+				$order_item['product_name'] = $product['product_name'];
+				$order_item['product_price'] = $product['product_price'];
+				$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
 
-                	$order_item['product_unit'] = '';
-                	$order_item['product_specification'] = '';
-                	$this->db->where('product_combine_id', $item['product_combine_id']);
-		            $this->db->where('product_id', $pc['product_id']);
-		            $query = $this->db->get('product_combine_item');
-		            if ($query->num_rows() > 0) {
-		            	$row = $query->row_array();
-		            	$order_item['product_unit'] = $row['product_unit'];
-		            	$order_item['product_specification'] = $row['product_specification'];
-		            };
+				$order_item['product_unit'] = '';
+				$order_item['product_specification'] = '';
+				$this->db->where('product_combine_id', $item['product_combine_id']);
+				$this->db->where('product_id', $pc['product_id']);
+				$query = $this->db->get('product_combine_item');
+				if ($query->num_rows() > 0) {
+					$row = $query->row_array();
+					$order_item['product_unit'] = $row['product_unit'];
+					$order_item['product_specification'] = $row['product_specification'];
+				};
 
-                	array_push($array['Data']['product_item'], $order_item);
-                // }
-            }
-        }
+				array_push($array['Data']['product_item'], $order_item);
+				// }
+			}
+		}
 
-        if($action=='read'){
-        	header('Content-Type: application/json');
-        	echo json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-        	exit;
-        }
+		if ($action == 'read') {
+			header('Content-Type: application/json');
+			echo json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+			exit;
+		}
 
-        if($api_url!=''){
-	        $make_call = $this->callAPI('POST', $api_url.'/api/vei_star/sales_order/save', json_encode($array));
-	        $response = json_decode($make_call, true);
-	        if($response['IsSuccess']==true || $response['IsSuccess']==1){
-	            echo 'send success.';
-	        } else {
-	            // echo 'send fail.';
-	            print_r($response);
-	        }
-	    } else {
-	    	echo 'empty api_url';
-	    }
-    }
+		if ($api_url != '') {
+			$make_call = $this->callAPI('POST', $api_url . '/api/vei_star/sales_order/save', json_encode($array));
+			$response = json_decode($make_call, true);
+			if ($response['IsSuccess'] == true || $response['IsSuccess'] == 1) {
+				echo 'send success.';
+			} else {
+				// echo 'send fail.';
+				print_r($response);
+			}
+		} else {
+			echo 'empty api_url';
+		}
+	}
 
-    function order_update_synchronize($order_id, $action = 'do')
-    {
-    	$api_url = '';
-        if ($this->is_td_stuff) {
-        	$api_url = 'http://erp.vei-star.com';
-        }
+	function order_update_synchronize($order_id, $action = 'do')
+	{
+		$api_url = '';
+		if ($this->is_td_stuff) {
+			$api_url = 'http://erp.vei-star.com';
+		}
 
-        $this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
-        $array = array(
-            'ErrorCode' => '',
-            'Errors' => null,
-            'Message' => 'ok',
-            'IsSuccess' => true,
-            'Data' => array(
-                'order' => array(),
-                'order_item' => array(),
-                'product_item' => array(),
-            )
-        );
-        $order = $this_order;
-        $order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
-        $order['order_payment_name'] = get_payment($this_order['order_payment']);
-        $array['Data']['order'] = $order;
+		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+		$array = array(
+			'ErrorCode' => '',
+			'Errors' => null,
+			'Message' => 'ok',
+			'IsSuccess' => true,
+			'Data' => array(
+				'order' => array(),
+				'order_item' => array(),
+				'product_item' => array(),
+			)
+		);
+		$order = $this_order;
+		$order['order_delivery_name'] = get_delivery($this_order['order_delivery']);
+		$order['order_payment_name'] = get_payment($this_order['order_payment']);
+		$array['Data']['order'] = $order;
 
-        // $this->db->select('order_item.*');
-        // $this->db->join('product', 'product.product_id = order_item.product_id');
-        $this->db->where('order_id', $this_order['order_id']);
-        // $this->db->where('product_id', 0);
-        $query = $this->db->get('order_item');
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $item) {
-            	if($item['product_id']==0){
-                	$order_item = $item;
+		// $this->db->select('order_item.*');
+		// $this->db->join('product', 'product.product_id = order_item.product_id');
+		$this->db->where('order_id', $this_order['order_id']);
+		// $this->db->where('product_id', 0);
+		$query = $this->db->get('order_item');
+		if ($query->num_rows() > 0) {
+			foreach ($query->result_array() as $item) {
+				if ($item['product_id'] == 0) {
+					$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+					$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+					$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_sku'] = $product['product_sku'];
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
+					$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+					$order_item['product_sku'] = $product['product_sku'];
+					$order_item['product_name'] = $product['product_name'];
+					$order_item['product_price'] = $product['product_price'];
 
-                	$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
-                	if(!empty($pci)) { foreach($pci as $qqq) {
-                		$order_item['product_combine_item'][] = $qqq;
-                	}}
+					$pci = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $item['product_combine_id']);
+					if (!empty($pci)) {
+						foreach ($pci as $qqq) {
+							$order_item['product_combine_item'][] = $qqq;
+						}
+					}
 
-                    array_push($array['Data']['order_item'], $order_item);
-                }
+					array_push($array['Data']['order_item'], $order_item);
+				}
 
-                // if($item['product_id']>0){
-                	$order_item = $item;
+				// if($item['product_id']>0){
+				$order_item = $item;
 
-                	$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
-                	$order_item['product_combine'] = $pc;
+				$pc = $this->mysql_model->_select('product_combine', 'id', $item['product_combine_id'], 'row');
+				$order_item['product_combine'] = $pc;
 
-                	$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
-                	$order_item['product_sku'] = $product['product_sku'];
-                	$order_item['product_name'] = $product['product_name'];
-                	$order_item['product_price'] = $product['product_price'];
-                	$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
+				$product = $this->mysql_model->_select('product', 'product_id', $pc['product_id'], 'row');
+				$order_item['product_sku'] = $product['product_sku'];
+				$order_item['product_name'] = $product['product_name'];
+				$order_item['product_price'] = $product['product_price'];
+				$order_item['specification_name'] = get_product_specification_name($item['specification_id']);
 
-                	$order_item['product_unit'] = '';
-                	$order_item['product_specification'] = '';
-                	$this->db->where('product_combine_id', $item['product_combine_id']);
-		            $this->db->where('product_id', $pc['product_id']);
-		            $query = $this->db->get('product_combine_item');
-		            if ($query->num_rows() > 0) {
-		            	$row = $query->row_array();
-		            	$order_item['product_unit'] = $row['product_unit'];
-		            	$order_item['product_specification'] = $row['product_specification'];
-		            };
+				$order_item['product_unit'] = '';
+				$order_item['product_specification'] = '';
+				$this->db->where('product_combine_id', $item['product_combine_id']);
+				$this->db->where('product_id', $pc['product_id']);
+				$query = $this->db->get('product_combine_item');
+				if ($query->num_rows() > 0) {
+					$row = $query->row_array();
+					$order_item['product_unit'] = $row['product_unit'];
+					$order_item['product_specification'] = $row['product_specification'];
+				};
 
-                	array_push($array['Data']['product_item'], $order_item);
-                // }
-            }
-        }
+				array_push($array['Data']['product_item'], $order_item);
+				// }
+			}
+		}
 
-        if($action=='read'){
-        	header('Content-Type: application/json');
-        	echo json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
-        	exit;
-        }
+		if ($action == 'read') {
+			header('Content-Type: application/json');
+			echo json_encode($array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+			exit;
+		}
 
-        if($api_url!=''){
-	        $make_call = $this->callAPI('POST', $api_url.'/api/vei_star/sales_order/update', json_encode($array));
-	        $response = json_decode($make_call, true);
-	        if($response['IsSuccess']==true || $response['IsSuccess']==1){
-	            echo 'send success.';
-	        } else {
-	            // echo 'send fail.';
-	            print_r($response);
-	        }
-        } else {
-        	echo 'empty api_url';
-        }
-    }
+		if ($api_url != '') {
+			$make_call = $this->callAPI('POST', $api_url . '/api/vei_star/sales_order/update', json_encode($array));
+			$response = json_decode($make_call, true);
+			if ($response['IsSuccess'] == true || $response['IsSuccess'] == 1) {
+				echo 'send success.';
+			} else {
+				// echo 'send fail.';
+				print_r($response);
+			}
+		} else {
+			echo 'empty api_url';
+		}
+	}
 
-    //////////////////////////////////////////
+	//////////////////////////////////////////
 
-    function getallheaders()
-    {
-       $headers = array ();
-       foreach ($_SERVER as $name => $value)
-       {
-           if (substr($name, 0, 5) == 'HTTP_')
-           {
-               $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-           }
-       }
-       return $headers;
-    }
+	function getallheaders()
+	{
+		$headers = array();
+		foreach ($_SERVER as $name => $value) {
+			if (substr($name, 0, 5) == 'HTTP_') {
+				$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+			}
+		}
+		return $headers;
+	}
 
-    function get_token()
-    {
-        foreach ($this->getallheaders() as $name => $value) {
-            if($name=='X-Token'){
-                $X_TOKEN = $value;
-            }
-        }
-        if(!empty($X_TOKEN)){
-            return $X_TOKEN;
-        } else {
-            return false;
-        }
-    }
+	function get_token()
+	{
+		foreach ($this->getallheaders() as $name => $value) {
+			if ($name == 'X-Token') {
+				$X_TOKEN = $value;
+			}
+		}
+		if (!empty($X_TOKEN)) {
+			return $X_TOKEN;
+		} else {
+			return false;
+		}
+	}
 
-    function check_token($X_TOKEN)
-    {
-        if(empty($X_TOKEN)){
-            $X_ERROR_CODE = '990102';
-            $array = array(
-                'ErrorCode' => '1',
-                'Errors' => ['no token.'],
-                'Message' => 'no token.',
-                'IsSuccess' => false,
-                'Data' => null
-            );
-            header('Content-Type: application/json');
-            header('X_ERROR_CODE: '.$X_ERROR_CODE);
-            echo json_encode($array, JSON_UNESCAPED_UNICODE);
-            exit;
-        } else {
-            $key = 'KUANGLIP';
-            // 解密
-            $x_token_decrypt = $this->decryptStr($X_TOKEN, $key);
-            if($x_token_decrypt=='mei-fresh'){
-                //
-            } else {
-                $X_ERROR_CODE = '990102';
-                $array = array(
-                    'ErrorCode' => '1',
-                    'Errors' => ['token error.'],
-                    'Message' => 'token error.',
-                    'IsSuccess' => false,
-                    'Data' => null
-                );
-                header('Content-Type: application/json');
-                header('X_ERROR_CODE: '.$X_ERROR_CODE);
-                echo json_encode($array, JSON_UNESCAPED_UNICODE);
-                exit;
-            }
-        }
-    }
+	function check_token($X_TOKEN)
+	{
+		if (empty($X_TOKEN)) {
+			$X_ERROR_CODE = '990102';
+			$array = array(
+				'ErrorCode' => '1',
+				'Errors' => ['no token.'],
+				'Message' => 'no token.',
+				'IsSuccess' => false,
+				'Data' => null
+			);
+			header('Content-Type: application/json');
+			header('X_ERROR_CODE: ' . $X_ERROR_CODE);
+			echo json_encode($array, JSON_UNESCAPED_UNICODE);
+			exit;
+		} else {
+			$key = 'KUANGLIP';
+			// 解密
+			$x_token_decrypt = $this->decryptStr($X_TOKEN, $key);
+			if ($x_token_decrypt == 'mei-fresh') {
+				//
+			} else {
+				$X_ERROR_CODE = '990102';
+				$array = array(
+					'ErrorCode' => '1',
+					'Errors' => ['token error.'],
+					'Message' => 'token error.',
+					'IsSuccess' => false,
+					'Data' => null
+				);
+				header('Content-Type: application/json');
+				header('X_ERROR_CODE: ' . $X_ERROR_CODE);
+				echo json_encode($array, JSON_UNESCAPED_UNICODE);
+				exit;
+			}
+		}
+	}
 
-    // 加密
-    function encryptStr($str, $key){
-        $block = mcrypt_get_block_size('des', 'ecb');
-        $pad = $block - (strlen($str) % $block);
-        $str .= str_repeat(chr($pad), $pad);
-        $enc_str = mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
-        return base64_encode($enc_str);
-    }
+	// 加密
+	function encryptStr($str, $key)
+	{
+		$block = mcrypt_get_block_size('des', 'ecb');
+		$pad = $block - (strlen($str) % $block);
+		$str .= str_repeat(chr($pad), $pad);
+		$enc_str = mcrypt_encrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+		return base64_encode($enc_str);
+	}
 
-    // 解密
-    function decryptStr($str, $key){
-        $str = base64_decode($str);
-        $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
-        $block = mcrypt_get_block_size('des', 'ecb');
-        $pad = ord($str[($len = strlen($str)) - 1]);
-        return substr($str, 0, strlen($str) - $pad);
-    }
+	// 解密
+	function decryptStr($str, $key)
+	{
+		$str = base64_decode($str);
+		$str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+		$block = mcrypt_get_block_size('des', 'ecb');
+		$pad = ord($str[($len = strlen($str)) - 1]);
+		return substr($str, 0, strlen($str) - $pad);
+	}
 
-    function callAPI($method, $url, $data){
-        // $key = 'KUANGLIP';
-        // $X_TOKEN = $this->encryptStr('mei-fresh', $key);
+	function callAPI($method, $url, $data)
+	{
+		// $key = 'KUANGLIP';
+		// $X_TOKEN = $this->encryptStr('mei-fresh', $key);
 
-        $curl = curl_init();
-        switch ($method){
-            case "GET":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
-                if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case "POST":
-                curl_setopt($curl, CURLOPT_POST, 1);
-                if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case "PUT":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-                if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            case "DELETE":
-                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-                if ($data)
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-                break;
-            default:
-                if ($data)
-                $url = sprintf("%s?%s", $url, http_build_query($data));
-       }
-        // OPTIONS:
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            // 'X-Token: '.$X_TOKEN,
-        ));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        // EXECUTE:
-        $result = curl_exec($curl);
-        curl_close($curl);
-        return $result;
-    }
-
+		$curl = curl_init();
+		switch ($method) {
+			case "GET":
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+				if ($data)
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				break;
+			case "POST":
+				curl_setopt($curl, CURLOPT_POST, 1);
+				if ($data)
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				break;
+			case "PUT":
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+				if ($data)
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				break;
+			case "DELETE":
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+				if ($data)
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+				break;
+			default:
+				if ($data)
+					$url = sprintf("%s?%s", $url, http_build_query($data));
+		}
+		// OPTIONS:
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+			'Content-Type: application/json',
+			// 'X-Token: '.$X_TOKEN,
+		));
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		// EXECUTE:
+		$result = curl_exec($curl);
+		curl_close($curl);
+		return $result;
+	}
 }

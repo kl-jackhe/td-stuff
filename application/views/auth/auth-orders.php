@@ -28,7 +28,7 @@
                             <ol class="col-2 align-self-center text-center">{{ self.order_total }}</ol>
 
                             <ol class="col-2 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ (self.order_pay_status == 'paid') ? '已付款' : '未付款' }}</ol>
-                            <ol class="col-3 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ self.CVSPaymentNo ? "已開設貨運單" : "未出貨" }}</ol>
+                            <ol class="col-3 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ (self.SelfLogistics || self.AllPayLogisticsID || self.CVSPaymentNo) ? "已開設貨運單" : "未出貨" }}</ol>
                             <ol class="col-2 align-self-center text-center" v-if="self.order_step != 'confirm'">訂單已取消</ol>
                             <ol class="col-3 align-self-center text-center" v-if="self.order_step != 'confirm'">訂單已取消</ol>
                         </li>
