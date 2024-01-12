@@ -11,27 +11,30 @@ $sub_current = $this->uri->segment(3); ?>
         <span>控制台</span>
       </a>
     </li>
-    <!-- <li <?= (($current == "product" && $sub_current != "category") || ($current == "product" && $sub_current == "category")) ? "class='active'" : ''; ?>>
-      <a href="#" class="dropdown-toggle">
-        <i class="fa fa-shopping-basket"></i>
-        <span>商品管理</span>
-        <b class="arrow fa fa-angle-right"></b>
-      </a>
-      <ul class="submenu">
-        <li <?= ($current == "product" && $sub_current == "category") ? 'class="active"' : ""; ?>>
-          <a href="/admin/product/category">商品分類</a>
-        </li>
-        <li <?= ($current == "product" && $sub_current != "category") ? 'class="active"' : ''; ?>>
-          <a href="/admin/product">商品清單</a>
-        </li>
-      </ul>
-    </li> -->
-    <li class="<?= ($current == "product") ? "active" : ''; ?>">
-      <a href="/admin/product">
-        <i class="fa fa-shopping-basket"></i>
-        <span>商品管理</span>
-      </a>
-    </li>
+    <?php if ($this->is_liqun_food || $this->is_td_stuff) : ?>
+      <li <?= (($current == "product" && $sub_current != "category") || ($current == "product" && $sub_current == "category")) ? "class='active'" : ''; ?>>
+        <a href="#" class="dropdown-toggle">
+          <i class="fa fa-shopping-basket"></i>
+          <span>商品管理</span>
+          <b class="arrow fa fa-angle-right"></b>
+        </a>
+        <ul class="submenu">
+          <li <?= ($current == "product" && $sub_current == "category") ? 'class="active"' : ""; ?>>
+            <a href="/admin/product/category">商品分類</a>
+          </li>
+          <li <?= ($current == "product" && $sub_current != "category") ? 'class="active"' : ''; ?>>
+            <a href="/admin/product">商品清單</a>
+          </li>
+        </ul>
+      </li>
+    <?php elseif ($this->is_partnertoys) : ?>
+      <li class="<?= ($current == "product") ? "active" : ''; ?>">
+        <a href="/admin/product">
+          <i class="fa fa-shopping-basket"></i>
+          <span>商品管理</span>
+        </a>
+      </li>
+    <?php endif; ?>
     <li class="<?= ($current == "order") ? "active" : ''; ?>">
       <a href="/admin/order">
         <i class="fa-solid fa-list-check"></i>

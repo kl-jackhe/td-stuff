@@ -61,25 +61,39 @@
                     <div class="col-12 col-md-12">
                         <span>
                             <a href="/about">關於我們</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=FrequentlyQA">常見Ｑ＆Ａ</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=FraudPreventionInformation">防詐騙宣導資訊</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=Disclaimer">免責聲明</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=TermsOfService">服務條款</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=IntellectualProperty">知識產權</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                             <span class="d-none d-md-inline-block d-lg-inline-block d-xl-inline-block"> ｜ </span>
                             <a href="/policy?target=ReturnPolicy">退貨政策</a>
-                            <div class="d-block d-md-none d-lg-none d-xl-none w-100"><hr></div>
+                            <div class="d-block d-md-none d-lg-none d-xl-none w-100">
+                                <hr>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -121,16 +135,17 @@
         $(document).click(function(event) {
             var target = $(event.target);
             if (!target.closest('#fridge_box').length && !target.closest('#fridge_item').length) {
-                $('#fridge_item').not(target.closest('#fridge_box').find('#fridge_item')).hide();
+                $('#fridge_item').not(target.closest('#fridge_box').find('#fridge_item')).slideUp();
                 isFridgeBoxOpen = false;
             }
         });
+
         $('#fridge_box').click(function(event) {
             if (isFridgeBoxOpen == false) {
-                $('#fridge_item').show();
+                $('#fridge_item').slideDown();
                 isFridgeBoxOpen = true;
             } else {
-                $('#fridge_item').hide();
+                $('#fridge_item').slideUp();
                 isFridgeBoxOpen = false;
             }
         });
@@ -233,4 +248,5 @@
     //MyCart
 </script>
 </body>
+
 </html>

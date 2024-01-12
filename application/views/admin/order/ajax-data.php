@@ -67,12 +67,15 @@
             <th class="text-center text-nowrap">金額/付款方式</th>
             <th class="text-center">匯款後五碼</th>
             <th class="text-center">訂單狀態</th>
-            <!-- 新增物流單 -->
-            <th class="text-center">物流交易編號</th>
-            <th class="text-center">寄貨編號</th>
-            <!-- 暫時隱藏 -->
-            <th style="display: none;">銷售頁面</th>
-            <th style="display: none;">代言人</th>
+
+            <?php if ($this->is_partnertoys) : ?>
+                <!-- 新增物流單 -->
+                <th class="text-center">物流交易編號</th>
+                <th class="text-center">寄貨編號</th>
+            <?php else : ?>
+                <th class="text-center">銷售頁面</th>
+                <th class="text-center">代言人</th>
+            <?php endif; ?>
         </tr>
     </thead>
     <tbody class="pc_control">
@@ -128,49 +131,51 @@
                         </select>
                     </td>
                     <!-- 新增物流單 -->
-                    <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
-                        <td>
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <input type="text" class="form-control" value="<?php echo $order['AllPayLogisticsID'] ?>" readonly>
-                                    <button type="submit" class="btn btn-primary btn-sm" disabled>更新</button>
-                                </span>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <?php echo $order['CVSPaymentNo'] ?>
-                        </td>
+                    <?php if ($this->is_partnertoys) : ?>
+                        <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
+                            <td>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <input type="text" class="form-control" value="<?php echo $order['AllPayLogisticsID'] ?>" readonly>
+                                        <button type="submit" class="btn btn-primary btn-sm" disabled>更新</button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <?php echo $order['CVSPaymentNo'] ?>
+                            </td>
+                        <?php else : ?>
+                            <td>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <?php $attributes = array('class' => 'form-inline'); ?>
+                                        <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
+                                        <input type="text" class="form-control" name="self_logistics" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                        <?php echo form_close() ?>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                NONE
+                            </td>
+                        <?php endif; ?>
                     <?php else : ?>
                         <td>
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <?php $attributes = array('class' => 'form-inline'); ?>
-                                    <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
-                                    <input type="text" class="form-control" name="self_logistics" value="<?php echo $order['SelfLogistics'] ?>">
-                                    <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                                    <?php echo form_close() ?>
-                                </span>
-                            </div>
+                            <? if ($order['single_sales_id'] != '') { ?>
+                                <a href="/admin/sales/editSingleSales/<?= $order['single_sales_id'] ?>" target="_blank">
+                                    <?= $order['single_sales_id'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <? } ?>
                         </td>
-                        <td class="text-center">
-                            NONE
+                        <td>
+                            <? if ($agentName != '') { ?>
+                                <a href="/admin/agent/editAgent<?= $order['agent_id'] ?>" target="_blank">
+                                    <?= $agentName ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <? } ?>
                         </td>
                     <?php endif; ?>
-                    <!-- 暫時隱藏 -->
-                    <td style="display: none;">
-                        <? if ($order['single_sales_id'] != '') { ?>
-                            <a href="/admin/sales/editSingleSales/<?= $order['single_sales_id'] ?>" target="_blank">
-                                <?= $order['single_sales_id'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
-                            </a>
-                        <? } ?>
-                    </td>
-                    <td style="display: none;">
-                        <? if ($agentName != '') { ?>
-                            <a href="/admin/agent/editAgent<?= $order['agent_id'] ?>" target="_blank">
-                                <?= $agentName ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
-                            </a>
-                        <? } ?>
-                    </td>
                 </tr>
             <? }
         } else { ?>

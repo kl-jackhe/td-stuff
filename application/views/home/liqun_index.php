@@ -1,10 +1,9 @@
 <style>
-    <? for ($i = 1; $i <= 6; $i++) { ?>.image-link-<?= $i ?>:hover img {
+    <? for ($i = 1; $i <= 6; $i++) : ?>.image-link-<?= $i ?>:hover img {
         content: url('/assets/images/liqun/index_icon_pots-<?= $i ?>a.png');
     }
-    <?
-    }
-    ?>
+
+    <? endfor; ?>
 </style>
 <div role="main" class="main">
     <section class="content_auto_h">
@@ -17,7 +16,7 @@
                         </div>
                         <div class="col-md-8" style="position: relative;">
                             <div class="fridge_style">
-                                <div class="py-2" id="fridge_box">
+                                <div class="py-2 transitionAnimation" id="fridge_box">
                                     <i class="fa-solid fa-bars"></i>&ensp;冰箱裡有什麼？
                                 </div>
                                 <div class="row justify-content-center" id="fridge_item">
@@ -211,14 +210,16 @@
                     <img src="/assets/images/liqun/index_icon_title-3.png" class="img-fluid">
                 </div>
                 <div class="col-12 text-justify liqunHomeCategoryOuter">
-                    <?php if (!empty($product_category)) {
-                        $count = 0;
-                        foreach ($product_category as $pc_row) { ?>
+                    <?php if (!empty($product_category)) : ?>
+                        <?php foreach ($product_category as $pc_row) : ?>
                             <a href="/product?cid=<?= $pc_row['product_category_id'] ?>" style="text-decoration: none;">
                                 <span class="text-center liqunHomeCategory"><?= $pc_row['product_category_name'] ?></span>
                             </a>
-                    <?php }
-                    } ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <a href="/product?cid=" style="text-decoration: none;">
+                        <span class="text-center liqunHomeCategory">全品項</span>
+                    </a>
                 </div>
             </div>
         </div>
