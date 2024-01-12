@@ -224,30 +224,6 @@ class Update extends Admin_Controller
         }
     }
 
-    function update_202401081500()
-    {
-        $version = '202401081500';
-        $description = '[sub_son_menu]新增欄位[switch]';
-        $this->db->select('id');
-        $this->db->where('version', $version);
-        $row = $this->db->get('update_log')->row_array();
-        if (empty($row)) {
-            $query = $this->db->query("SHOW COLUMNS FROM sub_son_menu LIKE 'switch'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_son_menu` ADD `switch` tinyint(4) NOT NULL DEFAULT 0 AFTER `status`;");
-            }
-
-
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
-        }
-    }
     function update_202401012000()
     {
         $version = '202401012000';
@@ -306,54 +282,24 @@ class Update extends Admin_Controller
         $this->db->where('version', $version);
         $row = $this->db->get('update_log')->row_array();
         if (empty($row)) {
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'grandparent_id'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `grandparent_id` int(11) NOT NULL  AFTER `parent_id`;");
-            }
-
-
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
-        }
-    }
-    function update_202312281830()
-    {
-        $version = '202312281830';
-        $description = '[sub_menu_list]新增欄位[sort]&[type]&[status]&[updated_at]&[created_at]';
-        $this->db->select('id');
-        $this->db->where('version', $version);
-        $row = $this->db->get('update_log')->row_array();
-        if (empty($row)) {
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'sort'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `sort` int(11) NOT NULL  AFTER `name`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'type'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `type` varchar(30) NOT NULL  AFTER `sort`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'status'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `status` tinyint(4) NOT NULL  AFTER `type`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'updated_at'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `updated_at` datetime NOT NULL  AFTER `status`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM sub_menu_list LIKE 'created_at'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `sub_menu_list` ADD `created_at` datetime NOT NULL  AFTER `updated_at`;");
+            $row = $this->db->query("SHOW TABLES LIKE 'sub_son_menu'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `sub_son_menu` (
+                    `id` int(11) NOT NULL,
+                    `parent_id` int(11) NOT NULL,
+                    `grandparent_id` int(11) NOT NULL,
+                    `grandparent_parent_id` int(11) NOT NULL,
+                    `code` varchar(30) NOT NULL,
+                    `name` varchar(100) NOT NULL,
+                    `sort` int(11) NOT NULL,
+                    `type` varchar(30) NOT NULL,
+                    `status` tinyint(4) NOT NULL DEFAULT 1,
+                    `switch` tinyint(4) NOT NULL DEFAULT 0,
+                    `updated_at` datetime NOT NULL,
+                    `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `sub_son_menu` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `sub_son_menu` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
             }
 
             $insertData = array(
@@ -394,7 +340,6 @@ class Update extends Admin_Controller
             }
         }
     }
-
     function update_202312271600()
     {
         $version = '202312271600';
@@ -418,7 +363,6 @@ class Update extends Admin_Controller
             }
         }
     }
-
     function update_202312251830()
     {
         $version = '202312251830';
@@ -452,7 +396,6 @@ class Update extends Admin_Controller
             }
         }
     }
-
     function update_202312231630()
     {
         $version = '202312231630';
@@ -896,7 +839,6 @@ class Update extends Admin_Controller
             }
         }
     }
-
     function update_202312132220()
     {
         $version = '202312132220';
