@@ -77,6 +77,7 @@ class Update extends Admin_Controller
                 $this->update_202401081500();
                 $this->update_202401081530();
                 $this->update_202401111630();
+                $this->update_202401121730();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -87,6 +88,78 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401121730()
+    {
+        $version = '202401121730';
+        $description = '新增資料表[product_tag][product_tag_lang][product_tag_content]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW TABLES LIKE 'product_tag'")->result_array();
+            if (empty($query)) {
+                $this->db->query("CREATE TABLE `product_tag` (
+              `id` int(11) NOT NULL,
+              `parent_id` int(11) NOT NULL,
+              `code` varchar(30) NOT NULL,
+              `sort` decimal(6,2) NOT NULL,
+              `status` tinyint(4) NOT NULL DEFAULT '1',
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` datetime NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `product_tag`
+              ADD PRIMARY KEY (`id`),
+              ADD KEY `parent_id` (`parent_id`),
+              ADD KEY `code` (`code`),
+              ADD KEY `status` (`status`);");
+                $this->db->query("ALTER TABLE `product_tag` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $query = $this->db->query("SHOW TABLES LIKE 'product_tag_content'")->result_array();
+            if (empty($query)) {
+                $this->db->query("CREATE TABLE `product_tag_content` (
+              `id` int(11) NOT NULL,
+              `product_tag_id` int(11) NOT NULL,
+              `product_id` int(11) NOT NULL,
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` datetime NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `product_tag_content`
+              ADD PRIMARY KEY (`id`),
+              ADD KEY `product_tag_id` (`product_tag_id`),
+              ADD KEY `product_id` (`product_id`);");
+                $this->db->query("ALTER TABLE `product_tag_content` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $query = $storeDB->query("SHOW TABLES LIKE 'product_tag'")->result_array();
+            if (empty($query)) {
+                $this->db->query("CREATE TABLE `product_tag` (
+              `id` int(11) NOT NULL,
+              `parent_id` int(11) NOT NULL,
+              `code` varchar(30) NOT NULL,
+              `sort` decimal(6,2) NOT NULL,
+              `status` tinyint(4) NOT NULL DEFAULT '1',
+              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `updated_at` datetime NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `product_tag`
+              ADD PRIMARY KEY (`id`),
+              ADD KEY `parent_id` (`parent_id`),
+              ADD KEY `code` (`code`),
+              ADD KEY `status` (`status`);");
+                $this->db->query("ALTER TABLE `product_tag` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -177,6 +250,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202401012000()
     {
         $version = '202401012000';
@@ -251,6 +325,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312281830()
     {
         $version = '202312281830';
@@ -294,6 +369,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312271800()
     {
         $version = '202312271800';
@@ -322,6 +398,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312271600()
     {
         $version = '202312271600';
@@ -345,6 +422,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312251830()
     {
         $version = '202312251830';
@@ -378,6 +456,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312231630()
     {
         $version = '202312231630';
@@ -821,6 +900,7 @@ class Update extends Admin_Controller
             }
         }
     }
+
     function update_202312132220()
     {
         $version = '202312132220';
