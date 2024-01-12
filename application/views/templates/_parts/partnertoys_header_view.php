@@ -29,7 +29,7 @@
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <?php if ($this->is_partnertoys) : ?>
-        <link href="/assets/css/mostPage.css" rel="stylesheet">
+        <link href="/assets/css/partnertoysPage.css" rel="stylesheet">
         <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
     <?php endif; ?>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>

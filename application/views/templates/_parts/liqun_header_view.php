@@ -27,6 +27,7 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
+    <link href="/assets/css/liqunPage.css" rel="stylesheet">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 </head>
 <style>
@@ -175,7 +176,7 @@
                             <div class="col-12 text-right nav_item_style">
                                 <a href="/">回首頁</a>
                                 <span> ｜ </span>
-                                <a href="/">全品項</a>
+                                <a href="/product?cid=">全品項</a>
                                 <span> ｜ </span>
                                 <?php if (!$this->ion_auth->logged_in()) { ?>
                                     <a href="/login">登入</a>

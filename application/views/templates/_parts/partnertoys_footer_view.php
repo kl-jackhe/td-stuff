@@ -121,7 +121,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
 <?php if ($this->is_partnertoys) : ?>
-    <script src="/assets/js/mostPage.js"></script>
+    <script src="/assets/js/partnertoysPage.js"></script>
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 <?php endif; ?>
 <script>

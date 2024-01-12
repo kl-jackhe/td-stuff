@@ -1,0 +1,240 @@
+.liqunHomeCategory {
+    border-radius: 15px;
+    border: 1px solid #b9b9b9;
+    background-color: #f4f2f2;
+    color: #1d1e1e;
+    min-width: 120px;
+    padding: 5px 12px;
+    font-size: 14px;
+    display: inline-block;
+    cursor: pointer;
+    margin-bottom: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.liqunHomeCategoryOuter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.fridge_style {
+    border-radius: 10px;
+    background-color: #444340;
+    width: 180px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    z-index: 9;
+    top: 15px;
+}
+
+#fridge_box {
+    cursor: pointer;
+}
+
+#fridge_item {
+    padding-top: 35px;
+    padding-bottom: 35px;
+}
+
+#fridge_item a {
+    color: #fff;
+    position: relative;
+    text-decoration: none;
+}
+
+#fridge_item a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    height: 1px;
+    /* 底線高度 */
+    background-color: #fff;
+    /* 底線颜色 */
+    transition: right 0.3s ease;
+    /* 過渡效果，使底線動畫顯示 */
+}
+
+#fridge_item a:hover::before {
+    right: 0;
+}
+
+#search_box {
+    padding: 5px 15px 5px 15px;
+    background-color: #f0ede8;
+    border-radius: 20px;
+}
+
+#search_box .tb {
+    display: table;
+    width: 100%;
+}
+
+#search_box .td {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+#search_box input {
+    color: #fff;
+    border: 0;
+    background-color: transparent;
+    width: 100%;
+}
+
+#search_box a {
+    font-weight: bold;
+    cursor: pointer;
+    color: #565555;
+    position: relative;
+    text-decoration: none;
+}
+
+#search_box a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    height: 1.5px;
+    /* 底線高度 */
+    background-color: #565555;
+    /* 底線颜色 */
+    transition: right 0.3s ease;
+    /* 過渡效果，使底線動畫顯示 */
+}
+
+#search_box a:hover::before {
+    right: 0;
+}
+
+#search_box input[type="text"] {
+    color: #000;
+}
+
+#search_box input[type="text"]::placeholder {
+    color: #919191;
+}
+
+#search_box input:focus {
+    outline: none;
+}
+
+.tag_item {
+    font-size: 12px;
+    text-align: end;
+    color: #7f0d20;
+}
+
+.tag_item a {
+    color: #7f0d20;
+    position: relative;
+    text-decoration: none;
+}
+
+.tag_item a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 100%;
+    height: 1px;
+    /* 底線高度 */
+    background-color: #7f0d20;
+    /* 底線颜色 */
+    transition: right 0.3s ease;
+    /* 過渡效果，使底線動畫顯示 */
+}
+
+.tag_item a:hover::before {
+    right: 0;
+}
+
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-duration: 2s;
+    transition-property: opacity;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-left,
+.carousel-fade .carousel-item-prev.carousel-item-right {
+    opacity: 1;
+}
+
+.carousel-fade .active.carousel-item-left,
+.carousel-fade .active.carousel-item-right {
+    opacity: 0;
+}
+
+.carousel-fade .carousel-item-next,
+.carousel-fade .carousel-item-prev,
+.carousel-fade .carousel-item.active,
+.carousel-fade .active.carousel-item-left,
+.carousel-fade .active.carousel-item-prev {
+    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
+}
+
+#home_product {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+#home_product a {
+    text-decoration: none;
+    color: black;
+    transition: 500ms ease 0s;
+}
+
+#home_product a:hover {
+    color: rgba(239, 132, 104, 1.0);
+}
+
+#zoomA {
+    transition: transform ease-in-out 0s;
+}
+
+#zoomA:hover {
+    transform: scale(1.05);
+}
+
+.product_img_style {
+    border-radius: 15px;
+    max-width: 900px;
+    max-height: 900px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.all_product_category {
+    padding-left: 67px;
+    padding-right: 67px;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .ipad_w {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
+
+@media (max-width: 767px) {
+    .product_box_list {
+        padding: 0px 30px 0px 30px;
+    }
+
+    .all_product_category {
+        padding-left: 52px;
+        padding-right: 52px;
+    }
+
+    .fridge_style {
+        display: none;
+    }
+}
