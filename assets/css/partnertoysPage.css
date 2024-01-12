@@ -918,8 +918,6 @@ a.logBtn {
     padding: 30px;
 }
 
-
-
 .clearfix::after {
     content: "";
     display: table;

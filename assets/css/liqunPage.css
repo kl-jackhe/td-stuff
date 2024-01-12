@@ -1,3 +1,19 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    min-height: 100%;
+    overflow: hidden;
+}
+
+#footer {
+    clear: both;
+}
+
 body {
     font-family: Open Sans, "Microsoft JhengHei";
 }
@@ -381,4 +397,623 @@ a {
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
+}
+
+
+.section-contents {
+    float: left;
+    width: 55%;
+    /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
+}
+
+.section-contents h1,
+.section-contents-one h1 {
+    height: 40px;
+    font-size: 22px;
+    line-height: 40px;
+    border-bottom: 2px solid #ddd;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.section-contents h1 span,
+.section-contents-one h1 span {
+    display: inline-block;
+    height: 40px;
+    color: #facaa8;
+    border-bottom: 2px solid #facaa8;
+    padding: 0 15px;
+}
+
+.section-sidemenu {
+    margin-right: 30px;
+    margin-bottom: 50px;
+    margin-left: 14%;
+    float: left;
+    width: 15%;
+    /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
+}
+
+.section-sidemenu h1,
+.section-sidemenu-one h1 {
+    height: 40px;
+    font-size: 22px;
+    line-height: 40px;
+    border-bottom: 2px solid;
+    border-image: linear-gradient(to right, #facaa8, #f1ded1 50%, #f1ded1 50%, #facaa8);
+    border-image-slice: 1;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.section-sidemenu h1 span,
+.section-sidemenu-one h1 span {
+    color: #000;
+    padding: 0 15px;
+}
+
+#menu-btn {
+    display: none;
+}
+
+@media (min-width: 2300px) {
+    .right-content {
+        margin-top: 100px;
+    }
+}
+
+@media (max-width: 1412px) {
+
+    /* 初始時 nav 是關閉的狀態 */
+    .section-sidemenu {
+        position: absolute;
+        left: -100%;
+        opacity: 0;
+        visibility: hidden;
+        width: 100%;
+        margin: 0;
+        /* 樣式 */
+        transform: translateX(-100%);
+        /* 將 nav 隱藏在畫面左側 */
+    }
+
+    /* 當 isNavOpen 為 true（即 nav 是打開的狀態）時，將其顯示在畫面中間 */
+    .section-sidemenu.nav-open {
+        position: relative;
+        left: 0;
+        opacity: 1;
+        visibility: visible;
+        transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -webkit-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+        /* 添加過渡效果 */
+        transform: translateX(0);
+    }
+
+    .section-contents {
+        width: 100%;
+    }
+
+    #menu-btn {
+        border-radius: 5px;
+        text-align: center;
+        width: 35px;
+        border: 1px solid;
+        padding: 5px;
+        display: block;
+        transition: all .3s ease-in-out;
+        -moz-transition: all .3s ease-in-out;
+        -webkit-transition: all .3s ease-in-out;
+        -o-transition: all .3s ease-in-out;
+    }
+
+    #menu-btn:hover,
+    #menu-btn.active {
+        cursor: pointer;
+        /* 懸停時顯示手型游標 */
+        background-color: #d35448;
+    }
+
+
+    .searchContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .left-content {
+        margin: 3px 20px 20px 20px;
+    }
+
+    .right-content {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        /* 如果需要給右邊內容添加樣式 */
+    }
+
+    /* 主NAV */
+    .header-main-nav.d-none,
+    .header-main-nav.d-md-none,
+    .header-main-nav.d-lg-block,
+    .header-main-nav.d-xl-block {
+        display: none !important;
+    }
+
+    .header-main-nav.d-block,
+    .header-main-nav.d-md-block,
+    .header-main-nav.d-lg-none,
+    .header-main-nav.d-xl-none {
+        display: block !important;
+    }
+
+    .navbar-expand-lg .navbar-toggler {
+        display: block !important;
+    }
+}
+
+.sectionRejust {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-top: 50px;
+}
+
+#memberLoginForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px;
+    margin: 50px 10px 60px 10px;
+}
+
+#memberLoginForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px;
+    margin: 50px 10px 60px 10px;
+}
+
+.memberForm {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px 100px;
+    margin: 50px 10px 60px 10px;
+}
+
+@media (max-width:767px) {
+    .memberForm {
+        padding: 30px;
+    }
+}
+
+.memberTitleMember {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 28px;
+    color: #facaa8;
+}
+
+@media (max-width:500px) {
+    .input-group-prepend .input-group-text {
+        font-size: 12px;
+    }
+
+    .input-group-prepend input {
+        font-size: 12px;
+    }
+
+    .memberTitleMember {
+        font-size: 20px;
+    }
+}
+
+.memberTitleLogin {
+    font-weight: bold;
+    color: #ffa361;
+}
+
+.memberTitleChinese {
+    font-weight: bold;
+    padding: 10px;
+    margin: 0 0 30px 0;
+}
+
+.separator {
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
+@media (max-width:767px) {
+    .separator {
+        padding-top: 20px;
+        border-left: none;
+        border-top: 1px solid rgb(221, 221, 221);
+    }
+}
+
+#separatorBottom {
+    border-bottom: 3px double rgb(221, 221, 221);
+}
+
+#formBtnStyle {
+    padding: 10px;
+}
+
+#loginBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 20px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#loginBtn:hover {
+    text-decoration: none;
+    background: #ff3333;
+}
+
+#eraseBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #333;
+    padding: 8px 20px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#eraseBtn:hover {
+    text-decoration: none;
+    background: rgba(0, 0, 0);
+}
+
+#memberTxt {
+    font-size: 12px;
+}
+
+#memberTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#addMember {
+    margin: 20px;
+}
+
+#addMemberBtn {
+    color: #ddd;
+    font-size: 1em;
+    font-weight: bold;
+    background: #666;
+    padding: 8px 20px;
+    margin: 20px auto 0;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#addMemberBtn:hover {
+    cursor: pointer;
+    text-decoration: none;
+    background: #000;
+}
+
+#forgotBtn {
+    color: #007bff;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#forgotBtn:hover {
+    cursor: pointer;
+    color: #00c3ff;
+    text-decoration: none;
+}
+
+#FBgraph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    margin: 20px;
+    padding: 20px;
+    color: #fff;
+    background-color: #0866ff;
+    border: 1px solid #0866ff;
+    border-radius: 10px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+@media (max-width:1000px) {
+    #FBgraph {
+        font-size: 18px;
+    }
+}
+
+@media (max-width:450px) {
+    #FBgraph {
+        font-size: 14px;
+    }
+}
+
+#FBgraph:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 10px #0088ff;
+}
+
+#FBLoginPosition {
+    margin-top: 50px;
+}
+
+#joinBtn,
+#editBtn,
+#changeBtn,
+#forgotSendBtn,
+#contactSendBtn {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#joinBtn:hover,
+#editBtn:hover,
+#changeBtn:hover,
+#forgotSendBtn:hover,
+#contactSendBtn:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #ff3333;
+}
+
+.menu-main {
+    list-style: none;
+    min-height: 42px;
+    line-height: 20px;
+    color: #000;
+    background-position: left 10px top 10px;
+    padding: 0;
+}
+
+.category_btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    border: none;
+    background: none;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    color: #000;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.category_btn.active,
+.category_btn:hover,
+.category_btn:checked {
+    cursor: pointer;
+    background-color: #facaa8;
+    box-shadow: rgb(223 145 78 / 50%) 0px 3px 8px;
+    color: #fff;
+}
+
+.menu-main li {
+    border-bottom: 1px solid rgba(84, 110, 122, .35);
+}
+
+#randomCheckcode {
+    cursor: pointer;
+    height: 56%;
+    max-width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 30.5px;
+    right: 0;
+}
+
+.paddingFixTop {
+    padding: 30px;
+}
+
+.cargoText .paddingFixTop {
+    font-size: 18px;
+}
+
+label.required::before {
+    content: '* ';
+    color: red;
+}
+
+#orderListHeader {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+#memberOrderList {
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px 60px;
+    margin: 50px 0 60px 0;
+}
+
+.orderInformation li {
+    margin-top: 30px;
+    border: 1px solid #e3e3e3;
+    background-color: #f9f9f9;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.orderInformation li:hover {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #bfbfbf7f;
+}
+
+.orderNumber {
+    color: #e30020;
+}
+
+.selectedOrderHeader {
+    margin-right: 20px;
+}
+
+.selectedOrderHeaderBox {
+    text-align: left;
+    border: 1px solid #e1e1e1;
+    padding: 10px 20px;
+    margin: 10px 0;
+}
+
+.memberOrderContent {
+    /* box-shadow: 6px 6px 20px grey; */
+    /* padding: 30px 30px; */
+    margin: 50px 0 60px 0;
+}
+
+.orderContentHeader {
+    background-color: #868686;
+    width: 100%;
+    height: 40px;
+    color: #fff;
+    font-size: 17px;
+    letter-spacing: 2px;
+    line-height: 40px;
+    border-radius: 3px;
+    padding-left: 20px
+}
+
+.noneOrder {
+    width: 100%;
+    font-size: 15px;
+    color: #DC0003;
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 0 auto 50px;
+}
+
+.selectedOrderList {
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+#pagination_bottom {
+    margin-bottom: 50px;
+}
+
+@media (max-width: 767px) {
+    .pagination {
+        font-size: 12px;
+    }
+}
+
+.pagination {
+    margin-top: 30px;
+    text-align: center;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem rem;
+    display: block;
+}
+
+.pagination li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.page-item:first-child .page_link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-item.disabled .page_link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.page_link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #d35448;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.orderDetailButton #goBack {
+    padding: 10px;
+    cursor: pointer;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.orderDetailButton #goBack:hover {
+    color: #fff;
+    background-color: #000;
+}
+
+.computeTable {
+    text-align: right;
+    padding: 20px 0px;
+    margin: 60px auto;
+    border: 8px solid #efefef;
+}
+
+.orderMarginBottom {
+    margin-bottom: 50px;
+    font-size: 10pt;
+}
+
+.shippingInformation {
+    height: 29px;
+    color: #e30020;
+    font-size: 1.3em;
+    background: url(/assets/uploads/bg_title.png) no-repeat 0 0px;
+    line-height: 10px;
+    padding-left: 22px;
+    margin: 4% auto 0;
 }

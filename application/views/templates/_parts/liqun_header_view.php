@@ -27,8 +27,16 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <link href="/assets/css/liqunPage.css" rel="stylesheet">
-    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <?php if ($this->is_liqun_food) : ?>
+        <link href="/assets/css/liqunPage.css" rel="stylesheet">
+        <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+        <!-- jquery一定要在最上面 -->
+        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+        <!-- <script src="https://unpkg.com/vue@next"></script> -->
+        <script src="https://unpkg.com/vue-router@4"></script>
+    <?php endif; ?>
 </head>
 
 <body>
@@ -43,10 +51,10 @@
                                 <span> ｜ </span>
                                 <a href="/product?cid=">全品項</a>
                                 <span> ｜ </span>
-                                <?php if (!$this->ion_auth->logged_in()) { ?>
-                                    <a href="/login">登入</a>
+                                <?php if (empty($this->session->userdata('user_id'))) { ?>
+                                    <a href="/auth">會員中心</a>
                                 <? } else { ?>
-                                    <a href="/auth/edit_user">會員中心</a>
+                                    <a href="/auth">會員中心</a>
                                     <span> ｜ </span>
                                     <a href="/logout">登出</a>
                                 <? } ?>
