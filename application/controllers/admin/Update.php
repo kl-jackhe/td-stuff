@@ -101,7 +101,7 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'Sales_volume'");
             if ($query->num_rows() > 0) {
             } else {
-                $this->db->query("ALTER TABLE `product` ADD `Sales_volume` varchar(30) NOT NULL AFTER `volume_height`;");
+                $this->db->query("ALTER TABLE `product` ADD `Sales_volume` int(11) NOT NULL DEFAULT 0 AFTER `volume_height`;");
             }
 
 

@@ -26,6 +26,15 @@ class Checkout extends Public_Controller
 		}
 	}
 
+	// function testencode()
+	// {
+	// 	redirect(base_url() . 'checkout/testdecode/' . $this->aesEncrypt('12345', $this->aesKey, $this->aesIv));
+	// }
+	// function testdecode($value)
+	// {
+	// 	echo $this->aesDecrypt($value, $this->aesKey, $this->aesIv);
+	// }
+
 	public function index()
 	{
 		$this->data['page_title'] = '結帳';
@@ -53,8 +62,11 @@ class Checkout extends Public_Controller
 		}
 		$this->setMemberInfo($this->data['user_data']['phone']);
 
-		if ($this->is_liqun_food || $this->is_td_stuff) {
+		if ($this->is_td_stuff) {
 			$this->render('checkout/index');
+		}
+		if ($this->is_liqun_food) {
+			$this->render('checkout/liqun_index');
 		}
 		if ($this->is_partnertoys) {
 			// $this->data['ECPayVal'] = $this->mysql_model->_select('features_pay', 'pay_id', 1);
@@ -312,6 +324,14 @@ class Checkout extends Public_Controller
 				'created_at' => $created_at,
 			);
 			$this->db->insert('order_item', $order_item);
+
+			// liqun 熱門商品功能數量計算
+			if ($this->is_liqun_food) {
+				$tmp_cnt = $this->product_model->getSingleProduct($cart_item['product_id']);
+				$cnt = (int)$cart_item['qty'] + (int)$tmp_cnt['Sales_volume'];
+				$this->db->where('product_id', $cart_item['product_id']);
+				$this->db->update('product', ['Sales_volume' => $cnt]);
+			}
 
 		// $this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
 		// if (!empty($this_product_combine_item)) {
@@ -618,7 +638,7 @@ class Checkout extends Public_Controller
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
-
+		echo $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv);
 		if (!empty($this->data['order'])) {
 			$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
 			// debug unknow users relogin

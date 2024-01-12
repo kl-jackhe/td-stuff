@@ -51,7 +51,16 @@
                         </div>
                         <div class="col-md-12 py-3">
                             <div class="tag_item">
-                                熱門 >> <a href="#">千層生乳吐司</a> ｜ <a href="#">紅龍雞塊</a> ｜ <a href="#">卜蜂炒飯</a> ｜ <a href="#">紅燒牛肉湯</a> ｜ <a href="#">挪威頂級鯖魚</a> ｜ <a href="#">醬醃蛤蠣</a> ｜ <a href="#">起司千層派</a>
+                                熱門 >>
+                                <?php if (!empty($hot_product)) : ?>
+                                    <?php $timer = 6; ?>
+                                    <?php foreach ($hot_product as $self) : ?>
+                                        <a href="product/view/<?= $self['product_id'] ?>"><?= $self['product_name'] ?></a>
+                                        <?php if ($timer--) : ?>
+                                            &nbsp;｜
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

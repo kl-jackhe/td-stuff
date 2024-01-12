@@ -38,7 +38,7 @@ class Cart extends Public_Controller
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
 		$this_contradiction = $this->mysql_model->_select('contradiction', 'name', 'product', 'row');
 
-		if ($this->is_partnertoys) {
+		if ($this->is_partnertoys || $this->is_liqun_food) {
 			// 檢查預購商品是否與其他商品一起下
 			if ($this_contradiction['contradiction_status'] == 1) {
 				if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {

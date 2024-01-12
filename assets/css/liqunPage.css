@@ -1017,3 +1017,7 @@ label.required::before {
     padding-left: 22px;
     margin: 4% auto 0;
 }
+
+.none-order {
+    margin: 200px auto 200px auto;
+}

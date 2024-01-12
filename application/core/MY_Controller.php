@@ -32,7 +32,9 @@ class MY_Controller extends CI_Controller
 	protected function render($the_view = NULL, $template = 'master')
 	{
 		$this->data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
-		$this->data['footer_category'] = $this->menu_model->getSubMenuData();
+		if ($this->is_partnertoys) {
+			$this->data['footer_category'] = $this->menu_model->getSubMenuData();
+		}
 		if ($template == 'json' || $this->input->is_ajax_request()) {
 			header('Content-Type: application/json');
 			echo json_encode($this->data);
