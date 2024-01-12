@@ -129,8 +129,13 @@
                     </td>
                     <!-- 新增物流單 -->
                     <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
-                        <td class="text-center">
-                            <?php echo $order['AllPayLogisticsID'] ?>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <input type="text" class="form-control" value="<?php echo $order['AllPayLogisticsID'] ?>" readonly>
+                                    <button type="submit" class="btn btn-primary btn-sm" disabled>更新</button>
+                                </span>
+                            </div>
                         </td>
                         <td class="text-center">
                             <?php echo $order['CVSPaymentNo'] ?>

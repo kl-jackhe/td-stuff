@@ -286,7 +286,7 @@
                     foreach ($main_product_category as $mpc_row) {
                         $count++;?>
                         <div class="col-5 col-md-2 my-3">
-                            <a href="/product?cid=<?=$mpc_row['product_category_id']?>" target="_blank" style="text-decoration: none;" class="image-link-<?=$count?>">
+                            <a href="/product?cid=<?=$mpc_row['product_category_id']?>" style="text-decoration: none;" class="image-link-<?=$count?>">
                                 <img src="<?=$mpc_row['product_category_image']?>" class="img-fluid">
                             </a>
                         </div>
@@ -306,7 +306,7 @@
                             foreach ($limited_time_products as $product){
                                 if ($count < 4) {?>
                                 <div class="col-md-3 pb-4 ipad_w">
-                                    <a href="/product/view/<?=$product['product_id']?>" target="_blank">
+                                    <a href="/product/view/<?=$product['product_id']?>">
                                         <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['picture'])?$product['picture']:'Product/img-600x600.png')?>">
                                         <div class="product_name">
                                             <span><?=$product['product_name'];?></span>
@@ -350,7 +350,7 @@
                                 foreach ($product_combine as $product){
                                     if ($count < 6) {?>
                                     <div class="col-md-2 pb-4 ipad_w">
-                                        <a href="/product/view/<?=$product['product_id']?>" target="_blank">
+                                        <a href="/product/view/<?=$product['product_id']?>">
                                             <img id="zoomA" class="product_img_style" src="/assets/uploads/<?=(!empty($product['picture'])?$product['picture']:'Product/img-600x600.png')?>">
                                             <div class="product_name">
                                                 <span><?=$product['product_name'];?></span>
@@ -390,7 +390,7 @@
                     <?if (!empty($product_category)) {
                         $count = 0;
                         foreach ($product_category as $pc_row) {?>
-                            <a href="/product?cid=<?=$pc_row['product_category_id']?>" target="_blank" style="text-decoration: none;">
+                            <a href="/product?cid=<?=$pc_row['product_category_id']?>" style="text-decoration: none;">
                                 <span class="text-center" style="border-radius: 15px; border: 1px solid #b9b9b9;background-color: #f4f2f2;color: #1d1e1e;min-width: 120px;padding: 5px 12px;font-size: 14px;display: inline-block; cursor: pointer;margin-bottom: 25px;margin-left: 10px;margin-right: 10px;text-align: center;"><?=$pc_row['product_category_name']?></span>
                             </a>
                         <?}

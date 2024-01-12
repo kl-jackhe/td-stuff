@@ -1,6 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -32,9 +33,11 @@
     body {
         font-family: Open Sans, "Microsoft JhengHei";
     }
+
     a {
         outline: none !important;
     }
+
     #header {
         position: fixed;
         background-color: #eecfb9;
@@ -43,33 +46,42 @@
         top: 0;
         z-index: 1030;
     }
-    .nav_item_style span{
+
+    .nav_item_style span {
         color: #595757;
     }
-    .nav_item_style a{
+
+    .nav_item_style a {
         align-self: center;
         font-size: 14px;
         color: #161313;
         position: relative;
         text-decoration: none;
     }
+
     .nav_item_style a::before {
         content: "";
         position: absolute;
         bottom: 0;
         left: 0;
         right: 100%;
-        height: 1px; /* 底線高度 */
-        background-color: #161313; /* 底線颜色 */
-        transition: right 0.3s ease; /* 過渡效果，使底線動畫顯示 */
+        height: 1px;
+        /* 底線高度 */
+        background-color: #161313;
+        /* 底線颜色 */
+        transition: right 0.3s ease;
+        /* 過渡效果，使底線動畫顯示 */
     }
+
     .nav_item_style a:hover::before {
         right: 0;
     }
+
     .nav_item_mb_style li {
         padding-top: 10px;
         padding-bottom: 10px;
     }
+
     #navbarToggler {
         position: fixed;
         top: 7%;
@@ -79,52 +91,65 @@
         min-height: 2000px;
         padding: 6% 20px 15px 20px;
     }
+
     .fixed_icon_style {
         max-width: 50px;
     }
+
     .header_fixed_icon {
         left: auto;
         right: 25px;
         bottom: 60px;
     }
+
     .icon_pointer {
         cursor: pointer;
     }
+
     #footer {
         background-color: #e3dfd9;
     }
+
     .footer-company-logo {
         padding-bottom: 35px;
         padding-top: 35px;
     }
+
     .footer-company-info {
         padding-bottom: 20px;
     }
+
     .footer-company-info a {
         color: #323232;
         position: relative;
         text-decoration: none;
     }
+
     .footer-company-info a::before {
         content: "";
         position: absolute;
         bottom: 0;
         left: 0;
         right: 100%;
-        height: 2px; /* 底線高度 */
-        background-color: #323232; /* 底線颜色 */
-        transition: right 0.3s ease; /* 過渡效果，使底線動畫顯示 */
+        height: 2px;
+        /* 底線高度 */
+        background-color: #323232;
+        /* 底線颜色 */
+        transition: right 0.3s ease;
+        /* 過渡效果，使底線動畫顯示 */
     }
+
     .footer-company-info a:hover::before {
         right: 0;
     }
+
     .footer-copyright {
         color: #7d7d7d;
         padding-bottom: 20px;
     }
-    @media (min-width: 768px) and (max-width: 991.98px) {
 
-    }
+    @media (min-width: 768px) and (max-width: 991.98px) {}
+
     @media (max-width: 767px) {
         #cart-qty {
             color: #BE2633;
@@ -150,7 +175,9 @@
                             <div class="col-12 text-right nav_item_style">
                                 <a href="/">回首頁</a>
                                 <span> ｜ </span>
-                                <?php if (!$this->ion_auth->logged_in()){ ?>
+                                <a href="/">全品項</a>
+                                <span> ｜ </span>
+                                <?php if (!$this->ion_auth->logged_in()) { ?>
                                     <a href="/login">登入</a>
                                 <? } else { ?>
                                     <a href="/auth/edit_user">會員中心</a>
@@ -190,7 +217,7 @@
                     <li>
                         <a href="/">回首頁</a>
                     </li>
-                    <?php if (!$this->ion_auth->logged_in()){ ?>
+                    <?php if (!$this->ion_auth->logged_in()) { ?>
                         <li>
                             <a href="/login">登入 <i class="fa-solid fa-right-to-bracket"></i></a>
                         </li>
