@@ -217,7 +217,7 @@ class Auth extends Public_Controller
 				} else {
 					$this->session->set_flashdata('changePasswordMessage', '<br>輸入錯誤請重新嘗試<br><br>');
 				}
-				redirect('auth/index?id=3', 'refresh');
+				redirect('auth/index?id=4', 'refresh');
 			}
 			redirect('auth/login', 'refresh');
 		}
@@ -261,7 +261,7 @@ class Auth extends Public_Controller
 				redirect('auth/index?id=6', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('changePasswordMessage'));
-				redirect('auth/index?id=3', 'refresh');
+				redirect('auth/index?id=4', 'refresh');
 			}
 			$this->render('auth/change_password', 'admin_master');
 		} else {
@@ -280,7 +280,7 @@ class Auth extends Public_Controller
 					redirect('auth/index?id=6', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=3', 'refresh');
+					redirect('auth/index?id=4', 'refresh');
 				}
 				redirect('auth/change_password', 'refresh');
 			}
@@ -767,7 +767,7 @@ class Auth extends Public_Controller
 					redirect('auth/index?id=5', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					echo '<script>alert("修改成功");</script>';
-					redirect('auth/index?id=2', 'refresh');
+					redirect('auth/index?id=3', 'refresh');
 				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');
@@ -784,7 +784,7 @@ class Auth extends Public_Controller
 					redirect('auth/index?id=5', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('editMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=2', 'refresh');
+					redirect('auth/index?id=3', 'refresh');
 				}
 				if ($this->ion_auth->is_admin()) {
 					// redirect('/auth', 'refresh');

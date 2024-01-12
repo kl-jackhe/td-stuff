@@ -5,7 +5,6 @@ class Product_tag extends Admin_Controller {
 	function __construct() {
 		parent::__construct();
 		$this->load->model('product_model');
-		$this->load->model('product_category_model');
 		$this->load->model('product_tag_model');
 		$language_list = array();
 		$language = get_setting_general_real('language');
@@ -22,7 +21,7 @@ class Product_tag extends Admin_Controller {
         }
         $this->data['language_list'] = $language_list;
         $this->data['product'] = $this->product_model->get_products();
-		$this->data['product_category'] = $this->product_category_model->get_product_category();
+		$this->data['product_category'] = $this->product_model->get_product_category();
 	}
 
 	function index() {

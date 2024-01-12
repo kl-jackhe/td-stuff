@@ -32,9 +32,13 @@
                 </div>
                 <div v-else-if="selectedCategoryId == 2">
                     <!-- 更改個資 -->
-                    <?php require('auth-edit.php'); ?>
+                    <?php require('auth-coupon.php'); ?>
                 </div>
                 <div v-else-if="selectedCategoryId == 3">
+                    <!-- 更改個資 -->
+                    <?php require('auth-edit.php'); ?>
+                </div>
+                <div v-else-if="selectedCategoryId == 4">
                     <!-- 更改密碼 -->
                     <?php require('auth-changepd.php'); ?>
                 </div>

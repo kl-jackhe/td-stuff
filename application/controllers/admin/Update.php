@@ -76,6 +76,7 @@ class Update extends Admin_Controller
                 $this->update_202401081530();
                 $this->update_202401111630();
                 $this->update_202401121730();
+                $this->update_202401122200();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -86,6 +87,31 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401122200()
+    {
+        $version = '202401122200';
+        $description = '[product]新增欄位[Sales_volume]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'Sales_volume'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `Sales_volume` varchar(30) NOT NULL AFTER `volume_height`;");
+            }
+
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -132,24 +158,24 @@ class Update extends Admin_Controller
                 $this->db->query("ALTER TABLE `product_tag_content` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
             }
 
-            $query = $storeDB->query("SHOW TABLES LIKE 'product_tag'")->result_array();
-            if (empty($query)) {
-                $this->db->query("CREATE TABLE `product_tag` (
-              `id` int(11) NOT NULL,
-              `parent_id` int(11) NOT NULL,
-              `code` varchar(30) NOT NULL,
-              `sort` decimal(6,2) NOT NULL,
-              `status` tinyint(4) NOT NULL DEFAULT '1',
-              `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-              `updated_at` datetime NOT NULL
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-                $this->db->query("ALTER TABLE `product_tag`
-              ADD PRIMARY KEY (`id`),
-              ADD KEY `parent_id` (`parent_id`),
-              ADD KEY `code` (`code`),
-              ADD KEY `status` (`status`);");
-                $this->db->query("ALTER TABLE `product_tag` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
-            }
+            // $query = $storeDB->query("SHOW TABLES LIKE 'product_tag'")->result_array();
+            // if (empty($query)) {
+            //     $this->db->query("CREATE TABLE `product_tag` (
+            //   `id` int(11) NOT NULL,
+            //   `parent_id` int(11) NOT NULL,
+            //   `code` varchar(30) NOT NULL,
+            //   `sort` decimal(6,2) NOT NULL,
+            //   `status` tinyint(4) NOT NULL DEFAULT '1',
+            //   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            //   `updated_at` datetime NOT NULL
+            // ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+            //     $this->db->query("ALTER TABLE `product_tag`
+            //   ADD PRIMARY KEY (`id`),
+            //   ADD KEY `parent_id` (`parent_id`),
+            //   ADD KEY `code` (`code`),
+            //   ADD KEY `status` (`status`);");
+            //     $this->db->query("ALTER TABLE `product_tag` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            // }
 
             $insertData = array(
                 'version' => $version,
@@ -172,7 +198,7 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'SelfLogistics'");
             if ($query->num_rows() > 0) {
             } else {
-                $this->db->query("ALTER TABLE `orders` ADD `SelfLogistics` varchar(30) AFTER `InvoiceNumber`;");
+                $this->db->query("ALTER TABLE `orders` ADD `SelfLogistics` varchar(30) NOT NULL AFTER `InvoiceNumber`;");
             }
 
 
