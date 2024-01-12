@@ -59,17 +59,18 @@
 <div class="row">
   <div class="col-md-4">
     <div class="row" id="positionBtn">
-      <div class="col-md-4">
+      <div class="col-md-12">
         <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
       </div>
-      <div class="col-md-8">
-        <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
-          <a id="contradictionBtn" onclick="contradition(1)">不可同時預購</a>
-        <?php else : ?>
-          <a id="contradictionBtn" onclick="contradition(0)">可同時預購</a>
-        <?php endif; ?>
-
-      </div>
+      <?php if ($this->is_partnertoys) : ?>
+        <div class="col-md-8">
+          <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
+            <a id="contradictionBtn" onclick="contradition(1)">不可同時預購</a>
+          <?php else : ?>
+            <a id="contradictionBtn" onclick="contradition(0)">可同時預購</a>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
     </div>
     <!-- <a href="/admin/product/add_on_group" class="btn btn-info">加購項目</a> -->
     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->

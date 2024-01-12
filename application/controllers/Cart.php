@@ -38,7 +38,7 @@ class Cart extends Public_Controller
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
 		$this_contradiction = $this->mysql_model->_select('contradiction', 'name', 'product', 'row');
 
-		if ($this->is_partnertoys || $this->is_liqun_food) {
+		if ($this->is_partnertoys) {
 			// 檢查預購商品是否與其他商品一起下
 			if ($this_contradiction['contradiction_status'] == 1) {
 				if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
@@ -51,6 +51,30 @@ class Cart extends Public_Controller
 					}
 				}
 			}
+			// 購物車是否有該物品
+			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
+				$cart_item = $this->cart->contents(true);
+				foreach ($cart_item as $self) {
+					if ($self['id'] == $this_product_combine['id']) {
+						if ($this_product_combine['limit_enable'] == 'YES' && (int)$self['qty'] + (int)$qty > (int)$this_product_combine['limit_qty']) {
+							echo 'exceed';
+							return;
+						}
+						$rowid = $self['rowid'];
+						$new_qty = (int)$self['qty'] + (int)$qty;
+
+						$data = array(
+							'rowid' => $rowid,
+							'qty'	=> $new_qty
+						);
+						// 将修改后的内容重新设置回购物车
+						$this->cart->update($data);
+						echo 'updateSuccessful';
+						return;
+					}
+				}
+			}
+		} else if ($this->is_liqun_food) {
 			// 購物車是否有該物品
 			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
 				$cart_item = $this->cart->contents(true);

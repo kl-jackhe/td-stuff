@@ -54,12 +54,10 @@
     }
 
     .add_product {
-        <? if ($this->is_td_stuff) { ?>
-            background-color: #68396D;
-            color: #fff !important;
-        <? } ?><? if ($this->is_liqun_food) { ?>
-            background-color: #f4f2f2;
-            color: #fff !important;
+        <? if ($this->is_td_stuff) { ?>background-color: #68396D;
+        color: #fff !important;
+        <? } ?><? if ($this->is_liqun_food) { ?>background-color: #f4f2f2;
+        color: #fff !important;
         <? } ?>width: 100%;
         line-height: 1.8;
         padding: 0;
@@ -270,7 +268,7 @@
                                                 <!-- 任意選取規格 -->
                                                 <? } else {
                                                 if (($product['sales_status'] == 0 || $product['sales_status'] == 2) && ($product['inventory'] >= $inventory || $product['excluding_inventory'] == true || $product['stock_overbought'] == true)) { ?>
-                                                    <button onclick="add_cart(<?php echo $combine['id'] ?>)" type="button" class="btn add_product" style="<?= ($product['sales_status'] == 2 || ($product['inventory'] < $inventory && $product['stock_overbought'] == true) ? 'background: #A60747;' : '') ?>">
+                                                    <button onclick="add_cart(<?php echo $combine['id'] ?>, '<?= $combine['limit_enable'] ?>', <?php echo $combine['limit_qty'] ?>)" type="button" class="btn add_product" style="<?= ($product['sales_status'] == 2 || ($product['inventory'] < $inventory && $product['stock_overbought'] == true) ? 'background: #A60747;' : '') ?>">
                                                         <i class="fa-solid fa-cart-shopping"></i>
                                                         <? if ($product['inventory'] < $inventory && $product['stock_overbought'] == true) {
                                                             echo '預購';
@@ -296,8 +294,18 @@
     </section>
 </div>
 <script>
-    function add_cart(combine_id) {
+    function add_cart(combine_id, limit_enable = 'NO', limit_qty = 0) {
+        // 檢查登入
+        <?php if (empty($this->session->userdata('user_id'))) : ?>
+            alert('請先登入再進行操作。');
+            window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
+            return;
+        <?php endif; ?>
         var qty = document.getElementById("qty_" + combine_id).value;
+        if (limit_enable == 'YES' && parseInt(qty) > parseInt(limit_qty)) {
+            alert('商品數量不得超過' + limit_qty + '個');
+            return;
+        }
         var form = $('#multitude_specification');
         var url = form.attr('action');
         var specification_name = $("input[name='" + combine_id + "specification_name[]']").map(function() {
@@ -320,7 +328,17 @@
                 specification_qty: specification_qty,
             },
             success: function(data) {
-                alert('加入成功');
+                if (data == 'contradiction') {
+                    alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
+                } else if (data == 'exceed') {
+                    alert('超過限制數量故無法下單，敬請見諒');
+                } else if (data == 'updateSuccessful') {
+                    alert('成功更新購物車');
+                } else if (data == 'successful') {
+                    alert('成功加入購物車');
+                } else {
+                    console.log(data);
+                }
                 get_cart_qty();
             }
         });

@@ -27,8 +27,11 @@ class Product extends Public_Controller
 		$this->data['products'] = $this->product_model->getProducts();
 		// $this->data['product_category'] = $this->product_model->get_product_category();
 
-		if ($this->is_liqun_food || $this->is_td_stuff) {
+		if ($this->is_td_stuff) {
 			$this->render('product/index');
+		}
+		if ($this->is_liqun_food) {
+			$this->render('product/liqun/index');
 		}
 		if ($this->is_partnertoys) {
 			$this->data['current_page'] = $id;
@@ -244,6 +247,10 @@ class Product extends Public_Controller
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
 		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $id);
 		$this->data['page_title'] = $this->data['product']['product_name'];
-		$this->render('product/view');
+		if ($this->is_liqun_food) {
+			$this->render('product/liqun/view');
+		} else {
+			$this->render('product/view');
+		}
 	}
 }
