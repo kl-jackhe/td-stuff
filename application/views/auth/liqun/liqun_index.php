@@ -65,11 +65,14 @@
                 isBtnActive: false, // nav-btn active state
                 perpage: 5, // 一頁的資料數
                 currentPage: 1, // 目前page
+                // imageBase64: '', // check code graph
             }
         },
         mounted() {
             // 初始化 Magnific Popup
             // this.initMagnificPopup();
+            // init imageBase64
+            // this.getCaptcha();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
                 this.selectedCategoryId = this.authCategory[0].auth_category_id;
@@ -145,6 +148,16 @@
                     });
                 }
             },
+            // getCaptcha() {
+            //     $.ajax({
+            //         type: 'post',
+            //         url: '/auth/get_captcha',
+            //         contentType: 'application/json',
+            //         success: (data) => {
+            //             this.imageBase64 = data;
+            //         },
+            //     })
+            // },
             // 獲取追蹤清單
             getFollow() {
                 $.ajax({
@@ -211,6 +224,8 @@
                 } else {
                     window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
                 }
+                // this.getCaptcha();
+                // console.log(<?= json_encode($this->session->flashdata('captcha')); ?>);
             },
             randomCheckcodeContact() {
                 // 获取当前页面的 URL

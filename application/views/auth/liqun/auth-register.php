@@ -76,6 +76,7 @@
                                 <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">驗證碼</label>
                                     <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" autocomplete="off" required>
+                                    <!-- <a @click="randomCheckcode"><img id="randomCheckcode" :src="imageBase64" alt="Captcha Image"></a> -->
                                     <a @click="randomCheckcode"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image"></a>
                                 </div>
                             </div>
