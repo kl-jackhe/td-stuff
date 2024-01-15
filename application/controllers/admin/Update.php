@@ -46,7 +46,6 @@ class Update extends Admin_Controller
                 $this->update_202311211630();
                 $this->update_202312051900();
                 $this->update_202312062000();
-                $this->update_202312112300();
                 $this->update_202312121540();
                 $this->update_202312121541();
                 $this->update_202312122310();
@@ -77,6 +76,7 @@ class Update extends Admin_Controller
                 $this->update_202401111630();
                 $this->update_202401121730();
                 $this->update_202401122200();
+                $this->update_202401151500();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -87,6 +87,37 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401151500()
+    {
+        $version = '202401151500';
+        $description = '新增資料表[features_pay]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'features_pay'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `features_pay` (
+                    `pay_id` int(2) NOT NULL,
+                    `pay_name` varchar(30) NOT NULL,
+                    `payment_status` tinyint(1) NOT NULL,
+                    `MerchantID` varchar(10) NOT NULL,
+                    `HashKey` varchar(64) NOT NULL,
+                    `HashIV` varchar(64) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `features_pay` ADD PRIMARY KEY (`pay_id`);");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -1274,38 +1305,6 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'volume_height'")->result_array();
             if (empty($query)) {
                 $this->db->query("ALTER TABLE `product` ADD `volume_height` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL AFTER `volume_width`;");
-            }
-
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
-        }
-    }
-
-    function update_202312112300()
-    {
-        $version = '202312112200';
-        $description = '新增資料表[features_pay]';
-        $this->db->select('id');
-        $this->db->where('version', $version);
-        $row = $this->db->get('update_log')->row_array();
-        if (empty($row)) {
-            $row = $this->db->query("SHOW TABLES LIKE 'features_pay'")->row_array();
-            if (empty($row)) {
-                $this->db->query("CREATE TABLE `features_pay` (
-                    `pay_id` int(2) NOT NULL,
-                    `pay_name` varchar(30) NOT NULL,
-                    `ECPAY_ACTIVE` char(1) NOT NULL,
-                    `ECPAY_OPEN` char(1) NOT NULL,
-                    `ECPAY_MerchantID` varchar(10) NOT NULL,
-                    `ECPAY_HashKey` varchar(64) NOT NULL,
-                    `ECPAY_HashIV` varchar(64) NOT NULL
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-                $this->db->query("ALTER TABLE `features_pay` ADD PRIMARY KEY (`pay_id`);");
             }
 
             $insertData = array(

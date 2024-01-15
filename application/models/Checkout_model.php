@@ -5,11 +5,11 @@ class Checkout_model extends CI_Model
     {
         parent::__construct();
     }
-    public function getECPay($id = 3)
+    public function getECPay($id = 1)
     {
         $this->db->select('*');
-        $this->db->where('id', $id);
-        $query = $this->db->get('payment');
+        $this->db->where('pay_id', $id);
+        $query = $this->db->get('features_pay');
         if ($query->num_rows() > 0) {
             return $query->row_array();
         } else {

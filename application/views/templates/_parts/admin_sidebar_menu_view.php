@@ -132,12 +132,22 @@ $sub_current = $this->uri->segment(3); ?>
         <span>首頁輪播</span>
       </a>
     </li>
-    <li class="<?= ($current == "menu") ? "active" : ''; ?>">
-      <a href="/admin/menu">
-        <i class="fa-solid fa-file-lines"></i>
-        <span>選單管理</span>
-      </a>
-    </li>
+    <?php if ($this->is_partnertoys) : ?>
+      <li class="<?= ($current == "menu") ? "active" : ''; ?>">
+        <a href="/admin/menu">
+          <i class="fa-solid fa-file-lines"></i>
+          <span>選單管理</span>
+        </a>
+      </li>
+    <?php endif; ?>
+    <?php if ($this->is_liqun_food) : ?>
+      <li class="<?= ($current == "coupon") ? "active" : ''; ?>">
+        <a href="/admin/coupon">
+          <i class="fa-solid fa-file-lines"></i>
+          <span>優惠券管理</span>
+        </a>
+      </li>
+    <?php endif; ?>
     <li class="<?= ($current == "StandardPage") ? "active" : ''; ?>">
       <a href="/admin/StandardPage">
         <i class="fa-regular fa-file-word"></i>

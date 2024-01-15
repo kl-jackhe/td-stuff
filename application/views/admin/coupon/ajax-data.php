@@ -1,7 +1,7 @@
 <?php echo $this->ajax_pagination_admin->create_links(); ?>
 <?php $attributes = array('class' => 'coupon', 'id' => 'coupon'); ?>
 <?php echo form_open('admin/coupon/multiple_action' , $attributes); ?>
-<!-- <div class="form-group"> -->
+<div class="form-group">
   <div class="form-inline">
     <label><input type="checkbox" id="checkAll"> 全選</label>
     <select name="action" id="action" class="form-control">
@@ -10,7 +10,7 @@
     </select>
     <button type="subit" class="btn btn-primary">操作</button>
   </div>
-<!-- </div> -->
+</div>
 
 <table class="table table-striped table-bordered table-hover" id="data-table">
   <thead>

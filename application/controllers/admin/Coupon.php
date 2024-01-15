@@ -6,7 +6,7 @@ class Coupon extends Admin_Controller {
     {
         parent::__construct();
         $this->load->model('coupon_model');
-        $this->load->model('service_area_model');
+        // $this->load->model('service_area_model');
     }
 
     public function index()

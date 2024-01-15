@@ -6,20 +6,20 @@ class Product_tag extends Admin_Controller {
 		parent::__construct();
 		$this->load->model('product_model');
 		$this->load->model('product_tag_model');
-		$language_list = array();
-		$language = get_setting_general_real('language');
-        $language_second = get_setting_general_real('language_second');
-        $language_third = get_setting_general_real('language_third');
-        if ($language != '') {
-            $language_list[] = $language;
-        }
-        if ($language_second != '') {
-            $language_list[] = $language_second;
-        }
-        if ($language_third != '') {
-            $language_list[] = $language_third;
-        }
-        $this->data['language_list'] = $language_list;
+		// $language_list = array();
+		// $language = get_setting_general_real('language');
+        // $language_second = get_setting_general_real('language_second');
+        // $language_third = get_setting_general_real('language_third');
+        // if ($language != '') {
+        //     $language_list[] = $language;
+        // }
+        // if ($language_second != '') {
+        //     $language_list[] = $language_second;
+        // }
+        // if ($language_third != '') {
+        //     $language_list[] = $language_third;
+        // }
+        // $this->data['language_list'] = $language_list;
         $this->data['product'] = $this->product_model->get_products();
 		$this->data['product_category'] = $this->product_model->get_product_category();
 	}

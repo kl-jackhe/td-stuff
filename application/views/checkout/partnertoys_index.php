@@ -510,19 +510,26 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
-                                    <? $payment_count = 0;
-                                    foreach ($payment as $row) { ?>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>">
-                                            <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
-                                                <?= $row['payment_name'] ?>
-                                            </label>
-                                            <? if (!empty($row['payment_info'])) { ?>
-                                                <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $row['payment_info']; ?></p>
-                                            <? } ?>
-                                        </div>
-                                    <? $payment_count++;
-                                    } ?>
+                                    <?php $payment_count = 0; ?>
+                                    <?php if (!empty($ECPay_status) && !empty($close_count)) : ?>
+                                        <?php foreach ($payment as $row) : ?>
+                                            <?php if ($row['payment_status'] == 0) : ?>
+                                                <?php $payment_count++; ?>
+                                            <?php endif; ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>">
+                                                <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
+                                                    <?= $row['payment_name'] ?>
+                                                </label>
+                                                <? if (!empty($row['payment_info'])) { ?>
+                                                    <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $row['payment_info']; ?></p>
+                                                <? } ?>
+                                            </div>
+                                            <?php $payment_count++; ?>
+                                        <?php endforeach; ?>
+                                    <?php elseif (empty($ECPay_status) || empty($close_count)) : ?>
+                                        <span style="color:#dd0606;">尚無付款方式。請聯繫客服。</span>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="row col-12 supermarket">
                                     <div class="col-12">

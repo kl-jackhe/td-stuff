@@ -69,7 +69,14 @@ class Checkout extends Public_Controller
 			$this->render('checkout/liqun_index');
 		}
 		if ($this->is_partnertoys) {
-			// $this->data['ECPayVal'] = $this->mysql_model->_select('features_pay', 'pay_id', 1);
+			$self = $this->checkout_model->getECPay();
+			$this->data['ECPay_status'] = $self['payment_status'];
+			$this->data['close_count'] = count($this->data['payment']);
+			foreach ($this->data['payment'] as $tmp) :
+				if ($tmp['payment_status'] == 0) :
+					$this->data['close_count']--;
+				endif;
+			endforeach;
 			$this->render('checkout/partnertoys_index');
 		}
 	}
@@ -126,7 +133,7 @@ class Checkout extends Public_Controller
 
 		$pay_order = $this->checkout_model->getSelectedOrder($order_id);
 		// 綠界-信用卡
-		if (isset($pay_order) && $pay_order['order_payment'] == 'ecpay') {
+		if (!empty($pay_order) && ($pay_order['order_payment'] == 'ecpay_credit' || $pay_order['order_payment'] == 'ecpay_ATM' || $pay_order['order_payment'] == 'ecpay_CVS')) {
 			/**
 			 *    Credit信用卡付款產生訂單範例
 			 */
@@ -161,7 +168,13 @@ class Checkout extends Public_Controller
 				$obj->Send['TotalAmount'] = (int)$pay_order['order_total']; //交易金額
 				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: ' . $pay_order['order_remark']); //交易描述
 				// 可以決定ATM或Credit支付
-				$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式:Credit
+				if ($pay_order['order_payment'] == 'ecpay_credit') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式
+				} else if ($pay_order['order_payment'] == 'ecpay_ATM') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::ATM; //付款方式
+				} else if ($pay_order['order_payment'] == 'ecpay_CVS') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::CVS; //付款方式
+				}
 				// POST會傳到這
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $pay_order['order_number']; //付款完成通知回傳的網址
@@ -406,7 +419,7 @@ class Checkout extends Public_Controller
 		$this->cart->destroy();
 
 		// 綠界-信用卡
-		if ($this->input->post('checkout_payment') == 'ecpay') {
+		if ($this->input->post('checkout_payment') == 'ecpay_credit' || $this->input->post('checkout_payment') == 'ecpay_ATM' || $this->input->post('checkout_payment') == 'ecpay_CVS') {
 
 			/**
 			 *    Credit信用卡付款產生訂單範例
@@ -442,7 +455,13 @@ class Checkout extends Public_Controller
 				$obj->Send['TotalAmount'] = $order_total; //交易金額
 				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: ' . $this->input->post('remark')); //交易描述
 				// 可以決定ATM或Credit支付
-				$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式:Credit
+				if ($this->input->post('checkout_payment') == 'ecpay_credit') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式
+				} else if ($this->input->post('checkout_payment') == 'ecpay_ATM') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::ATM; //付款方式
+				} else if ($this->input->post('checkout_payment') == 'ecpay_CVS') {
+					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::CVS; //付款方式
+				}
 				// POST會傳到這
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
