@@ -4,7 +4,7 @@
         <div class="justify-content-center">
             <div id="memberOrderList">
                 <div class="col-12 text-center">
-                    <span class="memberTitleMember">ORDER<span class="memberTitleLogin">&nbsp;INFORMATION</span></span>
+                    <span class="memberTitleMember">COUPON<span class="memberTitleLogin">&nbsp;INFORMATION</span></span>
                 </div>
                 <div class="memberTitleChinese col-12 text-center">{{ pageTitle }}</div>
                 <div class="noneOrder">

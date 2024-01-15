@@ -31,6 +31,7 @@ class Product extends Public_Controller
 			$this->render('product/index');
 		}
 		if ($this->is_liqun_food) {
+			$this->data['product_category'] = $this->product_model->get_product_category();
 			$this->render('product/liqun/index');
 		}
 		if ($this->is_partnertoys) {
