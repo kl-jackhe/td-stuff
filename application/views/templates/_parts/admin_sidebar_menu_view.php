@@ -22,7 +22,10 @@ $sub_current = $this->uri->segment(3); ?>
           <li <?= ($current == "product" && $sub_current == "category") ? 'class="active"' : ""; ?>>
             <a href="/admin/product/category">商品分類</a>
           </li>
-          <li <?= ($current == "product" && $sub_current != "category") ? 'class="active"' : ''; ?>>
+          <li <?= ($current == "product" && $sub_current == "product_tag") ? 'class="active"' : ''; ?>>
+            <a href="/admin/product/product_tag">商品標籤</a>
+          </li>
+          <li <?= ($current == "product" && $sub_current != "category" && $sub_current != "product_tag") ? 'class="active"' : ''; ?>>
             <a href="/admin/product">商品清單</a>
           </li>
         </ul>

@@ -97,7 +97,10 @@
                         </li>
                     <? } else { ?>
                         <li>
-                            <a href="/auth/edit_user">會員中心</a>
+                            <a href="/auth">會員中心</a>
+                        </li>
+                        <li>
+                            <a href="/product?cid=">全品項</a>
                         </li>
                         <li>
                             <a href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>

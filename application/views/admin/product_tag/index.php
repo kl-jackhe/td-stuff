@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="table-responsive" id="datatable">
-    <?php require 'ajax-data.php';?>
+    <?php // require 'ajax-data.php';?>
 </div>
 <div class="modal" id="createProductTag" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">

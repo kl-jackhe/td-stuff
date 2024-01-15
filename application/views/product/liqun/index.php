@@ -60,14 +60,6 @@
         padding-right: 30px;
     }
 
-    .product_category {
-        <? if ($this->is_td_stuff) { ?>border: 1px solid #68396D;
-        <? } ?><? if ($this->is_liqun_food) { ?>border: 1px solid #f6d523;
-        <? } ?>padding: 5px 15px 5px 15px;
-        border-radius: 10px;
-        width: 100%;
-    }
-
     .m_padding {
         padding-bottom: 0px !important;
     }
@@ -80,12 +72,6 @@
         .page-header {
             padding-left: 0px;
             padding-right: 0px;
-        }
-
-        .product_category {
-            margin: 10px 0px 10px 0px;
-            padding: 6px 2px 6px 2px;
-            font-size: 14px;
         }
 
         #product_index {
@@ -103,16 +89,14 @@
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div> -->
                         <!-- <input type="text" id="keywords" class="form-control" placeholder="請輸入商品名稱" size="50"> -->
-                        <?php if (!empty($product_category)) { ?>
-                            <?php foreach ($product_category as $row) { ?>
-                                <div class="col-3 col-md-2 mb-2">
-                                    <span class="product_category btn" id="<? echo 'product_category_id_' . $row['product_category_id'] ?>" onClick="searchFilter(<? echo $row['product_category_id']; ?>)"><? echo $row['product_category_name']; ?></span>
-                                </div>
+                        <div class="product-categories">
+                            <?php if (!empty($product_category)) { ?>
+                                <?php foreach ($product_category as $row) { ?>
+                                    <span class="product_category btn col-2" id="<?php echo 'product_category_id_' . $row['product_category_id'] ?>" onClick="searchFilter(<?php echo $row['product_category_id']; ?>)"><?php echo $row['product_category_name']; ?></span>
+                                <?php } ?>
+                                <span class="product_category btn col-2" onClick="searchFilter('')">全品項</span>
                             <?php } ?>
-                            <div class="col-3 col-md-2 mb-2">
-                                <span class="product_category btn" onClick="searchFilter('')">全品項</span>
-                            </div>
-                        <?php } ?>
+                        </div>
                     </div>
                     <hr class="py-2" style="border-top: 1px solid #988B7A;">
                 </div>

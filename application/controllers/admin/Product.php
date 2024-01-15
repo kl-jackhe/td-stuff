@@ -7,6 +7,9 @@ class Product extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->model('product_model');
+		if ($this->is_liqun_food) {
+			$this->load->model('product_tag_model');
+		}
 	}
 
 	public function index()
@@ -699,5 +702,85 @@ class Product extends Admin_Controller
 		$this->db->delete('product_add_on_group');
 
 		redirect(base_url() . 'admin/product/add_on_group');
+	}
+
+	// 標籤功能 ---------------------------------------------------------------------------------
+	public function product_tag()
+	{
+		$this->data['page_title'] = '商品標籤';
+		$this->data['product_tag'] = $this->mysql_model->_select('product_tag');
+
+		$this->render('admin/product/product_tag/index');
+	}
+
+	public function insert_tag()
+	{
+		$this->data['page_title'] = '新增商品標籤';
+		$data = array(
+			'name' => $this->input->post('product_tag_name'),
+			'sort' => $this->input->post('product_tag_sort'),
+		);
+		$this->db->insert('product_tag', $data);
+		$this->session->set_flashdata('message', '新增成功');
+
+		echo '<script>window.history.back();</script>';
+	}
+
+	public function edit_tag($id)
+	{
+		$this->data['page_title'] = '編輯商品分類';
+		$this->data['category'] = $this->mysql_model->_select('product_category', 'product_category_id', $id, 'row');
+
+		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
+		$this->db->select('delivery_id');
+		$this->db->where('source', 'ProductCategory');
+		$this->db->where('source_id', $id);
+		$this->db->where('status', 1);
+		$this->data['use_delivery_list'] = $this->db->get('delivery_range_list')->result_array();
+
+		$this->render('admin/product/category/edit');
+	}
+
+	public function update_tag($id)
+	{
+		$data = array(
+			'product_category_parent' => $this->input->post('product_category_parent'),
+			'product_category_name' => $this->input->post('product_category_name'),
+			'product_category_sort' => $this->input->post('product_category_sort'),
+			'updater_id' => $this->current_user->id,
+			'updated_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->where('product_category_id', $id);
+		$this->db->update('product_category', $data);
+
+		// 刪除配送方式
+		$this->db->where('source', 'ProductCategory');
+		$this->db->where('source_id', $id);
+		$this->db->delete('delivery_range_list');
+		$delivery = $this->input->post('delivery');
+		if (isset($delivery) & !empty($delivery)) {
+			// 新增配送方式
+			for ($i = 0; $i < count($delivery); $i++) {
+				$insertData = array(
+					'delivery_id' => $delivery[$i],
+					'source' => 'ProductCategory',
+					'source_id' => $id,
+				);
+				$this->db->insert('delivery_range_list', $insertData);
+			}
+		}
+		redirect(base_url() . 'admin/product/category');
+	}
+
+	public function delete_tag($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete('product_tag');
+
+		$this->db->where('product_tag_id', $id);
+		$this->db->delete('product_tag_content');
+
+		$this->session->set_flashdata('message', '刪除成功');
+		echo '<script>window.history.back();</script>';
 	}
 }
