@@ -10,7 +10,6 @@ class Product extends Public_Controller
 
 	public function index($id = 1)
 	{
-		$this->data['page_title'] = '夥伴商城';
 
 		$data = array();
 		//total rows count
@@ -28,13 +27,16 @@ class Product extends Public_Controller
 		// $this->data['product_category'] = $this->product_model->get_product_category();
 
 		if ($this->is_td_stuff) {
+			$this->data['page_title'] = '商品頁面';
 			$this->render('product/index');
 		}
 		if ($this->is_liqun_food) {
+			$this->data['page_title'] = '商品頁面';
 			$this->data['product_category'] = $this->product_model->get_product_category();
 			$this->render('product/liqun/index');
 		}
 		if ($this->is_partnertoys) {
+			$this->data['page_title'] = '夥伴商城';
 			$this->data['current_page'] = $id;
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 			$this->data['productCombine'] = $this->product_model->getProductCombine();

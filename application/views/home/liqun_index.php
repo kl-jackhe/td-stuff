@@ -53,7 +53,7 @@
                             <div class="tag_item">
                                 熱門 >>
                                 <?php if (!empty($hot_product)) : ?>
-                                    <?php $timer = 6; ?>
+                                    <?php $timer = 4; ?>
                                     <?php foreach ($hot_product as $self) : ?>
                                         <a href="product/view/<?= $self['product_id'] ?>"><?= $self['product_name'] ?></a>
                                         <?php if ($timer--) : ?>

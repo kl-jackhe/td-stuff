@@ -28,9 +28,9 @@ class Home_model extends CI_Model
         return ($query->num_rows() > 0) ? $query->row_array() : false;
     }
 
-    public function get_hot_product()
+    public function get_hot_product($count)
     {
-        $this->db->limit(7);
+        $this->db->limit((int)$count);
         $this->db->order_by('Sales_volume', 'desc');
         $query = $this->db->get('product');
         return ($query->num_rows() > 0) ? $query->result_array() : false;
