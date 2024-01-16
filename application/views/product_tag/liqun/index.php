@@ -5,7 +5,7 @@
                 <?php if (!empty($product_tag)) : ?>
                     <div class="col-12">
                         <div class="py-2" style="padding: 30px;">
-                            <a href="/">回冰箱</a>
+                            <a class="backHome" href="/">回冰箱</a>
                             <span>&nbsp;/&nbsp;</span>
                             <span><?= $product_tag['name']; ?></span>
                         </div>
