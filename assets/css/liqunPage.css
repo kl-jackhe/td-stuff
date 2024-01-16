@@ -1114,6 +1114,10 @@ label.required::before {
     text-decoration: none;
 }
 
+.content_auto_h{
+    padding-top: 38.39px;
+}
+
 @media (max-width: 767px) {
 
     .product_box,
@@ -1128,5 +1132,9 @@ label.required::before {
 
     #product_index {
         padding: 0px 30px 0px 30px;
+    }
+
+    .content_auto_h{
+        padding-top: 62.5px;
     }
 }
