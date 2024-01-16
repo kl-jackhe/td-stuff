@@ -27,6 +27,9 @@ class MY_Controller extends CI_Controller
 			$this->load->model('lottery_model');
 			$this->load->model('users_model');
 		}
+		if ($this->is_liqun_food) {
+			$this->load->model('product_tag_model');
+		}
 	}
 
 	protected function render($the_view = NULL, $template = 'master')
@@ -34,6 +37,9 @@ class MY_Controller extends CI_Controller
 		$this->data['agentID'] = ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : $this->input->get('aid'));
 		if ($this->is_partnertoys) {
 			$this->data['footer_category'] = $this->menu_model->getSubMenuData();
+		}
+		if ($this->is_liqun_food) {
+			$this->data['header_product_tag'] = $this->product_tag_model->getProductTag();
 		}
 		if ($template == 'json' || $this->input->is_ajax_request()) {
 			header('Content-Type: application/json');

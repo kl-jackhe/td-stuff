@@ -112,30 +112,13 @@
                     <li>
                         冰箱裡有什麼？
                     </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 新春年菜&ensp;強強滾</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 餐廳美食&ensp;帶回家</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 嚴格挑選&ensp;頂級牛</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 露營必備&ensp;不可少</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 即食加熱&ensp;超便利</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 烤肉必備&ensp;香噴噴</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 低卡蔬食&ensp;輕食區</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-chevron-right"></i> 常溫可食&ensp;免煩惱</a>
-                    </li>
+                    <?php if (!empty($header_product_tag)) : ?>
+                        <?php foreach ($header_product_tag as $self) : ?>
+                            <li>
+                                <a href="/product_tag/index/<?= $self['id']; ?>"><i class="fa-solid fa-chevron-right"></i> <?= $self['name']; ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
