@@ -1,53 +1,75 @@
 <div class="row">
 	<div class="col-md-12">
-		<a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) . '/category' ?>" class="btn btn-info hidden-print">返回上一頁</a>
+		<a onClick="goBack()" class="btn btn-info hidden-print">返回上一頁</a>
 		<hr>
 	</div>
 	<div class="col-md-6">
 		<div class="content-box-large">
-			<?php $attributes = array('class' => 'product_category', 'id' => 'product_category');?>
-			<?php echo form_open('admin/product/update_category/' . $category['product_category_id'], $attributes); ?>
-			  	<div class="form-group">
-			    	<label for="product_category_name">分類名稱</label>
-			    	<input type="text" class="form-control" name="product_category_name" value="<?php echo $category['product_category_name']; ?>">
-			  	</div>
-			  	<div class="form-group">
-        			<label>上層分類</label>
-        			<select class="form-control" name="product_category_parent">
-          				<option value="0">選擇分類</option>
-          				<?php echo get_product_category_option(0,'',$category['product_category_parent']) ?>
-        			</select>
-      			</div>
-			  	<div class="form-group">
-			    	<label for="product_category_sort">分類排序</label>
-			    	<input type="text" class="form-control" name="product_category_sort" value="<?php echo $category['product_category_sort']; ?>">
-			  	</div>
-			  	<?if (!empty($delivery)) {?>
-                    <div class="form-group">
-                        <p style="color: red;">※無設定則任何配送方式都可使用！<br>※有設定則會依照設定值為主要配送方式！<br>※配送方式優先順序『全域 < 分類 < 商品 < 方案』</p>
-                        <div class="input-group">
-                            <span class="input-group-addon">指定配送方式</span>
-                            <select name="delivery[]" id="delivery" class="form-control chosen" multiple>
-                                <? foreach ($delivery as $d_row) {
-                                    $is_use = '';
-                                    if (!empty($use_delivery_list)) {
-                                        foreach ($use_delivery_list as $udl_row) {
-                                            if ($udl_row['delivery_id'] == $d_row['id']) {
-                                                $is_use = 'selected';
-                                                break;
-                                            }
-                                        }
-                                    }?>
-                                    <option value="<?=$d_row['id']?>" <?=($is_use != '' ? $is_use : '')?>><?=$d_row['delivery_name']?></option>
-                                <?}?>
-                            </select>
-                        </div>
-                    </div>
-                <?}?>
-			    <div class="form-group">
-			  		<button type="submit" class="btn btn-primary">修改</button>
-			  	</div>
+			<?php $attributes = array('class' => 'product_tag', 'id' => 'product_tag'); ?>
+			<?php echo form_open('admin/product/update_tag/' . $product_tag['id'], $attributes); ?>
+			<div class="form-group">
+				<label for="product_tag_name">標籤名稱</label>
+				<input type="text" class="form-control" id="product_tag_name" name="product_tag_name" value="<?php echo $product_tag['name']; ?>">
+			</div>
+			<div class="form-group">
+				<label for="product_tag">標籤成員</label>
+				<select class="form-control chosen" id="product_tag[]" name="product_tag[]" multiple>
+					<? foreach ($products as $self) { ?>
+						<option value="<?= $self['product_id'] ?>" <?= (!empty($selected_products) && in_array($self['product_id'], $selected_products) ? 'selected' : '') ?>><?= $self['product_name'] ?></option>
+					<? } ?>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="product_tag">標籤狀態</label>
+				<select class="form-control" id="product_tag_status" name="product_tag_status">
+					<option value="1" <?= ($product_tag['status'] == '1') ? 'selected' : ''; ?>>✔️開啟</option>
+					<option value="0" <?= ($product_tag['status'] == '0') ? 'selected' : ''; ?>>❌關閉</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="product_tag_sort">標籤排序</label>
+				<input type="number" class="form-control" id="product_tag_sort" name="product_tag_sort" value="<?php echo $product_tag['sort']; ?>">
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-primary" onClick="form_check()">修改</button>
+			</div>
 			<?php echo form_close(); ?>
 		</div>
 	</div>
 </div>
+
+<script>
+	function form_check() {
+		var product_tag_name = $(' #product_tag_name').val();
+		var product_tag_sort = $('#product_tag_sort').val();
+		<?php if (!empty($total_product_tag)) : ?> <?php foreach ($total_product_tag as $self) : ?>
+				var name = <?= json_encode($self['name']) ?>;
+				var sort = <?= json_encode($self['sort']) ?>;
+				if (product_tag_name == <?= json_encode($product_tag['name']) ?> || parseInt(product_tag_sort) == <?= json_encode((int)$product_tag['sort']) ?>) {
+					if (product_tag_name == <?= json_encode($product_tag['name']) ?> && parseInt(product_tag_sort) == <?= json_encode((int)$product_tag['sort']) ?>) {} else {
+						if (product_tag_name == name) {
+							alert('該項目已存在');
+							return;
+						}
+						if (parseInt(product_tag_sort) == parseInt(sort)) {
+							alert('該排序已存在');
+							return;
+						}
+					}
+				} else {
+					if (product_tag_name == name) {
+						alert('該項目已存在');
+						return;
+					}
+					if (parseInt(product_tag_sort) == parseInt(sort)) {
+						alert('該排序已存在');
+						return;
+					}
+				}
+			<?php endforeach; ?> <?php endif; ?> document.getElementById("product_tag").submit();
+	}
+
+	function goBack() {
+		window.history.back();
+	}
+</script>

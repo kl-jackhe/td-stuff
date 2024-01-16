@@ -56,7 +56,7 @@ class Product_tag_model extends CI_Model
     function getProductTagList()
     {
         $this->db->select('id');
-        $query = $this->db->get('Product_tag')->result_array();
+        $query = $this->db->get('product_tag')->result_array();
         return (!empty($query)) ? $query : false;
     }
 
@@ -75,7 +75,81 @@ class Product_tag_model extends CI_Model
         $this->db->select('id');
         $this->db->where('name', $name);
         $this->db->limit(1);
-        $pc_row = $this->db->get('product_tag')->row_array();
-        return (!empty($pc_row) ? $pc_row : false);
+        $row = $this->db->get('product_tag')->row_array();
+        return (!empty($row) ? $row : false);
+    }
+
+    function getProductTag()
+    {
+        $this->db->select('id, name, code, sort, status');
+        $this->db->order_by('sort');
+        $query = $this->db->get('product_tag')->result_array();
+        return (!empty($query)) ? $query : false;
+    }
+    function getSelectedProductID($id)
+    {
+        $selected = array();
+        $this->db->select('product_tag_id, product_id');
+        $this->db->where('product_tag_id', $id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        if (!empty($query)) {
+            foreach ($query as $row) {
+                $selected[] = $row['product_id'];
+            }
+        }
+        return $selected;
+    }
+
+    function getSelectedProductTagID($id)
+    {
+        $selected = array();
+        $this->db->select('product_tag_id, product_id');
+        $this->db->where('product_id', $id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        if (!empty($query)) {
+            foreach ($query as $row) {
+                $selected[] = $row['product_tag_id'];
+            }
+        }
+        return $selected;
+    }
+
+    function tagContentIsNull($id)
+    {
+        $this->db->where('product_tag_id', $id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        if (!empty($query)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function isExistProductID($product_tag_id, $product_id)
+    {
+        $this->db->where('product_id', $product_id);
+        $this->db->where('product_tag_id', $product_tag_id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        if (!empty($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getTagsProductID($id)
+    {
+        $this->db->select('product_id');
+        $this->db->where('product_tag_id', $id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        return (!empty($query) ? $query : false);
+    }
+
+    function getTagsProductTagID($id)
+    {
+        $this->db->select('product_tag_id');
+        $this->db->where('product_id', $id);
+        $query = $this->db->get('product_tag_content')->result_array();
+        return (!empty($query) ? $query : false);
     }
 }

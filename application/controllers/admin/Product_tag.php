@@ -2,55 +2,55 @@
 
 class Product_tag extends Admin_Controller {
 
-	function __construct() {
-		parent::__construct();
-		$this->load->model('product_model');
-		$this->load->model('product_tag_model');
-		// $language_list = array();
-		// $language = get_setting_general_real('language');
-        // $language_second = get_setting_general_real('language_second');
-        // $language_third = get_setting_general_real('language_third');
-        // if ($language != '') {
-        //     $language_list[] = $language;
-        // }
-        // if ($language_second != '') {
-        //     $language_list[] = $language_second;
-        // }
-        // if ($language_third != '') {
-        //     $language_list[] = $language_third;
-        // }
-        // $this->data['language_list'] = $language_list;
-        $this->data['product'] = $this->product_model->getProductList();
-		$this->data['product_category'] = $this->product_model->get_product_category();
-	}
+	// function __construct() {
+	// 	parent::__construct();
+	// 	$this->load->model('product_model');
+	// 	$this->load->model('product_tag_model');
+	// 	$language_list = array();
+	// 	$language = get_setting_general_real('language');
+    //     $language_second = get_setting_general_real('language_second');
+    //     $language_third = get_setting_general_real('language_third');
+    //     if ($language != '') {
+    //         $language_list[] = $language;
+    //     }
+    //     if ($language_second != '') {
+    //         $language_list[] = $language_second;
+    //     }
+    //     if ($language_third != '') {
+    //         $language_list[] = $language_third;
+    //     }
+    //     $this->data['language_list'] = $language_list;
+    //     $this->data['product'] = $this->product_model->getProductList();
+	// 	$this->data['product_category'] = $this->product_model->get_product_category();
+	// }
 
-	function index() {
-		$this->data['page_title'] = $this->lang->line('product_tag_manage');
-		$this->render('product_tag/index');
-	}
+	// function index() {
+	// 	$this->data['page_title'] = $this->lang->line('product_tag_manage');
+	// 	$this->render('product_tag/index');
+	// }
 
-	function ajaxData() {
-		$conditions = array();
-		$page = $this->input->get('page');
-		if (!$page) {
-			$offset = 0;
-		} else {
-			$offset = $page;
-		}
-		$conditions['search']['sortBy'] = $this->input->get('sortBy');
-		$conditions['search']['status'] = $this->input->get('status');
-		$totalRec = $this->product_tag_model->getRowsCount($conditions);
-		$config['target'] = '#datatable';
-		$config['base_url'] = base_url() . 'product_tag/ajaxData';
-		$config['total_rows'] = $totalRec;
-		$config['per_page'] = 100;
-		$config['link_func'] = 'searchFilter';
-		$this->ajax_pagination->initialize($config);
-		$conditions['start'] = $offset;
-		$conditions['limit'] = 100;
-		$this->data['Product_tag'] = $this->product_tag_model->getRows($conditions);
-		$this->load->view('product_tag/ajax-data', $this->data, false);
-	}
+	// function ajaxData() {
+	// 	$conditions = array();
+	// 	$page = $this->input->get('page');
+	// 	if (!$page) {
+	// 		$offset = 0;
+	// 	} else {
+	// 		$offset = $page;
+	// 	}
+	// 	$conditions['search']['sortBy'] = $this->input->get('sortBy');
+	// 	$conditions['search']['status'] = $this->input->get('status');
+	// 	$totalRec = $this->product_tag_model->getRowsCount($conditions);
+	// 	$config['target'] = '#datatable';
+	// 	$config['base_url'] = base_url() . 'product_tag/ajaxData';
+	// 	$config['total_rows'] = $totalRec;
+	// 	$config['per_page'] = 100;
+	// 	$config['link_func'] = 'searchFilter';
+	// 	$this->ajax_pagination->initialize($config);
+	// 	$conditions['start'] = $offset;
+	// 	$conditions['limit'] = 100;
+	// 	$this->data['Product_tag'] = $this->product_tag_model->getRows($conditions);
+	// 	$this->load->view('product_tag/ajax-data', $this->data, false);
+	// }
 
 	// function createProductTag() {
 	// 	if ($this->checkProductTagNameIsRepeat() == 'is_empty') {

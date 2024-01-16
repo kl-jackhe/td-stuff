@@ -127,6 +127,20 @@
                                             <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at" value="<?php echo $product['discontinued_at']; ?>">
                                         </div>
                                     </div>
+                                    <?php if (!empty($product_tag)) : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="product_tag">標籤</label>
+                                                <select class="form-control chosen" id="product_tag[]" name="product_tag[]" multiple>
+                                                    <?php foreach ($product_tag as $self) : ?>
+                                                        <?php if ($self['status'] == 1) : ?>
+                                                            <option value="<?= $self['id'] ?>" <?= (!empty($selected_product_tag) && in_array($self['id'], $selected_product_tag) ? 'selected' : '') ?>><?= $self['name'] ?></option>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
                                     <? if (!empty($delivery)) { ?>
                                         <div class="col-md-12">
                                             <label for="delivery">指定配送方式</label>

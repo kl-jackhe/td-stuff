@@ -36,7 +36,7 @@
                                 <td class="text-center"><?= (int)$self['sort'] ?></td>
                                 <td class="text-center"><?= ($self['status'] == 1) ? "✔️啟用中" : "❌關閉中" ?></td>
                                 <td class="text-center">
-                                    <!-- <a href="/admin/product/edit_tag/<?= $self['id']; ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a> -->
+                                    <a href="/admin/product/edit_tag/<?= $self['id']; ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                                     <a href="/admin/product/delete_tag/<?= $self['id']; ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

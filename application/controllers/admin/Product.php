@@ -147,6 +147,10 @@ class Product extends Admin_Controller
 		$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		$this->data['select_product_category'] = $this->product_model->getSelectProductCategory($id);
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
+		if ($this->is_liqun_food) {
+			$this->data['product_tag'] = $this->product_tag_model->getProductTag();
+			$this->data['selected_product_tag'] = $this->product_tag_model->getSelectedProductTagID($id);
+		}
 		$this->db->select('delivery_id');
 		$this->db->where('source', 'Product');
 		$this->db->where('source_id', $id);
@@ -343,6 +347,45 @@ class Product extends Admin_Controller
 					'source_id' => $id,
 				);
 				$this->db->insert('delivery_range_list', $insertData);
+			}
+		}
+
+		// 標籤處理
+		$productTagArray = $this->input->post('product_tag');
+
+		// 檢查是否沒被選標籤
+		if (empty($productTagArray)) {
+			$this->db->where('product_id', $id);
+			$this->db->delete('product_tag_content');
+			$this->session->set_flashdata('message', '更新成功');
+			echo '<script>window.history.back();</script>';
+		}
+
+		if (!empty($productTagArray)) {
+			$existingTags = $this->product_tag_model->getTagsProductTagID($id);
+			if (!empty($existingTags)) {
+				// 去名
+				$existingTagIds = array_column($existingTags, 'product_tag_id');
+				// 找出需要刪除的標籤
+				$tagsToDelete = array_diff($existingTagIds, $productTagArray);
+
+				// 循環遍歷需要刪除的標籤，並刪除對應的數據
+				foreach ($tagsToDelete as $tag) {
+					$this->db->where('product_tag_id', $tag);
+					$this->db->where('product_id', $id);
+					$this->db->delete('product_tag_content');
+				}
+			}
+
+			// 插入未存在標籤
+			foreach ($productTagArray as $tag) {
+				if (!$this->product_tag_model->isExistProductID($tag, $id)) {
+					$data = array(
+						'product_tag_id' => $tag,
+						'product_id' => $id,
+					);
+					$this->db->insert('product_tag_content', $data);
+				}
 			}
 		}
 
@@ -708,7 +751,8 @@ class Product extends Admin_Controller
 	public function product_tag()
 	{
 		$this->data['page_title'] = '商品標籤';
-		$this->data['product_tag'] = $this->mysql_model->_select('product_tag');
+		$this->data['product_tag'] = $this->product_tag_model->getProductTag();
+		$this->data['product_tag_content'] = $this->mysql_model->_select('product_tag_content');
 
 		$this->render('admin/product/product_tag/index');
 	}
@@ -728,48 +772,85 @@ class Product extends Admin_Controller
 
 	public function edit_tag($id)
 	{
-		$this->data['page_title'] = '編輯商品分類';
-		$this->data['category'] = $this->mysql_model->_select('product_category', 'product_category_id', $id, 'row');
+		$this->data['page_title'] = '編輯商品標籤';
+		$this->data['total_product_tag'] = $this->mysql_model->_select('product_tag');
+		$this->data['product_tag'] = $this->mysql_model->_select('product_tag', 'id', $id, 'row');
+		$this->data['products'] = $this->product_model->getProducts();
+		$this->data['selected_products'] = $this->product_tag_model->getSelectedProductID($id);
 
-		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
-		$this->db->select('delivery_id');
-		$this->db->where('source', 'ProductCategory');
-		$this->db->where('source_id', $id);
-		$this->db->where('status', 1);
-		$this->data['use_delivery_list'] = $this->db->get('delivery_range_list')->result_array();
-
-		$this->render('admin/product/category/edit');
+		$this->render('admin/product/product_tag/edit');
 	}
 
 	public function update_tag($id)
 	{
 		$data = array(
-			'product_category_parent' => $this->input->post('product_category_parent'),
-			'product_category_name' => $this->input->post('product_category_name'),
-			'product_category_sort' => $this->input->post('product_category_sort'),
-			'updater_id' => $this->current_user->id,
-			'updated_at' => date('Y-m-d H:i:s'),
+			'name' => $this->input->post('product_tag_name'),
+			'sort' => $this->input->post('product_tag_sort'),
+			'status' => $this->input->post('product_tag_status'),
 		);
-		$this->db->where('product_category_id', $id);
-		$this->db->update('product_category', $data);
 
-		// 刪除配送方式
-		$this->db->where('source', 'ProductCategory');
-		$this->db->where('source_id', $id);
-		$this->db->delete('delivery_range_list');
-		$delivery = $this->input->post('delivery');
-		if (isset($delivery) & !empty($delivery)) {
-			// 新增配送方式
-			for ($i = 0; $i < count($delivery); $i++) {
-				$insertData = array(
-					'delivery_id' => $delivery[$i],
-					'source' => 'ProductCategory',
-					'source_id' => $id,
-				);
-				$this->db->insert('delivery_range_list', $insertData);
-			}
+		$this->db->where('id', $id);
+		$this->db->update('product_tag', $data);
+
+
+
+		$productTagArray = $this->input->post('product_tag');
+
+		// 檢查資料庫是否沒對應標籤之商品
+		if (!$this->product_tag_model->tagContentIsNull($id) && !empty($productTagArray)) {
+			$this->session->set_flashdata('message', '更新成功');
+			echo '<script>window.history.back();</script>';
 		}
-		redirect(base_url() . 'admin/product/category');
+
+		// 檢查資料庫是否沒被選標籤
+		if (empty($productTagArray)) {
+			$this->db->where('product_tag_id', $id);
+			$this->db->delete('product_tag_content');
+			$this->session->set_flashdata('message', '更新成功');
+			echo '<script>window.history.back();</script>';
+		}
+
+		if (!empty($productTagArray)) {
+			$existingTags = $this->product_tag_model->getTagsProductID($id);
+			if (!empty($existingTags)) {
+				// 去名
+				$existingTagIds = array_column($existingTags, 'product_id');
+
+				// echo "<pre>";
+				// print_r($productTagArray);
+				// echo "</pre>";
+				// echo "<pre>";
+				// print_r($existingTags);
+				// echo "</pre>";
+				// echo "<pre>";
+				// print_r($existingTagIds);
+				// echo "</pre>";
+
+
+				// 找出需要刪除的標籤
+				$tagsToDelete = array_diff($existingTagIds, $productTagArray);
+
+				// 循環遍歷需要刪除的標籤，並刪除對應的數據
+				foreach ($tagsToDelete as $tag) {
+					$this->db->where('product_tag_id', $id);
+					$this->db->where('product_id', $tag);
+					$this->db->delete('product_tag_content');
+				}
+			}
+
+			// 插入未存在標籤
+			foreach ($productTagArray as $tag) {
+				if (!$this->product_tag_model->isExistProductID($id, $tag)) {
+					$data = array(
+						'product_tag_id' => $id,
+						'product_id' => $tag,
+					);
+					$this->db->insert('product_tag_content', $data);
+				}
+			}
+			$this->session->set_flashdata('message', '更新成功');
+			echo '<script>window.history.back();</script>';
+		}
 	}
 
 	public function delete_tag($id)
