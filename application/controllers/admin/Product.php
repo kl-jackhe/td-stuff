@@ -785,6 +785,7 @@ class Product extends Admin_Controller
 	{
 		$data = array(
 			'name' => $this->input->post('product_tag_name'),
+			// 'code' => $this->input->post('product_tag_code'),
 			'sort' => $this->input->post('product_tag_sort'),
 			'status' => $this->input->post('product_tag_status'),
 		);

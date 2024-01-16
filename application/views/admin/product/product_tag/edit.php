@@ -11,6 +11,10 @@
 				<label for="product_tag_name">標籤名稱</label>
 				<input type="text" class="form-control" id="product_tag_name" name="product_tag_name" value="<?php echo $product_tag['name']; ?>">
 			</div>
+			<!-- <div class="form-group">
+				<label for="product_tag_code">標籤內碼</label>
+				<input type="text" class="form-control" id="product_tag_code" name="product_tag_code" value="<?php echo $product_tag['code']; ?>" readonly>
+			</div> -->
 			<div class="form-group">
 				<label for="product_tag">標籤成員</label>
 				<select class="form-control chosen" id="product_tag[]" name="product_tag[]" multiple>
@@ -40,18 +44,18 @@
 
 <script>
 	function form_check() {
-		var product_tag_name = $(' #product_tag_name').val();
+		var product_tag_name = $('#product_tag_name').val();
 		var product_tag_sort = $('#product_tag_sort').val();
 		<?php if (!empty($total_product_tag)) : ?> <?php foreach ($total_product_tag as $self) : ?>
 				var name = <?= json_encode($self['name']) ?>;
 				var sort = <?= json_encode($self['sort']) ?>;
-				if (product_tag_name == <?= json_encode($product_tag['name']) ?> || parseInt(product_tag_sort) == <?= json_encode((int)$product_tag['sort']) ?>) {
-					if (product_tag_name == <?= json_encode($product_tag['name']) ?> && parseInt(product_tag_sort) == <?= json_encode((int)$product_tag['sort']) ?>) {} else {
-						if (product_tag_name == name) {
+				if (product_tag_name == <?= json_encode($product_tag['name']) ?> || parseInt(product_tag_sort) == parseInt(<?= json_encode((int)$product_tag['sort']) ?>)) {
+					if (product_tag_name == <?= json_encode($product_tag['name']) ?> && parseInt(product_tag_sort) == parseInt(<?= json_encode((int)$product_tag['sort']) ?>)) {} else {
+						if (product_tag_name == name && parseInt(product_tag_sort) == parseInt(<?= json_encode((int)$product_tag['sort']) ?>)) {
 							alert('該項目已存在');
 							return;
 						}
-						if (parseInt(product_tag_sort) == parseInt(sort)) {
+						if (parseInt(product_tag_sort) == parseInt(sort) && product_tag_name == <?= json_encode($product_tag['name']) ?>) {
 							alert('該排序已存在');
 							return;
 						}

@@ -86,6 +86,7 @@ class Product_tag_model extends CI_Model
         $query = $this->db->get('product_tag')->result_array();
         return (!empty($query)) ? $query : false;
     }
+
     function getSelectedProductID($id)
     {
         $selected = array();
@@ -150,6 +151,14 @@ class Product_tag_model extends CI_Model
         $this->db->select('product_tag_id');
         $this->db->where('product_id', $id);
         $query = $this->db->get('product_tag_content')->result_array();
+        return (!empty($query) ? $query : false);
+    }
+
+    function getSelectedProductTag($id)
+    {
+        $this->db->select('id, name, code, sort, status');
+        $this->db->where('id', $id);
+        $query = $this->db->get('product_tag')->row_array();
         return (!empty($query) ? $query : false);
     }
 }

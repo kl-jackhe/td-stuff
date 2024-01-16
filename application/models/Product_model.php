@@ -327,4 +327,12 @@ class Product_model extends CI_Model
 			return false;
 		}
 	}
+
+	function getTagsOfProduct($id)
+	{
+		$this->db->select('*');
+		$this->db->where('id', $id);
+		$query = $this->db->get('product')->row();
+		return (!empty($query) ? $query : false);
+	}
 }

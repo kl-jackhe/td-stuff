@@ -7,6 +7,9 @@ class Home extends Public_Controller
 		parent::__construct();
 		$this->load->model('home_model');
 		$this->load->model('product_model');
+		if ($this->is_liqun_food) {
+			$this->load->model('product_tag_model');
+		}
 	}
 
 	function index($franchisee = '')
@@ -38,6 +41,7 @@ class Home extends Public_Controller
 			$this->render('home/partnertoys_index');
 		} else if ($this->is_liqun_food) {
 			$this->data['hot_product'] = $this->home_model->get_hot_product(5);
+			$this->data['product_tag'] = $this->product_tag_model->getProductTag();
 			$this->render('home/liqun_index');
 		} else {
 			$this->render('home/index');

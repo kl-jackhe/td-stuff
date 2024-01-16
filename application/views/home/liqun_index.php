@@ -20,14 +20,11 @@
                                     <i class="fa-solid fa-bars"></i>&ensp;冰箱裡有什麼？
                                 </div>
                                 <div class="row justify-content-center" id="fridge_item">
-                                    <div class="col-md-12 py-3"><a href="#">新春年菜&ensp;強強滾</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">餐廳美食&ensp;帶回家</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">嚴格挑選&ensp;頂級牛</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">露營必備&ensp;不可少</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">即食加熱&ensp;超便利</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">烤肉必備&ensp;香噴噴</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">低卡蔬食&ensp;輕食區</a></div>
-                                    <div class="col-md-12 py-3"><a href="#">常溫可食&ensp;免煩惱</a></div>
+                                    <?php if (!empty($product_tag)) : ?>
+                                        <?php foreach ($product_tag as $self) : ?>
+                                            <div class="col-md-12 py-3"><a href="product_tag/index/<?= $self['id']; ?>"><?= $self['name']; ?></a></div>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
