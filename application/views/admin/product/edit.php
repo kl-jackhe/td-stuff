@@ -350,17 +350,19 @@
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
                                         <th style="width: 20%;">名稱</th>
+                                        <th style="width: 10%;">貨號</th>
                                         <th style="width: 10%;">原價</th>
                                         <th style="width: 10%;">方案價</th>
                                         <th style="width: 10%;">限購數量</th>
                                         <th style="width: 20%;">描述</th>
-                                        <th style="width: 20%;">圖片</th>
+                                        <th style="width: 10%;">圖片</th>
                                         <th style="width: 10%;">操作</th>
                                     </tr>
                                     <?php if (!empty($product_combine)) {
                                         foreach ($product_combine as $row) { ?>
                                             <tr>
                                                 <td><?php echo $row['name']; ?></td>
+                                                <td><?php echo $row['cargo_id']; ?></td>
                                                 <td><?php echo $row['price']; ?></td>
                                                 <td><?php echo $row['current_price']; ?></td>
                                                 <td>

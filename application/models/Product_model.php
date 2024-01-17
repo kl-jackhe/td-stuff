@@ -335,4 +335,12 @@ class Product_model extends CI_Model
 		$query = $this->db->get('product')->row();
 		return (!empty($query) ? $query : false);
 	}
+
+	function getProductCombineCargoId($id)
+	{
+		$this->db->select('id, cargo_id');
+		$this->db->where('product_id', $id);
+		$query = $this->db->get('product_combine')->result_array();
+		return (!empty($query) ? $query : false);
+	}
 }

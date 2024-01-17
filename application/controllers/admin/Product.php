@@ -437,6 +437,9 @@ class Product extends Admin_Controller
 	{
 		$this->data['product'] = $this->mysql_model->_select('product', 'product_id', $id, 'row');
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
+		if ($this->is_liqun_food) {
+			$this->data['cargo_id'] = $this->product_model->getProductCombineCargoId($id);
+		}
 		$this->load->view('admin/product/create_plan', $this->data);
 	}
 
@@ -444,6 +447,7 @@ class Product extends Admin_Controller
 	{
 		$data = array(
 			'product_id' => $this->input->post('product_id'),
+			'cargo_id' => $this->input->post('product_combine_cargo_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),
@@ -478,7 +482,9 @@ class Product extends Admin_Controller
 		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $product_id);
 		$this->data['product_specification'] = $this->mysql_model->_select('product_specification', 'product_id', $product_id);
 		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $this->data['product_combine']['id']);
-
+		if ($this->is_liqun_food) {
+			$this->data['cargo_id'] = $this->product_model->getProductCombineCargoId($product_id);
+		}
 		$this->load->view('admin/product/edit_plan', $this->data);
 	}
 
@@ -488,6 +494,7 @@ class Product extends Admin_Controller
 
 		$update_data = array(
 			'product_id' => $this->input->post('product_id'),
+			'cargo_id' => $this->input->post('product_combine_cargo_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),

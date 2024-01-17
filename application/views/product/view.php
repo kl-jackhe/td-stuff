@@ -95,16 +95,9 @@
                         <?= (!empty($product['product_description']) ? $product['product_description'] : '<h3>暫無商品描述</h3>') ?>
                     </div>
                     <div class="col-md-8 text-center product_description">
-                        <? if ($this->is_liqun_food) : ?>
-                            <p class="m-0" style="font-size: 28px;">
-                            <p><img src="../../../assets/uploads/page_reminder-shopping.jpg" alt="page_cooking-1" /></p>
-                            <p><img src="../../../assets/uploads/page_reminder.jpg" alt="page_cooking-1" /></p>
-                            </p>
-                        <? else : ?>
-                            <p class="m-0" style="font-size: 28px;">
-                                <?= $product['product_note'] ?>
-                            </p>
-                        <? endif; ?>
+                        <p class="m-0" style="font-size: 28px;">
+                            <?= $product['product_note'] ?>
+                        </p>
                     </div>
                     <div class="col-md-8 text-center product_description" style="margin-bottom: 35px;">
                         <? if ($this->is_td_stuff) { ?>

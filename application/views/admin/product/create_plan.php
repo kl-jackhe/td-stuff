@@ -1,5 +1,5 @@
 <div class="row">
-    <?php $attributes = array('class' => 'plan_insert_submit_form', 'id' => 'plan_insert_submit_form');?>
+    <?php $attributes = array('class' => 'plan_insert_submit_form', 'id' => 'plan_insert_submit_form'); ?>
     <?php echo form_open('admin/product/insert_plan', $attributes); ?>
     <div class="col-md-12">
         <div class="form-group">
@@ -23,7 +23,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_name">方案名稱</label>
                                     <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" required>
@@ -32,11 +32,17 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label for="product_combine_cargo_id">貨號</label>
+                                    <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" required>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <label for="product_combine_price">方案原價</label>
                                     <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="0" required>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="product_combine_current_price">方案售價</label>
                                     <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="0" required>
@@ -90,60 +96,67 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    $(document).on('click', '.x', function(){
-        $(this).parent().parent().remove();
+    $(document).ready(function() {
+        $(document).on('click', '.x', function() {
+            $(this).parent().parent().remove();
+        });
+
     });
 
-});
-function add_plan_item()
-{
-    var unit = '';
-    var unit_list = $('#product-unit-list .unit');
-    unit += '<select class="form-control" name="plan_unit[]">';
-    for(var i=0;i<unit_list.length;i++){
-        unit += '<option value=' + unit_list[i].value + '>' + unit_list[i].value + '</option>';
-    }
-    unit += '</select>';
-
-    var specification = '';
-    var specification_list = $('#product-specification-list .specification');
-    specification += '<select class="form-control" name="plan_specification[]">';
-    for(var i=0;i<specification_list.length;i++){
-        specification += '<option value=' + specification_list[i].value + '>' + specification_list[i].value + '</option>';
-    }
-    specification += '</select>';
-
-    $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>'+unit+'</td><td>'+specification+'</td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
-}
-$('.fancybox').fancybox({
-    'width': 1920,
-    'height': 1080,
-    'type': 'iframe',
-    'autoScale': false
-});
-$('#quick-save-btn').click(function(e){
-    e.preventDefault();
-    var form = $('#plan_insert_submit_form');
-    var url = form.attr('action');
-    // console.log( $('#submit_form').serialize() );
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: form.serialize(),
-        // contentType: false,
-        // cache: false,
-        // processData: false,
-        success : function(data)
-        {
-          // $('#use-Modal').modal('hide');
-          location.reload(true);
-          // console.log(data);
-        },
-        error: function(data)
-        {
-          console.log('無法送出');
+    function add_plan_item() {
+        var unit = '';
+        var unit_list = $('#product-unit-list .unit');
+        unit += '<select class="form-control" name="plan_unit[]">';
+        for (var i = 0; i < unit_list.length; i++) {
+            unit += '<option value=' + unit_list[i].value + '>' + unit_list[i].value + '</option>';
         }
-    })
-});
+        unit += '</select>';
+
+        var specification = '';
+        var specification_list = $('#product-specification-list .specification');
+        specification += '<select class="form-control" name="plan_specification[]">';
+        for (var i = 0; i < specification_list.length; i++) {
+            specification += '<option value=' + specification_list[i].value + '>' + specification_list[i].value + '</option>';
+        }
+        specification += '</select>';
+
+        $("#plan-item-list").append('<tr><td><input type="text" name="plan_qty[]" class="form-control"/></td><td>' + unit + '</td><td>' + specification + '</td><td class="text-center"><i class="fa-solid fa-trash x"></i></td></tr>');
+    }
+    $('.fancybox').fancybox({
+        'width': 1920,
+        'height': 1080,
+        'type': 'iframe',
+        'autoScale': false
+    });
+    $('#quick-save-btn').click(function(e) {
+        var update_cargo_id = $('#product_combine_cargo_id').val();
+        <?php if (!empty($cargo_id)) : ?>
+            <?php foreach ($cargo_id as $self) : ?>
+                if (update_cargo_id == <?= json_encode($self['cargo_id']); ?>) {
+                    alert('此貨號已存在請重新輸入');
+                    return;
+                }
+            <?php endforeach; ?>
+        <?php endif; ?>
+        e.preventDefault();
+        var form = $('#plan_insert_submit_form');
+        var url = form.attr('action');
+        // console.log( $('#submit_form').serialize() );
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            // contentType: false,
+            // cache: false,
+            // processData: false,
+            success: function(data) {
+                // $('#use-Modal').modal('hide');
+                location.reload(true);
+                // console.log(data);
+            },
+            error: function(data) {
+                console.log('無法送出');
+            }
+        })
+    });
 </script>

@@ -29,6 +29,12 @@
                                     <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="product_combine_cargo_id">貨號</label>
+                                    <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" value="<? echo $product_combine['cargo_id'] ?>" required>
+                                </div>
+                            </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="product_combine_price">原價</label>
@@ -195,6 +201,16 @@
         'autoScale': false
     });
     $('#quick-update-btn').click(function(e) {
+        var update_cargo_id = $('#product_combine_cargo_id').val();
+        // console.log(update_cargo_id);
+        <?php if (!empty($cargo_id)) : ?>
+            <?php foreach ($cargo_id as $self) : ?>
+                if (update_cargo_id == <?= json_encode($self['cargo_id']); ?> && <?= json_encode($product_combine['id'] != $self['id']) ?>) {
+                    alert('此貨號已存在請重新輸入');
+                    return;
+                }
+            <?php endforeach; ?>
+        <?php endif; ?>
         e.preventDefault();
         var form = $('#plan_update_submit_form');
         var url = form.attr('action');
