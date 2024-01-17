@@ -49,7 +49,7 @@ select.district {
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_use_limit" class="col-md-2 control-label">次數限定</label>
+              <label for="coupon_use_limit" class="col-md-2 control-label">次數限定：</label>
               <div class="col-md-4">
                 <label class="radio-inline">
                   <input type="radio" name="coupon_use_limit" id="coupon_use_limit1" value="once" checked=""> 使用一次
@@ -60,7 +60,7 @@ select.district {
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_store_limit" class="col-md-2 control-label">店家限定</label>
+              <label for="coupon_store_limit" class="col-md-2 control-label">店家限定：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <div style="display: inline-block;">
@@ -73,14 +73,14 @@ select.district {
                       }
                       echo form_dropdown('coupon_store_limit', $data, '0', $att);
                     else:
-                      echo '<label>沒有店家</label><input type="text" class="form-control" id="coupon_store_limit" name="coupon_store_limit" value="0" readonly>';
+                      echo '<input type="text" class="form-control" id="coupon_store_limit" name="coupon_store_limit" value="0" readonly>';
                     endif; ?>
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_amount_limit" class="col-md-2 control-label">金額限定</label>
+              <label for="coupon_amount_limit" class="col-md-2 control-label">金額限定：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select name="coupon_amount_limit" id="coupon_amount_limit" class="form-control">
@@ -94,7 +94,7 @@ select.district {
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_localtion_limit" class="col-md-2 control-label">地區限定</label>
+              <label for="coupon_localtion_limit" class="col-md-2 control-label">地區限定：</label>
               <div class="col-md-9">
                 <div class="form-inline" id="twzipcode">
                   <div class="pull-left">
@@ -109,7 +109,7 @@ select.district {
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_product_limit" class="col-md-2 control-label">商品限定</label>
+              <label for="coupon_product_limit" class="col-md-2 control-label">商品限定：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select name="coupon_product_limit" id="coupon_product_limit" class="form-control">
@@ -140,7 +140,7 @@ select.district {
               </div>
             </div>
             <div class="form-group">
-              <label for="coupon_birthday_only" class="col-md-2 control-label">壽星限定</label>
+              <label for="coupon_birthday_only" class="col-md-2 control-label">壽星限定：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select class="form-control" id="coupon_birthday_only" name="coupon_birthday_only">

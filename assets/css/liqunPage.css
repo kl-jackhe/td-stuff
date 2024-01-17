@@ -1164,3 +1164,25 @@ label.required::before {
         padding-top: 62.5px;
     }
 }
+
+.promotion-title {
+    font-size: 14px;
+}
+
+.couponTitle span {
+    display: block;
+    background-color: #E8F8E8;
+    text-align: center;
+    padding: 5px;
+    color: #000;
+    font-weight: 400;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.couponDescription span {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

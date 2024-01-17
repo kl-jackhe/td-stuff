@@ -273,8 +273,56 @@ foreach ($this->cart->contents() as $items) {
                             </tbody>
                         </table>
                         <hr>
+                        <?php
+                        $is_used = false;
+                        $free_shipping = false; // 是否免運
+                        $coupon_use_limit = 0; // 優惠券限制次數
+                        $coupon_cash = 0.00; // 折多少$
+                        $coupon_percent = 0.00; // 折多少%
+                        ?>
+                        <?php if (!empty($coupon)) : ?>
+                            <div class="col-12 row">
+                                <h5 class="col-12 promotion-title">已享用之優惠</h5>
+                                <?php foreach ($coupon as $self) : ?>
+                                    <?php if ($self['coupon_status'] == 1) : ?>
+                                        <?php
+                                        if ($self['coupon_method'] == 'free_shipping' && $this->cart->total() > $self['coupon_amount_limit_number']) :
+                                            // 免運費
+                                            $is_used = true;
+                                            $free_shipping = true;
+                                            $coupon_cash += $self['coupon_number'];
+                                        elseif ($self['coupon_method'] == 'cash' && $this->cart->total() > $self['coupon_amount_limit_number']) :
+                                            // 全商品折扣
+                                            $is_used = true;
+                                            $coupon_use_limit = ($self['coupon_use_limit'] == "repeat") ? -1 : 1; // 要改
+                                            $coupon_cash += $self['coupon_number'];
+                                        elseif ($self['coupon_method'] == 'percent' && $this->cart->total() > $self['coupon_amount_limit_number']) :
+                                            // 全商品%數折扣
+                                            $is_used = true;
+                                            $coupon_use_limit = ($self['coupon_use_limit'] == "repeat") ? -1 : 1; // 要改
+                                            $coupon_percent = $self['coupon_number'];
+                                        endif;
+                                        ?>
+                                        <?php if ($self['coupon_amount_limit'] == 1 && $this->cart->total() > $self['coupon_amount_limit_number']) : ?>
+                                            <div class="col-2 couponTitle">
+                                                <span><?= ($self['coupon_method'] == 'free_shipping') ? '免運費' : '折扣優惠'; ?></span>
+                                            </div>
+                                            <div class="col-10 couponDescription">
+                                                <span><?= $self['coupon_name'] ?></span>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </div>
+                            <br>
+                            <hr>
+                        <?php endif; ?>
                         <span style="text-align:right;">購物車小計：
-                            <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() ?></span>
+                            <?php if ($is_used) : ?>
+                                <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() - $coupon_cash * ($coupon_percent != 0.00 ? $coupon_percent : 1.00); ?></span>
+                            <?php else : ?>
+                                <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() ?></span>
+                            <?php endif; ?>
                         </span>
                         <br>
                         <br>

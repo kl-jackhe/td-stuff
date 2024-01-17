@@ -9,6 +9,9 @@ class Checkout extends Public_Controller
 	{
 		parent::__construct();
 		$this->load->model('checkout_model');
+		if ($this->is_liqun_food) {
+			$this->load->model('coupon_model');
+		}
 
 		// Check if aesKey and aesIv are already set in flashdata
 		if (!$this->session->flashdata('aesKey') || !$this->session->flashdata('aesIv')) {
@@ -66,6 +69,7 @@ class Checkout extends Public_Controller
 			$this->render('checkout/index');
 		}
 		if ($this->is_liqun_food) {
+			$this->data['coupon'] = $this->coupon_model->getShareCoupon();
 			$this->render('checkout/liqun_index');
 		}
 		if ($this->is_partnertoys) {

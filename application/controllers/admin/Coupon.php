@@ -84,8 +84,8 @@ class Coupon extends Admin_Controller {
         $this->data['page_title'] = '新增優惠券';
         $this->data['store'] = $this->mysql_model->_select('store');
         $this->data['product'] = $this->mysql_model->_select('product');
-        $this->data['hide_county'] = $this->service_area_model->get_hide_county();
-        $this->data['hide_district'] = $this->service_area_model->get_hide_district();
+        // $this->data['hide_county'] = $this->service_area_model->get_hide_county();
+        // $this->data['hide_district'] = $this->service_area_model->get_hide_district();
         $this->render('admin/coupon/create');
     }
 
@@ -143,8 +143,8 @@ class Coupon extends Admin_Controller {
         $this->data['coupon'] = $this->mysql_model->_select('coupon','coupon_id',$id,'row');
         $this->data['store'] = $this->mysql_model->_select('store');
         $this->data['product'] = $this->mysql_model->_select('product');
-        $this->data['hide_county'] = $this->service_area_model->get_hide_county();
-        $this->data['hide_district'] = $this->service_area_model->get_hide_district();
+        // $this->data['hide_county'] = $this->service_area_model->get_hide_county();
+        // $this->data['hide_district'] = $this->service_area_model->get_hide_district();
         $this->data['change_log'] = get_change_log('coupon',$id);
         $this->render('admin/coupon/edit');
     }
