@@ -5,7 +5,7 @@
             <div class="container">
                 <h1><span>{{ pageTitle }}</span></h1>
             </div>
-            <div v-if="selectedCategoryId == 1 && selectedSubCategoryId == null">
+            <div v-if="selectedCategoryId == 1 && selectedSubCategoryId == null && selectedSubSubCategoryId == null">
                 <div class="container">
                     <img src="/assets/uploads/Editor/images/creator/20230208153251.jpg" style="width: 100%;">
                 </div>
@@ -16,6 +16,16 @@
                             <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>
+                </div>
+            </div>
+            <div v-if="selectedSubCategoryId != null">
+                <div v-for="self in channels_son_category" class="row">
+                    <div v-if="selectedSubCategoryId == self.sort" v-html="self.description" class="col-12 center-content"></div>
+                </div>
+            </div>
+            <div v-if="selectedSubSubCategoryId != null">
+                <div v-for="self in channels_sub_son_category" class="row">
+                    <div v-if="selectedSubSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
                 </div>
             </div>
         </div>

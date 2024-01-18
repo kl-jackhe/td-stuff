@@ -44,7 +44,7 @@ class Menu_model extends CI_Model
 
     function getSubSonMenuData($id = 0, $parent_id = 0)
     {
-        $this->db->select('id, parent_id, grandparent_id, code, name, sort, type, status');
+        $this->db->select('id, parent_id, grandparent_id, code, description, name, sort, type, status');
         if ($id == 0 && $parent_id != 0) {
             // 找son
             $this->db->where('parent_id', $parent_id);
@@ -64,7 +64,7 @@ class Menu_model extends CI_Model
 
     function getSubSubSonMenuData($id = 0, $parent_id = 0)
     {
-        $this->db->select('id, parent_id, grandparent_id, grandparent_parent_id, code, name, sort, type, status');
+        $this->db->select('id, parent_id, grandparent_id, grandparent_parent_id, code, description, name, sort, type, status');
         if ($id == 0 && $parent_id != 0) {
             // 找son
             $this->db->where('parent_id', $parent_id);

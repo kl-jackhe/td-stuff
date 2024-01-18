@@ -79,6 +79,8 @@ class Update extends Admin_Controller
                 $this->update_202401151500();
                 $this->update_202401151900();
                 $this->update_202401172030();
+                $this->update_202401181930();
+                $this->update_202401182000();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -89,6 +91,54 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401182000()
+    {
+        $version = '202401182000';
+        $description = '[sub_sub_son_menu]新增欄位[description]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM sub_sub_son_menu LIKE 'description'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `sub_sub_son_menu` ADD `description` LONGTEXT NOT NULL AFTER `code`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202401181930()
+    {
+        $version = '202401181930';
+        $description = '[sub_son_menu]新增欄位[description]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM sub_son_menu LIKE 'description'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `sub_son_menu` ADD `description` LONGTEXT NOT NULL AFTER `code`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

@@ -2449,6 +2449,27 @@ input.qtyminus {
     margin: 4% auto 0;
 }
 
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.center-content p {
+    margin: 0;
+    /* 清除段落的預設邊距 */
+}
+
+.center-content img {
+    max-width: 100%;
+    /* 讓圖片不超出其容器 */
+    height: auto;
+    /* 保持原始高度寬度比例 */
+    margin: 10px 0;
+    /* 可以根據需要調整圖片之間的垂直間距 */
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

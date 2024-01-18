@@ -18,6 +18,11 @@
                     </div>
                 </div>
             </div>
+            <div v-if="selectedSubCategoryId != null">
+                <div v-for="self in cargo_son_category" class="row">
+                    <div v-if="selectedSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

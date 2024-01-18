@@ -119,16 +119,39 @@ class Menu extends Admin_Controller
         echo '<script>window.history.back();</script>';
     }
 
+    function edit($databaseName = '', $id = 0)
+    {
+        $this->data['databaseName'] = $databaseName;
+        if ($databaseName == 'menu') {
+            $this->data['menu'] = $this->menu_model->getMenuData($id);
+            $this->data['same_level_menu'] = $this->menu_model->getMenuData();
+        } elseif ($databaseName == 'sub_menu') {
+            $this->data['menu'] = $this->menu_model->getSubMenuData($id, 0);
+            $this->data['same_level_menu'] = $this->menu_model->getSubMenuData(0, $this->data['menu']['parent_id']);
+        } elseif ($databaseName == 'sub_son_menu') {
+            $this->data['menu'] = $this->menu_model->getSubSonMenuData($id, 0);
+            $this->data['same_level_menu'] = $this->menu_model->getSubSonMenuData(0, $this->data['menu']['parent_id']);
+        } elseif ($databaseName == 'sub_sub_son_menu') {
+            $this->data['menu'] = $this->menu_model->getSubSubSonMenuData($id, 0);
+            $this->data['same_level_menu'] = $this->menu_model->getSubSubSonMenuData(0, $this->data['menu']['parent_id']);
+        }
+        $this->render('admin/menu/edit');
+    }
+
     function update($databaseName = '')
     {
         $id = $this->input->post('id');
+        $description = $this->input->post('description');
         $name = $this->input->post('name');
         $sort = $this->input->post('sort');
         $status = $this->input->post('status');
-        if (!empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
+
+        $message = '更新失敗';
+
+        if (!empty($description) && !empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
             try {
                 $updateData = array(
-                    'id' => $id,
+                    'description' => $description,
                     'name' => $name,
                     'sort' => $sort,
                     'status' => $status,

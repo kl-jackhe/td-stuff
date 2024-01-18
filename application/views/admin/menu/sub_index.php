@@ -54,7 +54,8 @@
                             </td>
                             <td hidden><input type="hidden" id="menuId" value="<?= $data['id'] ?>"></td>
                             <td class="text-center">
-                                <a class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a>
+                                <a href="/admin/menu/edit/sub_menu/<?= $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                                <!-- <a class="btn btn-info btn-sm" onclick="editRow(this)"><i class="fa fa-edit"></i></a> -->
                                 <a href="/admin/menu/delete/sub_menu/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa-solid fa-trash"></i></a>
                             </td>
                         </tr>
