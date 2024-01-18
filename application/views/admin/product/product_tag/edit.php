@@ -24,7 +24,7 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="product_tag">標籤狀態</label>
+				<label for="product_tag_status">標籤狀態</label>
 				<select class="form-control" id="product_tag_status" name="product_tag_status">
 					<option value="1" <?= ($product_tag['status'] == '1') ? 'selected' : ''; ?>>✔️開啟</option>
 					<option value="0" <?= ($product_tag['status'] == '0') ? 'selected' : ''; ?>>❌關閉</option>
