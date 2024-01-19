@@ -321,21 +321,22 @@ class Checkout extends Public_Controller
 			// echo '<pre>';
 			// print_r ($cart_item);
 			// echo '</pre>';
-			$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $cart_item['id']);
+			$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $cart_item['id'], 'row');
 			// echo '<pre>';
 			// print_r ($this_product_combine);
 			// echo '</pre>';
-			$this_product = $this->mysql_model->_select('product', 'product_id', $cart_item['product_id']);
+			$this_product = $this->mysql_model->_select('product', 'product_id', $cart_item['product_id'], 'row');
 			// echo '<pre>';
 			// print_r ($this_product);
 			// echo '</pre>';
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
-				'product_combine_name' => $this_product_combine[0]['name'],
+				'cargo_id' => $this_product_combine['cargo_id'],
+				'product_combine_name' => $this_product_combine['name'],
 				'customer_id' => $customer_id,
-				'product_id' => $this_product[0]['product_id'],
-				'product_name' => $this_product[0]['product_name'],
+				'product_id' => $this_product['product_id'],
+				'product_name' => $this_product['product_name'],
 				'order_item_qty' => $cart_item['qty'],
 				'order_item_price' => $cart_item['price'],
 				'created_at' => $created_at,
