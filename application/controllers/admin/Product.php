@@ -800,9 +800,8 @@ class Product extends Admin_Controller
 		$this->db->where('id', $id);
 		$this->db->update('product_tag', $data);
 
-
-
-		$productTagArray = $this->input->post('product_tag');
+		$productTagArray = $this->input->post('checkboxList');
+		// $productTagArray = $this->input->post('product_tag');
 
 		// 檢查資料庫是否沒對應標籤之商品
 		if (!$this->product_tag_model->tagContentIsNull($id) && !empty($productTagArray)) {
@@ -858,6 +857,7 @@ class Product extends Admin_Controller
 			}
 			$this->session->set_flashdata('message', '更新成功');
 			echo '<script>window.history.back();</script>';
+			// redirect(base_url() . 'admin/product/edit_tag/' . $id);
 		}
 	}
 
