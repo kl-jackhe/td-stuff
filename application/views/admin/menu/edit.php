@@ -73,7 +73,7 @@
     </div>
     <? echo form_close() ?>
 </div>
-<script src="//cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+<script src="/assets/ckeditor5-build-classic/ckeditor.js"></script>
 <script>
     // ajax 一定要寫在裡面不然會讀不到editor
     ClassicEditor

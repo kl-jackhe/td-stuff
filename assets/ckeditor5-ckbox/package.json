@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@ckeditor/ckeditor5-ckbox": "^41.0.0"
+  }
+}
