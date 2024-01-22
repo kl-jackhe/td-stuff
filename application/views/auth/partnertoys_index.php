@@ -269,6 +269,53 @@
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
             },
+            redirectToCargo() {
+                console.log(this.selectedOrderItem);
+                this.add_cart();
+            },
+            add_cart() {
+                // 檢查登入
+                <?php if (empty($this->session->userdata('user_id'))) : ?>
+                    alert('請先登入再進行操作。');
+                    window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
+                    return;
+                <?php endif; ?>
+
+                Promise.all(this.selectedOrderItem.map(async (element) => {
+                        try {
+                            let data = await $.ajax({
+                                url: "/cart/add_combine",
+                                method: "POST",
+                                data: {
+                                    combine_id: element.product_combine_id,
+                                    qty: element.order_item_qty,
+                                    specification_name: '',
+                                    specification_id: '',
+                                    specification_qty: '',
+                                }
+                            });
+
+                            if (data == 'exceed') {
+                                alert('超過限制數量故無法下單，敬請見諒');
+                            } else if (data == 'updateSuccessful') {
+                                console.log(data);
+                            } else if (data == 'successful') {
+                                console.log(data);
+                            } else {
+                                console.log(data);
+                            }
+                            get_cart_qty();
+                        } catch (error) {
+                            console.error('Error in AJAX request:', error);
+                        }
+                    }))
+                    .then(() => {
+                        // 等待3秒後執行跳轉
+                        setTimeout(() => {
+                            window.location.href = <?= json_encode(base_url() . 'checkout') ?>;
+                        }, 300);
+                    });
+            },
             // 頁碼
             setPage(page) {
                 if (page <= 0 || page > this.totalPages || (page === this.totalPages && this.currentPage === this.totalPages)) {

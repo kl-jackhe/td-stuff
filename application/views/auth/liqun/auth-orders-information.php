@@ -3,7 +3,10 @@
     <div class="container">
         <div class="justify-content-center">
             <div class="memberOrderContent" id="row">
-                <div class="orderDetailButton"><span id="goBack" @click="clearSelectedOrder()"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;返回列表</span></div>
+                <div class="orderDetailButton">
+                    <span class="orderBtn" @click="clearSelectedOrder()"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;返回列表</span>
+                    <span class="orderBtn" @click="redirectToCargo()"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;再買一次</span>
+                </div>
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">ORDER<span class="memberTitleLogin">&nbsp;CONTENT</span></span>
                 </div>

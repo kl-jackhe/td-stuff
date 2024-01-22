@@ -978,7 +978,8 @@ label.required::before {
     -o-transition: all .3s ease-in-out;
 }
 
-.orderDetailButton #goBack {
+.orderDetailButton .orderBtn {
+    margin-right: 10px;
     padding: 10px;
     cursor: pointer;
     color: #000;
@@ -991,7 +992,7 @@ label.required::before {
     -o-transition: all .3s ease-in-out;
 }
 
-.orderDetailButton #goBack:hover {
+.orderDetailButton .orderBtn:hover {
     color: #fff;
     background-color: #000;
 }

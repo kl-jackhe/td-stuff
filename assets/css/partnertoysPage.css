@@ -1801,7 +1801,8 @@ input.qtyminus {
     margin-bottom: 40px;
 }
 
-.orderDetailButton #goBack {
+.orderDetailButton .orderBtn {
+    margin-right: 10px;
     padding: 10px;
     cursor: pointer;
     color: #d35448;
@@ -1814,7 +1815,7 @@ input.qtyminus {
     -o-transition: all .3s ease-in-out;
 }
 
-.orderDetailButton #goBack:hover {
+.orderDetailButton .orderBtn:hover {
     color: #fff;
     background-color: #d35448;
 }
