@@ -978,6 +978,10 @@ label.required::before {
     -o-transition: all .3s ease-in-out;
 }
 
+.orderDetailButton {
+    margin-bottom: 40px;
+}
+
 .orderDetailButton .orderBtn {
     margin-right: 10px;
     padding: 10px;
