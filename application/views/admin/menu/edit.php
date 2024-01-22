@@ -60,8 +60,8 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="description">內容描述</label>
-                                        <textarea id="editor" name="description"><?= $menu['description'] ?></textarea>
+                                        <label for="editor">內容描述</label>
+                                        <textarea class="form-control" id="editor" name="editor" cols="30" rows="30"><?= $menu['description'] ?></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -73,65 +73,71 @@
     </div>
     <? echo form_close() ?>
 </div>
-<script src="/assets/ckeditor5-build-classic/ckeditor.js"></script>
+<!-- <script src="/assets/ckeditor5-build-classic/ckeditor.js"></script> -->
 <script>
     // ajax 一定要寫在裡面不然會讀不到editor
-    ClassicEditor
-        .create(document.querySelector('#editor'))
-        .then(editor => {
-            $('#update-btn').click(function(e) {
-                var editid = $('#id').val();
-                var editName = $('#name').val();
-                var editSort = $('#sort').val();
+    // ClassicEditor
+    //     .create(document.querySelector('#editor'), {
+    //         // toolbar: [ 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', 'link'],
+    //         ckfinder: {
+    //             tokenUrl: <?= json_encode(base_url()); ?>,
+    //             uploadUrl: '/upload/'
+    //         }
+    //     })
+    //     .then(editor => {
+    //         $('#update-btn').click(function(e) {
+    //             var editid = $('#id').val();
+    //             var editName = $('#name').val();
+    //             var editSort = $('#sort').val();
 
-                if (editSort == 0) {
-                    alert('更新失敗排序不可為NULL');
-                    return;
-                }
-                <?php if (!empty($same_level_menu)) : ?>
-                    <?php foreach ($same_level_menu as $self) : ?>
-                        if (editSort == <?= json_encode($self['sort']) ?>) {
-                            if (editid != <?= json_encode($self['id']) ?>) {
-                                alert('更新失敗排序不可重複');
-                                return;
-                            }
-                        }
-                        if (editName == <?= json_encode($self['name']) ?>) {
-                            if (editid != <?= json_encode($self['id']) ?>) {
-                                alert('更新失敗名稱不可重複');
-                                return;
-                            }
-                        }
-                    <?php endforeach; ?>
-                <?php endif; ?>
+    //             if (editSort == 0) {
+    //                 alert('更新失敗排序不可為NULL');
+    //                 return;
+    //             }
+    //             <?php if (!empty($same_level_menu)) : ?>
+    //                 <?php foreach ($same_level_menu as $self) : ?>
+    //                     if (editSort == <?= json_encode($self['sort']) ?>) {
+    //                         if (editid != <?= json_encode($self['id']) ?>) {
+    //                             alert('更新失敗排序不可重複');
+    //                             return;
+    //                         }
+    //                     }
+    //                     if (editName == <?= json_encode($self['name']) ?>) {
+    //                         if (editid != <?= json_encode($self['id']) ?>) {
+    //                             alert('更新失敗名稱不可重複');
+    //                             return;
+    //                         }
+    //                     }
+    //                 <?php endforeach; ?>
+    //             <?php endif; ?>
 
-                // 更新 <textarea> 的值
-                editor.updateSourceElement();
+    //             // 更新 <textarea> 的值
+    //             editor.updateSourceElement();
 
-                // send ajax data to backend
-                e.preventDefault();
-                var form = $('#update');
-                var url = form.attr('action');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(),
-                    success: function(data) {
-                        if (data == '更新成功') {
-                            location.reload(true);
-                        } else {
-                            console.log(data);
-                        }
-                    },
-                    error: function(data) {
-                        console.log('無法送出');
-                    }
-                })
-            });
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    //             // send ajax data to backend
+    //             e.preventDefault();
+    //             var form = $('#update');
+    //             var url = form.attr('action');
+    //             $.ajax({
+    //                 type: "POST",
+    //                 url: url,
+    //                 data: form.serialize(),
+    //                 success: function(data) {
+    //                     if (data == '更新成功') {
+    //                         location.reload(true);
+    //                     } else {
+    //                         console.log(data);
+    //                     }
+    //                 },
+    //                 error: function(data) {
+    //                     console.log('無法送出');
+    //                 }
+    //             })
+    //         });
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
 
     function returnSubMenu() {
         window.history.back();
@@ -148,5 +154,34 @@
                 $('#any_specification').val('0');
             }
         });
+    });
+
+    $('#update-btn').click(function(e) {
+        var editid = $('#id').val();
+        var editName = $('#name').val();
+        var editSort = $('#sort').val();
+
+        if (editSort == 0) {
+            alert('更新失敗排序不可為NULL');
+            return;
+        }
+        <?php if (!empty($same_level_menu)) : ?>
+            <?php foreach ($same_level_menu as $self) : ?>
+                if (editSort == <?= json_encode($self['sort']) ?>) {
+                    if (editid != <?= json_encode($self['id']) ?>) {
+                        alert('更新失敗排序不可重複');
+                        return;
+                    }
+                }
+                if (editName == <?= json_encode($self['name']) ?>) {
+                    if (editid != <?= json_encode($self['id']) ?>) {
+                        alert('更新失敗名稱不可重複');
+                        return;
+                    }
+                }
+            <?php endforeach; ?>
+        <?php endif; ?>
+
+        $('#update').submit();
     });
 </script>

@@ -141,7 +141,7 @@ class Menu extends Admin_Controller
     function update($databaseName = '')
     {
         $id = $this->input->post('id');
-        $description = $this->input->post('description');
+        $description = $this->input->post('editor');
         $name = $this->input->post('name');
         $sort = $this->input->post('sort');
         $status = $this->input->post('status');
@@ -164,8 +164,7 @@ class Menu extends Admin_Controller
             }
         }
         $this->session->set_flashdata('message', $message);
-        echo $message;
-        return;
+        echo '<script>window.history.back();</script>';
     }
 
     function delete($databaseName, $id)
