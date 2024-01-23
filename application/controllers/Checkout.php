@@ -93,44 +93,68 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
-	public function get_ecbAPI()
+	public function get_ecbAPIToken()
 	{
 		$API_ID = '0032';
 		$API_KEY = 'viSAcHt6F1c438Fz';
+
+		$url = 'https://ecbypass.com.tw/api/v2/token/authorize.php';
 
 		$header = array(
 			"Content-Type: application/x-www-form-urlencoded",
 			"Authorization: Basic " . base64_encode($API_ID . ':' . $API_KEY)
 		);
 
-		$context = array(
-			"http" => array(
-				"method"        => "GET",
-				"header"        => implode("\r\n", $header)
+		$options = array(
+			'http' => array(
+				'method' => 'GET',
+				'header' => implode("\r\n", $header),
 			),
-			"ssl" => array(
-				"verify_peer" => false,
-				"verify_peer_name" => false,
-				"allow_self_signed" => true
-			)
+			// 'ssl' => array(
+			// 	'verify_peer' => true,
+			// 	'verify_peer_name' => true,
+			// 	'allow_self_signed' => false,
+			// ), 
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
 		);
 
-		$res = file_get_contents('https://ecbypass.com.tw/api/v2/token/authorize.php', false, stream_context_create($context));
-		$data = json_decode($res, true);
+		$context = stream_context_create($options);
 
-		if (is_array($data)) {
-			if ($data['response'] == 'success') {
-				$token = $data['data']['access_token'];
-				echo '<pre>';
-				print_r($token);
-				echo '</pre>';
-			} else {
-				//error msg;
-				echo 'error';
-			}
+		$res = @file_get_contents($url, false, $context);
+
+
+		if ($res === FALSE) {
+			// 處理錯誤
+			echo "Error: Unable to fetch data.";
 		} else {
-			//error msg;
-			echo 'error';
+			// 解析 JSON
+			$data = json_decode($res, true);
+
+			// 檢查 JSON 解析是否成功
+			if (json_last_error() === JSON_ERROR_NONE) {
+				// 檢查 API 回應
+				if (isset($data['response']) && $data['response'] === 'success') {
+					// 獲取 access_token
+					$token = $data['data']['access_token'];
+					echo '<pre>';
+					print_r($token);
+					echo '</pre>';
+				} else {
+					// 處理 API 錯誤回應
+					echo 'API Error: ' . (isset($data['error']) ? $data['error'] : 'Unknown error');
+					// 顯示完整的 API 回應
+					echo '<pre>';
+					print_r($data);
+					echo '</pre>';
+				}
+			} else {
+				// 處理 JSON 解析錯誤
+				echo 'JSON Error: ' . json_last_error_msg();
+			}
 		}
 	}
 

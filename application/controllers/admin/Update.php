@@ -66,7 +66,6 @@ class Update extends Admin_Controller
                 $this->update_202312211000();
                 $this->update_202312231600();
                 $this->update_202312231630();
-                $this->update_202312251830();
                 $this->update_202312271600();
                 $this->update_202312271800();
                 $this->update_202312291830();
@@ -572,39 +571,7 @@ class Update extends Admin_Controller
             }
         }
     }
-    function update_202312251830()
-    {
-        $version = '202312251830';
-        $description = '[payment]新增欄位[MerchantID]&[HashKey]&[HashIV]';
-        $this->db->select('id');
-        $this->db->where('version', $version);
-        $row = $this->db->get('update_log')->row_array();
-        if (empty($row)) {
-            $query = $this->db->query("SHOW COLUMNS FROM payment LIKE 'MerchantID'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `payment` ADD `MerchantID` varchar(64) NOT NULL  AFTER `updater_id`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM payment LIKE 'HashKey'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `payment` ADD `HashKey` varchar(64) NOT NULL  AFTER `MerchantID`;");
-            }
-            $query = $this->db->query("SHOW COLUMNS FROM payment LIKE 'HashIV'");
-            if ($query->num_rows() > 0) {
-            } else {
-                $this->db->query("ALTER TABLE `payment` ADD `HashIV` varchar(64) NOT NULL  AFTER `HashKey`;");
-            }
-
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
-        }
-    }
+    
     function update_202312231630()
     {
         $version = '202312231630';
