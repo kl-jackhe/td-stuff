@@ -36,16 +36,23 @@ class Cart extends Public_Controller
 
 		$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $combine_id, 'row');
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
-		$this_contradiction = $this->mysql_model->_select('contradiction', 'name', 'product', 'row');
+		$this_contradiction_enable = $this->mysql_model->_select('contradiction', 'name', 'product', 'row');
+		$this_contradiction_date = $this->mysql_model->_select('contradiction', 'name', 'booking_date', 'row');
 
 		if ($this->is_partnertoys) {
 			// 檢查預購商品是否與其他商品一起下
-			if ($this_contradiction['contradiction_status'] == 1) {
+			if ($this_contradiction_enable['contradiction_status'] == 1) {
 				if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
 					$cart_item = $this->cart->contents(true);
 					foreach ($cart_item as $self) {
+						// 是否為預購與非預購一併下訂
 						if (($self['product_category_id'] == '1' && $this_product['product_category_id'] != '1') || ($self['product_category_id'] != '1' && $this_product['product_category_id'] == '1')) {
 							echo 'contradiction';
+							return;
+						}
+						// 同為預購是否同月份
+						elseif ($this_contradiction_date['contradiction_status'] == 1 && $this_product['product_category_id'] == '1' && $self['product_category_id'] == '1' && $self['options']['booking_date'] != $this_product['booking_date']) {
+							echo 'contradiction_date';
 							return;
 						}
 					}
@@ -142,6 +149,7 @@ class Cart extends Public_Controller
 			'image' => $this_product_combine['picture'],
 			'options' => array(
 				'time' => get_random_string(15),
+				'booking_date' => $this_product['booking_date'],
 			),
 		);
 		$rowid = $this->cart->insert($insert_data);

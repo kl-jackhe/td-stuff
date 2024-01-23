@@ -212,7 +212,9 @@
                         specification_qty: 'Textqty',
                     },
                     success: function(data) {
-                        if (data == 'contradiction') {
+                        if (data == 'contradiction_date') {
+                            alert('預購商品若不同月份不得一並選購，敬請見諒。');
+                        } else if (data == 'contradiction') {
                             alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
                         } else if (data == 'exceed') {
                             alert('超過限制數量故無法下單，敬請見諒');

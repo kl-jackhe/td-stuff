@@ -16,23 +16,23 @@ class Product extends Admin_Controller
 	{
 		$this->data['page_title'] = '商品管理';
 		if ($this->is_partnertoys) {
-			$this->data['enable_status'] = $this->product_model->getProductContradiction(1);
+			$this->data['enable_status'] = $this->product_model->getProductContradiction();
 		}
 		$this->render('admin/product/index');
 	}
 
 	function contradiction()
 	{
-		$status = $this->input->post('status');
+		$id = $this->input->post('contradiction_id');
+		$status = $this->input->post('contradiction_status');
 		$this->db->select('*');
-		$this->db->where('id', 1);
+		$this->db->where('id', $id);
 		$query = $this->db->get('contradiction');
 		if ($query->num_rows() === 1) {
-			$self = $query->row();
 			if ($status == '1') {
-				$this->db->update('contradiction', ['contradiction_status' => 0], ['id' => $self->id]);
+				$this->db->update('contradiction', ['contradiction_status' => 0], ['id' => $id]);
 			} else if ($status == '0') {
-				$this->db->update('contradiction', ['contradiction_status' => 1], ['id' => $self->id]);
+				$this->db->update('contradiction', ['contradiction_status' => 1], ['id' => $id]);
 			}
 			echo 'successful';
 			return;
@@ -213,27 +213,35 @@ class Product extends Admin_Controller
 			'updater_id' => $this->current_user->id,
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
+		if ($this->is_partnertoys) {
+			$data['product_category_id'] = $this->input->post('product_category');
+			if ($this->input->post('product_category') == 1) {
+				$data['booking_date'] = $this->input->post('booking_date');
+			}
+		}
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
 
-		$product_category_id_list = $this->input->post('product_category');
-		if (isset($product_category_id_list) && !empty($product_category_id_list)) {
-			$this->db->where_not_in('product_category_id', $product_category_id_list);
-			$this->db->where('product_id', $id);
-			$this->db->delete('product_category_list');
-			for ($i = 0; $i < count($product_category_id_list); $i++) {
-				$this->db->select('product_category_id');
+		if (!$this->is_partnertoys) {
+			$product_category_id_list = $this->input->post('product_category');
+			if (isset($product_category_id_list) && !empty($product_category_id_list)) {
+				$this->db->where_not_in('product_category_id', $product_category_id_list);
 				$this->db->where('product_id', $id);
-				$this->db->where('product_category_id', $product_category_id_list[$i]);
-				$pcl_row = $this->db->get('product_category_list')->row_array();
-				if (empty($pcl_row)) {
-					$this->db->insert('product_category_list', array('product_id' => $id, 'product_category_id' => $product_category_id_list[$i]));
-				} else {
+				$this->db->delete('product_category_list');
+				for ($i = 0; $i < count($product_category_id_list); $i++) {
+					$this->db->select('product_category_id');
+					$this->db->where('product_id', $id);
+					$this->db->where('product_category_id', $product_category_id_list[$i]);
+					$pcl_row = $this->db->get('product_category_list')->row_array();
+					if (empty($pcl_row)) {
+						$this->db->insert('product_category_list', array('product_id' => $id, 'product_category_id' => $product_category_id_list[$i]));
+					} else {
+					}
 				}
+			} else {
+				$this->db->where('product_id', $id);
+				$this->db->delete('product_category_list');
 			}
-		} else {
-			$this->db->where('product_id', $id);
-			$this->db->delete('product_category_list');
 		}
 
 		$inventory_log = array(
@@ -447,13 +455,15 @@ class Product extends Admin_Controller
 	{
 		$data = array(
 			'product_id' => $this->input->post('product_id'),
-			'cargo_id' => $this->input->post('product_combine_cargo_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
 		);
+		if ($this->is_liqun_food) {
+			$data['cargo_id'] = $this->input->post('product_combine_cargo_id');
+		}
 		$id = $this->mysql_model->_insert('product_combine', $data);
 
 		$qty = $this->input->post('plan_qty');

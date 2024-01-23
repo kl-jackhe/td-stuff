@@ -316,15 +316,24 @@ class Product_model extends CI_Model
 		return (!empty($query) ? $query : false);
 	}
 
-	function getProductContradiction($id = 1)
+	function getProductContradiction($id = 0)
 	{
 		$this->db->select('*');
-		$this->db->where('id', $id);
-		$query = $this->db->get('contradiction');
-		if ($query->num_rows() > 0) {
-			return $query->result_array();
+		if ($id != 0) {
+			$this->db->where('id', $id);
+			$query = $this->db->get('contradiction');
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
 		} else {
-			return false;
+			$query = $this->db->get('contradiction');
+			if ($query->num_rows() > 0) {
+				return $query->result_array();
+			} else {
+				return false;
+			}
 		}
 	}
 

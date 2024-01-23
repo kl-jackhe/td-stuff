@@ -29,12 +29,14 @@
                                     <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="product_combine_cargo_id">貨號</label>
-                                    <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" value="<? echo $product_combine['cargo_id'] ?>" required>
+                            <?php if ($this->is_liqun_food) : ?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_cargo_id">貨號</label>
+                                        <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" value="<? echo $product_combine['cargo_id'] ?>" required>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label for="product_combine_price">原價</label>

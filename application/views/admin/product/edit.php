@@ -28,7 +28,6 @@
         bottom: 0px;
     }
 </style>
-
 <div class="row">
     <?php $attributes = array('class' => 'submit_form', 'id' => 'submit_form'); ?>
     <?php echo form_open('admin/product/update/' . $product['product_id'], $attributes); ?>
@@ -85,20 +84,37 @@
                                             <input type="text" class="form-control" id="product_name" name="product_name" value="<?php echo $product['product_name']; ?>" required>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <? if (!empty($product_category)) { ?>
-                                                <label for="product_category">分類</label>
-                                                <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
-                                                    <? foreach ($product_category as $pc_row) { ?>
-                                                        <option value="<?= $pc_row['product_category_id'] ?>" <?= (!empty($select_product_category) && in_array($pc_row['product_category_id'], $select_product_category) ? 'selected' : '') ?>><?= $pc_row['product_category_name'] ?></option>
-                                                    <? } ?>
-                                                </select>
-                                            <? } else {
-                                                echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
-                                            } ?>
+                                    <?php if ($this->is_partnertoys) : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <? if (!empty($product_category)) { ?>
+                                                    <label for="product_category">分類</label>
+                                                    <select class="form-control" id="product_category" name="product_category">
+                                                        <? foreach ($product_category as $pc_row) { ?>
+                                                            <option value="<?= $pc_row['product_category_id'] ?>" <?= ($product['product_category_id'] == $pc_row['product_category_id']) ? 'selected' : ''; ?>><?= $pc_row['product_category_name'] ?></option>
+                                                        <? } ?>
+                                                    </select>
+                                                <? } else {
+                                                    echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
+                                                } ?>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php else : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <? if (!empty($product_category)) { ?>
+                                                    <label for="product_category">分類</label>
+                                                    <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
+                                                        <? foreach ($product_category as $pc_row) { ?>
+                                                            <option value="<?= $pc_row['product_category_id'] ?>" <?= (!empty($select_product_category) && in_array($pc_row['product_category_id'], $select_product_category) ? 'selected' : '') ?>><?= $pc_row['product_category_name'] ?></option>
+                                                        <? } ?>
+                                                    </select>
+                                                <? } else {
+                                                    echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
+                                                } ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="product_price">預設價格</label>
@@ -138,6 +154,15 @@
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if ($this->is_partnertoys && $product['product_category_id'] == 1) : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="booking_date">預購年月</label>
+
+                                                <input type="text" class="form-control datetimepicker-ym" id="booking_date" name="booking_date" value="<?= $product['booking_date'] ?>" required>
                                             </div>
                                         </div>
                                     <?php endif; ?>

@@ -135,7 +135,8 @@
         autoclose: true,
         clearBtn: true,
         viewMode: "months",
-        minViewMode: "months",
+        minViewMode: "months", // 設定最小視圖模式
+        startDate: "today", // 設定起始日期為今天
         todayBtn: true,
         todayHighlight: true,
         language: 'zh-TW'
@@ -174,7 +175,13 @@
 
     $('.datetimepicker-ymd').datetimepicker({
         locale: 'zh-TW',
-        format: 'YYYY-MM-DD'
+        format: 'YYYY-MM-DD',
+    });
+
+    $('.datetimepicker-ym').datetimepicker({
+        locale: 'zh-TW',
+        format: 'YYYY-MM',
+        minDate: moment() // 設定最小日期為今天
     });
 
     $('.datetimepicker').datetimepicker({

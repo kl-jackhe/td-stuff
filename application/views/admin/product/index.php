@@ -35,9 +35,7 @@
   }
 
   #contradictionBtn {
-    <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>background-color: #ec6262;
-    <?php else : ?>background-color: #4dcf4d;
-    <?php endif; ?>color: #fff;
+    color: #fff;
     box-shadow: 2px 2px 4px gray;
     display: inline-block;
     padding: 6px 12px;
@@ -59,17 +57,26 @@
 <div class="row">
   <div class="col-md-4">
     <div class="row" id="positionBtn">
-      <div class="col-md-12">
+      <div class="col-md-4">
         <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
       </div>
       <?php if ($this->is_partnertoys) : ?>
         <div class="col-md-8">
           <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
-            <a id="contradictionBtn" onclick="contradition(1)">不可同時預購</a>
+            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 1)" style="background-color: #ec6262;">不可同時預購</a>
           <?php else : ?>
-            <a id="contradictionBtn" onclick="contradition(0)">可同時預購</a>
+            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 0)" style="background-color: #4dcf4d;">可以同時預購</a>
           <?php endif; ?>
         </div>
+        <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
+          <div class="col-md-8">
+            <?php if (isset($enable_status) && $enable_status[1]['contradiction_status'] == 1) : ?>
+              <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 1)" style="background-color: #ec6262;">不同月份不可同時預購</a>
+            <?php else : ?>
+              <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 0)" style="background-color: #4dcf4d;">不同月份可以同時預購</a>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
       <?php endif; ?>
     </div>
     <!-- <a href="/admin/product/add_on_group" class="btn btn-info">加購項目</a> -->
@@ -147,14 +154,14 @@
       });
   }
 
-  function contradition($now_status) {
-
+  function contradiction($id, $now_status) {
     // 發送 AJAX 請求
     $.ajax({
       url: '/admin/product/contradiction',
       type: 'POST',
       data: {
-        status: $now_status
+        contradiction_id: $id,
+        contradiction_status: $now_status
       },
       success: function(response) {
         if (response == 'successful') {

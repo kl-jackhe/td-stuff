@@ -93,6 +93,47 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
+	public function get_ecbAPI()
+	{
+		$API_ID = '0032';
+		$API_KEY = 'viSAcHt6F1c438Fz';
+
+		$header = array(
+			"Content-Type: application/x-www-form-urlencoded",
+			"Authorization: Basic " . base64_encode($API_ID . ':' . $API_KEY)
+		);
+
+		$context = array(
+			"http" => array(
+				"method"        => "GET",
+				"header"        => implode("\r\n", $header)
+			),
+			"ssl" => array(
+				"verify_peer" => false,
+				"verify_peer_name" => false,
+				"allow_self_signed" => true
+			)
+		);
+
+		$res = file_get_contents('https://ecbypass.com.tw/api/v2/token/authorize.php', false, stream_context_create($context));
+		$data = json_decode($res, true);
+
+		if (is_array($data)) {
+			if ($data['response'] == 'success') {
+				$token = $data['data']['access_token'];
+				echo '<pre>';
+				print_r($token);
+				echo '</pre>';
+			} else {
+				//error msg;
+				echo 'error';
+			}
+		} else {
+			//error msg;
+			echo 'error';
+		}
+	}
+
 	function setMemberInfo($phone)
 	{
 		unset($_SESSION['member_id']);
