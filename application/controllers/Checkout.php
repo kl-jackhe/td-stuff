@@ -93,7 +93,7 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
-	public function get_ecbAPIToken()
+	public function get_ecb_token()
 	{
 		$API_ID = '0032';
 		$API_KEY = 'viSAcHt6F1c438Fz';
