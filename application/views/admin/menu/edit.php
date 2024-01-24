@@ -23,25 +23,19 @@
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
                             <input type="hidden" class="form-control" id="id" name="id" value="<? echo $menu['id'] ?>" required>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="name">選單名稱</label>
                                     <input type="text" class="form-control" id="name" name="name" value="<? echo $menu['name'] ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="type">類型</label>
-                                    <input type="text" class="form-control" id="type" name="type" value="<? echo $menu['type'] ?>" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="sort">排序</label>
                                     <input type="text" class="form-control" id="sort" name="sort" value="<? echo $menu['sort'] ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="status">狀態</label>
                                     <select class="form-control" name="status">
@@ -53,6 +47,18 @@
                                             <option value="0" selected>❌關閉</option>
                                         <? } ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type">類型</label>
+                                    <input type="text" class="form-control" id="type" name="type" value="<? echo $menu['type'] ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="code">連結圖</label>
+                                    <input type="text" class="form-control" id="code" name="code" value="<? echo $menu['code'] ?>" required>
                                 </div>
                             </div>
                         </div>

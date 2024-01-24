@@ -18,14 +18,14 @@
                     </div>
                 </div>
             </div>
-            <div v-if="selectedSubCategoryId != null">
+            <div v-if="selectedSubCategoryId != null && selectedSubSubCategoryId == null" class="container">
                 <div v-for="self in channels_son_category" class="row">
-                    <div v-if="selectedSubCategoryId == self.sort" v-html="self.description" class="col-12 center-content"></div>
+                    <div v-if="selectedSubCategoryId == self.sort" v-html="self.description" class="col-12"></div>
                 </div>
             </div>
-            <div v-if="selectedSubSubCategoryId != null">
-                <div v-for="self in channels_sub_son_category" class="row">
-                    <div v-if="selectedSubSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
+            <div v-if="selectedSubSubCategoryId != null" class="container">
+                <div v-for="self in channels_sub_son_category" class="row subSubCategoryContent">
+                    <div v-if="selectedSubSubCategoryId == self.id" v-html="self.description" class="col-12"></div>
                 </div>
             </div>
         </div>

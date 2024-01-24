@@ -11,16 +11,23 @@
                 </div>
                 <div class="row">
                     <div v-for="self in cargo_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
-                        <a class="cursorPoint" @click="filterBySubCategory(self.id)">
+                        <a class="cursorPoint" @click="toggleSubCategory(self.id)">
                             <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
                             <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>
                 </div>
             </div>
-            <div v-if="selectedSubCategoryId != null">
-                <div v-for="self in cargo_son_category" class="row">
-                    <div v-if="selectedSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
+            <div v-if="selectedSubCategoryId != null && selectedSubSubCategoryId == null" class="row">
+                <div v-for="self in cargo_sub_son_category" class="col-lg-3 col-md-12 subCategoryGraph">
+                    <a class="cursorPoint" @click="filterBySubSubCategory(self.id)">
+                        <img :src="'/assets/uploads/Editor/images/products%20links/' + self.code">
+                    </a>
+                </div>
+            </div>
+            <div v-if="selectedSubSubCategoryId != null">
+                <div v-for="self in cargo_sub_son_category" class="row">
+                    <div v-if="selectedSubSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
                 </div>
             </div>
         </div>
@@ -35,12 +42,15 @@
                 getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 selectedSubCategoryId: null,
+                selectedSubSubCategoryId: null,
                 cargo_category: <?php echo json_encode(!empty($cargo_category) ? $cargo_category : ''); ?>,
                 cargo_son_category: null,
+                cargo_sub_son_category: null,
                 pageTitle: '', // 目前標籤
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
                 isExpanded: [],
+                isSubExpanded: [],
             }
         },
         mounted() {
@@ -64,9 +74,9 @@
                 this.isNavOpen = !this.isNavOpen;
                 this.isBtnActive = !this.isBtnActive;
             },
-            filterBySubCategory(subId) {
+            filterBySubSubCategory(subsubId) {
                 this.scrollToTop();
-                this.selectedSubCategoryId = subId;
+                this.selectedSubSubCategoryId = subsubId;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
@@ -83,9 +93,33 @@
                         } else {
                             this.isExpanded.switch = !this.isExpanded.switch;
                         }
+                        // 當點回最上層將其他層關閉
                         this.selectedSubCategoryId = null;
+                        this.selectedSubSubCategoryId = null;
+                        this.isSubExpanded = [];
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
+                    }
+                })
+            },
+            // 获取关联的子子项
+            toggleSubCategory(categoryId) {
+                this.scrollToTop();
+                $.ajax({
+                    url: '/cargo_intro/selected_sub_son/' + categoryId,
+                    method: 'post',
+                    success: (response) => {
+                        this.cargo_sub_son_category = response;
+                        // 確定上一個選擇類別決定開關狀態
+                        this.isSubExpanded = this.cargo_son_category.find(self => self.id === categoryId);
+                        if (this.isSubExpanded.sort != this.selectedSubCategoryId || this.selectedSubSubCategoryId !== null) {
+                            this.isSubExpanded.switch = true;
+                        } else {
+                            this.isSubExpanded.switch = !this.isSubExpanded.switch;
+                        }
+                        this.selectedSubSubCategoryId = null;
+                        // 更新選擇類別
+                        this.selectedSubCategoryId = this.isSubExpanded.sort;
                     }
                 })
             },

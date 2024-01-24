@@ -2450,25 +2450,39 @@ input.qtyminus {
     margin: 4% auto 0;
 }
 
-.center-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.cargoSubHeader {
+    margin: 40px 5px 10px 5px;
+    background-color: #D35549;
+    color: #ffffff;
+    padding: 5px 5px;
     text-align: center;
+    font-size: 18px;
+    letter-spacing: 2px;
 }
 
-.center-content p {
-    margin: 0;
-    /* 清除段落的預設邊距 */
+.subCategoryGraph {
+    padding: 40px 10px;
+    border-bottom: 1px solid;
 }
 
-.center-content img {
-    max-width: 100%;
-    /* 讓圖片不超出其容器 */
-    height: auto;
-    /* 保持原始高度寬度比例 */
-    margin: 10px 0;
-    /* 可以根據需要調整圖片之間的垂直間距 */
+.subCategoryGraph img {
+    width: 100%;
+    border: 1px solid #ddd;
+    /* 可以添加邊框效果 */
+    border-radius: 8px;
+    /* 可以添加圓角效果 */
+    transition: transform 0.3s;
+    /* 添加 hover 效果 */
+}
+
+.subCategoryGraph img:hover {
+    transform: scale(1.1);
+    /* 放大 1.1 倍的效果，可根據需要調整 */
+}
+
+.subSubCategoryContent div p {
+    padding: 10px;
+    font-size: 16px;
 }
 
 /* 修改滾動條 */

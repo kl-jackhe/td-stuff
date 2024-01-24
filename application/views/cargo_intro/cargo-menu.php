@@ -22,7 +22,17 @@
                 <transition name="menu-sub">
                     <ul v-show="isExpanded.switch && isExpanded.id === category.id" class="menu-sub">
                         <li v-for="subCategory in cargo_son_category" :key="subCategory.sort">
-                            <input type="button" :value="'&nbsp;' + subCategory.name" @click="filterBySubCategory(subCategory.id)" :class="{ category_btn: true, active: selectedSubCategoryId === subCategory.id}">
+                            <div class="sub-category-header" @click="toggleSubCategory(subCategory.id)">
+                                <input type="button" :value="'&nbsp;' + subCategory.name" :class="{ category_btn: true, active: selectedSubCategoryId === subCategory.sort}">
+                            </div>
+                            <transition name="sub-menu-sub">
+                                <ul v-show="isSubExpanded.switch && isSubExpanded.id === subCategory.id" class="menu-sub">
+                                    <!-- 這裡加入子子選單 -->
+                                    <li v-for="subSubCategory in cargo_sub_son_category" :key="subSubCategory.sort">
+                                        <input type="button" :value="'&nbsp;&nbsp;' + subSubCategory.name" @click="filterBySubSubCategory(subSubCategory.id)" :class="{ category_btn: true, active: selectedSubSubCategoryId === subSubCategory.id}">
+                                    </li>
+                                </ul>
+                            </transition>
                         </li>
                     </ul>
                 </transition>

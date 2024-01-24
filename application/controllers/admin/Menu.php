@@ -141,21 +141,27 @@ class Menu extends Admin_Controller
     function update($databaseName = '')
     {
         $id = $this->input->post('id');
-        $description = $this->input->post('editor');
         $name = $this->input->post('name');
         $sort = $this->input->post('sort');
         $status = $this->input->post('status');
+        $code = $this->input->post('code');
+        $description = $this->input->post('editor');
 
         $message = '更新失敗';
 
-        if (!empty($description) && !empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
+        if (!empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
             try {
                 $updateData = array(
-                    'description' => $description,
                     'name' => $name,
                     'sort' => $sort,
                     'status' => $status,
                 );
+                if (!empty($code)) {
+                    $updateData['code'] = $code;
+                }
+                if (!empty($description)) {
+                    $updateData['description'] = $description;
+                }
                 $this->db->where('id', $id);
                 $this->db->update($databaseName, $updateData);
                 $message = '更新成功';
