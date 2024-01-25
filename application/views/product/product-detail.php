@@ -3,9 +3,9 @@
         <!-- Menu -->
         <?php require('product-menu.php'); ?>
         <div class="section-contents">
-            <?php if (!empty($productCategory)) : ?>
+            <?php if (!empty($product_category_name)) : ?>
                 <div class="container">
-                    <h1><span><?= $productCategory['product_category_name']; ?></span></h1>
+                    <h1><span><?= $product_category_name; ?></span></h1>
                 </div>
             <?php endif; ?>
             <!-- 商品詳情 -->

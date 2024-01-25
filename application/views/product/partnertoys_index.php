@@ -9,29 +9,24 @@
                 <div class="container">
                     <h1><span>{{ pageTitle }}</span></h1>
                 </div>
-
                 <!-- 全部商品 -->
                 <div class="container">
                     <!-- Product Start -->
                     <div class="row">
-                        <div id="data" class="col-12">
-                            <div class="text-center">
-                                <div class="row" id="product_index">
-                                    <div class="product_view_style_out col-6 col-md-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
-                                        <a class="productMagnificPopupTrigger" @click="showProductDetails(self.product_id)">
-                                            <div class="product_view_style_in">
-                                                <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
-                                                <div class="product_name">
-                                                    <span>{{ self.product_name }}</span>
-                                                    <p class="price" v-if="self.sales_status === '0'">【現貨】$ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '1'">【售完】$ {{ self.product_price }}</p>
-                                                    <p class="price" v-else-if="self.sales_status === '2'">【預購】$ {{ self.product_price }}</p>
-                                                </div>
-                                            </div>
-                                        </a>
+                        <div class="product_view_style_out col-6 col-md-6 col-lg-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
+                            <a class="productMagnificPopupTrigger" @click="showProductDetails(self.product_id)">
+                                <div class="product_view_style_in">
+                                    <div class="productImg">
+                                        <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
+                                    </div>
+                                    <div class="product_name">
+                                        <span>{{ self.product_name }}</span>
+                                        <p class="price" v-if="self.sales_status === '0'">【現貨】$ {{ self.product_price }}</p>
+                                        <p class="price" v-else-if="self.sales_status === '1'">【售完】$ {{ self.product_price }}</p>
+                                        <p class="price" v-else-if="self.sales_status === '2'">【預購】$ {{ self.product_price }}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div v-if="filteredProducts.length === 0" class="col-12 text-center">

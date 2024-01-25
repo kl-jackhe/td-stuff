@@ -90,7 +90,39 @@ class Product extends Public_Controller
 		$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
-		$this->data['productCategory'] = $this->product_model->get_product_category_name($this->data['product']['product_category_id']);
+		$now = new DateTime();
+		$now = $now->format('Y-m-d H:i:s');
+
+		// none setting
+		$noneSetting = "0000-00-00 00:00:00";
+
+		// 將字串轉換為 DateTime 物件
+		$distributeAt = $this->data['product']['distribute_at'];
+		$discontinuedAt = $this->data['product']['discontinued_at'];
+
+		// 確認是否在上架期間
+		if (
+			($distributeAt <= $now && $discontinuedAt > $now) ||
+			($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
+			($distributeAt == $noneSetting && $discontinuedAt > $now) ||
+			($distributeAt <= $now && $discontinuedAt == $noneSetting)
+		) {
+			// 在時間範圍內，可以保留該項目
+		} else {
+			// 不在時間範圍內，移除該項目
+			return false;
+		}
+
+
+		// 找category_name
+		foreach ($this->data['product_category'] as $self) {
+			if ($self['sort'] == $this->data['product']['product_category_id']) {
+				$this->data['product_category_name'] = $self['name'];
+			}
+		}
+		// echo '<pre>';
+		// print_r($this->data['product_category']);
+		// echo '</pre>';
 
 		$this->data['productCombine'] = $this->product_model->getProduct_Combine($product_id);
 

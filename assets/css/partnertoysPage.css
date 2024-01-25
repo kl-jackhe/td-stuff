@@ -599,34 +599,28 @@ a.logBtn {
     color: rgba(211, 84, 72, 1);
 }
 
-#product_index {
-    font-size: 18px;
-    line-height: 20px;
-    align-items: end;
-}
-
-#product_index a {
+.product_view_style_out a {
     color: #4e555d;
     font-size: 0.9375rem;
     line-height: 20px;
     margin-top: 10px;
 }
 
-#product_index a:hover {
+.product_view_style_out a:hover span {
     cursor: pointer;
     /* 懸停時顯示手型游標 */
     text-decoration: none;
     color: #e30020;
 }
 
-#product_index .product_name {
-    white-space: nowrap;
+.product_view_style_out .product_name {
+    /* white-space: nowrap; */
     /* 不換行 */
     overflow: hidden;
     /* 超出部分隱藏 */
     text-overflow: ellipsis;
     /* 超出部分顯示省略號 */
-    padding: 10px 10px 0 10px;
+    padding: 10px 10px 30px 10px;
 }
 
 .select_product {
@@ -865,6 +859,7 @@ a.logBtn {
 }
 
 .product_view_style_in {
+    height: 94%;
     position: relative;
     overflow: hidden;
     padding-bottom: 10px;
@@ -1045,7 +1040,7 @@ a.logBtn {
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    /* -webkit-box-orient: vertical; */
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -1739,11 +1734,6 @@ input.qtyminus {
 
 .partitionLine {
     border-bottom: 1px dotted #ccc;
-}
-
-.postItemPosition {
-    display: flex;
-    flex-wrap: wrap;
 }
 
 .alignItemEnd {

@@ -7,11 +7,11 @@
             </div>
             <div class="container">
                 <!-- Post Start -->
-                <div class="row postItemPosition">
+                <div class="row">
                     <div class="col-6 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
                         <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
                             <div class="touch_effect">
-                                <div class="postImg text-center">
+                                <div class="postImg">
                                     <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
                                 </div>
                                 <div class="postText">
