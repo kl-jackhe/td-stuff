@@ -74,6 +74,19 @@ class Product_model extends CI_Model
 		return $result;
 	}
 
+	function getInTimeProducts()
+	{
+		$this->db->select('*');
+		$this->db->order_by('distribute_at', 'DESC');
+		$query = $this->db->get('product');
+
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else {
+			return false;
+		}
+	}
+
 	function getProductList()
 	{
 		$this->db->select('*');

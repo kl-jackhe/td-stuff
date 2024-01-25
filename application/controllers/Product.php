@@ -38,6 +38,44 @@ class Product extends Public_Controller
 		if ($this->is_partnertoys) {
 			$this->data['page_title'] = '夥伴商城';
 			$this->data['current_page'] = $id;
+
+			// 處理上下架時間
+			$this->data['products'] = $this->product_model->getInTimeProducts();
+			foreach ($this->data['products'] as $key => &$product) {
+				// 現在的時間
+				$now = new DateTime();
+				$now = $now->format('Y-m-d H:i:s');
+
+				// none setting
+				$noneSetting = "0000-00-00 00:00:00";
+
+				// 將字串轉換為 DateTime 物件
+				$distributeAt = $product['distribute_at'];
+				$discontinuedAt = $product['discontinued_at'];
+
+				// 檢查是否在時間範圍內
+				if (
+					($distributeAt <= $now && $discontinuedAt > $now) ||
+					($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
+					($distributeAt == $noneSetting && $discontinuedAt > $now) ||
+					($distributeAt <= $now && $discontinuedAt == $noneSetting)
+				) {
+					// 在時間範圍內，可以保留該項目
+					// echo "<pre>";
+					// print_r($product['product_name'] . ' pass ' . $discontinuedAt . '->' . $now . '=>' . ($distributeAt <= $now));
+					// echo "</pre>";
+				} else {
+					// 不在時間範圍內，移除該項目
+					unset($this->data['products'][$key]);
+					// echo "<pre>";
+					// print_r($product['product_name'] . 'unpass');
+					// echo "</pre>";
+				}
+			}
+
+			// 重新索引數組鍵，以確保數組的鍵是連續的
+			$this->data['products'] = array_values($this->data['products']);
+
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
