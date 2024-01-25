@@ -44,7 +44,7 @@ class Auth extends Public_Controller
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 17);
 			endif;
-			$this->render('auth/partnertoys_index');
+			$this->render('auth/partnertoys/partnertoys_index');
 		elseif ($this->is_liqun_food) :
 			if (empty($this->session->userdata('user_id'))) :
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');

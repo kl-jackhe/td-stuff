@@ -31,7 +31,7 @@ class Posts extends Public_Controller
         }
         if ($this->is_partnertoys) {
             $this->data['posts_category'] = $this->menu_model->getSubMenuData(0, 3);
-            $this->render('posts/partnertoys_index');
+            $this->render('posts/partnertoys/partnertoys_index');
         }
     }
 

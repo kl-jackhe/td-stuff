@@ -10,7 +10,7 @@ class Channels extends Public_Controller
     {
         $this->data['page_title'] = '經銷通路';
         $this->data['channels_category'] = $this->menu_model->getSubMenuData(0, 5);
-        $this->render('channels/partnertoys_index');
+        $this->render('channels/partnertoys/partnertoys_index');
     }
 
     function selected_son($id)

@@ -79,7 +79,7 @@ class Product extends Public_Controller
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
-			$this->render('product/partnertoys_index');
+			$this->render('product/partnertoys/partnertoys_index');
 		}
 	}
 
@@ -144,7 +144,7 @@ class Product extends Public_Controller
 		$this->data['combineName'] = $tmp;
 
 		$this->data['productCombineItem'] = $this->product_model->get_product_combine_item($product_id);
-		$this->render('product/product-detail');
+		$this->render('product/partnertoys/product-detail');
 	}
 
 	function get_like()

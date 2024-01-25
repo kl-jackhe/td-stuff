@@ -10,7 +10,7 @@ class Cargo_intro extends Public_Controller
     {
         $this->data['page_title'] = '產品介紹';
         $this->data['cargo_category'] = $this->menu_model->getSubMenuData(0, 7);
-        $this->render('cargo_intro/partnertoys_index');
+        $this->render('cargo_intro/partnertoys/partnertoys_index');
     }
 
     function selected_son($id)

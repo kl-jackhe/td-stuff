@@ -10,7 +10,7 @@ class Artist extends Public_Controller
     {
         $this->data['page_title'] = '合作介紹';
         $this->data['artist_category'] = $this->menu_model->getSubMenuData(0, 4);
-        $this->render('artist/partnertoys_index');
+        $this->render('artist/partnertoys/partnertoys_index');
     }
 
     function selected_son($id)
