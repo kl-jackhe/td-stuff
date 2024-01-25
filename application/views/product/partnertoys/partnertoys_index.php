@@ -151,23 +151,25 @@
                 }
             },
             filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'product/index' + (categoryId != null ? '?id=' + categoryId : '');
+                window.location.href = <?= json_encode(base_url()) ?> + 'product/index' + (categoryId != null ? '?id=' + categoryId : '' + (this.searchText != '' ? '&searchText=' + this.searchText : ''));
             },
             // 頁碼
             setPage(page) {
-                console.log(page);
+                // console.log(page);
                 if (page <= 0 || page > this.totalPages || (page > this.totalPages && this.currentPage === this.totalPages) || (page === this.totalPages && this.currentPage === this.totalPages)) {
+                    this.scrollToTop();
                     return;
                 }
                 this.isNavOpen = false;
                 this.currentPage = page;
-
                 window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
             },
             // 清除搜尋攔
             clearSearch() {
                 this.searchText = '';
-                this.filterByCategory(0); // 在清除搜尋欄後自動執行篩選全部商品
+                this.selectedCategoryId = 0;
+                this.pageTitle = '全部商品';
+                this.filterproductsByCategory(); // 在清除搜尋欄後自動執行第一個篩選
             },
             // 篩選清單呼叫
             toggleNav() {

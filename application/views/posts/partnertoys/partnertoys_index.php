@@ -122,6 +122,7 @@
             });
         },
         computed: {
+            // 篩選&搜尋
             filteredPosts() {
                 if (this.searchText.trim() !== '') {
                     this.pageTitle = "搜尋結果"
@@ -207,8 +208,8 @@
             filterByCategory(categoryId) {
                 this.currentPage = 1; // 將頁碼設置為1
                 this.selectedCategoryId = categoryId;
-                const selectedCategory = this.posts_categorys.find(category => category.post_category_id === categoryId);
-                this.pageTitle = selectedCategory.post_category_name;
+                const selectedCategory = this.posts_categorys.find(category => category.sort === categoryId);
+                this.pageTitle = selectedCategory.name;
             },
             // 頁碼
             setPage(page) {
@@ -222,7 +223,9 @@
             // 清除搜尋攔
             clearSearch() {
                 this.searchText = '';
-                this.filterByCategory(this.posts_categorys[0].post_category_id); // 在清除搜尋欄後自動執行第一個篩選
+                this.selectedCategoryId = 0;
+                this.pageTitle = '全部消息';
+                this.filterPostsByCategory(); // 在清除搜尋欄後自動執行第一個篩選
             },
             // 篩選清單呼叫
             toggleNav() {

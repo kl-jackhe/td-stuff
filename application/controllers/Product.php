@@ -23,16 +23,23 @@ class Product extends Public_Controller
 		$config['link_func'] = 'searchFilter';
 		$this->ajax_pagination->initialize($config);
 		//get the posts data
-		$this->data['products'] = $this->product_model->getProducts();
-		// $this->data['product_category'] = $this->product_model->get_product_category();
 
 		if ($this->is_td_stuff) {
 			$this->data['page_title'] = '商品頁面';
+
+			$this->data['products'] = $this->product_model->getProducts();
+			$this->data['product_category'] = $this->product_model->get_product_category();
+
 			$this->render('product/index');
 		}
 		if ($this->is_liqun_food) {
 			$this->data['page_title'] = '商品頁面';
+
+			$this->data['products'] = $this->product_model->getInTimeProducts();
+			$this->data['products'] = $this->get_limit_time_products($this->data['products']);
+
 			$this->data['product_category'] = $this->product_model->get_product_category();
+
 			$this->render('product/liqun/index');
 		}
 		if ($this->is_partnertoys) {
@@ -41,44 +48,13 @@ class Product extends Public_Controller
 
 			// 處理上下架時間
 			$this->data['products'] = $this->product_model->getInTimeProducts();
-			foreach ($this->data['products'] as $key => &$product) {
-				// 現在的時間
-				$now = new DateTime();
-				$now = $now->format('Y-m-d H:i:s');
-
-				// none setting
-				$noneSetting = "0000-00-00 00:00:00";
-
-				// 將字串轉換為 DateTime 物件
-				$distributeAt = $product['distribute_at'];
-				$discontinuedAt = $product['discontinued_at'];
-
-				// 檢查是否在時間範圍內
-				if (
-					($distributeAt <= $now && $discontinuedAt > $now) ||
-					($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
-					($distributeAt == $noneSetting && $discontinuedAt > $now) ||
-					($distributeAt <= $now && $discontinuedAt == $noneSetting)
-				) {
-					// 在時間範圍內，可以保留該項目
-					// echo "<pre>";
-					// print_r($product['product_name'] . ' pass ' . $discontinuedAt . '->' . $now . '=>' . ($distributeAt <= $now));
-					// echo "</pre>";
-				} else {
-					// 不在時間範圍內，移除該項目
-					unset($this->data['products'][$key]);
-					// echo "<pre>";
-					// print_r($product['product_name'] . 'unpass');
-					// echo "</pre>";
-				}
-			}
-
-			// 重新索引數組鍵，以確保數組的鍵是連續的
-			$this->data['products'] = array_values($this->data['products']);
+			$this->data['products'] = $this->get_limit_time_products($this->data['products']);
 
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
+
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
+
 			$this->render('product/partnertoys/partnertoys_index');
 		}
 	}
@@ -90,29 +66,14 @@ class Product extends Public_Controller
 		$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
-		$now = new DateTime();
-		$now = $now->format('Y-m-d H:i:s');
-
-		// none setting
-		$noneSetting = "0000-00-00 00:00:00";
-
-		// 將字串轉換為 DateTime 物件
-		$distributeAt = $this->data['product']['distribute_at'];
-		$discontinuedAt = $this->data['product']['discontinued_at'];
-
-		// 確認是否在上架期間
-		if (
-			($distributeAt <= $now && $discontinuedAt > $now) ||
-			($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
-			($distributeAt == $noneSetting && $discontinuedAt > $now) ||
-			($distributeAt <= $now && $discontinuedAt == $noneSetting)
-		) {
-			// 在時間範圍內，可以保留該項目
-		} else {
-			// 不在時間範圍內，移除該項目
-			return false;
+		// 檢查上下架期間
+		if (!$this->confirm_product_limit_time($this->data['product'])) {
+			echo
+			"<script>
+			alert('請不要嘗試這麼做謝謝');
+			href.location.history();
+			</script>";
 		}
-
 
 		// 找category_name
 		foreach ($this->data['product_category'] as $self) {
@@ -145,6 +106,152 @@ class Product extends Public_Controller
 
 		$this->data['productCombineItem'] = $this->product_model->get_product_combine_item($product_id);
 		$this->render('product/partnertoys/product-detail');
+	}
+
+	function ajaxData()
+	{
+		$conditions = array();
+		//calc offset number
+		$page = $this->input->get('page');
+		if (!$page) {
+			$offset = 0;
+		} else {
+			$offset = $page;
+		}
+		//set conditions for search
+		$keywords = $this->input->get('keywords');
+		$product_category = $this->input->get('product_category');
+
+		$product_category_list = array();
+		$product_category_list[] = $product_category;
+		$count = 0;
+		$isParentAvailable = true;
+		while ($isParentAvailable) {
+			$this->db->select('product_category_id');
+			$this->db->where('product_category_parent', $product_category_list[$count]);
+			$query = $this->db->get('product_category')->result_array();
+			if (!empty($query)) {
+				foreach ($query as $row) {
+					$product_category_list[] = $row['product_category_id'];
+				}
+			} else {
+				$isParentAvailable = false;
+				break;
+			}
+			$count++;
+			if ($count == 100) {
+				$isParentAvailable = false;
+				break;
+			}
+		}
+
+		if (!empty($keywords)) {
+			$conditions['search']['keywords'] = $keywords;
+		}
+		if (!empty($product_category)) {
+			$conditions['search']['product_category_id'] = $product_category_list;
+		}
+		//total rows count
+		$conditions['returnType'] = 'count';
+		$totalRec = $this->product_model->getProducts($conditions);
+		//pagination configuration
+		$config['target'] = '#data';
+		$config['base_url'] = base_url() . 'product/ajaxData';
+		// $config['total_rows'] = $totalRec;
+		// $config['per_page'] = $this->perPage;
+		$config['link_func'] = 'searchFilter';
+		$this->ajax_pagination->initialize($config);
+		//set start and limit
+		$conditions['start'] = $offset;
+		$conditions['limit'] = $this->perPage;
+		//get posts data
+		$conditions['returnType'] = '';
+		$this->data['products'] = $this->product_model->getProducts($conditions);
+		//load the view
+		$this->load->view('product/ajax-data', $this->data, false);
+	}
+
+	public function view($id = 0)
+	{
+		if ($id == 0) {
+			redirect(base_url() . 'product');
+		}
+		$this->data['product'] = $this->product_model->getSingleProduct($id);
+		$this->data['specification'] = $this->product_model->getProduct_Specification($id);
+		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
+		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $id);
+		$this->data['page_title'] = $this->data['product']['product_name'];
+		if ($this->is_liqun_food) {
+			$this->render('product/liqun/view');
+		} else {
+			$this->render('product/view');
+		}
+	}
+
+	function confirm_product_limit_time($self)
+	{
+		// 現在的時間
+		$now = new DateTime();
+		$now = $now->format('Y-m-d H:i:s');
+
+		// none setting
+		$noneSetting = "0000-00-00 00:00:00";
+
+		// 將字串轉換為 DateTime 物件
+		$distributeAt = $self['distribute_at'];
+		$discontinuedAt = $self['discontinued_at'];
+
+		// 檢查是否在時間範圍內
+		if (
+			($distributeAt <= $now && $discontinuedAt > $now) ||
+			($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
+			($distributeAt == $noneSetting && $discontinuedAt > $now) ||
+			($distributeAt <= $now && $discontinuedAt == $noneSetting)
+		) {
+			// 在時間範圍內
+			return true;
+		} else {
+			// 不在時間範圍內
+			return false;
+		}
+	}
+
+	function get_limit_time_products($self)
+	{
+		foreach ($self as $key => &$product) {
+			// 現在的時間
+			$now = new DateTime();
+			$now = $now->format('Y-m-d H:i:s');
+
+			// none setting
+			$noneSetting = "0000-00-00 00:00:00";
+
+			// 將字串轉換為 DateTime 物件
+			$distributeAt = $product['distribute_at'];
+			$discontinuedAt = $product['discontinued_at'];
+
+			// 檢查是否在時間範圍內
+			if (
+				($distributeAt <= $now && $discontinuedAt > $now) ||
+				($distributeAt == $noneSetting && $discontinuedAt == $noneSetting) ||
+				($distributeAt == $noneSetting && $discontinuedAt > $now) ||
+				($distributeAt <= $now && $discontinuedAt == $noneSetting)
+			) {
+				// 在時間範圍內，可以保留該項目
+				// echo "<pre>";
+				// print_r($product['product_name'] . ' pass ' . $discontinuedAt . '->' . $now . '=>' . ($distributeAt <= $now));
+				// echo "</pre>";
+			} else {
+				// 不在時間範圍內，移除該項目
+				unset($self[$key]);
+				// echo "<pre>";
+				// print_r($product['product_name'] . 'unpass');
+				// echo "</pre>";
+			}
+		}
+
+		// 重新索引數組鍵，以確保數組的鍵是連續的
+		return array_values($self);
 	}
 
 	function get_like()
@@ -245,85 +352,5 @@ class Product extends Public_Controller
 		// echo '</pre>';
 
 		echo "successful";
-	}
-
-	function ajaxData()
-	{
-		$conditions = array();
-		//calc offset number
-		$page = $this->input->get('page');
-		if (!$page) {
-			$offset = 0;
-		} else {
-			$offset = $page;
-		}
-		//set conditions for search
-		$keywords = $this->input->get('keywords');
-		$product_category = $this->input->get('product_category');
-
-		$product_category_list = array();
-		$product_category_list[] = $product_category;
-		$count = 0;
-		$isParentAvailable = true;
-		while ($isParentAvailable) {
-			$this->db->select('product_category_id');
-			$this->db->where('product_category_parent', $product_category_list[$count]);
-			$query = $this->db->get('product_category')->result_array();
-			if (!empty($query)) {
-				foreach ($query as $row) {
-					$product_category_list[] = $row['product_category_id'];
-				}
-			} else {
-				$isParentAvailable = false;
-				break;
-			}
-			$count++;
-			if ($count == 100) {
-				$isParentAvailable = false;
-				break;
-			}
-		}
-
-		if (!empty($keywords)) {
-			$conditions['search']['keywords'] = $keywords;
-		}
-		if (!empty($product_category)) {
-			$conditions['search']['product_category_id'] = $product_category_list;
-		}
-		//total rows count
-		$conditions['returnType'] = 'count';
-		$totalRec = $this->product_model->getProducts($conditions);
-		//pagination configuration
-		$config['target'] = '#data';
-		$config['base_url'] = base_url() . 'product/ajaxData';
-		// $config['total_rows'] = $totalRec;
-		// $config['per_page'] = $this->perPage;
-		$config['link_func'] = 'searchFilter';
-		$this->ajax_pagination->initialize($config);
-		//set start and limit
-		$conditions['start'] = $offset;
-		$conditions['limit'] = $this->perPage;
-		//get posts data
-		$conditions['returnType'] = '';
-		$this->data['products'] = $this->product_model->getProducts($conditions);
-		//load the view
-		$this->load->view('product/ajax-data', $this->data, false);
-	}
-
-	public function view($id = 0)
-	{
-		if ($id == 0) {
-			redirect(base_url() . 'product');
-		}
-		$this->data['product'] = $this->product_model->getSingleProduct($id);
-		$this->data['specification'] = $this->product_model->getProduct_Specification($id);
-		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
-		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $id);
-		$this->data['page_title'] = $this->data['product']['product_name'];
-		if ($this->is_liqun_food) {
-			$this->render('product/liqun/view');
-		} else {
-			$this->render('product/view');
-		}
 	}
 }
