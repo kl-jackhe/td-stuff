@@ -82,6 +82,8 @@ class Update extends Admin_Controller
                 $this->update_202401182000();
                 $this->update_202401191900();
                 $this->update_202401231430();
+                $this->update_202401262230();
+                $this->update_202401260000();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -92,6 +94,67 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401260000()
+    {
+        $version = '202401260000';
+        $description = '[new_coupon]新增欄位[use_product_enable]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM new_coupon LIKE 'use_product_enable'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `new_coupon` ADD `use_product_enable` tinyint(1) NOT NULL AFTER `use_type_number`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202401262230()
+    {
+        $version = '202401262230';
+        $description = '新增資料表[new_coupon]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'new_coupon'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `new_coupon` (
+                    `id` int(11) NOT NULL,
+                    `name` varchar(50) NOT NULL,
+                    `type` varchar(20) NOT NULL,
+                    `discount_amount` decimal(6) NOT NULL,
+                    `use_limit_enable` tinyint(1) NOT NULL,
+                    `use_limit_number` int(11) NOT NULL,
+                    `use_type_enable` tinyint(1) NOT NULL,
+                    `use_type_name` varchar(20) NOT NULL,
+                    `use_type_number` int(11) NOT NULL,
+                    `distribute_at` datetime NOT NULL,
+                    `discontinued_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `new_coupon` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `new_coupon` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
@@ -571,7 +634,7 @@ class Update extends Admin_Controller
             }
         }
     }
-    
+
     function update_202312231630()
     {
         $version = '202312231630';

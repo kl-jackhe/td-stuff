@@ -115,4 +115,11 @@ class Coupon_model extends CI_Model
         $query = $this->db->get('coupon');
         return ($query->num_rows() > 0) ? $query->result_array() : false;
     }
+
+    function getNewCoupon()
+    {
+        $this->db->select('*');
+        $query = $this->db->get('new_coupon');
+        return ($query->num_rows() > 0) ? $query->result_array() : false;
+    }
 }
