@@ -39,7 +39,8 @@
         data() {
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
-                getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
+                getYear: <?php echo json_encode($this->input->get('year', TRUE)); ?>, // 若透過合作指引
+                getCargoName: <?php echo json_encode($this->input->get('name', TRUE)); ?>, // 若透過合作指引
                 selectedCategoryId: null, // 目前顯示頁面主題
                 selectedSubCategoryId: null,
                 selectedSubSubCategoryId: null,
@@ -77,6 +78,8 @@
             filterBySubSubCategory(subsubId) {
                 this.scrollToTop();
                 this.selectedSubSubCategoryId = subsubId;
+                const tmp = this.cargo_sub_son_category.find(self => self.id === subsubId);
+                this.pageTitle = tmp.name;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
@@ -99,6 +102,7 @@
                         this.isSubExpanded = [];
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
+                        this.pageTitle = this.isExpanded.name;
                     }
                 })
             },
@@ -120,6 +124,7 @@
                         this.selectedSubSubCategoryId = null;
                         // 更新選擇類別
                         this.selectedSubCategoryId = this.isSubExpanded.sort;
+                        this.pageTitle = this.isSubExpanded.name;
                     }
                 })
             },

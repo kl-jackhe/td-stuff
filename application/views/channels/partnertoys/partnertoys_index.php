@@ -37,8 +37,6 @@
         data() {
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
-                getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
-                getSubSubID: <?php echo json_encode($this->input->get('subsubid', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 選中項目類別
                 selectedSubCategoryId: null, // 選中子項目類別
                 selectedSubSubCategoryId: null, // 選中子子項目類別
@@ -76,6 +74,8 @@
             filterBySubSubCategory(subsubId) {
                 this.scrollToTop();
                 this.selectedSubSubCategoryId = subsubId;
+                const tmp = this.channels_sub_son_category.find(self => self.id === subsubId);
+                this.pageTitle = tmp.name;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
@@ -98,6 +98,7 @@
                         this.isSubExpanded = [];
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
+                        this.pageTitle = this.isExpanded.name;
                     }
                 })
             },
@@ -119,6 +120,7 @@
                         this.selectedSubSubCategoryId = null;
                         // 更新選擇類別
                         this.selectedSubCategoryId = this.isSubExpanded.sort;
+                        this.pageTitle = this.isSubExpanded.name;
                     }
                 })
             },

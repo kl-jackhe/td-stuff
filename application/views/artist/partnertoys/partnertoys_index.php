@@ -45,7 +45,6 @@
         data() {
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
-                getSubID: <?php echo json_encode($this->input->get('subid', TRUE)); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 selectedSubCategoryId: null,
                 artist_category: <?php echo json_encode(!empty($artist_category) ? $artist_category : ''); ?>,
@@ -80,6 +79,8 @@
             filterBySubCategory(subId) {
                 this.scrollToTop();
                 this.selectedSubCategoryId = subId;
+                const tmp = this.artist_son_category.find(self => self.id === subId);
+                this.pageTitle = tmp.name;
             },
             // 获取关联的子项
             toggleCategory(categoryId) {
@@ -99,6 +100,7 @@
                         this.selectedSubCategoryId = null;
                         // 更新選擇類別
                         this.selectedCategoryId = this.isExpanded.sort;
+                        this.pageTitle = this.isExpanded.name;
                     }
                 })
             },
