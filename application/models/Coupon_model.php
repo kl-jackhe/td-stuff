@@ -122,4 +122,45 @@ class Coupon_model extends CI_Model
         $query = $this->db->get('new_coupon');
         return ($query->num_rows() > 0) ? $query->result_array() : false;
     }
+
+    function getTotalCustom()
+    {
+        $this->db->select('id');
+        $query = $this->db->get('users');
+        return ($query->num_rows() > 0) ? $query->result_array() : false;
+    }
+
+    function getExistCouponProduct($id)
+    {
+        $this->db->select('use_product_id');
+        $this->db->where('coupon_id', $id);
+        $query = $this->db->get('new_coupon_product')->result_array();
+        return (!empty($query) ? $query : false);
+    }
+
+    function isExistProductID($coupon_id, $product_id)
+    {
+        $this->db->where('coupon_id', $coupon_id);
+        $this->db->where('use_product_id', $product_id);
+        $query = $this->db->get('new_coupon_product')->result_array();
+        if (!empty($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getSelectedProductID($id)
+    {
+        $selected = array();
+        $this->db->select('use_product_id');
+        $this->db->where('coupon_id', $id);
+        $query = $this->db->get('new_coupon_product')->result_array();
+        if (!empty($query)) {
+            foreach ($query as $row) {
+                $selected[] = $row['use_product_id'];
+            }
+        }
+        return $selected;
+    }
 }

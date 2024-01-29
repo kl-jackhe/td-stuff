@@ -91,12 +91,13 @@ class Coupon extends Admin_Controller
     {
         $this->data['page_title'] = '新增優惠券';
         $this->data['store'] = $this->mysql_model->_select('store');
-        $this->data['product'] = $this->mysql_model->_select('product');
         // $this->data['hide_county'] = $this->service_area_model->get_hide_county();
         // $this->data['hide_district'] = $this->service_area_model->get_hide_district();
         if ($this->is_liqun_food) {
+            $this->data['products'] = $this->mysql_model->_select('product');
             $this->render('admin/coupon/liqun/coupon_create');
         } else {
+            $this->data['product'] = $this->mysql_model->_select('product');
             $this->render('admin/coupon/create');
         }
     }
@@ -110,19 +111,99 @@ class Coupon extends Admin_Controller
                 $this->session->set_flashdata('message', '此優惠券已存在。');
                 redirect(base_url() . 'admin/coupon/create');
             } else {
+                // create new coupon
                 $data = array(
-                    'name'             => $this->input->post('name'),
-                    'type'             => $this->input->post('type'),
-                    'discount_amount'  => $this->input->post('discount_amount'),
+                    'name' => $this->input->post('name'),
+                    'type' => $this->input->post('type'),
+                    'discount_amount' => $this->input->post('discount_amount'),
                     'use_limit_enable' => $this->input->post('use_limit_enable'),
-                    'use_limit_number' => $this->input->post('use_limit_number'),
-                    'use_type_enable'  => $this->input->post('use_type_enable'),
-                    'use_type_name'    => $this->input->post('use_type_name'),
-                    'use_type_number'  => $this->input->post('use_type_number'),
-                    'distribute_at'    => $this->input->post('distribute_at'),
-                    'discontinued_at'  => $this->input->post('discontinued_at'),
+                    'use_type_enable' => $this->input->post('use_type_enable'),
+                    'use_member_enable' => $this->input->post('use_member_enable'),
+                    'use_product_enable' => $this->input->post('use_product_enable'),
+                    'distribute_at' => $this->input->post('distribute_at'),
+                    'discontinued_at' => $this->input->post('discontinued_at'),
                 );
+                if ($this->input->post('use_limit_enable') == '1') {
+                    $data['use_limit_number'] = $this->input->post('use_limit_number');
+                }
+                if ($this->input->post('use_type_enable') == '1') {
+                    $data['use_type_name'] = $this->input->post('use_type_name');
+                    $data['use_type_number'] = $this->input->post('use_type_number');
+                }
+                if ($this->input->post('use_member_enable') == '1') {
+                    $data['use_member_type'] = $this->input->post('use_member_type');
+                }
                 $this->db->insert('new_coupon', $data);
+                $id = $this->db->insert_id();
+
+                // linkage the custom and the coupon
+                if ($this->input->post('use_member_enable') == '1') {
+                    $memberType = $this->input->post('use_member_type');
+                    if ($memberType != 'new_member') {
+                        $members = $this->coupon_model->getTotalCustom();
+                        foreach ($members as $self) {
+                            $data = array(
+                                'coupon_id' => $id,
+                                'custom_id' => $self['id'],
+                                'type' => $this->input->post('type'),
+                                'discount_amount' => $this->input->post('discount_amount'),
+                                'use_limit_enable' => $this->input->post('use_limit_enable'),
+                                'use_type_enable' => $this->input->post('use_type_enable'),
+                                'use_product_enable' => $this->input->post('use_product_enable'),
+                                'distribute_at' => $this->input->post('distribute_at'),
+                                'discontinued_at' => $this->input->post('discontinued_at'),
+                            );
+                            if ($this->input->post('use_limit_enable') == '1') {
+                                $data['use_limit_number'] = $this->input->post('use_limit_number');
+                            } else {
+                                $data['use_limit_number'] = '';
+                            }
+                            if ($this->input->post('use_type_enable') == '1') {
+                                $data['use_type_name'] = $this->input->post('use_type_name');
+                                $data['use_type_number'] = $this->input->post('use_type_number');
+                            } else {
+                                $data['use_type_name'] = '';
+                                $data['use_type_number'] = '';
+                            }
+                            $this->db->insert('new_coupon_custom', $data);
+                        }
+                    }
+                }
+
+                $productsArray = $this->input->post('checkboxList');
+                if ($this->input->post('use_product_enable') == '1' && !empty($productsArray)) {
+                    $existingProducts = $this->coupon_model->getExistCouponProduct($id);
+                    if (!empty($existingProducts)) {
+                        // 去名
+                        $existingProductIds = array_column($existingProducts, 'use_product_id');
+
+                        // 找出需要刪除的標籤
+                        $ProductsToDelete = array_diff($existingProductIds, $productsArray);
+
+                        // echo '<pre>';
+                        // print_r($ProductsToDelete);
+                        // echo '</pre>';
+
+                        // 循環遍歷需要刪除的標籤，並刪除對應的數據
+                        foreach ($ProductsToDelete as $self) {
+                            $this->db->where('coupon_id', $id);
+                            $this->db->where('use_product_id', $self);
+                            $this->db->delete('new_coupon_product');
+                        }
+                    }
+
+
+                    // 插入未存在標籤
+                    foreach ($productsArray as $self) {
+                        if (!$this->coupon_model->isExistProductID($id, $self)) {
+                            $data = array(
+                                'coupon_id' => $id,
+                                'use_product_id' => $self,
+                            );
+                            $this->db->insert('new_coupon_product', $data);
+                        }
+                    }
+                }
             }
         } else {
             $this->db->where('coupon_code', $this->input->post('coupon_code'));
@@ -173,14 +254,16 @@ class Coupon extends Admin_Controller
     {
         $this->data['page_title'] = '編輯優惠券';
         $this->data['store'] = $this->mysql_model->_select('store');
-        $this->data['product'] = $this->mysql_model->_select('product');
         // $this->data['hide_county'] = $this->service_area_model->get_hide_county();
         // $this->data['hide_district'] = $this->service_area_model->get_hide_district();
         $this->data['change_log'] = get_change_log('coupon', $id);
         if ($this->is_liqun_food) {
+            $this->data['products'] = $this->mysql_model->_select('product');
+            $this->data['selected_products'] = $this->coupon_model->getSelectedProductID($id);
             $this->data['coupon'] = $this->mysql_model->_select('new_coupon', 'id', $id, 'row');
             $this->render('admin/coupon/liqun/coupon_edit');
         } else {
+            $this->data['product'] = $this->mysql_model->_select('product');
             $this->data['coupon'] = $this->mysql_model->_select('coupon', 'coupon_id', $id, 'row');
             $this->render('admin/coupon/edit');
         }
@@ -190,23 +273,125 @@ class Coupon extends Admin_Controller
     {
         if ($this->is_liqun_food) {
             $data = array(
-                'name'             => $this->input->post('name'),
-                'type'             => $this->input->post('type'),
-                'discount_amount'  => $this->input->post('discount_amount'),
+                'name' => $this->input->post('name'),
+                'type' => $this->input->post('type'),
+                'discount_amount' => $this->input->post('discount_amount'),
                 'use_limit_enable' => $this->input->post('use_limit_enable'),
-                'use_limit_number' => $this->input->post('use_limit_number'),
-                'use_type_enable'  => $this->input->post('use_type_enable'),
-                'use_type_name'    => $this->input->post('use_type_name'),
-                'use_type_number'  => $this->input->post('use_type_number'),
-                'distribute_at'    => $this->input->post('distribute_at'),
-                'discontinued_at'  => $this->input->post('discontinued_at'),
+                'use_type_enable' => $this->input->post('use_type_enable'),
+                'use_member_enable' => $this->input->post('use_member_enable'),
+                'use_product_enable' => $this->input->post('use_product_enable'),
+                'distribute_at' => $this->input->post('distribute_at'),
+                'discontinued_at' => $this->input->post('discontinued_at'),
             );
+            if ($this->input->post('use_limit_enable') == '1') {
+                $data['use_limit_number'] = $this->input->post('use_limit_number');
+            } else {
+                $data['use_limit_number'] = '';
+            }
+            if ($this->input->post('use_type_enable') == '1') {
+                $data['use_type_name'] = $this->input->post('use_type_name');
+                $data['use_type_number'] = $this->input->post('use_type_number');
+            } else {
+                $data['use_type_name'] = '';
+                $data['use_type_number'] = '';
+            }
+            if ($this->input->post('use_member_enable') == '1') {
+                $data['use_member_type'] = $this->input->post('use_member_type');
+            } else {
+                $data['use_member_type'] = '';
+            }
             $this->db->where('id', $id);
             $this->db->update('new_coupon', $data);
-            $this->session->set_flashdata('message', '優惠券編輯成功。');
+
+            if ($this->input->post('use_member_enable') == '0') {
+                $members = $this->coupon_model->getTotalCustom();
+                foreach ($members as $self) {
+                    $this->db->where('coupon_id', $id);
+                    $this->db->where('custom_id', $self['id']);
+                    $this->db->delete('new_coupon_custom');
+                }
+            } else {
+                $memberType = $this->input->post('use_member_type');
+                if ($memberType != 'new_member') {
+                    $members = $this->coupon_model->getTotalCustom();
+                    foreach ($members as $self) {
+                        $this->db->where('coupon_id', $id);
+                        $this->db->where('custom_id', $self['id']);
+                        $query = $this->db->get('new_coupon_custom');
+                        if (!($query->num_rows() > 0)) {
+                            $data = array(
+                                'coupon_id' => $id,
+                                'custom_id' => $self['id'],
+                                'type' => $this->input->post('type'),
+                                'discount_amount' => $this->input->post('discount_amount'),
+                                'use_limit_enable' => $this->input->post('use_limit_enable'),
+                                'use_type_enable' => $this->input->post('use_type_enable'),
+                                'use_product_enable' => $this->input->post('use_product_enable'),
+                                'distribute_at' => $this->input->post('distribute_at'),
+                                'discontinued_at' => $this->input->post('discontinued_at'),
+                            );
+                            if ($this->input->post('use_limit_enable') == '1') {
+                                $data['use_limit_number'] = $this->input->post('use_limit_number');
+                            } else {
+                                $data['use_limit_number'] = '';
+                            }
+                            if ($this->input->post('use_type_enable') == '1') {
+                                $data['use_type_name'] = $this->input->post('use_type_name');
+                                $data['use_type_number'] = $this->input->post('use_type_number');
+                            } else {
+                                $data['use_type_name'] = '';
+                                $data['use_type_number'] = '';
+                            }
+                            $this->db->insert('new_coupon_custom', $data);
+                        }
+                    }
+                }
+            }
+
+            $productsArray = $this->input->post('checkboxList');
+            if ($this->input->post('use_product_enable') == '0' || empty($productsArray)) {
+                // 檢查是否沒被選或是關閉功能
+                $this->db->where('coupon_id', $id);
+                $this->db->delete('new_coupon_product');
+            } else {
+                $existingProducts = $this->coupon_model->getExistCouponProduct($id);
+                if (!empty($existingProducts)) {
+                    // 去名
+                    $existingProductIds = array_column($existingProducts, 'use_product_id');
+
+                    // 找出需要刪除的標籤
+                    $ProductsToDelete = array_diff($existingProductIds, $productsArray);
+
+                    // echo '<pre>';
+                    // print_r($ProductsToDelete);
+                    // echo '</pre>';
+
+                    // 循環遍歷需要刪除的標籤，並刪除對應的數據
+                    foreach ($ProductsToDelete as $self) {
+                        $this->db->where('coupon_id', $id);
+                        $this->db->where('use_product_id', $self);
+                        $this->db->delete('new_coupon_product');
+                    }
+                }
+
+
+                // 插入未存在標籤
+                foreach ($productsArray as $self) {
+                    if (!$this->coupon_model->isExistProductID($id, $self)) {
+                        $data = array(
+                            'coupon_id' => $id,
+                            'use_product_id' => $self,
+                        );
+                        $this->db->insert('new_coupon_product', $data);
+                    }
+                }
+            }
+
+            // 限定商品使用
             // echo '<pre>';
             // print_r($data);
             // echo '</pre>';
+            $this->session->set_flashdata('message', '優惠券編輯成功。');
             echo '<script>window.history.back();</script>';
         } else {
             // 紀錄欄位變動
@@ -285,6 +470,10 @@ class Coupon extends Admin_Controller
         if ($this->is_liqun_food) {
             $this->db->where('id', $id);
             $this->db->delete('new_coupon');
+            $this->db->where('coupon_id', $id);
+            $this->db->delete('new_coupon_custom');
+            $this->db->where('coupon_id', $id);
+            $this->db->delete('new_coupon_product');
         } else {
             $this->db->where('coupon_id', $id);
             $this->db->delete('coupon');

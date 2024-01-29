@@ -75,12 +75,14 @@
 	<div class="col-md-3 previewTag">
 		<p class="selectedCheckboxTitle text-center">標籤成員</p>
 		<div class="form-group" id="availableCheckboxContainer">
-			<?php foreach ($products as $self) { ?>
-				<label class="checkedTagMemberName">
-					<input type="checkbox" class="productCheckbox" name="checkboxList[]" value="<?= $self['product_id'] ?>" <?= (!empty($selected_products) && in_array($self['product_id'], $selected_products) ? 'checked' : '') ?>>
-					<?= $self['product_name'] ?>
-				</label><br>
-			<?php } ?>
+			<?php if (!empty($products)) : ?>
+				<?php foreach ($products as $self) : ?>
+					<label class="checkedTagMemberName">
+						<input type="checkbox" class="productCheckbox" name="checkboxList[]" value="<?= $self['product_id'] ?>" <?= (!empty($selected_products) && in_array($self['product_id'], $selected_products) ? 'checked' : '') ?>>
+						<?= $self['product_name'] ?>
+					</label><br>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</div>
 	</div>
 	<div class="col-md-3 previewTag">
@@ -103,37 +105,37 @@
 		$('.productCheckbox:checked').each(function() {
 			rearrangeCheckboxes();
 		});
-
-		function rearrangeCheckboxes() {
-			var selectedContainer = $('#selectedCheckboxContainer');
-
-			// Remove any existing content in the selected container
-			selectedContainer.empty();
-
-			// Loop through all checkboxes to find selected ones
-			$('.productCheckbox:checked').each(function() {
-				var labelText = $(this).closest('label').text().trim();
-				var productId = $(this).val();
-
-				// Create a span element with a class for styling
-				var spanElement = $('<span class="checkedTagMemberName">').text(labelText);
-
-				// Create a link (X) element for unchecking the checkbox
-				var uncheckLink = $('<a href="#" class="removeTag" data-product-id="' + productId + '"><i class="fa fa-times" aria-hidden="true"></i></a>').click(function() {
-					// Retrieve the product ID from the data attribute
-					var productIdToRemove = $(this).data('product-id');
-
-					// Uncheck the corresponding checkbox
-					$('.productCheckbox[value="' + productIdToRemove + '"]').prop('checked', false);
-
-					rearrangeCheckboxes(); // Update the displayed checkboxes
-				});
-
-				// Append the X link before the span
-				selectedContainer.append(uncheckLink).append(spanElement).append('<br>');
-			});
-		}
 	});
+
+	function rearrangeCheckboxes() {
+		var selectedContainer = $('#selectedCheckboxContainer');
+
+		// Remove any existing content in the selected container
+		selectedContainer.empty();
+
+		// Loop through all checkboxes to find selected ones
+		$('.productCheckbox:checked').each(function() {
+			var labelText = $(this).closest('label').text().trim();
+			var productId = $(this).val();
+
+			// Create a span element with a class for styling
+			var spanElement = $('<span class="checkedTagMemberName">').text(labelText);
+
+			// Create a link (X) element for unchecking the checkbox
+			var uncheckLink = $('<a href="#" class="removeTag" data-product-id="' + productId + '"><i class="fa fa-times" aria-hidden="true"></i></a>').click(function() {
+				// Retrieve the product ID from the data attribute
+				var productIdToRemove = $(this).data('product-id');
+
+				// Uncheck the corresponding checkbox
+				$('.productCheckbox[value="' + productIdToRemove + '"]').prop('checked', false);
+
+				rearrangeCheckboxes(); // Update the displayed checkboxes
+			});
+
+			// Append the X link before the span
+			selectedContainer.append(uncheckLink).append(spanElement).append('<br>');
+		});
+	}
 
 	function form_check() {
 		var product_tag_name = $('#product_tag_name').val();
