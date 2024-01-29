@@ -65,9 +65,8 @@
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
-                order: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
-                order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
-                order_item: <?php echo !(empty($this->session->userdata('user_id'))) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
+                order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 followData: null,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物

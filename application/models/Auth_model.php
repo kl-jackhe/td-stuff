@@ -22,6 +22,31 @@ class Auth_model extends CI_Model
         return (!empty($query) ? $query : false);
     }
 
+    function getCouponName($id)
+    {
+        $this->db->select('name');
+        $this->db->where('id', $id);
+        $query = $this->db->get('new_coupon');
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        } else {
+            return false;
+        }
+    }
+
+    function getCoupons($id)
+    {
+        $this->db->select('*');
+        $this->db->where('custom_id', $id);
+        $this->db->order_by('discontinued_at', 'desc');
+        $query = $this->db->get('new_coupon_custom');
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
     function getOrders($id)
     {
         $this->db->select('*');

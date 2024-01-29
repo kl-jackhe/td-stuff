@@ -34,28 +34,52 @@ class Auth extends Public_Controller
 
 			if (empty($this->session->userdata('user_id'))) :
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
+				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 6);
 			else :
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');
 				$user = $this->ion_auth->user($id)->row();
 				$this->data['user'] = $user;
+
+				// 個人訂單
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
+
+				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 17);
 			endif;
 			$this->render('auth/partnertoys/partnertoys_index');
 		elseif ($this->is_liqun_food) :
 			if (empty($this->session->userdata('user_id'))) :
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
+				// 分類
 				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
 			else :
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');
 				$user = $this->ion_auth->user($id)->row();
 				$this->data['user'] = $user;
+
+				// 優惠券
+				$coupon_arr = array();
+				$coupon_arr = $this->auth_model->getCoupons($id);
+				foreach ($coupon_arr as &$self) {
+					$save_arr = $this->auth_model->getCouponName($self['coupon_id']);
+					$self['name'] = $save_arr['name'];
+				}
+				unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
+				$this->data['coupon'] = $coupon_arr;
+
+				// echo '<pre>';
+				// print_r($coupon_arr);
+				// echo '</pre>';
+
+				// 個人訂單
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
+
+				// 分類
 				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
 			endif;
 			$this->render('auth/liqun/liqun_index');
