@@ -84,6 +84,7 @@ class Update extends Admin_Controller
                 $this->update_202401231430();
                 $this->update_202401262230();
                 $this->update_202401260000();
+                $this->update_202401291410();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -94,6 +95,106 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202401291410()
+    {
+        $version = '202401291410';
+        $description = '新增資料表[new_coupon_product]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'new_coupon_custom'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `new_coupon_custom` (
+                    `id` int(11) NOT NULL,
+                    `coupon_id` int(11) NOT NULL,
+                    `custom_id` int(11) NOT NULL,
+                    `type` varchar(20) NOT NULL,
+                    `discount_amount` decimal(6) NOT NULL,
+                    `use_limit_enable` tinyint(1) NOT NULL,
+                    `use_limit_number` int(11) NOT NULL,
+                    `use_type_enable` tinyint(1) NOT NULL,
+                    `use_type_name` varchar(20) NOT NULL,
+                    `use_type_number` int(11) NOT NULL,
+                    `use_product_enable` tinyint(1) NOT NULL,
+                    `distribute_at` datetime NOT NULL,
+                    `discontinued_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `new_coupon_custom` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `new_coupon_custom` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'new_coupon_custom_product_limit'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `new_coupon_custom_product_limit` (
+                    `id` int(11) NOT NULL,
+                    `coupon_custom_id` int(11) NOT NULL,
+                    `use_product_id` int(11) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `new_coupon_custom_product_limit` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `new_coupon_custom_product_limit` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202401291410()
+    {
+        $version = '202401291410';
+        $description = '新增資料表[new_coupon_custom]&[new_coupon_custom_product_limit]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'new_coupon_custom'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `new_coupon_custom` (
+                    `id` int(11) NOT NULL,
+                    `coupon_id` int(11) NOT NULL,
+                    `custom_id` int(11) NOT NULL,
+                    `type` varchar(20) NOT NULL,
+                    `discount_amount` decimal(6) NOT NULL,
+                    `use_limit_enable` tinyint(1) NOT NULL,
+                    `use_limit_number` int(11) NOT NULL,
+                    `use_type_enable` tinyint(1) NOT NULL,
+                    `use_type_name` varchar(20) NOT NULL,
+                    `use_type_number` int(11) NOT NULL,
+                    `use_product_enable` tinyint(1) NOT NULL,
+                    `distribute_at` datetime NOT NULL,
+                    `discontinued_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `new_coupon_custom` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `new_coupon_custom` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $row = $this->db->query("SHOW TABLES LIKE 'new_coupon_custom_product_limit'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `new_coupon_custom_product_limit` (
+                    `id` int(11) NOT NULL,
+                    `coupon_custom_id` int(11) NOT NULL,
+                    `use_product_id` int(11) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `new_coupon_custom_product_limit` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `new_coupon_custom_product_limit` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
