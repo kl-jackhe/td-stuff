@@ -65,7 +65,7 @@
                 </select>
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-group typeIsVisible">
               <label for="discount_amount" class="col-md-3 control-label required">優惠券折扣：</label>
               <div class="col-md-9">
                 <input type="number" class="form-control" id="discount_amount" name="discount_amount" value="<?= $coupon['discount_amount'] ?>" required>
@@ -159,7 +159,7 @@
             <hr>
             <?php foreach ($products as $self) : ?>
               <label class="checkedTagMemberName">
-                <input type="checkbox" class="productCheckbox" name="checkboxList[]" value="<?= $self['product_id'] ?>"  <?= (!empty($selected_products) && in_array($self['product_id'], $selected_products) ? 'checked' : '') ?>>
+                <input type="checkbox" class="productCheckbox" name="checkboxList[]" value="<?= $self['product_id'] ?>" <?= (!empty($selected_products) && in_array($self['product_id'], $selected_products) ? 'checked' : '') ?>>
                 <?= $self['product_name'] ?>
               </label><br>
             <?php endforeach; ?>
@@ -192,6 +192,15 @@
 
   // 選擇之商品checkbox
   $(document).ready(function() {
+    // 初始化时执行一次
+    toggleTypeIsVisible();
+
+    // 监听 #type 的变化
+    $('#type').change(function() {
+      // 当 #type 变化时，调用函数动态显示或隐藏元素
+      toggleTypeIsVisible();
+    });
+
     // 監聽 use_product_enable_btn
     $('#use_product_enable_button_hide').click(function() {
       toggleProductCheckboxVisibility(0);
@@ -258,6 +267,13 @@
     });
   }
 
+  function toggleTypeIsVisible() {
+    if ($('#type').val() == 'free_shipping') {
+      $('.typeIsVisible').hide();
+    } else {
+      $('.typeIsVisible').show();
+    }
+  }
 
   function toggleLimitReadOnly() {
     var selectElement = document.getElementById("use_limit_enable");
