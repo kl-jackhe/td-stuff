@@ -277,31 +277,34 @@ foreach ($this->cart->contents() as $items) {
                             <div class="col-12 row">
                                 <h4 class="col-12 promotion-title">可使用之優惠券<span style="color: red;">(點選後反白即已選用)</span></h4>
                                 <?php foreach ($coupon as $self) : ?>
-                                    <?php if (($self['use_limit_enable'] == 1 && (int)$self['use_limit_number'] > 0) || $self['use_limit_enable'] == 0) : ?>
-                                        <?php if ($self['type'] == 'free_shipping') : ?>
-                                            <!-- 免運費 -->
-                                            <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
-                                                <div class="col-12 row couponContent">
-                                                    <div class="col-md-12 col-lg-3 couponTitle">
-                                                        <span class="coupon_shipping transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">免運費</span>
+                                    <?php $now = date('Y-m-d H:i:s'); ?>
+                                    <?php if ($self['distribute_at'] < $now && $self['discontinued_at'] < $now) : ?>
+                                        <?php if (($self['use_limit_enable'] == 1 && (int)$self['use_limit_number'] > 0) || $self['use_limit_enable'] == 0) : ?>
+                                            <?php if ($self['type'] == 'free_shipping') : ?>
+                                                <!-- 免運費 -->
+                                                <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
+                                                    <div class="col-12 row couponContent">
+                                                        <div class="col-md-12 col-lg-3 couponTitle">
+                                                            <span class="coupon_shipping transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">免運費</span>
+                                                        </div>
+                                                        <div class="col-md-12 col-lg-9 couponDescription">
+                                                            <!-- 普通的点击事件，通过 JavaScript 更新隐藏的表单字段的值 -->
+                                                            <span class="couponName"><?= $self['name'] ?></span>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-12 col-lg-9 couponDescription">
-                                                        <!-- 普通的点击事件，通过 JavaScript 更新隐藏的表单字段的值 -->
-                                                        <span class="couponName"><?= $self['name'] ?></span>
+                                                <?php endif; ?>
+                                            <?php elseif ($self['type'] == 'cash' || $self['type'] == 'percent') : ?>
+                                                <!-- 全商品折扣 -->
+                                                <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
+                                                    <div class="col-12 row couponContent">
+                                                        <div class="col-md-12 col-lg-3 couponTitle">
+                                                            <span class="coupon_money transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">折扣優惠</span>
+                                                        </div>
+                                                        <div class="col-md-12 col-lg-9 couponDescription">
+                                                            <span class="couponName"><?= $self['name'] ?></span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php elseif ($self['type'] == 'cash' || $self['type'] == 'percent') : ?>
-                                            <!-- 全商品折扣 -->
-                                            <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
-                                                <div class="col-12 row couponContent">
-                                                    <div class="col-md-12 col-lg-3 couponTitle">
-                                                        <span class="coupon_money transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">折扣優惠</span>
-                                                    </div>
-                                                    <div class="col-md-12 col-lg-9 couponDescription">
-                                                        <span class="couponName"><?= $self['name'] ?></span>
-                                                    </div>
-                                                </div>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
