@@ -278,7 +278,7 @@ foreach ($this->cart->contents() as $items) {
                                 <h4 class="col-12 promotion-title">可使用之優惠券<span style="color: red;">(點選後反白即已選用)</span></h4>
                                 <?php foreach ($coupon as $self) : ?>
                                     <?php $now = date('Y-m-d H:i:s'); ?>
-                                    <?php if ($self['distribute_at'] < $now && $self['discontinued_at'] < $now) : ?>
+                                    <?php if ($self['distribute_at'] < $now && $self['discontinued_at'] > $now) : ?>
                                         <?php if (($self['use_limit_enable'] == 1 && (int)$self['use_limit_number'] > 0) || $self['use_limit_enable'] == 0) : ?>
                                             <?php if ($self['type'] == 'free_shipping') : ?>
                                                 <!-- 免運費 -->
