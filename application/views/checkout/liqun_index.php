@@ -595,7 +595,8 @@ foreach ($this->cart->contents() as $items) {
 
             // 如果当前值等于点击的couponId，清空；否则，更新为点击的couponId
             usedCouponInput.val((currentValue === couponId.toString()) ? '' : couponId);
-
+            // console.log($('#used_coupon').val());
+            
             // 判断是否已经有 active 类，如果有，则移除；如果没有，则添加
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
@@ -625,7 +626,6 @@ foreach ($this->cart->contents() as $items) {
                 $('#cart_total').val(cartTotal.toFixed(0))
                 cart_amount = cartTotal.toFixed(0);
             }
-            // console.log(usedCouponInput.val());
         });
 
         // 初始化選所選運送方式

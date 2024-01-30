@@ -292,6 +292,26 @@ class Checkout extends Public_Controller
 			return;
 		}
 
+		if (!empty($this->input->post('used_coupon'))) {
+			$coupon_custom_id = $this->input->post('used_coupon');
+
+			$this->db->select('*');
+			$this->db->where('id', $coupon_custom_id);
+			$query = $this->db->get('new_coupon_custom');
+			$selected_coupon = $query->row_array();
+			// echo '<pre>';
+			// print_r($selected_coupon);
+			// echo '</pre>';
+			if (!empty($selected_coupon)) {
+				// 在这里你需要处理要更新的字段和值，例如：
+				$data = array(
+					'use_limit_number' => (int)$selected_coupon['use_limit_number'] - 1,
+				);
+				$this->db->where('id', $coupon_custom_id);
+				$this->db->update('new_coupon_custom', $data);
+			}
+		}
+
 		$date = date('Y-m-d');
 		$y = substr($date, 0, 4);
 		$m = substr($date, 5, 2);
@@ -1298,9 +1318,9 @@ class Checkout extends Public_Controller
 		$this->email->message($body);
 		// echo $content;
 		if ($this->email->send()) {
-			echo "1";
+			// echo "1";
 		} else {
-			echo "0";
+			// echo "0";
 		}
 	}
 
