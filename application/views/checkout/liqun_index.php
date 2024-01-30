@@ -860,7 +860,7 @@ foreach ($this->cart->contents() as $items) {
         <?php if (wp_is_mobile()) { ?>
             $(window).attr('location', 'https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
         <?php } else { ?>
-            var mywindow = window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+            window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
         <?php } ?>
         // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
     }
