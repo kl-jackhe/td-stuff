@@ -62,13 +62,14 @@ class Auth extends Public_Controller
 				$this->data['user'] = $user;
 
 				// 優惠券
-				$coupon_arr = array();
 				$coupon_arr = $this->auth_model->getCoupons($id);
-				foreach ($coupon_arr as &$self) {
-					$save_arr = $this->auth_model->getCouponName($self['coupon_id']);
-					$self['name'] = $save_arr['name'];
+				if (!empty($coupon_arr)) {
+					foreach ($coupon_arr as &$self) {
+						$save_arr = $this->auth_model->getCouponName($self['coupon_id']);
+						$self['name'] = $save_arr['name'];
+					}
+					unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
 				}
-				unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
 				$this->data['coupon'] = $coupon_arr;
 
 				// echo '<pre>';
@@ -635,13 +636,45 @@ class Auth extends Public_Controller
 			// 註冊成功時，登入
 			$remember = true;
 			if ($this->ion_auth->login($this->input->post('identity'), $this->input->post('password'), $remember)) {
-				//if the login is successful
+				// if the login is successful
 				$data = array(
 					'ip_address' => $this->input->ip_address(),
 					'user_id' => $this->ion_auth->user()->row()->id,
 					'datetime' => date('Y-m-d H:i:s'),
 				);
 				$this->db->insert('login_log', $data);
+
+				// coupon given
+				$coupon = $this->auth_model->getAllCoupons();
+				foreach ($coupon as $self) {
+					if ($self['use_member_enable'] == 1 && ($self['use_member_type'] == 'new_member' || $self['use_member_type'] == 'all_member')) {
+						$data = array(
+							'coupon_id' => $self['id'],
+							'custom_id' => $this->ion_auth->user()->row()->id,
+							'type' => $self['type'],
+							'discount_amount' => $self['discount_amount'],
+							'use_limit_enable' => $self['use_limit_enable'],
+							'use_type_enable' => $self['use_type_enable'],
+							'use_product_enable' => $self['use_product_enable'],
+							'distribute_at' => $self['distribute_at'],
+							'discontinued_at' => $self['discontinued_at'],
+						);
+						if ($self['use_limit_enable'] == '1') {
+							$data['use_limit_number'] = $self['use_limit_number'];
+						} else {
+							$data['use_limit_number'] = '';
+						}
+						if ($self['use_type_enable'] == '1') {
+							$data['use_type_name'] = $self['use_type_name'];
+							$data['use_type_number'] = $self['use_type_number'];
+						} else {
+							$data['use_type_name'] = '';
+							$data['use_type_number'] = '';
+						}
+						$this->db->insert('new_coupon_custom', $data);
+					}
+				}
+
 				//redirect them back to the home page
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				echo '<script>alert("成功加入會員");</script>';

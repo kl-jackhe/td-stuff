@@ -72,11 +72,13 @@ class Checkout extends Public_Controller
 			$this->data['use_coupon'] = array();
 			// 優惠券
 			$coupon_arr = $this->checkout_model->getCoustomCoupons($this->session->userdata('user_id'));
-			foreach ($coupon_arr as &$self) {
-				$save_arr = $this->checkout_model->getCouponName($self['coupon_id']);
-				$self['name'] = $save_arr['name'];
+			if(!empty($coupon_arr)){
+				foreach ($coupon_arr as &$self) {
+					$save_arr = $this->checkout_model->getCouponName($self['coupon_id']);
+					$self['name'] = $save_arr['name'];
+				}
+				unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
 			}
-			unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
 			$this->data['coupon'] = $coupon_arr;
 			// echo '<pre>';
 			// print_r($this->data['coupon']);
