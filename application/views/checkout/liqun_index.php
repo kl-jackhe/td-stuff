@@ -273,56 +273,46 @@ foreach ($this->cart->contents() as $items) {
                             </tbody>
                         </table>
                         <hr>
-                        <?php
-                        $is_used = false;
-                        $free_shipping = false; // 是否免運
-                        $coupon_use_limit = 0; // 優惠券限制次數
-                        $coupon_cash = 0.00; // 折多少$
-                        $coupon_percent = 0.00; // 折多少%
-                        ?>
                         <?php if (!empty($coupon)) : ?>
                             <div class="col-12 row">
-                                <h5 class="col-12 promotion-title">已享用之優惠</h5>
+                                <h4 class="col-12 promotion-title">可使用之優惠券<span style="color: red;">(點選後反白即已選用)</span></h4>
                                 <?php foreach ($coupon as $self) : ?>
-                                    <?php if ($self['coupon_status'] == 1) : ?>
-                                        <?php
-                                        if ($self['coupon_method'] == 'free_shipping' && $this->cart->total() > $self['coupon_amount_limit_number']) :
-                                            // 免運費
-                                            $is_used = true;
-                                            $free_shipping = true;
-                                            $coupon_cash += $self['coupon_number'];
-                                        elseif ($self['coupon_method'] == 'cash' && $this->cart->total() > $self['coupon_amount_limit_number']) :
-                                            // 全商品折扣
-                                            $is_used = true;
-                                            $coupon_use_limit = ($self['coupon_use_limit'] == "repeat") ? -1 : 1; // 要改
-                                            $coupon_cash += $self['coupon_number'];
-                                        elseif ($self['coupon_method'] == 'percent' && $this->cart->total() > $self['coupon_amount_limit_number']) :
-                                            // 全商品%數折扣
-                                            $is_used = true;
-                                            $coupon_use_limit = ($self['coupon_use_limit'] == "repeat") ? -1 : 1; // 要改
-                                            $coupon_percent = $self['coupon_number'];
-                                        endif;
-                                        ?>
-                                        <?php if ($self['coupon_amount_limit'] == 1 && $this->cart->total() > $self['coupon_amount_limit_number']) : ?>
-                                            <div class="col-2 couponTitle">
-                                                <span><?= ($self['coupon_method'] == 'free_shipping') ? '免運費' : '折扣優惠'; ?></span>
-                                            </div>
-                                            <div class="col-10 couponDescription">
-                                                <span><?= $self['coupon_name'] ?></span>
-                                            </div>
+                                    <?php if (($self['use_limit_enable'] == 1 && (int)$self['use_limit_number'] > 0) || $self['use_limit_enable'] == 0) : ?>
+                                        <?php if ($self['type'] == 'free_shipping') : ?>
+                                            <!-- 免運費 -->
+                                            <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
+                                                <div class="col-12 row couponContent">
+                                                    <div class="col-md-12 col-lg-3 couponTitle">
+                                                        <span class="coupon_shipping transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-name="<?= $self['name'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">免運費</span>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-9 couponDescription">
+                                                        <!-- 普通的点击事件，通过 JavaScript 更新隐藏的表单字段的值 -->
+                                                        <span class="couponName"><?= $self['name'] ?></span>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php elseif ($self['type'] == 'cash' || $self['type'] == 'percent') : ?>
+                                            <!-- 全商品折扣 -->
+                                            <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
+                                                <div class="col-12 row couponContent">
+                                                    <div class="col-md-12 col-lg-3 couponTitle">
+                                                        <span class="coupon_money transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-name="<?= $self['name'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">折扣優惠</span>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-9 couponDescription">
+                                                        <span class="couponName"><?= $self['name'] ?></span>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
+                                <input type="hidden" name="used_coupon" id="used_coupon" value="">
                             </div>
                             <br>
                             <hr>
                         <?php endif; ?>
                         <span style="text-align:right;">購物車小計：
-                            <?php if ($is_used) : ?>
-                                <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() - $coupon_cash * ($coupon_percent != 0.00 ? $coupon_percent : 1.00); ?></span>
-                            <?php else : ?>
-                                <span style="color: #dd0606;font-weight: bold;"> $<?php echo  $this->cart->total() ?></span>
-                            <?php endif; ?>
+                            <span class="cart_total_display" style="color: #dd0606;font-weight: bold;"> $0.00</span>
                         </span>
                         <br>
                         <br>
@@ -331,10 +321,11 @@ foreach ($this->cart->contents() as $items) {
                     <h3>付款方式</h3>
                     <section>
                         <div class="container-fluid py-3">
-                            <div class="row">
+                            <div class="col-12 row">
                                 <div class="col-12">
-                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
-                                    <input type="hidden" id="cart_total" value="<?php echo '$' . $this->cart->total() ?>">
+                                    <h3 style="margin: 0px;">購物車小計：<span class="cart_total_display" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <!-- <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
+                                    <input type="hidden" id="cart_total" name="cart_total" value="">
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -389,7 +380,7 @@ foreach ($this->cart->contents() as $items) {
                                             }
                                         }
                                     }
-                                    $this->db->select('delivery_name_code,delivery_name,delivery_info');
+                                    $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost');
                                     if (!empty($deliveryList)) {
                                         $deliveryIdList = array();
                                         foreach ($deliveryList as $key => $value) {
@@ -400,10 +391,11 @@ foreach ($this->cart->contents() as $items) {
                                     $this->db->where('delivery_status', 1);
                                     $d_query = $this->db->get('delivery')->result_array();
 
+
                                     $delivery_count = 0;
                                     foreach ($d_query as $d_row) { ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
                                             <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                 <?= $d_row['delivery_name'] ?>
                                             </label>
@@ -436,8 +428,10 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
-                                    <input type="hidden" id="total_amount" value="<?php echo '$' . $this->cart->total() ?>">
+                                    <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <input type="hidden" id="shipping_amount" name="shipping_amount" value="">
+                                    <input type="hidden" id="total_amount" name="total_amount" value="">
                                 </div>
                             </div>
                         </div>
@@ -584,6 +578,77 @@ foreach ($this->cart->contents() as $items) {
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
 <script>
+    $(document).ready(function() {
+        // 初始化購物車總計
+        var cart_amount = 0;
+        var shipping_amount = 0;
+        var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
+        $('.cart_total_display').text(' $' + initialCartTotal.toFixed(0));
+        $('#cart_total').val(initialCartTotal.toFixed(0))
+        cart_amount = initialCartTotal.toFixed(0);
+
+        $('.couponTitle span').click(function() {
+            // 已選COUPON
+            var couponId = $(this).data('coupon-id');
+            var usedCouponInput = $('#used_coupon');
+            var currentValue = usedCouponInput.val();
+
+            // 如果当前值等于点击的couponId，清空；否则，更新为点击的couponId
+            usedCouponInput.val((currentValue === couponId.toString()) ? '' : couponId);
+
+            // 判断是否已经有 active 类，如果有，则移除；如果没有，则添加
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                // 更新購物車總計
+                $('.cart_total_display').text('$' + initialCartTotal.toFixed(0));
+                $('#cart_total').val(initialCartTotal.toFixed(0))
+            } else {
+                // 移除所有元素的选中状态
+                $('.couponTitle span').removeClass('active');
+                // 添加选中状态
+                $(this).addClass('active');
+                // 更新小計
+                var couponDiscount = parseFloat($(this).data('coupon-discount'));
+                // 计算购物车小计
+                var cartTotal = parseFloat(<?php echo $this->cart->total() ?>);
+
+                if (couponDiscount < 1 && couponDiscount > 0) {
+                    // 如果优惠券折扣小于1大于0，做乘法
+                    cartTotal *= couponDiscount;
+                } else if (couponDiscount > 1) {
+                    // 如果优惠券折扣大于1，做减法
+                    cartTotal -= couponDiscount;
+                }
+
+                // 更新购物车小计显示
+                $('.cart_total_display').text(' $' + cartTotal.toFixed(0));
+                $('#cart_total').val(cartTotal.toFixed(0))
+                cart_amount = cartTotal.toFixed(0);
+            }
+            // console.log(usedCouponInput.val());
+        });
+
+        // 初始化選所選運送方式
+        var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
+        $('#shipping_fee').text(' $' + initialShippingFee.toFixed(0));
+        shipping_amount = initialShippingFee.toFixed(0);
+        $('#shipping_amount').val(shipping_amount);
+        $('#total_amount').val(parseInt(cart_amount) + parseInt(shipping_amount))
+        $('#total_amount_view').text(' $' + ((parseInt(cart_amount) + parseInt(shipping_amount))));
+
+        // 更改運送方式
+        $('input[name="checkout_delivery"]').change(function() {
+            var shippingFee = $(this).data('shipping-fee');
+
+            // 当选择框改变时的逻辑
+            $('#shipping_fee').text(' $' + shippingFee.toFixed(0));
+            shipping_amount = shippingFee.toFixed(0);
+            $('#shipping_amount').val(shipping_amount);
+            $('#total_amount').val(parseInt(cart_amount) + parseInt(shipping_amount))
+            $('#total_amount_view').text(' $' + (parseInt(cart_amount) + parseInt(shipping_amount)));
+        });
+    });
+
     $("#wizard").steps({
         headerTag: "h3",
         bodyTag: "section",
@@ -731,10 +796,13 @@ foreach ($this->cart->contents() as $items) {
         //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
         // }
         if ($('#cart_total').val() != '') {
-            data += '<tr><td>購物車小計</td><td>' + $('#cart_total').val() + '</td></tr>';
+            data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
+        }
+        if ($('#shipping_amount').val() != '') {
+            data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';
         }
         if ($('#total_amount').val() != '') {
-            data += '<tr><td>總計</td><td style="color:red;font-size:20px">' + $('#total_amount').val() + '</td></tr>';
+            data += '<tr><td>總計</td><td style="color:red;font-size:20px">$' + $('#total_amount').val() + '</td></tr>';
         }
         data += "</tbody></table>";
         $(".confirm_info").html(data);

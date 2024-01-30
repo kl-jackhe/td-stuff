@@ -1176,18 +1176,63 @@ label.required::before {
 
 .couponTitle span {
     display: block;
-    background-color: #E8F8E8;
     text-align: center;
     padding: 5px;
+    margin-left: 30px;
     color: #000;
     font-weight: 400;
     font-size: 11px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.couponTitle span:hover {
+    box-shadow: 10px 5px 5px #7d7d7d;
+}
+
+@media (max-width:786px) {
+
+    .couponTitle span,
+    .couponDescription span {
+        margin-left: 60px;
+    }
+}
+
+.couponTitle .coupon_shipping {
+    background-color: #E8F8E8;
+}
+
+.couponTitle .coupon_money {
+    background-color: #fde7e7;
 }
 
 .couponDescription span {
+    font-size: 14px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.couponContent {
+    padding: 5px 0;
+    align-items: center;
+    text-align: center;
+}
+
+.couponTitle span.active {
+    background-color: #fff;
+}
+
+.partitionLine {
+    border-top: 1px dotted #ccc;
+}
+
+.tableOut {
+    height: auto;
+    width: 100%;
+}
+
+.tableOut tbody tr th {
+    padding: 10px;
 }

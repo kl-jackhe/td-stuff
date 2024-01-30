@@ -2495,6 +2495,10 @@ input.qtyminus {
     height: 150px;
 }
 
+.itemPrice {
+    color: #e30020;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

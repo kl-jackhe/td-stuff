@@ -456,7 +456,7 @@ foreach ($this->cart->contents() as $items) {
                                         }
                                     }
                                     // 抓資料庫的物流方式
-                                    $this->db->select('delivery_name_code, delivery_name, delivery_info, delivery_type');
+                                    $this->db->select('delivery_name_code, delivery_name, delivery_info, delivery_type, shipping_cost');
                                     // 暫時先註解code有點意義不明
                                     // if (!empty($deliveryList)) {
                                     //     $deliveryIdList = array();
@@ -476,7 +476,7 @@ foreach ($this->cart->contents() as $items) {
                                             <?php foreach ($d_query as $d_row) : ?>
                                                 <?php if ($d_row['delivery_type'] != 3) : ?>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
                                                         <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                             <?= $d_row['delivery_name'] ?>
                                                         </label>
@@ -493,7 +493,7 @@ foreach ($this->cart->contents() as $items) {
                                             <?php foreach ($d_query as $d_row) : ?>
                                                 <?php if ($d_row['delivery_type'] == 3) : ?>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                                        <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
                                                         <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                             <?= $d_row['delivery_name'] ?>
                                                         </label>
@@ -565,8 +565,11 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
-                                    <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
-                                    <input type="hidden" id="total_amount" value="<?php echo '$' . $this->cart->total() ?>">
+                                    <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <!-- <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
+                                    <input type="hidden" id="shipping_amount" value="">
+                                    <input type="hidden" id="total_amount" value="">
                                 </div>
                             </div>
                         </div>
@@ -610,10 +613,43 @@ foreach ($this->cart->contents() as $items) {
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
 <script>
+    $(document).ready(function() {
+        // 初始化購物車總計
+        var cart_amount = 0;
+        var shipping_amount = 0;
+        var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
+        cart_amount = parseInt(initialCartTotal);
+
+        // 初始化選所選運送方式
+        var initialShippingFee = 0;
+        shipping_amount = parseInt(initialShippingFee);
+        $('#shipping_fee').text(' $' + shipping_amount);
+        $('#shipping_amount').val(initialShippingFee)
+        $('#total_amount').val(cart_amount + shipping_amount)
+        $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+
+        // 更改運送方式
+        $('input[name="checkout_delivery"]').change(function() {
+            var shippingFee = $(this).data('shipping-fee');
+
+            // 当选择框改变时的逻辑
+            $('#shipping_fee').text(' $' + shippingFee);
+            shipping_amount = parseInt(shippingFee);
+            $('#shipping_amount').val(shipping_amount);
+            $('#total_amount').val(cart_amount + shipping_amount)
+            $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+        });
+    });
+
     $(document).on('change', '#Country', function() {
         var selectedCountry = $(this).val();
         var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');
         var othersDeliveryOptions = $('#othersDeliveryOptions');
+        var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
+        var initialShippingFee = 0;
+        $('#shipping_fee').text(' $' + initialShippingFee);
+        $('#total_amount_view').text(' $' + (initialCartTotal + initialShippingFee));
+        $('#total_amount').val(parseInt(initialCartTotal) + parseInt(initialShippingFee))
 
         if (selectedCountry === '臺灣') {
             taiwanDeliveryOptions.show();
@@ -893,8 +929,11 @@ foreach ($this->cart->contents() as $items) {
         if ($('#cart_total').val() != '') {
             data += '<tr><td>購物車小計</td><td>' + $('#cart_total').val() + '</td></tr>';
         }
+        if ($('#shipping_amount').val() != '') {
+            data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';
+        }
         if ($('#total_amount').val() != '') {
-            data += '<tr><td>總計</td><td style="color:red;font-size:20px">' + $('#total_amount').val() + '</td></tr>';
+            data += '<tr><td>總計</td><td style="color:red;font-size:20px">$' + $('#total_amount').val() + '</td></tr>';
         }
         data += "</tbody></table>";
         $(".confirm_info").html(data);

@@ -64,7 +64,7 @@
                                         <th scope="col" class="text-nowrap">商品</th>
                                     </tr>
                                 </thead>
-                                <? $count = 1;
+                                <?php $count = 1;
                                 $total = 0;
                                 if (!empty($order_item)) {
                                     foreach ($order_item as $item) {
@@ -139,7 +139,7 @@
                             </table>
                             <hr>
                             <span class="front_title">小計：<span class="money_size">$
-                                    <?php echo number_format($total) ?> </span></span>
+                                    <?php echo ((int)$order['order_discount_total'] - (int)$order['order_delivery_cost']); ?> </span></span>
                             <hr>
                             <?php if (!empty($order['order_store_address'])) : ?>
                                 <h3>取貨方式：

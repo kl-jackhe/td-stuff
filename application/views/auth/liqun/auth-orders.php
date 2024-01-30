@@ -25,7 +25,7 @@
                                 <span><br></span>
                                 <span><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ self.created_at }}</span>
                             </ol>
-                            <ol class="col-2 align-self-center text-center">{{ self.order_total }}</ol>
+                            <ol class="col-2 align-self-center text-center">{{ self.order_discount_total }}</ol>
 
                             <ol class="col-2 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ (self.order_pay_status == 'paid') ? '已付款' : '未付款' }}</ol>
                             <ol class="col-3 align-self-center text-center" v-if="self.order_step == 'confirm'">{{ (self.SelfLogistics || self.AllPayLogisticsID || self.CVSPaymentNo) ? "已開設貨運單" : "未出貨" }}</ol>

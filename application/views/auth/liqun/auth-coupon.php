@@ -17,13 +17,13 @@
                         <ol class="col-2 align-self-center text-center">可用次數</ol>
                         <ol class="col-3 align-self-center text-center">到期日</ol>
                     </li>
-                    <a v-for="self in coupon.slice(pageStart, pageEnd)" class="orderInformation">
+                    <a v-for="self in coupon" class="orderInformation">
                         <li class="row">
                             <ol class="col-7 align-self-center text-center">
                                 <span><i class="fa fa-search-plus"></i>&nbsp;{{ self.name }}</span>
                             </ol>
                             <ol class="col-2 align-self-center text-center">{{ (self.use_limit_enable == '1') ? self.use_limit_number : '無限制' }}</ol>
-                            <ol class="col-3 align-self-center text-center">{{ self.discontinued_at }}</ol>
+                            <ol class="col-3 align-self-center text-center"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ self.discontinued_at.substring(0, 10) }}</ol>
                         </li>
                     </a>
                 </div>

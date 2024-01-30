@@ -39,4 +39,29 @@ class Checkout_model extends CI_Model
             return false;
         }
     }
+
+    function getCoustomCoupons($id)
+    {
+        $this->db->select('*');
+        $this->db->where('custom_id', $id);
+        $this->db->order_by('LENGTH(type), type');
+        $query = $this->db->get('new_coupon_custom');
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
+    function getCouponName($id)
+    {
+        $this->db->select('name');
+        $this->db->where('id', $id);
+        $query = $this->db->get('new_coupon');
+        if ($query->num_rows() > 0) {
+            return $query->row_array();
+        } else {
+            return false;
+        }
+    }
 }

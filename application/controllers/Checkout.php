@@ -69,7 +69,18 @@ class Checkout extends Public_Controller
 			$this->render('checkout/index');
 		}
 		if ($this->is_liqun_food) {
-			$this->data['coupon'] = $this->coupon_model->getShareCoupon();
+			$this->data['use_coupon'] = array();
+			// 優惠券
+			$coupon_arr = $this->checkout_model->getCoustomCoupons($this->session->userdata('user_id'));
+			foreach ($coupon_arr as &$self) {
+				$save_arr = $this->checkout_model->getCouponName($self['coupon_id']);
+				$self['name'] = $save_arr['name'];
+			}
+			unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
+			$this->data['coupon'] = $coupon_arr;
+			// echo '<pre>';
+			// print_r($this->data['coupon']);
+			// echo '</pre>';
 			$this->render('checkout/liqun_index');
 		}
 		if ($this->is_partnertoys) {
@@ -349,6 +360,8 @@ class Checkout extends Public_Controller
 		}
 
 		$order_total = intval($this->cart->total() + (int)$delivery_cost);
+		$order_discount_total = intval((int)$this->input->post('cart_total') + (int)$delivery_cost);
+		$order_discount_price = intval((int)$this->cart->total() - (int)$this->input->post('cart_total'));
 
 		$order_pay_status = 'not_paid';
 
@@ -363,8 +376,8 @@ class Checkout extends Public_Controller
 			'customer_phone' => $this->input->post('phone'),
 			'customer_email' => $this->input->post('email'),
 			'order_total' => $order_total,
-			'order_discount_total' => $order_total,
-			// 'order_discount_price' => get_empty($discount_price),
+			'order_discount_total' => $order_discount_total,
+			'order_discount_price' => $order_discount_price,
 			'order_delivery_cost' => $delivery_cost,
 			'order_delivery_address' => $order_delivery_address,
 			'store_id' => get_empty($this->input->post('storeid')),
