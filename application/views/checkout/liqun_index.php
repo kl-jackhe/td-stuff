@@ -283,7 +283,7 @@ foreach ($this->cart->contents() as $items) {
                                             <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
                                                 <div class="col-12 row couponContent">
                                                     <div class="col-md-12 col-lg-3 couponTitle">
-                                                        <span class="coupon_shipping transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-name="<?= $self['name'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">免運費</span>
+                                                        <span class="coupon_shipping transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">免運費</span>
                                                     </div>
                                                     <div class="col-md-12 col-lg-9 couponDescription">
                                                         <!-- 普通的点击事件，通过 JavaScript 更新隐藏的表单字段的值 -->
@@ -296,7 +296,7 @@ foreach ($this->cart->contents() as $items) {
                                             <?php if (empty($self['use_type_name']) || (($self['use_type_name'] == 'qty' || $self['use_type_name'] == 'price') && $this->cart->total() >= $self['use_type_number'])) : ?>
                                                 <div class="col-12 row couponContent">
                                                     <div class="col-md-12 col-lg-3 couponTitle">
-                                                        <span class="coupon_money transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-name="<?= $self['name'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">折扣優惠</span>
+                                                        <span class="coupon_money transitionAnimation" data-coupon-id="<?= $self['id'] ?>" data-coupon-type="<?= $self['type'] ?>" data-coupon-discount="<?= $self['discount_amount'] ?>">折扣優惠</span>
                                                     </div>
                                                     <div class="col-md-12 col-lg-9 couponDescription">
                                                         <span class="couponName"><?= $self['name'] ?></span>
@@ -580,6 +580,7 @@ foreach ($this->cart->contents() as $items) {
 <script>
     $(document).ready(function() {
         // 初始化購物車總計
+        var coupon_type = '';
         var cart_amount = 0;
         var shipping_amount = 0;
         var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
@@ -590,13 +591,14 @@ foreach ($this->cart->contents() as $items) {
         $('.couponTitle span').click(function() {
             // 已選COUPON
             var couponId = $(this).data('coupon-id');
+            coupon_type = $(this).data('coupon-type');
             var usedCouponInput = $('#used_coupon');
             var currentValue = usedCouponInput.val();
 
             // 如果当前值等于点击的couponId，清空；否则，更新为点击的couponId
             usedCouponInput.val((currentValue === couponId.toString()) ? '' : couponId);
             // console.log($('#used_coupon').val());
-            
+
             // 判断是否已经有 active 类，如果有，则移除；如果没有，则添加
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
@@ -630,6 +632,9 @@ foreach ($this->cart->contents() as $items) {
 
         // 初始化選所選運送方式
         var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
+        if (coupon_type == 'free_shipping') {
+            var initialShippingFee = 0;
+        }
         $('#shipping_fee').text(' $' + initialShippingFee.toFixed(0));
         shipping_amount = initialShippingFee.toFixed(0);
         $('#shipping_amount').val(shipping_amount);
@@ -639,6 +644,9 @@ foreach ($this->cart->contents() as $items) {
         // 更改運送方式
         $('input[name="checkout_delivery"]').change(function() {
             var shippingFee = $(this).data('shipping-fee');
+            if (coupon_type == 'free_shipping') {
+                var shippingFee = 0;
+            }
 
             // 当选择框改变时的逻辑
             $('#shipping_fee').text(' $' + shippingFee.toFixed(0));

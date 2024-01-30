@@ -348,6 +348,10 @@ class Checkout extends Public_Controller
 			$delivery_cost = $self['shipping_cost'];
 		}
 
+		if ($this->input->post('shipping_amount') == 0) {
+			$delivery_cost = 0;
+		}
+
 		$order_delivery_address = '';
 		if (!empty($this->input->post('Country'))) {
 			$order_delivery_address .= $this->input->post('Country');
