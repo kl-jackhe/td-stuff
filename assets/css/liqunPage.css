@@ -1044,6 +1044,7 @@ label.required::before {
     }
 
     .product_category {
+        font-size: 10px;
         display: inline-block;
         width: 100%;
         padding: 6px 2px 6px 2px;
@@ -1067,19 +1068,12 @@ label.required::before {
 }
 
 #product_index .product_name {
+    height: 6vh;
     padding-bottom: 10px;
 }
 
 #product_index .product_price {
     line-height: 35px;
-}
-
-#zoomA {
-    transition: transform ease-in-out 0s;
-}
-
-#zoomA:hover {
-    transform: scale(1.05);
 }
 
 .select_product {
@@ -1235,4 +1229,122 @@ label.required::before {
 
 .tableOut tbody tr th {
     padding: 10px;
+}
+
+.product_description img {
+    width: 100%;
+    max-width: 900px;
+    height: 100%;
+}
+
+.qty {
+    width: 40px;
+    height: 35px;
+    text-align: center;
+    border: 0;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+}
+
+input.qtyplus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+}
+
+input.qtyminus {
+    width: 25px;
+    height: 35px;
+    border: 1px solid #aaa;
+    background: #f8f8f8;
+}
+
+.button_border_style_l {
+    border: 1px solid #B5ACA5;
+    padding: 0px 5px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
+    color: #524535;
+    background: #fff;
+}
+
+.button_border_style_r {
+    border: 1px solid #B5ACA5;
+    padding: 0px 5px 0px 5px;
+    border-radius: 0px 5px 5px 0px;
+    color: #C52B29;
+    background: #fff;
+}
+
+.input_border_style {
+    background-color: #fff !important;
+    border-top: 1px solid #B5ACA5;
+    border-bottom: 1px solid #B5ACA5;
+    padding: 0px;
+    height: 26px;
+    text-align: center;
+}
+
+.add_product {
+    background-color: #f4f2f2;
+    color: #fff !important;
+    width: 100%;
+    line-height: 1.8;
+    padding: 0;
+}
+
+.product_view_img_style {
+    border-radius: 15px;
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+}
+
+
+.reminderGraph img {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+}
+
+#dynamicCarousel .carousel-inner img {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 50px;
+}
+
+#dynamicCarousel .carousel-control-prev,
+#dynamicCarousel .carousel-control-next {
+    margin: 0 20%;
+    filter: brightness(150%);
+}
+
+@media (max-width:767px) {
+    .reminderGraph img {
+        width: 100%;
+    }
+
+    #dynamicCarousel .carousel-inner img {
+        width: 100%;
+    }
+
+    #dynamicCarousel .carousel-control-prev,
+    #dynamicCarousel .carousel-control-next {
+        margin: 0;
+    }
+}
+
+.jumpToCombine {
+    padding: 0 10px;
+    color: #007bff;
+    border-radius: 5px;
+    border: 1px solid #007bff;
+    cursor: pointer;
+}
+
+.jumpToCombine:hover {
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #007bff;
 }

@@ -13,19 +13,19 @@ class Checkout extends Public_Controller
 			$this->load->model('coupon_model');
 		}
 
-		// Check if aesKey and aesIv are already set in flashdata
-		if (!$this->session->flashdata('aesKey') || !$this->session->flashdata('aesIv')) {
+		// Check if aesKey and aesIv are already set in flashdata(userdata)
+		if (!$this->session->userdata('aesKey') || !$this->session->userdata('aesIv')) {
 			// If not set, generate new random values
 			$this->aesKey = openssl_random_pseudo_bytes(32); // 256 bits (32 bytes) key
 			$this->aesIv = openssl_random_pseudo_bytes(16);  // 128 bits (16 bytes) IV
 
-			// Save them in flashdata
-			$this->session->set_flashdata('aesKey', $this->aesKey);
-			$this->session->set_flashdata('aesIv', $this->aesIv);
+			// Save them in flashdata(userdata)
+			$this->session->set_userdata('aesKey', $this->aesKey);
+			$this->session->set_userdata('aesIv', $this->aesIv);
 		} else {
-			// If already set, retrieve them from flashdata
-			$this->aesKey = $this->session->flashdata('aesKey');
-			$this->aesIv = $this->session->flashdata('aesIv');
+			// If already set, retrieve them from flashdata(userdata)
+			$this->aesKey = $this->session->userdata('aesKey');
+			$this->aesIv = $this->session->userdata('aesIv');
 		}
 	}
 
@@ -72,7 +72,7 @@ class Checkout extends Public_Controller
 			$this->data['use_coupon'] = array();
 			// 優惠券
 			$coupon_arr = $this->checkout_model->getCoustomCoupons($this->session->userdata('user_id'));
-			if(!empty($coupon_arr)){
+			if (!empty($coupon_arr)) {
 				foreach ($coupon_arr as &$self) {
 					$save_arr = $this->checkout_model->getCouponName($self['coupon_id']);
 					$self['name'] = $save_arr['name'];
@@ -106,10 +106,62 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
+	public function fmmap()
+	{
+		$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '&freeze=false';
+
+		$header = array(
+			"Content-Type: application/x-www-form-urlencoded",
+			"Authorization: Bearer " . $this->get_ecb_token()
+		);
+
+		$options = array(
+			'http' => array(
+				'method' => 'GET',
+				'header' => implode("\r\n", $header),
+			),
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		if ($res === FALSE) {
+			// 處理錯誤
+			echo "Error: Unable to fetch data.";
+		} else {
+			// 解析 JSON
+			$data = json_decode($res, true);
+			// 檢查 API 回應
+			if (isset($data['response']) && $data['response'] === 'success') {
+				// 獲取 access_token
+				$token = $data['data']['access_token'];
+				// echo '<pre>';
+				// print_r($token);
+				// echo '</pre>';
+				return $token;
+			} else {
+				// 顯示完整的 API 回應
+				echo '<pre>';
+				print_r($data);
+				echo '</pre>';
+				echo '<pre>';
+				print_r($header);
+				echo '</pre>';
+				return false;
+			}
+		}
+	}
+
 	public function get_ecb_token()
 	{
-		$API_ID = '0032';
-		$API_KEY = 'viSAcHt6F1c438Fz';
+		$API_ID = get_setting_general('FM_API_ID');
+		$API_KEY = get_setting_general('FM_API_KEY');
 
 		$url = 'https://ecbypass.com.tw/api/v2/token/authorize.php';
 
@@ -123,11 +175,6 @@ class Checkout extends Public_Controller
 				'method' => 'GET',
 				'header' => implode("\r\n", $header),
 			),
-			// 'ssl' => array(
-			// 	'verify_peer' => true,
-			// 	'verify_peer_name' => true,
-			// 	'allow_self_signed' => false,
-			// ), 
 			'ssl' => array(
 				'verify_peer' => false,
 				'verify_peer_name' => false,
@@ -153,20 +200,23 @@ class Checkout extends Public_Controller
 				if (isset($data['response']) && $data['response'] === 'success') {
 					// 獲取 access_token
 					$token = $data['data']['access_token'];
-					echo '<pre>';
-					print_r($token);
-					echo '</pre>';
+					// echo '<pre>';
+					// print_r($token);
+					// echo '</pre>';
+					return $token;
 				} else {
 					// 處理 API 錯誤回應
 					echo 'API Error: ' . (isset($data['error']) ? $data['error'] : 'Unknown error');
 					// 顯示完整的 API 回應
-					echo '<pre>';
-					print_r($data);
-					echo '</pre>';
+					// echo '<pre>';
+					// print_r($data);
+					// echo '</pre>';
+					return false;
 				}
 			} else {
 				// 處理 JSON 解析錯誤
 				echo 'JSON Error: ' . json_last_error_msg();
+				return false;
 			}
 		}
 	}
@@ -342,7 +392,9 @@ class Checkout extends Public_Controller
 				}
 			}
 		}
-		$customer_id = (isset($this->current_user->id) ? $this->current_user->id : $this->get_users_id());
+
+		// $customer_id = (isset($this->current_user->id) ? $this->current_user->id : $this->get_users_id());
+		$customer_id = (isset($this->current_user->id) ? $this->current_user->id : -1);
 
 		$delivery_cost = 0;
 		if (!empty($this->input->post('checkout_delivery'))) {
@@ -766,19 +818,25 @@ class Checkout extends Public_Controller
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
-		echo $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv);
+
+		// echo "<pre>";
+		// print_r($this->data['order_item']);
+		// echo "</pre>";
+
 		if (!empty($this->data['order'])) {
 			$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
 			// debug unknow users relogin
-			if (empty($this->session->userdata('user_id'))) {
-				$query = $this->db->select('username, email, id, password, active, last_login')
-					->where('username', $this->data['order']['customer_name'])
-					->limit(1)
-					->order_by('id', 'desc')
-					->get($this->ion_auth_model->tables['users']);
-				$user = $query->row();
-				$this->ion_auth_model->set_session($user);
-				$this->ion_auth_model->update_last_login($user->id);
+			if (!empty($this->data['users'])) {
+				if (empty($this->session->userdata('user_id'))) {
+					$query = $this->db->select('username, email, id, password, active, last_login')
+						->where('username', $this->data['order']['customer_name'])
+						->limit(1)
+						->order_by('id', 'desc')
+						->get($this->ion_auth_model->tables['users']);
+					$user = $query->row();
+					$this->ion_auth_model->set_session($user);
+					$this->ion_auth_model->update_last_login($user->id);
+				}
 			}
 		}
 
@@ -949,9 +1007,9 @@ class Checkout extends Public_Controller
 				$obj->Send['LogisticsSubType'] = $LogisticsSubType; // 超商選擇
 				$obj->Send['GoodsAmount'] = (int)$this->input->post('TradeAmt'); // 商品總價
 				$obj->Send['GoodsName'] = 'Cargo'; // 商品名稱
-				$obj->Send['SenderName'] = '夥伴玩具'; // 電商名稱
-				$obj->Send['SenderPhone'] = '0422029095'; // 電商電話
-				$obj->Send['SenderCellPhone'] = '0912345678'; // 電商手機
+				$obj->Send['SenderName'] = get_setting_general('short_name'); // 電商名稱
+				$obj->Send['SenderPhone'] = get_setting_general('phone1'); // 電商電話
+				$obj->Send['SenderCellPhone'] = get_setting_general('cellphone1'); // 電商手機
 				$obj->Send['ReceiverName'] = $row['customer_name'];
 				$obj->Send['ReceiverPhone'] = '';
 				$obj->Send['ReceiverCellPhone'] = $row['customer_phone'];

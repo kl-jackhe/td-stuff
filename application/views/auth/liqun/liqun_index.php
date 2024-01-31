@@ -8,6 +8,11 @@
         <div class="section-contents">
             <div class="container">
                 <h1><span>{{ pageTitle }}</span></h1>
+                <?php
+                // echo '<pre>';
+                // print_r($this->session->userdata());
+                // echo '</pre>';
+                ?>
             </div>
             <?php if (empty($this->session->userdata('user_id'))) : ?>
                 <!-- 尚未登入 -->

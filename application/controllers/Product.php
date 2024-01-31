@@ -182,10 +182,18 @@ class Product extends Public_Controller
 		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $id);
 		$this->data['page_title'] = $this->data['product']['product_name'];
 		if ($this->is_liqun_food) {
+			$this->data['product_img_count'] = 0;
 			$this->render('product/liqun/view');
 		} else {
 			$this->render('product/view');
 		}
+	}
+
+	function set_product_img_count()
+	{
+		$count = $this->input->post('count');
+		$this->data['product_img_count'] = $count;
+		return;
 	}
 
 	function confirm_product_limit_time($self)

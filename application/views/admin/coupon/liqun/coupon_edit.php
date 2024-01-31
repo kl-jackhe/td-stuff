@@ -120,7 +120,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="use_product_enable" class="col-md-3 control-label">商品限定：</label>
+              <label for="use_product_enable" class="col-md-3 control-label">商品限定(暫無功能)：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select name="use_product_enable" id="use_product_enable" class="form-control" onchange="toggleProductReadOnly()">

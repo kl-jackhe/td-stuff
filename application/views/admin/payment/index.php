@@ -28,21 +28,21 @@
     <?php echo form_close(); ?>
     </div>
   </div> -->
-  <div class="col-md-12">
-    <h1>金鑰管理</h1>
-    <div class="content-box-large">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>金流名稱</th>
-            <th>MerchantID</th>
-            <th>HashKey</th>
-            <th>HashIV</th>
-            <th>狀態</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <?php if (!empty($features_pay)) : ?>
+  <?php if (!empty($features_pay)) : ?>
+    <div class="col-md-12">
+      <h1>金鑰管理</h1>
+      <div class="content-box-large">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>金流名稱</th>
+              <th>MerchantID</th>
+              <th>HashKey</th>
+              <th>HashIV</th>
+              <th>狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
           <?php foreach ($features_pay as $self) : ?>
             <tr>
               <td><?php echo $self['pay_name'] ?></td>
@@ -62,10 +62,10 @@
               </td>
             </tr>
           <?php endforeach; ?>
-        <?php endif; ?>
-      </table>
+        </table>
+      </div>
     </div>
-  </div>
+  <?php endif; ?>
   <div class="col-md-12">
     <h1>付款方式管理</h1>
     <div class="content-box-large">

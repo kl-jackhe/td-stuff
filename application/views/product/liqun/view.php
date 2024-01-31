@@ -1,83 +1,3 @@
-<style>
-    .product_description img {
-        width: 100%;
-        max-width: 900px;
-        height: 100%;
-    }
-
-    .qty {
-        width: 40px;
-        height: 35px;
-        text-align: center;
-        border: 0;
-        border-top: 1px solid #aaa;
-        border-bottom: 1px solid #aaa;
-    }
-
-    input.qtyplus {
-        width: 25px;
-        height: 35px;
-        border: 1px solid #aaa;
-        background: #f8f8f8;
-    }
-
-    input.qtyminus {
-        width: 25px;
-        height: 35px;
-        border: 1px solid #aaa;
-        background: #f8f8f8;
-    }
-
-    .button_border_style_l {
-        border: 1px solid #B5ACA5;
-        padding: 0px 5px 0px 5px;
-        border-radius: 5px 0px 0px 5px;
-        color: #524535;
-        background: #fff;
-    }
-
-    .button_border_style_r {
-        border: 1px solid #B5ACA5;
-        padding: 0px 5px 0px 5px;
-        border-radius: 0px 5px 5px 0px;
-        color: #C52B29;
-        background: #fff;
-    }
-
-    .input_border_style {
-        background-color: #fff !important;
-        border-top: 1px solid #B5ACA5;
-        border-bottom: 1px solid #B5ACA5;
-        padding: 0px;
-        height: 26px;
-        text-align: center;
-    }
-
-    .add_product {
-        <? if ($this->is_td_stuff) { ?>background-color: #68396D;
-        color: #fff !important;
-        <? } ?><? if ($this->is_liqun_food) { ?>background-color: #f4f2f2;
-        color: #fff !important;
-        <? } ?>width: 100%;
-        line-height: 1.8;
-        padding: 0;
-    }
-
-    #zoomA {
-        transition: transform ease-in-out 0s;
-    }
-
-    #zoomA:hover {
-        transform: scale(1.05);
-    }
-
-    .product_view_img_style {
-        border-radius: 15px;
-        max-width: 300px;
-        max-height: 300px;
-        width: 100%;
-    }
-</style>
 <div role="main" class="main product-view">
     <section class="form-section content_auto_h">
         <div class="container-fluid">
@@ -90,16 +10,33 @@
                     </div>
                     <div class="col-md-8 text-center product_description">
                         <p class="m-0" style="font-size: 28px;">
-                            <?= $product['product_name'] ?>
+                            <?= $product['product_name'] ?>&emsp;
+                            <span id="jumpToCombine" class="transitionAnimation jumpToCombine"><i class="fa fa-caret-square-down" aria-hidden="true"></i>&nbsp;跳至方案選擇</span>
                         </p>
-                        <?= (!empty($product['product_description']) ? $product['product_description'] : '<h3>暫無商品描述</h3>') ?>
                     </div>
                     <div class="col-md-8 text-center product_description">
+                        <div id="dynamicCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="3000">
+                            <div class="carousel-inner">
+                                <!-- Carousel items will be dynamically added here -->
+                                <?= (!empty($product['product_description']) ? $product['product_description'] : '<h3>暫無商品描述</h3>') ?>
+                            </div>
+                            <a class="carousel-control-prev" href="#dynamicCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#dynamicCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                            <ol class="carousel-indicators" style="bottom: 50px;">
+                                <!-- Dynamic carousel-indicators -->
+                            </ol>
+                        </div>
                         <? if ($this->is_liqun_food) : ?>
-                            <p class="m-0" style="font-size: 28px;">
-                            <p><img src="../../../assets/uploads/page_reminder-shopping.jpg" alt="page_cooking-1" /></p>
-                            <p><img src="../../../assets/uploads/page_reminder.jpg" alt="page_cooking-1" /></p>
-                            </p>
+                            <div class="reminderGraph">
+                                <img src="../../../assets/fixed-graph/page_reminder-shopping.jpg" alt="page_cooking-1" />
+                                <img src="../../../assets/fixed-graph/page_reminder.jpg" alt="page_cooking-1" />
+                            </div>
                         <? else : ?>
                             <p class="m-0" style="font-size: 28px;">
                                 <?= $product['product_note'] ?>
@@ -111,7 +48,7 @@
                             <p><img src="/assets/uploads/Banner/page_banner_free_shipping_1000-1.jpg"></p>
                         <? } ?>
                     </div>
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 text-center" id="selectCombine">
                         <p class="m-0" style="font-size: 28px;">方案選擇</p>
                     </div>
                     <div class="col-md-8 py-3">
@@ -300,14 +237,93 @@
         </div>
     </section>
 </div>
+<!-- Jump to the combine select -->
+<script>
+    $(document).ready(function() {
+        // 给 span 元素添加点击事件
+        $("#jumpToCombine").on("click", function() {
+            // 使用 jQuery 动画效果滚动到目标
+            $("html, body").animate({
+                scrollTop: $("#selectCombine").offset().top
+            }, 1000); // 1000 是滚动的时间，以毫秒为单位
+        });
+    });
+</script>
+
+<!-- Initial carousel -->
+<script>
+    $(document).ready(function() {
+        $('.carousel-control-prev, .carousel-control-next, .carousel-indicators').css('display', 'none');
+    })
+</script>
+
+<!-- Carousel -->
+<script>
+    // $(document).ready(function() {
+    //     var productDescription = '';
+    //     try {
+    //         // 假设 $product['product_description'] 包含 HTML 内容
+    //         productDescription = '<?= $product["product_description"] ?>';
+    //     } catch (error) {
+    //         console.error('Error fetching product description:', error);
+    //         // 在這裡可以執行一些替代操作，或者忽略錯誤繼續執行
+    //     }
+
+    //     var matches = [];
+    //     // 使用 jQuery 解析 HTML 内容并提取所有图片路径
+    //     $(productDescription).find('img').each(function() {
+    //         matches.push($(this).attr('src'));
+    //     });
+
+    //     // 如果没有在 <p> 中找到图像，尝试直接查找图像标记
+    //     if (matches.length === 0) {
+    //         $(productDescription).filter('img').each(function() {
+    //             matches.push($(this).attr('src'));
+    //         });
+    //     } else {
+    //         $('p img').each(function() {
+    //             this.style.setProperty('display', 'none', 'important');
+    //         });
+    //         $('.carousel-control-prev, .carousel-control-next, .carousel-indicators').css('display', '');
+    //     }
+
+
+
+    //     $('p img').each(function() {
+    //         this.style.setProperty('display', 'none', 'important');
+    //     });
+
+    //     // 创建 Carousel
+    //     var carouselInner = $("#dynamicCarousel .carousel-inner");
+    //     var carouselIndicators = $("#dynamicCarousel .carousel-indicators");
+
+
+    //     $.each(matches, function(index, imagePath) {
+    //         var item = $("<div>").addClass("carousel-item");
+    //         if (index === 0) {
+    //             item.addClass("active");
+    //         }
+
+    //         var img = $("<img>").attr("src", imagePath);
+
+    //         item.append(img);
+    //         carouselInner.append(item);
+
+    //         // 创建相应的 carousel indicator
+    //         var indicator = $("<li>")
+    //             .attr({
+    //                 'data-target': "#dynamicCarousel",
+    //                 'data-slide-to': index
+    //             })
+    //             .addClass(index === 0 ? 'active' : '');
+
+    //         carouselIndicators.append(indicator);
+    //     });
+    // });
+</script>
+
 <script>
     function add_cart(combine_id, limit_enable = 'NO', limit_qty = 0) {
-        // 檢查登入
-        <?php if (empty($this->session->userdata('user_id'))) : ?>
-            alert('請先登入再進行操作。');
-            window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
-            return;
-        <?php endif; ?>
         var qty = document.getElementById("qty_" + combine_id).value;
         if (limit_enable == 'YES' && parseInt(qty) > parseInt(limit_qty)) {
             alert('商品數量不得超過' + limit_qty + '個');

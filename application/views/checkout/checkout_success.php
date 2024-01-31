@@ -68,7 +68,7 @@
                                 $total = 0;
                                 if (!empty($order_item)) {
                                     foreach ($order_item as $item) {
-                                        if ($item['product_id'] == 0) { ?>
+                                        if ($item['product_id'] != 0) { ?>
                                             <tbody>
                                                 <tr>
                                                     <td>
@@ -133,7 +133,7 @@
                                             </tbody>
                                             <?php $count++; ?>
                                             <?php $total += $item['order_item_qty'] * $item['order_item_price']; ?>
-                                <?php }
+                                <?php  }
                                     }
                                 } ?>
                             </table>
