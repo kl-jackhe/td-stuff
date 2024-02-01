@@ -355,9 +355,18 @@ class Checkout extends Public_Controller
 			// print_r($selected_coupon);
 			// echo '</pre>';
 			if (!empty($selected_coupon)) {
+				$limit_number = (int)$selected_coupon['use_limit_number'] - 1;
+				if ($limit_number < 0) {
+					echo '
+					<script>
+						alert("優惠券錯誤請重新嘗試");
+						window.history.back();
+					</script>';
+					return;
+				}
 				// 在这里你需要处理要更新的字段和值，例如：
 				$data = array(
-					'use_limit_number' => (int)$selected_coupon['use_limit_number'] - 1,
+					'use_limit_number' => $limit_number,
 				);
 				$this->db->where('id', $coupon_custom_id);
 				$this->db->update('new_coupon_custom', $data);
