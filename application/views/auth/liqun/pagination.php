@@ -1,5 +1,5 @@
 <!-- 分頁 -->
-<ul v-if="order && totalPages !== 0" class="pagination" id="pagination_bottom">
+<ul v-if="order && totalPages !== 0" class="pagination">
     <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="currentPage !== 1 && setPage(1)">
         <a class="page_link" href="" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
@@ -23,4 +23,8 @@
             <span aria-hidden="true">&raquo;</span>
         </a>
     </li>
+</ul>
+
+<ul class="pagination pagination_bottom">
+    <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ this.order.length }}</span>
 </ul>

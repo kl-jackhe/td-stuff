@@ -68,7 +68,7 @@
               <label for="discount_amount" class="col-md-3 control-label required">優惠券折扣：</label>
               <div class="col-md-9">
                 <input type="number" class="form-control" id="discount_amount" name="discount_amount" value="0" required>
-                <p>備注：現金折扣直接輸入數字, 例如: 折扣11元則輸入「11」, 百分比折扣則輸入小數點, 例如: 打85折則輸入「0.85」</p>
+                <p>備注：現金折扣直接輸入數字，例如：折扣11元則輸入「11」，百分比折扣則輸入小數點，例如：打85折則輸入「0.85」。</p>
               </div>
             </div>
             <div class="form-group">
@@ -118,8 +118,8 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="use_product_enable" class="col-md-3 control-label">商品限定(暫無功能)：</label>
+            <div class="form-group" style="display: none;">
+              <label for="use_product_enable" class="col-md-3 control-label">商品限定(暫無)：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select name="use_product_enable" id="use_product_enable" class="form-control" onchange="toggleProductReadOnly()">
@@ -148,7 +148,7 @@
           </div>
         </div>
         <?php if (!empty($products)) : ?>
-          <div class="col-md-3 previewTag">
+          <div class="col-md-3 previewTag" style="display: none;">
             <p class="selectedCheckboxTitle text-center">
               <span>限定商品成員</span>
             </p>
@@ -163,7 +163,7 @@
               </label><br>
             <?php endforeach; ?>
           </div>
-          <div class="col-md-3 previewTag">
+          <div class="col-md-3 previewTag" style="display: none;">
             <p class="selectedCheckboxTitle text-center">
               <span>已選限定商品</span>
             </p>

@@ -45,7 +45,6 @@
       <button type="button" onClick="returnTo()" class="btn btn-info hidden-print">返回上一頁</button>
     </div>
     <div class="content-box-large">
-
       <div class="row">
         <div class="col-md-6">
           <div class="form-horizontal">
@@ -69,7 +68,7 @@
               <label for="discount_amount" class="col-md-3 control-label required">優惠券折扣：</label>
               <div class="col-md-9">
                 <input type="number" class="form-control" id="discount_amount" name="discount_amount" value="<?= $coupon['discount_amount'] ?>" required>
-                <p>備注：現金折扣直接輸入數字, 例如: 折扣11元則輸入「11」, 百分比折扣則輸入小數點, 例如: 打85折則輸入「0.85」</p>
+                <p>備注：現金折扣直接輸入數字，例如：折扣11元則輸入「11」，百分比折扣則輸入小數點，例如：打85折則輸入「0.85」。</p>
               </div>
             </div>
             <div class="form-group">
@@ -77,13 +76,14 @@
               <div class="col-md-9">
                 <div class="form-inline">
                   <select class="form-control" id="use_limit_enable" name="use_limit_enable" onchange="toggleLimitReadOnly()">
-                    <option value="0" <?= ($coupon['use_limit_enable'] == '0') ? "selected" : ""; ?>>無限</option>
-                    <option value="1" <?= ($coupon['use_limit_enable'] == '1') ? "selected" : ""; ?>>僅限</option>
+                    <option value="0" <?= ($coupon['use_limit_enable'] == '0') ? 'selected' : ''; ?>>無限</option>
+                    <option value="1" <?= ($coupon['use_limit_enable'] == '1') ? 'selected' : ''; ?>>僅限</option>
                   </select>
                   <div style="display: inline-block;">
                     <input type="number" class="form-control" id="use_limit_number" name="use_limit_number" placeholder="請輸入限制之使用次數" value="<?= $coupon['use_limit_number'] ?>">
                   </div>
                 </div>
+                <p>備注：為確保不會誤改到已經使用過的顧客的次數限定，故此處無法對已擁有該優惠券的客戶的次數限定部分進行修改，若需調整此部分請直接刪除此優惠券，另創一新優惠券。</p>
               </div>
             </div>
             <div class="form-group">
@@ -116,11 +116,12 @@
                     <option value="new_member" <?= ($coupon['use_member_type'] == 'new_member') ? "selected" : ""; ?>>未來新註冊的會員</option>
                     <option value="all_member" <?= ($coupon['use_member_type'] == 'all_member') ? "selected" : ""; ?>>目前有註冊的會員&未來新註冊的會員</option>
                   </select>
+                  <p>備注：修改時請注意若原為'目前有註冊的會員'或'目前有註冊的會員&未來新註冊的會員'，更改為'未來新註冊的會員'時將會把原會員擁有之對應優惠券移除。</p>
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <label for="use_product_enable" class="col-md-3 control-label">商品限定(暫無功能)：</label>
+            <div class="form-group" style="display: none;">
+              <label for="use_product_enable" class="col-md-3 control-label">商品限定(暫無)：</label>
               <div class="col-md-9">
                 <div class="form-inline">
                   <select name="use_product_enable" id="use_product_enable" class="form-control" onchange="toggleProductReadOnly()">
@@ -149,7 +150,7 @@
           </div>
         </div>
         <?php if (!empty($products)) : ?>
-          <div class="col-md-3 previewTag">
+          <div class="col-md-3 previewTag" style="display: none;">
             <p class="selectedCheckboxTitle text-center">
               <span>限定商品成員</span>
             </p>
@@ -164,7 +165,7 @@
               </label><br>
             <?php endforeach; ?>
           </div>
-          <div class="col-md-3 previewTag">
+          <div class="col-md-3 previewTag" style="display: none;">
             <p class="selectedCheckboxTitle text-center">
               <span>已選限定商品</span>
             </p>
@@ -267,14 +268,6 @@
     });
   }
 
-  function toggleTypeIsVisible() {
-    if ($('#type').val() == 'free_shipping') {
-      $('.typeIsVisible').hide();
-    } else {
-      $('.typeIsVisible').show();
-    }
-  }
-
   function toggleLimitReadOnly() {
     var selectElement = document.getElementById("use_limit_enable");
     var inputElement = document.getElementById("use_limit_number");
@@ -285,6 +278,14 @@
     } else {
       // 否則，加上readonly
       inputElement.setAttribute("readonly", "readonly");
+    }
+  }
+
+  function toggleTypeIsVisible() {
+    if ($('#type').val() == 'free_shipping') {
+      $('.typeIsVisible').hide();
+    } else {
+      $('.typeIsVisible').show();
     }
   }
 

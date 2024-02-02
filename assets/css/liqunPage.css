@@ -349,18 +349,9 @@ a {
     color: rgba(239, 132, 104, 1.0);
 }
 
-#zoomA {
-    transition: transform ease-in-out 0s;
-}
-
-#zoomA:hover {
-    transform: scale(1.05);
-}
-
 .product_img_style {
     border-radius: 15px;
-    max-width: 900px;
-    max-height: 900px;
+    height: auto;
     width: 100%;
     margin-bottom: 15px;
 }
@@ -925,7 +916,8 @@ label.required::before {
     font-size: 14px;
 }
 
-#pagination_bottom {
+.pagination_bottom {
+    font-size: 14px;
     margin-bottom: 50px;
 }
 
@@ -1054,13 +1046,11 @@ label.required::before {
 #product_index {
     font-size: 18px;
     line-height: 20px;
-    align-items: end;
 }
 
 #product_index a {
     text-decoration: none;
     color: black;
-    transition: 500ms ease 0s;
 }
 
 #product_index a:hover {
@@ -1068,8 +1058,9 @@ label.required::before {
 }
 
 #product_index .product_name {
-    height: 6vh;
     padding-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #product_index .product_price {
@@ -1077,19 +1068,13 @@ label.required::before {
 }
 
 .select_product {
+    display: inline-block;
     background-color: #f6d523;
     color: #000 !important;
     width: 50%;
     line-height: 1.8;
     padding: 0;
-}
-
-.product_img_style {
-    border-radius: 15px;
-    max-width: 900px;
-    max-height: 900px;
-    width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .product_box,
@@ -1357,4 +1342,83 @@ input.qtyminus {
 
 .itemPrice {
     color: #e30020;
+}
+
+.product_view_style_in {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+.product_view_style_in:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    transform: scale(1.05);
+}
+
+.product_view_style_out {
+    padding: 15px;
+}
+
+.page_link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #d35448;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.page_link:hover {
+    cursor: pointer;
+    /* 懸停時顯示手型游標 */
+    z-index: 2;
+    color: #fff;
+    text-decoration: none;
+    background-color: #d35448;
+    border-color: #dee2e6;
+}
+
+.page_link:focus {
+    z-index: 2;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(211, 84, 30, .25);
+}
+
+.page-item.disabled .page_link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.page-item:first-child .page_link {
+    margin-left: 0;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.page-item:last-child .page_link {
+    margin-left: 0;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.pagination .page-link.active {
+    color: #f6d523 !important;
+    border-color: #f6d523;
+    background-color: #fff;
+}
+
+.pagination .page-item a:hover {
+    border-color: #f6d523;
+    background-color: #fff;
 }

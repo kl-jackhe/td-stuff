@@ -937,7 +937,8 @@ a.logBtn {
     padding: 0 15px;
 }
 
-#pagination_bottom {
+.pagination_bottom {
+    font-size: 14px;
     margin-bottom: 50px;
 }
 

@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row product_box my-5">
                 <div class="col-12">
-                    <div class="row justify-content-center text-center">
+                    <div class="row text-center">
                         <!-- <div class="col-12 pb-3">
                             <span style="font-size: 18px;font-weight: bold;">商品分類</span>
                         </div> -->
@@ -13,7 +13,7 @@
                                 <?php foreach ($product_category as $row) { ?>
                                     <span class="product_category btn col-2" id="<?php echo 'product_category_id_' . $row['product_category_id'] ?>" onClick="searchFilter(<?php echo $row['product_category_id']; ?>)"><?php echo $row['product_category_name']; ?></span>
                                 <?php } ?>
-                                <span class="product_category btn col-2" onClick="searchFilter('')">全品項</span>
+                                <!-- <span class="product_category btn col-2" onClick="searchFilter('')">全品項</span> -->
                             <?php } ?>
                         </div>
                     </div>
@@ -27,15 +27,15 @@
     </section>
 </div>
 <script>
-    $(document).ready(function() {
-        // 取得完整的查詢字串（包括問號）
-        var queryString = window.location.search;
-        // 解析查詢字串，並建立一個包含參數和值的物件
-        var params = new URLSearchParams(queryString);
-        // 取得 id 參數的值
-        var idValue = params.get('cid');
-        searchFilter(idValue);
-    });
+    // $(document).ready(function() {
+    //     // 取得完整的查詢字串（包括問號）
+    //     var queryString = window.location.search;
+    //     // 解析查詢字串，並建立一個包含參數和值的物件
+    //     var params = new URLSearchParams(queryString);
+    //     // 取得 id 參數的值
+    //     var idValue = params.get('cid');
+    //     searchFilter(idValue);
+    // });
 
     function searchFilter(product_category) {
         $.ajax({

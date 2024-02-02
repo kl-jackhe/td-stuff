@@ -303,7 +303,7 @@ class Coupon extends Admin_Controller
             $this->db->where('id', $id);
             $this->db->update('new_coupon', $data);
 
-            if ($this->input->post('use_member_enable') == '0') {
+            if ($this->input->post('use_member_enable') == '0' || ($this->input->post('use_member_enable') == '1' && $this->input->post('use_member_type') == 'new_member')) {
                 $members = $this->coupon_model->getTotalCustom();
                 foreach ($members as $self) {
                     $this->db->where('coupon_id', $id);
@@ -343,6 +343,27 @@ class Coupon extends Admin_Controller
                                 $data['use_type_number'] = '';
                             }
                             $this->db->insert('new_coupon_custom', $data);
+                        } else {
+                            $data = array(
+                                'coupon_id' => $id,
+                                'custom_id' => $self['id'],
+                                'type' => $this->input->post('type'),
+                                'discount_amount' => $this->input->post('discount_amount'),
+                                'use_type_enable' => $this->input->post('use_type_enable'),
+                                'use_product_enable' => $this->input->post('use_product_enable'),
+                                'distribute_at' => $this->input->post('distribute_at'),
+                                'discontinued_at' => $this->input->post('discontinued_at'),
+                            );
+                            if ($this->input->post('use_type_enable') == '1') {
+                                $data['use_type_name'] = $this->input->post('use_type_name');
+                                $data['use_type_number'] = $this->input->post('use_type_number');
+                            } else {
+                                $data['use_type_name'] = '';
+                                $data['use_type_number'] = '';
+                            }
+                            $this->db->where('coupon_id', $id);
+                            $this->db->where('custom_id', $self['id']);
+                            $this->db->update('new_coupon_custom', $data);
                         }
                     }
                 }

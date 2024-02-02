@@ -462,13 +462,19 @@ foreach ($this->cart->contents() as $items) {
                                     </div>
                                     <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
                                 </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 d-none">
+                                <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">縣/市</label>
+                                        <span class="input-group-text">國家</span>
                                     </div>
-                                    <div style="width: 89.9%;">
-                                        <div id="twzipcode"></div>
-                                    </div>
+                                    <select class="form-control" name="Country" id="Country">
+                                        <option value="臺灣">臺灣</option>
+                                    </select>
+                                </div>
+                                <!-- zip of taiwan -->
+                                <div id="twzipcode" class="input-group mb-3 col-12 col-sm-8 row delivery_address">
+                                    <div class="mb-2 col-md-4 col-12" data-role="county"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="district"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode"></div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
@@ -737,9 +743,63 @@ foreach ($this->cart->contents() as $items) {
                     alert('請輸入完整的電子郵件');
                     return false;
                 }
-                if (delivery == '711_pickup') {
-                    if ($('#storename').val() == '' || $('#storeaddress').val() == '') {
+                if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery') || (($('#Country').val() != '臺灣') && delivery != 'sf_express_delivery')) {
+                    alert('請選擇運送方式');
+                    return false;
+                }
+                if (payment == '' || payment == null) {
+                    alert('請選擇付款方式');
+                    return false;
+                }
+                if (delivery == '711_pickup' || delivery == 'family_pickup') {
+                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
                         alert('請選擇取貨門市');
+                        return false;
+                    }
+                } else {
+                    if ($('#Country').val() == '請選擇國家') {
+                        alert('請選擇所在國家');
+                        return false;
+                    } else if ($('#Country').val() == '臺灣') {
+                        var countySelect = $("#twzipcode select[name='tw_county']").val();
+                        var districtSelect = $("#twzipcode select[name='tw_district']").val();
+
+                        // 檢查所在縣市
+                        if (countySelect == '') {
+                            alert('請選擇所在縣市');
+                            return false;
+                        }
+
+                        // 檢查所在鄉鎮市區
+                        if (districtSelect == '') {
+                            alert('請選擇所在鄉鎮市區');
+                            return false;
+                        }
+                    } else if ($('#Country').val() == '中國') {
+                        var provinceSelect = $("#cnzipcode select[name='cn_province']").val();
+                        var countySelect = $("#cnzipcode select[name='cn_county']").val();
+                        var districtSelect = $("#cnzipcode select[name='cn_district']").val();
+
+                        // 檢查所在省份
+                        if (provinceSelect == '') {
+                            alert('請選擇所在省份');
+                            return false;
+                        }
+
+                        // 檢查所在縣市
+                        if (countySelect == '') {
+                            alert('請選擇所在縣市');
+                            return false;
+                        }
+
+                        // 檢查所在鄉鎮市區
+                        if (districtSelect == '') {
+                            alert('請選擇所在鄉鎮市區');
+                            return false;
+                        }
+                    }
+                    if ($('#address').val() == '') {
+                        alert('請輸入詳細地址');
                         return false;
                     }
                 }
@@ -797,14 +857,47 @@ foreach ($this->cart->contents() as $items) {
         if ($('#email').val() != '') {
             data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
         }
-        if ($('#address').val() != '') {
-            data += '<tr><td>地址</td><td>' + $('#address').val() + '</td></tr>';
-        }
-        if ($('#storename').val() != '') {
-            data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
-        }
-        if ($('#storeaddress').val() != '') {
-            data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
+        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup') {
+            if ($('#Country').val() != '') {
+                data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
+            }
+            if ($('#Country').val() == '臺灣') {
+                if ($("#twzipcode select[name='tw_county']").val() != '') {
+                    data += '<tr><td>縣市</td><td>' + $("#twzipcode select[name='tw_county']").val() + '</td></tr>';
+                }
+                if ($("#twzipcode select[name='tw_district']").val() != '') {
+                    data += '<tr><td>鄉鎮市區</td><td>' + $("#twzipcode select[name='tw_district']").val() + '</td></tr>';
+                }
+                if ($("#twzipcode input[name='tw_zipcode']").val() != '') {
+                    data += '<tr><td>郵遞區號</td><td>' + $("#twzipcode input[name='tw_zipcode']").val() + '</td></tr>';
+                }
+            } else if ($('#Country').val() == '中國') {
+                if ($("#cnzipcode select[name='cn_province']").val() != '') {
+                    data += '<tr><td>省分</td><td>' + $("#cnzipcode select[name='cn_province']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode select[name='cn_county']").val() != '') {
+                    data += '<tr><td>縣市</td><td>' + $("#cnzipcode select[name='cn_county']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode select[name='cn_district']").val() != '') {
+                    data += '<tr><td>鄉鎮市區</td><td>' + $("#cnzipcode select[name='cn_district']").val() + '</td></tr>';
+                }
+                if ($("#cnzipcode input[name='cn_zipcode']").val() != '') {
+                    data += '<tr><td>郵遞區號</td><td>' + $("#cnzipcode input[name='cn_zipcode']").val() + '</td></tr>';
+                }
+            }
+            if ($('#address').val() != '') {
+                data += '<tr><td>詳細地址</td><td>' + $('#address').val() + '</td></tr>';
+            }
+        } else {
+            if ($('#storeid').val() != '') {
+                data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
+            }
+            if ($('#storename').val() != '') {
+                data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
+            }
+            if ($('#storeaddress').val() != '') {
+                data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
+            }
         }
         data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
         data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
@@ -826,16 +919,32 @@ foreach ($this->cart->contents() as $items) {
     }
 </script>
 <!-- purchase-steps -->
-<script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
+<script src="/assets/twzipcode/jquery.twzipcode.min.js"></script>
 <script>
-    $('#twzipcode').twzipcode({
-        // 'detect': true, // 預設值為 false
-        zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
-        'css': ['form-control county', 'form-control district', 'form-control zipcode'],
-        // 'countySel': '<?php // echo $user->county 
-                            ?>',
-        // 'districtSel': '<?php // echo $user->district 
-                            ?>'
+    // twzipcode
+    $(document).ready(function() {
+        // 初始化 twzipcode
+        $("#twzipcode").twzipcode();
+
+        // 禁用郵遞區號的輸入框
+        $("[name='tw_zipcode']").prop('readonly', true);
+
+        // 選擇縣市、鄉鎮市區下拉選單
+        var countySelect = $("select[name='tw_county']");
+        var districtSelect = $("select[name='tw_district']");
+        var zipcodeInput = $("input[name='tw_zipcode']");
+
+        if (countySelect.length > 0) {
+            countySelect.addClass('form-control');
+        }
+
+        if (districtSelect.length > 0) {
+            districtSelect.addClass('form-control');
+        }
+
+        if (zipcodeInput.length > 0) {
+            zipcodeInput.addClass('form-control');
+        }
     });
 </script>
 <script>
