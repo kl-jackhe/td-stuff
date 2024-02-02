@@ -189,6 +189,7 @@ foreach ($this->cart->contents() as $items) {
                     <h3>確認訂單</h3>
                     <section>
                         <h3 style="margin-top: 0px;">您共選擇 (<?= $count ?> 個項目)</h3>
+                        <input type="hidden" name="checking_cargos_value" id="checking_cargos_value" value="<?= $count ?>">
                         <table class="table table-hover m_table_none">
                             <thead>
                                 <tr>
@@ -586,10 +587,21 @@ foreach ($this->cart->contents() as $items) {
         var coupon_type = '';
         var cart_amount = 0;
         var shipping_amount = 0;
-        var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
-        $('.cart_total_display').text(' $' + initialCartTotal.toFixed(0));
-        $('#cart_total').val(initialCartTotal.toFixed(0))
-        cart_amount = initialCartTotal.toFixed(0);
+        var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
+        cart_amount = parseInt(initialCartTotal);
+        $('#cart_total').val(cart_amount)
+        $('.cart_total_display').text(' $' + cart_amount);
+
+        // 初始化整體總計
+        var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
+        if (coupon_type == 'free_shipping') {
+            initialShippingFee = 0;
+        }
+        shipping_amount = parseInt(initialShippingFee);
+        $('#shipping_fee').text(' $' + shipping_amount);
+        $('#shipping_amount').val(shipping_amount);
+        $('#total_amount').val(cart_amount + shipping_amount);
+        $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
 
         $('.couponTitle span').click(function() {
             // 已選COUPON
@@ -606,8 +618,8 @@ foreach ($this->cart->contents() as $items) {
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
                 // 更新購物車總計
-                $('.cart_total_display').text('$' + initialCartTotal.toFixed(0));
-                $('#cart_total').val(initialCartTotal.toFixed(0))
+                $('.cart_total_display').text('$' + initialCartTotal);
+                $('#cart_total').val(initialCartTotal)
             } else {
                 // 移除所有元素的选中状态
                 $('.couponTitle span').removeClass('active');
@@ -616,7 +628,7 @@ foreach ($this->cart->contents() as $items) {
                 // 更新小計
                 var couponDiscount = parseFloat($(this).data('coupon-discount'));
                 // 计算购物车小计
-                var cartTotal = parseFloat(<?php echo $this->cart->total() ?>);
+                var cartTotal = parseFloat(initialCartTotal);
 
                 if (couponDiscount < 1 && couponDiscount > 0) {
                     // 如果优惠券折扣小于1大于0，做乘法
@@ -627,22 +639,16 @@ foreach ($this->cart->contents() as $items) {
                 }
 
                 // 更新购物车小计显示
-                $('.cart_total_display').text(' $' + cartTotal.toFixed(0));
-                $('#cart_total').val(cartTotal.toFixed(0))
-                cart_amount = cartTotal.toFixed(0);
+                cart_amount = parseInt(cartTotal);
+                $('.cart_total_display').text(' $' + cart_amount);
+                $('#cart_total').val(cart_amount);
+
+                // 更新總計
+                $('#total_amount').val(cart_amount + shipping_amount);
+                $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+
             }
         });
-
-        // 初始化選所選運送方式
-        var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
-        if (coupon_type == 'free_shipping') {
-            var initialShippingFee = 0;
-        }
-        $('#shipping_fee').text(' $' + initialShippingFee.toFixed(0));
-        shipping_amount = initialShippingFee.toFixed(0);
-        $('#shipping_amount').val(shipping_amount);
-        $('#total_amount').val(parseInt(cart_amount) + parseInt(shipping_amount))
-        $('#total_amount_view').text(' $' + ((parseInt(cart_amount) + parseInt(shipping_amount))));
 
         // 更改運送方式
         $('input[name="checkout_delivery"]').change(function() {
@@ -652,11 +658,11 @@ foreach ($this->cart->contents() as $items) {
             }
 
             // 当选择框改变时的逻辑
-            $('#shipping_fee').text(' $' + shippingFee.toFixed(0));
-            shipping_amount = shippingFee.toFixed(0);
+            shipping_amount = parseInt(shippingFee);
+            $('#shipping_fee').text(' $' + shipping_amount);
             $('#shipping_amount').val(shipping_amount);
-            $('#total_amount').val(parseInt(cart_amount) + parseInt(shipping_amount))
-            $('#total_amount_view').text(' $' + (parseInt(cart_amount) + parseInt(shipping_amount)));
+            $('#total_amount').val(cart_amount + shipping_amount)
+            $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
         });
     });
 

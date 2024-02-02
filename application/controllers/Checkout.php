@@ -344,26 +344,71 @@ class Checkout extends Public_Controller
 			return;
 		}
 
+		if ($this->cart->total_items() <= 0) {
+			echo '
+				<script>
+					alert("購物車查無內容");
+					window.location.href = "' . base_url() . '";
+				</script>';
+			return;
+		}
+
+		$selected_coupon = '';
+
 		if (!empty($this->input->post('used_coupon'))) {
 			$coupon_custom_id = $this->input->post('used_coupon');
 
-			$this->db->select('*');
-			$this->db->where('id', $coupon_custom_id);
-			$query = $this->db->get('new_coupon_custom');
-			$selected_coupon = $query->row_array();
+			$selected_custom_coupon = $this->mysql_model->_select('new_coupon_custom', 'id', $coupon_custom_id, 'row');
+
 			// echo '<pre>';
-			// print_r($selected_coupon);
+			// print_r($selected_custom_coupon);
 			// echo '</pre>';
-			if (!empty($selected_coupon)) {
-				$limit_number = (int)$selected_coupon['use_limit_number'] - 1;
-				if ($limit_number < 0) {
+			if (!empty($selected_custom_coupon)) {
+				$now_time = date("Y-m-d H:i:s");
+				$limit_number = (int)$selected_custom_coupon['use_limit_number'] - 1;
+				$selected_coupon = $this->mysql_model->_select('new_coupon', 'id', $selected_custom_coupon['coupon_id'], 'row');
+
+				if ($selected_custom_coupon['type'] == 'percent' || $selected_custom_coupon['type'] == 'cash') {
+					$check_cart_total = $this->cart->total();
+					$check_discount = $selected_custom_coupon['discount_amount'];
+					// echo '<pre>';
+					// print_r($check_cart_total);
+					// echo '</pre>';
+					// echo '<pre>';
+					// print_r($check_discount);
+					// echo '</pre>';
+					// echo '<pre>';
+					// print_r((int)($check_cart_total * $check_discount));
+					// echo '</pre>';
+					// echo '<pre>';
+					// print_r((int)$this->input->post('cart_total'));
+					// echo '</pre>';
+					if ((float)$check_discount < 1.00) {
+						$check_cart_total = $check_cart_total * $check_discount;
+					} else {
+						$check_cart_total = $check_cart_total - $check_discount;
+					}
+					if ((int)$check_cart_total != (int)$this->input->post('cart_total')) {
+						echo '
+							<script>
+								alert("購物車金額計算發生錯誤請重新嘗試，若嘗試多次仍無果請聯繫客服，造成您的不便敬請見諒謝謝。");
+								window.location.href = "' . base_url() . 'checkout";
+							</script>';
+						return;
+					}
+				}
+
+				// checking coupon used limit and exist
+				if ($limit_number < 0 || empty($selected_coupon) || $now_time < $selected_coupon['distribute_at'] || $now_time > $selected_coupon['discontinued_at']) {
 					echo '
 					<script>
 						alert("優惠券錯誤請重新嘗試");
-						window.history.back();
+						window.location.href = "' . base_url() . 'checkout";
 					</script>';
 					return;
 				}
+				$selected_coupon = $selected_coupon['name'];
+
 				// 在这里你需要处理要更新的字段和值，例如：
 				$data = array(
 					'use_limit_number' => $limit_number,
@@ -446,6 +491,17 @@ class Checkout extends Public_Controller
 			$order_delivery_address .= '(' . $this->input->post('tw_zipcode') . ')';
 		}
 
+		if (empty($this->input->post('used_coupon'))) {
+			if ((int)$this->cart->total() != (int)$this->input->post('cart_total')) {
+				echo '
+				<script>
+					alert("購物車金額計算發生錯誤請重新嘗試，若嘗試多次仍無果請聯繫客服，造成您的不便敬請見諒謝謝。");
+					window.location.href = "' . base_url() . 'checkout";
+				</script>';
+				return;
+			}
+		}
+
 		$order_total = intval($this->cart->total() + (int)$delivery_cost);
 		$order_discount_total = intval((int)$this->input->post('cart_total') + (int)$delivery_cost);
 		$order_discount_price = intval((int)$this->cart->total() - (int)$this->input->post('cart_total'));
@@ -458,6 +514,7 @@ class Checkout extends Public_Controller
 		$insert_data = array(
 			'order_number' => $order_number,
 			'order_date' => date("Y-m-d"),
+			'used_coupon_name' => $selected_coupon,
 			'customer_id' => $customer_id,
 			'customer_name' => $this->input->post('name'),
 			'customer_phone' => $this->input->post('phone'),

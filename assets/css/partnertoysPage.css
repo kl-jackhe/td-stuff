@@ -1038,6 +1038,7 @@ a.logBtn {
 
 .postTitle {
     margin: 0;
+    font-size: .9375rem;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     /* -webkit-box-orient: vertical; */

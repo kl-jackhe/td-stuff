@@ -86,6 +86,7 @@ class Update extends Admin_Controller
                 $this->update_202401260000();
                 $this->update_202401291410();
                 $this->update_202401291600();
+                $this->update_202402021730();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -96,6 +97,30 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function update_202402021730()
+    {
+        $version = '202402021730';
+        $description = '[orders]新增欄位[used_coupon_id]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'used_coupon_id'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `used_coupon_id` int(11) NOT NULL AFTER `store_id`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

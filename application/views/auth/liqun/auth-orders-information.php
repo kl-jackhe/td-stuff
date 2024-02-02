@@ -31,7 +31,7 @@
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-2 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
                         <ol class="col-2 align-self-center text-center">{{ self.order_item_qty }}</ol>
-                        <ol class="col-2 align-self-center text-center price">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
+                        <ol class="col-2 align-self-center text-center itemPrice">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
                     </li>
                 </div>
                 <div class="col-12 d-md-none">
@@ -45,7 +45,20 @@
                         <ol class="col-3 align-self-center text-center">{{ self.product_name }}</ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-3 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
-                        <ol class="col-3 align-self-center text-center price">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
+                        <ol class="col-3 align-self-center text-center itemPrice">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
+                    </li>
+                </div>
+                <div v-if="selectedOrder.used_coupon_name != ''" class="col-12 orderContentHeader">
+                    <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;優惠券使用
+                </div>
+                <div v-if="selectedOrder.used_coupon_name != ''" class="col-12 M_order">
+                    <li id="orderListHeader" class="row">
+                        <ol class="col-8 align-self-center text-center">優惠券名稱</ol>
+                        <ol class="col-4 align-self-center text-center">折抵金額</ol>
+                    </li>
+                    <li class="selectedOrderList row">
+                        <ol class="col-8 align-self-center text-center">{{ selectedOrder.used_coupon_name }}</ol>
+                        <ol class="col-4 align-self-center text-center itemPrice">{{ (selectedOrder.order_discount_price != 0) ? ('$ ' + parseInt(selectedOrder.order_discount_price)) : 'delivery fee' }}</ol>
                     </li>
                 </div>
                 <div class="computeTable">

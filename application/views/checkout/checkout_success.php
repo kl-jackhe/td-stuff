@@ -138,8 +138,19 @@
                                 } ?>
                             </table>
                             <hr>
-                            <span class="front_title">小計：<span class="money_size">$
-                                    <?php echo ((int)$order['order_discount_total'] - (int)$order['order_delivery_cost']); ?> </span></span>
+                            <?php if ($order['order_discount_price'] != 0) : ?>
+                                <span class="front_title">折扣金額：
+                                    <span class="money_size">$
+                                        <?php echo (int)$order['order_discount_price']; ?>
+                                    </span>
+                                </span>
+                                <hr>
+                            <?php endif; ?>
+                            <span class="front_title">小計：
+                                <span class="money_size">$
+                                    <?php echo ((int)$order['order_discount_total'] - (int)$order['order_delivery_cost']); ?>
+                                </span>
+                            </span>
                             <hr>
                             <?php if (!empty($order['order_store_address'])) : ?>
                                 <h3>取貨方式：

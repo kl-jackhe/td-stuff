@@ -399,8 +399,9 @@ foreach ($this->cart->contents() as $items) {
                         <div class="container-fluid py-3">
                             <div class="row">
                                 <div class="col-12">
-                                    <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3>
-                                    <input type="hidden" id="cart_total" value="<?php echo '$' . $this->cart->total() ?>">
+                                    <!-- <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
+                                    <h3 class="mt-0">總計：<span id="cart_total_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <input type="hidden" id="cart_total" name="cart_total" value="<?php echo '$' . $this->cart->total() ?>">
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -569,7 +570,7 @@ foreach ($this->cart->contents() as $items) {
                                     <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <!-- <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
                                     <input type="hidden" id="shipping_amount" value="">
-                                    <input type="hidden" id="total_amount" value="">
+                                    <input type="hidden" id="total_amount" name="total_amount" value="">
                                 </div>
                             </div>
                         </div>
@@ -619,6 +620,8 @@ foreach ($this->cart->contents() as $items) {
         var shipping_amount = 0;
         var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
         cart_amount = parseInt(initialCartTotal);
+        $('#cart_total').val(cart_amount)
+        $('#cart_total_view').text(' $' + cart_amount)
 
         // 初始化選所選運送方式
         var initialShippingFee = 0;

@@ -1348,3 +1348,13 @@ input.qtyminus {
     background-color: #007bff;
     border: 1px solid #007bff;
 }
+
+.price {
+    color: #e30020;
+    text-align: left;
+    margin: 10px 0 0 0;
+}
+
+.itemPrice {
+    color: #e30020;
+}
