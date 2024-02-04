@@ -8,7 +8,7 @@ class Posts extends Public_Controller
         parent::__construct();
     }
 
-    public function index()
+    public function index($id = 1)
     {
         $this->data['page_title'] = '最新訊息';
 
@@ -30,7 +30,8 @@ class Posts extends Public_Controller
             $this->render('posts/index');
         }
         if ($this->is_partnertoys) {
-            $this->data['posts'] = $this->posts_model->getDescPosts();
+			$this->data['current_page'] = $id;
+            $this->data['posts'] = $this->posts_model->getDescCreatedAtPosts();
             $this->data['posts_category'] = $this->menu_model->getSubMenuData(0, 3);
             $this->render('posts/partnertoys/partnertoys_index');
         }

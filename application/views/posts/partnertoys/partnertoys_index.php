@@ -1,4 +1,4 @@
-<div id="postApp" role="main" class="main pt-signinfo">
+<div v-cloak id="postApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <?php require('posts-menu.php'); ?>
         <div class="section-contents">
@@ -12,7 +12,7 @@
                         <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
                             <div class="touch_effect">
                                 <div class="postImg">
-                                    <img class="post_img" :src="'/assets/uploads/News/img/' + self.post_image" :alt="self.post_title">
+                                    <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
                                 </div>
                                 <div class="postText">
                                     <p class="text-right">{{ self.updated_at.substr(0, 10) }}</p>
@@ -93,8 +93,10 @@
             },
         },
         mounted() {
+            // 使用 jQuery 将样式更改为 display: block;
             // 在 mounted 鉤子中設定 selectedCategoryId 的值
             if (this.posts_categorys && this.posts_categorys.length > 0) {
+                this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
                 this.selectedCategoryId = 0;
                 this.pageTitle = '全部消息';
                 if (this.getID && this.getID.length > 0) {
@@ -114,11 +116,10 @@
                 mainClass: 'mfp-zoom-in', // Add a zoom-in effect if you like
             });
             // 監聽是否有按下搜尋
-            document.addEventListener('toggleSearch', () => {
+            $(document).on('toggleSearch', () => {
                 // 处理事件触发后的逻辑
                 // 显示搜寻栏的逻辑
                 this.hiddenSearch = !this.hiddenSearch;
-                console.log(this.hiddenSearch);
             });
         },
         computed: {
@@ -187,7 +188,6 @@
             showPostDetails(post) {
                 this.selectedPost = post;
                 this.selectedPostCategoryId = this.posts_categorys.filter(category => category.sort === post.post_category);
-
             },
             // 搜尋攔篩選
             filterPostsBySearch() {
@@ -206,19 +206,17 @@
                 }
             },
             filterByCategory(categoryId) {
-                this.currentPage = 1; // 將頁碼設置為1
-                this.selectedCategoryId = categoryId;
-                const selectedCategory = this.posts_categorys.find(category => category.sort === categoryId);
-                this.pageTitle = selectedCategory.name;
+                window.location.href = <?= json_encode(base_url()) ?> + 'posts' + (categoryId != null ? '?id=' + categoryId : '' + (this.searchText != '' ? '&searchText=' + this.searchText : ''));
             },
             // 頁碼
             setPage(page) {
                 if (page <= 0 || page > this.totalPages || (page === this.totalPages && this.currentPage === this.totalPages)) {
+                    this.scrollToTop();
                     return;
                 }
                 this.isNavOpen = false;
                 this.currentPage = page;
-                this.scrollToTop();
+                window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
             },
             // 清除搜尋攔
             clearSearch() {

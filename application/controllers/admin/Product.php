@@ -7,6 +7,9 @@ class Product extends Admin_Controller
 	{
 		parent::__construct();
 		$this->load->model('product_model');
+		if ($this->is_partnertoys) {
+			$this->load->model('menu_model');
+		}
 		if ($this->is_liqun_food) {
 			$this->load->model('product_tag_model');
 		}
@@ -85,7 +88,11 @@ class Product extends Admin_Controller
 		//get posts data
 		$conditions['returnType'] = '';
 		$this->data['product'] = $this->product_model->getRows($conditions);
-		$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		if ($this->is_partnertoys) {
+			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
+		} else {
+			$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		}
 		//load the view
 		$this->load->view('admin/product/ajax-data', $this->data);
 	}
@@ -93,7 +100,11 @@ class Product extends Admin_Controller
 	public function create()
 	{
 		$this->data['page_title'] = '新增商品';
-		$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		if ($this->is_partnertoys) {
+			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
+		} else {
+			$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		}
 		$this->render('admin/product/create');
 	}
 
@@ -144,7 +155,11 @@ class Product extends Admin_Controller
 		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $id);
 		$this->data['product_specification'] = $this->product_model->getProduct_Specification($id);
 		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
-		$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		if ($this->is_partnertoys) {
+			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
+		} else {
+			$this->data['product_category'] = $this->mysql_model->_select('product_category');
+		}
 		$this->data['select_product_category'] = $this->product_model->getSelectProductCategory($id);
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 		if ($this->is_liqun_food) {

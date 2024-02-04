@@ -88,7 +88,7 @@ class Update extends Admin_Controller
                 $this->update_202401291600();
                 $this->update_202402021730();
                 if ($this->is_partnertoys) {
-                    // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
+                    $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                 }
             } else {
                 // 不存在
@@ -117,9 +117,7 @@ class Update extends Admin_Controller
             // Explode CSV data into an array
             $csv_array = explode("\n", $csv_data);
 
-            $this->db->select('*');
-            $query = $this->db->get('news');
-            $post_contents = $query->result_array();
+
 
             foreach ($csv_array as $row) {
                 // Explode each row into values
@@ -129,12 +127,14 @@ class Update extends Admin_Controller
                 $created_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[4])));
                 $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[5])));
 
-
+                $this->db->select('*');
+                $this->db->where('newsid', $row_data[0]);
+                $query = $this->db->get('news');
+                $post_content = $query->row_array();
 
                 // Check if there are more rows in $post_contents
-                if (!empty($post_contents)) {
+                if (!empty($post_content)) {
                     // Get the first row from $post_contents
-                    $post_content = array_shift($post_contents);
 
                     // Create an associative array with field names as keys
                     $data = array(

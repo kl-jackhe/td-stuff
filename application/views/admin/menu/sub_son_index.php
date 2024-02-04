@@ -81,7 +81,7 @@
 
 <script>
     function returnSubMenu() {
-        window.history.back();
+        window.location.href = <?= json_encode(base_url() . 'admin/menu/sub_index/' . $grandparent_id); ?>;
     }
 
     function form_check() {

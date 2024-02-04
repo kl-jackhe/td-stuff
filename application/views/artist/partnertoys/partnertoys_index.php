@@ -1,4 +1,4 @@
-<div id="artistApp" role="main" class="main pt-signinfo">
+<div v-cloak id="artistApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <?php require('artist-menu.php'); ?>
         <div class="contentMarginBottom section-contents">
@@ -12,7 +12,7 @@
                 <div class="row">
                     <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="filterBySubCategory(self.id)">
-                            <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
+                            <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
                             <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>
@@ -25,7 +25,7 @@
                 <div class="row">
                     <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="filterBySubCategory(self.id)">
-                            <img :src="'/assets/uploads/Editor/images/creator/' + self.code" style="width: 100%;">
+                            <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
                             <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>

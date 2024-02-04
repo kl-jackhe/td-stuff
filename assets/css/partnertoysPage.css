@@ -511,6 +511,7 @@ a.logBtn {
 
 .active {
     background-color: #d35448;
+    border-color: #d35448;
     font-weight: bold;
 }
 
@@ -2522,4 +2523,8 @@ input.qtyminus {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
     /* 滑鼠懸停時的顏色 */
+}
+
+[v-cloak] {
+    display: none;
 }

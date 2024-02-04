@@ -2,7 +2,7 @@
 <!-- 引入 Facebook JavaScript SDK -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-<div id="authApp">
+<div v-cloak id="authApp">
     <section class="sectionRejust">
         <?php require('auth-menu.php'); ?>
         <div class="section-contents">

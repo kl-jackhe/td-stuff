@@ -5,11 +5,11 @@
   </div>
   <div class="col-md-6">
     <div class="form-inline text-right">
-      <input type="text" id="keywords" class="form-control" placeholder="搜尋..." onkeyup="searchFilter()"/>
+      <input type="text" id="keywords" class="form-control" placeholder="搜尋..." onkeyup="searchFilter()" />
       <select id="category" class="form-control" onchange="searchFilter()">
         <option value="0">---選擇分類---</option>
         <?php foreach ($category as $data) {
-          echo '<option value='.$data['post_category_id'].'>'.$data['post_category_name'].'</option>';
+          echo '<option value=' . $data['post_category_id'] . '>' . $data['post_category_name'] . '</option>';
         } ?>
       </select>
       <select id="sortBy" class="form-control" onchange="searchFilter()">

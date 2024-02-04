@@ -1,4 +1,4 @@
-<div id="productApp" role="main" class="main pt-signinfo">
+<div v-cloak id="productApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <!-- Menu -->
         <?php if (!empty($product_category)) : ?>
@@ -72,7 +72,7 @@
                 }
             }
             // 監聽是否有按下搜尋
-            document.addEventListener('toggleSearch', () => {
+            $(document).on('toggleSearch', () => {
                 // 处理事件触发后的逻辑
                 // 显示搜寻栏的逻辑
                 this.hiddenSearch = !this.hiddenSearch;

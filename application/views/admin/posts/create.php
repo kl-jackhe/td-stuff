@@ -1,10 +1,10 @@
 <div class="row">
-<?php $attributes = array('class' => 'post', 'id' => 'post'); ?>
-<?php echo form_open('admin/posts/insert' , $attributes); ?>
+  <?php $attributes = array('class' => 'post', 'id' => 'post'); ?>
+  <?php echo form_open('admin/posts/insert', $attributes); ?>
   <div class="col-md-12">
     <div class="form-group">
       <button type="submit" class="btn btn-primary">建立</button>
-      <a href="<?php echo base_url().'admin/'.$this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
+      <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     </div>
   </div>
   <div class="col-md-12">
@@ -12,15 +12,19 @@
       <div class="row">
         <div class="col-md-3">
           <div class="form-group">
-            <?php if(!empty($category)): ?>
-            <label for="post_category">分類</label>
+            <?php if (!empty($category)) : ?>
+              <label for="post_category">分類</label>
             <?php $att = 'id="post_category" class="form-control chosen" data-rule-required="true"';
-            $data = array();
-            foreach ($category as $c){
-            $data[$c['post_category_id']] = $c['post_category_name'];
-            }
-            echo form_dropdown('post_category', $data, '0', $att);
-            else: echo '<label>沒有分類</label><input type="text" class="form-control" id="post_category" name="post_category" value="0" readonly>';
+              $data = array();
+              foreach ($category as $c) {
+                if ($this->is_partnertoys) {
+                  $data[$c['sort']] = $c['name'];
+                } else {
+                  $data[$c['post_category_id']] = $c['post_category_name'];
+                }
+              }
+              echo form_dropdown('post_category', $data, '0', $att);
+            else : echo '<label>沒有分類</label><input type="text" class="form-control" id="post_category" name="post_category" value="0" readonly>';
             endif; ?>
           </div>
         </div>
@@ -52,17 +56,17 @@
       </div>
     </div>
   </div>
-<?php echo form_close() ?>
+  <?php echo form_close() ?>
 </div>
 
 <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script> -->
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
 <script>
-$.validator.setDefaults({
+  $.validator.setDefaults({
     submitHandler: function() {
-        document.getElementById("post").submit();
-        //alert("submitted!");
+      document.getElementById("post").submit();
+      //alert("submitted!");
     }
-});
+  });
 </script>

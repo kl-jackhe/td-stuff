@@ -1,4 +1,4 @@
-<div id="aboutApp" role="main" class="main pt-signinfo">
+<div v-cloak id="aboutApp" role="main" class="main pt-signinfo">
     <section class="sectionRejust">
         <?php require('about-menu.php'); ?>
         <div class="contentMarginBottom section-contents">

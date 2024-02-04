@@ -91,7 +91,7 @@
                                                     <label for="product_category">分類</label>
                                                     <select class="form-control" id="product_category" name="product_category">
                                                         <? foreach ($product_category as $pc_row) { ?>
-                                                            <option value="<?= $pc_row['product_category_id'] ?>" <?= ($product['product_category_id'] == $pc_row['product_category_id']) ? 'selected' : ''; ?>><?= $pc_row['product_category_name'] ?></option>
+                                                            <option value="<?= $pc_row['sort'] ?>" <?= ($product['sort'] == $pc_row['sort']) ? 'selected' : ''; ?>><?= $pc_row['name'] ?></option>
                                                         <? } ?>
                                                     </select>
                                                 <? } else {

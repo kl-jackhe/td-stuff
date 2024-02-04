@@ -25,16 +25,30 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <?if (!empty($product_category)) { ?>
-                                        <label for="product_category">分類</label>
-                                        <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
-                                            <?foreach ($product_category as $pc_row) {?>
-                                                <option value="<?=$pc_row['product_category_id']?>"><?=$pc_row['product_category_name']?></option>
-                                            <?}?>
-                                        </select>
-                                    <?} else {
-                                        echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
-                                    } ?>
+                                    <?php if ($this->is_partnertoys) : ?>
+                                        <? if (!empty($product_category)) { ?>
+                                            <label for="product_category">分類</label>
+                                            <select class="form-control" id="product_category" name="product_category">
+                                                <? foreach ($product_category as $pc_row) { ?>
+                                                    <option value="<?= $pc_row['sort'] ?>"><?= $pc_row['name'] ?></option>
+                                                <? } ?>
+                                            </select>
+                                        <? } else {
+                                            echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
+                                        } ?>
+
+                                    <?php else : ?>
+                                        <? if (!empty($product_category)) { ?>
+                                            <label for="product_category">分類</label>
+                                            <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
+                                                <? foreach ($product_category as $pc_row) { ?>
+                                                    <option value="<?= $pc_row['product_category_id'] ?>"><?= $pc_row['product_category_name'] ?></option>
+                                                <? } ?>
+                                            </select>
+                                        <? } else {
+                                            echo '<label for="product_category">沒有分類</label><input type="text" class="form-control" id="product_category" name="product_category" value="" readonly>';
+                                        } ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <div class="col-md-3">

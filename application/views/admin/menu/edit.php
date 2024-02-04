@@ -32,7 +32,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="sort">排序</label>
-                                    <input type="text" class="form-control" id="sort" name="sort" value="<? echo $menu['sort'] ?>" required>
+                                    <input type="text" class="form-control" id="sort" name="sort" value="<? echo $menu['sort'] ?>" required readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -58,7 +58,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="code">連結圖</label>
-                                    <input type="text" class="form-control" id="code" name="code" value="<? echo $menu['code'] ?>" required>
+                                    <?php if ($databaseName == 'menu' || $databaseName == 'sub_menu' || $databaseName == 'sub_sub_son_menu') : ?>
+                                        <input type="text" class="form-control" id="code" name="code" value="<? echo $menu['code'] ?>" required readonly>
+                                    <?php else : ?>
+                                        <br>
+                                        <a target="_blank" href="/assets/admin/filemanager/dialog.php?type=1&field_id=menu_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top:5px;">選擇照片</a>
+                                        <img src="/assets/uploads/<?php echo $menu['code']; ?>" id="menu_image_preview" class="img-responsive" width="300" height="300">
+                                        <input type="hidden" id="menu_image" name="menu_image" value="<?php echo $menu['code']; ?>" />
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +153,7 @@
     //     });
 
     function returnSubMenu() {
-        window.history.back();
+        window.location.href = <?= json_encode(base_url() . 'admin/menu/' . $returnIndex . '/' . $menu['parent_id']); ?>;
     }
 
     $(document).ready(function() {

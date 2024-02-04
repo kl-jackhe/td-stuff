@@ -123,15 +123,19 @@ class Menu extends Admin_Controller
     {
         $this->data['databaseName'] = $databaseName;
         if ($databaseName == 'menu') {
+            $this->data['returnIndex'] = 'index';
             $this->data['menu'] = $this->menu_model->getMenuData($id);
             $this->data['same_level_menu'] = $this->menu_model->getMenuData();
         } elseif ($databaseName == 'sub_menu') {
+            $this->data['returnIndex'] = 'sub_index';
             $this->data['menu'] = $this->menu_model->getSubMenuData($id, 0);
             $this->data['same_level_menu'] = $this->menu_model->getSubMenuData(0, $this->data['menu']['parent_id']);
         } elseif ($databaseName == 'sub_son_menu') {
+            $this->data['returnIndex'] = 'sub_son_index';
             $this->data['menu'] = $this->menu_model->getSubSonMenuData($id, 0);
             $this->data['same_level_menu'] = $this->menu_model->getSubSonMenuData(0, $this->data['menu']['parent_id']);
         } elseif ($databaseName == 'sub_sub_son_menu') {
+            $this->data['returnIndex'] = 'sub_sub_son_index';
             $this->data['menu'] = $this->menu_model->getSubSubSonMenuData($id, 0);
             $this->data['same_level_menu'] = $this->menu_model->getSubSubSonMenuData(0, $this->data['menu']['parent_id']);
         }
@@ -145,6 +149,9 @@ class Menu extends Admin_Controller
         $sort = $this->input->post('sort');
         $status = $this->input->post('status');
         $code = $this->input->post('code');
+        if ($databaseName != 'menu' && $databaseName != 'sub_menu') {
+            $code = $this->input->post('menu_image');
+        }
         $description = $this->input->post('editor');
 
         $message = '更新失敗';

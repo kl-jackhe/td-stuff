@@ -81,6 +81,18 @@ class Posts_model extends CI_Model
         }
     }
 
+    function getDescCreatedAtPosts()
+    {
+        $this->db->select('*');
+        $this->db->order_by('created_at', 'desc');
+        $query = $this->db->get('posts');
+        if (!empty($query)) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
     function getLastestPosts($limit)
     {
         $this->db->select('*');

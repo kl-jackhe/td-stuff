@@ -340,6 +340,28 @@
 <script>
     tinymce.init({
         language: 'zh_TW',
+        selector: 'textarea#post_content',
+        plugins: [
+            "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking save",
+            "table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern code image imagetools imagetools responsivefilemanager"
+        ],
+        toolbar: 'insert undo redo | fontselect fontsizeselect | responsivefilemanager | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | code removeformat',
+        image_advtab: true,
+        fontsize_formats: "8pt 10pt 12pt 14pt 18pt 24pt 36pt 48pt 60pt 72pt 84pt 96pt",
+        content_css: ['/assets/admin/bootstrap/dist/css/bootstrap.min.css'],
+        font_formats: '微軟正黑體=微軟正黑體,Microsoft JhengHei;新細明體=PMingLiU,新細明體;標楷體=標楷體,DFKai-SB,BiauKai;黑體=黑體,SimHei,Heiti TC,Andale Mono=andale mono,times;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Trebuchet MS=trebuchet ms,geneva;Verdana=v erdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats;',
+        external_filemanager_path: "/assets/admin/filemanager/",
+        filemanager_title: "媒體庫",
+        external_plugins: {
+            "filemanager": "plugins/responsivefilemanager/plugin.min.js"
+        }
+    });
+</script>
+
+<script>
+    tinymce.init({
+        language: 'zh_TW',
         selector: 'textarea#editor',
         plugins: [
             "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
