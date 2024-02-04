@@ -88,8 +88,11 @@ class Update extends Admin_Controller
                 $this->update_202401291600();
                 $this->update_202402021730();
                 if ($this->is_partnertoys) {
-                    $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
+                    // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
+                    // $this->import_product_old_sql();
+                    $this->import_member_sql();
                 }
+                $this->update_202402021730();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -100,6 +103,131 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function import_member_sql()
+    {
+        $version = 'import_member_sql';
+        $description = 'transition member data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $this->db->select('*');
+            $query = $this->db->get('member');
+            $products = $query->result_array();
+
+            foreach ($products as $row) {
+                $created_at = $row['datetime'];
+                $updated_at = $row['datetime2'];
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'id' => $row['memid'],
+                    'fb_id' => $row['fbid'],
+                    'ip_address' => $row['login_ip'],
+                    'username' => (!empty($row['tel']) ? $row['tel'] : (!empty($row['email']) ? $row['email'] : (!empty($row['fbid']) ? $row['fbid'] : $row['memid']))),
+                    'gender' => ($row['sex'] == '1' ? 'Male' : 'Female'),
+                    'password' => $row['pwd'],
+                    'active' => 1,
+                    'email' => $row['email'],
+                    'full_name' => $row['username'],
+                    'birthday' => (($row['birthday'] != null) ? $row['birthday'] : ''),
+                    'is_send_email' => (($row['is_send_email'] != null) ? $row['is_send_email'] : 0),
+                    'created_at' => $created_at,
+                    'updated_at' => $updated_at,
+                );
+
+                echo '<pre>';
+                print_r($data);
+                echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('users', $data);
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function import_product_old_sql()
+    {
+        $version = 'import_product_old_sql';
+        $description = 'transition product data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+
+            $this->db->select('*');
+            $query = $this->db->get('product_old');
+            $products = $query->result_array();
+
+            foreach ($products as $row) {
+
+                $cate_id = 0;
+                // Convert date format from '0000/00/00' to '0000-00-00 00:00:00'
+                $created_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row['datetime'])));
+                $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row['datetime'])));
+                if ($row['cateid2'] == '76') {
+                    $cate_id = 1;
+                }
+                if ($row['cateid2'] == '77') {
+                    $cate_id = 3;
+                }
+                if ($row['cateid2'] == '79') {
+                    $cate_id = 5;
+                }
+                if ($row['cateid2'] == '80') {
+                    $cate_id = 4;
+                }
+                if ($row['cateid2'] == '78') {
+                    $cate_id = 2;
+                }
+
+                $product_img = 'Product/' . $row['filename'];
+                $price = ($row['price'] != null) ? $row['price'] : (($row['spec_price'] != null) ? $row['price'] != null : 0);
+
+                // Check if there are more rows in $post_contents
+                // Get the first row from $post_contents
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'product_id' => $row['prdid'],
+                    'product_category_id' => $cate_id,
+                    'product_name' => $row['pname'],
+                    'product_sku' => $row['prdno'],
+                    'product_price' => $price,
+                    'product_description' => $row['content'],
+                    'product_note' => $row['desc1'],
+                    'product_image' => $product_img,
+                    'distribute_at' => $created_at,
+                    'created_at' => $created_at,
+                    'updated_at' => $updated_at,
+                );
+
+                echo '<pre>';
+                print_r($data);
+                echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('product', $data);
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

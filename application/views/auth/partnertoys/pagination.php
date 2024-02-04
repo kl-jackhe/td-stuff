@@ -25,6 +25,6 @@
     </li>
 </ul>
 
-<ul class="pagination pagination_bottom">
+<ul v-if="order && totalPages !== 0" class="pagination pagination_bottom">
     <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ this.order.length }}</span>
 </ul>
