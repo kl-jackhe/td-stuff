@@ -12,7 +12,7 @@
                         <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
                             <div class="touch_effect">
                                 <div class="postImg">
-                                    <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
+                                    <img class="post_img" :src="'/assets/uploads/News/img/' + self.post_image" :alt="self.post_title">
                                 </div>
                                 <div class="postText">
                                     <p class="text-right">{{ self.updated_at.substr(0, 10) }}</p>
@@ -76,7 +76,7 @@
                 posts: <?php echo json_encode($posts); ?>, // posts資料庫所有類及項目
                 posts_categorys: <?php echo json_encode($posts_category); ?>, // posts_category資料庫所有類及項目
                 pageTitle: '', // 目前標籤
-                perpage: 6, // 一頁的資料數
+                perpage: 12, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉

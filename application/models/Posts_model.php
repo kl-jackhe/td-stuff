@@ -12,7 +12,7 @@ class Posts_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('posts');
-		$this->db->order_by("updated_at DESC", "created_at DESC", "post_id ASC");
+        $this->db->order_by("updated_at DESC", "created_at DESC", "post_id ASC");
         //filter data by searched keywords
         if (!empty($params['search']['keywords'])) {
             $this->db->like('post_title', $params['search']['keywords']);
@@ -51,7 +51,7 @@ class Posts_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('posts');
-		$this->db->order_by("updated_at DESC", "created_at DESC", "post_id ASC");
+        $this->db->order_by("updated_at DESC", "created_at DESC", "post_id ASC");
 
         if (!empty($params['search']['post_category_id'])) {
             $this->db->where('post_category_id', $params['search']['post_category_id']);
@@ -67,6 +67,18 @@ class Posts_model extends CI_Model
             $result = ($query->num_rows() > 0) ? $query->result_array() : false;
         }
         return $result;
+    }
+
+    function getDescPosts()
+    {
+        $this->db->select('*');
+        $this->db->order_by('post_id', 'desc');
+        $query = $this->db->get('posts');
+        if (!empty($query)) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
     }
 
     function getLastestPosts($limit)

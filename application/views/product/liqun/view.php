@@ -9,9 +9,9 @@
                         <? } ?>
                     </div>
                     <div class="col-md-8 text-center product_description">
-                        <p class="m-0" style="font-size: 28px;">
-                            <?= $product['product_name'] ?>&emsp;
-                            <span id="jumpToCombine" class="transitionAnimation jumpToCombine"><i class="fa fa-caret-square-down" aria-hidden="true"></i>&nbsp;跳至方案選擇</span>
+                        <p class="m-0">
+                            <span class="productViewTitle"><?= $product['product_name'] ?></span>
+                            <span id="jumpToCombine" class="transitionAnimation jumpToCombine productViewTitle"><i class="fa fa-caret-square-down" aria-hidden="true"></i>&nbsp;跳至方案選擇</span>
                         </p>
                     </div>
                     <div class="col-md-8 text-center product_description">
@@ -56,9 +56,11 @@
                             <?php if (!empty($product_combine)) {
                                 foreach ($product_combine as $combine) {
                                     $inventory = 0;
-                                    foreach ($product_combine_item as $pci_row) {
-                                        if ($combine['id'] == $pci_row['product_combine_id']) {
-                                            $inventory = $pci_row['qty'];
+                                    if (!empty($product_combine_item)) {
+                                        foreach ($product_combine_item as $pci_row) {
+                                            if ($combine['id'] == $pci_row['product_combine_id']) {
+                                                $inventory = $pci_row['qty'];
+                                            }
                                         }
                                     } ?>
                                     <div class="col-md-4 py-2 mb-5 text-center">

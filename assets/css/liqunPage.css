@@ -1128,6 +1128,12 @@ label.required::before {
     padding-top: 38.39px;
 }
 
+
+.productViewTitle {
+    font-size: 28px;
+    padding: 15px 0;
+}
+
 @media (max-width: 767px) {
 
     .product_box,
@@ -1138,10 +1144,6 @@ label.required::before {
     .page-header {
         padding-left: 0px;
         padding-right: 0px;
-    }
-
-    #product_index {
-        padding: 0px 30px 0px 30px;
     }
 
     .content_auto_h {

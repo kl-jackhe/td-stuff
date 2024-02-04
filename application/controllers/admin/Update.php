@@ -87,6 +87,9 @@ class Update extends Admin_Controller
                 $this->update_202401291410();
                 $this->update_202401291600();
                 $this->update_202402021730();
+                if ($this->is_partnertoys) {
+                    // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
+                }
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -97,6 +100,76 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function import_post_csv($csv_path, $table_name)
+    {
+        $version = 'import_post_csv';
+        $description = 'transition news data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            // Load CSV file data
+            $csv_data = file_get_contents($csv_path, FILE_TEXT | FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+            // Explode CSV data into an array
+            $csv_array = explode("\n", $csv_data);
+
+            $this->db->select('*');
+            $query = $this->db->get('news');
+            $post_contents = $query->result_array();
+
+            foreach ($csv_array as $row) {
+                // Explode each row into values
+                $row_data = explode(",", $row);
+
+                // Convert date format from '0000/00/00' to '0000-00-00 00:00:00'
+                $created_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[4])));
+                $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[5])));
+
+
+
+                // Check if there are more rows in $post_contents
+                if (!empty($post_contents)) {
+                    // Get the first row from $post_contents
+                    $post_content = array_shift($post_contents);
+
+                    // Create an associative array with field names as keys
+                    $data = array(
+                        'post_id' => $row_data[0],
+                        'post_category' => $row_data[1],
+                        'post_title' => $row_data[2],
+                        'post_content' => $post_content['desc1'],
+                        'post_image' => $row_data[3],
+                        'created_at' => $created_at,
+                        'updated_at' => $updated_at,
+                    );
+
+                    echo '<pre>';
+                    print_r($data);
+                    echo '</pre>';
+
+                    if (!empty($row_data[0]) && $row_data[2] != 'post_title') {
+                        // Insert row data into the database
+                        $this->db->insert($table_name, $data);
+                    } else {
+                        // $this->db->insert($table_name, $data);
+                    }
+                } else {
+                    // Handle the case where there are no more rows in $post_contents
+                    echo "No more rows in post_contents.";
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

@@ -12,24 +12,25 @@ class Posts extends Public_Controller
     {
         $this->data['page_title'] = '最新訊息';
 
-        $data = array();
-        //total rows count
-        $totalRec = count($this->posts_model->getPosts());
-        //pagination configuration
-        $config['target']      = '#data';
-        $config['base_url']    = base_url() . 'posts/ajaxData';
-        $config['total_rows']  = $totalRec;
-        $config['per_page']    = 5;
-        $config['link_func']   = 'searchFilter';
-        $this->ajax_pagination->initialize($config);
-        //get the posts data
-        $this->data['posts'] = $this->posts_model->getPosts(array('limit' => 5));
-
         if ($this->is_liqun_food || $this->is_td_stuff) {
+
+            $data = array();
+            //total rows count
+            $totalRec = count($this->posts_model->getPosts());
+            //pagination configuration
+            $config['target']      = '#data';
+            $config['base_url']    = base_url() . 'posts/ajaxData';
+            $config['total_rows']  = $totalRec;
+            $config['per_page']    = 5;
+            $config['link_func']   = 'searchFilter';
+            $this->ajax_pagination->initialize($config);
+            //get the posts data
+            $this->data['posts'] = $this->posts_model->getPosts(array('limit' => 5));
             $this->data['posts_category'] = $this->posts_model->getPostCategoryId();
             $this->render('posts/index');
         }
         if ($this->is_partnertoys) {
+            $this->data['posts'] = $this->posts_model->getDescPosts();
             $this->data['posts_category'] = $this->menu_model->getSubMenuData(0, 3);
             $this->render('posts/partnertoys/partnertoys_index');
         }
