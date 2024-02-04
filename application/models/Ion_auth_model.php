@@ -1130,7 +1130,7 @@ class Ion_auth_model extends CI_Model
 			}
 			$this->db->update('users', ['last_login' => time()], ['id' => $user->id]);
 			$this->set_session($user);
-			
+
 			return TRUE;
 		} else {
 			$password = $this->hash_password($user_data['userID']);
@@ -1179,14 +1179,14 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', ' . $this->identity_mail_column . ', id, password, active, last_login')
+		$query = $this->db->select($this->identity_column . ', ' . $this->identity_mail_column . ', id, password, active, full_name, last_login')
 			->where($this->identity_column, $identity)
 			->limit(1)
 			->order_by('id', 'desc')
 			->get($this->tables['users']);
 
 		if ($query->num_rows() === 0) {
-			$query = $this->db->select($this->identity_mail_column . ', ' . $this->identity_column . ', id, password, active, last_login')
+			$query = $this->db->select($this->identity_mail_column . ', ' . $this->identity_column . ', id, password, active, full_name, last_login')
 				->where($this->identity_mail_column, $identity)
 				->limit(1)
 				->order_by('id', 'desc')
@@ -2133,6 +2133,7 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('pre_set_session');
 
 		$session_data = [
+			'full_name'             => $user->full_name,
 			'identity'             => $user->{$this->identity_column},
 			$this->identity_column => $user->{$this->identity_column},
 			'email'                => $user->email,
