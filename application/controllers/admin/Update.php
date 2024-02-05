@@ -90,7 +90,7 @@ class Update extends Admin_Controller
                 if ($this->is_partnertoys) {
                     // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                     // $this->import_product_old_sql();
-                    $this->import_member_sql();
+                    // $this->import_member_sql();
                 }
                 $this->update_202402021730();
             } else {
@@ -175,7 +175,7 @@ class Update extends Admin_Controller
                 $cate_id = 0;
                 // Convert date format from '0000/00/00' to '0000-00-00 00:00:00'
                 $created_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row['datetime'])));
-                $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row['datetime'])));
+                $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row['datetime2'])));
                 if ($row['cateid2'] == '76') {
                     $cate_id = 1;
                 }
@@ -209,8 +209,9 @@ class Update extends Admin_Controller
                     'product_note' => $row['desc1'],
                     'product_image' => $product_img,
                     'distribute_at' => $created_at,
+                    'discontinued_at' => $updated_at,
                     'created_at' => $created_at,
-                    'updated_at' => $updated_at,
+                    'updated_at' => $created_at,
                 );
 
                 echo '<pre>';

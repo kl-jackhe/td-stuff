@@ -573,72 +573,72 @@ class Checkout extends Public_Controller
 				$this->db->update('product', ['Sales_volume' => $cnt]);
 			}
 
-		// $this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
-		// if (!empty($this_product_combine_item)) {
-		// 	$inventory = array();
-		// 	foreach ($this_product_combine_item as $items) {
-		// 		$order_item = array(
-		// 			'order_id' => $order_id,
-		// 			'product_combine_id' => $items['product_combine_id'],
-		// 			'customer_id' => $customer_id,
-		// 			'product_id' => $items['product_id'],
-		// 			'order_item_qty' => ($cart_item['qty'] * $items['qty']),
-		// 			'order_item_price' => 0,
-		// 			'created_at' => $created_at,
-		// 		);
-		// 		$this->db->insert('order_item', $order_item);
-		// 		if (array_key_exists($items['product_id'], $inventory)) {
-		// 			$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
-		// 		} else {
-		// 			$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
-		// 		}
-		// 	}
-		// 	if (!empty($inventory)) {
-		// 		foreach ($inventory as $key => $value) {
-		// 			$this->db->select('excluding_inventory');
-		// 			$this->db->where('product_id', $key);
-		// 			$p_row = $this->db->get('product')->row_array();
-		// 			if (!empty($p_row)) {
-		// 				if ($p_row['excluding_inventory'] == false) {
-		// 					$this->db->set('inventory', 'inventory - ' . $value, FALSE);
-		// 					$this->db->where('product_id', $key);
-		// 					$this->db->update('product');
+			$this_product_combine_item = $this->mysql_model->_select('product_combine_item', 'product_combine_id', $cart_item['id']);
+			if (!empty($this_product_combine_item)) {
+				$inventory = array();
+				foreach ($this_product_combine_item as $items) {
+					$order_item = array(
+						'order_id' => $order_id,
+						'product_combine_id' => $items['product_combine_id'],
+						'customer_id' => $customer_id,
+						'product_id' => $items['product_id'],
+						'order_item_qty' => ($cart_item['qty'] * $items['qty']),
+						'order_item_price' => 0,
+						'created_at' => $created_at,
+					);
+					$this->db->insert('order_item', $order_item);
+					if (array_key_exists($items['product_id'], $inventory)) {
+						$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
+					} else {
+						$inventory[$items['product_id']] = ($cart_item['qty'] * $items['qty']);
+					}
+				}
+				if (!empty($inventory)) {
+					foreach ($inventory as $key => $value) {
+						$this->db->select('excluding_inventory');
+						$this->db->where('product_id', $key);
+						$p_row = $this->db->get('product')->row_array();
+						if (!empty($p_row)) {
+							if ($p_row['excluding_inventory'] == false) {
+								$this->db->set('inventory', 'inventory - ' . $value, FALSE);
+								$this->db->where('product_id', $key);
+								$this->db->update('product');
 
-		// 					$inventory_log = array(
-		// 						'product_id' => $key,
-		// 						'source' => 'Order',
-		// 						'change_history' => -$value,
-		// 						'change_notes' => $order_number,
-		// 					);
-		// 					$this->db->insert('inventory_log', $inventory_log);
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// }
-		// if (!empty($cart_item['specification']['specification_id'])) {
-		// 	$sp_qty = 0;
-		// 	$qty_array = 0;
-		// 	foreach ($cart_item['specification']['specification_qty'] as $row) {
-		// 		$specification_id[$sp_qty] = $row;
-		// 		$sp_qty++;
-		// 	}
-		// 	foreach ($cart_item['specification']['specification_id'] as $row) {
-		// 		$order_item = array(
-		// 			'order_id' => $order_id,
-		// 			'product_combine_id' => $items['product_combine_id'],
-		// 			'product_id' => $items['product_id'],
-		// 			'order_item_qty' => 0,
-		// 			'order_item_price' => 0,
-		// 			'specification_id' => $row,
-		// 			'specification_str' => $this->product_model->getSpecificationStr($row),
-		// 			'specification_qty' => $specification_id[$qty_array],
-		// 			'created_at' => $created_at,
-		// 		);
-		// 		$this->db->insert('order_item', $order_item);
-		// 		$qty_array++;
-		// 	}
-		// }
+								$inventory_log = array(
+									'product_id' => $key,
+									'source' => 'Order',
+									'change_history' => -$value,
+									'change_notes' => $order_number,
+								);
+								$this->db->insert('inventory_log', $inventory_log);
+							}
+						}
+					}
+				}
+			}
+			if (!empty($cart_item['specification']['specification_id'])) {
+				$sp_qty = 0;
+				$qty_array = 0;
+				foreach ($cart_item['specification']['specification_qty'] as $row) {
+					$specification_id[$sp_qty] = $row;
+					$sp_qty++;
+				}
+				foreach ($cart_item['specification']['specification_id'] as $row) {
+					$order_item = array(
+						'order_id' => $order_id,
+						'product_combine_id' => $items['product_combine_id'],
+						'product_id' => $items['product_id'],
+						'order_item_qty' => 0,
+						'order_item_price' => 0,
+						'specification_id' => $row,
+						'specification_str' => $this->product_model->getSpecificationStr($row),
+						'specification_qty' => $specification_id[$qty_array],
+						'created_at' => $created_at,
+					);
+					$this->db->insert('order_item', $order_item);
+					$qty_array++;
+				}
+			}
 		endforeach;
 
 		// Start 寄信給買家、賣家(可以砍掉echo部分)

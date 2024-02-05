@@ -65,7 +65,7 @@
                                 // echo '</pre>';
                                 ?>
                                 <?php if (!empty($this->session->userdata('username'))) :  ?>
-                                    <i class="fas fa-user"></i>：<?= $this->session->userdata('full_name') ?>
+                                    <i class="fas fa-user"></i>：<?= !empty($this->session->userdata('full_name')) ? $this->session->userdata('full_name') : $this->session->userdata('username'); ?>
                                     <span class="logoutBnt" @click="confirmLogout"><i class="fa fa-sign-out" aria-hidden="true"></i>登出</span>
                                 <?php else : ?>
                                     <i class="fas fa-user"></i>：訪客

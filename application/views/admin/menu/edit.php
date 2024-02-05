@@ -153,7 +153,7 @@
     //     });
 
     function returnSubMenu() {
-        window.location.href = <?= json_encode(base_url() . 'admin/menu/' . $returnIndex . '/' . $menu['parent_id']); ?>;
+        window.location.href = <?= json_encode(base_url() . 'admin/menu/' . (!empty($menu['parent_id']) ? $returnIndex . '/' . $menu['parent_id'] : '')); ?>;
     }
 
     $(document).ready(function() {

@@ -26,5 +26,4 @@
 </div>
 <div class="table-responsive" id="datatable">
   <?php require('ajax-data.php'); ?>
-  </table>
 </div>
