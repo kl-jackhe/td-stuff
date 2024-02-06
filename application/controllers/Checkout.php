@@ -616,29 +616,29 @@ class Checkout extends Public_Controller
 					}
 				}
 			}
-			if (!empty($cart_item['specification']['specification_id'])) {
-				$sp_qty = 0;
-				$qty_array = 0;
-				foreach ($cart_item['specification']['specification_qty'] as $row) {
-					$specification_id[$sp_qty] = $row;
-					$sp_qty++;
-				}
-				foreach ($cart_item['specification']['specification_id'] as $row) {
-					$order_item = array(
-						'order_id' => $order_id,
-						'product_combine_id' => $items['product_combine_id'],
-						'product_id' => $items['product_id'],
-						'order_item_qty' => 0,
-						'order_item_price' => 0,
-						'specification_id' => $row,
-						'specification_str' => $this->product_model->getSpecificationStr($row),
-						'specification_qty' => $specification_id[$qty_array],
-						'created_at' => $created_at,
-					);
-					$this->db->insert('order_item', $order_item);
-					$qty_array++;
-				}
-			}
+			// if (!empty($cart_item['specification']['specification_id'])) {
+			// 	$sp_qty = 0;
+			// 	$qty_array = 0;
+			// 	foreach ($cart_item['specification']['specification_qty'] as $row) {
+			// 		$specification_id[$sp_qty] = $row;
+			// 		$sp_qty++;
+			// 	}
+			// 	foreach ($cart_item['specification']['specification_id'] as $row) {
+			// 		$order_item = array(
+			// 			'order_id' => $order_id,
+			// 			'product_combine_id' => $items['product_combine_id'],
+			// 			'product_id' => $items['product_id'],
+			// 			'order_item_qty' => 0,
+			// 			'order_item_price' => 0,
+			// 			'specification_id' => $row,
+			// 			'specification_str' => $this->product_model->getSpecificationStr($row),
+			// 			'specification_qty' => $specification_id[$qty_array],
+			// 			'created_at' => $created_at,
+			// 		);
+			// 		$this->db->insert('order_item', $order_item);
+			// 		$qty_array++;
+			// 	}
+			// }
 		endforeach;
 
 		// Start 寄信給買家、賣家(可以砍掉echo部分)
