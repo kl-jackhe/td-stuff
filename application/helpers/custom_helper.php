@@ -582,6 +582,19 @@ function get_cart_output($data)
 	}
 }
 
+function search_post_name($id, $arr)
+{
+	if (!empty($arr)) {
+		foreach ($arr as $self) {
+			if ($id == $self['sort']) {
+				return $self['name'];
+			}
+		}
+	} else {
+		return false;
+	}
+}
+
 function get_post_category_name($id)
 {
 	$CI = &get_instance();

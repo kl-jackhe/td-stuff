@@ -23,16 +23,11 @@
       <th>操作</th>
     </tr>
   </thead>
-  <?php if (!empty($posts)) : ?>
-    <?php foreach ($posts as $data) : ?>
+  <?php if (!empty($posts)) : foreach ($posts as $data) : ?>
       <tr>
         <!-- <td class="text-center"><input type="checkbox" name="post_id[]" value="<?php echo $data['post_id'] ?>"></td> -->
         <td><?php echo $data['post_title'] ?></td>
-        <?php if ($this->is_partnertoys) : ?>
-          <td><?= search_post_name($data['post_category'], !empty($category) ? $category : $post_category) ?></td>
-        <?php else : ?>
-          <td><?php echo get_post_category_name($data['post_category']) ?></td>
-        <?php endif; ?>
+        <td><?php echo get_post_category_name($data['post_category']) ?></td>
         <td><?php echo $data['created_at'] ?></td>
         <td><?php echo $data['updated_at'] ?></td>
         <td>

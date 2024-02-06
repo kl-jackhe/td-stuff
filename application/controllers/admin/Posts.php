@@ -26,7 +26,11 @@ class Posts extends Admin_Controller
         $config['link_func']   = 'searchFilter';
         $this->ajax_pagination_admin->initialize($config);
         //get the posts data
-        $this->data['category'] = $this->mysql_model->_select('post_category');
+        if ($this->is_partnertoys) {
+            $this->data['category'] = $this->menu_model->getSubMenuData(0, 3);
+        } else {
+            $this->data['category'] = $this->mysql_model->_select('post_category');
+        }
         $conditions['returnType'] = '';
         $this->data['posts'] = $this->posts_model->getRows(array('limit' => $this->perPage));
 
@@ -57,7 +61,7 @@ class Posts extends Admin_Controller
         if (!empty($category)) {
             $conditions['search']['category'] = $category;
         }
-        if(!empty($status)){
+        if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
         //total rows count
@@ -76,7 +80,11 @@ class Posts extends Admin_Controller
         //get posts data
         $conditions['returnType'] = '';
         $this->data['posts'] = $this->posts_model->getRows($conditions);
-		$this->data['post_category'] = $this->mysql_model->_select('post_category');
+        if ($this->is_partnertoys) {
+            $this->data['post_category'] = $this->menu_model->getSubMenuData(0, 3);
+        } else {
+            $this->data['post_category'] = $this->mysql_model->_select('post_category');
+        }
         //load the view
         $this->load->view('admin/posts/ajax-data', $this->data);
     }

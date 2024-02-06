@@ -8,19 +8,9 @@
       <input type="text" id="keywords" class="form-control" placeholder="搜尋..." onkeyup="searchFilter()" />
       <select id="category" class="form-control" onchange="searchFilter()">
         <option value="0">---選擇分類---</option>
-        <?php if ($this->is_partnertoys) : ?>
-          <?php
-          foreach ($category as $data) :
-            echo '<option value=' . $data['sort'] . '>' . $data['name'] . '</option>';
-          endforeach;
-          ?>
-        <?php else : ?>
-          <?php
-          foreach ($category as $data) :
-            echo '<option value=' . $data['post_category_id'] . '>' . $data['post_category_name'] . '</option>';
-          endforeach;
-          ?>
-        <?php endif; ?>
+        <?php foreach ($category as $data) {
+          echo '<option value=' . $data['post_category_id'] . '>' . $data['post_category_name'] . '</option>';
+        } ?>
       </select>
       <select id="sortBy" class="form-control" onchange="searchFilter()">
         <option value="0">排序</option>

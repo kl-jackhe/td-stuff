@@ -272,7 +272,9 @@ class Product extends Public_Controller
 			foreach ($filtered_cookies as $cookie_name) {
 				$value = $all_cookies[$cookie_name];
 				$decoded_value = json_decode($value, true);
-				$result[] = $decoded_value; // 將數據添加到結果數組中
+				if (!empty($decoded_value)) {
+					$result[] = $decoded_value; // 將數據添加到結果數組中
+				}
 			}
 		}
 

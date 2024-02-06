@@ -38,8 +38,7 @@
                 <div v-if="order" class="d-md-none">
 
                 </div>
-                <?php // require('pagination.php'); 
-                ?>
+                <?php require('pagination.php'); ?>
             </div>
         </div>
     </div>

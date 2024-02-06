@@ -185,6 +185,7 @@
                     contentType: 'application/json',
                     success: (data) => {
                         this.followData = data;
+                        console.log(this.followData);
                     },
                 })
             },
