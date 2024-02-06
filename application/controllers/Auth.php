@@ -46,6 +46,9 @@ class Auth extends Public_Controller
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 
+				// 郵件
+				$this->data['mail'] = $this->auth_model->getMails();
+
 				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 17);
 			endif;
@@ -85,6 +88,33 @@ class Auth extends Public_Controller
 			endif;
 			$this->render('auth/liqun/liqun_index');
 		endif;
+	}
+
+	public function cantact_us()
+	{
+		$freetime = $this->input->post('freetime');
+		$company = $this->input->post('company');
+		$name = $this->input->post('name');
+		$number = $this->input->post('number');
+		$email = $this->input->post('email');
+		$content = $this->input->post('content');
+
+		$data = array(
+			'gtime' => $freetime,
+			'cpname' => $company,
+			'custname' => $name,
+			'tel' => $number,
+			'email' => $email,
+			'desc1' => $content,
+			'datetime' => date('Y-m-d H:i:s'),
+		);
+
+		$this->db->insert('contact', $data);
+		echo '
+		<script>
+			alert("發送成功，請留意信箱訊息以接收回復通知");
+			window.history.back();
+		</script>';
 	}
 
 	public function cancel_order($id)

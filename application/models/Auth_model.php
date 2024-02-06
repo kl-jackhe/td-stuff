@@ -83,6 +83,25 @@ class Auth_model extends CI_Model
         }
     }
 
+    function getMails()
+    {
+        $this->db->select('*');
+        $this->db->where('tel', $this->session->userdata('identity'));
+        $this->db->order_by('datetime', 'desc');
+        $query = $this->db->get('contact');
+        if (empty($query)) {
+            $this->db->select('*');
+            $this->db->where('email', $this->session->userdata('identity'));
+            $this->db->order_by('datetime', 'desc');
+            $query = $this->db->get('contact');
+        }
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
     function getStandardPageList($name = null)
     {
         $this->db->select('*');

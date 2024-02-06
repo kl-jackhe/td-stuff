@@ -70,11 +70,11 @@
                     <div class="col-bg-12 col-md-6 col-lg-6 form-group">
                         <label>方便聯絡時間</label>
                         <select class="form-control" id="freetime" name="freetime">
-                            <option value="請選擇方便聯絡時間" selected>請選擇方便聯絡時間</option>
-                            <option value="上午">上午</option>
-                            <option value="中午">中午</option>
-                            <option value="下午">下午</option>
-                            <option value="皆可">皆可</option>
+                            <option value="1">上午</option>
+                            <option value="2">中午</option>
+                            <option value="3">下午</option>
+                            <option value="4">晚上</option>
+                            <option value="5">皆可</option>
                         </select>
                     </div>
                     <div class="col-12 form-group">

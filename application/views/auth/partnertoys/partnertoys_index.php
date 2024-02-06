@@ -54,6 +54,10 @@
                     <!-- 聯絡我們 -->
                     <?php require('auth-contact.php'); ?>
                 </div>
+                <div v-else-if="selectedCategoryId == 8">
+                    <!-- 郵件箱 -->
+                    <?php require('auth-respond.php'); ?>
+                </div>
             <?php endif; ?>
         </div>
     </section>
@@ -67,6 +71,7 @@
                 pageTitle: null, // 目前標籤
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                mail: <?= (!empty($this->session->userdata('user_id')) && !empty($mail)) ? json_encode($mail) : json_encode(''); ?>,
                 followData: null,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物

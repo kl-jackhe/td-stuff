@@ -39,7 +39,7 @@
                     <li id="orderListHeader" class="row">
                         <ol class="col-12 text-center">訂單資訊</ol>
                     </li>
-                    <a v-for="self in order" class="orderInformation" @click="showOrderDetails(self)">
+                    <a v-for="self in order.slice(pageStart, pageEnd)" class="orderInformation" @click="showOrderDetails(self)">
                         <li class="row">
                             <ol class="col-12 text-center">
                                 <span class="orderNumber"><i class="fa fa-search-plus"></i>&nbsp;{{ self.order_number }}</span>
