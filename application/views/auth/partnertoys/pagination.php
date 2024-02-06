@@ -26,5 +26,5 @@
 </ul>
 
 <ul v-if="order && totalPages !== 0" class="pagination pagination_bottom">
-    <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ this.order.length }}</span>
+    <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ (this.selectedCategoryId == 1) ? this.order.length : ((this.selectedCategoryId == 2) ? this.followData.length : this.mail.length) }}</span>
 </ul>

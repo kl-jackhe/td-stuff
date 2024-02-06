@@ -11,8 +11,13 @@
                     <span class="memberTitleMember">ORDER<span class="memberTitleLogin">&nbsp;CONTENT</span></span>
                 </div>
                 <div class="col-12 memberTitleChinese text-center">訂單內容</div>
-                <div class="col-12 selectedOrderHeaderBox">
+                <div class="col-12 selectedOrderHeaderBox d-none d-md-block">
                     <span class="selectedOrderHeader"> 訂單編號：<span class="orderNumber">{{ selectedOrder.order_number }}</span></span>
+                    <span class="selectedOrderHeader"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ selectedOrder.created_at }}</span>
+                </div>
+                <div class="col-12 selectedOrderHeaderBox d-md-none">
+                    <span class="selectedOrderHeader"> 訂單編號：<span class="orderNumber">{{ selectedOrder.order_number }}</span></span>
+                    <br>
                     <span class="selectedOrderHeader"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ selectedOrder.created_at }}</span>
                 </div>
                 <div class="col-12 orderContentHeader">

@@ -56,7 +56,8 @@
                 </div>
                 <div v-else-if="selectedCategoryId == 8">
                     <!-- 郵件箱 -->
-                    <?php require('auth-respond.php'); ?>
+                    <div v-if='!selectedMail'><?php require('auth-respond.php'); ?></div>
+                    <div v-else><?php require('auth-respond-detail.php'); ?></div>
                 </div>
             <?php endif; ?>
         </div>
@@ -75,6 +76,7 @@
                 followData: null,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
+                selectedMail: null, // 該會員被選中的訂單
                 authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
@@ -124,16 +126,28 @@
                 }
             },
             totalPages() {
-                return Math.ceil(this.order.length / this.perpage);
+                if (this.selectedCategoryId == 1) {
+                    return Math.ceil(this.order.length / this.perpage);
+                } else if (this.selectedCategoryId == 2) {
+                    return Math.ceil(this.followData.length / this.perpage);
+                } else if (this.selectedCategoryId == 8) {
+                    return Math.ceil(this.mail.length / this.perpage);
+                }
             },
             pageStart() {
-                return (this.currentPage - 1) * this.perpage
                 //取得該頁第一個值的index
+                return (this.currentPage - 1) * this.perpage
             },
             pageEnd() {
                 const end = this.currentPage * this.perpage;
-                return Math.min(end, this.order.length);
                 //取得該頁最後一個值的index
+                if (this.selectedCategoryId == 1) {
+                    return Math.min(end, this.order.length);
+                } else if (this.selectedCategoryId == 2) {
+                    return Math.min(end, this.followData.length);
+                } else if (this.selectedCategoryId == 8) {
+                    return Math.min(end, this.mail.length);
+                }
             },
         },
         methods: {
@@ -255,9 +269,9 @@
             },
             filterByCategory(categoryId) {
                 this.scrollToTop();
+                this.clearSelectedOrder();
+                this.clearSelectedMail();
                 this.currentPage = 1; // 將頁碼設置為1
-                this.selectedOrder = null;
-                this.selectedOrderItem = null;
                 this.selectedCategoryId = categoryId;
                 const selectedCategory = this.authCategory.find(category => category.sort === categoryId);
                 this.pageTitle = selectedCategory.name;
@@ -273,8 +287,15 @@
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
             },
+            showMailDetail(selected) {
+                this.scrollToTop();
+                this.selectedMail = selected;
+            },
+            clearSelectedMail() {
+                this.selectedMail = null;
+            },
             redirectToCargo() {
-                console.log(this.selectedOrderItem);
+                // console.log(this.selectedOrderItem);
                 this.add_cart();
             },
             add_cart() {

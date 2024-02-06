@@ -2502,6 +2502,39 @@ input.qtyminus {
     color: #e30020;
 }
 
+.mailDescription {
+    display: inline-block;
+    width: 100px;
+    /* 设置宽度 */
+    white-space: nowrap;
+    /* 防止换行 */
+    overflow: hidden;
+    /* 隐藏超出部分 */
+    text-overflow: ellipsis;
+    /* 在超出部分显示省略号 */
+}
+
+.mailContentBox {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #bebebe;
+}
+
+.mailContent {
+    font-size: 12px;
+    padding: 10px;
+}
+
+.mailContentTitle {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.redContent {
+    color: #e30020;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

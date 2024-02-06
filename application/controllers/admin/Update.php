@@ -91,6 +91,7 @@ class Update extends Admin_Controller
                     // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
+                    // $this->create_product_combine();
                 }
                 $this->update_202402021730();
             } else {
@@ -103,6 +104,48 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function create_product_combine()
+    {
+        $version = 'create_product_combine';
+        $description = 'create product combine';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $this->db->select('*');
+            $query = $this->db->get('product');
+            $products = $query->result_array();
+
+            foreach ($products as $row) {
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'product_id' => $row['product_id'],
+                    'name' => $row['product_name'],
+                    'price' => $row['product_price'],
+                    'current_price' => $row['product_price'],
+                    'picture' => $row['product_image'],
+                    'create_time' => date('Y-m-d H:i:s'),
+                );
+
+                echo '<pre>';
+                print_r($data);
+                echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('product_combine', $data);
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
