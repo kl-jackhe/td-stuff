@@ -1668,7 +1668,7 @@ input.qtyminus {
 .orderInformation li:hover {
     cursor: pointer;
     text-decoration: none;
-    background-color: #bfbfbf7f;
+    background-color: #bfbfbf7f !important;
 }
 
 .orderNumber {
@@ -2521,13 +2521,13 @@ input.qtyminus {
 }
 
 .mailContent {
-    font-size: 12px;
+    font-size: 16px;
     padding: 10px;
 }
 
 .mailContentTitle {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 20px;
     padding: 10px;
 }
 

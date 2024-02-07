@@ -672,6 +672,17 @@ function get_user_address($id)
 	}
 }
 
+function get_unread_mail_count($state, $mode)
+{
+	$CI = &get_instance();
+	$query = $CI->db->get_where('contact', array((($mode == 'admin') ? 'state' : 'state_member') => $state));
+	if ($query->num_rows() > 0) {
+		$result = $query->result_array();
+		$data = count($result);
+		return $data;
+	}
+}
+
 function get_setting_general($name)
 {
 	$CI = &get_instance();

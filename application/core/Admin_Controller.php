@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 class Admin_Controller extends MY_Controller
 {
@@ -6,8 +6,7 @@ class Admin_Controller extends MY_Controller
 	{
 		parent::__construct();
 
-		if (!$this->ion_auth->logged_in())
-		{
+		if (!$this->ion_auth->logged_in()) {
 			redirect('admin/login', 'refresh');
 		}
 
@@ -18,8 +17,7 @@ class Admin_Controller extends MY_Controller
 		if ($this->ion_auth_model->in_group('franchisee') && !$accessBackend) {
 			$accessBackend = true;
 		}
-		if (!$accessBackend)
-		{
+		if (!$accessBackend) {
 			redirect(base_url(), 'refresh');
 		}
 		$this->load->library('Ajax_pagination_admin');

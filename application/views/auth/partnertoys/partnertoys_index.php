@@ -291,9 +291,28 @@
             showMailDetail(selected) {
                 this.scrollToTop();
                 this.selectedMail = selected;
+                $.ajax({
+                    url: "/auth/mail_is_reading",
+                    method: "post",
+                    data: {
+                        id: selected.contid,
+                    },
+                    success: function(data) {
+                        console.log('reading');
+                    }
+                });
             },
             clearSelectedMail() {
                 this.selectedMail = null;
+            },
+            allReading() {
+                $.ajax({
+                    url: "/auth/mail_total_reading",
+                    method: "post",
+                    success: function(data) {
+                        window.location.href = "<?= base_url() . 'auth?id=8'; ?>";
+                    }
+                });
             },
             redirectToCargo() {
                 // console.log(this.selectedOrderItem);

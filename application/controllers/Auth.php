@@ -90,6 +90,21 @@ class Auth extends Public_Controller
 		endif;
 	}
 
+	public function mail_total_reading()
+	{
+		$this->db->where('tel', $this->session->userdata('identity'));
+		$this->db->update('contact', ['state_member' => 1]);
+		$this->db->where('email', $this->session->userdata('identity'));
+		$this->db->update('contact', ['state_member' => 1]);
+	}
+
+	public function mail_is_reading()
+	{
+		$id = $this->input->post('id');
+		$this->db->where('contid', $id);
+		$this->db->update('contact', ['state_member' => 1]);
+	}
+
 	public function cantact_us()
 	{
 		$freetime = $this->input->post('freetime');

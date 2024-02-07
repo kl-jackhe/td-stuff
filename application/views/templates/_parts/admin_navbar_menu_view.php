@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 
 <!-- BEGIN Navbar -->
 <div id="navbar" class="navbar navbar-fixed">
@@ -21,34 +21,49 @@
         <span id="NowTime" style="color: white;"></span>
       </a>
     </li>
-    <!-- END Button Notifications -->
-    <?php if(!empty($this->session->userdata('user_id'))){ ?>
-    <!-- BEGIN Button User -->
-    <li class="user-profile">
-      <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-        <i class="fa fa-user"></i>
-        <span id="user_info">
-          <?php echo $this->session->userdata('identity'); ?>
-        </span>
-        <i class="fa fa-caret-down"></i>
+    <li class="hidden-sm-down">
+      <a href="/admin/mail">
+        <?php if (get_unread_mail_count(0, 'admin') > 0) : ?>
+          <span id="MailBox" style="color: red; position: relative;">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+            <span>&nbsp;<?php echo get_unread_mail_count(0, 'admin'); ?></span>
+          </span>
+        <?php else : ?>
+          <span id="MailBox" style="color: white; position: relative;">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </span>
+        <?php endif; ?>
       </a>
-      <!-- BEGIN User Dropdown -->
-      <ul class="dropdown-menu dropdown-navbar" id="user_menu">
-        <!-- <li class="divider"></li> -->
-        <!-- <li><a href="/employee/edit/<?php echo $this->ion_auth->user()->row()->id; ?>"><i class="fa fa-edit"></i> 修改基本資料</a></li> -->
-        <!-- <li class="divider"></li> -->
-        <li><a href="/admin/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id; ?>"><i class="fa fa-edit"></i> 修改密碼</a></li>
-        <!-- <li class="divider"></li> -->
-        <?php //echo $admin_user_menu; ;;?>
-        <li>
-          <a href="/logout">
-            <i class="fa fa-power-off"></i> 登出
-          </a>
-        </li>
-      </ul>
-        <!-- BEGIN User Dropdown -->
     </li>
-    <!-- END Button User -->
+    <!-- END Button Notifications -->
+    <?php if (!empty($this->session->userdata('user_id'))) { ?>
+      <!-- BEGIN Button User -->
+      <li class="user-profile">
+        <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
+          <i class="fa fa-user"></i>
+          <span id="user_info">
+            <?php echo $this->session->userdata('identity'); ?>
+          </span>
+          <i class="fa fa-caret-down"></i>
+        </a>
+        <!-- BEGIN User Dropdown -->
+        <ul class="dropdown-menu dropdown-navbar" id="user_menu">
+          <!-- <li class="divider"></li> -->
+          <!-- <li><a href="/employee/edit/<?php echo $this->ion_auth->user()->row()->id; ?>"><i class="fa fa-edit"></i> 修改基本資料</a></li> -->
+          <!-- <li class="divider"></li> -->
+          <li><a href="/admin/auth/edit_user/<?php echo $this->ion_auth->user()->row()->id; ?>"><i class="fa fa-edit"></i> 修改密碼</a></li>
+          <!-- <li class="divider"></li> -->
+          <?php //echo $admin_user_menu; ;;
+          ?>
+          <li>
+            <a href="/logout">
+              <i class="fa fa-power-off"></i> 登出
+            </a>
+          </li>
+        </ul>
+        <!-- BEGIN User Dropdown -->
+      </li>
+      <!-- END Button User -->
     <?php } ?>
   </ul>
   <!-- END Navbar Buttons -->

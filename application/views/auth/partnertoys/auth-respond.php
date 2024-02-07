@@ -6,6 +6,9 @@
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">PARTNERT<span class="memberTitleLogin">&nbsp;MAIL</span></span>
                 </div>
+                <div v-if="mail" class="orderDetailButton">
+                    <span class="orderBtn" @click="allReading()">全部已讀</span>
+                </div>
                 <div class="memberTitleChinese col-12 text-center">{{ pageTitle }}</div>
                 <div v-if="!mail" class="noneOrder">
                     <span class="">目前無任何郵件資料</span>
@@ -18,7 +21,12 @@
                         <ol class="col-3 align-self-center text-center"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;回復時間</ol>
                     </li>
                     <a v-for="self in mail" class="orderInformation" @click="showMailDetail(self)">
-                        <li class="row">
+                        <li v-if="self.state_member == 0" class="row" style="background-color: #f8eaea;">
+                            <ol class="col-6 align-self-center text-center mailDescription">{{ self.desc1 }}</ol>
+                            <ol class="col-3 align-self-center text-center">{{ self.datetime.substr(0,10) }}</ol>
+                            <ol class="col-3 align-self-center text-center redContent">{{ (self.datetime2 != null) ? self.datetime2.substr(0,10) : '尚未回覆' }}</ol>
+                        </li>
+                        <li v-else class="row">
                             <ol class="col-6 align-self-center text-center mailDescription">{{ self.desc1 }}</ol>
                             <ol class="col-3 align-self-center text-center">{{ self.datetime.substr(0,10) }}</ol>
                             <ol class="col-3 align-self-center text-center redContent">{{ (self.datetime2 != null) ? self.datetime2.substr(0,10) : '尚未回覆' }}</ol>

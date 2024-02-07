@@ -20,13 +20,19 @@
                 </div>
                 <div class="row col-12 mailContentBox">
                     <span class="col-12 mailContentTitle"><i class="fa fa-share" aria-hidden="true"></i>&nbsp;主旨：</span>
-                    <span class="col-12"><hr></span>
+                    <span class="col-12">
+                        <hr>
+                    </span>
                     <span class="col-12 mailContent">{{ selectedMail.desc1 }}</span>
                 </div>
                 <div class="row col-12 mailContentBox">
                     <span class="col-12 mailContentTitle"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;回復：</span>
-                    <span class="col-12"><hr></span>
-                    <span class="col-12 mailContent">{{ (selectedMail.desc2 != null) ? selectedMail.desc2 : '尚未回覆' }}</span>
+                    <span class="col-12">
+                        <hr>
+                    </span>
+                    <span class="col-12 mailContent">
+                        <div v-html="(selectedMail.desc2 != null) ? selectedMail.desc2 : '尚未回覆'"></div>
+                    </span>
                 </div>
                 <!-- <div class="col-12 M_order d-none d-md-block">
                     <span> 主旨：{{ selectedMail.desc1 }}</span>
