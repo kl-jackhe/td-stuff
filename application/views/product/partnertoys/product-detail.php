@@ -34,7 +34,7 @@
                                 </div>
                                 <!--商品簡介:多行文字欄位-->
                                 <?php if (!empty($productCombine)) : ?>
-                                    <div v-if="selectedCombineName != '請選擇方案'" v-html="selectedCombine.description" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
+                                    <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
                                 <?php endif; ?>
                                 <?php if (!empty($productCombine)) : ?>
                                     <!--方案選擇-->
@@ -117,6 +117,7 @@
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
                 combineName: <?php echo json_encode(!empty($combineName) ? $combineName : ''); ?>,
+                selectedDescription: <?php echo json_encode(!empty($product) ? $product['product_note'] : ''); ?>,
                 selectedCombine: null,
                 selectedCombineName: '請選擇方案',
                 selectedCategoryId: 0,

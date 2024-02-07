@@ -91,7 +91,7 @@ class Update extends Admin_Controller
                     // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
-                    // $this->create_product_combine();
+                    $this->create_product_combine();
                 }
                 $this->update_202402021730();
             } else {
@@ -128,6 +128,7 @@ class Update extends Admin_Controller
                     'price' => $row['product_price'],
                     'current_price' => $row['product_price'],
                     'picture' => $row['product_image'],
+                    'description' => $row['product_note'],
                     'create_time' => date('Y-m-d H:i:s'),
                 );
 
