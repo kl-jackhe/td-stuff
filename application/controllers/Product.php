@@ -178,6 +178,7 @@ class Product extends Public_Controller
 		}
 		$this->data['product'] = $this->product_model->getSingleProduct($id);
 		$this->data['specification'] = $this->product_model->getProduct_Specification($id);
+		$this->data['product_unit'] = $this->mysql_model->_select('product_unit', 'product_id', $id, 'row');
 		$this->data['product_combine'] = $this->mysql_model->_select('product_combine', 'product_id', $id);
 		$this->data['product_combine_item'] = $this->mysql_model->_select('product_combine_item', 'product_id', $id);
 		$this->data['page_title'] = $this->data['product']['product_name'];

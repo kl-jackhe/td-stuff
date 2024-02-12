@@ -1794,6 +1794,10 @@ input.qtyminus {
     margin-bottom: 40px;
 }
 
+#allReadingButton {
+    margin-top: 40px;
+}
+
 .orderDetailButton .orderBtn {
     margin-right: 10px;
     padding: 10px;

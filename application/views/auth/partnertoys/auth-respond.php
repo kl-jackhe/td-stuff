@@ -3,11 +3,11 @@
     <div class="container">
         <div class="justify-content-center">
             <div id="memberOrderList">
+                <div v-if="mail" id="allReadingButton" class="col-12 orderDetailButton">
+                    <span class="orderBtn" @click="allReading()">全部已讀</span>
+                </div>
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">PARTNERT<span class="memberTitleLogin">&nbsp;MAIL</span></span>
-                </div>
-                <div v-if="mail" class="orderDetailButton">
-                    <span class="orderBtn" @click="allReading()">全部已讀</span>
                 </div>
                 <div class="memberTitleChinese col-12 text-center">{{ pageTitle }}</div>
                 <div v-if="!mail" class="noneOrder">

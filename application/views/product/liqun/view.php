@@ -51,6 +51,7 @@
                     <div class="col-md-12 text-center" id="selectCombine">
                         <p class="m-0" style="font-size: 28px;">方案選擇</p>
                     </div>
+                    <input type="hidden" name="weight" id="weight" value="<?php echo $product_unit['weight'] ?>">
                     <div class="col-md-8 py-3">
                         <div class="row justify-content-center">
                             <?php if (!empty($product_combine)) {
@@ -76,14 +77,14 @@
                                         <div>
                                             <?php if ($combine['price'] != $combine['current_price'] && $combine['price'] != 0) { ?>
                                                 <span style="color: gray;font-size: 14px;font-style: oblique;text-decoration: line-through;">原價
-                                                    <span style="color: gray;font-size: 14px;font-style: oblique;"> $
+                                                    <span style="color: gray;font-size: 14px;font-style: oblique;">&nbsp;$
                                                         <?= $combine['price']; ?>
                                                     </span>
                                                 </span>
                                                 <br>
                                             <? } ?>
                                             <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">方案價
-                                                <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">$
+                                                <span style="color:#BE2633; font-size: 16px; font-weight: bold;font-style: oblique;">&nbsp;$
                                                     <?= $combine['current_price']; ?>
                                                 </span>
                                             </span>
@@ -326,6 +327,8 @@
 
 <script>
     function add_cart(combine_id, limit_enable = 'NO', limit_qty = 0) {
+        var weight = $('#weight').val();
+        console.log('weight = ' + weight);
         var qty = document.getElementById("qty_" + combine_id).value;
         if (limit_enable == 'YES' && parseInt(qty) > parseInt(limit_qty)) {
             alert('商品數量不得超過' + limit_qty + '個');
@@ -348,7 +351,7 @@
             data: {
                 combine_id: combine_id,
                 qty: qty,
-                specification_name: specification_name,
+                weight: weight,
                 specification_id: specification_id,
                 specification_qty: specification_qty,
             },
@@ -357,6 +360,8 @@
                     alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
                 } else if (data == 'exceed') {
                     alert('超過限制數量故無法下單，敬請見諒');
+                } else if (data == 'weight_exceed') {
+                    alert('超過限制重量故無法下單，敬請見諒');
                 } else if (data == 'updateSuccessful') {
                     alert('成功更新購物車');
                 } else if (data == 'successful') {

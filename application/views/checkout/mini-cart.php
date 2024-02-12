@@ -97,9 +97,15 @@
         }
     }
 </style>
-<?php $i = 0;
+<?php
+$i = 0;
+$weight = 0;
 if (!empty($this->cart->contents())) {
     foreach ($this->cart->contents() as $items) {
+        // echo '<pre>';
+        // print_r($items);
+        // echo '</pre>';
+        $weight += ((float)$items['options']['weight'] * (float)$items['qty']);
         $i++; ?>
         <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
             <div class="row">
@@ -236,10 +242,26 @@ if (!empty($this->cart->contents())) {
         </div>
 <?php }
 } ?>
-<div class="col-12 text-right p-0">
+<div class="col-12 p-0">
     <hr>
-    <span style="font-size: 24px;">總計：<span style="color: #BE2633;">$
-            <?php echo $this->cart->total() ?></span></span>
+    <span style="color: #BE2633;">備註：超商配送限重10KG。</span><br>
+</div>
+<div class="col-12 text-right p-0">
+    <?php if ($this->is_liqun_food) : ?>
+        <span style="font-size: 24px;">累計重量：
+            <span style="color: #BE2633;">
+                <?= $weight ?>&nbsp;kg
+            </span>
+        </span>
+        <br>
+    <?php endif; ?>
+    <span style="font-size: 24px;">總計：
+        <span style="color: #BE2633;">$
+            <?php echo $this->cart->total() ?>
+        </span>
+    </span>
+</div>
+<div class="col-12 p-0">
     <hr>
 </div>
 <div class="row">

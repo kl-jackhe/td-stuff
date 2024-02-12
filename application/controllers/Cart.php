@@ -16,6 +16,7 @@ class Cart extends Public_Controller
 
 	public function mini_cart()
 	{
+		$this->data['cargo_weight'] = 0;
 		$this->load->view('checkout/mini-cart');
 	}
 
@@ -33,6 +34,7 @@ class Cart extends Public_Controller
 
 		$combine_id = $this->input->post('combine_id');
 		$qty = $this->input->post('qty');
+		$weight = $this->input->post('weight');
 
 		$this_product_combine = $this->mysql_model->_select('product_combine', 'id', $combine_id, 'row');
 		$this_product = $this->mysql_model->_select('product', 'product_id ', $this_product_combine['product_id'], 'row');
@@ -82,9 +84,18 @@ class Cart extends Public_Controller
 				}
 			}
 		} else if ($this->is_liqun_food) {
+			$total_weight = (float)($weight * $qty);
+			$cart_item = $this->cart->contents(true);
+			// checking weight
+			foreach ($cart_item as $self) {
+				$total_weight += ((float)$self['options']['weight'] * (float)$self['qty']);
+			}
+			if ($total_weight > 10.00) {
+				echo 'weight_exceed';
+				return;
+			}
 			// 購物車是否有該物品
 			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
-				$cart_item = $this->cart->contents(true);
 				foreach ($cart_item as $self) {
 					if ($self['id'] == $this_product_combine['id']) {
 						if ($this_product_combine['limit_enable'] == 'YES' && (int)$self['qty'] + (int)$qty > (int)$this_product_combine['limit_qty']) {
@@ -107,51 +118,55 @@ class Cart extends Public_Controller
 			}
 		}
 
-		// $name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
-		// $price = $this_product_combine['current_price'];
-		// if (!empty($specification_qty)) {
-		// 	foreach ($specification_qty as $row) {
-		// 		if ($row != 0) {
-		// 			$specification_name_array[] = $specification_name[$i];
-		// 			$specification_id_array[] = $specification_id[$i];
-		// 			$specification_qty_array[] = $row;
-		// 		}
-		// 		$i++;
-		// 	}
-		// }
-		// $insert_data = array(
-		// 	'product_id' => $this_product_combine['product_id'],
-		// 	'product_category_id' => $this_product['product_category_id'],
-		// 	'id' => $this_product_combine['id'],
-		// 	'name' => $name,
-		// 	'price' => $price,
-		// 	'qty' => $qty,
-		// 	'specification' => array(
-		// 		'specification_name' => $specification_name_array,
-		// 		'specification_id' => $specification_id_array,
-		// 		'specification_qty' => $specification_qty_array,
-		// 	),
-		// 	'image' => $this_product_combine['picture'],
-		// 	'options' => array(
-		// 		'time' => get_random_string(15),
-		// 	),
-		// );
-
 		$name = $this_product['product_name'] . ' - ' . $this_product_combine['name'];
 		$price = $this_product_combine['current_price'];
-		$insert_data = array(
-			'product_id' => $this_product_combine['product_id'],
-			'product_category_id' => $this_product['product_category_id'],
-			'id' => $this_product_combine['id'],
-			'name' => $name,
-			'price' => $price,
-			'qty' => $qty,
-			'image' => $this_product_combine['picture'],
-			'options' => array(
-				'time' => get_random_string(15),
-				'booking_date' => $this_product['booking_date'],
-			),
-		);
+		if (!empty($specification_qty)) {
+			foreach ($specification_qty as $row) {
+				if ($row != 0) {
+					$specification_name_array[] = $specification_name[$i];
+					$specification_id_array[] = $specification_id[$i];
+					$specification_qty_array[] = $row;
+				}
+				$i++;
+			}
+			$insert_data = array(
+				'product_id' => $this_product_combine['product_id'],
+				'product_category_id' => $this_product['product_category_id'],
+				'id' => $this_product_combine['id'],
+				'name' => $name,
+				'price' => $price,
+				'qty' => $qty,
+				'specification' => array(
+					'specification_name' => $specification_name_array,
+					'specification_id' => $specification_id_array,
+					'specification_qty' => $specification_qty_array,
+				),
+				'image' => $this_product_combine['picture'],
+				'options' => array(
+					'time' => get_random_string(15),
+				),
+			);
+		} else {
+			$insert_data = array(
+				'product_id' => $this_product_combine['product_id'],
+				'product_category_id' => $this_product['product_category_id'],
+				'id' => $this_product_combine['id'],
+				'name' => $name,
+				'price' => $price,
+				'qty' => $qty,
+				'image' => $this_product_combine['picture'],
+				'options' => array(
+					'time' => get_random_string(15),
+				),
+			);
+		}
+
+		if ($this->is_partnertoys) {
+			$insert_data['options']['booking_date'] = $this_product['booking_date'];
+		}
+		if ($this->is_liqun_food) {
+			$insert_data['options']['weight'] = $this->input->post('weight');
+		}
 		$rowid = $this->cart->insert($insert_data);
 		if ($rowid) {
 			echo 'successful';

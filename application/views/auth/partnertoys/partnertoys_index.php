@@ -185,7 +185,7 @@
                     contentType: 'application/json',
                     success: (data) => {
                         this.followData = data;
-                        console.log(this.followData);
+                        // console.log(this.followData);
                     },
                 })
             },
@@ -343,11 +343,11 @@
                             if (data == 'exceed') {
                                 alert('超過限制數量故無法下單，敬請見諒');
                             } else if (data == 'updateSuccessful') {
-                                console.log(data);
+                                // console.log(data);
                             } else if (data == 'successful') {
-                                console.log(data);
+                                // console.log(data);
                             } else {
-                                console.log(data);
+                                // console.log(data);
                             }
                             get_cart_qty();
                         } catch (error) {
