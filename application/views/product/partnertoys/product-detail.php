@@ -22,7 +22,7 @@
                                 <!--價格-->
                                 <div class="cargoText col-sm-12 col-md-12 col-lg-12">
                                     <?php if (!empty($productCombine)) : ?>
-                                        <div v-if="selectedCombineName != '請選擇方案'" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
+                                        <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
                                         <div v-else class="item">❌尚未選擇方案</div>
                                     <?php else : ?>
                                         <div class="paddingFixTop">

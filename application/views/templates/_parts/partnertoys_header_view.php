@@ -78,20 +78,22 @@
                                         <i class="fas fa-search"></i>
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="<?= !empty($this->session->userdata('user_id')) ? '/auth?id=8' : '/auth'; ?>">
-                                        <?php if (get_unread_mail_count(0, 'member') > 0) : ?>
-                                            <span id="MailBox" style="color: #682d2d; position: relative;">
-                                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                <span>&nbsp;<?php echo get_unread_mail_count(0, 'member'); ?></span>
-                                            </span>
-                                        <?php else : ?>
-                                            <span id="MailBox" style="color: white; position: relative;">
-                                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                                            </span>
-                                        <?php endif; ?>
-                                    </a>
-                                </li>
+                                <?php if (!empty($this->session->userdata('user_id'))) : ?>
+                                    <li>
+                                        <a href="/auth?id=8">
+                                            <?php if (get_unread_mail_count(0, 'member') > 0) : ?>
+                                                <span id="MailBox" style="color: #682d2d; position: relative;">
+                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                    <span>&nbsp;<?php echo get_unread_mail_count(0, 'member'); ?></span>
+                                                </span>
+                                            <?php else : ?>
+                                                <span id="MailBox" style="color: white; position: relative;">
+                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                </span>
+                                            <?php endif; ?>
+                                        </a>
+                                    </li>
+                                <?php endif; ?>
                                 <li>
                                     <a href="/auth">
                                         <i class="fas fa-user"></i>
