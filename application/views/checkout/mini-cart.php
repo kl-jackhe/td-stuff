@@ -105,7 +105,9 @@ if (!empty($this->cart->contents())) {
         // echo '<pre>';
         // print_r($items);
         // echo '</pre>';
-        $weight += ((float)$items['options']['weight'] * (float)$items['qty']);
+        if ($this->is_liqun_food) :
+            $weight += ((float)$items['options']['weight'] * (float)$items['qty']);
+        endif;
         $i++; ?>
         <div class="container-fluid p-2" style="border: 1px solid #D3D3D3;" id="mini-cart">
             <div class="row">
@@ -201,7 +203,7 @@ if (!empty($this->cart->contents())) {
                                                 </span>
                                                 <input style="border-radius: 5px" type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" readonly>
                                                 <span class="input-group-btn" style="display:none;">
-                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>" disabled>
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>" disabled>
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </span>
@@ -219,7 +221,7 @@ if (!empty($this->cart->contents())) {
                                                 ?>
                                                 <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="<?= $max_qty; ?>" readonly>
                                                 <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </span>
@@ -293,6 +295,7 @@ if (!empty($this->cart->contents())) {
 <script>
     $('#mini-cart .btn-number').click(function(e) {
         e.preventDefault();
+        cargoWeight = $(this).data('weight');
         fieldName = $(this).attr('data-field');
         type = $(this).attr('data-type');
         var input = $("input[name='" + fieldName + "']");
@@ -321,6 +324,15 @@ if (!empty($this->cart->contents())) {
                 }
             } else if (type == 'plus') {
                 if (currentVal < input.attr('max')) {
+                    <?php if ($this->is_liqun_food) : ?>
+                        limitWeight = 10;
+                        var compareWeight = <?= $weight; ?>;
+                        compareWeight = parseFloat(compareWeight) + parseFloat(cargoWeight);
+                        if (compareWeight > limitWeight) {
+                            alert('已達商品限制最大重量，敬請見諒。');
+                            return false;
+                        }
+                    <?php endif; ?>
                     input.val(currentVal + 1).change();
                 } else if (parseInt(input.val()) == input.attr('max')) {
                     alert('已達商品限制最大數量，敬請見諒。');
