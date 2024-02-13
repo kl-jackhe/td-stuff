@@ -49,8 +49,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon">商品網址</span>
                                     <span class="input-group-addon" style="cursor: pointer;color: green;" onclick="copy_product_front_link()"><i class="fa-solid fa-copy"></i></span>
-                                    <input type="text" class="form-control" id="product_front_link" value="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>" disabled>
-                                    <span class="input-group-addon"><a href="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>">瀏覽頁面</a></span>
+                                    <input type="text" class="form-control" id="product_front_link" value="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/product_detail/' . $lottery['product_id']?>" disabled>
+                                    <span class="input-group-addon"><a href="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/product_detail/' . $lottery['product_id']?>">瀏覽頁面</a></span>
                                 </div>
                                <!--  <span class="btn btn-success" onclick="copy_product_front_link()">複製網址 <i class="fa-solid fa-copy"></i></span>
                                 <a href="<?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?>"><?='https://' . $_SERVER['HTTP_HOST'] . '/product/view/' . $lottery['product_id']?></a> -->

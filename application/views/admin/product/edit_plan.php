@@ -39,13 +39,8 @@
                             <?php endif; ?>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label for="product_combine_price">原價</label>
-                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
                                     <label for="product_combine_current_price">方案價</label>
+                                    <input type="hidden" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
                                     <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
                                 </div>
                             </div>

@@ -30,25 +30,22 @@
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
                                 </div>
                             </div>
+                            <?php if ($this->is_liqun_food) : ?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_cargo_id">貨號</label>
+                                        <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" required>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="product_combine_cargo_id">貨號</label>
-                                    <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="product_combine_price">方案原價</label>
-                                    <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="0" required>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
                                     <label for="product_combine_current_price">方案售價</label>
+                                    <input type="hidden" class="form-control" id="product_combine_price" name="product_combine_price" value="<?php echo $product['product_price'] ?>" required>
                                     <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="0" required>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_image" class="control-label">封面圖片</label>
                                     <div class="form-group">

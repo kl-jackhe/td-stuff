@@ -71,7 +71,7 @@ class Product extends Public_Controller
 			echo
 			"<script>
 			alert('請不要嘗試這麼做謝謝');
-			href.location.history();
+			window.history.back();
 			</script>";
 		}
 
@@ -200,8 +200,7 @@ class Product extends Public_Controller
 	function confirm_product_limit_time($self)
 	{
 		// 現在的時間
-		$now = new DateTime();
-		$now = $now->format('Y-m-d H:i:s');
+		$now = date('Y-m-d H:i:s');
 
 		// none setting
 		$noneSetting = "0000-00-00 00:00:00";

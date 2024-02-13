@@ -91,7 +91,7 @@
                                                     <label for="product_category">分類</label>
                                                     <select class="form-control" id="product_category" name="product_category">
                                                         <? foreach ($product_category as $pc_row) { ?>
-                                                            <option value="<?= $pc_row['sort'] ?>" <?= ($product['sort'] == $pc_row['sort']) ? 'selected' : ''; ?>><?= $pc_row['name'] ?></option>
+                                                            <option value="<?= $pc_row['sort'] ?>" <?= ($product['product_category_id'] == $pc_row['sort']) ? 'selected' : ''; ?>><?= $pc_row['name'] ?></option>
                                                         <? } ?>
                                                     </select>
                                                 <? } else {
@@ -157,12 +157,11 @@
                                             </div>
                                         </div>
                                     <?php endif; ?>
-                                    <?php if ($this->is_partnertoys && $product['product_category_id'] == 1) : ?>
-                                        <div class="col-md-12">
+                                    <?php if ($this->is_partnertoys) : ?>
+                                        <div class="col-md-12" id="booking_date_container" style="display: none;">
                                             <div class="form-group">
                                                 <label for="booking_date">預購年月</label>
-
-                                                <input type="text" class="form-control datetimepicker-ym" id="booking_date" name="booking_date" value="<?= $product['booking_date'] ?>" required>
+                                                <input type="text" class="form-control datetimepicker-ym" id="booking_date" name="booking_date" value="<?= $product['booking_date'] ?>">
                                             </div>
                                         </div>
                                     <?php endif; ?>
@@ -375,7 +374,9 @@
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
                                         <th style="width: 20%;">名稱</th>
-                                        <th style="width: 10%;">貨號</th>
+                                        <?php if ($this->is_liqun_food) : ?>
+                                            <th style="width: 10%;">貨號</th>
+                                        <?php endif; ?>
                                         <th style="width: 10%;">原價</th>
                                         <th style="width: 10%;">方案價</th>
                                         <th style="width: 10%;">限購數量</th>
@@ -387,7 +388,9 @@
                                         foreach ($product_combine as $row) { ?>
                                             <tr>
                                                 <td><?php echo $row['name']; ?></td>
-                                                <td><?php echo $row['cargo_id']; ?></td>
+                                                <?php if ($this->is_liqun_food) : ?>
+                                                    <td><?php echo $row['cargo_id']; ?></td>
+                                                <?php endif; ?>
                                                 <td><?php echo $row['price']; ?></td>
                                                 <td><?php echo $row['current_price']; ?></td>
                                                 <td>
@@ -473,6 +476,30 @@
         </div>
     </div>
 </div> -->
+<script>
+    $(document).ready(function() {
+        // Function to toggle required attribute on booking_date field
+        function toggleBookingDateRequired() {
+            var categoryName = $('#product_category option:selected').text();
+            // Check if the selected category name contains '預購商品'
+            if (categoryName == '預購商品') {
+                $('#booking_date_container').show();
+                $('#booking_date').prop('required', true);
+            } else {
+                $('#booking_date_container').hide();
+                $('#booking_date').prop('required', false);
+            }
+        }
+
+        // Call the function on page load
+        toggleBookingDateRequired();
+
+        // Bind change event to product_category select element
+        $('#product_category').change(function() {
+            toggleBookingDateRequired(); // Call the function when the selection changes
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
         if (location.hash) {

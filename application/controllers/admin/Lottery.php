@@ -1,28 +1,32 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-class Lottery extends Admin_Controller {
-    public function __construct() {
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+class Lottery extends Admin_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('lottery_model');
     }
 
-    function index() {
+    function index()
+    {
         $this->data['page_title'] = '抽選管理';
         $this->render('admin/lottery/index');
     }
 
-    function ajaxData() {
+    function ajaxData()
+    {
         $conditions = array();
         $page = $this->input->get('page');
-        if(!$page){
+        if (!$page) {
             $offset = 0;
-        }else{
+        } else {
             $offset = $page;
         }
         $keywords = $this->input->get('keywords');
         // $sortBy = $this->input->get('sortBy');
         // $category = $this->input->get('category');
         // $status = $this->input->get('status');
-        if(!empty($keywords)){
+        if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }
         // if(!empty($sortBy)){
@@ -34,9 +38,9 @@ class Lottery extends Admin_Controller {
         // if(!empty($status)){
         //     $conditions['search']['status'] = $status;
         // }
-        $totalRec = (!empty($this->lottery_model->getRows($conditions)) ? count($this->lottery_model->getRows($conditions)) : 0 );
+        $totalRec = (!empty($this->lottery_model->getRows($conditions)) ? count($this->lottery_model->getRows($conditions)) : 0);
         $config['target']      = '#datatable';
-        $config['base_url']    = base_url().'admin/lottery/ajaxData';
+        $config['base_url']    = base_url() . 'admin/lottery/ajaxData';
         $config['total_rows']  = $totalRec;
         $config['per_page']    = $this->perPage;
         $config['link_func']   = 'searchFilter';
@@ -47,13 +51,15 @@ class Lottery extends Admin_Controller {
         $this->load->view('admin/lottery/ajax-data', $this->data, false);
     }
 
-    function create() {
+    function create()
+    {
         $this->data['page_title'] = '建立抽選活動';
         $this->data['product'] = $this->mysql_model->_select('product');
         $this->render('admin/lottery/create');
     }
 
-    function addLotteryEvent() {
+    function addLotteryEvent()
+    {
         $insertData = array(
             'name' => $this->input->post('name'),
             'email_subject' => $this->input->post('email_subject'),
@@ -72,52 +78,43 @@ class Lottery extends Admin_Controller {
         redirect('admin/lottery/edit/' . $id);
     }
 
-    function edit($id) {
+    function edit($id)
+    {
         $this->data['page_title'] = '編輯抽選活動';
         $this->data['lottery'] = $this->mysql_model->_select('lottery', 'id', $id, 'row');
         $this->data['lottery_pool'] = $this->mysql_model->_select('lottery_pool', 'lottery_id', $id);
         $this->data['product'] = $this->mysql_model->_select('product');
         $this->data['draw_date_3d'] = strtotime("+2 Day", strtotime($this->data['lottery']['draw_date']));
-        $this->data['draw_date_3d_end'] = date("Y-m-d  H:i:s",strtotime("+2 day",strtotime($this->data['lottery']['draw_date'])));
+        $this->data['draw_date_3d_end'] = date("Y-m-d  H:i:s", strtotime("+2 day", strtotime($this->data['lottery']['draw_date'])));
         $this->data['fill_up_date_3d'] = strtotime("+2 Day", strtotime($this->data['lottery']['fill_up_date']));
-        $this->data['fill_up_date_3d_end'] = date("Y-m-d  H:i:s",strtotime("+2 day",strtotime($this->data['lottery']['fill_up_date'])));
+        $this->data['fill_up_date_3d_end'] = date("Y-m-d  H:i:s", strtotime("+2 day", strtotime($this->data['lottery']['fill_up_date'])));
         $this->data['nowtime'] = strtotime('now');
         $this->render('admin/lottery/edit');
     }
 
-    function editLotteryEvent($id) {
-        $id = $_POST['id'];
-        $name = $_POST["name"];
-        $email_subject = $_POST["email_subject"];
-        $email_content = $_POST["email_content"];
-        $sms_subject = $_POST["sms_subject"];
-        $sms_content = $_POST["sms_content"];
-        $product_id = $_POST["product_id"];
-        $number_limit = $_POST["number_limit"];
-        // $number_alternate = $_POST["number_alternate"];
-        $star_time = $_POST["star_time"];
-        $end_time = $_POST["end_time"];
-        $draw_date = $_POST["draw_date"];
-        $fill_up_date = $_POST["fill_up_date"];
-        $query = "update lottery set ";
-        $query .= "name='$name',";
-        $query .= "email_subject='$email_subject',";
-        $query .= "email_content='$email_content',";
-        $query .= "sms_subject='$sms_subject',";
-        $query .= "sms_content='$sms_content',";
-        $query .= "product_id='$product_id',";
-        $query .= "number_limit='$number_limit',";
-        // $query .= "number_alternate='$number_alternate',";
-        $query .= "star_time='$star_time',";
-        $query .= "end_time='$end_time',";
-        $query .= "draw_date='$draw_date',";
-        $query .= "fill_up_date='$fill_up_date'";
-        $query .= " where id=$id";
-        mysqli_query($dblink, $query) || die("Can't update lottery info. Reason: " . mysqli_error($dblink));
+    function editLotteryEvent($id)
+    {
+        $update_data = array(
+            'name' => $this->input->post('name'),
+            'email_subject' => $this->input->post('email_subject'),
+            'email_content' => $this->input->post('email_content'),
+            'sms_subject' => $this->input->post('sms_subject'),
+            'sms_content' => $this->input->post('sms_content'),
+            'product_id' => $this->input->post('product'),
+            'number_limit' => $this->input->post('number_limit'),
+            'star_time' => $this->input->post('star_time'),
+            'end_time' => $this->input->post('end_time'),
+            'draw_date' => $this->input->post('draw_date'),
+            'fill_up_date' => $this->input->post('fill_up_date'),
+        );
+        $this->db->where('id', $id);
+        $this->db->update('lottery', $update_data);
+        $this->session->set_flashdata('更新成功');
         redirect('admin/lottery/edit/' . $id);
     }
 
-    function deleteLotteryEvent() {
+    function deleteLotteryEvent()
+    {
         $id = $_GET['id'];
         $query_find = "select * from lottery where id='$id'";
         $result2 = mysqli_query($dblink, $query_find);
@@ -133,7 +130,8 @@ class Lottery extends Admin_Controller {
         }
     }
 
-    function finishLotteryEvent() {
+    function finishLotteryEvent()
+    {
         $id = $_GET['id'];
         $query = "select * from lottery where id='$id'";
         $result = mysqli_query($dblink, $query);
@@ -145,12 +143,13 @@ class Lottery extends Admin_Controller {
         }
     }
 
-    function reservationWiner() {
+    function reservationWiner()
+    {
         $id = $_GET['id'];
         $memid = $_GET['memid'];
         $query = "select * from lottery where id='$id'";
         $result = mysqli_query($dblink, $query);
-        if (mysqli_num_rows($result) > 0):
+        if (mysqli_num_rows($result) > 0) :
             while ($row = mysqli_fetch_array($result)) {
                 $draw_over = $row['draw_over'];
                 $number_remain = $row['number_remain'];
@@ -197,12 +196,13 @@ class Lottery extends Admin_Controller {
         }
     }
 
-    function addMemberBlackList() {
+    function addMemberBlackList()
+    {
         $lottery_id = $_GET['id'];
         $count = 0;
         $query = "select * from lottery_pool where lottery_id='$lottery_id' && order_state!='pay_ok' && abandon=1 && blacklist=0";
         $result = mysqli_query($dblink, $query);
-        if (mysqli_num_rows($result) > 0):
+        if (mysqli_num_rows($result) > 0) :
             while ($row = mysqli_fetch_array($result)) {
                 $count++;
                 $id = $row['id'];
@@ -224,7 +224,8 @@ class Lottery extends Admin_Controller {
         mysqli_query($dblink, $query) || die("Can't update lottery info. Reason: " . mysqli_error($dblink));
     }
 
-    function deleteMemberBlackList() {
+    function deleteMemberBlackList()
+    {
         $id = $_GET['id'];
         $member_id = $_GET['member_id'];
         $query = "select * from lottery_pool INNER JOIN member on lottery_pool.member_id = member.memid where lottery_id=$id && memid=$member_id group by memid";
@@ -242,5 +243,4 @@ class Lottery extends Admin_Controller {
             }
         }
     }
-
 }

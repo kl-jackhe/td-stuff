@@ -1216,7 +1216,6 @@ input.qtyminus {
     font-size: 14px;
     margin-top: 0;
     margin-bottom: 10px;
-    padding: 10px;
 }
 
 .cargoText .paddingFixTop {
@@ -1233,7 +1232,6 @@ input.qtyminus {
 .cargoDetail {
     color: rgb(72, 79, 83);
     font-size: 14px;
-    padding: 10px;
     margin-bottom: 10px;
 }
 
