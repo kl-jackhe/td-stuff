@@ -39,6 +39,7 @@
                     <?php require('auth-follow.php'); ?>
                 </div>
                 <div v-else-if="selectedCategoryId == 3">
+                    <?php require('auth-lottery.php'); ?>
                 </div>
                 <div v-else-if="selectedCategoryId == 4">
                 </div>
@@ -73,7 +74,8 @@
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 mail: <?= (!empty($this->session->userdata('user_id')) && !empty($mail)) ? json_encode($mail) : json_encode(''); ?>,
-                followData: null,
+                followData: '',
+                lottery: '',
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 selectedMail: null, // 該會員被選中的訂單
@@ -130,6 +132,8 @@
                     return Math.ceil(this.order.length / this.perpage);
                 } else if (this.selectedCategoryId == 2) {
                     return Math.ceil(this.followData.length / this.perpage);
+                } else if (this.selectedCategoryId == 3) {
+                    return Math.ceil(this.lottery.length / this.perpage);
                 } else if (this.selectedCategoryId == 8) {
                     return Math.ceil(this.mail.length / this.perpage);
                 }
@@ -145,6 +149,8 @@
                     return Math.min(end, this.order.length);
                 } else if (this.selectedCategoryId == 2) {
                     return Math.min(end, this.followData.length);
+                } else if (this.selectedCategoryId == 3) {
+                    return Math.min(end, this.lottery.length);
                 } else if (this.selectedCategoryId == 8) {
                     return Math.min(end, this.mail.length);
                 }
