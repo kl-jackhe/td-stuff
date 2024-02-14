@@ -17,8 +17,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="menu_sort">排序</label>
+                <label for="menu_sort">序列編號</label>
                 <input type="number" class="form-control" id="menu_sort" name="menu_sort" min="1" value="1">
+            </div>
+            <div class="form-group">
+                <label for="menu_position_sort">排序</label>
+                <input type="number" class="form-control" id="menu_position_sort" name="menu_position_sort" min="1" value="1">
             </div>
             <div hidden class="form-group">
                 <input class="form-control" name="parent_id" value="<?= $parent_id; ?>">
@@ -42,6 +46,7 @@
                     <tr>
                         <th class="text-center">選單名稱</th>
                         <th class="text-center">類型</th>
+                        <th class="text-center">序列編號</th>
                         <th class="text-center">排序</th>
                         <th class="text-center">狀態</th>
                         <th class="text-center">操作</th>
@@ -53,6 +58,7 @@
                             <td class="text-center" id="name"><?= $data['name'] ?></td>
                             <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
+                            <td class="text-center" id="sort"><?= $data['position_sort'] ?></td>
                             <td class="text-center" id="status"><?= $data['status'] == 1 ? '✔️開啟' : '❌關閉'; ?></td>
                             <td hidden><input type="hidden" id="menuId" value="<?= $data['id'] ?>"></td>
                             <td class="text-center">
@@ -64,7 +70,7 @@
                     <?php endforeach; ?>
                 <?php else : ?>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <br>
                             <br>
                             <br>
@@ -90,11 +96,16 @@
             <?php foreach ($menu as $self) : ?>
                 var name = <?= json_encode($self['name']) ?>;
                 var sort = <?= json_encode($self['sort']) ?>;
+                var position_sort = <?= json_encode($self['position_sort']) ?>;
                 if (menu_name == name) {
                     alert('該項目已存在');
                     return;
                 }
                 if (menu_sort == sort) {
+                    alert('該序列編號已存在');
+                    return;
+                }
+                if (menu_position_sort == position_sort) {
                     alert('該排序已存在');
                     return;
                 }

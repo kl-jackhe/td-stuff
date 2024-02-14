@@ -147,6 +147,7 @@ class Menu extends Admin_Controller
         $id = $this->input->post('id');
         $name = $this->input->post('name');
         $sort = $this->input->post('sort');
+        $position_sort = $this->input->post('position_sort');
         $status = $this->input->post('status');
         $code = $this->input->post('code');
         if ($databaseName != 'menu' && $databaseName != 'sub_menu') {
@@ -156,11 +157,12 @@ class Menu extends Admin_Controller
 
         $message = '更新失敗';
 
-        if (!empty($id) && !empty($name) && !empty($sort) && ((!empty($status == 0) || !empty($status == 1)))) {
+        if (!empty($id) && !empty($name) && !empty($sort) && !empty($position_sort) && ((!empty($status == 0) || !empty($status == 1)))) {
             try {
                 $updateData = array(
                     'name' => $name,
                     'sort' => $sort,
+                    'position_sort' => $position_sort,
                     'status' => $status,
                 );
                 if (!empty($code)) {

@@ -87,11 +87,12 @@ class Update extends Admin_Controller
                 $this->update_202401291410();
                 $this->update_202401291600();
                 $this->update_202402021730();
+                $this->update_202402141400();
                 if ($this->is_partnertoys) {
                     // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
-                    $this->create_product_combine();
+                    // $this->create_product_combine();
                 }
                 $this->update_202402021730();
             } else {
@@ -333,6 +334,38 @@ class Update extends Admin_Controller
                 } else {
                     // Handle the case where there are no more rows in $post_contents
                     echo "No more rows in post_contents.";
+                }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202402141400()
+    {
+        $version = '202402141400';
+        $description = '[menu] and the sons insert col [position_sort]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $tables = ['menu', 'sub_menu', 'sub_son_menu', 'sub_sub_son_menu'];
+            $newColumnName = 'position_sort';
+
+            foreach ($tables as $table) {
+                $query = $this->db->query("SHOW COLUMNS FROM $table LIKE 'sort'");
+                if ($query->num_rows() > 0) {
+                    // Add the new column
+                    $this->db->query("ALTER TABLE `$table` ADD `$newColumnName` int(11) NOT NULL AFTER `sort`;");
+
+                    // Update the new column with values from the sort column
+                    $this->db->query("UPDATE `$table` SET `$newColumnName` = `sort`;");
                 }
             }
 

@@ -23,19 +23,25 @@
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
                             <input type="hidden" class="form-control" id="id" name="id" value="<? echo $menu['id'] ?>" required>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="name">選單名稱</label>
                                     <input type="text" class="form-control" id="name" name="name" value="<? echo $menu['name'] ?>" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="sort">排序</label>
+                                    <label for="sort">序列編號</label>
                                     <input type="text" class="form-control" id="sort" name="sort" value="<? echo $menu['sort'] ?>" required readonly>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="position_sort">排序</label>
+                                    <input type="text" class="form-control" id="position_sort" name="position_sort" value="<? echo $menu['position_sort'] ?>" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="status">狀態</label>
                                     <select class="form-control" name="status">
@@ -173,14 +179,21 @@
         var editid = $('#id').val();
         var editName = $('#name').val();
         var editSort = $('#sort').val();
+        var editPositionSort = $('#position_sort').val();
 
-        if (editSort == 0) {
+        if (editSort == 0 || editPositionSort == 0) {
             alert('更新失敗排序不可為NULL');
             return;
         }
         <?php if (!empty($same_level_menu)) : ?>
             <?php foreach ($same_level_menu as $self) : ?>
                 if (editSort == <?= json_encode($self['sort']) ?>) {
+                    if (editid != <?= json_encode($self['id']) ?>) {
+                        alert('更新失敗序列編號不可重複');
+                        return;
+                    }
+                }
+                if (editPositionSort == <?= json_encode($self['position_sort']) ?>) {
                     if (editid != <?= json_encode($self['id']) ?>) {
                         alert('更新失敗排序不可重複');
                         return;
