@@ -930,7 +930,7 @@ foreach ($this->cart->contents() as $items) {
         //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
         // }
         if ($('#cart_total').val() != '') {
-            data += '<tr><td>購物車小計</td><td>' + $('#cart_total').val() + '</td></tr>';
+            data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
         }
         if ($('#shipping_amount').val() != '') {
             data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';

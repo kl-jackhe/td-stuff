@@ -108,6 +108,196 @@ class Update extends Admin_Controller
         }
     }
 
+    function upload_orders()
+    {
+        $version = 'upload_orders';
+        $description = 'transition orders data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $this->db->select('*');
+            $query = $this->db->get('order_list');
+            $order_list = $query->result_array();
+
+            $this->db->select('*');
+            $query = $this->db->get('order_cvs');
+            $order_cvs = $query->result_array();
+
+            $this->db->select('*');
+            $query = $this->db->get('order_dtl');
+            $order_dtl = $query->result_array();
+
+            foreach ($order_list as $row) {
+                $new_date = date('Y-m-d', strtotime($row['oddate'])); // 將日期轉換為 Y-m-d 格式
+                $order_delivery = ($row['shipid'] == 3) ? '711_pickup' : (($row['shipid'] == 4) ? 'family_pickup' : (($row['shipid'] == 8 || $row['shipid'] == 17 || $row['shipid'] == 18 || $row['shipid'] == 19) ? 'sf_express_delivery' : (($row['shipid'] == 6 || $row['shipid'] == 12 || $row['shipid'] == 13) ? 'post_delivery' : 'ktj_delivery')));
+                $order_payment = ($row['kindid'] == 1 || $row['kindid'] == 23 || $row['kindid'] == 24) ? 'ecpay_ATM' : (($row['kindid'] == 2 || $row['kindid'] == 22) ? 'ecpay_credit' : 'ecpay_CVS');
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'order_id' => $row['odid'],
+                    'order_number' => $row['odno'],
+                    'order_date' => $new_date,
+                    'customer_id' => $row['memid'],
+                    'customer_name' => $row['username1'],
+                    'customer_phone' => $row['mobile1'],
+                    'customer_email' => $row['email1'],
+                    'order_total' => $row['price'],
+                    'order_discount_total' => $row['price'],
+                    // 'order_discount_price' => $row['price'],
+                    'order_delivery_cost' => $row['cost'],
+                    // 'order_delivery_place' => $row['order_delivery_place'],
+                    'order_delivery_address' => ($row['addr1'] . '(' . $row['code1'] . ')'),
+                    // 'order_delivery_time' => $row['order_delivery_time'],
+                    // 'store_id' => $row['store_id'],
+                    // 'order_store_name' => $row['order_store_name'],
+                    // 'order_store_address' => $row['order_store_address'],
+                    'order_delivery' => $order_delivery,
+                    'order_payment' => $order_payment,
+                    'InvoiceNumber' => $row['invoid'],
+                    // 'SelfLogistics' => $row['SelfLogistics'],
+                    // 'AllPayLogisticsID' => $row['AllPayLogisticsID'],
+                    // 'CVSPaymentNo' => $row['CVSPaymentNo'],
+                    // 'order_step' => $row['order_step'],
+                    // 'order_pay_status' => $row['order_pay_status'],
+                    // 'order_pay_feedback' => $row['order_pay_feedback'],
+                    'MerchantID' => $row['MerchantID'],
+                    'MerchantTradeNo' => $row['MerchantTradeNo'],
+                    'PaymentDate' => $row['PaymentDate'],
+                    'PaymentType' => $row['PaymentType'],
+                    'PaymentTypeChargeFee' => $row['PaymentTypeChargeFee'],
+                    'RtnCode' => $row['RtnCode'],
+                    'RtnMsg' => $row['RtnMsg'],
+                    'SimulatePaid' => $row['SimulatePaid'],
+                    'TradeAmt' => $row['TradeAmt'],
+                    'PayAmt' => $row['PayAmt'],
+                    'TradeNo' => $row['TradeNo'],
+                    'TradeDate' => $row['TradeDate'],
+                    'PaymentNo' => $row['PaymentNo'],
+                    'VirtualAccount' => $row['VirtualAccount'],
+                    'BankCode' => $row['BankCode'],
+                    'ExpireDate' => $row['ExpireDate'],
+                    'invoid' => $row['invoid'],
+                    'send_date' => $row['send_date'],
+                    'send_type' => $row['send_type'],
+                    'send_no' => $row['send_no'],
+                    'upay_no' => $row['upay_no'],
+                    'upay_price' => $row['upay_price'],
+                    'upay_name' => $row['upay_name'],
+                    'upay_date' => $row['upay_date'],
+                    'upay_memo' => $row['upay_memo'],
+                    'stock_makeup' => $row['stock_makeup'],
+                    'point_enabled' => $row['point_enabled'],
+                    'point_price' => $row['point_price'],
+                    'created_at' => $row['oddate'],
+                );
+
+                // echo '<pre>';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('orders', $data);
+            }
+
+            foreach ($order_cvs as $row) {
+                // Create an associative array with field names as keys
+                $data = array(
+                    'store_id' => $row['CVSStoreID'],
+                    'order_store_name' => $row['CVSStoreName'],
+                    'order_store_address' => $row['CVSAddress'],
+                );
+
+                // echo '<pre>';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Update row data into the database
+                $this->db->where('order_number', $row['odno']);
+                $this->db->update('orders', $data);
+            }
+
+            // foreach ($order_dtl as $row) {
+               
+            //     // Create an associative array with field names as keys
+            //     $data = array(
+            //         'order_id' => $row['odid'],
+            //         'order_number' => $row['odno'],
+            //         'order_date' => $new_date,
+            //         'customer_id' => $row['memid'],
+            //         'customer_name' => $row['username1'],
+            //         'customer_phone' => $row['mobile1'],
+            //         'customer_email' => $row['email1'],
+            //         'order_total' => $row['price'],
+            //         'order_discount_total' => $row['price'],
+            //         // 'order_discount_price' => $row['price'],
+            //         'order_delivery_cost' => $row['cost'],
+            //         // 'order_delivery_place' => $row['order_delivery_place'],
+            //         'order_delivery_address' => ($row['addr1'] . '(' . $row['code1'] . ')'),
+            //         // 'order_delivery_time' => $row['order_delivery_time'],
+            //         // 'store_id' => $row['store_id'],
+            //         // 'order_store_name' => $row['order_store_name'],
+            //         // 'order_store_address' => $row['order_store_address'],
+            //         'order_delivery' => $order_delivery,
+            //         'order_payment' => $order_payment,
+            //         'InvoiceNumber' => $row['invoid'],
+            //         // 'SelfLogistics' => $row['SelfLogistics'],
+            //         // 'AllPayLogisticsID' => $row['AllPayLogisticsID'],
+            //         // 'CVSPaymentNo' => $row['CVSPaymentNo'],
+            //         // 'order_step' => $row['order_step'],
+            //         // 'order_pay_status' => $row['order_pay_status'],
+            //         // 'order_pay_feedback' => $row['order_pay_feedback'],
+            //         'MerchantID' => $row['MerchantID'],
+            //         'MerchantTradeNo' => $row['MerchantTradeNo'],
+            //         'PaymentDate' => $row['PaymentDate'],
+            //         'PaymentType' => $row['PaymentType'],
+            //         'PaymentTypeChargeFee' => $row['PaymentTypeChargeFee'],
+            //         'RtnCode' => $row['RtnCode'],
+            //         'RtnMsg' => $row['RtnMsg'],
+            //         'SimulatePaid' => $row['SimulatePaid'],
+            //         'TradeAmt' => $row['TradeAmt'],
+            //         'PayAmt' => $row['PayAmt'],
+            //         'TradeNo' => $row['TradeNo'],
+            //         'TradeDate' => $row['TradeDate'],
+            //         'PaymentNo' => $row['PaymentNo'],
+            //         'VirtualAccount' => $row['VirtualAccount'],
+            //         'BankCode' => $row['BankCode'],
+            //         'ExpireDate' => $row['ExpireDate'],
+            //         'invoid' => $row['invoid'],
+            //         'send_date' => $row['send_date'],
+            //         'send_type' => $row['send_type'],
+            //         'send_no' => $row['send_no'],
+            //         'upay_no' => $row['upay_no'],
+            //         'upay_price' => $row['upay_price'],
+            //         'upay_name' => $row['upay_name'],
+            //         'upay_date' => $row['upay_date'],
+            //         'upay_memo' => $row['upay_memo'],
+            //         'stock_makeup' => $row['stock_makeup'],
+            //         'point_enabled' => $row['point_enabled'],
+            //         'point_price' => $row['point_price'],
+            //         'created_at' => $row['oddate'],
+            //     );
+
+            //     // echo '<pre>';
+            //     // print_r($data);
+            //     // echo '</pre>';
+
+            //     // Insert row data into the database
+            //     $this->db->insert('orders', $data);
+            // }
+            
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+
     function create_product_combine()
     {
         $version = 'create_product_combine';
