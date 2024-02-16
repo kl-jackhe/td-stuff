@@ -66,6 +66,27 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $('#languageSelect').change(function() {
+            var lang = $(this).val();
+            $.ajax({
+                url: '/auth/language_switch', // 請替換為你的後端腳本位置
+                method: 'POST',
+                data: {
+                    lang: lang
+                },
+                success: function(response) {
+                    // console.log(response);
+                    // 更新內容
+                    $('#termsOfMembership .memberTitleChinese').html(response.page_title);
+                    $('#termsOfMembership .membershipContent').html(response.page_info);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
     const authApp = Vue.createApp({
         data() {
             return {

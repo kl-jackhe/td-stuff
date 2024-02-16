@@ -87,7 +87,7 @@ class Product extends Public_Controller
 
 		$this->data['productCombine'] = $this->product_model->getProduct_Combine($product_id);
 
-		$this->data['instructions'] = $this->auth_model->getStandardPageList('LogisticsAndPayment');
+		$this->data['instructions'] = $this->auth_model->getStandardPageList('LogisticsAndPayment_tw');
 
 		$tmp = array();
 		if (!empty($this->data['productCombine'])) {
@@ -188,6 +188,16 @@ class Product extends Public_Controller
 		} else {
 			$this->render('product/view');
 		}
+	}
+
+	function language_switch()
+	{
+		$lang = $this->input->post('lang');
+		$data = $this->product_model->getLanguageData($lang);
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($data));
+		return;
 	}
 
 	function set_product_img_count()

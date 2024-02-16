@@ -31,9 +31,8 @@ class Auth extends Public_Controller
 	{
 		$this->data['title'] = '會員專區';
 		if ($this->is_partnertoys) :
-
 			if (empty($this->session->userdata('user_id'))) :
-				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
+				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService_tw');
 				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 6);
 			else :
@@ -88,6 +87,16 @@ class Auth extends Public_Controller
 			endif;
 			$this->render('auth/liqun/liqun_index');
 		endif;
+	}
+
+	function language_switch()
+	{
+		$lang = $this->input->post('lang');
+		$data = $this->auth_model->getLanguageData($lang);
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($data));
+		return;
 	}
 
 	public function mail_total_reading()

@@ -54,6 +54,7 @@ class Menu extends Admin_Controller
             'name' => $this->input->post('menu_name'),
             'type' => $this->input->post('menu_type'),
             'sort' => $this->input->post('menu_sort'),
+            'position_sort' => $this->input->post('menu_position_sort'),
         );
         $this->db->insert('menu', $insertData);
         $message = '新增成功';
@@ -71,6 +72,7 @@ class Menu extends Admin_Controller
             'name' => $this->input->post('menu_name'),
             'type' => $this->input->post('menu_type'),
             'sort' => $this->input->post('menu_sort'),
+            'position_sort' => $this->input->post('menu_position_sort'),
         );
 
         $this->db->insert('sub_menu', $insertData);
@@ -90,6 +92,7 @@ class Menu extends Admin_Controller
             'name' => $this->input->post('menu_name'),
             'type' => $this->input->post('menu_type'),
             'sort' => $this->input->post('menu_sort'),
+            'position_sort' => $this->input->post('menu_position_sort'),
         );
 
         $this->db->insert('sub_son_menu', $insertData);
@@ -110,6 +113,7 @@ class Menu extends Admin_Controller
             'name' => $this->input->post('menu_name'),
             'type' => $this->input->post('menu_type'),
             'sort' => $this->input->post('menu_sort'),
+            'position_sort' => $this->input->post('menu_position_sort'),
         );
 
         $this->db->insert('sub_sub_son_menu', $insertData);

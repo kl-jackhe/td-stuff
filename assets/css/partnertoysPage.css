@@ -1207,8 +1207,11 @@ input.qtyminus {
 .cargoBtn {
     font-size: 14px;
     margin: 10px 0;
-    padding: 10px;
     text-align: center;
+}
+
+#combineSelect.cargoBtn {
+    padding: 10px;
 }
 
 .cargoText {
@@ -1952,7 +1955,7 @@ input.qtyminus {
 
 @media (max-width: 600px) {
     #termsOfMembership {
-        padding: 15px;
+        padding: 50px 15px 15px 15px;
     }
 }
 
@@ -2535,6 +2538,44 @@ input.qtyminus {
 
 .redContent {
     color: #e30020;
+}
+
+#languageSelector {
+    position: absolute;
+    top: 10px;
+    /* 距離窗口頂部的距離 */
+    z-index: 9999;
+    /* 確保它在其他內容之上 */
+    border: 1px solid #ccc;
+    /* 邊框 */
+    border-radius: 5px;
+    /* 圓角 */
+}
+
+#languageSelector select {
+    padding: 8px 20px;
+    /* 內邊距 */
+    font-size: 16px;
+    /* 字體大小 */
+    border: 1px solid #ccc;
+    /* 邊框 */
+    border-radius: 5px;
+    /* 圓角 */
+    background-color: #fff;
+    /* 背景色 */
+    -webkit-appearance: none;
+    /* 移除默認樣式 */
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    /* 指標 */
+}
+
+/* 選擇狀態下的樣式 */
+#languageSelector select:hover,
+#languageSelector select:focus {
+    border-color: #999;
+    /* 鼠標懸停或焦點時的邊框顏色 */
 }
 
 /* 修改滾動條 */

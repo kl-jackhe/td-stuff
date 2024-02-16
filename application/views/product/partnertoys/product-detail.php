@@ -98,10 +98,19 @@
     <!-- mfp -->
     <div id="termsPopupWrapper">
         <div id="termsOfMembership" class="mfp-hide">
+            <div id="languageSelector"> <!-- 語言選擇器放在這裡 -->
+                <select id="languageSelect">
+                    <option value="zh_tw">繁體中文</option>
+                    <option value="zh_cn">简体中文</option>
+                    <option value="ja_jp">日本語</option>
+                    <option value="en_us">English</option>
+                    <!-- 其他語言選項 -->
+                </select>
+            </div>
             <div class="col-12 text-center">
                 <span class="memberTitleMember">FREIGHT<span class="memberTitleLogin">&nbsp;DESCRIPTION</span></span>
             </div>
-            <div class="memberTitleChinese col-12 text-center">運費說明</div>
+            <div class="memberTitleChinese col-12 text-center"><?= !empty($instructions['page_title']) ? $instructions['page_title'] : ''; ?></div>
             <div class="membershipLine"></div>
             <div class="membershipContent">
                 <?php echo !empty($instructions['page_info']) ? $instructions['page_info'] : ''; ?>
@@ -109,6 +118,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#languageSelect').change(function() {
+            var lang = $(this).val();
+            $.ajax({
+                url: '/product/language_switch', // 請替換為你的後端腳本位置
+                method: 'POST',
+                data: {
+                    lang: lang
+                },
+                success: function(response) {
+                    // console.log(response);
+                    // 更新內容
+                    $('#termsOfMembership .memberTitleChinese').html(response.page_title);
+                    $('#termsOfMembership .membershipContent').html(response.page_info);
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     const productApp = Vue.createApp({

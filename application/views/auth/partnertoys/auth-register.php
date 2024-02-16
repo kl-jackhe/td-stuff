@@ -108,10 +108,19 @@
         <!-- mfp -->
         <div id="termsPopupWrapper">
             <div id="termsOfMembership" class="mfp-hide">
+                <div id="languageSelector"> <!-- 語言選擇器放在這裡 -->
+                    <select id="languageSelect">
+                        <option value="zh_tw">繁體中文</option>
+                        <option value="zh_cn">简体中文</option>
+                        <option value="ja_jp">日本語</option>
+                        <option value="en_us">English</option>
+                        <!-- 其他語言選項 -->
+                    </select>
+                </div>
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">MEMBER<span class="memberTitleLogin">&nbsp;TERMS</span></span>
                 </div>
-                <div class="memberTitleChinese col-12 text-center">會員加入條款</div>
+                <div class="memberTitleChinese col-12 text-center"><?= !empty($membership['page_title']) ? $membership['page_title'] : ''; ?></div>
                 <div class="membershipLine"></div>
                 <div class="membershipContent">
                     <?php echo !empty($membership['page_info']) ? $membership['page_info'] : ''; ?>

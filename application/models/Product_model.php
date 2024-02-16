@@ -365,4 +365,11 @@ class Product_model extends CI_Model
 		$query = $this->db->get('product_combine')->result_array();
 		return (!empty($query) ? $query : false);
 	}
+	function getLanguageData($lang)
+	{
+		$this->db->where('page_lang', $lang);
+		$this->db->like('page_name', 'LogisticsAndPayment', 'both');
+		$query = $this->db->get('standard_page_list');
+		return (!empty($query) ? $query->row_array() : false);
+	}
 }
