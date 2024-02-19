@@ -549,7 +549,7 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'state'");
             if ($query->num_rows() > 0) {
             } else {
-                $this->db->query("ALTER TABLE `orders` ADD `state` tinyint(1) NOT NULL AFTER `agent_profit_amount`;");
+                $this->db->query("ALTER TABLE `orders` ADD `state` tinyint(1) NOT NULL DEFAULT 1 AFTER `agent_profit_amount`;");
             }
 
             $insertData = array(
