@@ -88,13 +88,14 @@ class Update extends Admin_Controller
                 $this->update_202401291600();
                 $this->update_202402021730();
                 $this->update_202402141400();
+                $this->update_202402200216();
                 if ($this->is_partnertoys) {
                     // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
                     // $this->create_product_combine();
+                    // $this->upload_orders();
                 }
-                $this->update_202402021730();
             } else {
                 // 不存在
                 $this->update_202308161130();
@@ -218,7 +219,7 @@ class Update extends Admin_Controller
             }
 
             // foreach ($order_dtl as $row) {
-               
+
             //     // Create an associative array with field names as keys
             //     $data = array(
             //         'order_id' => $row['odid'],
@@ -285,7 +286,7 @@ class Update extends Admin_Controller
             //     // Insert row data into the database
             //     $this->db->insert('orders', $data);
             // }
-            
+
 
             $insertData = array(
                 'version' => $version,
@@ -525,6 +526,30 @@ class Update extends Admin_Controller
                     // Handle the case where there are no more rows in $post_contents
                     echo "No more rows in post_contents.";
                 }
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202402200216()
+    {
+        $version = '202402200216';
+        $description = '[orders] create [state]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'state'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `state` tinyint(1) NOT NULL AFTER `agent_profit_amount`;");
             }
 
             $insertData = array(

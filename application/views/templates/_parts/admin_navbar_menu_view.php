@@ -21,20 +21,53 @@
         <span id="NowTime" style="color: white;"></span>
       </a>
     </li>
-    <li class="hidden-sm-down">
-      <a href="/admin/mail">
-        <?php if (get_unread_mail_count(0, 'admin') > 0) : ?>
-          <span id="MailBox" style="color: red; position: relative;">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-            <span>&nbsp;<?php echo get_unread_mail_count(0, 'admin'); ?></span>
-          </span>
-        <?php else : ?>
-          <span id="MailBox" style="color: white; position: relative;">
-            <i class="fa fa-envelope" aria-hidden="true"></i>
-          </span>
-        <?php endif; ?>
-      </a>
-    </li>
+    <?php if ($this->is_partnertoys) : ?>
+      <!-- paid hint -->
+      <li class="hidden-sm-down">
+        <a href="/admin/order">
+          <?php if (get_unread_order_count() > 0) : ?>
+            <span class="MailBox" style="color: #ffff3e; position: relative;">
+              <i class="fa fa-balance-scale" aria-hidden="true"></i>
+              <span>&nbsp;<?php echo get_unread_order_count(); ?></span>
+            </span>
+          <?php else : ?>
+            <span class="MailBox" style="color: white; position: relative;">
+              <i class="fa fa-balance-scale" aria-hidden="true"></i>
+            </span>
+          <?php endif; ?>
+        </a>
+      </li>
+      <!-- truck hint -->
+      <li class="hidden-sm-down">
+        <a href="/admin/order">
+          <?php if (get_comfire_incomplete_count() > 0) : ?>
+            <span class="MailBox" style="color: #f737ea; position: relative;">
+              <i class="fa fa-truck" aria-hidden="true"></i>
+              <span>&nbsp;<?php echo get_comfire_incomplete_count(); ?></span>
+            </span>
+          <?php else : ?>
+            <span class="MailBox" style="color: white; position: relative;">
+              <i class="fa fa-truck" aria-hidden="true"></i>
+            </span>
+          <?php endif; ?>
+        </a>
+      </li>
+      <!-- mail hint -->
+      <li class="hidden-sm-down">
+        <a href="/admin/mail">
+          <?php if (get_unread_mail_count(0, 'admin') > 0) : ?>
+            <span class="MailBox" style="color: #ff4949; position: relative;">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span>&nbsp;<?php echo get_unread_mail_count(0, 'admin'); ?></span>
+            </span>
+          <?php else : ?>
+            <span class="MailBox" style="color: white; position: relative;">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+            </span>
+          <?php endif; ?>
+        </a>
+      </li>
+    <?php endif; ?>
     <!-- END Button Notifications -->
     <?php if (!empty($this->session->userdata('user_id'))) { ?>
       <!-- BEGIN Button User -->

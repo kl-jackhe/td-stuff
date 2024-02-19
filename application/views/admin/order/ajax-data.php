@@ -12,6 +12,10 @@
         width: 65%;
     }
 
+    .redContent {
+        color: #e30020;
+    }
+
     .pay_ok_color {
         background-color: #C4E1FF !important;
     }
@@ -82,7 +86,7 @@
         <? if (!empty($orders)) {
             foreach ($orders as $order) {
                 $agentName = $this->agent_model->getAgentName($order['agent_id']); ?>
-                <tr class="<?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?>">
+                <tr class="<?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?> <?= ($order['state'] == 0 ? 'redContent' : '') ?>">
                     <td class="text-center">
                         <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?= $order['order_id'] ?>">
                     </td>
@@ -160,7 +164,15 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                NONE
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <?php $attributes = array('class' => 'form-inline'); ?>
+                                        <?php echo form_open('admin/order/updata_all_pay_logistics_id/' . $order['order_id'], $attributes); ?>
+                                        <input type="text" class="form-control" name="all_pay_logistics_id" value="<?php echo $order['AllPayLogisticsID'] ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                        <?php echo form_close() ?>
+                                    </span>
+                                </div>
                             </td>
                         <?php endif; ?>
                     <?php else : ?>

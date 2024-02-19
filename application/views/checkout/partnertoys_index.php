@@ -569,7 +569,7 @@ foreach ($this->cart->contents() as $items) {
                                     <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <!-- <h3 class="mt-0">總計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
-                                    <input type="hidden" id="shipping_amount" value="">
+                                    <input type="hidden" id="shipping_amount" name="shipping_amount" value="">
                                     <input type="hidden" id="total_amount" name="total_amount" value="">
                                 </div>
                             </div>
@@ -651,8 +651,8 @@ foreach ($this->cart->contents() as $items) {
         var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
         var initialShippingFee = 0;
         $('#shipping_fee').text(' $' + initialShippingFee);
-        $('#total_amount_view').text(' $' + (initialCartTotal + initialShippingFee));
         $('#total_amount').val(parseInt(initialCartTotal) + parseInt(initialShippingFee))
+        $('#total_amount_view').text(' $' + (initialCartTotal + initialShippingFee));
 
         if (selectedCountry === '臺灣') {
             taiwanDeliveryOptions.show();

@@ -2578,6 +2578,10 @@ input.qtyminus {
     /* 鼠標懸停或焦點時的邊框顏色 */
 }
 
+.resetRowMargin {
+    margin: auto;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

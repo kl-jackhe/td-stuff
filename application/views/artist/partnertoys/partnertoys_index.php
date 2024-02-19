@@ -9,7 +9,7 @@
                 <div class="container">
                     <img src="/assets//uploads/Editor/images/20200710164258.jpg" style="width: 100%;">
                 </div>
-                <div class="row">
+                <div class="row resetRowMargin">
                     <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="filterBySubCategory(self.id)">
                             <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
@@ -22,7 +22,7 @@
                 <div class="container">
                     <img src="/assets//uploads/Editor/images/20200710164301.jpg" style="width: 100%;">
                 </div>
-                <div class="row">
+                <div class="row resetRowMargin">
                     <div v-for="self in artist_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="filterBySubCategory(self.id)">
                             <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div v-if="selectedSubCategoryId != null" class="container">
-                <div v-for="self in artist_son_category" class="row">
+                <div v-for="self in artist_son_category" class="row resetRowMargin">
                     <div v-if="selectedSubCategoryId == self.id" v-html="self.description" class="col-12 center-content"></div>
                 </div>
             </div>

@@ -152,6 +152,20 @@ class Order extends Admin_Controller
 		$this->session->set_flashdata('message', '訂單更新成功！');
 		redirect($_SERVER['HTTP_REFERER']);
 	}
+
+	public function updata_all_pay_logistics_id($id)
+	{
+		$data = array(
+			'AllPayLogisticsID' => $this->input->post('all_pay_logistics_id'),
+		);
+		$this->db->where('order_id', $id);
+		$this->db->update('orders', $data);
+
+		$this->session->set_flashdata('message', '訂單更新成功！');
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+
 	function selectBoxChangeStep()
 	{
 		foreach ($this->input->post('id_list') as $id) {
@@ -229,6 +243,10 @@ class Order extends Admin_Controller
 				'updater_id' => $this->current_user->id,
 				'updated_at' => date('Y-m-d H:i:s'),
 			);
+			if ($step == 'pay_ok') {
+				// 已收款
+				$data['state'] = 1;
+			}
 			$this->db->where('order_id', $id);
 			$this->db->update('orders', $data);
 		}

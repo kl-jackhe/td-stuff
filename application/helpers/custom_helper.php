@@ -683,6 +683,30 @@ function get_unread_mail_count($state, $mode)
 	}
 }
 
+function get_unread_order_count()
+{
+	$CI = &get_instance();
+	$query = $CI->db->get_where('orders', array('state' => 0));
+	if ($query->num_rows() > 0) {
+		$result = $query->result_array();
+		$data = count($result);
+		return $data;
+	}
+}
+
+function get_comfire_incomplete_count()
+{
+	$CI = &get_instance();
+	$excluded_states = array('confirm', 'shipping', 'complete', 'cancel', 'invalid');
+	$CI->db->where_not_in('order_step', $excluded_states);
+	$query = $CI->db->get('orders');
+	if ($query->num_rows() > 0) {
+		$result = $query->result_array();
+		$data = count($result);
+		return $data;
+	}
+}
+
 function get_setting_general($name)
 {
 	$CI = &get_instance();
