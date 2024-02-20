@@ -9,7 +9,7 @@
       <?php echo form_open('admin/delivery/update_delivery/' . $delivery['id'], $attributes); ?>
           <div class="form-group">
             <label for="delivery_name">配送名稱</label>
-            <input type="text" class="form-control" name="delivery_name" value="<?php echo $delivery['delivery_name']; ?>" readonly>
+            <input type="text" class="form-control" name="delivery_name" value="<?php echo $delivery['delivery_name']; ?>">
           </div>
           <div class="form-group">
             <label for="shipping_cost">運費</label>

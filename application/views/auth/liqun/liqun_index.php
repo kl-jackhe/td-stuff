@@ -12,6 +12,8 @@
                 // echo '<pre>';
                 // print_r($this->session->userdata());
                 // echo '</pre>';
+                // $server_ip = $_SERVER['SERVER_ADDR'];
+                // echo "Server IP Address: " . $server_ip;
                 ?>
             </div>
             <?php if (empty($this->session->userdata('user_id'))) : ?>

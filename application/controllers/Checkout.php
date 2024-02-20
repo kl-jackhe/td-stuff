@@ -2,6 +2,7 @@
 
 class Checkout extends Public_Controller
 {
+	private $fmtoken_life;
 	private $aesKey;
 	private $aesIv;
 
@@ -160,6 +161,17 @@ class Checkout extends Public_Controller
 
 	public function get_ecb_token()
 	{
+		// $default = date('0000-00-00 00:00:00');
+		// $now_time = date('Y-m-d H:i:s');
+
+		// if($this->fmtoken_life >= $default){
+		// 	if($now_time > $this->fmtoken_life){
+		// 		$this->fmtoken_life = date('Y-m-d H:i:s') + '1hr';
+		// 	}
+		// }else{
+		// 	$this->fmtoken_life = date('Y-m-d H:i:s') + '1hr';
+		// }
+		
 		$API_ID = get_setting_general('FM_API_ID');
 		$API_KEY = get_setting_general('FM_API_KEY');
 
