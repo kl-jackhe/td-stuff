@@ -52,12 +52,22 @@ class Checkout extends Public_Controller
 		$this->data['user_data']['name'] = '';
 		$this->data['user_data']['phone'] = '';
 		$this->data['user_data']['email'] = '';
+		$this->data['user_data']['Country'] = '';
+		$this->data['user_data']['province'] = '';
+		$this->data['user_data']['county'] = '';
+		$this->data['user_data']['district'] = '';
 		$this->data['user_data']['address'] = '';
+		$this->data['user_data']['zipcode'] = '';
 		if ($this->ion_auth->logged_in() && !empty($this->current_user)) {
 			$this->data['user_data']['name'] = $this->current_user->full_name;
 			$this->data['user_data']['phone'] = $this->current_user->phone;
 			$this->data['user_data']['email'] = $this->current_user->email;
+			$this->data['user_data']['Country'] = $this->current_user->Country;
+			$this->data['user_data']['province'] = $this->current_user->province;
+			$this->data['user_data']['county'] = $this->current_user->county;
+			$this->data['user_data']['district'] = $this->current_user->district;
 			$this->data['user_data']['address'] = $this->current_user->address;
+			$this->data['user_data']['zipcode'] = $this->current_user->zipcode;
 		} else {
 			$this->data['user_data']['name'] = get_cookie("user_name", true);
 			$this->data['user_data']['phone'] = get_cookie("user_phone", true);
@@ -171,7 +181,7 @@ class Checkout extends Public_Controller
 		// }else{
 		// 	$this->fmtoken_life = date('Y-m-d H:i:s') + '1hr';
 		// }
-		
+
 		$API_ID = get_setting_general('FM_API_ID');
 		$API_KEY = get_setting_general('FM_API_KEY');
 

@@ -18,10 +18,10 @@
         </div>
     </div>
     <div class="col-md-8">
-        <div class="content-box-large">
-            <table class="table">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
                 <thead>
-                    <tr>
+                    <tr class="info">
                         <th class="text-center">標籤名稱</th>
                         <th class="text-center">排序</th>
                         <th class="text-center">狀態</th>

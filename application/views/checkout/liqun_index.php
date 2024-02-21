@@ -472,15 +472,15 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <!-- zip of taiwan -->
                                 <div id="twzipcode" class="input-group mb-3 col-12 col-sm-8 row delivery_address">
-                                    <div class="mb-2 col-md-4 col-12" data-role="county"></div>
-                                    <div class="mb-2 col-md-4 col-12" data-role="district"></div>
-                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="county" data-value="<?= $user_data['county'] ?>"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="district" data-value="<?= $user_data['district'] ?>"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode" data-value="<?= $user_data['zipcode'] ?>"></div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
-                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">

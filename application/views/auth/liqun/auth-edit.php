@@ -67,12 +67,12 @@
                                     <span class="input-group-text"><i class="fas fa-street-view"></i></span>
                                 </div>
                                 <select class="form-control" name="Country" id="Country">
-                                    <option value="請選擇國家" selected>請選擇國家</option>
+                                    <!-- <option value="請選擇國家" selected>請選擇國家</option> -->
                                     <option value="臺灣" <?= ($user->Country == '臺灣') ? 'selected' : ''; ?>>臺灣</option>
-                                    <option value="中國" <?= ($user->Country == '中國') ? 'selected' : ''; ?>>中國</option>
+                                    <!-- <option value="中國" <?= ($user->Country == '中國') ? 'selected' : ''; ?>>中國</option>
                                     <option value="香港" <?= ($user->Country == '香港') ? 'selected' : ''; ?>>香港</option>
                                     <option value="澳門" <?= ($user->Country == '澳門') ? 'selected' : ''; ?>>澳門</option>
-                                    <option value="其它" <?= ($user->Country == '其它') ? 'selected' : ''; ?>>其它</option>
+                                    <option value="其它" <?= ($user->Country == '其它') ? 'selected' : ''; ?>>其它</option> -->
                                 </select>
                             </div>
                         </div>

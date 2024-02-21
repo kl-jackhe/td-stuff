@@ -314,18 +314,18 @@ foreach ($this->cart->contents() as $items) {
                                     </div>
                                     <select class="form-control" name="Country" id="Country">
                                         <option value="請選擇國家" selected>請選擇國家</option>
-                                        <option value="臺灣">臺灣</option>
-                                        <option value="中國">中國</option>
-                                        <option value="香港">香港</option>
-                                        <option value="澳門">澳門</option>
-                                        <option value="其它">其它</option>
+                                        <option value="臺灣" <?= ($user_data['Country'] == '臺灣') ? 'selected' : ''; ?>>臺灣</option>
+                                        <option value="中國" <?= ($user_data['Country'] == '中國') ? 'selected' : ''; ?>>中國</option>
+                                        <option value="香港" <?= ($user_data['Country'] == '香港') ? 'selected' : ''; ?>>香港</option>
+                                        <option value="澳門" <?= ($user_data['Country'] == '澳門') ? 'selected' : ''; ?>>澳門</option>
+                                        <option value="其它" <?= ($user_data['Country'] == '其它') ? 'selected' : ''; ?>>其它</option>
                                     </select>
                                 </div>
                                 <!-- zip of taiwan -->
                                 <div id="twzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
-                                    <div class="mb-2 col-md-4 col-12" data-role="county"></div>
-                                    <div class="mb-2 col-md-4 col-12" data-role="district"></div>
-                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="county" data-value="<?= $user_data['county'] ?>"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="district" data-value="<?= $user_data['district'] ?>"></div>
+                                    <div class="mb-2 col-md-4 col-12" data-role="zipcode" data-value="<?= $user_data['zipcode'] ?>"></div>
                                 </div>
                                 <!-- zip of china -->
                                 <div id="cnzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
@@ -339,7 +339,7 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">詳細地址</span>
                                     </div>
-                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址">
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
                                 </div>
                                 <!-- 備註 -->
                                 <div class="input-group mb-3 col-12 col-sm-8">
@@ -950,6 +950,19 @@ foreach ($this->cart->contents() as $items) {
     $(document).ready(function() {
         // 初始化 twzipcode
         $("#twzipcode").twzipcode();
+        if ($("#Country").val() === '臺灣') {
+            $("#twzipcode").show();
+            var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');
+            var othersDeliveryOptions = $('#othersDeliveryOptions');
+            var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
+            var initialShippingFee = 0;
+            $('#shipping_fee').text(' $' + initialShippingFee);
+            $('#total_amount').val(parseInt(initialCartTotal) + parseInt(initialShippingFee))
+            $('#total_amount_view').text(' $' + (initialCartTotal + initialShippingFee));
+
+            taiwanDeliveryOptions.show();
+            othersDeliveryOptions.hide();
+        }
 
         $("#Country").change(function() {
             if ($(this).val() === '臺灣') {
@@ -982,7 +995,25 @@ foreach ($this->cart->contents() as $items) {
     // cnzipcode
     $(document).ready(function() {
         // 初始化 cnzipcode
-        $("#cnzipcode").cnzipcode();
+        $("#cnzipcode").cnzipcode({
+            provinceDefault: '<?= $user_data['province'] ?>',
+            countyDefault: '<?= $user_data['county'] ?>',
+            districtDefault: '<?= $user_data['district'] ?>',
+            zipcodeDefault: '<?= $user_data['zipcode'] ?>'
+        });
+        if ($("#Country").val() === '中國') {
+            $("#cnzipcode").show();
+            var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');
+            var othersDeliveryOptions = $('#othersDeliveryOptions');
+            var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
+            var initialShippingFee = 0;
+            $('#shipping_fee').text(' $' + initialShippingFee);
+            $('#total_amount').val(parseInt(initialCartTotal) + parseInt(initialShippingFee))
+            $('#total_amount_view').text(' $' + (initialCartTotal + initialShippingFee));
+
+            taiwanDeliveryOptions.hide();
+            othersDeliveryOptions.show();
+        }
 
         $("#Country").change(function() {
             if ($(this).val() === '中國') {

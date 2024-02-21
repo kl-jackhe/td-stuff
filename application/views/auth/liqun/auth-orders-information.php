@@ -5,14 +5,19 @@
             <div class="memberOrderContent" id="row">
                 <div class="orderDetailButton">
                     <span class="orderBtn" @click="clearSelectedOrder()"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;返回列表</span>
-                    <span class="orderBtn" @click="redirectToCargo()"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;再買一次</span>
+                    <!-- <span class="orderBtn" @click="redirectToCargo()"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;再買一次</span> -->
                 </div>
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">ORDER<span class="memberTitleLogin">&nbsp;CONTENT</span></span>
                 </div>
                 <div class="col-12 memberTitleChinese text-center">訂單內容</div>
-                <div class="col-12 selectedOrderHeaderBox">
+                <div class="col-12 selectedOrderHeaderBox d-none d-md-block">
                     <span class="selectedOrderHeader"> 訂單編號：<span class="orderNumber">{{ selectedOrder.order_number }}</span></span>
+                    <span class="selectedOrderHeader"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ selectedOrder.created_at }}</span>
+                </div>
+                <div class="col-12 selectedOrderHeaderBox d-md-none">
+                    <span class="selectedOrderHeader"> 訂單編號：<span class="orderNumber">{{ selectedOrder.order_number }}</span></span>
+                    <br>
                     <span class="selectedOrderHeader"><i class="fa fa-clock" aria-hidden="true"></i>&nbsp;{{ selectedOrder.created_at }}</span>
                 </div>
                 <div class="col-12 orderContentHeader">
@@ -27,7 +32,13 @@
                         <ol class="col-2 align-self-center text-center">小計</ol>
                     </li>
                     <li v-for="self in selectedOrderItem" class="selectedOrderList row">
-                        <ol class="col-3 align-self-center text-center">{{ self.product_name }}</ol>
+                        <ol class="col-3 align-self-center text-center">
+                            <?php if ($this->is_partnertoys) : ?>
+                                <a :href="'/product/product_detail/' + self.product_id">{{ self.product_name }}</a>
+                            <?php else : ?>
+                                <a :href="'/product/view/' + self.product_id">{{ self.product_name }}</a>
+                            <?php endif; ?>
+                        </ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-2 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
                         <ol class="col-2 align-self-center text-center">{{ self.order_item_qty }}</ol>
@@ -42,23 +53,12 @@
                         <ol class="col-3 align-self-center text-center">小計</ol>
                     </li>
                     <li v-for="self in selectedOrderItem" class="selectedOrderList row">
-                        <ol class="col-3 align-self-center text-center">{{ self.product_name }}</ol>
+                        <ol class="col-3 align-self-center text-center">
+                            <a :href="'/product/product_detail/' + self.product_id">{{ self.product_name }}</a>
+                        </ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-3 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
                         <ol class="col-3 align-self-center text-center itemPrice">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
-                    </li>
-                </div>
-                <div v-if="selectedOrder.used_coupon_name != ''" class="col-12 orderContentHeader">
-                    <i class="fa fa-tags" aria-hidden="true"></i>&nbsp;優惠券使用
-                </div>
-                <div v-if="selectedOrder.used_coupon_name != ''" class="col-12 M_order">
-                    <li id="orderListHeader" class="row">
-                        <ol class="col-8 align-self-center text-center">優惠券名稱</ol>
-                        <ol class="col-4 align-self-center text-center">折抵金額</ol>
-                    </li>
-                    <li class="selectedOrderList row">
-                        <ol class="col-8 align-self-center text-center">{{ selectedOrder.used_coupon_name }}</ol>
-                        <ol class="col-4 align-self-center text-center itemPrice">{{ (selectedOrder.order_discount_price != 0) ? ('$ ' + parseInt(selectedOrder.order_discount_price)) : 'delivery fee' }}</ol>
                     </li>
                 </div>
                 <div class="computeTable">
@@ -70,22 +70,16 @@
                                     <span class="price">{{ (selectedOrder.order_total - selectedOrder.order_delivery_cost).toFixed(2) }}</span>&nbsp;元
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="partitionLine">
                                 <th class="col-lg-10 col-sm-9 col-xs-7">運費</th>
                                 <td class="col-lg-2 col-sm-3 col-xs-5">
                                     <span class="price">{{ selectedOrder.order_delivery_cost }}</span>&nbsp;元
                                 </td>
                             </tr>
-                            <tr v-if="selectedOrder.order_discount_price > 0">
-                                <th class="col-lg-10 col-sm-9 col-xs-7">優惠券折抵</th>
-                                <td class="col-lg-2 col-sm-3 col-xs-5">
-                                    <span class="price">-{{ selectedOrder.order_discount_price }}</span>&nbsp;元
-                                </td>
-                            </tr>
-                            <tr class="partitionLine">
+                            <tr>
                                 <th nowrap="nowrap" class="col-lg-10 col-sm-9 col-xs-7">商品金額總計</th>
                                 <td nowrap="nowrap" class="col-lg-2 col-sm-3 col-xs-5">
-                                    <span class="price">NT$&nbsp;{{ selectedOrder.order_discount_total }}</span>&nbsp;元
+                                    <span class="price">NT$&nbsp;{{ selectedOrder.order_total }}</span>&nbsp;元
                                 </td>
                             </tr>
                         </tbody>
@@ -100,7 +94,7 @@
                             <div class="col-4 text-right">訂購人：</div>
                             <div class="col-8">{{ selectedOrder.customer_name }}</div>
                             <div class="col-4 text-right">付款方式：</div>
-                            <div class="col-8">{{ (selectedOrder.order_payment == 'ecpay') ? '綠界金流' : '貨到付款' }}</div>
+                            <div class="col-8">{{ (selectedOrder.order_payment == 'cash_on_delivery') ? '貨到付款' : '綠界金流' }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
@@ -136,8 +130,17 @@
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
-                    <div v-if="selectedOrder.order_step != 'confirm'" class="noneOrder">
+                    <div v-if="selectedOrder.order_step == 'order_cancel'" class="noneOrder">
                         <span>訂單已取消</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'invalid'" class="noneOrder">
+                        <span>訂單不成立</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'returning'" class="noneOrder">
+                        <span>退貨處理中</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'return_complete'" class="noneOrder">
+                        <span>訂單已退貨</span>
                     </div>
                     <div v-else-if="!selectedOrder.SelfLogistics && !selectedOrder.AllPayLogisticsID && !selectedOrder.CVSPaymentNo" class="noneOrder">
                         <span>尚未出貨</span>
@@ -158,6 +161,8 @@
                                     <h2>物流資訊</h2>
                                 </div>
                                 <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-8">NONE</div>
+                                <div class="col-4 text-right">寄貨編號：</div>
                                 <div class="col-8">{{ selectedOrder.SelfLogistics }}</div>
                             </div>
                             <div v-else class="row">
@@ -190,7 +195,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay'">
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_credit' || selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
                     <div class="operateBtn col-6">
                         <a id="completePay" @click="completePay(selectedOrder.order_id)">完成付款</a>
                     </div>
