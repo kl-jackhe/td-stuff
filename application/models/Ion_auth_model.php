@@ -2017,6 +2017,10 @@ class Ion_auth_model extends CI_Model
 			}
 		}
 
+		// echo '<pre>';
+		// print_r($data);
+		// echo '</pre>';
+
 		$this->trigger_events('extra_where');
 		$this->db->update($this->tables['users'], $data, ['id' => $user->id]);
 

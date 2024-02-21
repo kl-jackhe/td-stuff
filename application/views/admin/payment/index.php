@@ -31,10 +31,10 @@
   <?php if (!empty($features_pay)) : ?>
     <div class="col-md-12">
       <h1>金鑰管理</h1>
-      <div class="content-box-large">
-        <table class="table">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
-            <tr>
+            <tr class="info">
               <th>金流名稱</th>
               <th>MerchantID</th>
               <th>HashKey</th>
@@ -68,10 +68,10 @@
   <?php endif; ?>
   <div class="col-md-12">
     <h1>付款方式管理</h1>
-    <div class="content-box-large">
-      <table class="table">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
         <thead>
-          <tr>
+          <tr class="info">
             <th>支付名稱</th>
             <th>描述</th>
             <th>狀態</th>

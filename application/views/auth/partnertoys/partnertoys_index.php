@@ -72,6 +72,99 @@
     </section>
 </div>
 
+<script src="/assets/twzipcode/jquery.twzipcode.min.js"></script>
+<script>
+    // twzipcode
+    $(document).ready(function() {
+        // 初始化 twzipcode
+        $("#twzipcode").twzipcode();
+        if ($("#Country").val() === '臺灣') {
+            $("#twzipcode").show();
+        }
+
+
+        $("#Country").change(function() {
+            if ($(this).val() === '臺灣') {
+                $("#twzipcode").show();
+            } else {
+                $("#twzipcode").hide();
+            }
+        });
+
+        // 禁用郵遞區號的輸入框
+        $("[name='tw_zipcode']").prop('readonly', true);
+
+        // 選擇縣市、鄉鎮市區下拉選單
+        var countySelect = $("select[name='tw_county']");
+        var districtSelect = $("select[name='tw_district']");
+        var zipcodeInput = $("input[name='tw_zipcode']");
+
+        if (countySelect.length > 0) {
+            countySelect.addClass('form-control');
+        }
+
+        if (districtSelect.length > 0) {
+            districtSelect.addClass('form-control');
+        }
+
+        if (zipcodeInput.length > 0) {
+            zipcodeInput.addClass('form-control');
+        }
+    });
+</script>
+
+<script src="/assets/jQuery-cn-zipcode-master/jquery-cn-zipcode.min.js"></script>
+<script>
+    // cnzipcode
+    $(document).ready(function() {
+        // 初始化 cnzipcode
+        $("#cnzipcode").cnzipcode({
+            provinceDefault: '<?= $user->province ?>',
+            countyDefault: '<?= $user->county ?>',
+            districtDefault: '<?= $user->district ?>',
+            zipcodeDefault: '<?= $user->zipcode ?>'
+        });
+        if ($("#Country").val() === '中國') {
+            $("#cnzipcode").show();
+        }
+
+        $("#Country").change(function() {
+            if ($(this).val() === '中國') {
+                $("#cnzipcode").show();
+            } else {
+                $("#cnzipcode").hide();
+            }
+        });
+
+        // 禁用郵遞區號的輸入框
+        $("[name='cn_zipcode']").prop('readonly', true);
+
+        // 選擇縣市、鄉鎮市區下拉選單
+        var provinceSelect = $("select[name='cn_province']");
+        var countySelect = $("select[name='cn_county']");
+        var districtSelect = $("select[name='cn_district']");
+        var zipcodeInput = $("input[name='cn_zipcode']");
+
+        if (provinceSelect.length > 0) {
+            provinceSelect.addClass('form-control');
+        }
+
+        if (countySelect.length > 0) {
+            countySelect.addClass('form-control');
+        }
+
+        if (districtSelect.length > 0) {
+            districtSelect.addClass('form-control');
+        }
+
+        if (zipcodeInput.length > 0) {
+            zipcodeInput.addClass('form-control');
+            // 設定 input 的 placeholder
+            zipcodeInput.attr('placeholder', '邮政编码');
+        }
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $('#languageSelect').change(function() {
@@ -303,13 +396,14 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
-                this.scrollToTop();
-                this.clearSelectedOrder();
-                this.clearSelectedMail();
-                this.currentPage = 1; // 將頁碼設置為1
-                this.selectedCategoryId = categoryId;
-                const selectedCategory = this.authCategory.find(category => category.sort === categoryId);
-                this.pageTitle = selectedCategory.name;
+                window.location.href = '<?= base_url() . 'auth?id=' ?>' + categoryId;
+                // this.scrollToTop();
+                // this.clearSelectedOrder();
+                // this.clearSelectedMail();
+                // this.currentPage = 1; // 將頁碼設置為1
+                // this.selectedCategoryId = categoryId;
+                // const selectedCategory = this.authCategory.find(category => category.sort === categoryId);
+                // this.pageTitle = selectedCategory.name;
             },
             // 選中獨立訂單
             showOrderDetails(selected) {

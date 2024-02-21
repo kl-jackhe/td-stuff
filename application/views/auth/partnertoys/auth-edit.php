@@ -63,10 +63,41 @@
                         <div class="form-group">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">地址</span>
+                                    <span class="input-group-text">國家</span>
                                     <span class="input-group-text"><i class="fas fa-street-view"></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="address" id="address" value="<?php echo $user->address; ?>">
+                                <select class="form-control" name="Country" id="Country">
+                                    <option value="請選擇國家" selected>請選擇國家</option>
+                                    <option value="臺灣" <?= ($user->Country == '臺灣') ? 'selected' : ''; ?>>臺灣</option>
+                                    <option value="中國" <?= ($user->Country == '中國') ? 'selected' : ''; ?>>中國</option>
+                                    <option value="香港" <?= ($user->Country == '香港') ? 'selected' : ''; ?>>香港</option>
+                                    <option value="澳門" <?= ($user->Country == '澳門') ? 'selected' : ''; ?>>澳門</option>
+                                    <option value="其它" <?= ($user->Country == '其它') ? 'selected' : ''; ?>>其它</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- zip of taiwan -->
+                    <div id="twzipcode" class="input-group mb-3 col-12 row" style="display: none;">
+                        <div class="mb-2 col-md-4 col-12 d-flex justify-content-center align-items-center" data-role="county" data-value="<?= $user->county ?>"></div>
+                        <div class="mb-2 col-md-4 col-12 d-flex justify-content-center align-items-center" data-role="district" data-value="<?= $user->district ?>"></div>
+                        <div class="mb-2 col-md-4 col-12 d-flex justify-content-center align-items-center" data-role="zipcode" data-value="<?= $user->zipcode ?>"></div>
+                    </div>
+                    <!-- zip of china -->
+                    <div id="cnzipcode" class="input-group mb-3 col-12 row" style="display: none;">
+                        <div class="mb-2 col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center" data-role="province"></div>
+                        <div class="mb-2 col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center" data-role="county"></div>
+                        <div class="mb-2 col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center" data-role="district"></div>
+                        <div class="mb-2 col-lg-3 col-md-6 col-12 d-flex justify-content-center align-items-center" data-role="zipcode"></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">詳細地址</span>
+                                    <span class="input-group-text"><i class="fas fa-street-view"></i></span>
+                                </div>
+                                <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user->address; ?>">
                             </div>
                         </div>
                     </div>

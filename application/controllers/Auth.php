@@ -699,33 +699,36 @@ class Auth extends Public_Controller
 				$this->db->insert('login_log', $data);
 
 				// coupon given
+
 				$coupon = $this->auth_model->getAllCoupons();
-				foreach ($coupon as $self) {
-					if ($self['use_member_enable'] == 1 && ($self['use_member_type'] == 'new_member' || $self['use_member_type'] == 'all_member')) {
-						$data = array(
-							'coupon_id' => $self['id'],
-							'custom_id' => $this->ion_auth->user()->row()->id,
-							'type' => $self['type'],
-							'discount_amount' => $self['discount_amount'],
-							'use_limit_enable' => $self['use_limit_enable'],
-							'use_type_enable' => $self['use_type_enable'],
-							'use_product_enable' => $self['use_product_enable'],
-							'distribute_at' => $self['distribute_at'],
-							'discontinued_at' => $self['discontinued_at'],
-						);
-						if ($self['use_limit_enable'] == '1') {
-							$data['use_limit_number'] = $self['use_limit_number'];
-						} else {
-							$data['use_limit_number'] = '';
+				if (!empty($coupon)) {
+					foreach ($coupon as $self) {
+						if ($self['use_member_enable'] == 1 && ($self['use_member_type'] == 'new_member' || $self['use_member_type'] == 'all_member')) {
+							$data = array(
+								'coupon_id' => $self['id'],
+								'custom_id' => $this->ion_auth->user()->row()->id,
+								'type' => $self['type'],
+								'discount_amount' => $self['discount_amount'],
+								'use_limit_enable' => $self['use_limit_enable'],
+								'use_type_enable' => $self['use_type_enable'],
+								'use_product_enable' => $self['use_product_enable'],
+								'distribute_at' => $self['distribute_at'],
+								'discontinued_at' => $self['discontinued_at'],
+							);
+							if ($self['use_limit_enable'] == '1') {
+								$data['use_limit_number'] = $self['use_limit_number'];
+							} else {
+								$data['use_limit_number'] = '';
+							}
+							if ($self['use_type_enable'] == '1') {
+								$data['use_type_name'] = $self['use_type_name'];
+								$data['use_type_number'] = $self['use_type_number'];
+							} else {
+								$data['use_type_name'] = '';
+								$data['use_type_number'] = '';
+							}
+							$this->db->insert('new_coupon_custom', $data);
 						}
-						if ($self['use_type_enable'] == '1') {
-							$data['use_type_name'] = $self['use_type_name'];
-							$data['use_type_number'] = $self['use_type_number'];
-						} else {
-							$data['use_type_name'] = '';
-							$data['use_type_number'] = '';
-						}
-						$this->db->insert('new_coupon_custom', $data);
 					}
 				}
 
@@ -837,17 +840,41 @@ class Auth extends Public_Controller
 
 			// if ($this->form_validation->run() === TRUE)
 			// {
+
+			$this_province = '';
+			$this_county = '';
+			$this_district = '';
+			$this_zipcode = '';
+
+			if ($this->input->post('Country') == '臺灣') {
+				$this_province = '';
+				$this_county = $this->input->post('tw_county');
+				$this_district = $this->input->post('tw_district');
+				$this_zipcode = $this->input->post('tw_zipcode');
+			} else if ($this->input->post('Country') == '中國') {
+				$this_province = $this->input->post('cn_province');
+				$this_county = $this->input->post('cn_county');
+				$this_district = $this->input->post('cn_district');
+				$this_zipcode = $this->input->post('cn_zipcode');
+			}
 			$data = array(
 				'full_name' => $this->input->post('full_name'),
 				'email' => $this->input->post('email'),
 				'phone' => $this->input->post('phone'),
-				'county' => $this->input->post('county'),
-				'district' => $this->input->post('district'),
+				'Country' => $this->input->post('Country'),
+				'province' => $this_province,
+				'county' => $this_county,
+				'district' => $this_district,
+				'zipcode' => $this_zipcode,
 				'address' => $this->input->post('address'),
 				'birthday' => $this->input->post('birthday'),
 				'updater_id' => $this->ion_auth->user()->row()->id,
 				'updated_at' => date('Y-m-d H:i:s'),
 			);
+
+			// echo '<pre>';
+			// print_r($data);
+			// echo '</pre>';
 
 			// update the password if it was posted
 			if ($this->input->post('password')) {
@@ -875,6 +902,7 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				if ($this->is_partnertoys) {
 					echo '<script>alert("修改成功");</script>';
+					// return;
 					redirect('auth/index?id=5', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					echo '<script>alert("修改成功");</script>';

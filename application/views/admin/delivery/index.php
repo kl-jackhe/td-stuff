@@ -5,7 +5,7 @@
   </div> -->
   <!-- <div class="col-md-4">
     <div class="content-box-large">
-    <?php $attributes = array('class' => 'delivery', 'id' => 'delivery');?>
+    <?php $attributes = array('class' => 'delivery', 'id' => 'delivery'); ?>
     <?php echo form_open('admin/delivery/insert_delivery', $attributes); ?>
       <div class="form-group">
         <label for="delivery_name">配送名稱</label>
@@ -33,10 +33,10 @@
     </div>
   </div> -->
   <div class="col-md-12">
-  	<div class="content-box-large">
-  	  <table class="table">
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
         <thead>
-          <tr>
+          <tr class="info">
             <th>配送名稱</th>
             <!-- <th>依照方式</th> -->
             <th>運費</th>
@@ -46,49 +46,54 @@
             <th>操作</th>
           </tr>
         </thead>
-        <?if (!empty($delivery)): foreach ($delivery as $data): ?>
-	        <tr>
-	          <td><?php echo $data['delivery_name'] ?></td>
-            <!-- <td>
-            <?if (!empty($data['according_name'])) {?>
+        <? if (!empty($delivery)) : foreach ($delivery as $data) : ?>
+            <tr>
+              <td><?php echo $data['delivery_name'] ?></td>
+              <!-- <td>
+            <? if (!empty($data['according_name'])) { ?>
               <?php echo $data['according_name'] ?>
-            <?}else{echo '無';}?>
+            <? } else {
+              echo '無';
+            } ?>
             </td> -->
-            <td>$<?php echo $data['shipping_cost'] ?></td>
-            <td>
-              <?
-              $count = 0;
-              if ($data['limit_weight'] != '' && $data['limit_weight_unit'] != '') {
-                echo '重量限制：' . $data['limit_weight'] . ' ' . $data['limit_weight_unit'];
-                $count++;
-              }
-              if ($data['limit_volume_length'] != '' || $data['limit_volume_width'] != '' || $data['limit_volume_height'] != '') {
-                if ($count > 0) {
-                  echo '<br>';
+              <td>$<?php echo $data['shipping_cost'] ?></td>
+              <td>
+                <?
+                $count = 0;
+                if ($data['limit_weight'] != '' && $data['limit_weight_unit'] != '') {
+                  echo '重量限制：' . $data['limit_weight'] . ' ' . $data['limit_weight_unit'];
+                  $count++;
                 }
-                echo '材積限制：' . '長 ' . $data['limit_volume_length'] . 'cm, 寬 ' . $data['limit_volume_width'] . 'cm, 高 ' . $data['limit_volume_height'] . 'cm';
-              }?>
-            </td>
-            <td><?php echo $data['delivery_info'] ?></td>
-            <td><?if ($data['delivery_status'] == 1) {?>
-              <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
-              <span>啟用中</span></a>
-            <?} else {?>
-              <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
-              <span>停用</span></a>
-            <?}?></td>
-	          <td>
-	            <a href="/admin/delivery/edit_delivery/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-	            <!-- <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
-	          </td>
-	        </tr>
-	        <?endforeach?>
-        <?php else: ?>
+                if ($data['limit_volume_length'] != '' || $data['limit_volume_width'] != '' || $data['limit_volume_height'] != '') {
+                  if ($count > 0) {
+                    echo '<br>';
+                  }
+                  echo '材積限制：' . '長 ' . $data['limit_volume_length'] . 'cm, 寬 ' . $data['limit_volume_width'] . 'cm, 高 ' . $data['limit_volume_height'] . 'cm';
+                } ?>
+              </td>
+              <td><?php echo $data['delivery_info'] ?></td>
+              <td><? if ($data['delivery_status'] == 1) { ?>
+                  <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
+                    <span>啟用中</span></a>
+                <? } else { ?>
+                  <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
+                    <span>停用</span></a>
+                <? } ?>
+              </td>
+              <td>
+                <a href="/admin/delivery/edit_delivery/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                <!-- <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
+              </td>
+            </tr>
+          <? endforeach ?>
+        <?php else : ?>
           <tr>
-            <td colspan="4"><center>對不起, 沒有資料 !</center></td>
+            <td colspan="4">
+              <center>對不起, 沒有資料 !</center>
+            </td>
           </tr>
-        <?php endif;?>
+        <?php endif; ?>
       </table>
-  	</div>
+    </div>
   </div>
 </div>

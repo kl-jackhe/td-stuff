@@ -89,12 +89,13 @@ class Update extends Admin_Controller
                 $this->update_202402021730();
                 $this->update_202402141400();
                 $this->update_202402200216();
+                $this->update_202402220300();
                 if ($this->is_partnertoys) {
-                    // $this->import_post_csv(base_url() . 'assets/csv_data/news.csv', 'posts');
+                    // $this->import_post_sql();
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
                     // $this->create_product_combine();
-                    $this->upload_orders();
+                    // $this->upload_orders();
                     // $this->upload_orders_item();
                 }
             } else {
@@ -355,7 +356,7 @@ class Update extends Admin_Controller
 
             foreach ($prd_detail as $row) {
                 $product = $this->mysql_model->_select('product', 'product_id', $row['prdid'], 'row');
-                if(empty($product)){
+                if (empty($product)) {
                     continue;
                 }
                 echo '<pre>';
@@ -412,16 +413,17 @@ class Update extends Admin_Controller
                 $updated_at = $row['datetime2'];
 
                 // Create an associative array with field names as keys
-                $data = array(
+                $user_data = array(
                     'id' => $row['memid'],
                     'fb_id' => $row['fbid'],
                     'ip_address' => $row['login_ip'],
-                    'username' => (!empty($row['tel']) ? $row['tel'] : (!empty($row['email']) ? $row['email'] : (!empty($row['fbid']) ? $row['fbid'] : $row['memid']))),
+                    'username' => (!empty($row['mobile'] && $row['mobile'] != null) ? $row['mobile'] : (!empty($row['email'] && $row['email'] != null) ? $row['email'] : (!empty($row['fbid'] && $row['fbid'] != null) ? $row['fbid'] : $row['memid']))),
                     'gender' => ($row['sex'] == '1' ? 'Male' : 'Female'),
                     'password' => $row['pwd'],
                     'active' => 1,
                     'email' => $row['email'],
                     'full_name' => $row['username'],
+                    'phone' => ((!empty($row['mobile']) && $row['mobile'] != null) ? $row['mobile'] : ''),
                     'birthday' => (($row['birthday'] != null) ? $row['birthday'] : ''),
                     'is_send_email' => (($row['is_send_email'] != null) ? $row['is_send_email'] : 0),
                     'created_at' => $created_at,
@@ -429,11 +431,18 @@ class Update extends Admin_Controller
                 );
 
                 echo '<pre>';
-                print_r($data);
+                print_r($user_data);
                 echo '</pre>';
 
                 // Insert row data into the database
-                $this->db->insert('users', $data);
+                $this->db->insert('users', $user_data);
+
+                $groups_data = array(
+                    'user_id' => $row['memid'],
+                    'group_id' => 2,
+                );
+
+                $this->db->insert('users_groups', $groups_data);
             }
 
             // $insertData = array(
@@ -522,64 +531,67 @@ class Update extends Admin_Controller
         }
     }
 
-    function import_post_csv($csv_path, $table_name)
+    function import_post_sql()
     {
-        $version = 'import_post_csv';
+        $version = 'import_post_sql';
         $description = 'transition news data';
         $this->db->select('id');
         $this->db->where('version', $version);
         $row = $this->db->get('update_log')->row_array();
         if (empty($row)) {
-            // Load CSV file data
-            $csv_data = file_get_contents($csv_path, FILE_TEXT | FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $this->db->select('*');
+            $query = $this->db->get('news');
+            $news = $query->result_array();
 
-            // Explode CSV data into an array
-            $csv_array = explode("\n", $csv_data);
+            foreach ($news as $row) {
 
-
-
-            foreach ($csv_array as $row) {
-                // Explode each row into values
-                $row_data = explode(",", $row);
-
+                $cate_id = 0;
                 // Convert date format from '0000/00/00' to '0000-00-00 00:00:00'
-                $created_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[4])));
-                $updated_at = date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $row_data[5])));
-
-                $this->db->select('*');
-                $this->db->where('newsid', $row_data[0]);
-                $query = $this->db->get('news');
-                $post_content = $query->row_array();
-
-                // Check if there are more rows in $post_contents
-                if (!empty($post_content)) {
-                    // Get the first row from $post_contents
-
-                    // Create an associative array with field names as keys
-                    $data = array(
-                        'post_id' => $row_data[0],
-                        'post_category' => $row_data[1],
-                        'post_title' => $row_data[2],
-                        'post_content' => $post_content['desc1'],
-                        'post_image' => $row_data[3],
-                        'created_at' => $created_at,
-                        'updated_at' => $updated_at,
-                    );
-
-                    echo '<pre>';
-                    print_r($data);
-                    echo '</pre>';
-
-                    if (!empty($row_data[0]) && $row_data[2] != 'post_title') {
-                        // Insert row data into the database
-                        $this->db->insert($table_name, $data);
-                    } else {
-                        // $this->db->insert($table_name, $data);
-                    }
-                } else {
-                    // Handle the case where there are no more rows in $post_contents
-                    echo "No more rows in post_contents.";
+                $created_at = date('Y-m-d H:i:s', strtotime($row['datetime']));
+                $updated_at = date('Y-m-d H:i:s', strtotime($row['datetime2']));
+                if ($row['kindid'] == '92') {
+                    $cate_id = 1;
                 }
+                if ($row['kindid'] == '93') {
+                    $cate_id = 2;
+                }
+                if ($row['kindid'] == '118') {
+                    $cate_id = 3;
+                }
+                if ($row['kindid'] == '119') {
+                    $cate_id = 4;
+                }
+                if ($row['kindid'] == '120') {
+                    $cate_id = 5;
+                }
+                if ($row['kindid'] == '117') {
+                    $cate_id = 6;
+                }
+
+                $post_img = 'News/img/' . $row['filename'];
+
+                if (empty($row['filename'])) {
+                    continue;
+                }
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'post_id' => $row['newsid'],
+                    'post_category' => $cate_id,
+                    'post_title' => $row['subject'],
+                    'post_content' => $row['desc1'],
+                    'post_image' => $post_img,
+                    'post_status' => ($row['state'] == 'y') ? 1 : 2,
+                    'created_at' => $created_at,
+                    'updated_at' => $created_at,
+                );
+
+                echo '<pre>';
+                print_r($data);
+                echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('posts', $data);
             }
 
             // $insertData = array(
@@ -589,6 +601,42 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202402220300()
+    {
+        $version = '202402220300';
+        $description = '[users] create [Country][province][zipcode]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'Country'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `users` ADD `Country` varchar(10) NOT NULL AFTER `phone`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'provinc'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `users` ADD `province` varchar(10) NOT NULL AFTER `Country`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM users LIKE 'zipcode'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `users` ADD `zipcode` varchar(10) NOT NULL AFTER `address`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

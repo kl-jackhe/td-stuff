@@ -148,6 +148,22 @@ class Posts extends Admin_Controller
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    public function update_post_status($id)
+    {
+        $self = $this->mysql_model->_select('posts', 'post_id', $id, 'row');
+        if ($self['post_status'] == 1) {
+            $post_status = 2;
+        } else {
+            $post_status = 1;
+        }
+        $data = array(
+            'post_status' => $post_status,
+        );
+        $this->db->where('post_id', $id);
+        $this->db->update('posts', $data);
+        redirect(base_url() . 'admin/posts/edit/' . $id);
+    }
+
     public function delete($id)
     {
         $this->db->where('post_id', $id);

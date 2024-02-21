@@ -84,6 +84,7 @@ class Posts_model extends CI_Model
     function getDescCreatedAtPosts()
     {
         $this->db->select('*');
+        $this->db->where('post_status', 1);
         $this->db->order_by('created_at', 'desc');
         $query = $this->db->get('posts');
         if (!empty($query)) {

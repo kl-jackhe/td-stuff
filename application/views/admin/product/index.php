@@ -55,34 +55,26 @@
 </style>
 
 <div class="row">
-  <div class="col-md-4">
-    <div class="row" id="positionBtn">
-      <div class="col-md-4">
-        <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
-      </div>
+  <div class="col-md-12" bis_skin_checked="1">
+    <div class="form-group" bis_skin_checked="1">
+      <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
       <?php if ($this->is_partnertoys) : ?>
-        <div class="col-md-8">
-          <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
-            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 1)" style="background-color: #ec6262;">不可同時預購</a>
-          <?php else : ?>
-            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 0)" style="background-color: #4dcf4d;">可以同時預購</a>
-          <?php endif; ?>
-        </div>
         <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
-          <div class="col-md-8">
-            <?php if (isset($enable_status) && $enable_status[1]['contradiction_status'] == 1) : ?>
-              <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 1)" style="background-color: #ec6262;">不同月份不可同時預購</a>
-            <?php else : ?>
-              <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 0)" style="background-color: #4dcf4d;">不同月份可以同時預購</a>
-            <?php endif; ?>
-          </div>
+          <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 1)" style="background-color: #ec6262; float: right;margin-right: 15px;">不可同時預購</a>
+        <?php else : ?>
+          <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 0)" style="background-color: #4dcf4d; float: right;margin-right: 15px;">可以同時預購</a>
+        <?php endif; ?>
+        <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
+          <?php if (isset($enable_status) && $enable_status[1]['contradiction_status'] == 1) : ?>
+            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 1)" style="background-color: #ec6262; float: right;margin-right: 15px;">不同月份不可同時預購</a>
+          <?php else : ?>
+            <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 0)" style="background-color: #4dcf4d; float: right;margin-right: 15px;">不同月份可以同時預購</a>
+          <?php endif; ?>
         <?php endif; ?>
       <?php endif; ?>
     </div>
-    <!-- <a href="/admin/product/add_on_group" class="btn btn-info">加購項目</a> -->
-    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exportModal">匯出資料</button> -->
   </div>
-  <div class="col-md-8">
+  <div class="col-md-12">
     <div class="form-inline form-group text-right">
       <input type="text" id="keywords" class="form-control" placeholder="搜尋商品名稱..." />
       <select id="status" class="form-control" onchange="searchFilter()">

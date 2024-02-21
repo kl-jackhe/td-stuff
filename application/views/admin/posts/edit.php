@@ -5,6 +5,9 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary">修改</button>
       <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
+      <a href="/admin/posts/update_post_status/<?php echo $post['post_id'] ?>" class="btn btn-<?= ($post['post_status'] == 1 ? 'success' : 'danger') ?> btn-sm" style="float: right;margin-right: 15px;" onClick="return confirm('確定要<?= ($post['post_status'] == 1 ? '下' : '上') ?>架嗎?')"></i>
+        <span><?= ($post['post_status'] == 1 ? '上架中' : '已下架') ?></span>
+      </a>
     </div>
   </div>
   <div class="col-md-12">

@@ -40,10 +40,10 @@
         </div>
     </div>
     <div class="col-md-9">
-        <div class="content-box-large">
-            <table class="table">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover">
                 <thead>
-                    <tr>
+                    <tr class="info">
                         <th class="text-center">選單名稱</th>
                         <th class="text-center">類型</th>
                         <th class="text-center">序列編號</th>
