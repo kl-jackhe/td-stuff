@@ -160,6 +160,8 @@
                                                 } ?>
                                             </li>
                                         </ul>
+                                    <? } else { ?>
+                                        <?= get_product_name($item['product_id']) . ' - ' . get_product_combine_name($item['product_combine_id']); ?>
                                     <? } ?>
                                 </div>
                                 <div class="col-md-2 text-center"><?php echo number_format($item['order_item_price']) ?></div>

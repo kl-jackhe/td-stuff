@@ -94,8 +94,8 @@ class Update extends Admin_Controller
                     // $this->import_product_old_sql();
                     // $this->import_member_sql();
                     // $this->create_product_combine();
-                    // $this->upload_orders();
-                    $this->upload_orders_item();
+                    $this->upload_orders();
+                    // $this->upload_orders_item();
                 }
             } else {
                 // 不存在
@@ -243,8 +243,8 @@ class Update extends Admin_Controller
                     'customer_name' => $row['username1'],
                     'customer_phone' => $row['mobile1'],
                     'customer_email' => $row['email1'],
-                    'order_total' => $row['price'],
-                    'order_discount_total' => $row['price'],
+                    'order_total' => (int)$row['price'] + (int)$row['cost'],
+                    'order_discount_total' => (int)$row['price'] + (int)$row['cost'],
                     // 'order_discount_price' => $row['price'],
                     'order_delivery_cost' => $row['cost'],
                     // 'order_delivery_place' => $row['order_delivery_place'],
@@ -290,7 +290,7 @@ class Update extends Admin_Controller
                     'stock_makeup' => $row['stock_makeup'],
                     'point_enabled' => $row['point_enabled'],
                     'point_price' => $row['point_price'],
-                    'state' => !empty($this_order_status[$row['state']]),
+                    'state' => empty($this_order_status[$row['state']]) ? '1' : (($this_order_status[$row['state']] == 'confirm' && $this_order_pay_status[$row['pay_state']] == 'paid') ? '0' : 1),
                     'created_at' => $row['oddate'],
                 );
 
