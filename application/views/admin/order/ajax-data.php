@@ -8,8 +8,15 @@
         display: none;
     }
 
+    .inTopButton {
+        position: absolute;
+        right: 0;
+        z-index: 1000;
+    }
+
     .input-group {
-        width: 65%;
+        margin: auto;
+        width: 100%;
     }
 
     .redContent {
@@ -38,6 +45,18 @@
 
     .invalid_color {
         background-color: #B3D9D9 !important;
+    }
+
+    .preparation_color {
+        background-color: #3bd6c9 !important;
+    }
+    
+    .returning_color {
+        background-color: #d6823b !important;
+    }
+
+    .return_complete_color {
+        background-color: #da6d6d !important;
     }
 
     @media screen and (max-width:767px) {
@@ -86,7 +105,7 @@
         <? if (!empty($orders)) {
             foreach ($orders as $order) {
                 $agentName = $this->agent_model->getAgentName($order['agent_id']); ?>
-                <tr class="<?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?> <?= ($order['state'] == 0 ? 'redContent' : '') ?>">
+                <tr class="<?= ($order['order_step'] == 'return_complete' ? 'return_complete_color' : '') ?> <?= ($order['order_step'] == 'returning' ? 'returning_color' : '') ?> <?= ($order['order_step'] == 'preparation' ? 'preparation_color' : '') ?> <?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?> <?= ($order['state'] == 0 ? 'redContent' : '') ?>">
                     <td class="text-center">
                         <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?= $order['order_id'] ?>">
                     </td>
@@ -123,7 +142,7 @@
                                 <? $attributes = array('class' => 'form-inline');
                                 echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes); ?>
                                 <input type="text" class="form-control" name="remittance_account" value="<?= $order['remittance_account'] ?>">
-                                <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
                                 <? echo form_close() ?>
                             </span>
                         </div>
@@ -140,36 +159,23 @@
                     <!-- 新增物流單 -->
                     <?php if ($this->is_partnertoys) : ?>
                         <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
-                            <td>
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <input type="text" class="form-control" value="<?php echo $order['AllPayLogisticsID'] ?>" readonly>
-                                        <button type="submit" class="btn btn-primary btn-sm" disabled>更新</button>
-                                    </span>
-                                </div>
+                            <td class="text-center">
+                                <span><?php echo $order['AllPayLogisticsID'] ?></span>
                             </td>
                             <td class="text-center">
-                                <?php echo $order['CVSPaymentNo'] ?>
+                                <span><?php echo $order['CVSPaymentNo'] ?></span>
                             </td>
                         <?php else : ?>
-                            <td>
+                            <td class="text-center">
+                                <span>NONE</span>
+                            </td>
+                            <td class="text-center">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <?php $attributes = array('class' => 'form-inline'); ?>
                                         <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
-                                        <input type="text" class="form-control" name="self_logistics" value="<?php echo $order['SelfLogistics'] ?>">
-                                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                                        <?php echo form_close() ?>
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <?php $attributes = array('class' => 'form-inline'); ?>
-                                        <?php echo form_open('admin/order/updata_all_pay_logistics_id/' . $order['order_id'], $attributes); ?>
-                                        <input type="text" class="form-control" name="all_pay_logistics_id" value="<?php echo $order['AllPayLogisticsID'] ?>">
-                                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="請輸入自定義寄貨編號" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
                                         <?php echo form_close() ?>
                                     </span>
                                 </div>

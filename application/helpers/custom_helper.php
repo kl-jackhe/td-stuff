@@ -307,11 +307,20 @@ function get_order_step($data)
 		case 'process':
 			return "待出貨";
 			break;
+		case 'preparation':
+			return "調貨中";
+			break;
 		case 'shipping':
 			return "已出貨";
 			break;
+		case 'returning':
+			return "退貨處理";
+			break;
 		case 'complete':
 			return "完成";
+			break;
+		case 'return_complete':
+			return "訂單已退貨";
 			break;
 		case 'order_cancel':
 			return "訂單取消";
@@ -697,7 +706,7 @@ function get_unread_order_count()
 function get_comfire_incomplete_count()
 {
 	$CI = &get_instance();
-	$excluded_states = array('confirm', 'shipping', 'complete', 'cancel', 'invalid');
+	$excluded_states = array('confirm', 'shipping', 'complete', 'order_cancel', 'invalid', 'returning', 'return_complete');
 	$CI->db->where_not_in('order_step', $excluded_states);
 	$query = $CI->db->get('orders');
 	if ($query->num_rows() > 0) {

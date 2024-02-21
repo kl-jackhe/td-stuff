@@ -5,7 +5,7 @@
             <div class="memberOrderContent" id="row">
                 <div class="orderDetailButton">
                     <span class="orderBtn" @click="clearSelectedOrder()"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;返回列表</span>
-                    <span class="orderBtn" @click="redirectToCargo()"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;再買一次</span>
+                    <!-- <span class="orderBtn" @click="redirectToCargo()"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;再買一次</span> -->
                 </div>
                 <div class="col-12 text-center">
                     <span class="memberTitleMember">ORDER<span class="memberTitleLogin">&nbsp;CONTENT</span></span>
@@ -32,7 +32,13 @@
                         <ol class="col-2 align-self-center text-center">小計</ol>
                     </li>
                     <li v-for="self in selectedOrderItem" class="selectedOrderList row">
-                        <ol class="col-3 align-self-center text-center">{{ self.product_name }}</ol>
+                        <ol class="col-3 align-self-center text-center">
+                            <?php if ($this->is_partnertoys) : ?>
+                                <a :href="'/product/product_detail/' + self.product_id">{{ self.product_name }}</a>
+                            <?php else : ?>
+                                <a :href="'/product/view/' + self.product_id">{{ self.product_name }}</a>
+                            <?php endif; ?>
+                        </ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-2 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
                         <ol class="col-2 align-self-center text-center">{{ self.order_item_qty }}</ol>
@@ -47,7 +53,9 @@
                         <ol class="col-3 align-self-center text-center">小計</ol>
                     </li>
                     <li v-for="self in selectedOrderItem" class="selectedOrderList row">
-                        <ol class="col-3 align-self-center text-center">{{ self.product_name }}</ol>
+                        <ol class="col-3 align-self-center text-center">
+                            <a :href="'/product/product_detail/' + self.product_id">{{ self.product_name }}</a>
+                        </ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-3 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>
                         <ol class="col-3 align-self-center text-center itemPrice">$&nbsp;{{ self.order_item_price*self.order_item_qty }}</ol>
@@ -122,8 +130,17 @@
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
-                    <div v-if="selectedOrder.order_step != 'confirm'" class="noneOrder">
+                    <div v-if="selectedOrder.order_step == 'order_cancel'" class="noneOrder">
                         <span>訂單已取消</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'invalid'" class="noneOrder">
+                        <span>訂單不成立</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'returning'" class="noneOrder">
+                        <span>退貨處理中</span>
+                    </div>
+                    <div v-else-if="selectedOrder.order_step == 'return_complete'" class="noneOrder">
+                        <span>訂單已退貨</span>
                     </div>
                     <div v-else-if="!selectedOrder.SelfLogistics && !selectedOrder.AllPayLogisticsID && !selectedOrder.CVSPaymentNo" class="noneOrder">
                         <span>尚未出貨</span>
@@ -144,6 +161,8 @@
                                     <h2>物流資訊</h2>
                                 </div>
                                 <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-8">NONE</div>
+                                <div class="col-4 text-right">寄貨編號：</div>
                                 <div class="col-8">{{ selectedOrder.SelfLogistics }}</div>
                             </div>
                             <div v-else class="row">

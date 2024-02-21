@@ -2578,6 +2578,32 @@ input.qtyminus {
     /* 鼠標懸停或焦點時的邊框顏色 */
 }
 
+.sonsPreview {
+    text-align: center;
+    font-size: 22px;
+    margin-top: 35px;
+    border: 1px solid;
+    border-radius: 5px;
+    color: #fa8b68;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.sonsPreview:hover {
+    color: #ffffff;
+    background-color: #fa8b68;
+}
+
+.sonsPreview span{
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px 20px;
+}
+
 .resetRowMargin {
     margin: auto;
 }

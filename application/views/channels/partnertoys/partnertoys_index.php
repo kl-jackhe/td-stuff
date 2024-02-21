@@ -9,7 +9,7 @@
                 <div class="container">
                     <img src="/assets/uploads/Editor/images/creator/20230208153251.jpg" style="width: 100%;">
                 </div>
-                <div class="row">
+                <div class="row resetRowMargin">
                     <div v-for="self in channels_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="toggleSubCategory(self.id)">
                             <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
@@ -21,6 +21,13 @@
             <div v-if="selectedSubCategoryId != null && selectedSubSubCategoryId == null" class="container">
                 <div v-for="self in channels_son_category" class="row">
                     <div v-if="selectedSubCategoryId == self.sort" v-html="self.description" class="col-12"></div>
+                </div>
+                <div class="row resetRowMargin">
+                    <div v-for="sons in channels_sub_son_category" class="subSubCategoryContent col-3">
+                        <div class="sonsPreview">
+                            <span @click="filterBySubSubCategory(sons.id)">{{ sons.name }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div v-if="selectedSubSubCategoryId != null" class="container">

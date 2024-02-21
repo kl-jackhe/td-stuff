@@ -67,12 +67,13 @@ class Product extends Public_Controller
 
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
 		// 檢查上下架期間
-		if (!$this->confirm_product_limit_time($this->data['product'])) {
+		if (empty($this->data['product']) || !$this->confirm_product_limit_time($this->data['product'])) {
 			echo
 			"<script>
-			alert('請不要嘗試這麼做謝謝');
+			alert('商品不存在或已下架');
 			window.history.back();
 			</script>";
+			return;
 		}
 
 		// 找category_name

@@ -16,10 +16,13 @@ class Order extends Admin_Controller
 			'confirm' => '訂單確認',
 			'pay_ok' => '已收款',
 			'process' => '待出貨',
+			'preparation' => '調貨中',
 			'shipping' => '已出貨',
 			'complete' => '完成',
 			'order_cancel' => '訂單取消',
 			'invalid' => '訂單不成立',
+			'returning' => '退貨處理中',
+			'return_complete' => '訂單已退貨',
 		);
 	}
 
