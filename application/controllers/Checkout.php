@@ -589,16 +589,16 @@ class Checkout extends Public_Controller
 			if (!empty($this_product_combine_item)) {
 				$inventory = array();
 				foreach ($this_product_combine_item as $items) {
-					$order_item = array(
-						'order_id' => $order_id,
-						'product_combine_id' => $items['product_combine_id'],
-						'customer_id' => $customer_id,
-						'product_id' => $items['product_id'],
-						'order_item_qty' => ($cart_item['qty'] * $items['qty']),
-						'order_item_price' => 0,
-						'created_at' => $created_at,
-					);
-					$this->db->insert('order_item', $order_item);
+					// $order_item = array(
+					// 	'order_id' => $order_id,
+					// 	'product_combine_id' => $items['product_combine_id'],
+					// 	'customer_id' => $customer_id,
+					// 	'product_id' => $items['product_id'],
+					// 	'order_item_qty' => ($cart_item['qty'] * $items['qty']),
+					// 	'order_item_price' => 0,
+					// 	'created_at' => $created_at,
+					// );
+					// $this->db->insert('order_item', $order_item);
 					if (array_key_exists($items['product_id'], $inventory)) {
 						$inventory[$items['product_id']] += ($cart_item['qty'] * $items['qty']);
 					} else {
