@@ -23,6 +23,10 @@
         color: #e30020;
     }
 
+    .yellowContent {
+        color: #e30020;
+    }
+
     .pay_ok_color {
         background-color: #C4E1FF !important;
     }
@@ -50,7 +54,7 @@
     .preparation_color {
         background-color: #3bd6c9 !important;
     }
-    
+
     .returning_color {
         background-color: #d6823b !important;
     }
@@ -128,13 +132,11 @@
                     </td>
                     <td class="text-center">
                         <?php
-                        if (substr($order['order_payment'], 0, 5) == 'ecpay') {
-                            $order['order_payment'] = substr($order['order_payment'], 0, 5);
-                        }
                         echo '$' . format_number($order['order_discount_total']) . '<br>' . get_payment($order['order_payment']);
-                        if ($order['order_payment'] == 'ecpay') {
+                        if (substr($order['order_payment'], 0, 5) == 'ecpay') {
                             echo '<br>' . get_pay_status($order['order_pay_status']);
-                        } ?>
+                        }
+                        ?>
                     </td>
                     <td>
                         <div class="input-group">

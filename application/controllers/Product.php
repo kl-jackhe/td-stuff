@@ -67,7 +67,7 @@ class Product extends Public_Controller
 
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
 		// 檢查上下架期間
-		if (empty($this->data['product']) || !$this->confirm_product_limit_time($this->data['product'])) {
+		if (empty($this->data['product']) || $this->data['product']['product_status'] != 1 || !$this->confirm_product_limit_time($this->data['product'])) {
 			echo
 			"<script>
 			alert('商品不存在或已下架');
@@ -263,6 +263,10 @@ class Product extends Public_Controller
 			} else {
 				// 不在時間範圍內，移除該項目
 				unset($self[$key]);
+				if ($discontinuedAt < $now) {
+					$this->db->where('product_id', $product['product_id']);
+					$this->db->update('product', ['product_status' => 2]);
+				}
 				// echo "<pre>";
 				// print_r($product['product_name'] . 'unpass');
 				// echo "</pre>";

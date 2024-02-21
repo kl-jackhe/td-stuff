@@ -30,7 +30,7 @@
                                     <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
                                 </div>
                             </div>
-                            <?php if ($this->is_liqun_food) : ?>
+                            <?php if ($this->is_partnertoys || $this->is_liqun_food) : ?>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="product_combine_cargo_id">貨號</label>

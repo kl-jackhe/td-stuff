@@ -134,25 +134,11 @@ class Update extends Admin_Controller
                 if (empty($self_orders)) {
                     continue;
                 }
-                $this->db->where('order_item_id', $row['dtlid']);
-                $tmp_query = $this->db->get('order_item');
-                if (!empty($tmp_query)) {
-                    continue;
-                }
-                // echo '<pre>';
-                // echo 'product_id : ';
-                // print_r($product_id);
-                // echo '</pre>';
-
-                // echo '<pre>';
-                // echo 'row : ';
-                // print_r($row);
-                // echo '</pre>';
-
-                // echo '<pre>';
-                // echo 'product_combine : ';
-                // print_r($self_product_combine);
-                // echo '</pre>';
+                // $this->db->where('order_item_id', $row['dtlid']);
+                // $tmp_query = $this->db->get('order_item');
+                // if (!empty($tmp_query)) {
+                //     continue;
+                // }
 
                 // if (is_array($row)) {
                 //     foreach ($row as $key => $value) {
@@ -185,6 +171,14 @@ class Update extends Admin_Controller
                 // Insert row data into the database
                 $this->db->insert('order_item', $data);
             }
+
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -209,6 +203,22 @@ class Update extends Admin_Controller
                 $order_delivery = ($row['shipid'] == 3) ? '711_pickup' : (($row['shipid'] == 4) ? 'family_pickup' : (($row['shipid'] == 8 || $row['shipid'] == 17 || $row['shipid'] == 18 || $row['shipid'] == 19) ? 'sf_express_delivery' : (($row['shipid'] == 6 || $row['shipid'] == 12 || $row['shipid'] == 13) ? 'post_delivery' : 'ktj_delivery')));
                 $order_payment = ($row['kindid'] == 1 || $row['kindid'] == 23 || $row['kindid'] == 24) ? 'ecpay_ATM' : (($row['kindid'] == 2 || $row['kindid'] == 22) ? 'ecpay_credit' : 'ecpay_CVS');
 
+                $this_order_status = array(
+                    '1' => 'confirm',
+                    '2' => 'preparation',
+                    '5' => 'shipping',
+                    '7' => 'return_complete',
+                    '8' => 'order_cancel',
+                    '9' => 'complete',
+                    '10' => 'return_complete',
+                );
+
+                $this_order_pay_status = array(
+                    '1' => 'not_paid',
+                    '2' => 'paid',
+                    '3' => 'return',
+                );
+
                 if (is_array($row)) {
                     foreach ($row as $key => $value) {
                         // 检查 $value 是否为 null，如果是，则替换为空字符串
@@ -218,11 +228,11 @@ class Update extends Admin_Controller
                     }
                 }
 
-                $this->db->where('order_id', $row['odid']);
-                $tmp_query = $this->db->get('orders');
-                if (!empty($tmp_query)) {
-                    continue;
-                }
+                // $this->db->where('order_id', $row['odid']);
+                // $tmp_query = $this->db->get('orders');
+                // if (!empty($tmp_query)) {
+                //     continue;
+                // }
 
                 // Create an associative array with field names as keys
                 $data = array(
@@ -249,8 +259,8 @@ class Update extends Admin_Controller
                     // 'SelfLogistics' => $row['SelfLogistics'],
                     // 'AllPayLogisticsID' => $row['AllPayLogisticsID'],
                     'CVSPaymentNo' => $row['send_no'],
-                    // 'order_step' => $row['order_step'],
-                    // 'order_pay_status' => $row['order_pay_status'],
+                    'order_step' => !empty($this_order_status[$row['state']]) ? $this_order_status[$row['state']] : 'invalid',
+                    'order_pay_status' => !empty($this_order_pay_status[$row['pay_state']]) ? $this_order_pay_status[$row['pay_state']] : 'cancel',
                     // 'order_pay_feedback' => $row['order_pay_feedback'],
                     'MerchantID' => $row['MerchantID'],
                     'MerchantTradeNo' => $row['MerchantTradeNo'],
@@ -280,6 +290,7 @@ class Update extends Admin_Controller
                     'stock_makeup' => $row['stock_makeup'],
                     'point_enabled' => $row['point_enabled'],
                     'point_price' => $row['point_price'],
+                    'state' => !empty($this_order_status[$row['state']]),
                     'created_at' => $row['oddate'],
                 );
 
@@ -319,13 +330,13 @@ class Update extends Admin_Controller
                 $this->db->update('orders', $data);
             }
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -339,19 +350,30 @@ class Update extends Admin_Controller
         $row = $this->db->get('update_log')->row_array();
         if (empty($row)) {
             $this->db->select('*');
-            $query = $this->db->get('product');
-            $products = $query->result_array();
+            $query = $this->db->get('prd_detail');
+            $prd_detail = $query->result_array();
 
-            foreach ($products as $row) {
+            foreach ($prd_detail as $row) {
+                $product = $this->mysql_model->_select('product', 'product_id', $row['prdid'], 'row');
+                if(empty($product)){
+                    continue;
+                }
+                echo '<pre>';
+                echo 'product =';
+                print_r($product);
+                echo '</pre>';
 
                 // Create an associative array with field names as keys
                 $data = array(
-                    'product_id' => $row['product_id'],
-                    'name' => $row['product_name'],
-                    'price' => $row['product_price'],
-                    'current_price' => $row['product_price'],
-                    'picture' => $row['product_image'],
-                    'description' => $row['product_note'],
+                    'id' => $row['pdid'],
+                    'product_id' => $row['prdid'],
+                    'cargo_id' => $row['pdno'],
+                    'name' => $row['pdname'],
+                    'quantity' => $row['stock'],
+                    'price' => $product['product_price'],
+                    'current_price' => $product['product_price'],
+                    'picture' => $product['product_image'],
+                    // 'description' => $product['product_note'],
                     'create_time' => date('Y-m-d H:i:s'),
                 );
 
@@ -363,13 +385,13 @@ class Update extends Admin_Controller
                 $this->db->insert('product_combine', $data);
             }
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -414,13 +436,13 @@ class Update extends Admin_Controller
                 $this->db->insert('users', $data);
             }
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -473,8 +495,9 @@ class Update extends Admin_Controller
                     'product_sku' => $row['prdno'],
                     'product_price' => $price,
                     'product_description' => $row['content'],
-                    'product_note' => $row['desc1'],
+                    'product_note' => nl2br($row['desc1']),
                     'product_image' => $product_img,
+                    'product_status' => ($row['state'] == 2) ? 1 : 2,
                     'distribute_at' => $created_at,
                     'discontinued_at' => $updated_at,
                     'created_at' => $created_at,
@@ -489,13 +512,13 @@ class Update extends Admin_Controller
                 $this->db->insert('product', $data);
             }
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -559,13 +582,13 @@ class Update extends Admin_Controller
                 }
             }
 
-            $insertData = array(
-                'version' => $version,
-                'description' => $description,
-            );
-            if ($this->db->insert('update_log', $insertData)) {
-                echo '<p>' . $version . ' - ' . $description . '</p>';
-            }
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 

@@ -319,6 +319,9 @@ function get_order_step($data)
 		case 'complete':
 			return "完成";
 			break;
+		case 'invalid':
+			return "訂單不成立";
+			break;
 		case 'return_complete':
 			return "訂單已退貨";
 			break;
@@ -370,6 +373,15 @@ function get_payment($data)
 			break;
 		case 'ecpay':
 			return "綠界科技";
+			break;
+		case 'ecpay_credit':
+			return "綠界-信用卡";
+			break;
+		case 'ecpay_CVS':
+			return "綠界-超商代碼";
+			break;
+		case 'ecpay_ATM':
+			return "綠界-ATM";
 			break;
 	}
 	// $CI = &get_instance();

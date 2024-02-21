@@ -176,13 +176,13 @@
     $('.datetimepicker-ymd').datetimepicker({
         locale: 'zh-TW',
         format: 'YYYY-MM-DD',
-        minDate: moment() // 設定最小日期為今天
+        // minDate: moment() // 設定最小日期為今天
     });
 
     $('.datetimepicker-ym').datetimepicker({
         locale: 'zh-TW',
         format: 'YYYY-MM',
-        minDate: moment() // 設定最小日期為今天
+        // minDate: moment() // 設定最小日期為今天
     });
 
     $('.datetimepicker').datetimepicker({

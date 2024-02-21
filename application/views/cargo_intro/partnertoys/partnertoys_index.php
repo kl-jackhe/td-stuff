@@ -12,7 +12,7 @@
                 <div class="row resetRowMargin">
                     <div v-for="self in cargo_son_category" class="intro col-lg-3 col-md-6 col-6 list wow fadeIn">
                         <a class="cursorPoint" @click="toggleSubCategory(self.id)">
-                            <img :src="'/assets/uploads/Editor/images/collaboration/' + self.code" style="width: 100%;">
+                            <img :src="'/assets/uploads/' + self.code" style="width: 100%;">
                             <p class="introText">{{ self.name }}</p>
                         </a>
                     </div>

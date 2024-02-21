@@ -119,14 +119,20 @@ class Order extends Admin_Controller
 	{
 		$this->data['page_title'] = '訂單明細';
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
-		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
-		$this->db->select_sum('order_item_qty');
-		$this->db->select('order_id,product_combine_id,order_item_price');
-		$this->db->where('order_id', $id);
-		$this->db->where('product_id', 0);
-		$this->db->group_by('product_combine_id');
-		$this->db->order_by('order_item_id', 'asc');
-		$this->data['order_item'] = $this->db->get('order_item')->result_array();
+		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
+
+		// echo '<pre>';
+		// echo 'order_item = ';
+		// print_r($this->data['order_item']);
+		// echo '</pre>';
+
+		// $this->db->select_sum('order_item_qty');
+		// $this->db->select('order_id,product_combine_id,order_item_price');
+		// $this->db->where('order_id', $id);
+		// $this->db->where('product_id', 0);
+		// $this->db->group_by('product_combine_id');
+		// $this->db->order_by('order_item_id', 'asc');
+		// $this->data['order_item'] = $this->db->get('order_item')->result_array();
 		$this->render('admin/order/view');
 	}
 

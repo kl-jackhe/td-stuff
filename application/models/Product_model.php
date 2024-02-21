@@ -34,8 +34,8 @@ class Product_model extends CI_Model
 		// } else {
 		// 	$this->db->order_by('product.product_id', 'desc');
 		// }
-		$this->db->order_by('product.product_sku', 'asc');
-		$this->db->order_by('product.product_id', 'asc');
+		// $this->db->order_by('product.product_sku', 'asc');
+		$this->db->order_by('product.product_id', 'desc');
 		$this->db->order_by("distribute_at", 'desc');
 		//set start and limit
 		if (array_key_exists("start", $params) && array_key_exists("limit", $params)) {
@@ -77,6 +77,7 @@ class Product_model extends CI_Model
 	function getInTimeProducts()
 	{
 		$this->db->select('*');
+		$this->db->where('product_status', 1);
 		$this->db->order_by('distribute_at', 'DESC');
 		$query = $this->db->get('product');
 
