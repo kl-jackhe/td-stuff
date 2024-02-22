@@ -1,191 +1,192 @@
 <style>
-.fixed-bottom {
-    display: none;
-}
-.bs-wizard {
-    margin-top: 20px;
-}
-
-.bs-wizard {
-    border-bottom: solid 1px #e0e0e0;
-    padding: 0 0 10px 0;
-}
-
-.bs-wizard>.bs-wizard-step {
-    padding: 0;
-    position: relative;
-}
-
-.bs-wizard>.bs-wizard-step+.bs-wizard-step {}
-
-.bs-wizard>.bs-wizard-step .bs-wizard-stepnum {
-    color: #595757;
-    font-size: 11pt;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.bs-wizard>.bs-wizard-step .bs-wizard-info {
-    color: #999;
-    font-size: 14px;
-}
-
-.bs-wizard>.bs-wizard-step>.bs-wizard-dot {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    display: block;
-    background: #fff;
-    top: 45px;
-    left: 50%;
-    margin-top: -15px;
-    margin-left: -15px;
-    border-radius: 50%;
-    border: 2px solid #595757;
-}
-
-.bs-wizard>.bs-wizard-step>.bs-wizard-dot:after {
-    content: ' ';
-    width: 18px;
-    height: 18px;
-    background: #fbbd19;
-    border-radius: 50px;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-}
-
-.bs-wizard>.bs-wizard-step>.progress {
-    position: relative;
-    border-radius: 0px;
-    height: 4px;
-    box-shadow: none;
-    margin: 22px 0;
-    background: #595757;
-}
-
-.bs-wizard>.bs-wizard-step>.progress>.progress-bar {
-    width: 0px;
-    box-shadow: none;
-    background: #fbbd19;
-}
-
-.bs-wizard>.bs-wizard-step.complete>.progress>.progress-bar {
-    width: 100%;
-}
-
-.bs-wizard>.bs-wizard-step.active>.progress>.progress-bar {
-    width: 50%;
-}
-
-.bs-wizard>.bs-wizard-step:first-child.active>.progress>.progress-bar {
-    width: 0%;
-}
-
-.bs-wizard>.bs-wizard-step:last-child.active>.progress>.progress-bar {
-    width: 100%;
-}
-
-.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot {
-    background-color: #f5f5f5;
-}
-
-.bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot:after {
-    opacity: 0;
-}
-
-.bs-wizard>.bs-wizard-step:first-child>.progress {
-    left: 50%;
-    width: 50%;
-}
-
-.bs-wizard>.bs-wizard-step:last-child>.progress {
-    width: 50%;
-}
-
-.bs-wizard>.bs-wizard-step.disabled a.bs-wizard-dot {
-    pointer-events: none;
-}
-
-table {
-    margin: auto;
-    /*padding: 20px;*/
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-tr {
-    /*border: 1px solid #E0607E;*/
-}
-
-td {
-    /*border: 1px solid #607ee0;*/
-    /*padding: 10px 30px;*/
-    /*background-color: #E0607E;*/
-    /*color: #FFF;*/
-}
-
-/*第一欄第一列：左上*/
-tr:first-child td:first-child {
-    border-top-left-radius: 8px;
-}
-
-/*第一欄最後列：左下*/
-tr:last-child td:first-child {
-    border-bottom-left-radius: 8px;
-}
-
-/*最後欄第一列：右上*/
-tr:first-child td:last-child {
-    border-top-right-radius: 8px;
-}
-
-/*最後欄第一列：右下*/
-tr:last-child td:last-child {
-    border-bottom-right-radius: 8px;
-}
-
-@media (max-width: 480px) {
+    .fixed-bottom {
+        display: none;
+    }
 
     .bs-wizard {
-        margin-top: 0px;
-        margin-left: -15px;
-        margin-right: -15px;
+        margin-top: 20px;
     }
+
+    .bs-wizard {
+        border-bottom: solid 1px #e0e0e0;
+        padding: 0 0 10px 0;
+    }
+
+    .bs-wizard>.bs-wizard-step {
+        padding: 0;
+        position: relative;
+    }
+
+    .bs-wizard>.bs-wizard-step+.bs-wizard-step {}
 
     .bs-wizard>.bs-wizard-step .bs-wizard-stepnum {
-        padding-top: 50px;
-        padding-bottom: 100px;
-        width: 15px;
-        margin: 0 auto;
+        color: #595757;
+        font-size: 11pt;
+        font-weight: bold;
+        margin-bottom: 5px;
     }
 
-    .bs-wizard>.bs-wizard-step>.progress {
-        margin: 0;
-        margin-top: -211px;
-        margin-bottom: 120px;
+    .bs-wizard>.bs-wizard-step .bs-wizard-info {
+        color: #999;
+        font-size: 14px;
     }
 
     .bs-wizard>.bs-wizard-step>.bs-wizard-dot {
-        top: 20px;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        display: block;
+        background: #fff;
+        top: 45px;
+        left: 50%;
+        margin-top: -15px;
+        margin-left: -15px;
+        border-radius: 50%;
+        border: 2px solid #595757;
     }
 
-    #order_list th {
-        vertical-align: middle;
-        padding: 3px !important;
+    .bs-wizard>.bs-wizard-step>.bs-wizard-dot:after {
+        content: ' ';
+        width: 18px;
+        height: 18px;
+        background: #fbbd19;
+        border-radius: 50px;
+        position: absolute;
+        top: 4px;
+        left: 4px;
     }
 
-    #order_list td {
-        vertical-align: middle;
-        padding: 10px 3px !important;
+    .bs-wizard>.bs-wizard-step>.progress {
+        position: relative;
+        border-radius: 0px;
+        height: 4px;
+        box-shadow: none;
+        margin: 22px 0;
+        background: #595757;
     }
 
-    #sub_menu a {
-        width: 24%;
-        padding: 6px;
+    .bs-wizard>.bs-wizard-step>.progress>.progress-bar {
+        width: 0px;
+        box-shadow: none;
+        background: #fbbd19;
     }
 
-}
+    .bs-wizard>.bs-wizard-step.complete>.progress>.progress-bar {
+        width: 100%;
+    }
+
+    .bs-wizard>.bs-wizard-step.active>.progress>.progress-bar {
+        width: 50%;
+    }
+
+    .bs-wizard>.bs-wizard-step:first-child.active>.progress>.progress-bar {
+        width: 0%;
+    }
+
+    .bs-wizard>.bs-wizard-step:last-child.active>.progress>.progress-bar {
+        width: 100%;
+    }
+
+    .bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot {
+        background-color: #f5f5f5;
+    }
+
+    .bs-wizard>.bs-wizard-step.disabled>.bs-wizard-dot:after {
+        opacity: 0;
+    }
+
+    .bs-wizard>.bs-wizard-step:first-child>.progress {
+        left: 50%;
+        width: 50%;
+    }
+
+    .bs-wizard>.bs-wizard-step:last-child>.progress {
+        width: 50%;
+    }
+
+    .bs-wizard>.bs-wizard-step.disabled a.bs-wizard-dot {
+        pointer-events: none;
+    }
+
+    table {
+        margin: auto;
+        /*padding: 20px;*/
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    tr {
+        /*border: 1px solid #E0607E;*/
+    }
+
+    td {
+        /*border: 1px solid #607ee0;*/
+        /*padding: 10px 30px;*/
+        /*background-color: #E0607E;*/
+        /*color: #FFF;*/
+    }
+
+    /*第一欄第一列：左上*/
+    tr:first-child td:first-child {
+        border-top-left-radius: 8px;
+    }
+
+    /*第一欄最後列：左下*/
+    tr:last-child td:first-child {
+        border-bottom-left-radius: 8px;
+    }
+
+    /*最後欄第一列：右上*/
+    tr:first-child td:last-child {
+        border-top-right-radius: 8px;
+    }
+
+    /*最後欄第一列：右下*/
+    tr:last-child td:last-child {
+        border-bottom-right-radius: 8px;
+    }
+
+    @media (max-width: 480px) {
+
+        .bs-wizard {
+            margin-top: 0px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        .bs-wizard>.bs-wizard-step .bs-wizard-stepnum {
+            padding-top: 50px;
+            padding-bottom: 100px;
+            width: 15px;
+            margin: 0 auto;
+        }
+
+        .bs-wizard>.bs-wizard-step>.progress {
+            margin: 0;
+            margin-top: -211px;
+            margin-bottom: 120px;
+        }
+
+        .bs-wizard>.bs-wizard-step>.bs-wizard-dot {
+            top: 20px;
+        }
+
+        #order_list th {
+            vertical-align: middle;
+            padding: 3px !important;
+        }
+
+        #order_list td {
+            vertical-align: middle;
+            padding: 10px 3px !important;
+        }
+
+        #sub_menu a {
+            width: 24%;
+            padding: 6px;
+        }
+
+    }
 </style>
 <div role="main" class="main pt-signinfo">
     <section class="content_auto_h">
@@ -217,98 +218,116 @@ tr:last-child td:last-child {
                         </div>
                         <div class="col-md-12" style="margin-top: 40px;">
                             <?php if (wp_is_mobile()) {
-	$status = '';
-	$step = '';
-	if (!empty($orders)) {
-		foreach ($orders as $data) {
-			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-			if ($data['order_step'] == 'picked') {$step = 'picked';}
-			if ($data['order_step'] == 'picked') {
-				$style = 'color: #fefefe; background: #A0A0A0;';
-			} else {
-				$style = 'color: #fefefe; background: #420252;';
-			}?>
-                                    <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
-                                        <tr>
-                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單編號</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_number'] ?></td>
-                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單日期</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_date'] ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送地址</td>
-                                            <td colspan="3" class="fs-11 color-595757">
-                                                <?php if (!empty($data['order_store_address'])) {
-				echo $data['order_store_address'];
-			} else {
-				echo $data['order_delivery_address'];
-			}?>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">配送方式</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_delivery($data['order_delivery']) ?></td>
-                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">付款方式</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_payment($data['order_payment']) ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單狀態</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_order_step($data['order_step']) ?></td>
-                                            <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
-                                            <td class="fs-11 color-595757" style="width: 24%;">
-                                                <a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12">查看</a>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                <?php }}?>
-                            <?php } else {
-	$status = '';
-	$step = '';
-	if (!empty($orders)) {
-		foreach ($orders as $data) {
-			if ($data['order_pay_status'] == 'not_paid') {$status = 'not_paid';}
-			if ($data['order_pay_status'] == 'paid') {$status = 'paid';}
-			if ($data['order_step'] == 'picked') {$step = 'picked';}?>
-                                    <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
-                                        <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {echo '#A0A0A0';} else {echo '#420252;';}?>">
-                                            <td class="text-center fs-12" style="width: 12%;">訂單編號/日期</td>
-                                            <td class="text-center fs-12" style="width: 12%;">訂單金額</td>
-                                            <td class="text-center fs-12" style="width: auto;">配送地址</td>
-                                            <td class="text-center fs-12" style="width: 12%;">配送方式</td>
-                                            <td class="text-center fs-12" style="width: 12%;">付款方式</td>
-                                            <td class="text-center fs-12" style="width: 12%;">訂單狀態</td>
-                                            <td class="text-center fs-12" style="width: 12%;">訂單明細</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fs-11 color-595757">
-                                                <?php echo $data['order_number'] ?><br>
-                                                <?php echo $data['order_date'] ?>
-                                            </td>
-                                            <td class="fs-11 color-595757">
-                                                <?php echo format_number($data['order_discount_total']) ?>
-                                            </td>
-                                            <td class="fs-11 color-595757">
-                                                <?php if (!empty($data['order_store_address'])) {
-				echo $data['order_store_name'] . ' ' . $data['order_store_address'];
-			} else {
-				echo $data['order_delivery_address'];
-			}?>
-                                            </td>
-                                            <td class="fs-11 color-595757">
-                                                <?php echo get_delivery($data['order_delivery']) ?>
-                                            </td>
-                                            <td class="fs-11 color-595757">
-                                                <?php echo get_payment($data['order_payment']) ?>
-                                            </td>
-                                            <td class="fs-11 color-595757">
-                                                <?php echo get_order_step($data['order_step']) ?>
-                                            </td>
-                                            <td class="fs-11 color-595757"><a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12" style="outline: none;text-decoration: none;">查看</a></td>
-                                        </tr>
-                                    </table>
-                                <?php }}?>
-                            <?php }?>
+                                $status = '';
+                                $step = '';
+                                if (!empty($orders)) {
+                                    foreach ($orders as $data) {
+                                        if ($data['order_pay_status'] == 'not_paid') {
+                                            $status = 'not_paid';
+                                        }
+                                        if ($data['order_pay_status'] == 'paid') {
+                                            $status = 'paid';
+                                        }
+                                        if ($data['order_step'] == 'picked') {
+                                            $step = 'picked';
+                                        }
+                                        if ($data['order_step'] == 'picked') {
+                                            $style = 'color: #fefefe; background: #A0A0A0;';
+                                        } else {
+                                            $style = 'color: #fefefe; background: #420252;';
+                                        } ?>
+                                        <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
+                                            <tr>
+                                                <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單編號</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_number'] ?></td>
+                                                <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單日期</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;"><?php echo $data['order_date'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">配送地址</td>
+                                                <td colspan="3" class="fs-11 color-595757">
+                                                    <?php if (!empty($data['order_store_address'])) {
+                                                        echo $data['order_store_address'];
+                                                    } else {
+                                                        echo $data['order_delivery_address'];
+                                                    } ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">配送方式</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_delivery($data['order_delivery']) ?></td>
+                                                <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">付款方式</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_payment($data['order_payment']) ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center fs-12" style="width: 24%;<?php echo $style ?>">訂單狀態</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;"><?php echo get_order_step($data['order_step']) ?></td>
+                                                <td class="text-center fs-12" style="width: 24%; <?php echo $style ?>">訂單明細</td>
+                                                <td class="fs-11 color-595757" style="width: 24%;">
+                                                    <a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12">查看</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                <?php }
+                                } ?>
+                                <?php } else {
+                                $status = '';
+                                $step = '';
+                                if (!empty($orders)) {
+                                    foreach ($orders as $data) {
+                                        if ($data['order_pay_status'] == 'not_paid') {
+                                            $status = 'not_paid';
+                                        }
+                                        if ($data['order_pay_status'] == 'paid') {
+                                            $status = 'paid';
+                                        }
+                                        if ($data['order_step'] == 'picked') {
+                                            $step = 'picked';
+                                        } ?>
+                                        <table class="table table-bordered text-center <?php echo $data['order_pay_status']; ?> <?php echo $data['order_step']; ?>" id="order_list" style="border: none;">
+                                            <tr style="color: #fefefe; background: <?php if ($data['order_step'] == 'picked') {
+                                                                                        echo '#A0A0A0';
+                                                                                    } else {
+                                                                                        echo '#420252;';
+                                                                                    } ?>">
+                                                <td class="text-center fs-12" style="width: 12%;">訂單編號/日期</td>
+                                                <td class="text-center fs-12" style="width: 12%;">訂單金額</td>
+                                                <td class="text-center fs-12" style="width: auto;">配送地址</td>
+                                                <td class="text-center fs-12" style="width: 12%;">配送方式</td>
+                                                <td class="text-center fs-12" style="width: 12%;">付款方式</td>
+                                                <td class="text-center fs-12" style="width: 12%;">訂單狀態</td>
+                                                <td class="text-center fs-12" style="width: 12%;">訂單明細</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-11 color-595757">
+                                                    <?php echo $data['order_number'] ?><br>
+                                                    <?php echo $data['order_date'] ?>
+                                                </td>
+                                                <td class="fs-11 color-595757">
+                                                    <?php echo format_number($data['order_discount_total']) ?>
+                                                </td>
+                                                <td class="fs-11 color-595757">
+                                                    <?php if (!empty($data['order_store_address'])) {
+                                                        echo $data['order_store_name'] . ' ' . $data['order_store_address'];
+                                                    } else {
+                                                        echo $data['order_delivery_address'];
+                                                    } ?>
+                                                </td>
+                                                <td class="fs-11 color-595757">
+                                                    <?php echo get_delivery($data['order_delivery']) ?>
+                                                </td>
+                                                <td class="fs-11 color-595757">
+                                                    <?php echo get_payment($data['order_payment']) ?>
+                                                </td>
+                                                <td class="fs-11 color-595757">
+                                                    <?php echo get_order_step($data['order_step']) ?>
+                                                </td>
+                                                <td class="fs-11 color-595757"><a href="/order/view/<?php echo encode($data['order_id']) ?>" class="order-modal-btn fs-12" style="outline: none;text-decoration: none;">查看</a></td>
+                                            </tr>
+                                        </table>
+                                <?php }
+                                } ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -344,31 +363,31 @@ tr:last-child td:last-child {
     </div>
 </div>
 <script>
-$('.order-modal-btn').on('click', function(e) {
-    e.preventDefault();
-    //$('#use-Modal').modal('show').find('.modal-body').load($(this).attr('href'));
-    $('#order-Modal').modal('show').find('.modal-body').load(this.href);
-});
+    $('.order-modal-btn').on('click', function(e) {
+        e.preventDefault();
+        //$('#use-Modal').modal('show').find('.modal-body').load($(this).attr('href'));
+        $('#order-Modal').modal('show').find('.modal-body').load(this.href);
+    });
 </script>
 <script>
-function get_order() {
-    var order_status = $('#order_status').val();
-    if (order_status == 'not_paid') {
-        $("table.paid").fadeOut('fast');
-        $("table.picked").fadeOut('fast');
-        $("table.not_paid").fadeIn('fast');
-    } else if (order_status == 'paid') {
-        $("table.not_paid").fadeOut('fast');
-        $("table.picked").fadeOut('fast');
-        $("table.paid").fadeIn('fast');
-    } else if (order_status == 'picked') {
-        $("table.not_paid").fadeOut('fast');
-        $("table.paid").fadeOut('fast');
-        $("table.picked").fadeIn('fast');
-    } else {
-        $("table.not_paid").fadeIn('fast');
-        $("table.paid").fadeIn('fast');
-        $("table.picked").fadeIn('fast');
+    function get_order() {
+        var order_status = $('#order_status').val();
+        if (order_status == 'not_paid') {
+            $("table.paid").fadeOut('fast');
+            $("table.picked").fadeOut('fast');
+            $("table.not_paid").fadeIn('fast');
+        } else if (order_status == 'paid') {
+            $("table.not_paid").fadeOut('fast');
+            $("table.picked").fadeOut('fast');
+            $("table.paid").fadeIn('fast');
+        } else if (order_status == 'picked') {
+            $("table.not_paid").fadeOut('fast');
+            $("table.paid").fadeOut('fast');
+            $("table.picked").fadeIn('fast');
+        } else {
+            $("table.not_paid").fadeIn('fast');
+            $("table.paid").fadeIn('fast');
+            $("table.picked").fadeIn('fast');
+        }
     }
-}
 </script>

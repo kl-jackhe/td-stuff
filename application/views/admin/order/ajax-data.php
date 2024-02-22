@@ -232,8 +232,11 @@
                         <p>付款方式：
                             <?php echo get_payment($order['order_payment']) ?>
                         </p>
-                        <p>訂單金額：<span style="color:red;font-weight: bold;">
-                                <?php echo format_number($order['order_discount_total']) ?></span></p>
+                        <p>訂單金額：
+                            <span style="color:red;font-weight: bold;">
+                                <?php echo format_number($order['order_discount_total']) ?>
+                            </span>
+                        </p>
                     </td>
                     <td>
                         <p>寄送/取貨地址：</p>
