@@ -1274,7 +1274,7 @@ input.qtyminus {
 
 .add_product {
     background-color: #f4f2f2;
-    color: #fff !important;
+    color: #000 !important;
     width: 100%;
     line-height: 1.8;
     padding: 0;
