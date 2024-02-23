@@ -195,6 +195,18 @@ if (!empty($this->cart->contents())) {
                                 <div class="row">
                                     <div class="col">
                                         <div class="input-group">
+                                            <?php
+                                            if (!empty($this->product_model->getProductCombine($items["id"]))) {
+                                                $self = $this->product_model->getProductCombine($items["id"]);
+                                                $is_lottery = $this->mysql_model->_select('lottery', 'product_id', $self['product_id'], 'row');
+                                                if (!empty($is_lottery)) {
+                                                    $add_disabled = 'disabled';
+                                                } else {
+                                                    $add_disabled = '';
+                                                }
+                                                $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
+                                            }
+                                            ?>
                                             <? if (!empty($items['specification']['specification_id'])) { ?>
                                                 <span class="input-group-btn" style="display:none;">
                                                     <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
@@ -213,15 +225,9 @@ if (!empty($this->cart->contents())) {
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                 </span>
-                                                <?php
-                                                if (!empty($this->product_model->getProductCombine($items["id"]))) {
-                                                    $self = $this->product_model->getProductCombine($items["id"]);
-                                                    $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
-                                                }
-                                                ?>
                                                 <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="<?= $max_qty; ?>" readonly>
                                                 <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>">
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>" <?= $add_disabled ?>>
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </span>
@@ -246,7 +252,11 @@ if (!empty($this->cart->contents())) {
 } ?>
 <div class="col-12 p-0">
     <hr>
-    <span style="color: #BE2633;">備註：超商配送限重10KG。</span><br>
+    <?php if ($this->is_liqun_food) : ?>
+        <span style="color: #BE2633;">備註：超商配送限重10KG。</span><br>
+    <?php elseif ($this->is_partnertoys) : ?>
+        <span style="color: #BE2633;">備註：預購商品不可與其他商品以及不同月份之預購商品無法一併下訂。</span><br>
+    <?php endif; ?>
 </div>
 <div class="col-12 text-right p-0">
     <?php if ($this->is_liqun_food) : ?>
@@ -277,6 +287,8 @@ if (!empty($this->cart->contents())) {
 <script>
     $(document).ready(function() {
         $(document).on('click', '.mini-cart-x', function() {
+            // const delect = confirm("貼心提醒，是否指定商品將從購物車清除。");
+            // if (delect) {
             var rowid = this.id;
             $.ajax({
                 url: "/cart/remove",
@@ -288,6 +300,7 @@ if (!empty($this->cart->contents())) {
                     get_mini_cart();
                 }
             });
+            // }
         });
     });
 </script>

@@ -277,6 +277,42 @@ class Product extends Public_Controller
 		return array_values($self);
 	}
 
+	function get_lottery_product_combine($product_id)
+	{
+		$result = $this->mysql_model->_select('product_combine', 'product_id', $product_id);
+		
+		// 返回所有數據
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($result));
+	}
+
+	function add_lottery($product_id)
+	{
+		$this->db->where('product_id', $product_id);
+		$lottery = $this->db->get('lottery')->row_array();
+		if (!empty($lottery)) {
+			$this->db->where('lottery_id', $lottery['id']);
+			$this->db->where('users_id', $this->session->userdata('user_id'));
+			$lottery_pool = $this->db->get('lottery_pool')->row_array();
+			if (!empty($lottery_pool)) {
+				// echo '<pre>';
+				// print_r($lottery_pool);
+				// echo '</pre>';
+				echo 'repetitive';
+			} else {
+				$data = array(
+					'lottery_id' => $lottery['id'],
+					'users_id' => $this->session->userdata('user_id'),
+				);
+				$this->db->insert('lottery_pool', $data);
+				echo 'success';
+			}
+		} else {
+			echo 'non-exist';
+		}
+	}
+
 	function get_like()
 	{
 		$all_cookies = $this->input->cookie();

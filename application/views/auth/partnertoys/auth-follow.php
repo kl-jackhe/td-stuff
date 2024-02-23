@@ -11,13 +11,13 @@
                     <span class="">目前無任何追蹤資料</span>
                 </div>
                 <!-- Display for screens larger than or equal to 767px -->
-                <div v-if="followData" class="M_order d-none d-md-block">
+                <div v-if="followData && !(followData && !followData.some(container => Object.keys(container).length > 0))" class="M_order d-none d-md-block">
                     <li id="orderListHeader" class="row">
                         <ol class="col-8 align-self-center text-center">商品名稱</ol>
                         <ol class="col-2 align-self-center text-center">刪除</ol>
                         <ol class="col-2 align-self-center text-center">購買</ol>
                     </li>
-                    <a v-for="self in followData" class="Information">
+                    <a v-for="self in followData.slice(pageStart, pageEnd)" class="Information">
                         <li v-if="self" class="row">
                             <ol class="col-2 align-self-center text-center">
                                 <img :src="'/assets/uploads/' + self.product_image" style="width: 100%;">
@@ -35,13 +35,13 @@
                     </a>
                 </div>
                 <!-- Your alternative display for small screens goes here -->
-                <div v-if="followData" class="d-md-none">
+                <div v-if="followData && !(followData && !followData.some(container => Object.keys(container).length > 0))" class="d-md-none">
                     <li id="orderListHeader" class="row">
                         <ol class="col-8 align-self-center text-center">商品名稱</ol>
                         <ol class="col-2 align-self-center text-center">刪除</ol>
                         <ol class="col-2 align-self-center text-center">購買</ol>
                     </li>
-                    <a v-for="self in followData" class="Information">
+                    <a v-for="self in followData.slice(pageStart, pageEnd)" class="Information">
                         <li v-if="self" class="row">
                             <ol class="col-8 align-self-center">
                                 <span>{{ self.product_name }}</span>

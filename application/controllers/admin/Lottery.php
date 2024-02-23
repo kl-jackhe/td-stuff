@@ -54,7 +54,7 @@ class Lottery extends Admin_Controller
     function create()
     {
         $this->data['page_title'] = '建立抽選活動';
-        $this->data['product'] = $this->mysql_model->_select('product');
+        $this->data['product'] = $this->mysql_model->_select('product', 'product_category_id', '6');
         $this->render('admin/lottery/create');
     }
 
@@ -83,7 +83,7 @@ class Lottery extends Admin_Controller
         $this->data['page_title'] = '編輯抽選活動';
         $this->data['lottery'] = $this->mysql_model->_select('lottery', 'id', $id, 'row');
         $this->data['lottery_pool'] = $this->mysql_model->_select('lottery_pool', 'lottery_id', $id);
-        $this->data['product'] = $this->mysql_model->_select('product');
+        $this->data['product'] = $this->mysql_model->_select('product', 'product_category_id', '6');
         $this->data['draw_date_3d'] = strtotime("+2 Day", strtotime($this->data['lottery']['draw_date']));
         $this->data['draw_date_3d_end'] = date("Y-m-d  H:i:s", strtotime("+2 day", strtotime($this->data['lottery']['draw_date'])));
         $this->data['fill_up_date_3d'] = strtotime("+2 Day", strtotime($this->data['lottery']['fill_up_date']));
@@ -130,19 +130,16 @@ class Lottery extends Admin_Controller
         }
     }
 
-    function finishLotteryEvent()
+    // 結束抽選
+    function finishLotteryEvent($id)
     {
-        $id = $_GET['id'];
-        $query = "select * from lottery where id='$id'";
-        $result = mysqli_query($dblink, $query);
-        if (mysqli_num_rows($result) > 0) {
-            $query = "update lottery set ";
-            $query .= "lottery_end='1'";
-            $query .= " where id=$id";
-            mysqli_query($dblink, $query) || die("Can't update lottery info. Reason: " . mysqli_error($dblink));
-        }
+        $this->db->where('id', $id);
+        $this->db->update('lottery', ['lottery_end' => '1']);
+        $this->session->set_flashdata('已結束此期抽選');
+        redirect('admin/lottery/edit/' . $id);
     }
 
+    // 開始抽選
     function reservationWiner()
     {
         $id = $_GET['id'];
@@ -156,6 +153,7 @@ class Lottery extends Admin_Controller
             }
         endif;
         if ($draw_over == 0) {
+            // 正取
             $query = "select * from lottery_pool where lottery_id='$id' && id='$memid'";
             $result = mysqli_query($dblink, $query);
             if (mysqli_num_rows($result) > 0) {
@@ -170,6 +168,7 @@ class Lottery extends Admin_Controller
                 }
             }
         } else {
+            // 備取遞補
             if ($number_remain > 0) {
                 $query = "select * from lottery_pool where lottery_id='$id' && id='$memid'";
                 $result = mysqli_query($dblink, $query);
@@ -242,5 +241,15 @@ class Lottery extends Admin_Controller
                 mysqli_query($dblink, $query) || die("Can't update member info. Reason: " . mysqli_error($dblink));
             }
         }
+    }
+
+    // 指定抽選
+    function specify_lottery($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('lottery_pool', ['winner' => '1']);
+        $this->session->set_flashdata('預定選中完成');
+        
+        echo '<script>window.history.back();</script>';
     }
 }

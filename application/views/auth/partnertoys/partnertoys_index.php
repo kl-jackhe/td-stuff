@@ -195,8 +195,10 @@
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 mail: <?= (!empty($this->session->userdata('user_id')) && !empty($mail)) ? json_encode($mail) : json_encode(''); ?>,
+                lottery: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery)) ? json_encode($lottery) : json_encode(''); ?>,
+                lottery_pool: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery_pool)) ? json_encode($lottery_pool) : json_encode(''); ?>,
+                lottery_product_combine: [], // 存储商品组合数据的数组
                 followData: '',
-                lottery: '',
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 selectedMail: null, // 該會員被選中的訂單
@@ -254,7 +256,7 @@
                 } else if (this.selectedCategoryId == 2) {
                     return Math.ceil(this.followData.length / this.perpage);
                 } else if (this.selectedCategoryId == 3) {
-                    return Math.ceil(this.lottery.length / this.perpage);
+                    return Math.ceil(this.lottery_pool.length / this.perpage);
                 } else if (this.selectedCategoryId == 8) {
                     return Math.ceil(this.mail.length / this.perpage);
                 }
@@ -271,7 +273,7 @@
                 } else if (this.selectedCategoryId == 2) {
                     return Math.min(end, this.followData.length);
                 } else if (this.selectedCategoryId == 3) {
-                    return Math.min(end, this.lottery.length);
+                    return Math.min(end, this.lottery_pool.length);
                 } else if (this.selectedCategoryId == 8) {
                     return Math.min(end, this.mail.length);
                 }
@@ -327,10 +329,28 @@
                             alert('刪除成功');
                             window.location.href = <?php echo json_encode(base_url()); ?> + "auth?id=2";
                         } else {
-                            console.log(data);
+                            // console.log(data);
                         }
                     },
                 })
+            },
+            async getLotteryProductCombine(product_id) {
+                if (this.lottery_product_combine.length > 0 && this.lottery_product_combine[0].product_id == product_id) {
+                    return true;
+                }
+                await $.ajax({
+                    url: '/product/get_lottery_product_combine/' + product_id,
+                    type: 'post',
+                    success: (data) => {
+                        // 更新商品组合数据
+                        this.lottery_product_combine = data;
+                        // console.log(this.lottery_product_combine);
+                        return true;
+                    }
+                });
+            },
+            getLotteryResult(lottery_id) {
+                return this.lottery_pool.find(self => self.lottery_id === lottery_id);
             },
             // 指向指定商品
             href_product(id) {
@@ -479,7 +499,7 @@
                             }
                             get_cart_qty();
                         } catch (error) {
-                            console.error('Error in AJAX request:', error);
+                            // console.error('Error in AJAX request:', error);
                         }
                     }))
                     .then(() => {
@@ -488,6 +508,47 @@
                             window.location.href = <?= json_encode(base_url() . 'checkout') ?>;
                         }, 300);
                     });
+            },
+            add_cart_lottery(lotteryID) {
+                var this_combine_id = $('#lotteryProductCombine').val();
+                $.ajax({
+                    url: '/cart/add_combine',
+                    method: 'post',
+                    data: {
+                        is_lottery: true,
+                        lottery_id: lotteryID,
+                        combine_id: this_combine_id,
+                        qty: '1',
+                        specification_name: '',
+                        specification_id: '',
+                        specification_qty: '',
+                    },
+                    success: function(response) {
+                        if (response == 'successful') {
+                            alert('加入購物車成功');
+                            window.location.href = '/checkout';
+                        } else if (response == 'lottery') {
+                            alert('抽選商品只能選購一個');
+                        } else if (response == 'not_lottery_time') {
+                            alert('該抽選商品無抽選活動');
+                        } else if (response == 'unlottery_user') {
+                            alert('非中獎者無法下單');
+                        } else if (response == 'unknown_user') {
+                            alert('找不到使用者');
+                        } else if (response == 'only_one') {
+                            alert('只可下一次單');
+                        } else if (data == 'contradiction_date') {
+                            alert('預購商品若不同月份不得一並選購，敬請見諒。');
+                        } else if (data == 'contradiction') {
+                            alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
+                        } else if (data == 'exceed') {
+                            alert('超過限制數量故無法下單，敬請見諒。');
+                        } else {
+                            alert('UNKNOUN ERROR');
+                            console.log(response);
+                        }
+                    }
+                })
             },
             // 頁碼
             setPage(page) {
@@ -701,14 +762,14 @@
                         } else if (data !== null) {
                             window.location.href = '/';
                         }
-                        console.log(data);
+                        // console.log(data);
                     },
                     error: function(error) {
                         if (data !== null) {
                             alert('登入失敗');
                             window.location.href = '/auth';
                         }
-                        console.error('Error:', error);
+                        // console.error('Error:', error);
                     }
                 });
             });

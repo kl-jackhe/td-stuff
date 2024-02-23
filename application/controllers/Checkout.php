@@ -573,6 +573,25 @@ class Checkout extends Public_Controller
 			// echo '<pre>';
 			// print_r ($this_product);
 			// echo '</pre>';
+
+			// 抽選單
+			if (!empty($this->session->userdata('user_id'))) {
+				$this_lottery = $this->mysql_model->_select('lottery', 'product_id', $this_product['product_id'], 'row');
+				if (!empty($this_lottery)) {
+					$this->db->where('users_id', $this->session->userdata('user_id'));
+					$this->db->where('lottery_id', $this_lottery['id']);
+					$this_lottery_pool = $this->db->get('lottery_pool')->row_array();
+					if (!empty($this_lottery_pool)) {
+						$self_lottery_pool = array(
+							'order_id' => $order_id,
+							'order_number' => $order_number,
+						);
+						$this->db->where('id', $this_lottery_pool['id']);
+						$this->db->update('lottery_pool', $self_lottery_pool);
+					}
+				}
+			}
+
 			$order_item = array(
 				'order_id' => $order_id,
 				'product_combine_id' => $cart_item['id'],
@@ -917,7 +936,7 @@ class Checkout extends Public_Controller
 			// debug unknow users relogin
 			if (!empty($this->data['users'])) {
 				if (empty($this->session->userdata('user_id'))) {
-					$query = $this->db->select('full_name, username, email, id, password, active, last_login')
+					$query = $this->db->select('full_name, username, email, id, fb_id, password, phone, active, last_login')
 						->where('username', $this->data['order']['customer_name'])
 						->limit(1)
 						->order_by('id', 'desc')
@@ -994,6 +1013,18 @@ class Checkout extends Public_Controller
 			);
 			$this->db->where('order_id', $order_id);
 			$this->db->update('orders', $data);
+
+			// 抽選單
+			$this->db->where('order_id', $order_id);
+			$this->db->where('order_number', $order_number);
+			$this_lottery_pool = $this->db->get('lottery_pool')->row_array();
+			if (!empty($this_lottery_pool)) {
+				$self_lottery_pool = array(
+					'order_state' => 'pay_ok',
+				);
+				$this->db->where('id', $this_lottery_pool['id']);
+				$this->db->update('lottery_pool', $self_lottery_pool);
+			}
 
 			// 開發票
 			try {

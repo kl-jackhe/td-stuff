@@ -1112,7 +1112,7 @@ class Ion_auth_model extends CI_Model
 		}
 
 		// 適當的業務邏輯處理，例如檢查用戶，更新數據庫等
-		$this->db->select('email, id, username, fb_id, full_name, password, active, last_login');
+		$this->db->select('email, id, username, fb_id, full_name, password, phone, active, last_login');
 		$this->db->where('email', $user_data['email']);
 		$query = $this->db->get('users');
 
@@ -1179,14 +1179,14 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		$query = $this->db->select($this->identity_column . ', ' . $this->identity_mail_column . ', fb_id, id, password, active, full_name, last_login')
+		$query = $this->db->select($this->identity_column . ', ' . $this->identity_mail_column . ', fb_id, id, password, active, full_name, phone, last_login')
 			->where($this->identity_column, $identity)
 			->limit(1)
 			->order_by('id', 'desc')
 			->get($this->tables['users']);
 
 		if ($query->num_rows() === 0) {
-			$query = $this->db->select($this->identity_mail_column . ', ' . $this->identity_column . ', fb_id, id, password, active, full_name, last_login')
+			$query = $this->db->select($this->identity_mail_column . ', ' . $this->identity_column . ', fb_id, id, password, active, full_name, phone, last_login')
 				->where($this->identity_mail_column, $identity)
 				->limit(1)
 				->order_by('id', 'desc')
@@ -2141,6 +2141,7 @@ class Ion_auth_model extends CI_Model
 			'identity'             => $user->{$this->identity_column},
 			$this->identity_column => $user->{$this->identity_column},
 			'email'                => $user->email,
+			'phone'                => $user->phone,
 			'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
 			'old_last_login'       => $user->last_login,
 			'last_check'           => time(),
@@ -2233,7 +2234,7 @@ class Ion_auth_model extends CI_Model
 
 		// get the user with the selector
 		$this->trigger_events('extra_where');
-		$query = $this->db->select($this->identity_column . ', fb_id, id, email, full_name, remember_code, last_login')
+		$query = $this->db->select($this->identity_column . ', fb_id, id, email, phone, full_name, remember_code, last_login')
 			->where('remember_selector', $token->selector)
 			->where('active', 1)
 			->limit(1)

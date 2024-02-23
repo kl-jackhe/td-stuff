@@ -1,11 +1,13 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-class Lottery extends Admin_Controller {
-    function __construct() {
-        parent::__construct();
-        
-    }
+<?php defined('BASEPATH') or exit('No direct script access allowed');
+class Lottery extends Admin_Controller
+{
+	function __construct()
+	{
+		parent::__construct();
+	}
 
-    function autoLottery() {
+	function autoLottery()
+	{
 		$winner_total = 0;
 		$count = 0;
 		$lottery_id = 0;
@@ -42,14 +44,15 @@ class Lottery extends Admin_Controller {
 			$this->db->where('id', $lottery_id);
 			$this->db->update('lottery', array('draw_over' => 1));
 		}
-    }
+	}
 
-    function autoLotterySendMail() {
-    	$lpsml_query = $this->lottery_model->getLotteryPoolSendMailList();
-    	if (!empty($lpsml_query)) {
-    		foreach ($lpsml_query as $lpsml_row) {
-    			$userDetail = $this->users_model->getUserDetail($lpsml_row['users_id']);
-    			$ll_row = $this->lottery_model->getLotteryList($lpsml_row['lottery_id'], 1);
+	function autoLotterySendMail()
+	{
+		$lpsml_query = $this->lottery_model->getLotteryPoolSendMailList();
+		if (!empty($lpsml_query)) {
+			foreach ($lpsml_query as $lpsml_row) {
+				$userDetail = $this->users_model->getUserDetail($lpsml_row['users_id']);
+				$ll_row = $this->lottery_model->getLotteryList($lpsml_row['lottery_id'], 1);
 				if (!empty($userDetail) && !empty($ll_row)) {
 					$sp_row = $this->product_model->getSingleProduct($ll_row['product_id']);
 					if ($ll_row['draw_over'] == '1' && !empty($sp_row)) {
@@ -64,7 +67,7 @@ class Lottery extends Admin_Controller {
 						$lottery_url = $_SERVER['SERVER_NAME'] . '/product/addLotteryProductToCart/' . $sp_row['product_id'];
 
 						$subject = '※重要※ 夥伴玩具線上抽選活動-中籤通知！';
-						if($ll_row['email_subject'] != ''){
+						if ($ll_row['email_subject'] != '') {
 							$subject = $ll_row['email_subject'];
 						}
 						$fileData = file_get_contents("/lottery/lottery_mail_template.php");
@@ -108,7 +111,7 @@ class Lottery extends Admin_Controller {
 							$content = $ll_row['sms_content'];
 							$mobile = $userDetail['phone'];
 							// 傳送簡訊
-							if($this->SMS->sendSMS($userID, $password, $subject, $content, $mobile, $sendTime)){
+							if ($this->SMS->sendSMS($userID, $password, $subject, $content, $mobile, $sendTime)) {
 								// echo "傳送簡訊成功，餘額為：" . $sms->credit . "，此次簡訊批號為：" . $sms->batchID . "<br />\r\n";
 							} else {
 								// echo "傳送簡訊失敗，" . $sms->processMsg . "<br />\r\n";
@@ -116,14 +119,15 @@ class Lottery extends Admin_Controller {
 						}
 					}
 				}
-    		}
-    	}
-    }
+			}
+		}
+	}
 
-    function runLotteryState() {
-    	$ldl_query = $this->lottery_model->getLotteryDrawList();
-    	if (!empty($ldl_query)) {
-    		foreach ($ldl_query as $ldl_row) {
+	function runLotteryState()
+	{
+		$ldl_query = $this->lottery_model->getLotteryDrawList();
+		if (!empty($ldl_query)) {
+			foreach ($ldl_query as $ldl_row) {
 				$nowtime = strtotime('now');
 				$time = date('Y-m-d H:i:s', ($nowtime));
 				$id = $ldl_row['id'];
@@ -147,10 +151,10 @@ class Lottery extends Admin_Controller {
 							$count++;
 							echo "訂單編號：" . $odid . " - " . "流水號：" . $odno . " - " . $count . " 付款完成-會員ID：" . $winner["member_id"] . "＊＊" . " 商品ID：" . "$product_id" . " - OK" . "<br>";
 							$this->db->where('id', $winner["id"]);
-    						$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
+							$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
 						} else {
 							$this->db->where('id', $winner["id"]);
-    						$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
+							$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
 						}
 					}
 				}
@@ -163,10 +167,10 @@ class Lottery extends Admin_Controller {
 							$count++;
 							echo "訂單編號：" . $odid . " - " . "流水號：" . $odno . " - " . $count . " 付款完成-會員ID：" . $winner["member_id"] . "＊＊" . " 商品ID：" . "$product_id" . " - OK" . "<br>";
 							$this->db->where('id', $winner["id"]);
-    						$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
+							$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
 						} else {
 							$this->db->where('id', $winner["id"]);
-    						$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
+							$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
 						}
 					}
 				}
@@ -181,14 +185,14 @@ class Lottery extends Admin_Controller {
 						$filter_black = 100;
 					}
 					$this->db->where('id', $id);
-					$this->db->update('lottery', array('number_remain' => $number_remain,'filter_black' => $filter_black));
+					$this->db->update('lottery', array('number_remain' => $number_remain, 'filter_black' => $filter_black));
 					$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'winner');
 					if (!empty($lpl_query)) {
 						foreach ($lpl_query as $lpl_row) {
 							if ($lpl_row['order_state'] != 'pay_ok') {
 								echo $lpl_row['member_id'] . ' - <br>';
 								$this->db->where('id', $lpl_row['id']);
-	    						$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
+								$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
 							}
 						}
 					}
@@ -201,23 +205,24 @@ class Lottery extends Admin_Controller {
 						$filter_black = 100;
 					}
 					$this->db->where('id', $id);
-					$this->db->update('lottery', array('number_remain' => $number_remain,'filter_black' => $filter_black));
+					$this->db->update('lottery', array('number_remain' => $number_remain, 'filter_black' => $filter_black));
 					$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'fill_up');
 					if (!empty($lpl_query)) {
 						foreach ($lpl_query as $lpl_row) {
 							if ($lpl_row['order_state'] != 'pay_ok') {
 								echo $lpl_row['member_id'] . ' - <br>';
 								$this->db->where('id', $lpl_row['id']);
-	    						$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
+								$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
 							}
 						}
 					}
 				}
 			}
-    	}
-    }
+		}
+	}
 
-	function get_order_list($member_id, $product_id) {
+	function get_order_list($member_id, $product_id)
+	{
 		// $order_list = "select * from order_list where memid='$member_id' ORDER BY odid DESC";
 		// $order_result = mysqli_query($this->Dbobj->getdbconnect(), $order_list);
 		// if (mysqli_num_rows($order_result) > 0) {
@@ -238,7 +243,8 @@ class Lottery extends Admin_Controller {
 		// return false;
 	}
 
-	function get_order_dtl($odid, $product_id) {
+	function get_order_dtl($odid, $product_id)
+	{
 		// $order_dtl = "select dtlid from order_dtl where odid='$odid' && prdid='$product_id' limit 1";
 		// $order_dtl_result = mysqli_query($this->Dbobj->getdbconnect(), $order_dtl);
 		// if (mysqli_num_rows($order_dtl_result) > 0) {

@@ -19,65 +19,80 @@
                             <div class="row">
                                 <!--商品名稱-->
                                 <h2 class="cargoTitle col-sm-12 col-md-12 col-lg-12"><?= $product['product_name']; ?></h2>
-                                <!--價格-->
-                                <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                    <?php if (!empty($productCombine)) : ?>
-                                        <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
-                                        <div v-else class="item">❌尚未選擇方案</div>
-                                    <?php else : ?>
-                                        <div class="paddingFixTop">
-                                            <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
-                                            <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
-                                            <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                <!--商品簡介:多行文字欄位-->
-                                <?php if (!empty($productCombine)) : ?>
+                                <?php if ($product['product_category_id'] == 6) : ?>
+                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                        <div class="item">&nbsp;$&nbsp;<?= $product['product_price'] ?></div>
+                                    </div>
                                     <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
-                                <?php endif; ?>
-                                <?php if (!empty($productCombine)) : ?>
-                                    <!--方案選擇-->
-                                    <select @change="updateSelectedCombine($event)" v-model="selectedCombineName" id="combineSelect" class="cargoBtn col-bg-12 col-md-12 col-lg-12">
-                                        <option value="請選擇方案" selected disabled>請選擇方案</option>
-                                        <?php foreach ($productCombine as $self) : ?>
-                                            <option value="<?php echo $self['name']; ?>">
-                                                <?php echo $self['name']; ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <!--商品數量-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
-                                        <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                        <input class="col-8 cargoCountText" type="text" v-model="quantity">
-                                        <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                    <!--抽選-->
+                                    <div class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick buyBtn" @click="participation"><i class="fas fa-truck"></i>參加抽選</span>
                                     </div>
                                     <!--運費說明-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                    <div class="cargoBtn col-md-12 col-lg-6">
                                         <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
                                     </div>
-                                    <!--購買按鍵-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
-                                        <?php if ($product['sales_status'] == 0) : ?>
-                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上購買</span>
-                                        <?php elseif ($product['sales_status'] == 2) : ?>
-                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                                <?php else : ?>
+                                    <!--價格-->
+                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                        <?php if (!empty($productCombine)) : ?>
+                                            <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
+                                            <div v-else class="item">❌尚未選擇方案</div>
                                         <?php else : ?>
-                                            <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
+                                            <div class="paddingFixTop">
+                                                <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
+                                                <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
+                                                <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
-                                    <!--加入購物車-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                        <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
-                                    </div>
-                                    <!--加入追蹤清單-->
-                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                        <span class="cargoClick likeBtn" @click="add_like()"><i class="fas fa-heart"></i>加入追蹤清單</span>
-                                    </div>
-                                <?php endif; ?>
+                                    <!--商品簡介:多行文字欄位-->
+                                    <?php if (!empty($productCombine)) : ?>
+                                        <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($productCombine)) : ?>
+                                        <!--方案選擇-->
+                                        <select @change="updateSelectedCombine($event)" v-model="selectedCombineName" id="combineSelect" class="cargoBtn col-bg-12 col-md-12 col-lg-12">
+                                            <option value="請選擇方案" selected disabled>請選擇方案</option>
+                                            <?php foreach ($productCombine as $self) : ?>
+                                                <option value="<?php echo $self['name']; ?>">
+                                                    <?php echo $self['name']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <!--商品數量-->
+                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
+                                            <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                            <input class="col-8 cargoCountText" type="text" v-model="quantity">
+                                            <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                        </div>
+                                        <!--運費說明-->
+                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                            <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
+                                        </div>
+                                        <!--購買按鍵-->
+                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
+                                            <?php if ($product['sales_status'] == 0) : ?>
+                                                <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                                            <?php elseif ($product['sales_status'] == 2) : ?>
+                                                <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                                            <?php else : ?>
+                                                <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <!--加入購物車-->
+                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                            <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                                        </div>
+                                        <!--加入追蹤清單-->
+                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                            <span class="cargoClick likeBtn" @click="add_like"><i class="fas fa-heart"></i>加入追蹤清單</span>
+                                        </div>
+                                    <?php endif; ?>
 
-                                <?php if (empty($productCombine)) : ?>
-                                    <?php require('product-contact.php'); ?>
+                                    <?php if (empty($productCombine)) : ?>
+                                        <?php require('product-contact.php'); ?>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -213,6 +228,36 @@
                 this.quantity = parseInt(this.quantity, 10);
                 this.quantity = Math.max(1, this.quantity - 1);
             },
+            // 參加抽選
+            participation() {
+                // 檢查登入
+                <?php if (empty($this->session->userdata('user_id'))) : ?>
+                    alert('請先登入再進行抽選報名。');
+                    window.location.href = "<?php echo base_url() . 'auth' ?>"; // 添加引號
+                    return;
+                <?php elseif (empty($this->session->userdata('email')) || empty($this->session->userdata('phone'))) : ?>
+                    alert('請先設定電子郵件及手機號碼再進行抽選報名。');
+                    window.location.href = "<?php echo base_url() . 'auth?=5' ?>"; // 添加引號
+                    return;
+                <?php endif; ?>
+
+                $.ajax({
+                    url: '/product/add_lottery/<?= $product['product_id'] ?>',
+                    method: 'post',
+                    data: {},
+                    success: function(response) {
+                        if (response == 'success') {
+                            alert('恭喜您！報名成功囉！');
+                        } else if (response == 'repetitive') {
+                            alert('您已經報名過囉！');
+                        } else if (response == 'non-exist') {
+                            alert('抽選活動尚未建立！');
+                        } else {
+                            alert('發生不明錯誤');
+                        }
+                    },
+                })
+            },
             // 加入購物車(待修)
             add_cart(hrefTarget) {
                 // 檢查登入
@@ -238,9 +283,9 @@
                     data: {
                         combine_id: this.selectedCombine.id,
                         qty: this.quantity,
-                        specification_name: 'Testname',
-                        specification_id: 'Testid',
-                        specification_qty: 'Textqty',
+                        specification_name: '',
+                        specification_id: '',
+                        specification_qty: '',
                     },
                     success: function(data) {
                         if (data == 'contradiction_date') {
@@ -248,15 +293,17 @@
                         } else if (data == 'contradiction') {
                             alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
                         } else if (data == 'exceed') {
-                            alert('超過限制數量故無法下單，敬請見諒');
+                            alert('超過限制數量故無法下單，敬請見諒。');
                         } else if (data == 'updateSuccessful') {
                             if (hrefTarget != '' && hrefTarget != null) {
+                                // console.log(data);
                                 window.location.href = hrefTarget;
                             } else {
                                 alert('成功更新購物車');
                             }
                         } else if (data == 'successful') {
                             if (hrefTarget != '' && hrefTarget != null) {
+                                // console.log(data);
                                 window.location.href = hrefTarget;
                             } else {
                                 alert('成功加入購物車');

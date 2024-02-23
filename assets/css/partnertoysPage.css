@@ -2597,7 +2597,7 @@ input.qtyminus {
     background-color: #fa8b68;
 }
 
-.sonsPreview span{
+.sonsPreview span {
     display: block;
     width: 100%;
     height: auto;
@@ -2606,6 +2606,69 @@ input.qtyminus {
 
 .resetRowMargin {
     margin: auto;
+}
+
+.pc_lottery .info {
+    color: #fff;
+    background-color: #868686;
+}
+
+.mb_lottery {
+    display: none;
+}
+
+.mb_lottery .remarks {
+    width: 100vh;
+}
+
+@media (max-width:995px) {
+    .pc_lottery {
+        font-size: 14px;
+    }
+}
+
+@media (max-width:768px) {
+    .pc_lottery {
+        display: none;
+    }
+
+    .mb_lottery {
+        display: block;
+    }
+
+    .mb_lottery .remarks {
+        font-size: 12px;
+    }
+}
+
+.lotteryResult {
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+select.lotteryResult {
+    color: #495057;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.addCartLottery {
+    color: #007bff !important;
+    cursor: pointer;
+}
+
+.addCartLottery:hover {
+    color: #007bff91 !important;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
 }
 
 /* 修改滾動條 */

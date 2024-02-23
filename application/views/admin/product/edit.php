@@ -374,7 +374,7 @@
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
                                         <th style="width: 20%;">名稱</th>
-                                        <?php if ($this->is_liqun_food) : ?>
+                                        <?php if ($this->is_liqun_food || $this->is_partnertoys) : ?>
                                             <th style="width: 10%;">貨號</th>
                                         <?php endif; ?>
                                         <th style="width: 10%;">原價</th>
@@ -388,7 +388,7 @@
                                         foreach ($product_combine as $row) { ?>
                                             <tr>
                                                 <td><?php echo $row['name']; ?></td>
-                                                <?php if ($this->is_liqun_food) : ?>
+                                                <?php if ($this->is_liqun_food || $this->is_partnertoys) : ?>
                                                     <td><?php echo $row['cargo_id']; ?></td>
                                                 <?php endif; ?>
                                                 <td><?php echo $row['price']; ?></td>

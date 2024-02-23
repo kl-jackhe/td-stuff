@@ -97,6 +97,8 @@ class Update extends Admin_Controller
                     // $this->create_product_combine();
                     // $this->upload_orders();
                     // $this->upload_orders_item();
+                    // $this->upload_lottery();
+                    // $this->upload_lottery_pool();
                 }
             } else {
                 // 不存在
@@ -108,6 +110,118 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function upload_lottery_pool()
+    {
+        $version = 'upload_lottery_pool';
+        $description = 'transition lottery_pool_anti data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+
+            $this->db->select('*');
+            $query = $this->db->get('lottery_pool_anti');
+            $lottery_pool = $query->result_array();
+
+            foreach ($lottery_pool as $row) {
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'id' => $row['id'],
+                    'lottery_id' => $row['lottery_id'],
+                    'users_id' => $row['member_id'],
+                    'send_mail' => $row['send_mail'],
+                    'abstain' => $row['abstain'],
+                    'winner' => $row['winner'],
+                    'alternate' => $row['alternate'],
+                    'fill_up' => $row['fill_up'],
+                    'blacklist' => $row['blacklist'],
+                    'abandon' => $row['abandon'],
+                    'order_state' => $row['order_state'],
+                    // 'order_id' => $row['order_odno'],
+                    'order_number' => $row['order_odno'],
+                    'msg_mail' => $row['msg_mail'],
+                    'msg' => $row['msg'],
+                    'create_time' => $row['create_time'],
+                );
+
+                // echo '<pre>';
+                // echo 'data : ';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('lottery_pool', $data);
+            }
+
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
+        }
+    }
+
+    function upload_lottery()
+    {
+        $version = 'upload_lottery';
+        $description = 'transition lottery_anti data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+
+            $this->db->select('*');
+            $query = $this->db->get('lottery_anti');
+            $lottery = $query->result_array();
+
+            foreach ($lottery as $row) {
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'id' => $row['id'],
+                    'name' => $row['name'],
+                    'email_subject' => $row['email_subject'],
+                    'email_content' => $row['email_content'],
+                    'sms_subject' => $row['sms_subject'],
+                    'sms_content' => $row['sms_content'],
+                    'product_id' => $row['product_id'],
+                    'number_limit' => $row['number_limit'],
+                    'number_remain' => $row['number_remain'],
+                    'number_alternate' => $row['number_alternate'],
+                    'star_time' => $row['star_time'],
+                    'end_time' => $row['end_time'],
+                    'draw_date' => $row['draw_date'],
+                    'fill_up_date' => $row['fill_up_date'],
+                    'draw_over' => $row['draw_over'],
+                    'fill_up_over' => $row['fill_up_over'],
+                    'filter_black' => $row['filter_black'],
+                    'state' => $row['state'],
+                    'lottery_end' => $row['lottery_end'],
+                    'create_time' => $row['create_time'],
+                );
+
+                // echo '<pre>';
+                // echo 'data : ';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('lottery', $data);
+            }
+
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 

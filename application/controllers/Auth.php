@@ -45,6 +45,28 @@ class Auth extends Public_Controller
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 
+				// 抽選資料
+				$self_lottery = array();
+				$this->data['lottery_pool'] = $this->mysql_model->_select('lottery_pool', 'users_id', $id);
+				if (!empty($this->data['lottery_pool'])) {
+					foreach ($this->data['lottery_pool'] as $self) {
+						$tmp = $this->mysql_model->_select('lottery', 'id', $self['lottery_id'], 'row');
+						if (!empty($tmp)) {
+							$product_name = $this->mysql_model->_select('product', 'product_id', $tmp['product_id'], 'row');
+							// $this->data['lotteryProductCombine'] = $this->mysql_model->_select('product_combine', 'product_id', $tmp['product_id']);
+						}
+						if (!empty($product_name)) {
+							$tmp['product_name'] = $product_name['product_name'];
+						}
+						$self_lottery[] = $tmp;
+					}
+				}
+				$this->data['lottery'] = $self_lottery;
+
+				// echo '<pre>';
+				// print_r($self_lottery);
+				// echo '</pre>';
+
 				// 郵件
 				$this->data['mail'] = $this->auth_model->getMails();
 

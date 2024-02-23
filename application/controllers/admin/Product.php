@@ -132,19 +132,19 @@ class Product extends Admin_Controller
 		$product_id = $this->mysql_model->_insert('product', $data);
 
 		if ($this->is_partnertoys) {
-			$this->db->where('product_id', $product_id);
-			$this->db->update('product', ['product_category_id' => $this->input->post('product_category')]);
+			// $this->db->where('product_id', $product_id);
+			// $this->db->update('product', ['product_category_id' => $this->input->post('product_category')]);
 
-			$data = array(
-				'product_id' => $product_id,
-				'name' => $this->input->post('product_name'),
-				'price' => $this->input->post('product_price'),
-				'current_price' => $this->input->post('product_price'),
-				'picture' => $this->input->post('product_image'),
-				'description' => $this->input->post('product_note'),
-				'create_time' => date('Y-m-d H:i:s'),
-			);
-			$this->db->insert('product_combine', $data);
+			// $data = array(
+			// 	'product_id' => $product_id,
+			// 	'name' => $this->input->post('product_name'),
+			// 	'price' => $this->input->post('product_price'),
+			// 	'current_price' => $this->input->post('product_price'),
+			// 	'picture' => $this->input->post('product_image'),
+			// 	'description' => $this->input->post('product_note'),
+			// 	'create_time' => date('Y-m-d H:i:s'),
+			// );
+			// $this->db->insert('product_combine', $data);
 		} else {
 			$product_category_id_list = $this->input->post('product_category');
 			if (isset($product_category_id_list) && !empty($product_category_id_list)) {
@@ -486,6 +486,7 @@ class Product extends Admin_Controller
 	{
 		$data = array(
 			'product_id' => $this->input->post('product_id'),
+			'cargo_id' => $this->input->post('product_combine_cargo_id'),
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),

@@ -1,5 +1,5 @@
 <!-- 分頁 -->
-<ul v-if="order && totalPages !== 0" class="pagination">
+<ul v-if="totalPages !== 0" class="pagination">
     <li class="page-item" :class="{'disabled': currentPage === 1}" @click.prevent="currentPage !== 1 && setPage(1)">
         <a class="page_link" href="" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
@@ -25,6 +25,6 @@
     </li>
 </ul>
 
-<ul v-if="order && totalPages !== 0" class="pagination pagination_bottom">
-    <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ (this.selectedCategoryId == 1) ? this.order.length : ((this.selectedCategoryId == 2) ? this.followData.length : this.mail.length) }}</span>
+<ul v-if="totalPages !== 0" class="pagination pagination_bottom">
+    <span>目前頁數： {{ currentPage }} / {{ totalPages }}　資料總數：{{ (selectedCategoryId == 1) ? order.length : ((selectedCategoryId == 2) ? followData.length : ((selectedCategoryId == 3) ? lottery_pool.length : mail.length)) }}</span>
 </ul>
