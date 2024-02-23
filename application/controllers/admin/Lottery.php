@@ -140,59 +140,65 @@ class Lottery extends Admin_Controller
     }
 
     // 開始抽選
-    function reservationWiner()
+    function reservationWiner($lottery_id)
     {
-        $id = $_GET['id'];
-        $memid = $_GET['memid'];
-        $query = "select * from lottery where id='$id'";
-        $result = mysqli_query($dblink, $query);
-        if (mysqli_num_rows($result) > 0) :
-            while ($row = mysqli_fetch_array($result)) {
-                $draw_over = $row['draw_over'];
-                $number_remain = $row['number_remain'];
-            }
+        $this->db->where('id', $lottery_id);
+        $lottery = $this->db->get('lottery')->row_array();
+        if (!empty($lottery)) :
+            $draw_over = $lottery['draw_over'];
+            $number_limit = $lottery['number_limit'];
+            $number_remain = $lottery['number_remain'];
+        // $number_alternate = $lottery['number_alternate'];
         endif;
         if ($draw_over == 0) {
             // 正取
-            $query = "select * from lottery_pool where lottery_id='$id' && id='$memid'";
-            $result = mysqli_query($dblink, $query);
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_array($result)) {
+            $this->db->where('lottery_id', $lottery_id);
+            $lottery_pool = $this->db->get('lottery_pool')->result_array();
+
+            if (!empty($lottery_pool)) {
+                // 随机抽取指定数量的结果
+                shuffle($lottery_pool); // 将结果集打乱顺序
+                $selected_lottery_pool = array_slice($lottery_pool, 0, $number_limit); // 从打乱后的数组中取出指定数量的元素
+            }
+
+            if (!empty($selected_lottery_pool)) {
+                foreach ($selected_lottery_pool as $row) {
                     if ($row['winner'] == '0' && $row['fill_up'] == '0' && $row['abandon'] == '0' && $row['blacklist'] == '0') {
-                        $query = "update lottery_pool set ";
-                        $query .= "winner='1'";
-                        $query .= " where id=$memid";
-                        mysqli_query($dblink, $query) || die("Can't update lottery_pool info. Reason: " . mysqli_error($dblink));
-                        break;
+                        $this->db->where('id', $row['id']);
+                        $this->db->update('lottery_pool', ['winner' => '1']);
                     }
                 }
             }
         } else {
             // 備取遞補
             if ($number_remain > 0) {
-                $query = "select * from lottery_pool where lottery_id='$id' && id='$memid'";
-                $result = mysqli_query($dblink, $query);
-                if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_array($result)) {
+                // 備取
+                $this->db->where('lottery_id', $lottery_id);
+                $lottery_pool = $this->db->get('lottery_pool')->result_array();
+
+                if (!empty($lottery_pool)) {
+                    // 随机抽取指定数量的结果
+                    shuffle($lottery_pool); // 将结果集打乱顺序
+                    $selected_lottery_pool = array_slice($lottery_pool, 0, $number_remain); // 从打乱后的数组中取出指定数量的元素
+                }
+
+                if (!empty($selected_lottery_pool)) {
+                    foreach ($selected_lottery_pool as $row) {
                         if ($row['winner'] == '0' && $row['fill_up'] == '0' && $row['abandon'] == '0' && $row['blacklist'] == '0') {
-                            $query = "update lottery_pool set ";
-                            $query .= "fill_up='1'";
-                            $query .= " where id=$memid";
-                            mysqli_query($dblink, $query) || die("Can't update lottery_pool info. Reason: " . mysqli_error($dblink));
+                            $this->db->where('id', $row['id']);
+                            $this->db->update('lottery_pool', ['fill_up' => '1']);
                             $number_remain = $number_remain - 1;
-                            $query = "update lottery set ";
-                            $query .= "number_remain='$number_remain'"; //釋出名額數
-                            $query .= " where id=$id";
-                            mysqli_query($dblink, $query) || die("Can't insert lottery info. Reason: " . mysqli_error($dblink));
-                            break;
+                            $this->db->where('id', $row['lottery_id']);
+                            $this->db->update('lottery_pool', ['number_remain' => $number_remain]);
                         }
                     }
                 }
             } else {
-                echo "<script>location='lottery_table.php?tree=6&act=mdy&id=$id';alert('沒有名額可以進行遞補抽選！');</script>";
+                echo "<script>alert('沒有名額可以進行遞補抽選！');</script>";
                 exit;
             }
         }
+        redirect('admin/lottery/edit/' . $lottery_id);
     }
 
     function addMemberBlackList()
@@ -249,7 +255,7 @@ class Lottery extends Admin_Controller
         $this->db->where('id', $id);
         $this->db->update('lottery_pool', ['winner' => '1']);
         $this->session->set_flashdata('預定選中完成');
-        
+
         echo '<script>window.history.back();</script>';
     }
 }

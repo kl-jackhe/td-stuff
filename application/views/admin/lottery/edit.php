@@ -296,6 +296,14 @@
     </div>
 </div>
 <script>
+    $(document).ready(function() {
+        $('.lottery_pool_alert_confirmation').click(function() {
+            if (confirm('你確定進行抽選嗎？')) {
+                window.location.href = "/admin/lottery/reservationWiner/<?= $lottery['id'] ?>";
+            }
+        });
+    })
+
     function specify_lottery() {
         if (confirm('確定預選該會員')) {
             window.location.href = '/admin/lottery/specify_lottery/<?= $lottery_pool_id ?>';
