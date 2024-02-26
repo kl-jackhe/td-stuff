@@ -693,6 +693,26 @@ function get_user_address($id)
 	}
 }
 
+function get_lottery_winner($user_id)
+{
+	$CI = &get_instance();
+	$data = array(
+		'users_id' => $user_id,
+	);
+	$CI->db->group_start();
+	$CI->db->where('winner', '1');
+	$CI->db->or_where('fill_up', '1');
+	$CI->db->group_end();
+	$CI->db->where_not_in('order_state', 'pay_ok');
+
+	$query = $CI->db->get_where('lottery_pool', $data);
+	if ($query->num_rows() > 0) {
+		$result = $query->result_array();
+		$data = count($result);
+		return $data;
+	}
+}
+
 function get_unread_mail_count($state, $mode)
 {
 	$CI = &get_instance();

@@ -80,16 +80,22 @@
                                 </li>
                                 <?php if (!empty($this->session->userdata('user_id'))) : ?>
                                     <li>
+                                        <a href="/auth?id=3">
+                                            <?php if (get_lottery_winner($this->session->userdata('user_id')) > 0) : ?>
+                                                <i class="fa fa-gift" aria-hidden="true"></i>
+                                                <span>&nbsp;<?php echo get_lottery_winner($this->session->userdata('user_id')); ?></span>
+                                            <?php else : ?>
+                                                <i class="fa fa-gift" aria-hidden="true"></i>
+                                            <?php endif; ?>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="/auth?id=8">
                                             <?php if (get_unread_mail_count(0, 'member') > 0) : ?>
-                                                <span id="MailBox" style="color: #682d2d; position: relative;">
-                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                    <span>&nbsp;<?php echo get_unread_mail_count(0, 'member'); ?></span>
-                                                </span>
+                                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                <span>&nbsp;<?php echo get_unread_mail_count(0, 'member'); ?></span>
                                             <?php else : ?>
-                                                <span id="MailBox" style="color: white; position: relative;">
-                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                                                </span>
+                                                <i class="fa fa-envelope" aria-hidden="true"></i>
                                             <?php endif; ?>
                                         </a>
                                     </li>

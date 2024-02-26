@@ -69,7 +69,7 @@
                                         <option v-for="combine in lottery_product_combine" :key="combine.id" :value="combine.id">{{ combine.name }}</option>
                                     </select>
                                     &nbsp;
-                                    <a class="addCartLottery" @click="add_cart_lottery">(加入購物車)</a>
+                                    <a class="addCartLottery" @click="add_cart_lottery(self.id)">(加入購物車)</a>
                                 </p>
                                 <p v-else>#</p>
                             </td>

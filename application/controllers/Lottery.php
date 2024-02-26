@@ -46,76 +46,97 @@ class Lottery extends Admin_Controller
 		}
 	}
 
-	function autoLotterySendMail()
+	function autoLotterySendMail($id)
 	{
-		$lpsml_query = $this->lottery_model->getLotteryPoolSendMailList();
-		if (!empty($lpsml_query)) {
-			foreach ($lpsml_query as $lpsml_row) {
-				$userDetail = $this->users_model->getUserDetail($lpsml_row['users_id']);
-				$ll_row = $this->lottery_model->getLotteryList($lpsml_row['lottery_id'], 1);
-				if (!empty($userDetail) && !empty($ll_row)) {
-					$sp_row = $this->product_model->getSingleProduct($ll_row['product_id']);
-					if ($ll_row['draw_over'] == '1' && !empty($sp_row)) {
-						$datetime = date('Y-m-d H:i:s', strtotime('now'));
-						$draw_date_2d = date("Y-m-d H:i:s", strtotime("+2 Day", strtotime($ll_row['draw_date'])));
-						// echo $nowtime . '<br>' . $datetime . '<br>' . $draw_date_2d;
-						if ($datetime > $draw_date_2d) {
-							$draw_date_3d = date("Y年m月d日 H時", strtotime("+2 Day", strtotime($ll_row['fill_up_date'])));
-						} else {
-							$draw_date_3d = date("Y年m月d日 H時", strtotime("+2 Day", strtotime($ll_row['draw_date'])));
-						}
-						$lottery_url = $_SERVER['SERVER_NAME'] . '/product/addLotteryProductToCart/' . $sp_row['product_id'];
+		$lottery_pool = $this->mysql_model->_select('lottery_pool', 'id', $id, 'row');
+		if (!empty($lottery_pool)) {
+			$userDetail = $this->users_model->getUserDetail($lottery_pool['users_id']);
+			$ll_row = $this->lottery_model->getLotteryList($lottery_pool['lottery_id'], 1);
+			$product_combine = $this->mysql_model->_select('product_combine', 'product_id', $ll_row['product_id'], 'row');
+			if (!empty($userDetail) && !empty($ll_row)) {
+				$sp_row = $this->product_model->getSingleProduct($ll_row['product_id']);
+				if ($ll_row['draw_over'] == '1' && !empty($sp_row)) {
+					$datetime = date('Y-m-d H:i:s', strtotime('now'));
+					$draw_date_2d = date("Y-m-d H:i:s", strtotime("+2 Day", strtotime($ll_row['draw_date'])));
+					// echo $nowtime . '<br>' . $datetime . '<br>' . $draw_date_2d;
+					if ($datetime > $draw_date_2d) {
+						$draw_date_3d = date("Y年m月d日 H時", strtotime("+2 Day", strtotime($ll_row['fill_up_date'])));
+					} else {
+						$draw_date_3d = date("Y年m月d日 H時", strtotime("+2 Day", strtotime($ll_row['draw_date'])));
+					}
 
-						$subject = '※重要※ 夥伴玩具線上抽選活動-中籤通知！';
-						if ($ll_row['email_subject'] != '') {
-							$subject = $ll_row['email_subject'];
-						}
-						$fileData = file_get_contents("/lottery/lottery_mail_template.php");
-						$fileData = str_replace("{{subject}}", $subject, $fileData);
-						// $fileData = str_replace("{{cpname}}", $_SESSION['sec_miya_cpname'], $fileData);
-						$fileData = str_replace("{{webname}}", get_setting_general('name'), $fileData);
-						$fileData = str_replace("{{email}}", get_setting_general('email'), $fileData);
-						$fileData = str_replace("{{tel}}", get_setting_general('phone1'), $fileData);
-						// ==================================================================================
-						$fileData = str_replace("{{cname}}", $userDetail['full_name'], $fileData);
-						$fileData = str_replace("{{lottery_name}}", $sp_row['product_name'], $fileData);
-						$fileData = str_replace("{{lottery_url}}", $lottery_url, $fileData);
-						$fileData = str_replace("{{date_end_pay}}", $draw_date_3d, $fileData);
-						$body = $fileData;
-						$this->load->library('email');
-						// 賣家資料
-						$this->email->set_smtp_host(get_setting_general('smtp_host'));
-						$this->email->set_smtp_user(get_setting_general('smtp_user'));
-						$this->email->set_smtp_pass(get_setting_general('smtp_pass'));
-						$this->email->set_smtp_port(get_setting_general('smtp_port'));
-						$this->email->set_smtp_crypto(get_setting_general('smtp_crypto'));
-						// 買家資料
-						$this->email->to($userDetail['email']);
-						$this->email->from(get_setting_general('email'), get_setting_general('name'));
-						$this->email->subject($subject);
-						$this->email->message($body);
-						// echo $content;
+					$subject = '※重要※ 夥伴玩具線上抽選活動-中籤通知！';
+					if ($ll_row['email_subject'] != '') {
+						$subject = $ll_row['email_subject'];
+					}
+
+					// 加载邮件模板文件
+					$mail_data = array(
+						'subject' => $subject,
+						'webname' => get_setting_general('name'),
+						'email' => get_setting_general('email'),
+						'tel' => get_setting_general('phone1'),
+						'cname' => $userDetail['full_name'],
+						'lottery_name' => $sp_row['product_name'],
+						'lottery_url' => base_url() . 'cart/add_combine?is_lottery=true&lottery_id=' . $lottery_pool['lottery_id'] . '&qty=1&combine_id=' . $product_combine['id'],
+						'date_end_pay' => $draw_date_3d
+					);
+					$body = $this->load->view('lottery/lottery_mail_template', $mail_data, true); // 将视图内容作为字符串返回
+					$this->load->library('email');
+					// 賣家資料
+					$this->email->set_smtp_host(get_setting_general('smtp_host'));
+					$this->email->set_smtp_user(get_setting_general('smtp_user'));
+					$this->email->set_smtp_pass(get_setting_general('smtp_pass'));
+					$this->email->set_smtp_port(get_setting_general('smtp_port'));
+					$this->email->set_smtp_crypto(get_setting_general('smtp_crypto'));
+					// 買家資料
+					$this->email->to($userDetail['email']);
+					$this->email->from(get_setting_general('email'), get_setting_general('name'));
+					$this->email->subject($subject);
+					$this->email->message($body);
+
+					$send_mail = 'OK';
+					try {
 						if ($this->email->send()) {
-							echo "1";
-							$this->db->where('id', $lpsml_row['id']);
-							$this->db->update('lottery_pool', array('send_mail' => 'OK', 'msg_mail' => $msg_mail, 'msg' => $msg));
+							// echo "1";
+							$msg_mail = 'mailer_sent';
+							$msg = 'success';
+							$send_data = array(
+								'send_mail' => $send_mail,
+								'msg_mail' => $msg_mail,
+								'msg' => $msg,
+							);
+							$this->db->where('id', $lottery_pool['id']);
+							$this->db->update('lottery_pool', $send_data);
 						} else {
-							echo "0";
+							throw new Exception('unknown error');
 						}
+					} catch (Exception $e) {
+						// echo "0";
+						$msg_mail = $e->getMessage();
+						$msg = 'error';
+						$send_data = array(
+							'send_mail' => $send_mail,
+							'msg_mail' => $msg_mail,
+							'msg' => $msg,
+						);
+						$this->db->where('id', $lottery_pool['id']);
+						$this->db->update('lottery_pool', $send_data);
+					}
+					if ($ll_row['sms_subject'] != '' && $ll_row['sms_content'] != '' && $userDetail['phone'] != '') {
+						$this->load->library('sms');
+						$userID = "partnertoys";
+						$password = "Ji394cji3104";
+						$subject = $ll_row['sms_subject'];
+						$content = $ll_row['sms_content'];
+						$mobile = $userDetail['phone'];
+						$sendTime = '';
 
-						if ($ll_row['sms_subject'] != '' && $ll_row['sms_content'] != '' && $userDetail['phone'] != '') {
-							$this->load->library('SMS');
-							$userID = "partnertoys";
-							$password = "Ji394cji3104";
-							$subject = $ll_row['sms_subject'];
-							$content = $ll_row['sms_content'];
-							$mobile = $userDetail['phone'];
-							// 傳送簡訊
-							if ($this->SMS->sendSMS($userID, $password, $subject, $content, $mobile, $sendTime)) {
-								// echo "傳送簡訊成功，餘額為：" . $sms->credit . "，此次簡訊批號為：" . $sms->batchID . "<br />\r\n";
-							} else {
-								// echo "傳送簡訊失敗，" . $sms->processMsg . "<br />\r\n";
-							}
+						// 傳送簡訊
+						if ($this->sms->sendSMS($userID, $password, $subject, $content, $mobile, $sendTime)) {
+							// echo "傳送簡訊成功，餘額為：" . $sms->credit . "，此次簡訊批號為：" . $sms->batchID . "<br />\r\n";
+						} else {
+							// echo "傳送簡訊失敗，" . $sms->processMsg . "<br />\r\n";
 						}
 					}
 				}
@@ -123,102 +144,79 @@ class Lottery extends Admin_Controller
 		}
 	}
 
-	function runLotteryState()
+	function autoLotteryState()
 	{
-		$ldl_query = $this->lottery_model->getLotteryDrawList();
-		if (!empty($ldl_query)) {
-			foreach ($ldl_query as $ldl_row) {
-				$nowtime = strtotime('now');
-				$time = date('Y-m-d H:i:s', ($nowtime));
-				$id = $ldl_row['id'];
-				$number_limit = $ldl_row['number_limit'];
-				$number_remain = $ldl_row['number_remain'];
-				$filter_black = $ldl_row['filter_black'];
-				$state = $ldl_row["state"];
-				$product_id = $ldl_row["product_id"];
-				$draw_date = $ldl_row["draw_date"];
-				$draw_date_2d = strtotime("+2 Day", strtotime($draw_date));
-				$fill_up_date = $ldl_row["fill_up_date"];
-				$fill_up_date_2d = strtotime("+2 Day", strtotime($fill_up_date));
-				echo '<br>抽選項次：' . $ldl_row['id'] . ' 抽選商品：' . $product_id . '<br>';
-				$count = 0;
-				echo '<br>=================正取=================<br>';
-				$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'winner');
-				if (!empty($lpl_query)) {
-					foreach ($lpl_query as $lpl_row) {
-						[$odid, $odno, $OK] = $main->get_order_list($winner["member_id"], $product_id);
-						if ($OK == 'OK') {
-							$count++;
-							echo "訂單編號：" . $odid . " - " . "流水號：" . $odno . " - " . $count . " 付款完成-會員ID：" . $winner["member_id"] . "＊＊" . " 商品ID：" . "$product_id" . " - OK" . "<br>";
-							$this->db->where('id', $winner["id"]);
-							$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
-						} else {
-							$this->db->where('id', $winner["id"]);
-							$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
-						}
-					}
-				}
-				echo '=================遞補=================<br>';
-				$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'fill_up');
-				if (!empty($lpl_query)) {
-					foreach ($lpl_query as $lpl_row) {
-						[$odid, $odno, $OK] = $main->get_order_list($winner["member_id"], $product_id);
-						if ($OK == 'OK') {
-							$count++;
-							echo "訂單編號：" . $odid . " - " . "流水號：" . $odno . " - " . $count . " 付款完成-會員ID：" . $winner["member_id"] . "＊＊" . " 商品ID：" . "$product_id" . " - OK" . "<br>";
-							$this->db->where('id', $winner["id"]);
-							$this->db->update('lottery_pool', array('order_state' => 'pay_ok', 'order_number' => $odno));
-						} else {
-							$this->db->where('id', $winner["id"]);
-							$this->db->update('lottery_pool', array('order_state' => '', 'order_number' => ''));
-						}
-					}
-				}
+		$lottery_array = $this->mysql_model->_select('lottery', 'lottery_end', '0');
+		foreach ($lottery_array as $row) {
+			$nowtime = strtotime('now');
+			$id = $row['id'];
+			$number_limit = $row['number_limit'];
+			$number_remain = $row['number_remain'];
+			$filter_black = $row['filter_black'];
+			$draw_date = $row["draw_date"];
+			$draw_date_2d = strtotime("+2 Day", strtotime($draw_date));
+			$fill_up_date = $row["fill_up_date"];
+			$fill_up_date_2d = strtotime("+2 Day", strtotime($fill_up_date));
+
+			if (!empty($id)) {
+				$winner = $this->lottery_model->getLotteryPoolWinnerCount($id);
+				$fill_up = $this->lottery_model->getLotteryPoolFillUpCount($id);
 				echo '抽選人數:' . $number_limit . '<br>';
-				$number_remain = $number_limit - $count;
+				$number_remain = $number_limit - (count($winner) + count($fill_up));
 				echo '剩餘抽選人數:' . $number_remain . '<br>';
 				if (!empty($id) && $nowtime > $draw_date_2d && $filter_black == 0) {
 					echo '正取更新<br>';
-					if ($filter_black == 0) {
-						$filter_black = 1;
-					} else {
-						$filter_black = 100;
-					}
-					$this->db->where('id', $id);
-					$this->db->update('lottery', array('number_remain' => $number_remain, 'filter_black' => $filter_black));
-					$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'winner');
-					if (!empty($lpl_query)) {
-						foreach ($lpl_query as $lpl_row) {
-							if ($lpl_row['order_state'] != 'pay_ok') {
-								echo $lpl_row['member_id'] . ' - <br>';
-								$this->db->where('id', $lpl_row['id']);
-								$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
-							}
+					$this->update_number_remain($id, $number_remain, $filter_black);
+					foreach ($winner as $un_winner) {
+						if ($un_winner['order_state'] != 'pay_ok') {
+							echo $un_winner['users_id'] . ' - <br>';
+							$this->update_abandon_abstain($un_winner['id']);
 						}
 					}
 				}
 				if (!empty($id) && $nowtime > $fill_up_date_2d && $fill_up_date != '0000-00-00 00:00:00' && $filter_black == 999) {
 					echo '遞補更新<br>';
-					if ($filter_black == 0) {
-						$filter_black = 1;
-					} else {
-						$filter_black = 100;
-					}
-					$this->db->where('id', $id);
-					$this->db->update('lottery', array('number_remain' => $number_remain, 'filter_black' => $filter_black));
-					$lpl_query = $this->lottery_model->getLotteryPoolList($id, 'fill_up');
-					if (!empty($lpl_query)) {
-						foreach ($lpl_query as $lpl_row) {
-							if ($lpl_row['order_state'] != 'pay_ok') {
-								echo $lpl_row['member_id'] . ' - <br>';
-								$this->db->where('id', $lpl_row['id']);
-								$this->db->update('lottery_pool', array('order_state' => 'un_order', 'abstain' => '1', 'abandon' => '1'));
-							}
+					$this->update_number_remain($id, $number_remain, $filter_black);
+					foreach ($fill_up as $un_fill_up) {
+						if ($un_fill_up['order_state'] != 'pay_ok') {
+							echo $un_fill_up['users_id'] . ' - <br>';
+							$this->update_abandon_abstain($un_fill_up['id']);
 						}
 					}
 				}
+				$send_mail_array = $this->lottery_model->getNotOKLotterySendMail();
+				if (!empty($send_mail_array)) {
+					$this->autoLotterySendMail($send_mail_array['id']);
+				}
 			}
 		}
+	}
+
+	public function update_abandon_abstain($id)
+	{
+		$data = array(
+			'order_state' => 'un_order',
+			'abstain' => '1',
+			'abandon' => '1',
+		);
+		$this->db->where('id', $id);
+		$this->db->update('lottery_pool', $data);
+	}
+
+	public function update_number_remain($id, $count, $filter_black)
+	{
+		if ($filter_black == 0) {
+			$filter_black = 1;
+		} else {
+			$filter_black = 100;
+		}
+
+		$data = array(
+			'number_remain' => $count,
+			'filter_black' => $filter_black,
+		);
+		$this->db->where('id', $id);
+		$this->db->update('lottery_pool', $data);
 	}
 
 	function get_order_list($member_id, $product_id)

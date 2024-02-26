@@ -42,8 +42,20 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="input-group">
+                                    <span class="input-group-addon">完成付款名額</span>
+                                    <input type="number" name="completed_pay" min="0" value="<?= $lottery['completed_pay'] ?>" class="form-control" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group">
                                     <span class="input-group-addon">正取名額</span>
-                                    <input type="number" name="number_limit" min="1" value="<?= $lottery['number_limit'] ?>" class="form-control" required>
+                                    <input type="number" name="number_limit" min="1" value="<?= $lottery['number_limit'] ?>" class="form-control" required <?= ($lottery['draw_over']) ? 'readonly' : '' ?>>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">備取名額</span>
+                                    <input type="number" name="number_remain" min="0" value="<?= $lottery['number_remain'] ?>" class="form-control" required <?= (!$lottery['draw_over']) ? 'readonly' : '' ?>>
                                 </div>
                             </div>
                             <div class="col-md-12">
@@ -276,7 +288,7 @@
                                 </td> -->
                                 <td nowrap="nowrap">
                                     <? if ($winner == '0' && $abandon == '0' && $fill_up == '0' && $blacklist == '0' && $lottery_end == '0') { ?>
-                                        <span class="btn btn-primary" onClick="specify_lottery()">預定中選</span>
+                                        <span class="btn btn-primary" onClick="specify_lottery(<?= $lottery_pool_id ?>)">預定中選</span>
                                     <? } else {
                                         echo "/"; ?>
                                     <? } ?>
@@ -304,9 +316,9 @@
         });
     })
 
-    function specify_lottery() {
+    function specify_lottery(lottery_pool_id) {
         if (confirm('確定預選該會員')) {
-            window.location.href = '/admin/lottery/specify_lottery/<?= $lottery_pool_id ?>';
+            window.location.href = '/admin/lottery/specify_lottery/' + lottery_pool_id;
         }
     }
 

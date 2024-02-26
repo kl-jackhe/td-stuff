@@ -511,9 +511,10 @@
             },
             add_cart_lottery(lotteryID) {
                 var this_combine_id = $('#lotteryProductCombine').val();
+                var this_method = (this_combine_id != '') ? 'post' : 'get';
                 $.ajax({
                     url: '/cart/add_combine',
-                    method: 'post',
+                    method: this_method,
                     data: {
                         is_lottery: true,
                         lottery_id: lotteryID,
@@ -537,11 +538,11 @@
                             alert('找不到使用者');
                         } else if (response == 'only_one') {
                             alert('只可下一次單');
-                        } else if (data == 'contradiction_date') {
+                        } else if (response == 'contradiction_date') {
                             alert('預購商品若不同月份不得一並選購，敬請見諒。');
-                        } else if (data == 'contradiction') {
+                        } else if (response == 'contradiction') {
                             alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
-                        } else if (data == 'exceed') {
+                        } else if (response == 'exceed') {
                             alert('超過限制數量故無法下單，敬請見諒。');
                         } else {
                             alert('UNKNOUN ERROR');
