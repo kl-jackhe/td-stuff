@@ -91,6 +91,13 @@ class Checkout extends Public_Controller
 				unset($self);  // 解除引用，以防止后续代码中意外修改 $self 导致原数组变动
 			}
 			$this->data['coupon'] = $coupon_arr;
+
+			$total_weight = 0;
+			$cart_item = $this->cart->contents(true);
+			foreach ($cart_item as $self) {
+				$total_weight += ((float)$self['options']['weight'] * (float)$self['qty']);
+			}
+			$this->data['total_weight'] = $total_weight;
 			// echo '<pre>';
 			// print_r($this->data['coupon']);
 			// echo '</pre>';
@@ -141,29 +148,34 @@ class Checkout extends Public_Controller
 		$context = stream_context_create($options);
 
 		$res = @file_get_contents($url, false, $context);
-
+		echo '<pre>';
+		print_r($res);
+		echo '</pre>';
 		if ($res === FALSE) {
 			// 處理錯誤
 			echo "Error: Unable to fetch data.";
 		} else {
 			// 解析 JSON
 			$data = json_decode($res, true);
+			echo '<pre>';
+			print_r($data);
+			echo '</pre>';
 			// 檢查 API 回應
 			if (isset($data['response']) && $data['response'] === 'success') {
 				// 獲取 access_token
 				$token = $data['data']['access_token'];
-				// echo '<pre>';
-				// print_r($token);
-				// echo '</pre>';
+				echo '<pre>';
+				print_r($data);
+				echo '</pre>';
 				return $token;
 			} else {
 				// 顯示完整的 API 回應
 				echo '<pre>';
 				print_r($data);
 				echo '</pre>';
-				echo '<pre>';
-				print_r($header);
-				echo '</pre>';
+				// echo '<pre>';
+				// print_r($header);
+				// echo '</pre>';
 				return false;
 			}
 		}

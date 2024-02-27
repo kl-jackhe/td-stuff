@@ -341,10 +341,10 @@ if (!empty($this->cart->contents())) {
                         limitWeight = 10;
                         var compareWeight = <?= $weight; ?>;
                         compareWeight = parseFloat(compareWeight) + parseFloat(cargoWeight);
-                        if (compareWeight > limitWeight) {
-                            alert('已達商品限制最大重量，敬請見諒。');
-                            return false;
-                        }
+                        // if (compareWeight > limitWeight) {
+                        //     alert('已達商品限制最大重量，敬請見諒。');
+                        //     return false;
+                        // }
                     <?php endif; ?>
                     input.val(currentVal + 1).change();
                 } else if (parseInt(input.val()) == input.attr('max')) {

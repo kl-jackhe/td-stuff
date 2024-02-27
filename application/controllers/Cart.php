@@ -49,6 +49,7 @@ class Cart extends Public_Controller
 			$is_lottery = $this->input->post('is_lottery');
 			$lottery_id = $this->input->post('lottery_id');
 		} else {
+			// 待加密
 			$combine_id = $this->input->get('combine_id');
 			$qty = $this->input->get('qty');
 			$weight = $this->input->get('weight');
@@ -197,10 +198,10 @@ class Cart extends Public_Controller
 			foreach ($cart_item as $self) {
 				$total_weight += ((float)$self['options']['weight'] * (float)$self['qty']);
 			}
-			if ($total_weight > 10.00) {
-				echo 'weight_exceed';
-				return;
-			}
+			// if ($total_weight > 10.00) {
+			// 	echo 'weight_exceed';
+			// 	return;
+			// }
 			// 購物車是否有該物品
 			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
 				foreach ($cart_item as $self) {
