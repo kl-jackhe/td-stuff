@@ -196,15 +196,21 @@ if (!empty($this->cart->contents())) {
                                     <div class="col">
                                         <div class="input-group">
                                             <?php
-                                            if (!empty($this->product_model->getProductCombine($items["id"]))) {
-                                                $self = $this->product_model->getProductCombine($items["id"]);
-                                                $is_lottery = $this->mysql_model->_select('lottery', 'product_id', $self['product_id'], 'row');
-                                                if (!empty($is_lottery)) {
-                                                    $add_disabled = 'disabled';
-                                                } else {
-                                                    $add_disabled = '';
+                                            $add_disabled = '';
+                                            if ($this->is_partnertoys) {
+                                                if (!empty($this->product_model->getProductCombine($items["id"]))) {
+                                                    $self = $this->product_model->getProductCombine($items["id"]);
+                                                    $is_lottery = $this->mysql_model->_select('lottery', 'product_id', $self['product_id'], 'row');
+                                                    if (!empty($is_lottery)) {
+                                                        $add_disabled = 'disabled';
+                                                    }
+                                                    $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
                                                 }
-                                                $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
+                                            } else if ($this->is_liqun_food) {
+                                                if (!empty($this->product_model->getProductCombine($items["id"]))) {
+                                                    $self = $this->product_model->getProductCombine($items["id"]);
+                                                    $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
+                                                }
                                             }
                                             ?>
                                             <? if (!empty($items['specification']['specification_id'])) { ?>
@@ -213,7 +219,7 @@ if (!empty($this->cart->contents())) {
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                 </span>
-                                                <input style="border-radius: 5px" type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" readonly>
+                                                <input style="border-radius: 5px" type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="100" disabled>
                                                 <span class="input-group-btn" style="display:none;">
                                                     <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>" disabled>
                                                         <i class="fa-solid fa-plus"></i>
@@ -225,7 +231,7 @@ if (!empty($this->cart->contents())) {
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                 </span>
-                                                <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="<?= $max_qty; ?>" readonly>
+                                                <input type="text" name="quant[<?php echo $items["rowid"] ?>]" class="form-control input-number input_border_style" value="<?php echo $items['qty']; ?>" min="1" max="<?= $max_qty; ?>" disabled>
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" id="<?php echo $items["rowid"] ?>" <?= $add_disabled ?>>
                                                         <i class="fa-solid fa-plus"></i>
@@ -253,7 +259,7 @@ if (!empty($this->cart->contents())) {
 <div class="col-12 p-0">
     <hr>
     <?php if ($this->is_liqun_food) : ?>
-        <span style="color: #BE2633;">備註：超商配送限重10KG。</span><br>
+        <span style="color: #BE2633;">備註：超商配送限10KG以下(不含10KG)。</span><br>
     <?php elseif ($this->is_partnertoys) : ?>
         <span style="color: #BE2633;">備註：預購商品不可與其他商品以及不同月份之預購商品無法一併下訂。</span><br>
     <?php endif; ?>

@@ -218,6 +218,15 @@ foreach ($this->cart->contents() as $items) {
                                             'product_combine_id' => $items['id'],
                                         );
                                     }
+                                    $add_disabled = '';
+                                    if (!empty($this->product_model->getProductCombine($items["id"]))) {
+                                        $self = $this->product_model->getProductCombine($items["id"]);
+                                        $is_lottery = $this->mysql_model->_select('lottery', 'product_id', $self['product_id'], 'row');
+                                        if (!empty($is_lottery)) {
+                                            $add_disabled = 'disabled';
+                                        }
+                                        $max_qty = ($self['limit_enable'] == 'YES') ? $self['limit_qty'] : '100';
+                                    }
                                 ?>
                                     <tr style="border-top:1px solid dimgray;">
                                         <td><?= $i ?></td>
@@ -270,7 +279,20 @@ foreach ($this->cart->contents() as $items) {
                                                 }
                                                         ?>
                                             <p>金額：$ <?php echo $items['price']; ?></p>
-                                            <p>數量：<?php echo $items['qty']; ?></p>
+                                            <p>
+                                                數量：
+                                                <span class="input-group-btn inlineBlock">
+                                                    <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                </span>
+                                                <input type="text" <?php echo $items["rowid"] ?> name="quant[<?php echo $items["rowid"] ?>]" class="input_border_style inlineBlock qtyInputBox" value="<?php echo $items['qty']; ?>" data-reword-id="<?php echo $items["rowid"] ?>" min='1' max='100' <?= $add_disabled ?>>
+                                                <span class="input-group-btn inlineBlock">
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>" <?= $add_disabled ?>>
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
                                             <p>小計：<span style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
                                         </td>
                                     </tr>
@@ -613,6 +635,112 @@ foreach ($this->cart->contents() as $items) {
 </div>
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
+<!-- 手填購物車 -->
+<script>
+    $(document).ready(function() {
+        // 监听输入框的 input 事件
+        $(".qtyInputBox").on("change", function() {
+            // 获取输入框的值
+            var qty = $(this).val();
+
+            // 检查输入值是否为数字
+            if ($.isNumeric(qty)) {
+                // 获取数据重奖的 ID
+                var rewordId = $(this).data("reword-id");
+
+                // 发送 AJAX 请求来更新数量
+                $.ajax({
+                    url: "/cart/update_qty",
+                    method: "POST",
+                    data: {
+                        rowid: rewordId,
+                        qty: qty
+                    },
+                    success: function(response) {
+                        // 更新小计显示
+                        // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                        // $('#subtotal_' + rewordId).text('$ ' + subtotal);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // 在错误时执行的操作
+                        console.error("Error updating quantity: " + error);
+                    }
+                });
+            } else {
+                // 如果输入值不是数字，则执行相应的操作（可根据需求处理）
+                console.log("Invalid quantity value");
+            }
+        });
+    });
+</script>
+<!-- 增減購物車 -->
+<script>
+    $(document).ready(function() {
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+            fieldName = $(this).attr('data-field');
+            reword_id = $(this).attr('data-reword-id');
+            type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            // console.log(currentVal);
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    } else if (parseInt(input.val()) == input.attr('min')) {
+                        const delect = confirm("貼心提醒，是否指定商品將從購物車清除。");
+                        if (delect) {
+                            var rowid = reword_id;
+                            $.ajax({
+                                url: "/cart/remove",
+                                method: "POST",
+                                data: {
+                                    rowid: rowid
+                                },
+                                success: function(response) {
+                                    // 更新小计显示
+                                    // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                                    // $('#subtotal_' + rowid).text('$ ' + subtotal);
+                                    location.reload();
+                                }
+                            });
+                        } else {
+                            return;
+                        }
+                        $(this).attr('disabled', true);
+                    }
+                } else if (type == 'plus') {
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    } else if (parseInt(input.val()) == input.attr('max')) {
+                        alert('已達商品限制最大數量，敬請見諒。');
+                        $(this).attr('disabled', true);
+                    }
+                }
+                var rowid = reword_id;
+                $.ajax({
+                    url: "/cart/update_qty",
+                    method: "POST",
+                    data: {
+                        rowid: rowid,
+                        qty: input.val()
+                    },
+                    success: function(response) {
+                        // 更新小计显示
+                        // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                        // $('#subtotal_' + rowid).text('$ ' + subtotal);
+                        location.reload();
+                    }
+                });
+            } else {
+                input.val(0);
+            }
+        });
+    });
+</script>
+<!-- compute cart -->
 <script>
     $(document).ready(function() {
         // 初始化購物車總計
@@ -643,7 +771,8 @@ foreach ($this->cart->contents() as $items) {
             $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
         });
     });
-
+</script>
+<script>
     $(document).on('change', '#Country', function() {
         var selectedCountry = $(this).val();
         var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');
@@ -662,7 +791,6 @@ foreach ($this->cart->contents() as $items) {
             othersDeliveryOptions.show();
         }
     });
-
     $(document).ready(function() {
         // 監聽 #Country 元素的變化事件
         $('#Country', '#checkout_form').on('change', function() {

@@ -1424,3 +1424,17 @@ input.qtyminus {
     border-color: #f6d523;
     background-color: #fff;
 }
+
+.qtyInputBox {
+    width: 50px;
+}
+
+@media (max-width: 767.98px) {
+    .qtyInputBox {
+        width: 25px;
+    }
+}
+
+.inlineBlock {
+    display: inline-block !important;
+}

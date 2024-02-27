@@ -349,6 +349,17 @@ class Cart extends Public_Controller
 			'qty' => $this->input->post('qty'),
 		);
 		$this->cart->update($data);
+
+		// 获取购物车项目列表
+		$cart_contents = $this->cart->contents();
+
+		// 查找匹配的购物车项目并返回数量
+		foreach ($cart_contents as $item) {
+			if ($item['rowid'] === $this->input->post('rowid')) {
+				echo $item['subtotal'];
+				break; // 找到匹配的项目后立即结束循环
+			}
+		}
 	}
 
 	public function update_price()

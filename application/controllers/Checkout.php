@@ -2,7 +2,7 @@
 
 class Checkout extends Public_Controller
 {
-	private $fmtoken_life;
+	private $fm_token; // 全家API Token
 	private $aesKey;
 	private $aesIv;
 
@@ -12,6 +12,16 @@ class Checkout extends Public_Controller
 		$this->load->model('checkout_model');
 		if ($this->is_liqun_food) {
 			$this->load->model('coupon_model');
+		}
+
+		// Check全家API生命週期
+		$now_time = time() + 60; // 获取未来1分钟后时间的时间戳
+		$tmp_token = $this->session->userdata('fm_token');
+		$tmp_token_life = $this->session->userdata('fm_token_life');
+		if (empty($tmp_token) || empty($tmp_token_life) || $now_time >= $tmp_token_life) {
+			$this->fm_token = '';
+		} else {
+			$this->fm_token = $tmp_token;
 		}
 
 		// Check if aesKey and aesIv are already set in flashdata(userdata)
@@ -124,75 +134,19 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
-	public function fmmap()
-	{
-		$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '&freeze=false';
-
-		$header = array(
-			"Content-Type: application/x-www-form-urlencoded",
-			"Authorization: Bearer " . $this->get_ecb_token()
-		);
-
-		$options = array(
-			'http' => array(
-				'method' => 'GET',
-				'header' => implode("\r\n", $header),
-			),
-			'ssl' => array(
-				'verify_peer' => false,
-				'verify_peer_name' => false,
-				'allow_self_signed' => true,
-			),
-		);
-
-		$context = stream_context_create($options);
-
-		$res = @file_get_contents($url, false, $context);
-		echo '<pre>';
-		print_r($res);
-		echo '</pre>';
-		if ($res === FALSE) {
-			// 處理錯誤
-			echo "Error: Unable to fetch data.";
-		} else {
-			// 解析 JSON
-			$data = json_decode($res, true);
-			echo '<pre>';
-			print_r($data);
-			echo '</pre>';
-			// 檢查 API 回應
-			if (isset($data['response']) && $data['response'] === 'success') {
-				// 獲取 access_token
-				$token = $data['data']['access_token'];
-				echo '<pre>';
-				print_r($data);
-				echo '</pre>';
-				return $token;
-			} else {
-				// 顯示完整的 API 回應
-				echo '<pre>';
-				print_r($data);
-				echo '</pre>';
-				// echo '<pre>';
-				// print_r($header);
-				// echo '</pre>';
-				return false;
-			}
-		}
-	}
-
+	// 取得全家API_TOKEN
 	public function get_ecb_token()
 	{
-		// $default = date('0000-00-00 00:00:00');
-		// $now_time = date('Y-m-d H:i:s');
 
-		// if($this->fmtoken_life >= $default){
-		// 	if($now_time > $this->fmtoken_life){
-		// 		$this->fmtoken_life = date('Y-m-d H:i:s') + '1hr';
-		// 	}
-		// }else{
-		// 	$this->fmtoken_life = date('Y-m-d H:i:s') + '1hr';
-		// }
+		if (!empty($this->fm_token)) {
+			// echo '<pre>';
+			// print_r(time());
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($this->fm_token);
+			// echo '</pre>';
+			return $this->fm_token;
+		}
 
 		$API_ID = get_setting_general('FM_API_ID');
 		$API_KEY = get_setting_general('FM_API_KEY');
@@ -232,12 +186,14 @@ class Checkout extends Public_Controller
 			if (json_last_error() === JSON_ERROR_NONE) {
 				// 檢查 API 回應
 				if (isset($data['response']) && $data['response'] === 'success') {
-					// 獲取 access_token
-					$token = $data['data']['access_token'];
+					// update token and token_life
+					$this->session->set_userdata('fm_token', $data['data']['access_token']);
+					$this->session->set_userdata('fm_token_life', $data['data']['expires_in']);
 					// echo '<pre>';
-					// print_r($token);
+					// print_r(time());
+					// print_r($data);
 					// echo '</pre>';
-					return $token;
+					return $data['data']['access_token'];
 				} else {
 					// 處理 API 錯誤回應
 					echo 'API Error: ' . (isset($data['error']) ? $data['error'] : 'Unknown error');
@@ -252,6 +208,40 @@ class Checkout extends Public_Controller
 				echo 'JSON Error: ' . json_last_error_msg();
 				return false;
 			}
+		}
+	}
+
+	// 取得全家地圖
+	public function fm_map()
+	{
+		$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout&freeze=false';
+
+		$header = array(
+			"Content-Type: application/x-www-form-urlencoded",
+			"Authorization: Bearer " . $this->get_ecb_token()
+		);
+
+		$options = array(
+			'http' => array(
+				'method' => 'GET',
+				'header' => implode("\r\n", $header),
+			),
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		if (!empty($res)) {
+			// echo '<pre>';
+			// print_r($header);
+			// echo '</pre>';
+			echo ($res);
 		}
 	}
 

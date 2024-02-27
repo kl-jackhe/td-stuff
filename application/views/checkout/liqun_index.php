@@ -167,13 +167,17 @@ foreach ($this->cart->contents() as $items) {
     }
 
     @media (max-width: 767.98px) {
+        p {
+            font-size: 12px;
+        }
+
         .wizard>.content {
             overflow-y: auto;
             min-height: 600px !important;
         }
     }
 </style>
-<div role="main" class="main">
+<div role="main" class="main" id="liqun_checkout">
     <section class="form-section content_auto_h">
         <?php $attributes = array('id' => 'checkout_form'); ?>
         <?php echo form_open('checkout/save_order', $attributes); ?>
@@ -187,7 +191,7 @@ foreach ($this->cart->contents() as $items) {
                 </div>
                 <div id="wizard" class="wizard">
                     <h3>確認訂單</h3>
-                    <section>
+                    <section id="confirm_order">
                         <h3 style="margin-top: 0px;">您共選擇 (<?= $count ?> 個項目)</h3>
                         <input type="hidden" name="checking_cargos_value" id="checking_cargos_value" value="<?= $count ?>">
                         <table class="table table-hover m_table_none">
@@ -265,8 +269,21 @@ foreach ($this->cart->contents() as $items) {
                                                 }
                                                         ?>
                                             <p>金額：$ <?php echo $items['price']; ?></p>
-                                            <p>數量：<?php echo $items['qty']; ?></p>
-                                            <p>小計：<span style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
+                                            <p>
+                                                數量：
+                                                <span class="input-group-btn inlineBlock">
+                                                    <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </button>
+                                                </span>
+                                                <input type="text" <?php echo $items["rowid"] ?> name="quant[<?php echo $items["rowid"] ?>]" class="input_border_style inlineBlock qtyInputBox" value="<?php echo $items['qty']; ?>" data-reword-id="<?php echo $items["rowid"] ?>" min='1' max='100'>
+                                                <span class="input-group-btn inlineBlock">
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </span>
+                                            </p>
+                                            <p>小計：<span id="subtotal_<?= $items["rowid"] ?>" style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
@@ -319,11 +336,15 @@ foreach ($this->cart->contents() as $items) {
                             <span class="cart_total_display" style="color: #dd0606;font-weight: bold;"> $0.00</span>
                         </span>
                         <br>
+                        <span style="text-align:right;">計重：
+                            <span class="cart_weight_display" style="color: #dd0606;font-weight: bold;"> 0.00</span>
+                        </span>
+                        <br>
                         <br>
                         <br>
                     </section>
                     <h3>付款方式</h3>
-                    <section>
+                    <section id="payment_type">
                         <div class="container-fluid py-3">
                             <div class="col-12 row">
                                 <div class="col-12">
@@ -399,7 +420,7 @@ foreach ($this->cart->contents() as $items) {
                                     $delivery_count = 0;
                                     foreach ($d_query as $d_row) { ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="checkout_delivery<?= $delivery_count ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
                                             <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                 <?= $d_row['delivery_name'] ?>
                                             </label>
@@ -432,16 +453,38 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
+                                    <div class="input-group mb-3 col-12 col-sm-8">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">取貨門市</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                    </div>
+                                    <div class="input-group mb-3 col-12 col-sm-8">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">門市地址</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
+                                        <div style="width: 100%; margin-top: 15px;">
+                                            <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <hr>
+                                </div>
+                                <div class="col-12">
                                     <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+                                    <h3 class="mt-0">計重：<span class="cart_weight_display" style="font-size:24px;color: #dd0606;"> 0.00</span></h3>
                                     <input type="hidden" id="shipping_amount" name="shipping_amount" value="">
                                     <input type="hidden" id="total_amount" name="total_amount" value="">
+                                    <input type="hidden" id="weight_amount" name="weight_amount" value="">
                                 </div>
                             </div>
                         </div>
                     </section>
                     <h3>收件資訊</h3>
-                    <section>
+                    <section id="delivery_infomation">
                         <div class="container-fluid">
                             <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
                                 <div class="input-group mb-3 col-12 col-sm-4">
@@ -481,21 +524,6 @@ foreach ($this->cart->contents() as $items) {
                                         <span class="input-group-text">地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">取貨門市</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
-                                </div>
-                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">門市地址</span>
-                                    </div>
-                                    <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
-                                    <div style="width: 100%; margin-top: 15px;">
-                                        <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
-                                    </div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
@@ -550,7 +578,7 @@ foreach ($this->cart->contents() as $items) {
                         </div>
                     </section>
                     <h3>確認下單</h3>
-                    <section>
+                    <section id="complete_order">
                         <div class="container-fluid">
                             <div class="row p-3 justify-content-center">
                                 <div class="col-12">
@@ -587,16 +615,125 @@ foreach ($this->cart->contents() as $items) {
 </div>
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
+<!-- 手填購物車 -->
+<script>
+    $(document).ready(function() {
+        // 监听输入框的 input 事件
+        $(".qtyInputBox").on("change", function() {
+            // 获取输入框的值
+            var qty = $(this).val();
+
+            // 检查输入值是否为数字
+            if ($.isNumeric(qty)) {
+                // 获取数据重奖的 ID
+                var rewordId = $(this).data("reword-id");
+
+                // 发送 AJAX 请求来更新数量
+                $.ajax({
+                    url: "/cart/update_qty",
+                    method: "POST",
+                    data: {
+                        rowid: rewordId,
+                        qty: qty
+                    },
+                    success: function(response) {
+                        // 更新小计显示
+                        // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                        // $('#subtotal_' + rewordId).text('$ ' + subtotal);
+                        location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // 在错误时执行的操作
+                        console.error("Error updating quantity: " + error);
+                    }
+                });
+            } else {
+                // 如果输入值不是数字，则执行相应的操作（可根据需求处理）
+                console.log("Invalid quantity value");
+            }
+        });
+    });
+</script>
+<!-- 增減購物車 -->
+<script>
+    $(document).ready(function() {
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+            fieldName = $(this).attr('data-field');
+            reword_id = $(this).attr('data-reword-id');
+            type = $(this).attr('data-type');
+            var input = $("input[name='" + fieldName + "']");
+            var currentVal = parseInt(input.val());
+            // console.log(currentVal);
+            if (!isNaN(currentVal)) {
+                if (type == 'minus') {
+                    if (currentVal > input.attr('min')) {
+                        input.val(currentVal - 1).change();
+                    } else if (parseInt(input.val()) == input.attr('min')) {
+                        const delect = confirm("貼心提醒，是否指定商品將從購物車清除。");
+                        if (delect) {
+                            var rowid = reword_id;
+                            $.ajax({
+                                url: "/cart/remove",
+                                method: "POST",
+                                data: {
+                                    rowid: rowid
+                                },
+                                success: function(response) {
+                                    // 更新小计显示
+                                    // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                                    // $('#subtotal_' + rowid).text('$ ' + subtotal);
+                                    location.reload();
+                                }
+                            });
+                        }
+                        $(this).attr('disabled', true);
+                    }
+                } else if (type == 'plus') {
+                    if (currentVal < input.attr('max')) {
+                        input.val(currentVal + 1).change();
+                    } else if (parseInt(input.val()) == input.attr('max')) {
+                        alert('已達商品限制最大數量，敬請見諒。');
+                        $(this).attr('disabled', true);
+                    }
+                }
+                var rowid = reword_id;
+                $.ajax({
+                    url: "/cart/update_qty",
+                    method: "POST",
+                    data: {
+                        rowid: rowid,
+                        qty: input.val()
+                    },
+                    success: function(response) {
+                        // 更新小计显示
+                        // var subtotal = parseInt(response); // 假设服务器返回的是正确的小计值
+                        // $('#subtotal_' + rowid).text('$ ' + subtotal);
+                        location.reload();
+                    }
+                });
+            } else {
+                input.val(0);
+            }
+        });
+    });
+</script>
+<!-- compute cart -->
 <script>
     $(document).ready(function() {
         // 初始化購物車總計
         var coupon_type = '';
         var cart_amount = 0;
+        var cart_weight = 0.00;
         var shipping_amount = 0;
         var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
-        cart_amount = parseInt(initialCartTotal);
-        $('#cart_total').val(cart_amount)
+        var initialCartWeight = parseFloat(<?php echo $total_weight ?>);
+        cart_amount = initialCartTotal;
+        cart_weight = initialCartWeight;
+        $('#cart_total').val(cart_amount);
+        $('#weight_amount').val(cart_weight);
         $('.cart_total_display').text(' $' + cart_amount);
+        $('.cart_weight_display').text(' ' + cart_weight + ' KG');
 
         // 初始化整體總計
         var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
@@ -652,7 +789,6 @@ foreach ($this->cart->contents() as $items) {
                 // 更新總計
                 $('#total_amount').val(cart_amount + shipping_amount);
                 $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
-
             }
         });
 
@@ -671,7 +807,9 @@ foreach ($this->cart->contents() as $items) {
             $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
         });
     });
-
+</script>
+<!-- 介面 -->
+<script>
     $("#wizard").steps({
         headerTag: "h3",
         bodyTag: "section",

@@ -1102,6 +1102,20 @@ input.qtyminus {
     text-align: center;
 }
 
+.qtyInputBox {
+    width: 50px;
+}
+
+@media (max-width: 767.98px) {
+    .qtyInputBox {
+        width: 25px;
+    }
+}
+
+.inlineBlock {
+    display: inline-block !important;
+}
+
 #zoomA {
     transition: transform ease-in-out 0s;
 }
