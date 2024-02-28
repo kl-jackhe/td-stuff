@@ -82,6 +82,15 @@ class Product_tag_model extends CI_Model
     function getProductTag()
     {
         $this->db->select('id, name, code, sort, status');
+        $this->db->where('status', '1');
+        $this->db->order_by('sort');
+        $query = $this->db->get('product_tag')->result_array();
+        return (!empty($query)) ? $query : false;
+    }
+
+    function getTotalProductTag()
+    {
+        $this->db->select('id, name, code, sort, status');
         $this->db->order_by('sort');
         $query = $this->db->get('product_tag')->result_array();
         return (!empty($query)) ? $query : false;

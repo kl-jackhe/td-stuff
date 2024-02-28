@@ -102,12 +102,16 @@ class Checkout extends Public_Controller
 			}
 			$this->data['coupon'] = $coupon_arr;
 
+			// 購物車重
 			$total_weight = 0;
 			$cart_item = $this->cart->contents(true);
 			foreach ($cart_item as $self) {
 				$total_weight += ((float)$self['options']['weight'] * (float)$self['qty']);
 			}
 			$this->data['total_weight'] = $total_weight;
+
+			// 是否有冷凍商品
+			$this->data['is_frozen'] = false;
 			// echo '<pre>';
 			// print_r($this->data['coupon']);
 			// echo '</pre>';
@@ -124,6 +128,18 @@ class Checkout extends Public_Controller
 			endforeach;
 			$this->render('checkout/partnertoys_index');
 		}
+	}
+
+	// 回傳FM CVS Store Information
+	public function fm_store_info()
+	{
+		$this->load->view('checkout/get_fm_store_info');
+	}
+
+	// 回傳ECP CVS Store Information
+	public function ecp_store_info($name)
+	{
+		$this->load->view('checkout/' . $name);
 	}
 
 	// 導向綠界地圖按鈕頁面
@@ -212,13 +228,65 @@ class Checkout extends Public_Controller
 	}
 
 	// 取得全家地圖
-	public function fm_map()
+	public function fm_map($freeze = false, $size = '')
 	{
-		$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout&freeze=false';
+		$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout/fm_store_info&freeze=false';
+		if ($freeze) {
+			$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout/fm_store_info&freeze=' . $freeze . '&size=' . $size;
+		}
 
 		$header = array(
 			"Content-Type: application/x-www-form-urlencoded",
 			"Authorization: Bearer " . $this->get_ecb_token()
+		);
+
+		$options = array(
+			'http' => array(
+				'method' => 'GET',
+				'header' => implode("\r\n", $header),
+			),
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		if (!empty($res)) {
+			// echo '<pre>';
+			// print_r($header);
+			// echo '</pre>';
+			echo ($res);
+		}
+	}
+
+	// 全家冷凍B2C
+	public function fm_b2c_frozen($order_number)
+	{
+		$url = 'https://ecbypass.com.tw/api/v2/B2C/AddColdOrder/index.php';
+		if ($freeze) {
+			$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout/fm_store_info&freeze=' . $freeze . '&size=' . $size;
+		}
+
+		$header = array(
+			"Content-Type: application/x-www-form-urlencoded",
+			"Authorization: Bearer " . $this->get_ecb_token(),
+			'Dara: [{
+				EshopIdOrderNo: "20230308033715",
+                OrderDate: "2023-03-08 15:37:15",
+                BageSize: "S105",
+                ShippDate: "2023-03-10",
+                OrderAmount: "1000",
+                ServiceType: 1,
+                ReceiverName: "李佳怡",
+                ReceiverPhone: "0982558322",
+                ReceiverStoreID: "123456",
+                Remark: "備註備註備註備註備註備註\備註"
+			}]'
 		);
 
 		$options = array(
@@ -334,7 +402,8 @@ class Checkout extends Public_Controller
 				// POST會傳到這
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $pay_order['order_number']; //付款完成通知回傳的網址
-				//$obj->Send['ClientBackURL']     = base_url(); //付款完成後，顯示返回商店按鈕
+				$obj->Send['ClientBackURL'] = base_url(); //付款完成後，顯示返回商店按鈕
+				$obj->SendExtend['PaymentInfoURL'] = base_url() . "/checkout/save_extend_Info"; 	//伺服器端回傳付款相關資訊。
 
 				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
 				//訂單的商品資料
@@ -509,9 +578,9 @@ class Checkout extends Public_Controller
 		if (!empty($this->input->post('address'))) {
 			$order_delivery_address .= $this->input->post('address');
 		}
-		if (!empty($this->input->post('cn_zipcode'))) {
+		if (!empty($this->input->post('Country')) && $this->input->post('Country') == '中國' && !empty($this->input->post('cn_zipcode'))) {
 			$order_delivery_address .= '(' . $this->input->post('cn_zipcode') . ')';
-		} else if (!empty($this->input->post('tw_zipcode'))) {
+		} else if (!empty($this->input->post('Country')) && $this->input->post('Country') == '臺灣' && !empty($this->input->post('tw_zipcode'))) {
 			$order_delivery_address .= '(' . $this->input->post('tw_zipcode') . ')';
 		}
 
@@ -551,6 +620,7 @@ class Checkout extends Public_Controller
 			'store_id' => get_empty($this->input->post('storeid')),
 			'order_store_name' => get_empty($this->input->post('storename')),
 			'order_store_address' => get_empty($this->input->post('storeaddress')),
+			'order_store_ReservedNo' => get_empty($this->input->post('ReservedNo')),
 			'order_delivery' => $this->input->post('checkout_delivery'),
 			'order_payment' => $this->input->post('checkout_payment'),
 			'order_pay_status' => $order_pay_status,
@@ -736,7 +806,8 @@ class Checkout extends Public_Controller
 				// POST會傳到這
 				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
-				//$obj->Send['ClientBackURL']     = base_url(); //付款完成後，顯示返回商店按鈕
+				$obj->Send['ClientBackURL'] = base_url(); //付款完成後，顯示返回商店按鈕
+				$obj->SendExtend['PaymentInfoURL'] = base_url() . "/checkout/save_extend_Info"; 	//伺服器端回傳付款相關資訊。
 
 				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
 				//訂單的商品資料

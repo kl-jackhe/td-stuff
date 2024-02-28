@@ -1228,7 +1228,8 @@ foreach ($this->cart->contents() as $items) {
         var route = '<?php echo base_url(); ?>checkout/cvsmap?checkout=' + selectedDelivery + '';
         if (isMobile) {
             // 導入串綠界地圖並給cvsmap判斷是否為mobile
-            window.location.href = (route + '&device=mobile');
+            window.open(route, "選擇門市");
+            // window.location.href = (route + '&device=mobile');
         } else {
             // 開新視窗串綠界地圖cvsmap
             window.open(route, "選擇門市", "width=1024,height=768");

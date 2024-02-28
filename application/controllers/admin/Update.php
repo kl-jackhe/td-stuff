@@ -90,6 +90,7 @@ class Update extends Admin_Controller
                 $this->update_202402141400();
                 $this->update_202402200216();
                 $this->update_202402220300();
+                $this->update_202402281618();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -715,6 +716,30 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202402281618()
+    {
+        $version = '202402281618';
+        $description = '[orders] create [order_store_ReservedNo]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'order_store_ReservedNo'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `order_store_ReservedNo` varchar(300) NOT NULL AFTER `order_store_address`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

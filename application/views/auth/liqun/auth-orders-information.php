@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
-                        <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                        <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup' || selectedOrder.order_delivery == 'family_limit_5_frozen_pickup' || selectedOrder.order_delivery == 'family_limit_10_frozen_pickup'" class="row">
                             <div class="col-12 text-center">
                                 <h2>送貨及備註資訊</h2>
                             </div>
@@ -112,8 +112,8 @@
                             <div class="col-8">{{ selectedOrder.store_id }}</div>
                             <div class="col-4 text-right">超商名稱：</div>
                             <div class="col-8">{{ selectedOrder.order_store_name }}</div>
-                            <div class="col-4 text-right">超商地址：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_address }}</div>
+                            <!-- <div class="col-4 text-right">超商地址：</div>
+                            <div class="col-8">{{ selectedOrder.order_store_address }}</div> -->
                         </div>
                         <div v-else class="row">
                             <div class="col-12 text-center">

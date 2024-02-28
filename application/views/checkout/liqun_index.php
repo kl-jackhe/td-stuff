@@ -206,6 +206,16 @@ foreach ($this->cart->contents() as $items) {
                                 <?php $i = 1;
                                 $product_list = array();
                                 foreach ($this->cart->contents() as $items) :
+                                    $tmp_tag_content = $this->mysql_model->_select('product_tag_content', 'product_id', $items['product_id']);
+                                    if (!empty($tmp_tag_content)) {
+                                        foreach ($tmp_tag_content as $self_tag) {
+                                            $tmp_tag = $this->mysql_model->_select('product_tag', 'id', $self_tag['product_tag_id'], 'row');
+                                            if ($tmp_tag['code'] == 'frozen') {
+                                                $is_frozen = true;
+                                            }
+                                        }
+                                    }
+
                                     $this->db->select('product_category_id');
                                     $this->db->where('product_id', $items['product_id']);
                                     $this->db->limit(1);
@@ -416,11 +426,19 @@ foreach ($this->cart->contents() as $items) {
                                     $this->db->where('delivery_status', 1);
                                     $d_query = $this->db->get('delivery')->result_array();
 
-
                                     $delivery_count = 0;
-                                    foreach ($d_query as $d_row) { ?>
+                                    foreach ($d_query as $d_row) {
+                                        $weight_limit = '';
+                                        if (($total_weight >= 5.00 && $d_row['delivery_name_code'] == 'family_pickup') || $is_frozen && $d_row['delivery_name_code'] == 'family_pickup') {
+                                            $weight_limit = 'disabled';
+                                        } elseif ($total_weight >= 5.00 && $d_row['delivery_name_code'] == 'family_limit_5_frozen_pickup') {
+                                            $weight_limit = 'disabled';
+                                        } elseif ($total_weight >= 10.00 && $d_row['delivery_name_code'] == 'family_limit_10_frozen_pickup') {
+                                            $weight_limit = 'disabled';
+                                        }
+                                    ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?php echo ($delivery_count == 0 ? 'checked' : '') ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?= $weight_limit ?>>
                                             <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                 <?= $d_row['delivery_name'] ?>
                                             </label>
@@ -448,26 +466,6 @@ foreach ($this->cart->contents() as $items) {
                                         </div>
                                     <? $payment_count++;
                                     } ?>
-                                </div>
-                                <div class="col-12">
-                                    <hr>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-group mb-3 col-12 col-sm-8">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">取貨門市</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
-                                    </div>
-                                    <div class="input-group mb-3 col-12 col-sm-8">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">門市地址</span>
-                                        </div>
-                                        <input type="text" class="form-control" name="storeaddress" id="storeaddress" value="<?php echo $this->input->get('storeaddress') ?>" placeholder="門市地址" readonly>
-                                        <div style="width: 100%; margin-top: 15px;">
-                                            <span class="btn btn-primary" onclick="select_store_info();">選擇門市</span>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div class="col-12">
                                     <hr>
@@ -524,6 +522,22 @@ foreach ($this->cart->contents() as $items) {
                                         <span class="input-group-text">地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">門市編號</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="storeid" id="storeid" value="<?php echo $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
+                                </div>
+                                <div class="input-group mb-3 col-12 col-sm-8 supermarket">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">取貨門市</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                    <input type="hidden" class="form-control" name="ReservedNo" id="ReservedNo" value="<?php echo $this->input->get('ReservedNo') ?>" readonly>
+                                    <div style="width: 100%; margin-top: 15px;">
+                                        <span class="btn btn-primary" onclick="select_fm_cvs();">選擇門市</span>
+                                    </div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
@@ -858,7 +872,7 @@ foreach ($this->cart->contents() as $items) {
             // console.log(newIndex)
             // console.log(delivery);
 
-            if (delivery == '711_pickup') {
+            if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
                 $('.delivery_address').hide();
                 $('.supermarket').show();
             }
@@ -889,8 +903,8 @@ foreach ($this->cart->contents() as $items) {
                     alert('請選擇付款方式');
                     return false;
                 }
-                if (delivery == '711_pickup' || delivery == 'family_pickup') {
-                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                    if ($('#storeid').val() == '' || $('#storename').val() == '') {
                         alert('請選擇取貨門市');
                         return false;
                     }
@@ -995,7 +1009,7 @@ foreach ($this->cart->contents() as $items) {
         if ($('#email').val() != '') {
             data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
         }
-        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup') {
+        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup' && selectedCheckoutDelivery != 'family_limit_5_frozen_pickup' && selectedCheckoutDelivery != 'family_limit_10_frozen_pickup') {
             if ($('#Country').val() != '') {
                 data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
             }
@@ -1033,7 +1047,7 @@ foreach ($this->cart->contents() as $items) {
             if ($('#storename').val() != '') {
                 data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
             }
-            if ($('#storeaddress').val() != '') {
+            if ($('#storeaddress').val() && $('#storeaddress').val() != '') {
                 data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
             }
         }
@@ -1119,6 +1133,31 @@ foreach ($this->cart->contents() as $items) {
         });
     });
 
+    function select_fm_cvs() {
+        set_user_data();
+        // checked radio val
+        var selectedDelivery = $("input[name='checkout_delivery']:checked").val();
+        // 手機版cookie存取checked radio val
+        document.cookie = "selectedDelivery=" + selectedDelivery;
+        // 是否為手機
+        var isMobile = <?php echo json_encode(wp_is_mobile()) ?>;
+        // 串至全家地圖
+        var route = '<?php echo base_url(); ?>checkout/fm_map';
+        if (selectedDelivery == 'family_limit_5_frozen_pickup') {
+            route = '<?php echo base_url(); ?>checkout/fm_map/true/S60';
+        } else if (selectedDelivery == 'family_limit_10_frozen_pickup') {
+            route = '<?php echo base_url(); ?>checkout/fm_map/true/S105';
+        }
+
+        if (isMobile) {
+            // 導入串全家地圖並給cvsmap判斷是否為mobile
+            window.open(route, "選擇門市");
+        } else {
+            // 開新視窗串全家地圖cvsmap
+            window.open(route, "選擇門市", "width=1024,height=768");
+        }
+    }
+
     function select_store_info() {
         set_user_data();
         <?php if (wp_is_mobile()) { ?>
@@ -1132,6 +1171,12 @@ foreach ($this->cart->contents() as $items) {
     function set_store_info(storename = '', storeaddress = '') {
         $("#storename").val(storename);
         $("#storeaddress").val(storeaddress);
+    }
+
+    function set_fm_store_info(storeid = '', storename = '', ReservedNo = '') {
+        $("#storeid").val(storeid);
+        $("#storename").val(storename);
+        $("#ReservedNo").val(ReservedNo);
     }
 
     function set_user_data() {

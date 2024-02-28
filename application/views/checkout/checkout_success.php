@@ -152,16 +152,18 @@
                                 </span>
                             </span>
                             <hr>
-                            <?php if (!empty($order['order_store_address'])) : ?>
+                            <?php if (!empty($order['order_store_name'])) : ?>
                                 <h3>取貨方式：
                                     <?php echo get_delivery($order['order_delivery']) ?>
                                 </h3>
                                 <h3>取貨門市：
                                     <?php echo $order['order_store_name']; ?>
                                 </h3>
-                                <h3>取貨地點：
-                                    <?php echo $order['order_store_address']; ?>
-                                </h3>
+                                <?php if ($this->is_partnertoys) : ?>
+                                    <h3>取貨地點：
+                                        <?php echo $order['order_store_address']; ?>
+                                    </h3>
+                                <?php endif; ?>
                             <?php else : ?>
                                 <h3>配送方式：
                                     <?php echo get_delivery($order['order_delivery']) ?>

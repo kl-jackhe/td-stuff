@@ -149,9 +149,7 @@
                                                 <label for="product_tag">標籤</label>
                                                 <select class="form-control chosen" id="product_tag[]" name="product_tag[]" multiple>
                                                     <?php foreach ($product_tag as $self) : ?>
-                                                        <?php if ($self['status'] == 1) : ?>
-                                                            <option value="<?= $self['id'] ?>" <?= (!empty($selected_product_tag) && in_array($self['id'], $selected_product_tag) ? 'selected' : '') ?>><?= $self['name'] ?></option>
-                                                        <?php endif; ?>
+                                                        <option value="<?= $self['id'] ?>" <?= (!empty($selected_product_tag) && in_array($self['id'], $selected_product_tag) ? 'selected' : '') ?>><?= $self['name'] ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>

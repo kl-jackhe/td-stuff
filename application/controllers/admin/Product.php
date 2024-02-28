@@ -179,7 +179,7 @@ class Product extends Admin_Controller
 		$this->data['select_product_category'] = $this->product_model->getSelectProductCategory($id);
 		$this->data['delivery'] = $this->mysql_model->_select('delivery', 'delivery_status', '1');
 		if ($this->is_liqun_food) {
-			$this->data['product_tag'] = $this->product_tag_model->getProductTag();
+			$this->data['product_tag'] = $this->product_tag_model->getTotalProductTag();
 			$this->data['selected_product_tag'] = $this->product_tag_model->getSelectedProductTagID($id);
 		}
 		$this->db->select('delivery_id');
@@ -800,7 +800,7 @@ class Product extends Admin_Controller
 	public function product_tag()
 	{
 		$this->data['page_title'] = '商品標籤';
-		$this->data['product_tag'] = $this->product_tag_model->getProductTag();
+		$this->data['product_tag'] = $this->product_tag_model->getTotalProductTag();
 		$this->data['product_tag_content'] = $this->mysql_model->_select('product_tag_content');
 
 		$this->render('admin/product/product_tag/index');

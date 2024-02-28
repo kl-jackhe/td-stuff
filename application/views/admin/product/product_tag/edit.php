@@ -59,13 +59,15 @@
 			<div class="form-group">
 				<label for="product_tag_status">標籤狀態</label>
 				<select class="form-control" id="product_tag_status" name="product_tag_status">
-					<option value="1" <?= ($product_tag['status'] == '1') ? 'selected' : ''; ?>>✔️開啟</option>
+					<?php if ($product_tag['code'] == '') : ?>
+						<option value="1" <?= ($product_tag['status'] == '1') ? 'selected' : ''; ?>>✔️開啟</option>
+					<?php endif; ?>
 					<option value="0" <?= ($product_tag['status'] == '0') ? 'selected' : ''; ?>>❌關閉</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label for="product_tag_sort">標籤排序</label>
-				<input type="number" class="form-control" id="product_tag_sort" name="product_tag_sort" value="<?php echo $product_tag['sort']; ?>">
+				<input type="number" class="form-control" id="product_tag_sort" name="product_tag_sort" value="<?php echo $product_tag['sort']; ?>" <?= ($product_tag['code'] == '') ? '' : 'readonly' ?>>
 			</div>
 			<div class="form-group">
 				<button type="button" class="btn btn-primary" onClick="form_check()">修改</button>
