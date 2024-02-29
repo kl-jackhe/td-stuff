@@ -265,34 +265,49 @@ class Checkout extends Public_Controller
 	}
 
 	// 全家冷凍B2C
-	public function fm_b2c_frozen($order_number)
+	public function fm_b2c_frozen($order_info)
 	{
 		$url = 'https://ecbypass.com.tw/api/v2/B2C/AddColdOrder/index.php';
-		if ($freeze) {
-			$url = 'https://ecbypass.com.tw/api/v2/Map/index.php?MapReplyURL=' . base_url() . '/checkout/fm_store_info&freeze=' . $freeze . '&size=' . $size;
+
+		// 准备要发送的数据
+		if (!empty($order_info)) {
+			$data = array(
+				'Data' => array(
+					array(
+						'EshopIdOrderNo' => $order_info['order_number'],
+						'OrderDate' => date('Y-m-d H:i:s'),
+						'BageSize' => ((float)$order_info['order_weight'] >= 5.000) ? 'S105' : 'S60',
+						'ShippDate' => date('Y-m-d', strtotime('+5 days')),
+						'OrderAmount' => $order_info['order_discount_total'],
+						'ServiceType' => 2,
+						'ReceiverName' => $order_info['customer_name'],
+						'ReceiverPhone' => $order_info['customer_phone'],
+						'ReceiverStoreID' => $order_info['store_id'],
+						'Remark' => $order_info['order_remark']
+					),
+				)
+			);
 		}
 
+		// echo '<pre>';
+		// print_r($data);
+		// echo '</pre>';
+
+		// 将数据编码为 JSON 格式
+		$json_data = json_encode($data);
+
+		// 准备请求头
 		$header = array(
-			"Content-Type: application/x-www-form-urlencoded",
-			"Authorization: Bearer " . $this->get_ecb_token(),
-			'Dara: [{
-				EshopIdOrderNo: "20230308033715",
-                OrderDate: "2023-03-08 15:37:15",
-                BageSize: "S105",
-                ShippDate: "2023-03-10",
-                OrderAmount: "1000",
-                ServiceType: 1,
-                ReceiverName: "李佳怡",
-                ReceiverPhone: "0982558322",
-                ReceiverStoreID: "123456",
-                Remark: "備註備註備註備註備註備註\備註"
-			}]'
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $this->get_ecb_token(),
 		);
 
+		// 设置请求选项
 		$options = array(
 			'http' => array(
-				'method' => 'GET',
+				'method' => 'POST', // 使用 POST 方法发送数据
 				'header' => implode("\r\n", $header),
+				'content' => $json_data, // 将 JSON 数据放在请求主体中
 			),
 			'ssl' => array(
 				'verify_peer' => false,
@@ -306,12 +321,128 @@ class Checkout extends Public_Controller
 		$res = @file_get_contents($url, false, $context);
 
 		if (!empty($res)) {
-			// echo '<pre>';
-			// print_r($header);
-			// echo '</pre>';
-			echo ($res);
+			$res = json_decode($res, true);
+			echo '<pre>';
+			print_r($res);
+			echo '</pre>';
+			// return $data;
+			if (!empty($res['result'][$order_info['order_number']]['ecno'])) {
+				return $res['result'][$order_info['order_number']]['ecno'];
+			} else {
+				return '';
+			}
 		}
 	}
+
+	// 物流單取號
+	public function fm_b2c_logistic($fm_ecno)
+	{
+		$url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/index.php';
+
+		// 准备要发送的数据
+		$data = array(
+			'Data' => array($fm_ecno),
+		);
+
+		// echo '<pre>';
+		// print_r($data);
+		// echo '</pre>';
+
+		// 将数据编码为 JSON 格式
+		$json_data = json_encode($data);
+
+		// 准备请求头
+		$header = array(
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $this->get_ecb_token(),
+		);
+
+		// 设置请求选项
+		$options = array(
+			'http' => array(
+				'method' => 'POST', // 使用 POST 方法发送数据
+				'header' => implode("\r\n", $header),
+				'content' => $json_data, // 将 JSON 数据放在请求主体中
+			),
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		if (!empty($res)) {
+			echo '<pre>';
+			print_r($res);
+			echo '</pre>';
+			$res = json_decode($res, true);
+			echo '<pre>';
+			print_r($res);
+			echo '</pre>';
+		}
+	}
+
+	// 物流單列印
+	public function fm_b2c_print($fm_ecno)
+	{
+		$url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
+
+		// 准备要发送的数据
+		$data = array(
+			'Data' => [$fm_ecno],
+		);
+
+		// echo '<pre>';
+		// print_r($data);
+		// echo '</pre>';
+
+		// 将数据编码为 JSON 格式
+		$json_data = json_encode($data);
+
+		// 准备请求头
+		$header = array(
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $this->get_ecb_token(),
+		);
+
+		// 设置请求选项
+		$options = array(
+			'http' => array(
+				'method' => 'POST', // 使用 POST 方法发送数据
+				'header' => implode("\r\n", $header),
+				'content' => $json_data, // 将 JSON 数据放在请求主体中
+			),
+			'ssl' => array(
+				'verify_peer' => false,
+				'verify_peer_name' => false,
+				'allow_self_signed' => true,
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		echo '<pre>';
+		print_r($res);
+		echo '</pre>';
+
+		if (!empty($res)) {
+
+			echo '<pre>';
+			print_r($res);
+			echo '</pre>';
+			$res = json_decode($res, true);
+			echo '<pre>';
+			print_r($res);
+			echo '</pre>';
+		}
+	}
+
 
 	function setMemberInfo($phone)
 	{
@@ -612,6 +743,7 @@ class Checkout extends Public_Controller
 			'customer_name' => $this->input->post('name'),
 			'customer_phone' => $this->input->post('phone'),
 			'customer_email' => $this->input->post('email'),
+			'order_weight' => $this->input->post('weight_amount'),
 			'order_total' => $order_total,
 			'order_discount_total' => $order_discount_total,
 			'order_discount_price' => $order_discount_price,
@@ -631,6 +763,16 @@ class Checkout extends Public_Controller
 			// 'creator_id' => $this->ion_auth->user()->row()->id,
 			'created_at' => $created_at,
 		);
+
+		if ($insert_data['order_delivery'] == 'family_pickup' || $insert_data['order_delivery'] == 'family_limit_5_frozen_pickup' || $insert_data['order_delivery'] == 'family_limit_10_frozen_pickup') {
+			$insert_data['fm_ecno'] = $this->fm_b2c_frozen($insert_data);
+		}
+
+		// echo '<pre>';
+		// print_r($this->fm_b2c_frozen($insert_data));
+		// echo '</pre>';
+
+		// return;
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
 
 		foreach ($this->cart->contents() as $cart_item) :

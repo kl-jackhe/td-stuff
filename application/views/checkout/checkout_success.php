@@ -152,25 +152,27 @@
                                 </span>
                             </span>
                             <hr>
-                            <?php if (!empty($order['order_store_name'])) : ?>
-                                <h3>取貨方式：
-                                    <?php echo get_delivery($order['order_delivery']) ?>
-                                </h3>
-                                <h3>取貨門市：
-                                    <?php echo $order['order_store_name']; ?>
-                                </h3>
-                                <?php if ($this->is_partnertoys) : ?>
-                                    <h3>取貨地點：
-                                        <?php echo $order['order_store_address']; ?>
+                            <?php if (!empty($order['order_delivery'])) : ?>
+                                <?php if ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'family_pickup' || $order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
+                                    <h3>取貨方式：
+                                        <?php echo get_delivery($order['order_delivery']) ?>
+                                    </h3>
+                                    <h3>取貨門市：
+                                        <?php echo $order['order_store_name']; ?>
+                                    </h3>
+                                    <?php if ($this->is_partnertoys) : ?>
+                                        <h3>取貨地點：
+                                            <?php echo $order['order_store_address']; ?>
+                                        </h3>
+                                    <?php endif; ?>
+                                <?php else : ?>
+                                    <h3>配送方式：
+                                        <?php echo get_delivery($order['order_delivery']) ?>
+                                    </h3>
+                                    <h3>配送地點：
+                                        <?php echo $order['order_delivery_address']; ?>
                                     </h3>
                                 <?php endif; ?>
-                            <?php else : ?>
-                                <h3>配送方式：
-                                    <?php echo get_delivery($order['order_delivery']) ?>
-                                </h3>
-                                <h3>配送地點：
-                                    <?php echo $order['order_delivery_address']; ?>
-                                </h3>
                             <?php endif; ?>
                             <span class="front_title">運費：<span class="money_size"> $
                                     <?php echo format_number($order['order_delivery_cost']) ?></span></span>

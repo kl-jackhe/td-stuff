@@ -11,6 +11,10 @@
                     <div class="col-md-8 text-center product_description">
                         <p class="m-0">
                             <span class="productViewTitle"><?= $product['product_name'] ?></span>
+                        </p>
+                    </div>
+                    <div class="col-md-8 text-center product_description">
+                        <p>
                             <span id="jumpToCombine" class="transitionAnimation jumpToCombine productViewTitle"><i class="fa fa-caret-square-down" aria-hidden="true"></i>&nbsp;跳至方案選擇</span>
                         </p>
                     </div>

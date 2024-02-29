@@ -738,7 +738,7 @@ foreach ($this->cart->contents() as $items) {
         // 初始化購物車總計
         var coupon_type = '';
         var cart_amount = 0;
-        var cart_weight = 0.00;
+        var cart_weight = 0.000;
         var shipping_amount = 0;
         var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
         var initialCartWeight = parseFloat(<?php echo $total_weight ?>);
@@ -750,10 +750,7 @@ foreach ($this->cart->contents() as $items) {
         $('.cart_weight_display').text(' ' + cart_weight + ' KG');
 
         // 初始化整體總計
-        var initialShippingFee = $('input[name="checkout_delivery"]').data('shipping-fee');
-        if (coupon_type == 'free_shipping') {
-            initialShippingFee = 0;
-        }
+        var initialShippingFee = 0;
         shipping_amount = parseInt(initialShippingFee);
         $('#shipping_fee').text(' $' + shipping_amount);
         $('#shipping_amount').val(shipping_amount);
@@ -774,6 +771,19 @@ foreach ($this->cart->contents() as $items) {
             // 判断是否已经有 active 类，如果有，则移除；如果没有，则添加
             if ($(this).hasClass('active')) {
                 $(this).removeClass('active');
+                // 更新coupon_type
+                coupon_type = '';
+                // 检查哪个运送方式被选中
+                var selectedDelivery = $('input[name="checkout_delivery"]:checked');
+                if (selectedDelivery.length > 0) { // 至少有一个运送方式被选中
+                    // 获取被选中的运送方式的运费
+                    var shippingFee = selectedDelivery.data('shipping-fee');
+                    $('#shipping_fee').text(' $' + shippingFee);
+                    $('#shipping_amount').val(shippingFee);
+                } else {
+                    $('#shipping_fee').text(' $' + initialShippingFee);
+                    $('#shipping_amount').val(initialShippingFee);
+                }
                 // 更新購物車總計
                 $('.cart_total_display').text('$' + initialCartTotal);
                 $('#cart_total').val(initialCartTotal)
@@ -782,6 +792,24 @@ foreach ($this->cart->contents() as $items) {
                 $('.couponTitle span').removeClass('active');
                 // 添加选中状态
                 $(this).addClass('active');
+
+                // 更新免運
+                if (coupon_type == 'free_shipping') {
+                    var selectedDelivery = $('input[name="checkout_delivery"]:checked');
+                    if (selectedDelivery.length > 0) { // 至少有一个运送方式被选中
+                        // 获取被选中的运送方式的运费
+                        var shippingFee = 0;
+
+                        // 当选择框改变时的逻辑
+                        shipping_amount = parseInt(shippingFee);
+                        $('#shipping_fee').text(' $' + shipping_amount);
+                        $('#shipping_amount').val(shipping_amount);
+                    } else {
+                        $('#shipping_fee').text(' $' + initialShippingFee);
+                        $('#shipping_amount').val(initialShippingFee);
+                    }
+                }
+
                 // 更新小計
                 var couponDiscount = parseFloat($(this).data('coupon-discount'));
                 // 计算购物车小计
@@ -879,6 +907,16 @@ foreach ($this->cart->contents() as $items) {
             if (delivery == 'home_delivery') {
                 $('.delivery_address').show();
                 $('.supermarket').hide();
+            }
+            if (newIndex === 2) {
+                if (delivery == '' || delivery == null) {
+                    alert('請選擇運送方式');
+                    return false;
+                }
+                if (payment == '' || payment == null) {
+                    alert('請選擇付款方式');
+                    return false;
+                }
             }
             if (newIndex === 3) {
                 // var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();

@@ -112,8 +112,8 @@
                             <div class="col-8">{{ selectedOrder.store_id }}</div>
                             <div class="col-4 text-right">超商名稱：</div>
                             <div class="col-8">{{ selectedOrder.order_store_name }}</div>
-                            <!-- <div class="col-4 text-right">超商地址：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_address }}</div> -->
+                            <div class="col-4 text-right">超商地址：</div>
+                            <div class="col-8">{{ selectedOrder.order_store_address }}</div>
                         </div>
                         <div v-else class="row">
                             <div class="col-12 text-center">

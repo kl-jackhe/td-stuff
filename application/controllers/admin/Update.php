@@ -91,6 +91,8 @@ class Update extends Admin_Controller
                 $this->update_202402200216();
                 $this->update_202402220300();
                 $this->update_202402281618();
+                $this->update_202402291446();
+                $this->update_202402292254();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -716,6 +718,54 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202402292254()
+    {
+        $version = '202402292254';
+        $description = '[orders] create [fm_ecno]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'fm_ecno'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `fm_ecno` varchar(50) NOT NULL AFTER `order_number`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202402291446()
+    {
+        $version = '202402291446';
+        $description = '[orders] create [order_weight]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'order_weight'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `order_weight` decimal(13,3) NOT NULL DEFAULT 0.000 AFTER `customer_email`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

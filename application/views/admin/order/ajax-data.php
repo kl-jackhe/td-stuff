@@ -11,7 +11,7 @@
     .inTopButton {
         position: absolute;
         right: 0;
-        z-index: 1000;
+        z-index: 500;
     }
 
     .input-group {
@@ -99,6 +99,11 @@
                 <!-- 新增物流單 -->
                 <th class="text-center">物流交易編號</th>
                 <th class="text-center">寄貨編號</th>
+            <?php elseif ($this->is_liqun_food) : ?>
+                <th class="text-center">物流單號</th>
+                <th class="text-center">產生物流單號(全家)</th>
+                <!-- <th class="text-center">銷售頁面</th>
+                <th class="text-center">代言人</th> -->
             <?php else : ?>
                 <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th>
@@ -124,8 +129,8 @@
                     <td>
                         <?php echo $order['customer_name'] ?>
                     </td>
-                    <td>
-                        <?= (!empty($order['order_store_address']) ? $order['order_store_name'] . '<br>' . $order['order_store_address'] : $order['order_delivery_address']) ?>
+                    <td class="text-center">
+                        <?= (!empty($order['order_store_name']) ? $order['order_store_name'] : $order['order_delivery_address']) ?>
                     </td>
                     <td class="text-center">
                         <?= get_delivery($order['order_delivery']) ?>
@@ -161,9 +166,11 @@
                     <!-- 新增物流單 -->
                     <?php if ($this->is_partnertoys) : ?>
                         <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
+                            <!-- 自動編號 -->
                             <td class="text-center">
                                 <span><?php echo $order['AllPayLogisticsID'] ?></span>
                             </td>
+                            <!-- 自動單號 -->
                             <td class="text-center">
                                 <span><?php echo $order['CVSPaymentNo'] ?></span>
                             </td>
@@ -171,27 +178,72 @@
                             <td class="text-center">
                                 <span>NONE</span>
                             </td>
+                            <!-- 手動編號 -->
                             <td class="text-center">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <?php $attributes = array('class' => 'form-inline'); ?>
                                         <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
-                                        <input type="text" class="form-control" name="self_logistics" placeholder="請輸入自定義寄貨編號" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="寄貨編號" value="<?php echo $order['SelfLogistics'] ?>">
                                         <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
                                         <?php echo form_close() ?>
                                     </span>
                                 </div>
                             </td>
                         <?php endif; ?>
+                    <?php elseif ($this->is_liqun_food) : ?>
+                        <?php if (!empty($order['AllPayLogisticsID'])) : ?>
+                            <!-- 自動單號 -->
+                            <td class="text-center">
+                                <span><?php echo $order['AllPayLogisticsID'] ?></span>
+                            </td>
+                        <?php else : ?>
+                            <!-- 手動單號 -->
+                            <td class="text-center">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <?php $attributes = array('class' => 'form-inline'); ?>
+                                        <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="物流單號" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
+                                        <?php echo form_close() ?>
+                                    </span>
+                                </div>
+                            </td>
+                        <?php endif; ?>
+                        <!-- 產生單號 -->
+                        <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>
+                            <td class="text-center">
+                                <a class="btn btn-success" href="/checkout/fm_b2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
+                            </td>
+                        <?php endif; ?>
+                        <!-- <td class='text-center'>
+                            <? if ($order['single_sales_id'] != '') { ?>
+                                <a href="/admin/sales/editSingleSales/<?= $order['single_sales_id'] ?>" target="_blank">
+                                    <?= $order['single_sales_id'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <? } else { ?>
+                                <p>NONE</p>
+                            <? } ?>
+                        </td>
+                        <td class='text-center'>
+                            <? if ($agentName != '') { ?>
+                                <a href="/admin/agent/editAgent<?= $order['agent_id'] ?>" target="_blank">
+                                    <?= $agentName ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                                </a>
+                            <? } else { ?>
+                                <p>NONE</p>
+                            <? } ?>
+                        </td> -->
                     <?php else : ?>
-                        <td>
+                        <td class='text-center'>
                             <? if ($order['single_sales_id'] != '') { ?>
                                 <a href="/admin/sales/editSingleSales/<?= $order['single_sales_id'] ?>" target="_blank">
                                     <?= $order['single_sales_id'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
                                 </a>
                             <? } ?>
                         </td>
-                        <td>
+                        <td class='text-center'>
                             <? if ($agentName != '') { ?>
                                 <a href="/admin/agent/editAgent<?= $order['agent_id'] ?>" target="_blank">
                                     <?= $agentName ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>

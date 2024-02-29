@@ -264,6 +264,7 @@ if (!empty($this->cart->contents())) {
         <span style="color: #BE2633;">備註：預購商品不可與其他商品以及不同月份之預購商品無法一併下訂。</span><br>
     <?php endif; ?>
 </div>
+<div class="col-12 p-0"><br></div>
 <div class="col-12 text-right p-0">
     <?php if ($this->is_liqun_food) : ?>
         <span style="font-size: 24px;">累計重量：
