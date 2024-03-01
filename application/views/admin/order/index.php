@@ -228,3 +228,15 @@
     }
   }
 </script>
+<!-- 產生FM訂單 -->
+<script>
+  function fmOrderBtn(orderId) {
+    var orderType = $('#orderType').val();
+
+    // 构建完整的URL
+    var url = '/fmtoken/' + orderType + '/' + orderId;
+
+    // 跳转到URL
+    window.location.href = url;
+  }
+</script>

@@ -101,7 +101,8 @@
                 <th class="text-center">寄貨編號</th>
             <?php elseif ($this->is_liqun_food) : ?>
                 <th class="text-center">物流單號</th>
-                <th class="text-center">產生物流單號(全家)</th>
+                <th class="text-center">新增全家訂單</th>
+                <th class="text-center">物流單號(全家)</th>
                 <!-- <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th> -->
             <?php else : ?>
@@ -120,7 +121,8 @@
                     </td>
                     <td style="<?= ($order['order_step'] == 'order_cancel' ? 'text-decoration: line-through;' : '') ?>">
                         <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
-                            <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                            <?php echo $order['order_number'] ?>
+                            <!-- <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i> -->
                         </a>
                     </td>
                     <td>
@@ -195,7 +197,8 @@
                         <?php if (!empty($order['AllPayLogisticsID'])) : ?>
                             <!-- 自動單號 -->
                             <td class="text-center">
-                                <span><?php echo $order['AllPayLogisticsID'] ?></span>
+                                <!-- 物流單列印 -->
+                                <a href="/fmtoken/<?= ($order['fm_type'] == 'b2c') ? 'fm_b2c_print/' . $order['fm_ecno'] : 'fm_c2c_print/' . $order['fm_ecno']; ?>" target="_blank"><?php echo $order['AllPayLogisticsID'] ?></a>
                             </td>
                         <?php else : ?>
                             <!-- 手動單號 -->
@@ -211,11 +214,34 @@
                                 </div>
                             </td>
                         <?php endif; ?>
+                        <!-- 新增訂單至全家後台 -->
+                        <?php if (empty($order['AllPayLogisticsID']) && empty($order['fm_ecno'])) : ?>
+                            <td class="text-center">
+                                <select id="orderType" class="form-control">
+                                    <?php if ($order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
+                                        <option value="fm_add_b2c_order/cold">B2C冷凍訂單</option>
+                                        <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option>
+                                    <?php elseif ($order['order_delivery'] == 'family_pickup') : ?>
+                                        <option value="fm_add_b2c_order/normal">B2C常溫訂單</option>
+                                        <option value="fm_add_c2c_order/normal">C2C常溫訂單</option>
+                                    <?php endif; ?>
+                                </select>
+                                <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
+                            </td>
+                        <?php else : ?>
+                            <td class="text-center"></td>
+                        <?php endif; ?>
                         <!-- 產生單號 -->
                         <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>
                             <td class="text-center">
-                                <a class="btn btn-success" href="/checkout/fm_b2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
+                                <?php if ($order['fm_type'] == 'b2c') : ?>
+                                    <a class="btn btn-success" href="/fmtoken/fm_b2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
+                                <?php elseif ($order['fm_type'] == 'c2c') : ?>
+                                    <a class="btn btn-success" href="/fmtoken/fm_c2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
+                                <?php endif; ?>
                             </td>
+                        <?php else : ?>
+                            <td class="text-center"></td>
                         <?php endif; ?>
                         <!-- <td class='text-center'>
                             <? if ($order['single_sales_id'] != '') { ?>

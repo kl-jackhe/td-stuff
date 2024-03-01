@@ -1180,11 +1180,11 @@ foreach ($this->cart->contents() as $items) {
         // 是否為手機
         var isMobile = <?php echo json_encode(wp_is_mobile()) ?>;
         // 串至全家地圖
-        var route = '<?php echo base_url(); ?>checkout/fm_map';
+        var route = '<?php echo base_url(); ?>fmtoken/fm_map';
         if (selectedDelivery == 'family_limit_5_frozen_pickup') {
-            route = '<?php echo base_url(); ?>checkout/fm_map/true/S60';
+            route = '<?php echo base_url(); ?>fmtoken/fm_map/true/S60';
         } else if (selectedDelivery == 'family_limit_10_frozen_pickup') {
-            route = '<?php echo base_url(); ?>checkout/fm_map/true/S105';
+            route = '<?php echo base_url(); ?>fmtoken/fm_map/true/S105';
         }
 
         if (isMobile) {
