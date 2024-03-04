@@ -55,7 +55,7 @@
         <header id="header">
             <div id="headerApp">
                 <div class="container-fluid">
-                    <div id="absoluteHeader">
+                    <div id="fixedFirstHeader">
                         <div class="container">
                             <!-- 登入顯示 -->
                             <div id="mem_login">
@@ -89,7 +89,7 @@
                                             <?php endif; ?>
                                         </a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="/auth?id=8">
                                             <?php if (get_unread_mail_count(0, 'member') > 0) : ?>
                                                 <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -98,76 +98,83 @@
                                                 <i class="fa fa-envelope" aria-hidden="true"></i>
                                             <?php endif; ?>
                                         </a>
-                                    </li>
+                                    </li> -->
                                 <?php endif; ?>
                                 <li>
                                     <a href="/auth">
                                         <i class="fas fa-user"></i>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="#" data-toggle="modal" style="position: relative;" data-target="#my_cart" onclick="get_mini_cart();">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                        <div id="cart-qty"><span>0</span></div>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="row py-2 justify-content-center header_fixed_top">
-                        <div class="col-5 col-md-3 col-lg-2" style="align-self: center;">
-                            <a href="<?php echo base_url() ?>">
-                                <img class="header_logo" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
-                            </a>
-                        </div>
-                        <!-- PC -->
-                        <div class="header-main-nav col-md-6 col-lg-7 d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
-                            <div class="row justify-content-end">
-                                <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
-                                    <?php foreach ($header_menu as $key => $self) : ?>
-                                        <?php if (!empty($self['status'])) : ?>
-                                            <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
-                                                <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
-                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= $self['name'] ?></a>
-                                                    <!-- 子選單 -->
-                                                    <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                        <ul id="SubMenu<?= $key ?>" class="sub-menu">
-                                                            <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                                <?php if (!empty($sub_self['status'])) : ?>
-                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
-                                                                <?php endif; ?>
-                                                            <?php endforeach; ?>
-                                                        </ul>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
-                                                <!-- 會員選單 -->
-                                                <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
-                                                    <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
-                                                    <!-- 子選單 -->
-                                                    <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
-                                                        <ul id="SubMenu<?= $key ?>" class="sub-menu">
-                                                            <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
-                                                                <?php if (!empty($sub_self['status'])) : ?>
-                                                                    <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
-                                                                <?php endif; ?>
-                                                            <?php endforeach; ?>
-                                                        </ul>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php endif; ?>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
+                    <div id="fixedSecondHeader" class="py-2 justify-content-center">
+                        <div class="container">
+                            <div class="" style="align-self: center;">
+                                <a href="<?php echo base_url() ?>">
+                                    <img class="header_logo" src="/assets/uploads/<?php echo get_setting_general('logo'); ?>">
+                                </a>
                             </div>
-                        </div>
-                        <div class="header-main-nav col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
-                            <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
-                                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
+                            <!-- PC -->
+                            <div class="header-main-nav d-none d-md-none d-lg-block d-xl-block" style="align-self: center;">
+                                <div class="justify-content-end">
+                                    <?php if (!empty($header_menu = $this->menu_model->getMenuData())) : ?>
+                                        <?php foreach ($header_menu as $key => $self) : ?>
+                                            <?php if (!empty($self['status'])) : ?>
+                                                <?php if (mb_substr($self['name'], 0, 4, 'utf-8') != '會員專區') : ?>
+                                                    <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
+                                                        <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= $self['name'] ?></a>
+                                                        <!-- 子選單 -->
+                                                        <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                            <ul id="SubMenu<?= $key ?>" class="sub-menu">
+                                                                <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                                    <?php if (!empty($sub_self['status'])) : ?>
+                                                                        <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php elseif (!empty($this->session->userdata('username')) && $self['name'] == '會員專區(會員)' || empty($this->session->userdata('username')) && $self['name'] == '會員專區(訪客)') : ?>
+                                                    <!-- 會員選單 -->
+                                                    <div class="menu-item" onmouseover="switchMenu(this, 'SubMenu<?= $key ?>', 'MouseOver')" onmouseout="hideSubMenu('SubMenu<?= $key ?>')">
+                                                        <a href="/<?= $self['code'] ?>" class="nav_item_style main-menu"><?= mb_substr($self['name'], 0, 4, 'utf-8') ?></a>
+                                                        <!-- 子選單 -->
+                                                        <?php if (!empty($header_sub_menu = $this->menu_model->getSubMenuData(0, $self['id']))) : ?>
+                                                            <ul id="SubMenu<?= $key ?>" class="sub-menu">
+                                                                <?php foreach ($header_sub_menu as $sub_key => $sub_self) : ?>
+                                                                    <?php if (!empty($sub_self['status'])) : ?>
+                                                                        <li><a href="/<?= $self['code'] ?>/index?id=<?= $sub_self['sort'] ?>"><?= $sub_self['name'] ?></a></li>
+                                                                    <?php endif; ?>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                            <div class="header-main-nav col-7 d-block d-md-block d-lg-none d-xl-none p-0" style="align-self: center;">
+                                <nav class="navbar navbar-expand-lg navbar-light" style="float: right;">
+                                    <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation" style="border:none;">
                                     <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
                                 </button> -->
-                                <a onclick="toggleMobile()">
-                                    <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
-                                </a>
-                            </nav>
+                                    <a onclick="toggleMobile()">
+                                        <img src="/assets/images/559mall_official/icon/web%20icon_menu.png" style="width:30px;">
+                                    </a>
+                                </nav>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- 待修 -->
                 <!-- Mobile -->
                 <div id="mobileMenu" style="display: none;">
                     <div class="mobile-header-container">

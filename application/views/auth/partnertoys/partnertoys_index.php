@@ -3,7 +3,7 @@
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
 <div v-cloak id="authApp">
-    <section class="sectionRejust">
+    <section class="container sectionRejust">
         <?php require('auth-menu.php'); ?>
         <div class="section-contents">
             <div class="container">
@@ -64,8 +64,8 @@
                 </div>
                 <div v-else-if="selectedCategoryId == 8">
                     <!-- 郵件箱 -->
-                    <div v-if='!selectedMail'><?php require('auth-respond.php'); ?></div>
-                    <div v-else><?php require('auth-respond-detail.php'); ?></div>
+                    <div v-if='!selectedMail'><?php // require('auth-respond.php'); ?></div>
+                    <div v-else><?php // require('auth-respond-detail.php'); ?></div>
                 </div>
             <?php endif; ?>
         </div>

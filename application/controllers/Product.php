@@ -55,6 +55,24 @@ class Product extends Public_Controller
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 
+
+			$this->data['isSearch'] = 'false';
+			// 获取当前 URL
+			$current_url = $_SERVER['REQUEST_URI'];
+
+			// 使用 parse_url() 解析 URL 获取查询字符串部分
+			$query_string = parse_url($current_url, PHP_URL_QUERY);
+
+			// 如果查询字符串不为空
+			if (!empty($query_string)) {
+				// 对参数进行解码以获取您想要的内容
+				$decoded_data = $this->security_url->decryptData($query_string);
+
+				if (!empty($decoded_data)) {
+					$this->data['isSearch'] = $decoded_data['value'];
+				}
+			}
+
 			$this->render('product/partnertoys/partnertoys_index');
 		}
 	}
@@ -95,15 +113,17 @@ class Product extends Public_Controller
 			foreach ($this->data['productCombine'] as $self) {
 				$tmp[] = [
 					'id' =>  $self['id'],
-					'name' => $self['name'],
-					'current_price' => $self['current_price'],
-					'description' => $self['description'],
-					'limit_enable' => $self['limit_enable'],
-					'limit_qty' => $self['limit_qty']
+					'cid' => $self['cargo_id'],
+					'pname' => $self['name'],
+					'price' => $self['price'],
+					'cprice' => $self['current_price'],
+					'image' => $self['picture'],
+					'LE' => $self['limit_enable'],
+					'LQ' => $self['limit_qty']
 				];
 			}
 		}
-		$this->data['combineName'] = $tmp;
+		$this->data['combine'] = $tmp;
 
 		$this->data['productCombineItem'] = $this->product_model->get_product_combine_item($product_id);
 		$this->render('product/partnertoys/product-detail');
@@ -280,7 +300,7 @@ class Product extends Public_Controller
 	function get_lottery_product_combine($product_id)
 	{
 		$result = $this->mysql_model->_select('product_combine', 'product_id', $product_id);
-		
+
 		// 返回所有數據
 		$this->output
 			->set_content_type('application/json')

@@ -1,5 +1,5 @@
 <div v-cloak id="postApp" role="main" class="main pt-signinfo">
-    <section class="sectionRejust">
+    <section class="container sectionRejust">
         <?php require('posts-menu.php'); ?>
         <div class="section-contents">
             <div class="container">

@@ -1,5 +1,5 @@
 <div v-cloak id="channelsApp" role="main" class="main pt-signinfo">
-    <section class="sectionRejust">
+    <section class="container sectionRejust">
         <?php require('channels-menu.php'); ?>
         <div class="contentMarginBottom section-contents">
             <div class="container">

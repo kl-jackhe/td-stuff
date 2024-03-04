@@ -15,7 +15,9 @@ body {
 }
 
 body {
-    font-family: Open Sans, "Microsoft JhengHei";
+    font-family: "Microsoft JhengHei", "PMingLiU", "Helvetica Neue", Helvetica, Arial, "Century Gothic", sans-serif !important;
+    /* font-family: Open Sans, "Microsoft JhengHei"; */
+    overflow-x: hidden;
 }
 
 a {
@@ -39,8 +41,8 @@ label.required::before {
     border: 1px solid #e3e3e3;
 }
 
-#absoluteHeader {
-    position: absolute;
+#fixedFirstHeader {
+    position: fixed;
     z-index: 1031;
     top: 0;
     left: 0;
@@ -51,7 +53,25 @@ label.required::before {
     color: white;
 }
 
-#absoluteHeader .container {
+#fixedFirstHeader .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#fixedSecondHeader {
+    background-color: #fff;
+    position: fixed;
+    box-shadow: 0 5px 30px 5px #E0E0E0;
+    background: url(/assets/uploads/bg_nav.png) 0 0 repeat-x;
+    /* height: 80px; */
+    width: 100%;
+    top: 35px;
+    left: 0;
+    z-index: 1030;
+}
+
+#fixedSecondHeader .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -88,15 +108,6 @@ label.required::before {
 
 .header-icons a:hover {
     color: #ffe747;
-}
-
-.header-icons .search-icon {
-    display: none;
-}
-
-.header-icons .search-icon.visible {
-    display: inline-block;
-    /* 或其他您想要的顯示屬性 */
 }
 
 .main-menu {
@@ -174,7 +185,7 @@ label.required::before {
 }
 
 #mobileMenu {
-    top: 0;
+    top: 105px;
     z-index: 99;
     width: 100%;
     height: 100%;
@@ -225,19 +236,14 @@ label.required::before {
     z-index: 999;
 }
 
-.header_fixed_top {
-    background-color: #fff;
-    position: fixed;
-    box-shadow: 0 5px 30px 5px #E0E0E0;
-    background: url(/assets/uploads/bg_nav.png) 0 0 repeat-x;
-    height: 80px;
-    width: 100%;
-    top: 35px;
-    z-index: 1030;
+.header_logo {
+    width: 200px;
 }
 
-.header_logo {
-    width: 70%;
+@media (max-width:767px) {
+    .header_logo {
+        width: 100%;
+    }
 }
 
 a.logBtn {
@@ -338,8 +344,8 @@ a.logBtn {
 .nav_item_style {
     font-weight: bold;
     align-self: center;
-    margin-right: 20px;
-    font-size: 18px;
+    margin-left: 10px;
+    font-size: 19.2px;
     color: #000;
     padding: 0 10px 0;
     transition: all .3s ease-in-out;
@@ -453,7 +459,27 @@ a.logBtn {
     margin-top: 30px;
 }
 
-#cart-qty {
+.footer-copyright .ig,
+.footer-copyright .fb {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-copyright .ig:hover,
+.footer-copyright .fb:hover {
+    color: #ffe747;
+}
+
+.transitionAnimation {
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+/* #cart-qty {
     color: #BE2633;
     position: absolute;
     top: -30px;
@@ -463,13 +489,21 @@ a.logBtn {
     width: 23px;
     height: 23px;
     text-align: center;
+} */
+
+#cart-qty {
+    font-size: 12px;
+    color: #BE2633;
+    position: absolute;
+    top: -3px;
+    right: 2px;
+    width: 15px;
+    background: #D1D1D1;
+    border-radius: 50px;
+    text-align: center;
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
-    .header_logo {
-        width: 100%;
-    }
-
     .top_logo_style {
         position: relative;
         transform: none;
@@ -624,6 +658,51 @@ a.logBtn {
     padding: 10px 10px 30px 10px;
 }
 
+.productTrigger {
+    position: relative;
+}
+
+.productTrigger .productImg {
+    flex-grow: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.productTrigger img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+    /* 添加過渡效果 */
+}
+
+.productTrigger:hover img {
+    filter: brightness(0.5);
+    /* 滑鼠懸停時降低亮度（變暗） */
+}
+
+.productTrigger:after {
+    content: '';
+    position: absolute;
+    top: 37%;
+    left: 50%;
+    display: block;
+    cursor: pointer;
+    width: 70px;
+    height: 70px;
+    background: url(/assets/uploads/ic_listmask.png) no-repeat;
+    background-size: 70px 70px;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0deg);
+    transition: all .3s ease-in-out;
+    z-index: 10;
+}
+
+.productTrigger:hover:after {
+    transform: translate(-50%, -50%) rotate(360deg);
+    opacity: 1;
+}
+
 .select_product {
     width: 50%;
     line-height: 1.8;
@@ -720,6 +799,10 @@ a.logBtn {
     border-bottom-right-radius: 0.25rem;
 }
 
+.section-contents {
+    overflow-x: hidden;
+}
+
 .section-contents h1,
 .section-contents-one h1 {
     height: 40px;
@@ -740,17 +823,16 @@ a.logBtn {
 }
 
 .section-sidemenu {
-    margin-right: 30px;
+    margin-right: 20px;
     margin-bottom: 50px;
-    margin-left: 14%;
     float: left;
-    width: 15%;
+    width: 20%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
 .section-contents {
     float: left;
-    width: 55%;
+    width: 78%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
@@ -875,9 +957,9 @@ a.logBtn {
 .product_view_style_in:hover {
     cursor: pointer;
     /* 懸停時顯示手型游標 */
-    transform: scale(1.05);
-    -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
-    box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
+    /* transform: scale(1.05); */
+    /* -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
+    box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35); */
 }
 
 .category_btn {
@@ -1137,8 +1219,13 @@ input.qtyminus {
     padding: 20px;
 }
 
+#postApp {
+    overflow-x: hidden;
+}
+
 #productApp {
     position: relative;
+    overflow-x: hidden;
 }
 
 .postDetailStyle {
@@ -1365,8 +1452,8 @@ input.qtyminus {
 }
 
 .cargoDescription img {
-    height: auto;
-    max-width: 100%;
+    height: auto !important;
+    width: 100% !important;
 }
 
 @media (max-width: 1300px) {
@@ -2683,6 +2770,44 @@ select.lotteryResult {
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
+}
+
+.custom-select {
+    /* position: relative;
+    display: inline-block;
+    width: 200px; */
+    height: 40px;
+    background-color: #f1f1f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Hide the default arrow */
+.custom-select select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Custom arrow icon */
+.custom-select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Hover effect */
+.custom-select:hover {
+    background-color: #e0e0e0;
 }
 
 /* 修改滾動條 */

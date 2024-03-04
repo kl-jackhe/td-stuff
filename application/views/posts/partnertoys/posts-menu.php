@@ -11,10 +11,10 @@
     <!-- 篩選清單呼叫鈕 -->
 
     <!-- 搜尋攔 -->
-    <div :class="{ 'right-content': true, 'breadcrumb': true, 'section-sidesearch': true, 'search-open': hiddenSearch }">
+    <!-- <div :class="{ 'right-content': true, 'breadcrumb': true, 'section-sidesearch': true, 'search-open': hiddenSearch }">
         <input type="text" class="search" placeholder="搜尋欄" v-model="searchText">
         <span v-if="searchText !== ''" @click="clearSearch" class="clear-search"><i class="fa fa-times" aria-hidden="true"></i></span>
-    </div>
+    </div> -->
     <!-- 搜尋攔 -->
 </div>
 <div :class="{ 'section-sidemenu': true, 'nav-open': isNavOpen }">

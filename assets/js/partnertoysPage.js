@@ -43,52 +43,53 @@ function toggleMobileMenu (id) {
 }
 
 // 置頂fixed-nav
-$(document).ready(function () {
-  var navFixed = $('#mobileMenu')
-  var headerFixed = $('.header_fixed_top')
+// $(document).ready(function () {
+//   var navFixed = $('#mobileMenu')
+//   var headerFixed = $('.header_fixed_top')
 
-  // 滚动事件处理函数
-  function handleScroll () {
-    var scrolled = $(window).scrollTop()
+//   // 滚动事件处理函数
+//   function handleScroll () {
+//     var scrolled = $(window).scrollTop()
 
-    if (scrolled > 40) {
-      navFixed.css('top', '79px')
-      headerFixed.css('top', '0')
-    } else {
-      navFixed.css('top', '114px')
-      headerFixed.css('top', '35px')
-    }
-  }
+//     if (scrolled > 40) {
+//       navFixed.css('top', '79px')
+//       headerFixed.css('top', '0')
+//     } else {
+//       navFixed.css('top', '114px')
+//       headerFixed.css('top', '35px')
+//     }
+//   }
 
-  // 刷新后立即触发一次滚动事件
-  handleScroll()
+//   // 刷新后立即触发一次滚动事件
+//   handleScroll()
 
-  // 监听滚动事件
-  $(window).scroll(handleScroll)
-})
+//   // 监听滚动事件
+//   $(window).scroll(handleScroll)
+// })
 
 // search-icon event
-$(document).ready(function () {
-  // 获取当前页面的 URL
-  var currentPageUrl = window.location.href
+// $(document).ready(function () {
+//   // 获取当前页面的 URL
+//   var currentPageUrl = window.location.href
 
-  // 检查是否在特定页面
-  if (
-    (currentPageUrl.indexOf('/product/product_detail') === -1 &&
-      currentPageUrl.indexOf('/product') !== -1) ||
-    currentPageUrl.indexOf('/posts') !== -1
-  ) {
-    // 在特定页面添加一个类，使搜索图标可见
-    $('.header-icons .search-icon').addClass('visible')
-  }
-})
+//   // 检查是否在特定页面
+//   if (
+//     (currentPageUrl.indexOf('/product/product_detail') === -1 &&
+//       currentPageUrl.indexOf('/product') !== -1) ||
+//     currentPageUrl.indexOf('/posts') !== -1
+//   ) {
+//     // 在特定页面添加一个类，使搜索图标可见
+//     $('.header-icons .search-icon').addClass('visible')
+//   }
+// })
 
-// search-icon event listener
-document.getElementById('searchLink').addEventListener('click', function () {
-  // 触发自定义事件
-  var event = new Event('toggleSearch')
-  document.dispatchEvent(event)
-})
+// // search-icon event listener
+// document.getElementById('searchLink').addEventListener('click', function () {
+  
+//   // 触发自定义事件
+//   var event = new Event('toggleSearch')
+//   document.dispatchEvent(event)
+// })
 
 // nav-menu-list
 function switchMenu (mainMenuItem, submenuId, eventType) {

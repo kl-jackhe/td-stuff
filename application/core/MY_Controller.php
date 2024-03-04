@@ -6,6 +6,7 @@ class MY_Controller extends CI_Controller
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->library('security_url');
 		$this->load->library('ion_auth');
 		$this->load->helper('custom');
 		$this->load->helper('general');

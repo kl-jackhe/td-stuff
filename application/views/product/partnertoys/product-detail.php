@@ -1,5 +1,5 @@
 <div id="productApp" role="main" class="main pt-signinfo">
-    <section class="sectionRejust">
+    <section class="container sectionRejust">
         <!-- Menu -->
         <?php require('product-menu.php'); ?>
         <div class="section-contents">
@@ -34,31 +34,18 @@
                                     </div>
                                 <?php else : ?>
                                     <!--價格-->
-                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                        <?php if (!empty($productCombine)) : ?>
-                                            <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.current_price }}</div>
+                                    <?php if (!empty($productCombine)) : ?>
+                                        <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                            <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.cprice }}</div>
                                             <div v-else class="item">❌尚未選擇方案</div>
-                                        <?php else : ?>
-                                            <div class="paddingFixTop">
-                                                <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
-                                                <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
-                                                <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                    <!--商品簡介:多行文字欄位-->
-                                    <?php if (!empty($productCombine)) : ?>
+                                        </div>
+                                        <!--商品簡介:多行文字欄位-->
                                         <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
-                                    <?php endif; ?>
-                                    <?php if (!empty($productCombine)) : ?>
+                                        <?php $count = 0; ?>
                                         <!--方案選擇-->
-                                        <select @change="updateSelectedCombine($event)" v-model="selectedCombineName" id="combineSelect" class="cargoBtn col-bg-12 col-md-12 col-lg-12">
-                                            <option value="請選擇方案" selected disabled>請選擇方案</option>
-                                            <?php foreach ($productCombine as $self) : ?>
-                                                <option value="<?php echo $self['name']; ?>">
-                                                    <?php echo $self['name']; ?>
-                                                </option>
-                                            <?php endforeach; ?>
+                                        <select @change="updateSelectedCombine($event)" id="combineSelect" class="custom-select cargoBtn col-bg-12 col-md-12 col-lg-12">
+                                            <option value="請選擇方案" disabled>請選擇方案</option>
+                                            <option v-for="self in combine" :key="self.id" :value="self.pname">{{ self.pname }}</option>
                                         </select>
                                         <!--商品數量-->
                                         <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
@@ -87,6 +74,14 @@
                                         <!--加入追蹤清單-->
                                         <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
                                             <span class="cargoClick likeBtn" @click="add_like"><i class="fas fa-heart"></i>加入追蹤清單</span>
+                                        </div>
+                                    <?php else : ?>
+                                        <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                            <div class="paddingFixTop">
+                                                <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
+                                                <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
+                                                <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
+                                            </div>
                                         </div>
                                     <?php endif; ?>
 
@@ -161,10 +156,9 @@
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
-                combineName: <?php echo json_encode(!empty($combineName) ? $combineName : ''); ?>,
+                combine: <?php echo json_encode(!empty($combine) ? $combine : ''); ?>,
                 selectedDescription: <?php echo json_encode(!empty($product) ? $product['product_note'] : ''); ?>,
                 selectedCombine: null,
-                selectedCombineName: '請選擇方案',
                 selectedCategoryId: 0,
                 searchText: '', // debug
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
@@ -174,6 +168,8 @@
             };
         },
         mounted() {
+            // initial option
+            this.selectedCombine = this.combine[0];
             // 初始化 Magnific Popup
             this.initMagnificPopup();
             // init btn state
@@ -213,9 +209,8 @@
             },
             updateSelectedCombine(event) {
                 // 取得所選方案的名稱
-                this.selectedCombineName = event.target.value;
-                this.selectedCombine = this.combineName.find(self => self.name === this.selectedCombineName);
-                // console.log(this.selectedCombineName);
+                this.selectedCombine = this.combine.find(self => self.pname === event.target.value);
+                // console.log(event.target.value);
             },
             // 商品數量選擇
             increment() {

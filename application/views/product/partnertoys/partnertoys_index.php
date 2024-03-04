@@ -1,5 +1,5 @@
 <div v-cloak id="productApp" role="main" class="main pt-signinfo">
-    <section class="sectionRejust">
+    <section class="container sectionRejust">
         <!-- Menu -->
         <?php if (!empty($product_category)) : ?>
             <?php require('product-menu.php'); ?>
@@ -14,7 +14,7 @@
                     <!-- Product Start -->
                     <div class="row">
                         <div class="product_view_style_out col-6 col-md-6 col-lg-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
-                            <a class="productMagnificPopupTrigger" @click="showProductDetails(self.product_id)">
+                            <a class="productTrigger" @click="showProductDetails(self.product_id)">
                                 <div class="product_view_style_in">
                                     <div class="productImg">
                                         <img class="product_img_style" :src="'/assets/uploads/' + self.product_image">
@@ -47,6 +47,7 @@
         data() {
             return {
                 getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getSearch: <?php echo json_encode($isSearch); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 products: <?php echo json_encode(!empty($products) ? $products : ''); ?>, // products資料庫所有類及項目
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
@@ -77,6 +78,8 @@
                 // 显示搜寻栏的逻辑
                 this.hiddenSearch = !this.hiddenSearch;
             });
+            this.hiddenSearch = (this.getSearch == 'true') ? true : false;
+            console.log(this.getSearch);
         },
         computed: {
             // 篩選&搜尋

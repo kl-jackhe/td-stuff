@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div class="fixed-bottom header_fixed_icon">
-    <? if ($agentID == '' && get_setting_general('official_facebook_1') != '') { ?>
+    <!-- <? if ($agentID == '' && get_setting_general('official_facebook_1') != '') { ?>
         <div id="fa-facebook-square" class="my-3 icon_pointer">
             <a id="facebook_href" href="<?= get_setting_general('official_facebook_1') ?>" target="_blank">
                 <i class="fa-brands fa-facebook fixed_icon_style"></i>
@@ -33,7 +33,7 @@
             <div id="cart-qty"><span>0</span></div>
             <i class="fa-solid fa-cart-shopping fixed_icon_style"></i>
         </a>
-    </div>
+    </div> -->
     <div id="fa-angles-up" class="my-3 icon_pointer">
         <a href="#">
             <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png">
@@ -92,8 +92,16 @@
         <div class="footer-copyright">
             <div class="container-fluid">
                 <div class="row justify-content-center text-center">
-                    <div class="col-md-12">
-                        Copyright © 2023 <?php echo get_setting_general('name'); ?>. All rights reserved.
+                    <div class="col-md-12 d-flex justify-content-center align-items-center">
+                        <span>
+                            Copyright © 2023 <?php echo get_setting_general('name'); ?> All Rights Reserved.&emsp;
+                        </span>
+                        <span>
+                            <a href="<?= get_setting_general('official_facebook_1') ?>" title="粉絲專頁" target="_blank" class="fb transitionAnimation">Facebook</a>&emsp;
+                        </span>
+                        <span>
+                            <a href="<?= get_setting_general('official_instagram_1') ?>" title="粉絲專頁" target="_blank" class="ig transitionAnimation">Instagram</a>&emsp;
+                        </span>
                     </div>
                 </div>
             </div>
@@ -123,6 +131,23 @@
 <?php if ($this->is_partnertoys) : ?>
     <script src="/assets/js/partnertoysPage.js"></script>
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script>
+        // search-icon event listener
+        document.getElementById('searchLink').addEventListener('click', function() {
+            <?php if (strpos($_SERVER['REQUEST_URI'], '/product') === false) : ?>
+                <?php
+                $data = array(
+                    'value' => 'true'
+                );
+                $securitycode = $this->security_url->encryptData($data);
+                ?>
+                window.location.href = '<?= base_url() . "product/?" . $securitycode; ?>';
+            <?php endif; ?>
+            // 触发自定义事件
+            var event = new Event('toggleSearch')
+            document.dispatchEvent(event)
+        })
+    </script>
 <?php endif; ?>
 <script>
     $(document).ready(function() {
@@ -149,7 +174,7 @@
             }
         });
         //Window Height
-        var header_h = $(".header_fixed_top").height();
+        var header_h = $("#fixedSecondHeader").height();
         $(".content_auto_h").css('padding-top', header_h * 2.5);
         //scrollTop
         $(function() {
