@@ -64,8 +64,10 @@
                 </div>
                 <div v-else-if="selectedCategoryId == 8">
                     <!-- 郵件箱 -->
-                    <div v-if='!selectedMail'><?php // require('auth-respond.php'); ?></div>
-                    <div v-else><?php // require('auth-respond-detail.php'); ?></div>
+                    <div v-if='!selectedMail'><?php // require('auth-respond.php'); 
+                                                ?></div>
+                    <div v-else><?php // require('auth-respond-detail.php'); 
+                                ?></div>
                 </div>
             <?php endif; ?>
         </div>
@@ -197,6 +199,7 @@
                 mail: <?= (!empty($this->session->userdata('user_id')) && !empty($mail)) ? json_encode($mail) : json_encode(''); ?>,
                 lottery: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery)) ? json_encode($lottery) : json_encode(''); ?>,
                 lottery_pool: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery_pool)) ? json_encode($lottery_pool) : json_encode(''); ?>,
+                pname: <?= (!empty($this->session->userdata('user_id')) && !empty($payment_name)) ? json_encode($payment_name) : json_encode(''); ?>,
                 lottery_product_combine: [], // 存储商品组合数据的数组
                 followData: '',
                 selectedOrder: null, // 該會員被選中的訂單
@@ -305,6 +308,10 @@
                         // 更多 Magnific Popup 配置项可根据需要添加
                     });
                 }
+            },
+            getPayName(data) {
+                var name = this.pname.find(self => self.payment_code === data);
+                return name.payment_name;
             },
             // 獲取追蹤清單
             getFollow() {

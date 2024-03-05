@@ -45,6 +45,9 @@ class Auth extends Public_Controller
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 
+				// 抓payname
+				$this->data['payment_name'] = $this->auth_model->getPaymentName();
+
 				// 抽選資料
 				$self_lottery = array();
 				$this->data['lottery_pool'] = $this->mysql_model->_select('lottery_pool', 'users_id', $id);
@@ -172,7 +175,7 @@ class Auth extends Public_Controller
 			$this->db->where('order_id', $id);
 			$query = $this->db->get('orders');
 			if ($query->num_rows() === 1) {
-				$this->db->update('orders', ['order_step' => 'cancel'], ['order_id' => $id]);
+				$this->db->update('orders', ['order_step' => 'order_cancel'], ['order_id' => $id]);
 			}
 			echo 'successful';
 		else :

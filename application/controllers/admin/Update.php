@@ -94,6 +94,8 @@ class Update extends Admin_Controller
                 $this->update_202402291446();
                 $this->update_202402292254();
                 $this->update_202403011721();
+                $this->update_202403051007();
+                $this->update_202403051354();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -103,6 +105,7 @@ class Update extends Admin_Controller
                     // $this->upload_orders_item();
                     // $this->upload_lottery();
                     // $this->upload_lottery_pool();
+                    $this->upload_product_img();
                 }
             } else {
                 // 不存在
@@ -114,6 +117,48 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function upload_product_img()
+    {
+        $version = 'upload_product_img';
+        $description = 'transition upload_product_img data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+
+            $this->db->select('*');
+            $query = $this->db->get('prd_picture');
+            $images = $query->result_array();
+
+            foreach ($images as $row) {
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'id' => $row['picid'],
+                    'product_id' => $row['prdid'],
+                    'picture' => 'Product/show/55/' . $row['filename'],
+                    'sort' => ($row['sort'] == null) ? '' : $row['sort'],
+                );
+
+                // echo '<pre>';
+                // echo 'data : ';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('product_img', $data);
+            }
+
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -722,6 +767,61 @@ class Update extends Admin_Controller
         }
     }
 
+    function update_202403051354()
+    {
+        $version = '202403051354';
+        $description = '新增資料表[product_img]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'product_img'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `product_img` (
+                    `id` int(11) NOT NULL,
+                    `product_id` int(11) NOT NULL,
+                    `subid` int(11) NOT NULL,
+                    `sort` int(11) NOT NULL,
+                    `picture` varchar(100) NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `product_img` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `product_img` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202403051007()
+    {
+        $version = '202403051007';
+        $description = '[banner] create [banner_image_mobile]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM banner LIKE 'banner_image_mobile'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `banner` ADD `banner_image_mobile` varchar(50) NOT NULL AFTER `banner_image`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
     function update_202403011721()
     {
         $version = '202403011721';
@@ -738,7 +838,7 @@ class Update extends Admin_Controller
             $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'fm_cold'");
             if ($query->num_rows() > 0) {
             } else {
-                $this->db->query("ALTER TABLE `orders` ADD `fm_cold` tinyint(1) NOT default 0 NULL AFTER `fm_type`;");
+                $this->db->query("ALTER TABLE `orders` ADD `fm_cold` tinyint(1) NOT NULL AFTER `fm_type`;");
             }
 
             $insertData = array(

@@ -17,15 +17,15 @@
                 <input type="text" class="form-control" name="banner_name" id="banner_name" value="<?php echo $banner['banner_name'] ?>" required>
               </div>
             </div>
-            <div class="form-group">
-              <label for="banner_type" class="col-sm-3 control-label">＊裝置：</label>
+            <!-- <div class="form-group">
+              <label for="banner_type" class="col-sm-3 control-label">＊類型：</label>
               <div class="col-sm-9">
                 <select class="form-control" name="banner_type" id="banner_type">
                   <option class="form-control" value="pc" <?= ($banner['banner_type'] == 'pc') ? 'selected' : '' ?>>電腦(PC)</option>
                   <option class="form-control" value="mobile" <?= ($banner['banner_type'] == 'mobile') ? 'selected' : '' ?>>手機(MOBILE)</option>
                 </select>
               </div>
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="banner_on_the_shelf" class="col-sm-3 control-label">＊上架時間：</label>
               <div class="col-sm-9">
@@ -42,14 +42,10 @@
               <label for="banner_status" class="col-sm-3 control-label">是否上架?：</label>
               <div class="col-sm-9">
                 <label class="radio-inline">
-                  <input type="radio" name="banner_status" id="banner_status1" value="1" <?php if ($banner['banner_status'] == 1) {
-                                                                                            echo 'checked';
-                                                                                          } ?>> 是
+                  <input type="radio" name="banner_status" id="banner_status1" value="1" <?= ($banner['banner_status'] == 1) ? 'checked' : '' ?>> 是
                 </label>
                 <label class="radio-inline">
-                  <input type="radio" name="banner_status" id="banner_status2" value="2" <?php if ($banner['banner_status'] == 2) {
-                                                                                            echo 'checked';
-                                                                                          } ?>> 否
+                  <input type="radio" name="banner_status" id="banner_status2" value="2" <?= ($banner['banner_status'] == 2) ? 'checked' : '' ?>> 否
                 </label>
               </div>
             </div>
@@ -66,15 +62,19 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="banner_content" class="col-sm-3 control-label">＊圖片：</label>
+              <label for="banner_content" class="col-sm-3 control-label">＊電腦版圖片：</label>
               <div class="col-sm-9">
-                <img src="/assets/uploads/<?php echo $banner['banner_image'] ?>" id="banner_image_preview" class="img-responsive" style="<?php if (empty($banner['banner_image'])) {
-                                                                                                                                            echo 'display: none';
-                                                                                                                                          } ?>">
-
+                <img src="/assets/uploads/<?php echo $banner['banner_image'] ?>" id="banner_image_preview" class="img-responsive" style="<?= empty($banner['banner_image']) ? 'display: none' : ''; ?>">
                 <input type="hidden" id="banner_image" name="banner_image" value="<?php echo $banner['banner_image'] ?>" />
-
                 <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=banner_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="banner_content" class="col-sm-3 control-label">＊手機版圖片：</label>
+              <div class="col-sm-9">
+                <img src="/assets/uploads/<?php echo $banner['banner_image_mobile'] ?>" id="banner_image_mobile_preview" class="img-responsive" style="<?= empty($banner['banner_image_mobile']) ? 'display: none' : ''; ?>">
+                <input type="hidden" id="banner_image_mobile" name="banner_image_mobile" value="<?php echo $banner['banner_image_mobile'] ?>" />
+                <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=banner_image_mobile&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
               </div>
             </div>
           </div>

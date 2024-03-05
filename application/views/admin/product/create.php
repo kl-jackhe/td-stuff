@@ -1,3 +1,14 @@
+<style>
+    label.required::before {
+        content: '* ';
+        color: red;
+    }
+
+    label.free::before {
+        content: '* ';
+        color: blue;
+    }
+</style>
 <div class="row">
     <?php $attributes = array('class' => 'submit_form', 'id' => 'submit_form'); ?>
     <?php echo form_open('admin/product/insert', $attributes); ?>
@@ -27,7 +38,7 @@
                                 <div class="form-group">
                                     <?php if ($this->is_partnertoys) : ?>
                                         <? if (!empty($product_category)) { ?>
-                                            <label for="product_category">分類</label>
+                                            <label class="required" for="product_category">分類</label>
                                             <select class="form-control" id="product_category" name="product_category">
                                                 <? foreach ($product_category as $pc_row) { ?>
                                                     <option value="<?= $pc_row['sort'] ?>"><?= $pc_row['name'] ?></option>
@@ -39,7 +50,7 @@
 
                                     <?php else : ?>
                                         <? if (!empty($product_category)) { ?>
-                                            <label for="product_category">分類</label>
+                                            <label class="required" for="product_category">分類</label>
                                             <select class="form-control chosen" id="product_category[]" name="product_category[]" multiple>
                                                 <? foreach ($product_category as $pc_row) { ?>
                                                     <option value="<?= $pc_row['product_category_id'] ?>"><?= $pc_row['product_category_name'] ?></option>
@@ -53,50 +64,69 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="distribute_at">上架日期</label>
+                                    <label class="required" for="distribute_at">上架日期</label>
                                     <input type="text" class="form-control datetimepicker" id="distribute_at" name="distribute_at" required>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="discontinued_at">下架日期</label>
-                                    <input type="datetime-local" class="form-control" id="discontinued_at" name="discontinued_at" required>
-                                </div>
-                            </div> -->
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="product_name">商品名稱</label>
+                                    <label class="free" for="discontinued_at">下架日期</label>
+                                    <input type="text" class="form-control datetimepicker" id="discontinued_at" name="discontinued_at">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="required" for="product_name">商品名稱</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name" required>
                                     <input type="hidden" id="store_id" name="store_id" value="<?php echo $this->uri->segment(4) ?>">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="product_sku">品號</label>
+                                    <label class="required" for="product_sku">品號</label>
                                     <input type="text" class="form-control" id="product_sku" name="product_sku" required>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="product_price">預設價格</label>
+                                    <label class="required" for="product_price">預設價格</label>
                                     <input type="text" class="form-control" id="product_price" name="product_price" required>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_image" class="control-label">封面圖片</label>
                                     <div class="form-group">
-                                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+                                        <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_image&relative_url=1" class="btn btn-primary fancybox" type="button">選擇圖片</a>
                                     </div>
                                     <img src="" id="add_product_image_preview" class="img-responsive" style="display: none;">
                                     <input type="hidden" id="add_product_image" name="product_image" />
                                 </div>
                             </div>
                         </div>
+                        <?php if ($this->is_partnertoys) : ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="product_picture" class="control-label">商品展示圖(可複選)</label>
+                                        <div class="form-group">
+                                            <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_picture&relative_url=1" id="graphGroup" class="btn btn-primary fancybox" type="button">選擇圖片</a>
+                                            <button type="button" class="btn btn-sucess" onClick="updateSelectedImages()">檢查圖片</button>
+                                        </div>
+                                        <div id="selected_images" class="row"></div>
+                                        <br>
+                                        <div id="selected_name"></div>
+                                        <input type="hidden" id="add_product_picture" name="product_picture" />
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="product_description">商品描述</label>
+                                    <label class="free" for="product_description">商品描述</label>
                                     <textarea class="form-control" id="product_description" name="product_description" cols="30" rows="10"></textarea>
                                 </div>
                             </div>
@@ -104,11 +134,27 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="product_note">注意事項</label>
+                                    <label class="free" for="product_note">注意事項</label>
                                     <textarea class="form-control" id="product_note" name="product_note" cols="30" rows="10"></textarea>
                                 </div>
                             </div>
                         </div>
+                        <?php if ($this->is_partnertoys) : ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="free" for="seo_title">seo設定</label>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body M_panel-body_bg">
+                                                <input type="text" name="seo_title" value="" class="form-control" id="seo_title" placeholder="請輸入TITLE(標題)">
+                                                <textarea name="seo_keyword" class="form-control" id="seo_keyword" rows="3" placeholder="請輸入KEYWORD(關鍵字)，每組關鍵字請用『半形逗號： , 』 隔開" style="resize:none;"></textarea>
+                                                <textarea name="seo_desc" class="form-control" id="seo_desc" rows="5" placeholder="請輸入DESCRIPTION(網站簡述)" style="resize:none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -116,3 +162,43 @@
     </div>
     <?php echo form_close() ?>
 </div>
+
+<!-- 檢查圖片上傳 -->
+<script>
+    // 更新选定的图片
+    function updateSelectedImages() {
+        // 解析隐藏域的值
+        var images = $('#add_product_picture').val()
+
+        // 清空现有图片
+        $('#selected_images').empty();
+        $('#selected_name').empty();
+        $('#selected_name').append('<span>已選圖片：</span>');
+
+        // 检查 images 是否为空或者不是有效的 JSON 字符串
+        if (images && isValidJSON(images)) {
+            var images = JSON.parse(images);
+
+            // 如果 imageNames 是数组，则添加新图片
+            if (Array.isArray(images)) {
+                $.each(images, function(index, images) {
+                    $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
+                    $('#selected_name').append('<span>' + images + '</span>&emsp;');
+                });
+            }
+        } else {
+            $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
+            $('#selected_name').append('<span>' + images + '</span>&emsp;');
+        }
+    }
+
+    // 检查字符串是否是有效的 JSON 格式
+    function isValidJSON(str) {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>

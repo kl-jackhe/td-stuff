@@ -147,69 +147,41 @@
     }
 </style>
 <div role="main" class="main">
-    <section class="no-padding sm-slide-fix content_auto_h">
+    <section class="no-padding sm-slide-fix bannerAbsolute">
+        <!-- <section class="no-padding sm-slide-fix content_auto_h"> -->
         <!-- First Presentation -->
         <? if (!empty($banner)) : ?>
-            <div class="container">
-                <!-- pc view -->
-                <div id="home-carousel" class="carousel slide carousel-fade d-none d-md-none d-lg-block d-xl-block" data-touch="false" data-interval="false">
-                    <ol class="carousel-indicators" style="bottom: -20px;">
-                        <? for ($i = 0; $i < (int)(!empty($pcBannerCount) ? $pcBannerCount : 0); $i++) : ?>
-                            <li data-target="#home-carousel" data-slide-to="<?= $i ?>" <?= ($i == 0 ? 'class="active"' : '') ?>></li>
-                        <? endfor; ?>
-                    </ol>
-                    <div class="carousel-inner">
-                        <?php $count = 0; ?>
-                        <?php foreach ($banner as $data) : ?>
-                            <?php if ($data['banner_type'] == 'pc') : ?>
-                                <div class="carousel-item <?= ($count == 0 ? 'active' : '') ?>">
-                                    <a href="<?= $data['banner_link'] ?>" target="<?= ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
-                                        <img class="d-block w-100" src="/assets/uploads/<?= $data['banner_image'] ?>">
-                                    </a>
-                                </div>
-                                <?php $count++; ?>
-                            <? endif; ?>
-                        <?php endforeach; ?>
-                    </div>
-                    <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="font-size: 24px;">
-                        <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="font-size: 24px;">
-                        <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
-                        <span class="sr-only">Next</span>
-                    </a>
+            <!-- <div class="container"> -->
+            <div id="home-carousel" class="carousel slide carousel-fade" data-touch="false" data-interval="false">
+                <ol class="carousel-indicators">
+                    <? for ($i = 0; $i < (int)(!empty($banner) ? count($banner) : 0); $i++) : ?>
+                        <li data-target="#home-carousel" data-slide-to="<?= $i ?>" <?= ($i == 0 ? 'class="active"' : '') ?>></li>
+                    <? endfor; ?>
+                </ol>
+                <div class="carousel-inner">
+                    <?php $count = 0; ?>
+                    <?php foreach ($banner as $data) : ?>
+                        <div class="carousel-item <?= ($count == 0 ? 'active' : '') ?>">
+                            <a href="<?= $data['banner_link'] ?>" target="<?= ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
+                                <!-- pc view -->
+                                <img class="d-none d-md-none d-lg-block d-xl-block w-100" src="/assets/uploads/<?= $data['banner_image'] ?>">
+                                <!-- mobile view -->
+                                <img class="d-block d-md-block d-lg-none d-xl-none w-100" src="/assets/uploads/<?= $data['banner_image_mobile'] ?>">
+                            </a>
+                        </div>
+                        <?php $count++; ?>
+                    <?php endforeach; ?>
                 </div>
-                <!-- mobile view -->
-                <div id="home-carousel-mobile" class="carousel slide carousel-fade d-block d-md-block d-lg-none d-xl-none" data-touch="false" data-interval="false">
-                    <ol class="carousel-indicators" style="bottom: -20px;">
-                        <? for ($i = 0; $i < (int)(!empty($mobileBannerCount) ? $mobileBannerCount : 0); $i++) : ?>
-                            <li data-target="#home-carousel-mobile" data-slide-to="<?= $i ?>" <?= ($i == 0 ? 'class="active"' : '') ?>></li>
-                        <? endfor; ?>
-                    </ol>
-                    <div class="carousel-inner">
-                        <?php $count = 0; ?>
-                        <?php foreach ($banner as $data) : ?>
-                            <?php if ($data['banner_type'] == 'mobile') : ?>
-                                <div class="carousel-item <?= ($count == 0 ? 'active' : '') ?>">
-                                    <a href="<?= $data['banner_link'] ?>" target="<?= ($data['banner_link'] == '#') ? ('_self') : ('_new') ?>" class="banner slidebanner">
-                                        <img class="d-block w-100" src="/assets/uploads/<?= $data['banner_image'] ?>">
-                                    </a>
-                                </div>
-                                <?php $count++; ?>
-                            <? endif; ?>
-                        <?php endforeach; ?>
-                    </div>
-                    <a class="carousel-control-prev" href="#home-carousel-mobile" role="button" data-slide="prev" style="font-size: 24px;">
-                        <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#home-carousel-mobile" role="button" data-slide="next" style="font-size: 24px;">
-                        <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
+                <a class="carousel-control-prev" href="#home-carousel" role="button" data-slide="prev" style="font-size: 24px;">
+                    <i class="fa-solid fa-circle-chevron-left" aria-hidden="true"></i>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#home-carousel" role="button" data-slide="next" style="font-size: 24px;">
+                    <i class="fa-solid fa-circle-chevron-right" aria-hidden="true"></i>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
+            <!-- </div> -->
         <? endif; ?>
 
         <!-- Second Presentation -->

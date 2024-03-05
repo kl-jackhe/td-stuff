@@ -19,7 +19,7 @@
     <tr class="info">
       <th></th>
       <th>標題</th>
-      <th>裝置</th>
+      <!-- <th>裝置</th> -->
       <th>連結</th>
       <th>順序</th>
       <th>狀態</th>
@@ -33,7 +33,7 @@
       <tr>
         <td><input type="checkbox" name="banner_id[]" value="<?php echo $data['banner_id'] ?>"></td>
         <td><?php echo $data['banner_name'] ?></td>
-        <td><?php echo ($data['banner_type'] == 'pc') ? '電腦(PC)' : '手機(MOBILE)' ?></td>
+        <!-- <td><?php echo ($data['banner_type'] == 'pc') ? '電腦(PC)' : '手機(MOBILE)' ?></td> -->
         <td><?php echo $data['banner_link'] ?></td>
         <td><?php echo $data['banner_sort'] ?></td>
         <td>

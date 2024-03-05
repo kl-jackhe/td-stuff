@@ -118,33 +118,48 @@ class Product extends Admin_Controller
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
-			// 'product_category_id' => $this->input->post('product_category'),
+			'product_category_id' => $this->input->post('product_category'),
 			'product_sku' => $this->input->post('product_sku'),
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
 			'product_image' => $this->input->post('product_image'),
 			'creator_id' => $this->current_user->id,
 			'distribute_at' => $this->input->post('distribute_at'),
-			// 'discontinued_at' => $this->input->post('discontinued_at'),
+			'discontinued_at' => $this->input->post('discontinued_at'),
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
 		$product_id = $this->mysql_model->_insert('product', $data);
 
 		if ($this->is_partnertoys) {
-			// $this->db->where('product_id', $product_id);
-			// $this->db->update('product', ['product_category_id' => $this->input->post('product_category')]);
+			$product_picture = $this->input->post('product_picture');
+			$product_picture_decode = json_decode($product_picture, true);
 
-			// $data = array(
-			// 	'product_id' => $product_id,
-			// 	'name' => $this->input->post('product_name'),
-			// 	'price' => $this->input->post('product_price'),
-			// 	'current_price' => $this->input->post('product_price'),
-			// 	'picture' => $this->input->post('product_image'),
-			// 	'description' => $this->input->post('product_note'),
-			// 	'create_time' => date('Y-m-d H:i:s'),
-			// );
-			// $this->db->insert('product_combine', $data);
+			if (!empty($product_picture)) {
+				// 检查 $product_images 的类型
+				if (is_array($product_picture_decode)) {
+					// 如果已经是数组，直接使用
+					foreach ($product_picture_decode as $image) {
+						// 处理每个图片的逻辑
+						$insert_data = array(
+							'product_id' => $product_id,
+							'sort' => 0,
+							'picture' => $image,
+							// 其他字段的处理
+						);
+						$this->db->insert('product_img', $insert_data);
+					}
+				} else {
+					// 处理每个图片的逻辑
+					$insert_data = array(
+						'product_id' => $product_id,
+						'sort' => 0,
+						'picture' => $product_picture,
+						// 其他字段的处理
+					);
+					$this->db->insert('product_img', $insert_data);
+				}
+			}
 		} else {
 			$product_category_id_list = $this->input->post('product_category');
 			if (isset($product_category_id_list) && !empty($product_category_id_list)) {
@@ -173,6 +188,7 @@ class Product extends Admin_Controller
 		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
 		if ($this->is_partnertoys) {
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
+			$this->data['product_pic'] = $this->mysql_model->_select('product_img', 'product_id', $id);
 		} else {
 			$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		}
@@ -591,6 +607,12 @@ class Product extends Admin_Controller
 		$this->db->where('product_id', $id);
 		$this->db->delete('product_specification');
 
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_tag_content');
+
+		$this->db->where('product_id', $id);
+		$this->db->delete('product_img');
+
 		redirect(base_url() . 'admin/product');
 	}
 
@@ -913,5 +935,12 @@ class Product extends Admin_Controller
 
 		$this->session->set_flashdata('message', '刪除成功');
 		echo '<script>window.history.back();</script>';
+	}
+
+	public function updateGraphSort()
+	{
+		$this->db->where('id', $this->input->post('id'));
+		$this->db->update('product_img', ['sort' => $this->input->post('sort')]);
+		echo 'success';
 	}
 }

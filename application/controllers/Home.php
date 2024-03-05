@@ -25,18 +25,6 @@ class Home extends Public_Controller
 		$this->data['franchisee'] = $franchisee;
 		$this->data['uid'] = (isset($_GET['uid']) ? $_GET['uid'] : null);
 		if ($this->is_partnertoys) {
-			$pcBannerCount = 0;
-			$mobileBannerCount = 0;
-			foreach ($this->data['banner'] as $item) {
-				if ($item['banner_type'] == 'pc') {
-					$pcBannerCount++;
-				}
-				if ($item['banner_type'] == 'mobile') {
-					$mobileBannerCount++;
-				}
-			}
-			$this->data['pcBannerCount'] = $pcBannerCount;
-			$this->data['mobileBannerCount'] = $mobileBannerCount;
 			$this->data['posts'] = $this->product_model->getHomePosts();
 			$this->render('home/partnertoys_index');
 		} else if ($this->is_liqun_food) {

@@ -17,15 +17,15 @@
                 <input type="text" class="form-control" name="banner_name" id="banner_name" required>
               </div>
             </div>
-            <div class="form-group">
-              <label for="banner_name" class="col-sm-3 control-label">＊標題：</label>
+            <!-- <div class="form-group">
+              <label for="banner_name" class="col-sm-3 control-label">＊類型：</label>
               <div class="col-sm-9">
                 <select class="form-control" name="banner_type" id="banner_type">
                   <option class="form-control" value="pc" selected>電腦(PC)</option>
                   <option class="form-control" value="mobile">手機(MOBILE)</option>
                 </select>
               </div>
-            </div>
+            </div> -->
             <div class="form-group">
               <label for="banner_on_the_shelf" class="col-sm-3 control-label">＊上架時間：</label>
               <div class="col-sm-9">
@@ -63,16 +63,21 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="banner_content" class="col-sm-3 control-label">＊圖片：</label>
+              <label for="banner_content" class="col-sm-3 control-label">＊電腦版圖片：</label>
               <div class="col-sm-9">
                 <img src="/assets/uploads/no-image.jpg" id="banner_image_preview" class="img-responsive">
-
                 <input type="hidden" id="banner_image" name="banner_image">
-
                 <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=banner_image&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
               </div>
             </div>
-
+            <div class="form-group">
+              <label for="banner_content" class="col-sm-3 control-label">＊手機版圖片：</label>
+              <div class="col-sm-9">
+                <img src="/assets/uploads/no-image.jpg" id="banner_image_mobile_preview" class="img-responsive">
+                <input type="hidden" id="banner_image_mobile" name="banner_image_mobile">
+                <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=banner_image_mobile&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

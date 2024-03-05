@@ -94,7 +94,7 @@
                             <div class="col-4 text-right">訂購人：</div>
                             <div class="col-8">{{ selectedOrder.customer_name }}</div>
                             <div class="col-4 text-right">付款方式：</div>
-                            <div class="col-8">{{ (selectedOrder.order_payment == 'cash_on_delivery') ? '貨到付款' : '綠界金流' }}</div>
+                            <div v-show="selectedOrder.order_payment" class="col-8">{{ getPayName(selectedOrder.order_payment) }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
@@ -195,11 +195,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_credit' || selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'">
                     <div class="operateBtn col-6">
-                        <a id="completePay" @click="completePay(selectedOrder.order_id)">完成付款</a>
+                        <a id="completePay" @click="completePay(selectedOrder.order_id)">繼續付款</a>
                     </div>
                     <div class="operateBtn col-6">
+                        <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
+                    </div>
+                </div>
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
+                    <div class="operateBtn col-12">
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
                     </div>
                 </div>

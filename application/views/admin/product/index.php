@@ -58,7 +58,7 @@
   <div class="col-md-12" bis_skin_checked="1">
     <div class="form-group" bis_skin_checked="1">
       <a target="_blank" href="/admin/product/create/0" class="btn btn-primary">新增商品</a>
-      <?php if ($this->is_partnertoys) : ?>
+      <!-- <?php if ($this->is_partnertoys) : ?>
         <?php if (isset($enable_status) && $enable_status[0]['contradiction_status'] == 1) : ?>
           <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[0]['id']; ?>, 1)" style="background-color: #ec6262; float: right;margin-right: 15px;">不可同時預購</a>
         <?php else : ?>
@@ -71,7 +71,7 @@
             <a id="contradictionBtn" onclick="contradiction(<?= $enable_status[1]['id']; ?>, 0)" style="background-color: #4dcf4d; float: right;margin-right: 15px;">不同月份可以同時預購</a>
           <?php endif; ?>
         <?php endif; ?>
-      <?php endif; ?>
+      <?php endif; ?> -->
     </div>
   </div>
   <div class="col-md-12">

@@ -1,6 +1,7 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
-class Banner extends Admin_Controller {
+class Banner extends Admin_Controller
+{
 
     public function __construct()
     {
@@ -18,30 +19,30 @@ class Banner extends Admin_Controller {
     {
         $conditions = array();
         $page = $this->input->get('page');
-        if(!$page){
+        if (!$page) {
             $offset = 0;
-        }else{
+        } else {
             $offset = $page;
         }
         $keywords = $this->input->get('keywords');
         $sortBy = $this->input->get('sortBy');
         $category = $this->input->get('category');
         $status = $this->input->get('status');
-        if(!empty($keywords)){
+        if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }
-        if(!empty($sortBy)){
+        if (!empty($sortBy)) {
             $conditions['search']['sortBy'] = $sortBy;
         }
-        if(!empty($category)){
+        if (!empty($category)) {
             $conditions['search']['category'] = $category;
         }
-        if(!empty($status)){
+        if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
-        $totalRec = (!empty($this->banner_model->getRows($conditions)) ? count($this->banner_model->getRows($conditions)) : 0 );
+        $totalRec = (!empty($this->banner_model->getRows($conditions)) ? count($this->banner_model->getRows($conditions)) : 0);
         $config['target']      = '#datatable';
-        $config['base_url']    = base_url().'admin/banner/ajaxData';
+        $config['base_url']    = base_url() . 'admin/banner/ajaxData';
         $config['total_rows']  = $totalRec;
         $config['per_page']    = $this->perPage;
         $config['link_func']   = 'searchFilter';
@@ -60,17 +61,20 @@ class Banner extends Admin_Controller {
 
     public function insert()
     {
-        if(empty($this->input->post('banner_image'))){
+        if (empty($this->input->post('banner_image'))) {
             $image = 'no-image.jpg';
+            $image_mobile = 'no-image.jpg';
         } else {
             $image = $this->input->post('banner_image');
+            $image_mobile = $this->input->post('banner_image_mobile');
         }
         $data = array(
             'banner_name'         => $this->input->post('banner_name'),
-            'banner_type'         => $this->input->post('banner_type'),
+            // 'banner_type'         => $this->input->post('banner_type'),
             'banner_on_the_shelf'  => $this->input->post('banner_on_the_shelf'),
             'banner_off_the_shelf' => $this->input->post('banner_off_the_shelf'),
             'banner_image'         => $image,
+            'banner_image_mobile'  => $image_mobile,
             'banner_link'          => $this->input->post('banner_link'),
             'banner_sort'          => $this->input->post('banner_sort'),
             'banner_status'        => $this->input->post('banner_status'),
@@ -80,29 +84,32 @@ class Banner extends Admin_Controller {
 
         $this->db->insert('banner', $data);
         $this->session->set_flashdata('message', 'Banner建立成功！');
-        redirect( base_url() . 'admin/banner');
+        redirect(base_url() . 'admin/banner');
     }
 
     public function edit($id)
     {
         $this->data['page_title'] = '編輯Banner';
-        $this->data['banner'] = $this->mysql_model->_select('banner','banner_id',$id,'row');
+        $this->data['banner'] = $this->mysql_model->_select('banner', 'banner_id', $id, 'row');
         $this->render('admin/banner/edit');
     }
 
     public function update($id)
     {
-        if(empty($this->input->post('banner_image'))){
+        if (empty($this->input->post('banner_image'))) {
             $image = 'no-image.jpg';
+            $image_mobile = 'no-image.jpg';
         } else {
             $image = $this->input->post('banner_image');
+            $image_mobile = $this->input->post('banner_image_mobile');
         }
         $data = array(
             'banner_name'         => $this->input->post('banner_name'),
-            'banner_type'         => $this->input->post('banner_type'),
+            // 'banner_type'         => $this->input->post('banner_type'),
             'banner_on_the_shelf'  => $this->input->post('banner_on_the_shelf'),
             'banner_off_the_shelf' => $this->input->post('banner_off_the_shelf'),
             'banner_image'         => $image,
+            'banner_image_mobile'  => $image_mobile,
             'banner_link'          => $this->input->post('banner_link'),
             'banner_sort'          => $this->input->post('banner_sort'),
             'banner_status'        => $this->input->post('banner_status'),
@@ -121,25 +128,25 @@ class Banner extends Admin_Controller {
         $this->db->where('banner_id', $id);
         $this->db->delete('banner');
         $this->session->set_flashdata('message', 'Banner刪除成功！');
-        redirect( base_url() . 'admin/banner');
+        redirect(base_url() . 'admin/banner');
     }
 
     public function multiple_action()
     {
         if (!empty($this->input->post('banner_id'))) {
             foreach ($this->input->post('banner_id') as $banner_id) {
-                if($this->input->post('action')=='delete'){
+                if ($this->input->post('action') == 'delete') {
                     $this->db->where('banner_id', $banner_id);
                     $this->db->delete('banner');
                     $this->session->set_flashdata('message', 'Banner刪除成功！');
-                } elseif ($this->input->post('action')=='on_the_shelf') {
+                } elseif ($this->input->post('action') == 'on_the_shelf') {
                     $data = array(
                         'banner_status' => '1',
                     );
                     $this->db->where('banner_id', $banner_id);
                     $this->db->update('banner', $data);
                     $this->session->set_flashdata('message', 'Banner上架成功！');
-                } elseif ($this->input->post('action')=='go_off_the_shelf') {
+                } elseif ($this->input->post('action') == 'go_off_the_shelf') {
                     $data = array(
                         'banner_status' => '2',
                     );
@@ -149,7 +156,6 @@ class Banner extends Admin_Controller {
                 }
             }
         }
-        redirect( base_url() . 'admin/banner');
+        redirect(base_url() . 'admin/banner');
     }
-
 }

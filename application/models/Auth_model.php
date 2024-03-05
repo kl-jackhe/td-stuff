@@ -22,6 +22,17 @@ class Auth_model extends CI_Model
         return (!empty($query) ? $query : false);
     }
 
+    function getPaymentName()
+    {
+        $this->db->select('id, payment_code, payment_name');
+        $query = $this->db->get('payment');
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        } else {
+            return false;
+        }
+    }
+
     function getCouponName($id)
     {
         $this->db->select('name');
@@ -122,10 +133,10 @@ class Auth_model extends CI_Model
     }
 
     function getLanguageData($lang)
-	{
-		$this->db->where('page_lang', $lang);
-		$this->db->like('page_name', 'TermsOfService', 'both');
-		$query = $this->db->get('standard_page_list');
-		return (!empty($query) ? $query->row_array() : false);
-	}
+    {
+        $this->db->where('page_lang', $lang);
+        $this->db->like('page_name', 'TermsOfService', 'both');
+        $query = $this->db->get('standard_page_list');
+        return (!empty($query) ? $query->row_array() : false);
+    }
 }
