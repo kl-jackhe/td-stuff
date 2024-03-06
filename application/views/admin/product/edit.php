@@ -252,7 +252,8 @@
                                         <label for="product_picture" class="control-label">商品展示圖(可複選)</label>
                                         <div class="form-group">
                                             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_picture&relative_url=1" id="graphGroup" class="btn btn-primary fancybox" type="button">選擇圖片</a>
-                                            <button type="button" class="btn btn-sucess" onClick="updateSelectedImages()">檢查圖片</button>
+                                            <button type="button" class="btn" onclick="checkSelectedImages()">檢查圖片</button>
+                                            <button type="button" class="btn" onclick="hiddenSelectedImages()">隱藏圖片</button>
                                         </div>
                                         <div>
                                             <div id="selected_images" class="row"></div>
@@ -270,17 +271,17 @@
                                     <div class="form-group">
                                         <!-- 全選按鈕 -->
                                         <button type="button" onclick="selectAllPictures()" class="btn btn-primary">全選</button>
-                                        <button type="button" onclick="deleteSelectedPicture()" class="btn btn-primary">批量刪除</button>
+                                        <button type="button" onclick="deleteSelectedPictures()" class="btn btn-primary">批量刪除</button>
                                     </div>
                                     <div class="row text-center">
                                         <?php if (!empty($product_pic)) : ?>
                                             <?php foreach ($product_pic as $self) : ?>
                                                 <div class="col-md-2" style="padding: 20px 0;">
-                                                    <button type="button" id="del_files" onclick="deletePicture()" class="btn btn-default" title="刪除" style="position: absolute; top: 0; right: 20px;">
+                                                    <button type="button" id="del_files" onclick="deletePicture(<?= $self['id'] ?>)" class="btn btn-default" title="刪除" style="position: absolute; top: 0; right: 20px;">
                                                         <i class="fa fa-trash"></i>
                                                     </button>
                                                     <div>
-                                                        <input type="checkbox" class="graphPicture[]" style='position: absolute; top: 0; left: 20px;'>
+                                                        <input type="checkbox" class="graphPicture" data-id="<?= $self['id'] ?>" style='position: absolute; top: 0; left: 20px;'>
                                                         <img src="/assets/uploads/<?= $self['picture'] ?>" style="max-width: 178px; max-height: 178px;">
                                                     </div>
                                                     <br>
@@ -567,6 +568,7 @@
         });
     });
 </script>
+
 <script>
     $(document).ready(function() {
         if (location.hash) {
@@ -639,7 +641,7 @@
 <!-- 檢查圖片上傳 -->
 <script>
     // 更新选定的图片
-    function updateSelectedImages() {
+    function checkSelectedImages() {
         // 解析隐藏域的值
         var images = $('#add_product_picture').val()
 
@@ -647,25 +649,38 @@
         $('#selected_images').empty();
         $('#selected_name').empty();
         $('#selected_images').append('<span class="col-md-12">已選新圖片：</span><br><br>');
-        $('#selected_name').append('<span>已選新圖片(檔名)：</span>');
+        $('#selected_name').append('<span>已選新圖片（路徑檔名）：</span>');
 
         // 检查 images 是否为空或者不是有效的 JSON 字符串
-        if (images && isValidJSON(images)) {
-            var images = JSON.parse(images);
+        if (images) {
+            if (isValidJSON(images)) {
+                var images = JSON.parse(images);
 
-            // 如果 imageNames 是数组，则添加新图片
-            if (Array.isArray(images)) {
-                $.each(images, function(index, images) {
-                    $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
-                    $('#selected_name').append('<span>' + images + '</span>&emsp;');
-                });
+                // 如果 imageNames 是数组，则添加新图片
+                if (Array.isArray(images)) {
+                    $.each(images, function(index, images) {
+                        $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
+                        $('#selected_name').append('<span>' + images + '</span>&emsp;');
+                    });
+                }
+            } else {
+                $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
+                $('#selected_name').append('<span>' + images + '</span>&emsp;');
             }
         } else {
-            $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
-            $('#selected_name').append('<span>' + images + '</span>&emsp;');
+            // 清空现有
+            $('#selected_images').empty();
+            $('#selected_name').empty();
         }
         // $('#selected_name').append('<span class="col-md-12"><hr></span>');
 
+    }
+
+    // 隱藏选定的图片
+    function hiddenSelectedImages() {
+        // 清空现有
+        $('#selected_images').empty();
+        $('#selected_name').empty();
     }
 
     // 检查字符串是否是有效的 JSON 格式
@@ -675,6 +690,54 @@
             return true;
         } catch (e) {
             return false;
+        }
+    }
+</script>
+
+<script>
+    // 批量刪除
+    function deleteSelectedPictures() {
+        var selectedIds = [];
+        $('.graphPicture:checked').each(function() {
+            selectedIds.push($(this).data('id'));
+        });
+
+        if (confirm('貼心提醒～是否刪除選定之商品展示圖？')) {
+            // 發送 AJAX 請求刪除選中的圖片
+            $.ajax({
+                url: '/admin/product/deleteMutiGraph',
+                method: 'POST',
+                data: {
+                    ids: selectedIds
+                },
+                success: function(response) {
+                    if (response == "success") {
+                        window.location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting selected pictures:', error);
+                }
+            });
+        }
+    }
+
+    // 單獨刪除
+    function deletePicture(id) {
+        // 發送 AJAX 請求刪除選中的圖片
+        if (confirm('貼心提醒～是否刪除選定之商品展示圖？')) {
+            $.ajax({
+                url: '/admin/product/deleteGraph/' + id,
+                method: 'POST',
+                success: function(response) {
+                    if (response == "success") {
+                        window.location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error deleting selected pictures:', error);
+                }
+            });
         }
     }
 </script>
@@ -720,7 +783,7 @@
 
     function selectAllPictures() {
         // 找到所有的複選框
-        var checkboxes = document.getElementsByClassName('graphPicture[]');
+        var checkboxes = document.getElementsByClassName('graphPicture');
 
         // 如果當前是全選狀態，則取消所有選擇；否則選擇所有
         for (var i = 0; i < checkboxes.length; i++) {

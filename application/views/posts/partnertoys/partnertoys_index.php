@@ -69,7 +69,7 @@
     const postApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
                 selectedPost: null, // 選中的消息
                 selectedPostCategoryId: null, // 選中的消息類別
                 selectedCategoryId: null, // 目前顯示頁面主題
@@ -93,18 +93,20 @@
             },
         },
         mounted() {
-            // 使用 jQuery 将样式更改为 display: block;
             // 在 mounted 鉤子中設定 selectedCategoryId 的值
             if (this.posts_categorys && this.posts_categorys.length > 0) {
-                this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
-                this.selectedCategoryId = 0;
-                this.pageTitle = '全部消息';
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    const tmpSet = this.posts_categorys.find(self => self.sort === this.getID);
+                // category init
+                if (this.getCategory && this.getCategory > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    const tmpSet = this.posts_categorys.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
+                } else {
+                    this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
+                    this.selectedCategoryId = 0;
+                    this.pageTitle = '全部消息';
                 }
             }
+
             // 最新資訊
             $('.postMagnificPopupTrigger').magnificPopup({
                 type: 'inline',
@@ -115,6 +117,7 @@
                 },
                 mainClass: 'mfp-zoom-in', // Add a zoom-in effect if you like
             });
+
             // 監聽是否有按下搜尋
             $(document).on('toggleSearch', () => {
                 // 处理事件触发后的逻辑
@@ -206,7 +209,28 @@
                 }
             },
             filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'posts' + (categoryId != null ? '?id=' + categoryId : '' + (this.searchText != '' ? '&searchText=' + this.searchText : ''));
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'posts' + (categoryId != null ? '?id=' + categoryId : '');
+                }
             },
             // 頁碼
             setPage(page) {
@@ -216,7 +240,29 @@
                 }
                 this.isNavOpen = false;
                 this.currentPage = page;
-                window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
+
+                if (this.getCategory != '') {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: this.getCategory,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage + '/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage;
+                }
             },
             // 清除搜尋攔
             clearSearch() {

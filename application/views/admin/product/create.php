@@ -113,7 +113,8 @@
                                         <label for="product_picture" class="control-label">商品展示圖(可複選)</label>
                                         <div class="form-group">
                                             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_picture&relative_url=1" id="graphGroup" class="btn btn-primary fancybox" type="button">選擇圖片</a>
-                                            <button type="button" class="btn btn-sucess" onClick="updateSelectedImages()">檢查圖片</button>
+                                            <button type="button" class="btn" onclick="checkSelectedImages()">檢查圖片</button>
+                                            <button type="button" class="btn" onclick="hiddenSelectedimages()">隱藏圖片</button>
                                         </div>
                                         <div id="selected_images" class="row"></div>
                                         <br>
@@ -166,30 +167,43 @@
 <!-- 檢查圖片上傳 -->
 <script>
     // 更新选定的图片
-    function updateSelectedImages() {
+    function checkSelectedImages() {
         // 解析隐藏域的值
         var images = $('#add_product_picture').val()
 
-        // 清空现有图片
+        // 清空现有图片和文件名
         $('#selected_images').empty();
         $('#selected_name').empty();
-        $('#selected_name').append('<span>已選圖片：</span>');
+        $('#selected_images').append('<span class="col-md-12">已選圖片：</span><br><br>');
+        $('#selected_name').append('<span>已選圖片（路徑檔名）：</span>');
 
         // 检查 images 是否为空或者不是有效的 JSON 字符串
-        if (images && isValidJSON(images)) {
-            var images = JSON.parse(images);
+        if (images) {
+            if (isValidJSON(images)) {
+                var imagesArray = JSON.parse(images);
 
-            // 如果 imageNames 是数组，则添加新图片
-            if (Array.isArray(images)) {
-                $.each(images, function(index, images) {
-                    $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
-                    $('#selected_name').append('<span>' + images + '</span>&emsp;');
-                });
+                // 如果 imagesArray 是数组，则添加新图片
+                if (Array.isArray(imagesArray) && imagesArray.length > 0) {
+                    $.each(imagesArray, function(index, image) {
+                        $('#selected_images').append('<img src="/assets/uploads/' + image + '" class="img-responsive col-md-1" />');
+                        $('#selected_name').append('<span>' + image + '</span>&emsp;');
+                    });
+                }
+            } else {
+                $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
+                $('#selected_name').append('<span>' + images + '</span>&emsp;');
             }
         } else {
-            $('#selected_images').append('<img src="/assets/uploads/' + images + '" class="img-responsive col-md-1" />');
-            $('#selected_name').append('<span>' + images + '</span>&emsp;');
+            // 清空现有
+            $('#selected_images').empty();
+            $('#selected_name').empty();
         }
+    }
+
+    function hiddenSelectedimages() {
+        // 清空现有
+        $('#selected_images').empty();
+        $('#selected_name').empty();
     }
 
     // 检查字符串是否是有效的 JSON 格式

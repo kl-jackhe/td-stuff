@@ -3,22 +3,15 @@ class Security_url
 {
     private $ci;
     private $url_key;
-    private $url_key_life_time; // 一小時後過期
 
     public function __construct($params = array())
     {
         $this->ci = &get_instance();
         $this->ci->load->library('session');
         // 檢查是否存在有效的 URL 鍵
-        if ($this->ci->session->has_userdata('url_key') && $this->ci->session->has_userdata('url_key_life_time')) {
-            if ($this->ci->session->userdata('url_key_life_time') < time()) {
-                // URL 鍵過期，生成一個新的 URL 鍵並存儲到會話中
-                $this->generateNewURLKey();
-            } else {
-                // 取得會話中的 URL 鍵和過期時間
-                $this->url_key = $this->ci->session->userdata('url_key');
-                $this->url_key_life_time = $this->ci->session->userdata('url_key_life_time');
-            }
+        if ($this->ci->session->has_userdata('url_key')) {
+            // 取得會話中的 URL 鍵和過期時間
+            $this->url_key = $this->ci->session->userdata('url_key');
         } else {
             // 生成新的 URL 鍵並存儲到會話中
             $this->generateNewURLKey();
@@ -29,9 +22,7 @@ class Security_url
     private function generateNewURLKey()
     {
         $this->url_key = $this->generateRandomString(); // 生成隨機的 URL 鍵
-        $this->url_key_life_time = time() + 3600; // 一小時後過期
         $this->ci->session->set_userdata('url_key', $this->url_key);
-        $this->ci->session->set_userdata('url_key_life_time', $this->url_key_life_time);
     }
 
     // 生成隨機字符串
@@ -41,7 +32,7 @@ class Security_url
     }
 
     // 生成 JWT
-    function generateJWT($payload, $key, $expiration_time)
+    function generateJWT($payload, $key)
     {
         // 將 Header 與 Payload 轉換為 Base64 字串
         $header = base64_encode(json_encode(array('typ' => 'JWT', 'alg' => 'HS256')));
@@ -60,32 +51,44 @@ class Security_url
     // 解析 JWT
     function parseJWT($jwt, $key)
     {
-        list($header, $payload, $signature) = explode('.', $jwt);
-
-        // 驗證 Signature
-        $expected_signature = hash_hmac('sha256', "$header.$payload", $key, true);
-        $expected_signature = base64_encode($expected_signature);
-
-        if ($signature !== $expected_signature) {
-            throw new Exception('Invalid signature');
+        if (empty($jwt)) {
+            return false;
         }
 
-        // 解碼 Payload
-        $payload = json_decode(base64_decode($payload), true);
-
-        // 檢查過期時間
-        if (isset($payload['exp']) && time() > $payload['exp']) {
-            throw new Exception('Token expired');
+        $parts = explode('.', $jwt);
+        if (count($parts) !== 3) {
+            return false;
         }
 
-        return $payload;
+        try {
+            list($header, $payload, $signature) = explode('.', $jwt);
+            // 驗證 Signature
+            $expected_signature = hash_hmac('sha256', "$header.$payload", $key, true);
+            $expected_signature = base64_encode($expected_signature);
+
+            if ($signature !== $expected_signature) {
+                throw new Exception('Invalid signature');
+            }
+
+            // 解碼 Payload
+            $payload = json_decode(base64_decode($payload), true);
+
+            // 檢查過期時間
+            if (isset($payload['exp']) && time() > $payload['exp']) {
+                throw new Exception('Token expired');
+            }
+
+            return $payload;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 
     // 加密數據
     public function encryptData($data)
     {
         // 生成 JWT
-        $jwt = $this->generateJWT($data, $this->getKey(), time() + 3600); // 一小時後過期
+        $jwt = $this->generateJWT($data, $this->getKey());
         return $jwt;
     }
 

@@ -121,10 +121,10 @@
     $(document).ready(function() {
         // 初始化 cnzipcode
         $("#cnzipcode").cnzipcode({
-            provinceDefault: '<?= $user->province ?>',
-            countyDefault: '<?= $user->county ?>',
-            districtDefault: '<?= $user->district ?>',
-            zipcodeDefault: '<?= $user->zipcode ?>'
+            provinceDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->province : '' ?>',
+            countyDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->county : '' ?>',
+            districtDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->district : '' ?>',
+            zipcodeDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->zipcode : '' ?>'
         });
         if ($("#Country").val() === '中國') {
             $("#cnzipcode").show();
@@ -192,7 +192,7 @@
     const authApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
@@ -220,12 +220,13 @@
             this.initMagnificPopup();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
-                this.selectedCategoryId = this.authCategory[0].sort;
-                this.pageTitle = this.authCategory[0].name;
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    const tmpSet = this.authCategory.find(self => self.sort === this.getID);
+                if (this.getCategory && this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    const tmpSet = this.authCategory.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
+                } else {
+                    this.selectedCategoryId = this.authCategory[0].sort;
+                    this.pageTitle = this.authCategory[0].name;
                 }
             }
         },
@@ -423,7 +424,28 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
-                window.location.href = '<?= base_url() . 'auth?id=' ?>' + categoryId;
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'auth/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'auth' + (categoryId != null ? '?id=' + categoryId : '');
+                }
                 // this.scrollToTop();
                 // this.clearSelectedOrder();
                 // this.clearSelectedMail();

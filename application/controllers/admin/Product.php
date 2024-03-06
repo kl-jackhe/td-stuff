@@ -943,4 +943,27 @@ class Product extends Admin_Controller
 		$this->db->update('product_img', ['sort' => $this->input->post('sort')]);
 		echo 'success';
 	}
+
+	public function deleteGraph($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete('product_img');
+		$this->session->set_flashdata('message', '刪除成功');
+		echo 'success';
+	}
+
+	public function deleteMutiGraph()
+	{
+		$group = $this->input->post('ids');
+		if (!empty($group)) {
+			foreach ($group as $self) {
+				$this->db->where('id', $self);
+				$this->db->delete('product_img');
+			}
+			$this->session->set_flashdata('message', '刪除成功');
+			echo 'success';
+		} else {
+			echo 'error';
+		}
+	}
 }

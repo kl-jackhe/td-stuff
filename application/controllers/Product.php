@@ -8,7 +8,7 @@ class Product extends Public_Controller
 		parent::__construct();
 	}
 
-	public function index($id = 1)
+	public function index($id = 1, $searchText = '')
 	{
 
 		$data = array();
@@ -56,20 +56,41 @@ class Product extends Public_Controller
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
 
 
-			$this->data['isSearch'] = 'false';
+			// 按搜尋icon進來
+			$this->data['searchIcon'] = 'false';
+			// 搜尋欄字元
+			$this->data['searchText'] = '';
+			// 類別分類
+			$this->data['category'] = '';
+
 			// 获取当前 URL
 			$current_url = $_SERVER['REQUEST_URI'];
 
 			// 使用 parse_url() 解析 URL 获取查询字符串部分
 			$query_string = parse_url($current_url, PHP_URL_QUERY);
 
+			// 对参数进行解码以获取您想要的内容
+			$decoded_data = $this->security_url->decryptData($query_string);
+
+			// echo '<pre>';
+			// print_r($query_string);
+			// echo '</pre>';
+			// if (!empty($decoded_data)) {
+			// 	echo '<pre>';
+			// 	print_r($decoded_data);
+			// 	echo '</pre>';
+			// }
+
 			// 如果查询字符串不为空
 			if (!empty($query_string)) {
-				// 对参数进行解码以获取您想要的内容
-				$decoded_data = $this->security_url->decryptData($query_string);
-
-				if (!empty($decoded_data)) {
-					$this->data['isSearch'] = $decoded_data['value'];
+				if (!empty($decoded_data) && !empty($decoded_data['searchIcon'])) {
+					$this->data['searchIcon'] = $decoded_data['searchIcon'];
+				}
+				if (!empty($decoded_data) && !empty($decoded_data['searchText'])) {
+					$this->data['searchText'] = $decoded_data['searchText'];
+				}
+				if (!empty($decoded_data) && !empty($decoded_data['category'])) {
+					$this->data['category'] = $decoded_data['category'];
 				}
 			}
 

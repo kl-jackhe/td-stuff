@@ -44,7 +44,7 @@
     const artistApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 selectedSubCategoryId: null,
                 artist_category: <?php echo json_encode(!empty($artist_category) ? $artist_category : ''); ?>,
@@ -58,10 +58,10 @@
         mounted() {
             // init btn state
             if (this.artist_category && this.artist_category.length > 0) {
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    this.toggleCategory(this.artist_category[parseInt(this.getID) - 1].id);
-                    const tmpSet = this.artist_category.find(self => self.sort === this.getID);
+                if (this.getCategory && this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    this.toggleCategory(this.artist_category[parseInt(this.getCategory) - 1].id);
+                    const tmpSet = this.artist_category.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
                 } else {
                     this.selectedCategoryId = this.artist_category[0].sort;
@@ -103,6 +103,30 @@
                         this.pageTitle = this.isExpanded.name;
                     }
                 })
+            },
+            encodeLinker(title, id, year, name) {
+                if (title != null && id != null && year != null && name != null) {
+                    $.ajax({
+                        url: '/encode/getMutiDataEncode',
+                        type: 'post',
+                        data: {
+                            category: id,
+                            year: year,
+                            name: name,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + title + '/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 將頁面滾動到頂部
             scrollToTop() {

@@ -35,7 +35,7 @@
     const aboutApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 目前顯示頁面主題
                 about_category: <?php echo json_encode(!empty($about_category) ? $about_category : ''); ?>,
                 pageTitle: '', // 目前標籤
@@ -46,12 +46,13 @@
         mounted() {
             // init btn state
             if (this.about_category && this.about_category.length > 0) {
-                this.selectedCategoryId = this.about_category[0].sort;
-                this.pageTitle = this.about_category[0].name;
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    const tmpSet = this.about_category.find(self => self.sort === this.getID);
+                if (this.getCategory && this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    const tmpSet = this.about_category.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
+                } else {
+                    this.selectedCategoryId = this.about_category[0].sort;
+                    this.pageTitle = this.about_category[0].name;
                 }
             }
         },
@@ -62,7 +63,28 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'about/index' + (categoryId != null ? '?id=' + categoryId : '');
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'about/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'about/index' + (categoryId != null ? '?id=' + categoryId : '');
+                }
             },
         },
     });

@@ -38,7 +38,8 @@
     const cargoApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode((!empty($this->input->get('id', TRUE)) ? $this->input->get('id', TRUE) : '')); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
+                getID: <?php echo json_encode((!empty($this->input->get('id', TRUE)) ? $this->input->get('id', TRUE) : '')); ?>, // 若透過合作指引
                 getYear: <?php echo json_encode((!empty($this->input->get('year', TRUE)) ? $this->input->get('year', TRUE) : '')); ?>, // 若透過合作指引
                 getCargoName: <?php echo json_encode((!empty($this->input->get('name', TRUE)) ? $this->input->get('name', TRUE) : '')); ?>, // 若透過合作指引
                 selectedCategoryId: null, // 目前顯示頁面主題
@@ -57,13 +58,18 @@
         mounted() {
             // init btn state
             if (this.cargo_category && this.cargo_category.length > 0) {
-                if (this.getID.length > 0) {
+                if (this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    this.toggleCategory(this.cargo_category[parseInt(this.getCategory) - 1].id);
+                } else if (this.getID.length > 0) {
                     if (this.getYear.length > 0 && this.getCargoName.length > 0) {
                         // artist href
                         // console.log('ID:' + this.getID);
                         // console.log('Year:' + this.getYear);
                         // console.log('Name:' + this.getCargoName);
                         this.hrefToggleCategory(this.cargo_category[parseInt(this.getID) - 1].id)
+                    } else if (this.getYear.length > 0) {
+                        this.toggleCategory(this.cargo_category[parseInt(this.getID) - 1].id)
                     } else {
                         // header category
                         // console.log('ID:' + this.getID);

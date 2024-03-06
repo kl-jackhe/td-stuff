@@ -43,7 +43,7 @@
     const channelsApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
                 selectedCategoryId: null, // 選中項目類別
                 selectedSubCategoryId: null, // 選中子項目類別
                 selectedSubSubCategoryId: null, // 選中子子項目類別
@@ -58,12 +58,12 @@
             }
         },
         mounted() {
-            // init btn state
             if (this.channels_category && this.channels_category.length > 0) {
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    this.toggleCategory(this.channels_category[parseInt(this.getID) - 1].id);
-                    const tmpSet = this.channels_category.find(self => self.sort === this.getID);
+                // category init
+                if (this.getCategory && this.getCategory > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    this.toggleCategory(this.channels_category[parseInt(this.getCategory) - 1].id);
+                    const tmpSet = this.channels_category.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
                 } else {
                     this.selectedCategoryId = this.channels_category[0].sort;

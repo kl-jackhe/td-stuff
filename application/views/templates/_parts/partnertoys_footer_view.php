@@ -35,9 +35,9 @@
         </a>
     </div> -->
     <div id="fa-angles-up" class="my-3 icon_pointer">
-        <a href="#">
+        <span>
             <img class="fixed_icon_style" src="/assets/images/web icon_top-2.png">
-        </a>
+        </span>
     </div>
 </div>
 
@@ -53,7 +53,8 @@
                         <?php if (!empty($footer_category)) : ?>
                             <?php foreach ($footer_category as $self) : ?>
                                 <?php if ($self['parent_id'] == 3 && $self['status'] == 1) : ?>
-                                    <p><a href="/posts/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p>
+                                    <!-- <p><a href="/posts/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p> -->
+                                    <p><a class="footerCategoryLinker" onclick="encodeHFLinker('posts', <?= $self['sort'] ?>)"><?= $self['name'] ?></a></p>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -65,7 +66,8 @@
                         <?php if (!empty($footer_category)) : ?>
                             <?php foreach ($footer_category as $self) : ?>
                                 <?php if ($self['parent_id'] == 1 && $self['status'] == 1) : ?>
-                                    <p><a href="/product/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p>
+                                    <!-- <p><a href="/product/index?id=<?= $self['sort'] ?>"><?= $self['name'] ?></a></p> -->
+                                    <p><a class="footerCategoryLinker" onclick="encodeHFLinker('product', <?= $self['sort'] ?>)"><?= $self['name'] ?></a></p>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -75,8 +77,8 @@
                         <hr>
                         <p><a href="/about">關於夥伴</a></p>
                         <p><a href="/product">產品介紹</a></p>
-                        <p><a href="#">合作介紹</a></p>
-                        <p><a href="#">經銷通路</a></p>
+                        <p><a href="/artist">合作介紹</a></p>
+                        <p><a href="/channel">經銷通路</a></p>
                     </div>
                     <div class="col-12 col-md-4">
                         <h2>聯絡我們</h2>
@@ -131,24 +133,53 @@
 <?php if ($this->is_partnertoys) : ?>
     <script src="/assets/js/partnertoysPage.js"></script>
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
-    <script>
-        // search-icon event listener
-        document.getElementById('searchLink').addEventListener('click', function() {
-            <?php if (strpos($_SERVER['REQUEST_URI'], '/product') === false) : ?>
-                <?php
-                $data = array(
-                    'value' => 'true'
-                );
-                $securitycode = $this->security_url->encryptData($data);
-                ?>
-                window.location.href = '<?= base_url() . "product/?" . $securitycode; ?>';
-            <?php endif; ?>
-            // 触发自定义事件
-            var event = new Event('toggleSearch')
-            document.dispatchEvent(event)
-        })
-    </script>
 <?php endif; ?>
+
+
+<script>
+    // footer click link
+    function encodeHFLinker(name, id) {
+        if (name != null && id != null) {
+            $.ajax({
+                url: '/encode/getDataEncode/category',
+                type: 'post',
+                data: {
+                    category: id,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()) ?> + name + '/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+</script>
+
+<script>
+    // search-icon event listener
+    document.getElementById('searchLink').addEventListener('click', function() {
+        <?php
+        $data = array(
+            'type' => 'searchIcon',
+            'searchIcon' => 'true',
+        );
+        $securitycode = $this->security_url->encryptData($data);
+        if ($_SERVER['REQUEST_URI'] !== '/product' && $_SERVER['REQUEST_URI'] !== ('/product/?' . $securitycode)) : ?>
+            window.location.href = '<?= base_url() . "product/?" . $securitycode; ?>';
+        <?php endif; ?>
+        // 触发自定义事件
+        var event = new Event('toggleSearch')
+        document.dispatchEvent(event)
+    })
+</script>
+
 <script>
     $(document).ready(function() {
         $('#home-carousel').carousel({
@@ -179,14 +210,20 @@
         //scrollTop
         $(function() {
             var $win = $(window);
+            var $faAnglesUp = $('#fa-angles-up');
+
+            // 初始隱藏
+            $faAnglesUp.hide();
+
             $win.scroll(function() {
                 if ($win.scrollTop() > 100) {
-                    $('#fa-angles-up').slideDown();
+                    $faAnglesUp.slideDown();
                 } else {
-                    $('#fa-angles-up').slideUp();
+                    $faAnglesUp.slideUp();
                 }
             });
-            $('#fa-angles-up').click(function() {
+
+            $faAnglesUp.click(function() {
                 $('html, body').animate({
                     scrollTop: 0
                 }, 200);

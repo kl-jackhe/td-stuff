@@ -187,7 +187,7 @@ label.required::before {
 }
 
 #mobileMenu {
-    top: 105px;
+    top: 115px;
     z-index: 99;
     width: 100%;
     height: 100%;
@@ -266,7 +266,7 @@ a.logBtn {
 .logoutBnt {
     cursor: pointer;
     display: inline-block;
-    padding-left: 20px;
+    padding-left: 10px;
     color: #ffe747;
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
@@ -301,6 +301,7 @@ a.logBtn {
 }
 
 .mobile-header-container {
+    overflow-x: hidden;
     overflow-y: auto;
     max-height: 80%;
 }
@@ -343,7 +344,7 @@ a.logBtn {
     }
 }
 
-.bannerAbsolute{
+.bannerAbsolute {
     position: relative;
     top: 124px;
 }
@@ -476,6 +477,15 @@ a.logBtn {
     color: #ffe747;
 }
 
+.footerCategoryLinker {
+    cursor: pointer;
+}
+
+.footerCategoryLinker:hover {
+    color: #d35448 !important;
+    text-decoration: none;
+}
+
 .transitionAnimation {
     transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
@@ -499,7 +509,7 @@ a.logBtn {
     font-size: 12px;
     color: #BE2633;
     position: absolute;
-    top: -3px;
+    top: -2px;
     right: 2px;
     width: 15px;
     background: #D1D1D1;
@@ -547,10 +557,9 @@ a.logBtn {
 
 }
 
-.active {
+.active .page_link {
+    color: #ffffff;
     background-color: #d35448;
-    border-color: #d35448;
-    font-weight: bold;
 }
 
 .breadcrumb {
@@ -1109,8 +1118,8 @@ a.logBtn {
     cursor: pointer;
     /* 懸停時顯示手型游標 */
     transform: scale(1.05);
-    -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
-    box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35)
+    /* -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
+    box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35) */
 }
 
 .postImg {

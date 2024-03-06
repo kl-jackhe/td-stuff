@@ -46,8 +46,8 @@
     const productApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
-                getSearch: <?php echo json_encode($isSearch); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
+                getSearchIcon: <?php echo json_encode($searchIcon); ?>, // 若透過搜尋按鈕進來
                 selectedCategoryId: null, // 目前顯示頁面主題
                 products: <?php echo json_encode(!empty($products) ? $products : ''); ?>, // products資料庫所有類及項目
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
@@ -55,31 +55,52 @@
                 perpage: 12, // 一頁的資料數
                 currentPage: 1, // 目前page
                 searchText: '', // 搜尋欄
+                getSearchText: <?php echo json_encode($searchText); ?>, // 搜尋欄
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
                 hiddenSearch: false, // search-box
             };
         },
         mounted() {
-            // init btn state
+            // init state
             if (this.products_categories && this.products_categories.length > 0) {
                 this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
                 this.selectedCategoryId = 0;
                 this.pageTitle = '全部商品';
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    const tmpSet = this.products_categories.filter(self => self.sort === this.getID);
-                    this.pageTitle = tmpSet[0].name;
+
+                // category init
+                if (this.getCategory && this.getCategory > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    const tmpSet = this.products_categories.find(self => self.sort === this.getCategory);
+                    this.pageTitle = tmpSet.name;
                 }
+
+                // search bar init
+                if (this.getSearchIcon == 'true') {
+                    this.hiddenSearch = true;
+                }
+
+                // search content init
+                if (this.getSearchText && this.getSearchText.length > 0) {
+                    this.hiddenSearch = true;
+                    this.searchText = this.getSearchText;
+                    this.filterproductsBySearch();
+                }
+
+                // 監聽是否有按下搜尋
+                $(document).on('toggleSearch', () => {
+                    // 处理事件触发后的逻辑
+                    // 显示搜寻栏的逻辑
+                    if (!this.hiddenSearch) {
+                        this.scrollToTop();
+                    }
+                    this.hiddenSearch = !this.hiddenSearch;
+                });
             }
-            // 監聽是否有按下搜尋
-            $(document).on('toggleSearch', () => {
-                // 处理事件触发后的逻辑
-                // 显示搜寻栏的逻辑
-                this.hiddenSearch = !this.hiddenSearch;
-            });
-            this.hiddenSearch = (this.getSearch == 'true') ? true : false;
-            console.log(this.getSearch);
+
+            // console.log(this.getCategory);
+            // console.log(this.getSearchIcon);
+            // console.log(this.getSearchText);
         },
         computed: {
             // 篩選&搜尋
@@ -154,7 +175,28 @@
                 }
             },
             filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'product/index' + (categoryId != null ? '?id=' + categoryId : '' + (this.searchText != '' ? '&searchText=' + this.searchText : ''));
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'product/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'product' + (categoryId != null ? '?id=' + categoryId : '');
+                }
             },
             // 頁碼
             setPage(page) {
@@ -165,11 +207,56 @@
                 }
                 this.isNavOpen = false;
                 this.currentPage = page;
-                window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
+
+                // 触发自定义事件
+                if (this.searchText != '') {
+                    $.ajax({
+                        url: '/encode/getDataEncode/searchText',
+                        type: 'post',
+                        data: {
+                            searchText: this.searchText,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage + '/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    if (this.getCategory != '') {
+                        $.ajax({
+                            url: '/encode/getDataEncode/category',
+                            type: 'post',
+                            data: {
+                                category: this.getCategory,
+                            },
+                            success: (response) => {
+                                if (response) {
+                                    if (response.result == 'success') {
+                                        window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage + '/?' + response.src;
+                                    } else {
+                                        console.log('error.');
+                                    }
+                                } else {
+                                    console.log(response);
+                                }
+                            },
+                        });
+                    } else {
+                        window.location.href = <?= json_encode(base_url()) ?> + 'product/index/' + this.currentPage;
+                    }
+                }
             },
             // 清除搜尋攔
             clearSearch() {
                 this.searchText = '';
+                this.currentPage = 1;
                 this.selectedCategoryId = 0;
                 this.pageTitle = '全部商品';
                 this.filterproductsByCategory(); // 在清除搜尋欄後自動執行第一個篩選
