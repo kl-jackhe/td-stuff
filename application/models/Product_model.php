@@ -373,4 +373,12 @@ class Product_model extends CI_Model
 		$query = $this->db->get('standard_page_list');
 		return (!empty($query) ? $query->row_array() : false);
 	}
+
+	function getProductGraph($id)
+	{
+		$this->db->where('product_id', $id);
+		$this->db->order_by('sort', 'asc');
+		$result = $this->db->get('product_img')->result_array();
+		return !empty($result) ? $result : false;
+	}
 }

@@ -50,11 +50,12 @@ class Product extends Public_Controller
 			$this->data['products'] = $this->product_model->getInTimeProducts();
 			$this->data['products'] = $this->get_limit_time_products($this->data['products']);
 
+			// 商品分類
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
+			// 商品規格
 			$this->data['productCombine'] = $this->product_model->getProductCombine();
 			$this->data['productCombineItem'] = $this->product_model->getProductCombineItem();
-
 
 			// 按搜尋icon進來
 			$this->data['searchIcon'] = 'false';
@@ -114,6 +115,9 @@ class Product extends Public_Controller
 			</script>";
 			return;
 		}
+
+		// 商品圖
+		$this->data['product_images'] = $this->product_model->getProductGraph($product_id);
 
 		// 找category_name
 		foreach ($this->data['product_category'] as $self) {

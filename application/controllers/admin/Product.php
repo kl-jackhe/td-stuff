@@ -239,6 +239,7 @@ class Product extends Admin_Controller
 			}
 		}
 
+		// 基本資訊
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'distribute_at' => $this->input->post('distribute_at'), //tmp
@@ -269,6 +270,7 @@ class Product extends Admin_Controller
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
 
+		// 類別
 		if (!$this->is_partnertoys) {
 			$product_category_id_list = $this->input->post('product_category');
 			if (isset($product_category_id_list) && !empty($product_category_id_list)) {
@@ -291,6 +293,39 @@ class Product extends Admin_Controller
 			}
 		}
 
+		// 商品圖
+		if ($this->is_partnertoys) {
+			$product_picture = $this->input->post('product_picture');
+			$product_picture_decode = json_decode($product_picture, true);
+
+			if (!empty($product_picture)) {
+				// 检查 $product_images 的类型
+				if (is_array($product_picture_decode)) {
+					// 如果已经是数组，直接使用
+					foreach ($product_picture_decode as $image) {
+						// 处理每个图片的逻辑
+						$insert_data = array(
+							'product_id' => $id,
+							'sort' => 0,
+							'picture' => $image,
+							// 其他字段的处理
+						);
+						$this->db->insert('product_img', $insert_data);
+					}
+				} else {
+					// 处理每个图片的逻辑
+					$insert_data = array(
+						'product_id' => $id,
+						'sort' => 0,
+						'picture' => $product_picture,
+						// 其他字段的处理
+					);
+					$this->db->insert('product_img', $insert_data);
+				}
+			}
+		}
+
+		// 更新資訊
 		$inventory_log = array(
 			'product_id' => $id,
 			'source' => 'ProductEdit',
@@ -965,5 +1000,41 @@ class Product extends Admin_Controller
 		} else {
 			echo 'error';
 		}
+	}
+
+	public function updateSelectedGraph($product_id)
+	{
+		$graph_data = $this->input->post('images');
+		$graph_data_decode = json_decode($graph_data, true);
+
+		if (!empty($graph_data)) {
+			// 检查 $product_images 的类型
+			if (is_array($graph_data_decode)) {
+				// 如果已经是数组，直接使用
+				foreach ($graph_data_decode as $image) {
+					// 处理每个图片的逻辑
+					$insert_data = array(
+						'product_id' => $product_id,
+						'sort' => 0,
+						'picture' => $image,
+						// 其他字段的处理
+					);
+					$this->db->insert('product_img', $insert_data);
+				}
+			} else {
+				// 处理每个图片的逻辑
+				$insert_data = array(
+					'product_id' => $product_id,
+					'sort' => 0,
+					'picture' => $graph_data,
+					// 其他字段的处理
+				);
+				$this->db->insert('product_img', $insert_data);
+			}
+			echo 'success';
+		} else {
+			echo 'error';
+		}
+		return;
 	}
 }

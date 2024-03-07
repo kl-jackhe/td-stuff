@@ -2823,6 +2823,206 @@ select.lotteryResult {
     background-color: #e0e0e0;
 }
 
+.img-responsive {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    padding: 0 5px;
+}
+
+.small-slick {
+    margin: 0;
+    /* 确保没有不必要的 margin */
+    padding: 0;
+    /* 确保没有不必要的 padding */
+}
+
+.album {
+    width: 100%;
+    height: auto;
+    visibility: hidden;
+}
+
+.album .big {
+    position: relative;
+}
+
+.album .small {
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.album .small-slick {
+    margin-left: -5px;
+    margin-right: -5px;
+}
+
+.album .small-slick .slick-slide a:after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    display: block;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    background: rgba(0, 0, 0, .3);
+}
+
+.album .big .slick-slide {
+    height: 400px;
+    background-color: #F3F1F1;
+}
+
+.album .big a.album-next {
+    right: 0;
+}
+
+.album .big a.album-prev {
+    right: 27px;
+}
+
+.album .big a.album-prev,
+.album .big a.album-next {
+    position: absolute;
+    top: 100%;
+    display: block;
+    width: 25px;
+    height: 25px;
+    background-color: rgba(0, 0, 0, 0.30);
+    /* border: 2px solid rgba(0, 0, 0, 0.30); */
+    border-radius: 100%;
+    outline: none;
+    transition: background .25s linear;
+    -ms-transition: background .25s linear;
+    -moz-transition: background .25s linear;
+    -webkit-transition: background .25s linear;
+    margin-top: -25px;
+    z-index: 10000;
+}
+
+.album .big a.album-prev:after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.album .big a.album-next:after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid #fff;
+    border-right: 2px solid #fff;
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
+.productPictureBox {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+}
+
+.productPictureBox img {
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+
+.share {
+    margin: 20px 0 0 0;
+    display: flex;
+    justify-content: center;
+    visibility: hidden;
+}
+
+.share ul.reset {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 10px;
+}
+
+.share ul.reset li {
+    margin-right: 10px;
+    /* 調整按鈕之間的間距 */
+}
+
+.share ul.reset li:last-child {
+    margin-right: 0;
+    /* 移除最後一個按鈕的右側間距 */
+}
+
+.share>ul li a {
+    display: block;
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    color: #b2b2b2;
+    text-align: center;
+    padding-top: 3px;
+    border: 1px solid #b2b2b2;
+    border-radius: 100%;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all .25s linear;
+    -ms-transition: all .25s linear;
+    -moz-transition: all .25s linear;
+    -webkit-transition: all .25s linear;
+}
+
+.share>ul li a.fb:hover {
+    border-color: #3b5998;
+    background-color: #3b5998;
+}
+
+
+.share>ul li a.line:hover {
+    border-color: #3ace00;
+    background-color: #3ace00;
+}
+
+.share>ul li a.twitter:hover {
+    border-color: #63cdf1;
+    background-color: #63cdf1;
+}
+
+.share>ul li a.google:hover {
+    border-color: #de5549;
+    background-color: #de5549;
+}
+
+.share>ul li a.email:hover {
+    border-color: #9a846a;
+    background-color: #9a846a;
+}
+
+.share>span {
+    display: block;
+    float: left;
+    width: 25px;
+    font-size: 1.1rem;
+    line-height: 26px;
+    padding-top: 3px;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

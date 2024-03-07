@@ -192,7 +192,7 @@
     const authApp = Vue.createApp({
         data() {
             return {
-                getCategory: <?php echo json_encode($category); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo !empty($category) ? json_encode($category) : json_encode(''); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
@@ -721,7 +721,7 @@
     // 初始化 Facebook SDK
     window.fbAsyncInit = function() {
         FB.init({
-            appId: '375467955018014',
+            appId: '1138704154148397',
             cookie: true,
             xfbml: true,
             version: 'v18.0'

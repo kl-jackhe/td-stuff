@@ -29,11 +29,16 @@
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
     <?php if ($this->is_partnertoys) : ?>
+        <!-- 引入 Slick Carousel 的 CSS -->
+        <link rel="stylesheet" href="/assets/slick/slick/slick.css">
+        <link rel="stylesheet" href="/assets/slick/slick/slick-theme.css">
         <link href="/assets/css/partnertoysPage.css" rel="stylesheet">
         <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
     <?php endif; ?>
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <?php if ($this->is_partnertoys) : ?>
+        <!-- 引入 Slick Carousel 的 JavaScript -->
+        <script src="/assets/slick/slick/slick.js"></script>
         <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
     <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>

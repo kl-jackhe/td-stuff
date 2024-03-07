@@ -252,6 +252,7 @@
                                         <label for="product_picture" class="control-label">商品展示圖(可複選)</label>
                                         <div class="form-group">
                                             <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_picture&relative_url=1" id="graphGroup" class="btn btn-primary fancybox" type="button">選擇圖片</a>
+                                            <button type="button" class="btn btn-primary" onclick="uploadSelectedImages()">上傳圖片</button>
                                             <button type="button" class="btn" onclick="checkSelectedImages()">檢查圖片</button>
                                             <button type="button" class="btn" onclick="hiddenSelectedImages()">隱藏圖片</button>
                                         </div>
@@ -640,6 +641,24 @@
 
 <!-- 檢查圖片上傳 -->
 <script>
+    function uploadSelectedImages() {
+        var images = $('#add_product_picture').val()
+        if (images) {
+            $.ajax({
+                url: '/admin/product/updateSelectedGraph/<?= $product['product_id'] ?>',
+                type: 'post',
+                data: {
+                    images: images,
+                },
+                success: function(response) {
+                    if (response == 'success') {
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    }
+
     // 更新选定的图片
     function checkSelectedImages() {
         // 解析隐藏域的值

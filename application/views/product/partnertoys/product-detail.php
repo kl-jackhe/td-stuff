@@ -13,7 +13,48 @@
                 <div class="row productDetail">
                     <?php if (!empty($product)) : ?>
                         <div class="col-bg-12 col-md-6 col-lg-6">
-                            <img class="product_img_style" src="/assets/uploads/<?= $product['product_image']; ?>">
+                            <div class="album">
+                                <div class="big">
+                                    <div class="big-slick">
+                                        <?php foreach ($product_images as $index => $image) : ?>
+                                            <div class="productPictureBox carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                                                <img src="/assets/uploads/<?= $image['picture']; ?>" class="productImages">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <a href="javascript:;" title="" class="album-prev slick-arrow"></a>
+                                    <a href="javascript:;" title="" class="album-next slick-arrow"></a>
+                                </div>
+                                <div class="small">
+                                    <div class="small-slick">
+                                        <?php foreach ($product_images as $index => $image) : ?>
+                                            <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                                                <img src="/assets/uploads/<?= $image['picture']; ?>" class="img-responsive">
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="share col-md-12">
+                                <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                                <ul class="reset">
+                                    <li>
+                                        <a href="https://www.facebook.com/share.php?u=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" title="分享至Facebook" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="http://line.naver.jp/R/msg/text/?<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至LINE" class="line"><i class="fa-brands fa-line"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://twitter.com/share" data-text="<?= $product['product_name'] ?>" data-lang="zh-tw" target="_blank" title="分享至Twitter" class="twitter"><i class="fab fa-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="https://plus.google.com/share?url=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至google-plus" class="google"><i class="fab fa-google-plus-g"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="mailto:?subject=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至E-mail" class="email"><i class="fas fa-envelope"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                         <div class="col-bg-12 col-md-6 col-lg-6">
                             <div class="row">
@@ -130,6 +171,82 @@
 </div>
 
 <script>
+    /* JavaScript 初始化 Slick Carousel */
+    $(document).ready(function() {
+        $('.big-slick').slick({
+            speed: 500,
+            focusOnSelect: true,
+            draggable: false,
+            infinite: false,
+            fade: true,
+            cssEase: 'cubic-bezier(0.215, 0.610, 0.355, 1.000)',
+            asNavFor: '.small-slick', // 聯繫小圖輪播
+            prevArrow: $('.album-prev'), // 上一張箭頭
+            nextArrow: $('.album-next'), // 下一張箭頭
+            // 可以根據需要添加其他選項
+        });
+
+        // 初始化小圖輪播
+        $('.small-slick').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            easing: 'easeOutQuart',
+            asNavFor: '.big-slick', // 聯繫大圖輪播
+            arrows: false,
+            speed: 500,
+            infinite: false,
+            // centerMode: true,
+            swipeToSlide: true,
+            focusOnSelect: true,
+            responsive: [{
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 5,
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 4,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 5,
+                    }
+                },
+                {
+                    breakpoint: 544,
+                    settings: {
+                        slidesToShow: 4,
+                    }
+                },
+                {
+                    breakpoint: 440,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+
+                }
+            ]
+            // 可以根據需要添加其他選項
+        });
+    });
+</script>
+
+<script>
+    // 等待載入
+    document.addEventListener("DOMContentLoaded", function() {
+        $('.big-slick').on('init', function() {
+            $('.album').css('visibility', 'visible');
+            $('.share').css('visibility', 'visible');
+        });
+    });
+</script>
+
+<script>
+    // 語言切換
     $(document).ready(function() {
         $('#languageSelect').change(function() {
             var lang = $(this).val();

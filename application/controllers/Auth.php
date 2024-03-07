@@ -30,12 +30,30 @@ class Auth extends Public_Controller
 	public function index()
 	{
 		$this->data['title'] = '會員專區';
-		if ($this->is_partnertoys) :
-			if (empty($this->session->userdata('user_id'))) :
+		if ($this->is_partnertoys) {
+			if (empty($this->session->userdata('user_id'))) {
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService_tw');
 				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 6);
-			else :
+				// 類別分類
+				$this->data['category'] = '';
+
+				// 获取当前 URL
+				$current_url = $_SERVER['REQUEST_URI'];
+
+				// 使用 parse_url() 解析 URL 获取查询字符串部分
+				$query_string = parse_url($current_url, PHP_URL_QUERY);
+
+				// 对参数进行解码以获取您想要的内容
+				$decoded_data = $this->security_url->decryptData($query_string);
+
+				// 如果查询字符串不为空
+				if (!empty($query_string)) {
+					if (!empty($decoded_data) && !empty($decoded_data['category'])) {
+						$this->data['category'] = $decoded_data['category'];
+					}
+				}
+			} else {
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');
 				$user = $this->ion_auth->user($id)->row();
@@ -75,13 +93,13 @@ class Auth extends Public_Controller
 
 				// 获取当前 URL
 				$current_url = $_SERVER['REQUEST_URI'];
-	
+
 				// 使用 parse_url() 解析 URL 获取查询字符串部分
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
-	
+
 				// 对参数进行解码以获取您想要的内容
 				$decoded_data = $this->security_url->decryptData($query_string);
-	
+
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
 					if (!empty($decoded_data) && !empty($decoded_data['category'])) {
@@ -94,14 +112,14 @@ class Auth extends Public_Controller
 
 				// 分類
 				$this->data['auth_category'] = $this->menu_model->getSubMenuData(0, 17);
-			endif;
+			}
 			$this->render('auth/partnertoys/partnertoys_index');
-		elseif ($this->is_liqun_food) :
-			if (empty($this->session->userdata('user_id'))) :
+		} elseif ($this->is_liqun_food) {
+			if (empty($this->session->userdata('user_id'))) {
 				$this->data['membership'] = $this->auth_model->getStandardPageList('TermsOfService');
 				// 分類
 				$this->data['auth_category'] = $this->auth_model->getAuthVisiterCategory();
-			else :
+			} else {
 				// 抓使用者資料
 				$id = $this->session->userdata('user_id');
 				$user = $this->ion_auth->user($id)->row();
@@ -128,9 +146,9 @@ class Auth extends Public_Controller
 
 				// 分類
 				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
-			endif;
+			}
 			$this->render('auth/liqun/liqun_index');
-		endif;
+		}
 	}
 
 	function language_switch()
