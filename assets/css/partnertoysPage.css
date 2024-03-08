@@ -2897,7 +2897,7 @@ select.lotteryResult {
     -moz-transition: background .25s linear;
     -webkit-transition: background .25s linear;
     margin-top: -25px;
-    z-index: 10000;
+    z-index: 1000;
 }
 
 .album .big a.album-prev:after {

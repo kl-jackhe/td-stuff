@@ -1211,7 +1211,7 @@ foreach ($this->cart->contents() as $items) {
             } else {
                 $(".content_auto_h").css('height', '100%');
             }
-            $(".wizard > .content").css('min-height', h_checkout);
+            $(".wizard > .content").css('min-height', '100vh');
         });
     });
 
