@@ -36,17 +36,9 @@ class Posts extends Public_Controller
 
             // 類別分類
             $this->data['category'] = '';
-
-            // 获取当前 URL
             $current_url = $_SERVER['REQUEST_URI'];
-
-            // 使用 parse_url() 解析 URL 获取查询字符串部分
             $query_string = parse_url($current_url, PHP_URL_QUERY);
-
-            // 对参数进行解码以获取您想要的内容
             $decoded_data = $this->security_url->decryptData($query_string);
-
-            // 如果查询字符串不为空
             if (!empty($query_string)) {
                 if (!empty($decoded_data) && !empty($decoded_data['category'])) {
                     $this->data['category'] = $decoded_data['category'];
@@ -90,6 +82,51 @@ class Posts extends Public_Controller
         $this->data['posts'] = $this->posts_model->getPosts($conditions);
         //load the view
         $this->load->view('posts/ajax-data', $this->data, false);
+    }
+
+    public function posts_detail($post_id = null)
+    {
+        $this->data['page_title'] = '詳細消息';
+
+        $this->data['posts_category'] = $this->menu_model->getSubMenuData(0, 3);
+
+        // 获取当前 URL
+        $current_url = $_SERVER['REQUEST_URI'];
+        $query_string = parse_url($current_url, PHP_URL_QUERY);
+        $decoded_data = $this->security_url->decryptData($query_string);
+        if (!empty($query_string)) {
+            if (!empty($decoded_data) && !empty($decoded_data['selectedPost'])) {
+                $post_id = $decoded_data['selectedPost'];
+            }
+        }
+
+        // echo '<pre>';
+        // print_r($decoded_data);
+        // echo '</pre>';
+
+        // return;
+
+        $this->data['post'] = $this->mysql_model->_select('posts', 'post_id', $post_id, 'row');
+
+        // 找category_name
+        foreach ($this->data['posts_category'] as $self) {
+            if ($self['sort'] == $this->data['post']['post_category']) {
+                $this->data['post_category_name'] = $self['name'];
+                $this->data['post_category_sort'] = $self['sort'];
+            }
+        }
+
+        // 檢查上下架期間
+        if (empty($this->data['post']) || $this->data['post']['post_status'] != 1) {
+            echo
+            "<script>
+			alert('消息不存在或已下架');
+			window.history.back();
+			</script>";
+            return;
+        }
+
+        $this->render('posts/partnertoys/posts-detail');
     }
 
     public function view($id)

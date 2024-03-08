@@ -9,7 +9,8 @@
                 <!-- Post Start -->
                 <div class="row">
                     <div class="col-6 col-md-6 col-lg-4" v-for="self in filteredPosts.slice(pageStart, pageEnd)" :key="self.post_id">
-                        <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)">
+                        <a class="font_color" @click="postDetailPage(self.post_id)">
+                            <!-- <a class="postMagnificPopupTrigger font_color" @click="showPostDetails(self)"> -->
                             <div class="touch_effect">
                                 <div class="postImg">
                                     <img class="post_img" :src="'/assets/uploads/' + self.post_image" :alt="self.post_title">
@@ -95,13 +96,14 @@
         mounted() {
             // 在 mounted 鉤子中設定 selectedCategoryId 的值
             if (this.posts_categorys && this.posts_categorys.length > 0) {
+                this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
+
                 // category init
                 if (this.getCategory && this.getCategory > 0) {
                     this.selectedCategoryId = this.getCategory;
                     const tmpSet = this.posts_categorys.find(self => self.sort === this.getCategory);
                     this.pageTitle = tmpSet.name;
                 } else {
-                    this.currentPage = parseInt(<? echo json_encode(!empty($current_page) ? $current_page : ''); ?>); // 目前page
                     this.selectedCategoryId = 0;
                     this.pageTitle = '全部消息';
                 }
@@ -187,10 +189,33 @@
                     mainClass: 'mfp-zoom-in',
                 });
             },
-            // 選中獨立商品
+            // 選中獨立消息
             showPostDetails(post) {
                 this.selectedPost = post;
                 this.selectedPostCategoryId = this.posts_categorys.filter(category => category.sort === post.post_category);
+            },
+            // 消息獨立頁面
+            postDetailPage(selected) {
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/selectedPost',
+                        type: 'post',
+                        data: {
+                            selectedPost: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'posts/posts_detail/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 搜尋攔篩選
             filterPostsBySearch() {

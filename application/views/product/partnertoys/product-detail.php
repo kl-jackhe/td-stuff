@@ -1,4 +1,4 @@
-<div id="productApp" role="main" class="main pt-signinfo">
+<div v-cloak id="productApp" role="main" class="main pt-signinfo">
     <section class="container sectionRejust">
         <!-- Menu -->
         <?php require('product-menu.php'); ?>
@@ -271,7 +271,7 @@
     const productApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getCategory: <?php echo json_encode($product_category_sort); ?>, // 若透過header或footer篩選
                 products_categories: <?php echo json_encode(!empty($product_category) ? $product_category : ''); ?>, // products_category資料庫所有類及項目
                 combine: <?php echo json_encode(!empty($combine) ? $combine : ''); ?>,
                 selectedDescription: <?php echo json_encode(!empty($product) ? $product['product_note'] : ''); ?>,
@@ -291,9 +291,10 @@
             this.initMagnificPopup();
             // init btn state
             if (this.products_categories && this.products_categories.length > 0) {
-                this.selectedCategoryId = 0;
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
+                if (this.getCategory && this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                } else {
+                    this.selectedCategoryId = 0;
                 }
             }
         },
@@ -453,7 +454,28 @@
                 });
             },
             filterByCategory(categoryId) {
-                window.location.href = <?= json_encode(base_url()) ?> + 'product/index' + (categoryId != null ? '?id=' + categoryId : '');
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'product/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'product' + (categoryId != null ? '?id=' + categoryId : '');
+                }
             },
             // 篩選清單呼叫
             toggleNav() {

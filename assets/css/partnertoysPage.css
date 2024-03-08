@@ -2952,24 +2952,57 @@ select.lotteryResult {
     visibility: hidden;
 }
 
-.share ul.reset {
+
+.postShare {
+    display: flex;
+    position: absolute;
+    margin: 20px 0 0 0;
+    justify-content: right;
+}
+
+.postShareMB {
+    display: none;
+    margin: 20px 0 0 0;
+    justify-content: right;
+}
+
+@media (max-width:991px) {
+
+    .postSharePC {
+        display: none;
+    }
+
+    .postShareMB {
+        display: flex;
+    }
+}
+
+.share ul.reset,
+.postShare ul.reset,
+.postShareMB ul.reset {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0 0 0 10px;
 }
 
-.share ul.reset li {
-    margin-right: 10px;
+.share ul.reset li,
+.postShare ul.reset li,
+.postShareMB ul.reset li {
+    margin-right: 5px;
     /* 調整按鈕之間的間距 */
 }
 
-.share ul.reset li:last-child {
+.share ul.reset li:last-child,
+.postShare ul.reset li:last-child,
+.postShareMB ul.reset li:last-child {
     margin-right: 0;
     /* 移除最後一個按鈕的右側間距 */
 }
 
-.share>ul li a {
+.share>ul li a,
+.postShare>ul li a,
+.postShareMB>ul li a {
     display: block;
     width: 30px;
     height: 30px;
@@ -2988,39 +3021,191 @@ select.lotteryResult {
     -webkit-transition: all .25s linear;
 }
 
-.share>ul li a.fb:hover {
+.share>ul li a.fb:hover,
+.postShare>ul li a.fb:hover,
+.postShareMB>ul li a.fb:hover {
     border-color: #3b5998;
     background-color: #3b5998;
 }
 
 
-.share>ul li a.line:hover {
+.share>ul li a.line:hover,
+.postShare>ul li a.line:hover,
+.postShareMB>ul li a.line:hover {
     border-color: #3ace00;
     background-color: #3ace00;
 }
 
-.share>ul li a.twitter:hover {
+.share>ul li a.twitter:hover,
+.postShare>ul li a.twitter:hover,
+.postShareMB>ul li a.twitter:hover {
     border-color: #63cdf1;
     background-color: #63cdf1;
 }
 
-.share>ul li a.google:hover {
+.share>ul li a.google:hover,
+.postShare>ul li a.google:hover,
+.postShareMB>ul li a.google:hover {
     border-color: #de5549;
     background-color: #de5549;
 }
 
-.share>ul li a.email:hover {
+.share>ul li a.email:hover,
+.postShare>ul li a.email:hover,
+.postShareMB>ul li a.email:hover {
     border-color: #9a846a;
     background-color: #9a846a;
 }
 
-.share>span {
+.share>span,
+.postShare>span,
+.postShareMB>span {
     display: block;
     float: left;
     width: 25px;
     font-size: 1.1rem;
-    line-height: 26px;
+    /* line-height: 26px; */
     padding-top: 3px;
+}
+
+.date {
+    float: left;
+    width: 55px;
+    height: 70px;
+    font-family: 'Century Gothic', Sans-serif;
+    color: #fff;
+    text-align: center;
+    background: rgba(0, 0, 0, .8);
+    padding: 6px;
+}
+
+.date span {
+    display: block;
+}
+
+.date .day {
+    height: 26px;
+    font-size: 1.0625rem;
+    line-height: 26px;
+    border-bottom: 1px solid rgba(255, 255, 255, .4);
+    margin-bottom: 4px;
+}
+
+.date .month,
+.date .year {
+    font-size: .75rem;
+    line-height: 14px;
+}
+
+.newsText .head {
+    position: relative;
+    height: 70px;
+}
+
+.newsText .head .date_480 {
+    display: none;
+}
+
+
+.newsText .head .title {
+    position: absolute;
+    top: 50%;
+    left: 85px;
+    width: calc(100% - 320px);
+    max-height: 52px;
+    font-family: 'Century Gothic', 'Microsoft JhengHei UI', 'Microsoft JhengHei', Sans-serif;
+    font-size: 1.2rem;
+    color: #000;
+    line-height: 26px;
+    overflow: hidden;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    margin: 0;
+}
+
+.newsText .head:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: block;
+    width: calc(100% - 90px);
+    height: 1px;
+    background: #aaa;
+}
+
+@media (max-width:991px) {
+
+    .newsText .head .title {
+        left: 85px;
+        width: auto;
+    }
+
+    .newsText .head:after {
+        width: 100%;
+    }
+
+    .date {
+        display: none;
+    }
+
+    .newsText .head {
+        height: auto;
+        padding-top: 70px;
+        padding-bottom: 10px;
+    }
+
+    .newsText .head .date_480 {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        float: left;
+        width: 100%;
+        /* height: 30px; */
+        font-family: 'Century Gothic', Sans-serif;
+        color: #fff;
+        text-align: center;
+        background: rgba(0, 0, 0, .8);
+        padding: 6px;
+    }
+
+    .newsText .head .title {
+        position: unset;
+    }
+}
+
+#mem_login2 {
+    display: none;
+}
+
+@media (max-width:767px) {
+    #mem_login {
+        display: none;
+    }
+
+    #mem_login2 {
+        display: block;
+        float: left;
+        width: 100%;
+        font-size: .95rem;
+        color: #fff;
+        text-align: center;
+        background-color: rgba(239, 132, 104, 1.0);
+        padding: 13px;
+    }
+
+    #mem_login2 a {
+        display: inline-block;
+        padding-left: 10px;
+        color: #ffe747;
+    }
+
+    #fixedFirstHeader .container {
+        justify-content: right;
+    }
 }
 
 /* 修改滾動條 */

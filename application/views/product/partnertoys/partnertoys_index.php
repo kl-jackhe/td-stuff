@@ -155,8 +155,26 @@
         methods: {
             // 選中獨立商品
             showProductDetails(selected) {
-                // 初始化方案選項
-                window.location.href = <?= json_encode(base_url()); ?> + 'product/product_detail/' + selected + (this.selectedCategoryId != 0 ? '?id=' + this.selectedCategoryId : '');
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/selectedProduct',
+                        type: 'post',
+                        data: {
+                            selectedProduct: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'product/product_detail/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 搜尋攔篩選
             filterproductsBySearch() {

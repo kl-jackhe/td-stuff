@@ -105,6 +105,20 @@ class Product extends Public_Controller
 
 		$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
+		// 获取当前 URL
+		$current_url = $_SERVER['REQUEST_URI'];
+		$query_string = parse_url($current_url, PHP_URL_QUERY);
+		$decoded_data = $this->security_url->decryptData($query_string);
+		if (!empty($query_string)) {
+			if (!empty($decoded_data) && !empty($decoded_data['selectedProduct'])) {
+				$product_id = $decoded_data['selectedProduct'];
+			}
+		}
+
+		// echo '<pre>';
+		// print_r($decoded_data);
+		// echo '</pre>';
+
 		$this->data['product'] = $this->product_model->getSingleProduct($product_id);
 		// 檢查上下架期間
 		if (empty($this->data['product']) || $this->data['product']['product_status'] != 1 || !$this->confirm_product_limit_time($this->data['product'])) {
@@ -123,6 +137,7 @@ class Product extends Public_Controller
 		foreach ($this->data['product_category'] as $self) {
 			if ($self['sort'] == $this->data['product']['product_category_id']) {
 				$this->data['product_category_name'] = $self['name'];
+				$this->data['product_category_sort'] = $self['sort'];
 			}
 		}
 		// echo '<pre>';

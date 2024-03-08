@@ -691,7 +691,8 @@ class Product extends Admin_Controller
 		);
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
-		redirect(base_url() . 'admin/product/edit/' . $id);
+		// redirect(base_url() . 'admin/product/edit/' . $id);
+		echo '<script>window.history.back();</script>';
 	}
 
 	// 其他功能 ---------------------------------------------------------------------------------

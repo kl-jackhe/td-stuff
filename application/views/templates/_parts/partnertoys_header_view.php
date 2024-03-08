@@ -198,6 +198,12 @@
                                     </li>
                                 <?php endif; ?>
                             <?php endforeach; ?>
+                            <?php if (!empty($this->session->userdata('user_id'))) : ?>
+                                <div id="mem_login2">
+                                    <i class="fas fa-user"></i>：<?= $this->session->userdata('full_name') ?>
+                                    <a href="/tw/html/member/logout.php" title="登出">登出</a>
+                                </div>
+                            <?php endif; ?>
                         </ul>
                     </div>
                 </div>
