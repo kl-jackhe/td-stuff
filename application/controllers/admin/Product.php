@@ -188,7 +188,7 @@ class Product extends Admin_Controller
 		$this->data['product_combine'] = $this->product_model->getProduct_Combine($id);
 		if ($this->is_partnertoys) {
 			$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
-			$this->data['product_pic'] = $this->mysql_model->_select('product_img', 'product_id', $id);
+			$this->data['product_pic'] = $this->product_model->getProductGraph($id);
 		} else {
 			$this->data['product_category'] = $this->mysql_model->_select('product_category');
 		}

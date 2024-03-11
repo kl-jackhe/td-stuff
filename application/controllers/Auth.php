@@ -351,7 +351,8 @@ class Auth extends Public_Controller
 				} else {
 					$this->session->set_flashdata('changePasswordMessage', '<br>輸入錯誤請重新嘗試<br><br>');
 				}
-				redirect('auth/index?id=6', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=6', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				if (!empty($this->session->userdata('fb_id'))) {
 					$this->session->set_flashdata('changePasswordMessage', '<br>FB登入者無法使用此功能<br><br>');
@@ -399,7 +400,8 @@ class Auth extends Public_Controller
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'change_password', $this->data);
 			if ($this->is_partnertoys) {
 				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('changePasswordMessage'));
-				redirect('auth/index?id=6', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=6', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				$this->session->set_flashdata('changePasswordMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('changePasswordMessage'));
 				redirect('auth/index?id=4', 'refresh');
@@ -418,7 +420,8 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
 					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=6', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=6', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('changePasswordMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=4', 'refresh');
@@ -461,7 +464,8 @@ class Auth extends Public_Controller
 			// $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'forgot_password', $this->data);
 			if ($this->is_partnertoys) {
 				$this->session->set_flashdata('forgotMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('forgotMessage'));
-				redirect('auth/index?id=3', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=3', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				$this->session->set_flashdata('forgotMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('forgotMessage'));
 				redirect('auth/index?id=3', 'refresh');
@@ -483,7 +487,8 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
 					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=3', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=3', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=3', 'refresh');
@@ -514,7 +519,8 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
 					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=3', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=3', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('forgotMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=3', 'refresh');
@@ -701,21 +707,24 @@ class Auth extends Public_Controller
 		if ($this->is_partnertoys && empty($this->input->post('checkcode'))) {
 			$this->session->set_flashdata('form_values', $this->input->post());
 			$this->session->set_flashdata('registerMessage', '<br>【驗證碼】欄位為必填項目<br><br>');
-			redirect('auth/index?id=2', 'refresh');
+			echo '<script>window.history.back();</script>';
+			// redirect('auth/index?id=2', 'refresh');
 		} elseif (!empty($this->input->post('checkcode')) && !empty($this->input->post('captcha'))) {
 			$checkcode = $this->input->post('checkcode');
 			$captcha = $this->input->post('captcha');
 			if ($checkcode != $captcha) {
 				$this->session->set_flashdata('form_values', $this->input->post());
 				$this->session->set_flashdata('registerMessage', '<br>【驗證碼錯誤】請重新填寫驗證碼<br><br>');
-				redirect('auth/index?id=2', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=2', 'refresh');
 			}
 		}
 
 		if ($this->is_partnertoys && empty($this->input->post('sex'))) {
 			$this->session->set_flashdata('form_values', $this->input->post());
 			$this->session->set_flashdata('registerMessage', '<br>【性別】欄位為必填項目<br><br>');
-			redirect('auth/index?id=2', 'refresh');
+			echo '<script>window.history.back();</script>';
+			// redirect('auth/index?id=2', 'refresh');
 		}
 
 		$tables = $this->config->item('tables', 'ion_auth');
@@ -860,7 +869,8 @@ class Auth extends Public_Controller
 			if ($this->is_partnertoys) {
 				$this->session->set_flashdata('form_values', $this->input->post());
 				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('registerMessage'))));
-				redirect('auth/index?id=2', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=2', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				$this->session->set_flashdata('form_values', $this->input->post());
 				$this->session->set_flashdata('registerMessage', (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('registerMessage'))));
@@ -964,8 +974,8 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 				if ($this->is_partnertoys) {
 					echo '<script>alert("修改成功");</script>';
-					// return;
-					redirect('auth/index?id=5', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=5', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					echo '<script>alert("修改成功");</script>';
 					redirect('auth/index?id=3', 'refresh');
@@ -982,7 +992,8 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->errors());
 				if ($this->is_partnertoys) {
 					$this->session->set_flashdata('editMessage', $this->ion_auth->errors());
-					redirect('auth/index?id=5', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=5', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('editMessage', $this->ion_auth->errors());
 					redirect('auth/index?id=3', 'refresh');

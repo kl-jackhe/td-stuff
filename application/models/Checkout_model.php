@@ -64,4 +64,16 @@ class Checkout_model extends CI_Model
             return false;
         }
     }
+
+    function getOpenDelivery()
+    {
+        $this->db->select('delivery_name_code, delivery_name, delivery_info, delivery_type, shipping_cost');
+        $this->db->where('delivery_status', 1);
+        $query = $this->db->get('delivery')->result_array();
+        if (!empty($query)) {
+            return $query;
+        } else {
+            return false;
+        }
+    }
 }

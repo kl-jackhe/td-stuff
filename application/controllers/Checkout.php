@@ -125,7 +125,8 @@ class Checkout extends Public_Controller
 					$this->data['close_count']--;
 				endif;
 			endforeach;
-			$this->render('checkout/partnertoys_index');
+			$this->render('checkout/partnertoys/partnertoys_index');
+			// $this->render('checkout/partnertoys_index');
 		}
 	}
 
@@ -138,7 +139,11 @@ class Checkout extends Public_Controller
 	// 回傳ECP CVS Store Information
 	public function ecp_store_info($name)
 	{
-		$this->load->view('checkout/' . $name);
+		if ($this->is_partnertoys) {
+			$this->load->view('checkout/partnertoys/' . $name);
+		} else {
+			$this->load->view('checkout/' . $name);
+		}
 	}
 
 	// 導向綠界地圖按鈕頁面
@@ -146,7 +151,12 @@ class Checkout extends Public_Controller
 	{
 		$this->load->library('ecpay_logistics');
 		$data['obj'] = $this->ecpay_logistics->load();
-		$this->load->view('checkout/cvsmap', $data);
+		$data['self_value'] = $this->checkout_model->getECPay();
+		if ($this->is_partnertoys) {
+			$this->load->view('checkout/partnertoys/cvsmap', $data);
+		} else {
+			$this->load->view('checkout/cvsmap', $data);
+		}
 	}
 
 	function setMemberInfo($phone)

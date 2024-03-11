@@ -46,10 +46,12 @@ foreach ($this->cart->contents() as $items) {
     }
 
     .wizard>.content {
-        overflow-y: auto;
+        /* overflow-y: auto; */
+        background: #fff !important;
     }
 
     .wizard>.actions {
+        margin: 70px 0 50px 0;
         text-align: center;
     }
 
@@ -100,40 +102,23 @@ foreach ($this->cart->contents() as $items) {
     .wizard>.actions a,
     .wizard>.actions a:hover,
     .wizard>.actions a:active {
-        <? if ($this->is_td_stuff) { ?>background: #420452;
-        <? } ?><? if ($this->is_liqun_food) { ?>background: #f6d523;
+        background: rgba(239, 132, 104, 1.0);
         color: #000;
-        <? } ?><? if ($this->is_partnertoys) { ?>background: rgba(239, 132, 104, 1.0);
-        color: #000;
-        <? } ?>
     }
 
     .wizard>.steps .disabled p {
-        <? if ($this->is_td_stuff) { ?>background: #B5ABB6;
-        <? } ?><? if ($this->is_liqun_food) { ?>background: #cfcdcd;
+        background: #cfcdcd;
         color: #807e7e;
-        <? } ?><? if ($this->is_partnertoys) { ?>background: #cfcdcd;
-        color: #807e7e;
-        <? } ?>
     }
 
     .wizard>.steps .current p {
-        <? if ($this->is_td_stuff) { ?>background: #420452;
-        <? } ?><? if ($this->is_liqun_food) { ?>background: #f6d523;
+        background: rgba(239, 132, 104, 1.0);
         color: #252020;
-        <? } ?><? if ($this->is_partnertoys) { ?>background: rgba(239, 132, 104, 1.0);
-        color: #252020;
-        <? } ?>
     }
 
     .wizard>.steps .done p {
-        <? if ($this->is_td_stuff) { ?>background: #420452;
-        <? } ?><? if ($this->is_liqun_food) { ?>background: #f6d523;
+        background: rgba(239, 132, 104, 1.0);
         color: #252020;
-        <? } ?><? if ($this->is_partnertoys) { ?>background: rgba(239, 132, 104, 1.0);
-        ;
-        color: #252020;
-        <? } ?>
     }
 
     .wizard a {
@@ -158,26 +143,23 @@ foreach ($this->cart->contents() as $items) {
         color: #524431;
     }
 
+    .wizard>.steps>ul>li {
+        width: 33.3% !important;
+    }
+
     #wizard {
         margin-bottom: 20px;
     }
 
     .progress_box {
-        <? if ($this->is_td_stuff) { ?>background-color: #B5ABB6;
-        <? } ?><? if ($this->is_liqun_food) { ?>background-color: #cfcdcd;
-        <? } ?><? if ($this->is_partnertoys) { ?>background-color: rgba(239, 132, 104, 1.0);
-        <? } ?>height: 1.5px;
+        background-color: rgba(239, 132, 104, 1.0);
+        height: 1.5px;
     }
 
     .progress_box_bar {
         width: 0%;
-        <? if ($this->is_td_stuff) { ?>background: #420452;
-        <? } ?><? if ($this->is_liqun_food) { ?>background: #f6d523;
-        <? } ?><? if ($this->is_partnertoys) { ?>background: rgba(239, 132, 104, 1.0);
-        <? } ?>
+        background: rgba(239, 132, 104, 1.0);
     }
-
-    @media (max-width: 767.98px) {}
 </style>
 <div role="main" class="main">
     <section class="form-section content_auto_h">
@@ -185,14 +167,14 @@ foreach ($this->cart->contents() as $items) {
         <?php echo form_open('checkout/save_order', $attributes); ?>
         <div class="container">
             <div class="row justify-content-center" style="padding-left: 25px; padding-right: 25px;position: relative;">
-                <div class="stpes" style="width: 70%;position: absolute;top: 52px;">
+                <div class="stpes" style="width: 60%;position: absolute;top: 52px;">
                     <div class="progress progress_box">
                         <div class="progress-bar progress_box_bar">
                         </div>
                     </div>
                 </div>
                 <div id="wizard" class="wizard">
-                    <h3>確認訂單</h3>
+                    <h3>購物清單</h3>
                     <section>
                         <h3 style="margin-top: 0px;">您共選擇 (<?= $count ?> 個項目)</h3>
                         <table class="table table-hover m_table_none">
@@ -297,7 +279,7 @@ foreach ($this->cart->contents() as $items) {
                                         </td>
                                     </tr>
                                     <?php $i++; ?>
-                                <?php endforeach; ?>
+                                <? endforeach; ?>
                             </tbody>
                         </table>
                         <hr>
@@ -308,7 +290,7 @@ foreach ($this->cart->contents() as $items) {
                         <br>
                         <br>
                     </section>
-                    <h3>訂購資訊</h3>
+                    <h3>購物資訊</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
@@ -415,9 +397,6 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                             </div>
                         </div>
-                    </section>
-                    <h3>取貨方式</h3>
-                    <section>
                         <div class="container-fluid py-3">
                             <div class="row">
                                 <div class="col-12">
@@ -535,21 +514,23 @@ foreach ($this->cart->contents() as $items) {
                                     <h3 class="mt-0">付款方式</h3>
                                     <?php $payment_count = 0; ?>
                                     <?php if (!empty($ECPay_status) && !empty($close_count)) : ?>
-                                        <?php foreach ($payment as $row) : ?>
-                                            <?php if ($row['payment_status'] == 0) : ?>
+                                        <div id="paymentSelected">
+                                            <?php foreach ($payment as $row) : ?>
+                                                <?php if ($row['payment_status'] == 0) : ?>
+                                                    <?php $payment_count++; ?>
+                                                <?php endif; ?>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>">
+                                                    <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
+                                                        <?= $row['payment_name'] ?>
+                                                    </label>
+                                                    <? if (!empty($row['payment_info'])) { ?>
+                                                        <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $row['payment_info']; ?></p>
+                                                    <? } ?>
+                                                </div>
                                                 <?php $payment_count++; ?>
-                                            <?php endif; ?>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>">
-                                                <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
-                                                    <?= $row['payment_name'] ?>
-                                                </label>
-                                                <? if (!empty($row['payment_info'])) { ?>
-                                                    <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $row['payment_info']; ?></p>
-                                                <? } ?>
-                                            </div>
-                                            <?php $payment_count++; ?>
-                                        <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        </div>
                                     <?php elseif (empty($ECPay_status) || empty($close_count)) : ?>
                                         <span style="color:#dd0606;">尚無付款方式。請聯繫客服。</span>
                                     <?php endif; ?>
@@ -597,7 +578,7 @@ foreach ($this->cart->contents() as $items) {
                             </div>
                         </div>
                     </section>
-                    <h3>確認下單</h3>
+                    <h3>送出訂單</h3>
                     <section>
                         <div class="container-fluid">
                             <div class="row p-3 justify-content-center">
@@ -838,12 +819,9 @@ foreach ($this->cart->contents() as $items) {
                 $('.progress_box_bar').css('width', '0%');
             }
             if (currentIndex == 1) {
-                $('.progress_box_bar').css('width', '33.5%');
+                $('.progress_box_bar').css('width', '50%');
             }
             if (currentIndex == 2) {
-                $('.progress_box_bar').css('width', '67%');
-            }
-            if (currentIndex == 3) {
                 $('.progress_box_bar').css('width', '100%');
             }
         },
@@ -962,10 +940,6 @@ foreach ($this->cart->contents() as $items) {
                         return false;
                     }
                 }
-            }
-
-            // step 3.
-            if (newIndex === 3) {
                 if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery') || (($('#Country').val() != '臺灣') && delivery != 'sf_express_delivery')) {
                     alert('請選擇運送方式');
                     return false;
@@ -1211,8 +1185,28 @@ foreach ($this->cart->contents() as $items) {
             } else {
                 $(".content_auto_h").css('height', '100%');
             }
-            $(".wizard > .content").css('min-height', '100vh');
+            // $(".wizard > .content").css('min-height', 'vh');
         });
+        // 計算並設置最小高度
+        function setMinHeight() {
+            var windowHeight = $(window).height(); // 瀏覽器窗口的高度
+            var contentHeight = $(".wizard > .content").outerHeight(); // 內容的實際高度，包括padding和邊框
+
+            // 如果內容高度小於窗口高度，將最小高度設置為窗口高度
+            // 否則，將最小高度設置為內容高度
+            var minHeight = contentHeight < windowHeight ? windowHeight : contentHeight;
+
+            // 將最小高度應用到 .wizard > .content 上
+            $(".wizard > .content").css('min-height', minHeight + 'px');
+        }
+
+        // 窗口大小變化時重新計算最小高度
+        $(window).resize(function() {
+            setMinHeight();
+        });
+
+        // 初始化時設置最小高度
+        setMinHeight();
     });
 
     // 地圖
