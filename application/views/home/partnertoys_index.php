@@ -201,16 +201,16 @@
                             <?php $count = 0; ?>
                             <?php foreach ($products as $self) : ?>
                                 <?php if ($count < 12) : ?>
-                                    <div class="homeProductPreview">
-                                        <a href="/product/product-detail/<?= $self['product_id'] ?>" title="">
+                                    <a class="homeHrefType" href="/product/product-detail/<?= $self['product_id'] ?>" title="">
+                                        <div class="homeProductPreview">
                                             <div class="homepic">
                                                 <img src="/assets/uploads/<?= $self['product_image'] ?>">
                                             </div>
                                             <div class="hometxt">
                                                 <span><?= $self['product_name'] ?></span>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 <?php endif; ?>
                                 <?php $count++; ?>
                             <?php endforeach; ?>

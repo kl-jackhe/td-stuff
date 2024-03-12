@@ -1438,3 +1438,86 @@ input.qtyminus {
 .inlineBlock {
     display: inline-block !important;
 }
+
+.orderMarginBottom {
+    margin-bottom: 50px;
+    font-size: 10pt;
+}
+
+.orderDetailButton {
+    margin-bottom: 40px;
+}
+
+#allReadingButton {
+    margin-top: 40px;
+}
+
+.orderDetailButton .orderBtn {
+    margin-right: 10px;
+    padding: 10px;
+    cursor: pointer;
+    color: #d35448;
+    background-color: #fff;
+    border: 1px solid #d35448;
+    border-radius: 3px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+.orderDetailButton .orderBtn:hover {
+    color: #fff;
+    background-color: #d35448;
+}
+
+.operateBtn {
+    margin: 40px 0;
+    text-align: center;
+}
+
+#completePay {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #e30020;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#completePay:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #ff3333;
+}
+
+#cancelOrder {
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    background: #333;
+    padding: 8px 80px;
+    transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+
+#cancelOrder:hover {
+    text-decoration: none;
+    cursor: pointer;
+    background: #000;
+}
+
+@media (max-width:600px) {
+
+    #completePay,
+    #cancelOrder {
+        padding: 8px 20px;
+    }
+}

@@ -36,7 +36,7 @@
                 <i class="fas fa-arrow-circle-right"></i>
                 <span>&nbsp;{{ redbtn }}</span>
             </span>
-            <span v-if="!cart_num" class="btnDef black" @click="backStep()">
+            <span v-if="!cart_num" class="btnDef black" @click="goingToProduct()">
                 <i class="fas fa-arrow-circle-left"></i>
                 <span>&nbsp;選購商品</span>
             </span>
@@ -44,6 +44,266 @@
         <?php echo form_close() ?>
     </section>
 </div>
+
+<script>
+    const checkoutApp = Vue.createApp({
+        data() {
+            return {
+                cart_num: <?= $this->cart->total_items() ?>,
+                selectedStep: 0,
+                pageTitle: '',
+                ic_step01: '',
+                ic_step02: '',
+                ic_step03: '',
+                blackbtn: '',
+                redbtn: '',
+            }
+        },
+        mounted() {
+            // init step.
+            this.changeStep();
+        },
+        methods: {
+            // 指定步驟
+            changeStep(selected = 1) {
+                if (this.cart_num == 0) {
+                    alert('購屋車目前是空的');
+                    this.goingToProduct();
+                    return;
+                }
+                if (selected == 3 && !this.formChecking()) {
+                    console.log('return changeStep');
+                    return;
+                }
+                this.checkConfirmInfo();
+                this.selectedStep = selected;
+                this.ic_step01 = (selected == 1) ? 'ic_step01o.png' : 'ic_step01.png';
+                this.ic_step02 = (selected == 2) ? 'ic_step02o.png' : 'ic_step02.png';
+                this.ic_step03 = (selected == 3) ? 'ic_step03o.png' : 'ic_step03.png';
+                if (selected == 1) {
+                    this.pageTitle = '購物清單';
+                    this.blackbtn = '繼續選購其他商品';
+                    this.redbtn = '下一步，填寫購買資料';
+                }
+                if (selected == 2) {
+                    this.pageTitle = '購物資訊';
+                    this.blackbtn = '返回上一步';
+                    this.redbtn = '下一步，送出訂單';
+                }
+                if (selected == 3) {
+                    this.pageTitle = '送出訂單';
+                    this.blackbtn = '返回上一步';
+                    this.redbtn = '確認送出訂單';
+                }
+                this.scrollToTop();
+            },
+            // 下一步
+            nextStep() {
+                if (this.selectedStep == 2 && !this.formChecking()) {
+                    return;
+                } else if (this.selectedStep != 3) {
+                    this.checkConfirmInfo();
+                    this.changeStep(this.selectedStep + 1);
+                } else {
+                    if (!this.formChecking()) {
+                        return;
+                    }
+                    $('#checkout_form').submit();
+                }
+            },
+            // 上一步
+            backStep() {
+                if (this.selectedStep != 1) {
+                    this.changeStep(this.selectedStep - 1);
+                } else {
+                    window.location.href = "<?= base_url() . 'product' ?>";
+                }
+            },
+            // 引導至商品區
+            goingToProduct() {
+                window.location.href = "<?= base_url() . 'product' ?>";
+            },
+            // 檢查表單
+            formChecking() {
+                var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
+                var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
+
+                if ($('#name').val() == '') {
+                    alert('請輸入收件姓名');
+                    return false;
+                }
+                if ($('#phone').val().length < 10) {
+                    alert('請輸入完整的收件電話');
+                    return false;
+                }
+                if ($('#email').val() == '') {
+                    alert('請輸入完整的電子郵件');
+                    return false;
+                }
+                if ($('#Country').val() == '請選擇國家') {
+                    alert('請選擇所在國家');
+                    return false;
+                } else if ($('#Country').val() == '臺灣') {
+                    var countySelect = $("#tw_county").val();
+                    var districtSelect = $("#tw_district").val();
+
+                    // 檢查所在縣市
+                    if (countySelect == '') {
+                        alert('請選擇所在縣市');
+                        return false;
+                    }
+
+                    // 檢查所在鄉鎮市區
+                    if (districtSelect == '') {
+                        alert('請選擇所在鄉鎮市區');
+                        return false;
+                    }
+                } else if ($('#Country').val() == '中國') {
+                    var provinceSelect = $("#cn_province").val();
+                    var countySelect = $("#cn_county").val();
+                    var districtSelect = $("#cn_district").val();
+
+                    // 檢查所在省份
+                    if (provinceSelect == '') {
+                        alert('請選擇所在省份');
+                        return false;
+                    }
+
+                    // 檢查所在縣市
+                    if (countySelect == '') {
+                        alert('請選擇所在縣市');
+                        return false;
+                    }
+
+                    // 檢查所在鄉鎮市區
+                    if (districtSelect == '') {
+                        alert('請選擇所在鄉鎮市區');
+                        return false;
+                    }
+                }
+                if ($('#address').val() == '') {
+                    alert('請輸入詳細地址');
+                    return false;
+                }
+                if (payment != 'bank_transfer') {
+                    $('#NotesOnBankRemittance').hide();
+                } else {
+                    $('#NotesOnBankRemittance').show();
+                }
+                if (delivery == '' || delivery == null) {
+                    alert('請選擇運送方式');
+                    return false;
+                }
+                if (payment == '' || payment == null) {
+                    alert('請選擇付款方式');
+                    return false;
+                }
+                if ($('#Country').val() == '臺灣' && (delivery == '711_pickup' || delivery == 'family_pickup')) {
+                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
+                        alert('請選擇取貨門市');
+                        return false;
+                    }
+                }
+                return true;
+            },
+            // 生成確認表單
+            checkConfirmInfo() {
+                var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
+                var checkoutDeliveryLabel = $('label[for="checkout_delivery_' + selectedCheckoutDelivery + '"]').text();
+                var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
+                var checkoutPaymentLabel = $('label[for="checkout_payment_' + selectedCheckoutPayment + '"]').text();
+
+                // console.log('selectedCheckoutDelivery = ' + selectedCheckoutDelivery);
+                // console.log('checkoutDeliveryLabel = ' + checkoutDeliveryLabel);
+                // console.log('selectedCheckoutPayment = ' + selectedCheckoutPayment);
+                // console.log('checkoutPaymentLabel = ' + checkoutPaymentLabel);
+
+                var data = '';
+                data += '<table class="table table-bordered table-striped"><tbody>';
+                // data += '<tr><td class="text-center" colspan="3"><h2 class="m-0">訂購資訊確認</h2></td></tr>';
+                if ($('#name').val() != '') {
+                    data += '<tr><td>姓名</td><td>' + $('#name').val() + '</td></tr>';
+                }
+                if ($('#phone').val() != '') {
+                    data += '<tr><td>電話</td><td>' + $('#phone').val() + '</td></tr>';
+                }
+                if ($('#email').val() != '') {
+                    data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
+                }
+                if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup') {
+                    if ($('#Country').val() != '') {
+                        data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
+                    }
+                    if ($('#Country').val() == '臺灣') {
+                        if ($("#tw_county").val() != '') {
+                            data += '<tr><td>縣市</td><td>' + $("#tw_county").val() + '</td></tr>';
+                        }
+                        if ($("#tw_district").val() != '') {
+                            data += '<tr><td>鄉鎮市區</td><td>' + $("#tw_district").val() + '</td></tr>';
+                        }
+                        if ($("#tw_zipcode").val() != '') {
+                            data += '<tr><td>郵遞區號</td><td>' + $("#tw_zipcode").val() + '</td></tr>';
+                        }
+                    } else if ($('#Country').val() == '中國') {
+                        if ($("#cn_province").val() != '') {
+                            data += '<tr><td>省分</td><td>' + $("#cn_province").val() + '</td></tr>';
+                        }
+                        if ($("#cn_county").val() != '') {
+                            data += '<tr><td>縣市</td><td>' + $("#cn_county").val() + '</td></tr>';
+                        }
+                        if ($("#cn_district").val() != '') {
+                            data += '<tr><td>鄉鎮市區</td><td>' + $("#cn_district").val() + '</td></tr>';
+                        }
+                        if ($("#cn_zipcode").val() != '') {
+                            data += '<tr><td>郵遞區號</td><td>' + $("#cn_zipcode").val() + '</td></tr>';
+                        }
+                    }
+
+                    if ($('#address').val() != '') {
+                        data += '<tr><td>詳細地址</td><td>' + $('#address').val() + '</td></tr>';
+                    }
+                }
+                if (selectedCheckoutDelivery == '711_pickup' || selectedCheckoutDelivery == 'family_pickup') {
+                    if ($('#storeid').val() != '') {
+                        data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
+                    }
+                    if ($('#storename').val() != '') {
+                        data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
+                    }
+                    if ($('#storeaddress').val() != '') {
+                        data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
+                    }
+                }
+                data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
+                data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
+                data += '<tr><td>付款方式</td><td>' + checkoutPaymentLabel + '</td></tr>';
+                // if ($('#xxxxx').val() != '') {
+                //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
+                // }
+                if ($('#cart_total').val() != '') {
+                    data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
+                }
+                if ($('#shipping_amount').val() != '') {
+                    data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';
+                }
+                if ($('#total_amount').val() != '') {
+                    data += '<tr><td>總計</td><td style="color:red;font-size:20px">$' + $('#total_amount').val() + '</td></tr>';
+                }
+                data += "</tbody></table>";
+                $(".confirm_info").html(data);
+            },
+            scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // 若要有平滑的滾動效果
+                });
+            },
+
+        },
+    });
+    checkoutApp.mount('#checkoutApp');
+</script>
+
 
 <script>
     // key in value to the cart
@@ -147,26 +407,38 @@
     });
 </script>
 
+<!-- initial function -->
 <script>
     function initialDelieveryAndPayment() {
         // initial payment
-        $('#ecpay_CVS').prop('disabled', true);
-        $('#ecpay_ATM').prop('disabled', true);
-        $('#ecpay_credit').prop('disabled', true);
+        $('#checkout_payment_ecpay_CVS').prop('disabled', true);
+        $('#checkout_payment_ecpay_ATM').prop('disabled', true);
+        $('#checkout_payment_ecpay_credit').prop('disabled', true);
 
         // initial delivery
-        $('#711_pickup').prop('disabled', true);
-        $('#family_pickup').prop('disabled', true);
-        $('#ktj_main_delivery').prop('disabled', true);
-        $('#ktj_sub_delivery').prop('disabled', true);
-        $('#sf_mc_express_delivery').prop('disabled', true);
-        $('#sf_hk_express_delivery').prop('disabled', true);
-        $('#sf_cn_express_delivery').prop('disabled', true);
-        $('#sf_others_express_delivery').prop('disabled', true);
+        $('#checkout_delivery_711_pickup').prop('disabled', true);
+        $('#checkout_delivery_family_pickup').prop('disabled', true);
+        $('#checkout_delivery_ktj_main_delivery').prop('disabled', true);
+        $('#checkout_delivery_ktj_sub_delivery').prop('disabled', true);
+        $('#checkout_delivery_sf_mc_express_delivery').prop('disabled', true);
+        $('#checkout_delivery_sf_hk_express_delivery').prop('disabled', true);
+        $('#checkout_delivery_sf_cn_express_delivery').prop('disabled', true);
+        $('#checkout_delivery_sf_others_express_delivery').prop('disabled', true);
 
         // initial checked payment and delivery
         $('input[name=checkout_payment]', '#checkout_form').prop('checked', false);
         $('input[name=checkout_delivery]', '#checkout_form').prop('checked', false);
+    }
+
+    function initialSelectedCountryInfo() {
+        // initial selected address
+        $('#tw_county').val('');
+        $('#tw_district').val('');
+        $('#tw_zipcode').val('');
+        $('#cn_province').val('');
+        $('#cn_county').val('');
+        $('#cn_district').val('');
+        $('#cn_zipcode').val('');
     }
 </script>
 
@@ -179,7 +451,9 @@
         var initialCartTotal = parseFloat(<?php echo $this->cart->total() ?>);
         cart_amount = parseInt(initialCartTotal);
         $('#cart_total').val(cart_amount)
-        $('#cart_total_view').text(' $' + cart_amount)
+
+        // 初始化表單
+        $(".confirm_info").html('');
 
         // 初始化選所選運送方式
         var initialShippingFee = 0;
@@ -191,12 +465,8 @@
 
         // 初始化配送與付款方式
         initialDelieveryAndPayment();
-    });
-</script>
 
-<script>
-    // 更改運送方式
-    $(document).ready(function() {
+        // 更改運送方式
         $('input[name="checkout_delivery"]').change(function() {
             var shippingFee = $(this).data('shipping-fee');
 
@@ -206,10 +476,16 @@
             $('#shipping_amount').val(shipping_amount);
             $('#total_amount').val(cart_amount + shipping_amount)
             $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+
+            // init store info
+            $('#storeid').val('');
+            $('#storename').val('');
+            $('#storeaddress').val('');
         });
     });
 </script>
 
+<!-- change event compute -->
 <script>
     // 更改國家
     $(document).on('change', '#Country', function() {
@@ -223,31 +499,33 @@
 
         // initial payment and delivery
         initialDelieveryAndPayment();
+        // initial selected country infomation
+        initialSelectedCountryInfo();
 
         if (selectedCountry == '臺灣') {
-            $('#ecpay_CVS').prop('disabled', false);
-            $('#ecpay_ATM').prop('disabled', false);
-            $('#ecpay_credit').prop('disabled', false);
-            tmpct = $("#twzipcode select[name='tw_county']").val();
+            $('#checkout_payment_ecpay_CVS').prop('disabled', false);
+            $('#checkout_payment_ecpay_ATM').prop('disabled', false);
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            tmpct = $("#tw_county").val();
             if (tmpct) {
                 if (tmpct == '宜蘭縣' || tmpct == '花蓮縣' || tmpct == '臺東縣' || tmpct == '金門縣' || tmpct == '連江縣' || tmpct == '澎湖縣') {
-                    $('#ktj_sub_delivery').prop('disabled', false);
+                    $('#checkout_delivery_ktj_sub_delivery').prop('disabled', false);
                 } else {
-                    $('#711_pickup').prop('disabled', false);
-                    $('#family_pickup').prop('disabled', false);
-                    $('#ktj_main_delivery').prop('disabled', false);
+                    $('#checkout_delivery_711_pickup').prop('disabled', false);
+                    $('#checkout_delivery_family_pickup').prop('disabled', false);
+                    $('#checkout_delivery_ktj_main_delivery').prop('disabled', false);
                 }
             }
         } else {
-            $('#ecpay_credit').prop('disabled', false);
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
             if (selectedCountry == '中國') {
-                $('#sf_cn_express_delivery').prop('disabled', false);
+                $('#checkout_delivery_sf_cn_express_delivery').prop('disabled', false);
             } else if (selectedCountry == '澳門') {
-                $('#sf_mc_express_delivery').prop('disabled', false);
+                $('#checkout_delivery_sf_mc_express_delivery').prop('disabled', false);
             } else if (selectedCountry == '香港') {
-                $('#sf_hk_express_delivery').prop('disabled', false);
+                $('#checkout_delivery_sf_hk_express_delivery').prop('disabled', false);
             } else if (selectedCountry == '其它') {
-                $('#sf_others_express_delivery').prop('disabled', false);
+                $('#checkout_delivery_sf_others_express_delivery').prop('disabled', false);
             }
         }
     });
@@ -265,19 +543,18 @@
         // initial payment and delivery
         initialDelieveryAndPayment();
 
-
         if (selectedCountry == '臺灣') {
-            $('#ecpay_CVS').prop('disabled', false);
-            $('#ecpay_ATM').prop('disabled', false);
-            $('#ecpay_credit').prop('disabled', false);
-            tmpct = $("#twzipcode select[name='tw_county']").val();
+            $('#checkout_payment_ecpay_CVS').prop('disabled', false);
+            $('#checkout_payment_ecpay_ATM').prop('disabled', false);
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            tmpct = $("#tw_county").val();
             if (tmpct) {
                 if (tmpct == '宜蘭縣' || tmpct == '花蓮縣' || tmpct == '臺東縣' || tmpct == '金門縣' || tmpct == '連江縣' || tmpct == '澎湖縣') {
-                    $('#ktj_sub_delivery').prop('disabled', false);
+                    $('#checkout_delivery_ktj_sub_delivery').prop('disabled', false);
                 } else {
-                    $('#711_pickup').prop('disabled', false);
-                    $('#family_pickup').prop('disabled', false);
-                    $('#ktj_main_delivery').prop('disabled', false);
+                    $('#checkout_delivery_711_pickup').prop('disabled', false);
+                    $('#checkout_delivery_family_pickup').prop('disabled', false);
+                    $('#checkout_delivery_ktj_main_delivery').prop('disabled', false);
                 }
             }
         }
@@ -315,232 +592,6 @@
             }
         }
     });
-
-    function checkConfirmInfo() {
-        var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
-        var checkoutDeliveryLabel = $('label[for="checkout_delivery' + selectedCheckoutDelivery + '"]').text();
-        var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
-        var checkoutPaymentLabel = $('label[for="checkout_payment' + selectedCheckoutPayment + '"]').text();
-        var data = '';
-        data += '<table class="table table-bordered table-striped"><tbody>';
-        data += '<tr><td class="text-center" colspan="3"><h2 class="m-0">訂購資訊確認</h2></td></tr>';
-        if ($('#name').val() != '') {
-            data += '<tr><td>姓名</td><td>' + $('#name').val() + '</td></tr>';
-        }
-        if ($('#phone').val() != '') {
-            data += '<tr><td>電話</td><td>' + $('#phone').val() + '</td></tr>';
-        }
-        if ($('#email').val() != '') {
-            data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
-        }
-        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup') {
-            if ($('#Country').val() != '') {
-                data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
-            }
-            if ($('#Country').val() == '臺灣') {
-                if ($("#twzipcode select[name='tw_county']").val() != '') {
-                    data += '<tr><td>縣市</td><td>' + $("#twzipcode select[name='tw_county']").val() + '</td></tr>';
-                }
-                if ($("#twzipcode select[name='tw_district']").val() != '') {
-                    data += '<tr><td>鄉鎮市區</td><td>' + $("#twzipcode select[name='tw_district']").val() + '</td></tr>';
-                }
-                if ($("#twzipcode input[name='tw_zipcode']").val() != '') {
-                    data += '<tr><td>郵遞區號</td><td>' + $("#twzipcode input[name='tw_zipcode']").val() + '</td></tr>';
-                }
-            } else if ($('#Country').val() == '中國') {
-                if ($("#cnzipcode select[name='cn_province']").val() != '') {
-                    data += '<tr><td>省分</td><td>' + $("#cnzipcode select[name='cn_province']").val() + '</td></tr>';
-                }
-                if ($("#cnzipcode select[name='cn_county']").val() != '') {
-                    data += '<tr><td>縣市</td><td>' + $("#cnzipcode select[name='cn_county']").val() + '</td></tr>';
-                }
-                if ($("#cnzipcode select[name='cn_district']").val() != '') {
-                    data += '<tr><td>鄉鎮市區</td><td>' + $("#cnzipcode select[name='cn_district']").val() + '</td></tr>';
-                }
-                if ($("#cnzipcode input[name='cn_zipcode']").val() != '') {
-                    data += '<tr><td>郵遞區號</td><td>' + $("#cnzipcode input[name='cn_zipcode']").val() + '</td></tr>';
-                }
-            }
-
-            if ($('#address').val() != '') {
-                data += '<tr><td>詳細地址</td><td>' + $('#address').val() + '</td></tr>';
-            }
-        }
-        if (selectedCheckoutDelivery == '711_pickup' || selectedCheckoutDelivery == 'family_pickup') {
-            if ($('#storeid').val() != '') {
-                data += '<tr><td>門市編號</td><td>' + $('#storeid').val() + '</td></tr>';
-            }
-            if ($('#storename').val() != '') {
-                data += '<tr><td>取件門市</td><td>' + $('#storename').val() + '</td></tr>';
-            }
-            if ($('#storeaddress').val() != '') {
-                data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
-            }
-        }
-        data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
-        data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
-        data += '<tr><td>付款方式</td><td>' + checkoutPaymentLabel + '</td></tr>';
-        // if ($('#xxxxx').val() != '') {
-        //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
-        // }
-        if ($('#cart_total').val() != '') {
-            data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
-        }
-        if ($('#shipping_amount').val() != '') {
-            data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';
-        }
-        if ($('#total_amount').val() != '') {
-            data += '<tr><td>總計</td><td style="color:red;font-size:20px">$' + $('#total_amount').val() + '</td></tr>';
-        }
-        data += "</tbody></table>";
-        $(".confirm_info").html(data);
-    }
-</script>
-
-<script>
-    const checkoutApp = Vue.createApp({
-        data() {
-            return {
-                cart_num: <?= $this->cart->total_items() ?>,
-                selectedStep: 0,
-                pageTitle: '',
-                ic_step01: '',
-                ic_step02: '',
-                ic_step03: '',
-                blackbtn: '',
-                redbtn: '',
-            }
-        },
-        mounted() {
-            // init step.
-            this.changeStep();
-        },
-        methods: {
-            changeStep(selected = 1) {
-                this.selectedStep = selected;
-                this.ic_step01 = (selected == 1) ? 'ic_step01o.png' : 'ic_step01.png';
-                this.ic_step02 = (selected == 2) ? 'ic_step02o.png' : 'ic_step02.png';
-                this.ic_step03 = (selected == 3) ? 'ic_step03o.png' : 'ic_step03.png';
-                if (selected == 1) {
-                    this.pageTitle = '購物清單';
-                    this.blackbtn = '繼續選購其他商品';
-                    this.redbtn = '下一步，填寫購買資料';
-                }
-                if (selected == 2) {
-                    this.pageTitle = '購物資訊';
-                    this.blackbtn = '返回上一步';
-                    this.redbtn = '下一步，送出訂單';
-                }
-                if (selected == 3) {
-                    this.pageTitle = '送出訂單';
-                    this.blackbtn = '返回上一步';
-                    this.redbtn = '確認送出訂單';
-                }
-                this.scrollToTop();
-            },
-            nextStep() {
-                if (this.selectedStep != 3) {
-                    this.changeStep(this.selectedStep + 1);
-                } else {
-                    if (!this.formChecking()) {
-                        return;
-                    }
-                    $('#checkout_form').submit();
-                }
-            },
-            backStep() {
-                if (this.selectedStep != 1) {
-                    this.changeStep(this.selectedStep - 1);
-                } else {
-                    window.location.href = "<?= base_url() . 'product' ?>";
-                }
-            },
-            formChecking() {
-                var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
-                var payment = $('input[name=checkout_payment]:checked', '#checkout_form').val();
-
-                if ($('#name').val() == '') {
-                    alert('請輸入收件姓名');
-                    return false;
-                }
-                if ($('#phone').val().length < 10) {
-                    alert('請輸入完整的收件電話');
-                    return false;
-                }
-                if ($('#email').val() == '') {
-                    alert('請輸入完整的電子郵件');
-                    return false;
-                }
-                if ($('#Country').val() == '請選擇國家') {
-                    alert('請選擇所在國家');
-                    return false;
-                } else if ($('#Country').val() == '臺灣') {
-                    var countySelect = $("#twzipcode select[name='tw_county']").val();
-                    var districtSelect = $("#twzipcode select[name='tw_district']").val();
-
-                    // 檢查所在縣市
-                    if (countySelect == '') {
-                        alert('請選擇所在縣市');
-                        return false;
-                    }
-
-                    // 檢查所在鄉鎮市區
-                    if (districtSelect == '') {
-                        alert('請選擇所在鄉鎮市區');
-                        return false;
-                    }
-                } else if ($('#Country').val() == '中國') {
-                    var provinceSelect = $("#cnzipcode select[name='cn_province']").val();
-                    var countySelect = $("#cnzipcode select[name='cn_county']").val();
-                    var districtSelect = $("#cnzipcode select[name='cn_district']").val();
-
-                    // 檢查所在省份
-                    if (provinceSelect == '') {
-                        alert('請選擇所在省份');
-                        return false;
-                    }
-
-                    // 檢查所在縣市
-                    if (countySelect == '') {
-                        alert('請選擇所在縣市');
-                        return false;
-                    }
-
-                    // 檢查所在鄉鎮市區
-                    if (districtSelect == '') {
-                        alert('請選擇所在鄉鎮市區');
-                        return false;
-                    }
-                }
-                if ($('#address').val() == '') {
-                    alert('請輸入詳細地址');
-                    return false;
-                }
-                if (delivery == '' || delivery == null || ($('#Country').val() == '臺灣' && delivery == 'sf_express_delivery') || (($('#Country').val() != '臺灣') && delivery != 'sf_express_delivery')) {
-                    alert('請選擇運送方式');
-                    return false;
-                }
-                if (payment == '' || payment == null) {
-                    alert('請選擇付款方式');
-                    return false;
-                }
-                if ($('#Country').val() == '臺灣' && (delivery == '711_pickup' || delivery == 'family_pickup')) {
-                    if ($('#storeid').val() == '' || $('#storename').val() == '' || $('#storeaddress').val() == '') {
-                        alert('請選擇取貨門市');
-                        return false;
-                    }
-                }
-            },
-            scrollToTop() {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth' // 若要有平滑的滾動效果
-                });
-            },
-
-        },
-    });
-    checkoutApp.mount('#checkoutApp');
 </script>
 
 <!-- CVS -->
@@ -591,6 +642,38 @@
 <!-- country select steps -->
 <script src="/assets/twzipcode/jquery.twzipcode.min.js"></script>
 <script src="/assets/jQuery-cn-zipcode-master/jquery-cn-zipcode.min.js"></script>
+
+<!-- user default info -->
+<script>
+    $(document).ready(function() {
+        <? if ($user_data['Country'] == '臺灣') : ?>
+            $('#checkout_payment_ecpay_CVS').prop('disabled', false);
+            $('#checkout_payment_ecpay_ATM').prop('disabled', false);
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            <? if ($user_data['county'] == '宜蘭縣' || $user_data['county'] == '花蓮縣' || $user_data['county'] == '臺東縣' || $user_data['county'] == '金門縣' || $user_data['county'] == '連江縣' || $user_data['county'] == '澎湖縣') : ?>
+                $('#checkout_delivery_ktj_sub_delivery').prop('disabled', false);
+            <? else : ?>
+                $('#checkout_delivery_711_pickup').prop('disabled', false);
+                $('#checkout_delivery_family_pickup').prop('disabled', false);
+                $('#checkout_delivery_ktj_main_delivery').prop('disabled', false);
+            <? endif; ?>
+        <? elseif ($user_data['Country'] == '中國') : ?>
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            $('#checkout_delivery_sf_cn_express_delivery').prop('disabled', false);
+        <? elseif ($user_data['Country'] == '香港') : ?>
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            $('#checkout_delivery_sf_hk_express_delivery').prop('disabled', false);
+        <? elseif ($user_data['Country'] == '澳門') : ?>
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            $('#checkout_delivery_sf_mc_express_delivery').prop('disabled', false);
+        <? elseif ($user_data['Country'] == '其它') : ?>
+            $('#checkout_payment_ecpay_credit').prop('disabled', false);
+            $('#checkout_delivery_sf_others_express_delivery').prop('disabled', false);
+        <? endif; ?>
+    });
+</script>
+
+<!-- zipcode function -->
 <script>
     // twzipcode
     $(document).ready(function() {
@@ -639,12 +722,18 @@
     // cnzipcode
     $(document).ready(function() {
         // 初始化 cnzipcode
-        $("#cnzipcode").cnzipcode({
-            provinceDefault: '<?= $user_data['province'] ?>',
-            countyDefault: '<?= $user_data['county'] ?>',
-            districtDefault: '<?= $user_data['district'] ?>',
-            zipcodeDefault: '<?= $user_data['zipcode'] ?>'
-        });
+        <? if ($user_data['Country'] == '中國') : ?>
+            $("#cnzipcode").cnzipcode({
+                provinceDefault: '<?= $user_data['province'] ?>',
+                countyDefault: '<?= $user_data['county'] ?>',
+                districtDefault: '<?= $user_data['district'] ?>',
+                zipcodeDefault: '<?= $user_data['zipcode'] ?>'
+            });
+        <? else : ?>
+            $("#cnzipcode").cnzipcode();
+        <? endif; ?>
+
+        // view the zipcode fun
         if ($("#Country").val() === '中國') {
             $("#cnzipcode").show();
             var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);

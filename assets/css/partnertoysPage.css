@@ -2349,17 +2349,14 @@ input.qtyminus {
     }
 }
 
+.homeHrefType:hover {
+    text-decoration: none;
+}
+
 .homeProductPreview:hover {
     cursor: pointer;
     filter: brightness(0.8);
     /* 滑鼠懸停時降低亮度（變暗） */
-}
-
-.homeProductPreview a {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    text-decoration: none;
 }
 
 .homeProductPreview .homepic {
@@ -3332,6 +3329,15 @@ select.lotteryResult {
 
 .container-fluid .checkoutRadioType input:checked {
     border: 6px solid black;
+}
+
+.container-fluid .remakBox {
+    align-items: baseline;
+}
+
+.container-fluid .remakBox textarea {
+    resize: none;
+    align-items: baseline;
 }
 
 .checkoutRadioType input[type="radio"]:disabled+label {

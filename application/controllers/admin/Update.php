@@ -96,6 +96,7 @@ class Update extends Admin_Controller
                 $this->update_202403011721();
                 $this->update_202403051007();
                 $this->update_202403051354();
+                $this->update_202403131212();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -105,7 +106,7 @@ class Update extends Admin_Controller
                     // $this->upload_orders_item();
                     // $this->upload_lottery();
                     // $this->upload_lottery_pool();
-                    $this->upload_product_img();
+                    // $this->upload_product_img();
                 }
             } else {
                 // 不存在
@@ -764,6 +765,36 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403131212()
+    {
+        $version = '202403131212';
+        $description = '[orders] create [order_cpname][order_cpno]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'order_cpname'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `order_cpname` varchar(50) NOT NULL AFTER `order_delivery_address`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'order_cpno'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `order_cpno` varchar(50) NOT NULL AFTER `order_cpname`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

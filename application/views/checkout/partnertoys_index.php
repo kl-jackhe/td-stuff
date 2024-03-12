@@ -1097,12 +1097,16 @@ foreach ($this->cart->contents() as $items) {
     // cnzipcode
     $(document).ready(function() {
         // 初始化 cnzipcode
-        $("#cnzipcode").cnzipcode({
-            provinceDefault: '<?= $user_data['province'] ?>',
-            countyDefault: '<?= $user_data['county'] ?>',
-            districtDefault: '<?= $user_data['district'] ?>',
-            zipcodeDefault: '<?= $user_data['zipcode'] ?>'
-        });
+        <? if ($user_data['Country'] == '中國') : ?>
+            $("#cnzipcode").cnzipcode({
+                provinceDefault: '<?= $user_data['province'] ?>',
+                countyDefault: '<?= $user_data['county'] ?>',
+                districtDefault: '<?= $user_data['district'] ?>',
+                zipcodeDefault: '<?= $user_data['zipcode'] ?>'
+            });
+        <? else : ?>
+            $("#cnzipcode").cnzipcode();
+        <? endif; ?>
         if ($("#Country").val() === '中國') {
             $("#cnzipcode").show();
             var taiwanDeliveryOptions = $('#taiwanDeliveryOptions');

@@ -56,12 +56,12 @@
                 <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
             </div>
             <!-- 備註 -->
-            <div class="input-group mb-3 col-12 col-sm-8">
+            <!-- <div class="input-group mb-3 col-12 col-sm-8">
                 <div class="input-group-prepend">
                     <span class="input-group-text">訂單備註</span>
                 </div>
                 <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="form-group">
@@ -76,8 +76,8 @@
                         <?php foreach ($delivery as $d_row) : ?>
                             <?php if ($d_row['delivery_type'] != 3) : ?>
                                 <div class="checkoutRadioType">
-                                    <input type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
-                                    <label for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
+                                    <input type="radio" name="checkout_delivery" id="checkout_delivery_<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                    <label for="checkout_delivery_<?= $d_row['delivery_name_code']; ?>">
                                         <?= $d_row['delivery_name'] ?>
                                     </label>
                                     <? if (!empty($d_row['delivery_info'])) { ?>
@@ -96,8 +96,8 @@
                         <?php foreach ($delivery as $d_row) : ?>
                             <?php if ($d_row['delivery_type'] == 3) : ?>
                                 <div class="checkoutRadioType">
-                                    <input type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
-                                    <label for="checkout_delivery">
+                                    <input type="radio" name="checkout_delivery" id="checkout_delivery_<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>">
+                                    <label for="checkout_delivery_<?= $d_row['delivery_name_code']; ?>">
                                         <?= $d_row['delivery_name'] ?>
                                     </label>
                                     <? if (!empty($d_row['delivery_info'])) { ?>
@@ -125,8 +125,8 @@
                         <?php $payment_count++; ?>
                     <?php endif; ?>
                     <div class="checkoutRadioType">
-                        <input type="radio" name="checkout_payment" id="<?= $row['payment_code']; ?>" value="<?= $row['payment_code']; ?>">
-                        <label for="checkout_payment">
+                        <input type="radio" name="checkout_payment" id="checkout_payment_<?= $row['payment_code']; ?>" value="<?= $row['payment_code']; ?>">
+                        <label for="checkout_payment_<?= $row['payment_code']; ?>">
                             <?= $row['payment_name'] ?>
                         </label>
                         <? if (!empty($row['payment_info'])) { ?>
@@ -176,6 +176,24 @@
     <!-- 其他資訊 -->
     <div class="form-group">
         <div class="formTi">其他資訊</div>
+    </div>
+    <div class="container-fluid row py-3">
+        <div class="remakBox form-group row col-12">
+            <label for="order_cpname" class="col-md-2 control-label">發票抬頭</label>
+            <div class="col-md-4 col-sm-12">
+                <input type="text" class="form-control" id="order_cpname" name="order_cpname" value="" placeholder="發票抬頭">
+            </div>
+            <label for="order_cpno" class="col-md-2 control-label">統一編號</label>
+            <div class="col-md-4 col-sm-12">
+                <input type="text" class="form-control" id="order_cpno" name="order_cpno" value="" placeholder="統一編號">
+            </div>
+        </div>
+        <div class="remakBox form-group row col-12">
+            <label for="remark" class="col-md-2 col-sm-12 control-label">備註事項</label>
+            <div class="col-md-10 col-sm-12">
+                <textarea class="form-control" id="remark" name="remark" rows="5" placeholder="如有特別注意事項請於備註欄填寫。"></textarea>
+            </div>
+        </div>
     </div>
     <div class="container-fluid py-3">
         <div class="col-12">
