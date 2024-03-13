@@ -160,7 +160,7 @@ class Checkout extends Public_Controller
 		$this->load->view('checkout/cvsmap', $data);
 	}
 
-	public function save_extend_info($MerchantTradeNo)
+	public function save_extend_info()
 	{
 		try {
 			// 載入綠界金流API
@@ -180,9 +180,6 @@ class Checkout extends Public_Controller
 				$obj->MerchantID  = '2000132'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
 				$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
 			endif;
-
-			$obj->Send['MerchantTradeNo'] = $MerchantTradeNo;
-			$obj->Send['TimeStamp'] = time();
 
 			/* 取得回傳參數 */
 			$arFeedback = $obj->CheckOutFeedback();
@@ -395,6 +392,13 @@ class Checkout extends Public_Controller
 
 				//基本參數(請依系統規劃自行調整)
 				$MerchantTradeNo = $pay_order['order_number'] . substr(time(), 4, 6);
+				if ($pay_order['order_payment'] != 'ecpay_credit') {
+					$MerchantTradeNo = $pay_order['MerchantTradeNo'];
+				}
+				if (strlen($MerchantTradeNo) > 20) {
+					$MerchantTradeNo = $pay_order['order_number'] . substr(time(), 6, 4);
+				}
+
 				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
 				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); //交易時間
 				$obj->Send['TotalAmount'] = (int)$pay_order['order_total']; //交易金額
@@ -564,9 +568,19 @@ class Checkout extends Public_Controller
 		}
 
 		$order_delivery_address = '';
+		// 郵遞區號
+		if (!empty($this->input->post('Country')) && $this->input->post('Country') == '中國' && !empty($this->input->post('cn_zipcode'))) {
+			$order_delivery_address .= '' . $this->input->post('cn_zipcode') . '';
+		} else if (!empty($this->input->post('Country')) && $this->input->post('Country') == '臺灣' && !empty($this->input->post('tw_zipcode'))) {
+			$order_delivery_address .= '' . $this->input->post('tw_zipcode') . '';
+		}
+
+		// 國家
 		if (!empty($this->input->post('Country'))) {
 			$order_delivery_address .= $this->input->post('Country');
 		}
+
+		// 省鄉鎮市區
 		if (!empty($this->input->post('Country')) && $this->input->post('Country') == '中國') {
 			if (!empty($this->input->post('cn_province'))) {
 				$order_delivery_address .= $this->input->post('cn_province');
@@ -585,15 +599,13 @@ class Checkout extends Public_Controller
 				$order_delivery_address .= $this->input->post('tw_district');
 			}
 		}
+
+		// 詳細地址
 		if (!empty($this->input->post('address'))) {
 			$order_delivery_address .= $this->input->post('address');
 		}
-		if (!empty($this->input->post('Country')) && $this->input->post('Country') == '中國' && !empty($this->input->post('cn_zipcode'))) {
-			$order_delivery_address .= '(' . $this->input->post('cn_zipcode') . ')';
-		} else if (!empty($this->input->post('Country')) && $this->input->post('Country') == '臺灣' && !empty($this->input->post('tw_zipcode'))) {
-			$order_delivery_address .= '(' . $this->input->post('tw_zipcode') . ')';
-		}
 
+		// 使用之coupon
 		if (empty($this->input->post('used_coupon'))) {
 			if ((int)$this->cart->total() != (int)$this->input->post('cart_total')) {
 				echo '
@@ -839,7 +851,7 @@ class Checkout extends Public_Controller
 					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::CVS; //付款方式
 				}
 				// POST會傳到這
-				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
+				$obj->Send['ReturnURL'] = base_url() . "checkout/save_extend_info"; //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
 				$obj->Send['ClientBackURL'] = base_url(); //付款完成後，顯示返回商店按鈕
 				$obj->Send['PaymentInfoURL'] = base_url() . "checkout/save_extend_info";

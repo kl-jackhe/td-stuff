@@ -97,6 +97,7 @@ class Update extends Admin_Controller
                 $this->update_202403051007();
                 $this->update_202403051354();
                 $this->update_202403131212();
+                $this->update_202403131156();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -107,6 +108,7 @@ class Update extends Admin_Controller
                     // $this->upload_lottery();
                     // $this->upload_lottery_pool();
                     // $this->upload_product_img();
+                    // $this->upload_guestbook();
                 }
             } else {
                 // 不存在
@@ -118,6 +120,49 @@ class Update extends Admin_Controller
             echo '<hr>';
             echo '<a href="/admin" class="btn btn-primary">回到控制台</a>';
             echo '</body></html>';
+        }
+    }
+
+    function upload_guestbook()
+    {
+        $version = 'upload_guestbook';
+        $description = 'transition upload_guestbook data';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+
+            $this->db->select('*');
+            $query = $this->db->get('guestbook_old')->result_array();
+
+            foreach ($query as $row) {
+
+                // Create an associative array with field names as keys
+                $data = array(
+                    'id' => $row['guestid'],
+                    'order_id' => $row['odid'],
+                    'user_id' => $row['memid'],
+                    'content' => $row['content'],
+                    'response_status' => 1,
+                    'created_at' => $row['datetime'],
+                );
+
+                // echo '<pre>';
+                // echo 'data : ';
+                // print_r($data);
+                // echo '</pre>';
+
+                // Insert row data into the database
+                $this->db->insert('guestbook', $data);
+            }
+
+            // $insertData = array(
+            //     'version' => $version,
+            //     'description' => $description,
+            // );
+            // if ($this->db->insert('update_log', $insertData)) {
+            //     echo '<p>' . $version . ' - ' . $description . '</p>';
+            // }
         }
     }
 
@@ -365,7 +410,25 @@ class Update extends Admin_Controller
 
             foreach ($order_list as $row) {
                 $new_date = date('Y-m-d', strtotime($row['oddate'])); // 將日期轉換為 Y-m-d 格式
-                $order_delivery = ($row['shipid'] == 3) ? '711_pickup' : (($row['shipid'] == 4) ? 'family_pickup' : (($row['shipid'] == 8 || $row['shipid'] == 17 || $row['shipid'] == 18 || $row['shipid'] == 19) ? 'sf_express_delivery' : (($row['shipid'] == 6 || $row['shipid'] == 12 || $row['shipid'] == 13) ? 'post_delivery' : 'ktj_delivery')));
+
+                $order_delivery_transfer = array(
+                    '0' => 'ktj_main_delivery',
+                    '1' => 'ktj_main_delivery',
+                    '3' => '711_pickup',
+                    '4' => 'family_pickup',
+                    '6' => 'ktj_main_delivery',
+                    '8' => 'sf_mc_express_delivery',
+                    '12' => 'ktj_main_delivery',
+                    '13' => 'ktj_sub_delivery',
+                    '14' => 'free_delivery',
+                    '15' => 'free_delivery',
+                    '16' => 'free_delivery',
+                    '17' => 'sf_hk_express_delivery',
+                    '18' => 'sf_cn_express_delivery',
+                    '19' => 'sf_others_express_delivery',
+                );
+                $order_delivery = $order_delivery_transfer[$row['shipid']];
+
                 $order_payment = ($row['kindid'] == 1 || $row['kindid'] == 23 || $row['kindid'] == 24) ? 'ecpay_ATM' : (($row['kindid'] == 2 || $row['kindid'] == 22) ? 'ecpay_credit' : 'ecpay_CVS');
 
                 $this_order_status = array(
@@ -413,7 +476,7 @@ class Update extends Admin_Controller
                     // 'order_discount_price' => $row['price'],
                     'order_delivery_cost' => $row['cost'],
                     // 'order_delivery_place' => $row['order_delivery_place'],
-                    'order_delivery_address' => ($row['addr1'] . '(' . $row['code1'] . ')'),
+                    'order_delivery_address' => ($row['code1'] . $row['addr1']),
                     // 'order_delivery_time' => $row['order_delivery_time'],
                     // 'store_id' => $row['store_id'],
                     // 'order_store_name' => $row['order_store_name'],
@@ -765,6 +828,38 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403131156()
+    {
+        $version = '202403131156';
+        $description = '新增資料表[guestbook]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $row = $this->db->query("SHOW TABLES LIKE 'guestbook'")->row_array();
+            if (empty($row)) {
+                $this->db->query("CREATE TABLE `guestbook` (
+                    `id` int(11) NOT NULL,
+                    `order_id` int(11) NOT NULL,
+                    `user_id` int(11) NOT NULL,
+                    `content` mediumtext NOT NULL,
+                    `response_status` tinyint(2) default 0 NOT NULL,
+                    `created_at` datetime NOT NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+                $this->db->query("ALTER TABLE `guestbook` ADD PRIMARY KEY (`id`);");
+                $this->db->query("ALTER TABLE `guestbook` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

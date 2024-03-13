@@ -181,11 +181,11 @@
         <div class="remakBox form-group row col-12">
             <label for="order_cpname" class="col-md-2 control-label">發票抬頭</label>
             <div class="col-md-4 col-sm-12">
-                <input type="text" class="form-control" id="order_cpname" name="order_cpname" value="" placeholder="發票抬頭">
+                <input type="text" class="form-control" id="order_cpname" name="order_cpname" value="" placeholder="發票抬頭" autocomplete="off">
             </div>
             <label for="order_cpno" class="col-md-2 control-label">統一編號</label>
             <div class="col-md-4 col-sm-12">
-                <input type="text" class="form-control" id="order_cpno" name="order_cpno" value="" placeholder="統一編號">
+                <input type="text" class="form-control" id="order_cpno" name="order_cpno" value="" placeholder="統一編號" autocomplete="off">
             </div>
         </div>
         <div class="remakBox form-group row col-12">
@@ -195,10 +195,16 @@
             </div>
         </div>
     </div>
+    <!-- 其他資訊 -->
+    <div class="form-group">
+        <div class="formTi">結算金額</div>
+    </div>
     <div class="container-fluid py-3">
         <div class="col-12">
-            <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
-            <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
+            <h3 class="mt-0">小計：<span class="amountPreviewStyle" id="cart_amount_view">&nbsp;$<?php echo  $this->cart->total() ?></span></h3>
+            <h3 class="mt-0">運費：<span class="amountPreviewStyle" id="shipping_fee"> $0.00</span></h3>
+            <hr>
+            <h3 class="mt-0">總計：<span class="amountPreviewStyle" id="total_amount_view"> $0.00</span></h3>
             <input type="hidden" id="shipping_amount" name="shipping_amount" value="">
             <input type="hidden" id="total_amount" name="total_amount" value="">
             <input type="hidden" id="cart_total" name="cart_total" value="<?php echo '$' . $this->cart->total() ?>">

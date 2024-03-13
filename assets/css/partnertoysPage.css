@@ -63,7 +63,7 @@ label.required::before {
 #fixedSecondHeader {
     background-color: #fff;
     position: fixed;
-    box-shadow: 0 5px 30px 5px #E0E0E0;
+    /* box-shadow: 0 5px 30px 5px #E0E0E0; */
     background: url(/assets/uploads/bg_nav.png) 0 0 repeat-x;
     height: 89px;
     width: 100%;
@@ -2036,14 +2036,22 @@ input.qtyminus {
     padding: 7px 50px;
 }
 
+#termsOfMessage {
+    top: 25%;
+}
+
+#termsOfMembership {
+    top: 20px;
+    bottom: 20px;
+}
+
+#termsOfMessage,
 #termsOfMembership {
     font-size: 14px;
     position: fixed;
     width: 1000px;
     height: auto;
     background: #fff;
-    top: 20px;
-    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     border: 10px solid #efefef;
@@ -2051,6 +2059,11 @@ input.qtyminus {
     padding: 50px;
     overflow: hidden;
     /* 防止内容被滚动条遮挡 */
+}
+
+#termsOfMessage textarea {
+    resize: none;
+    height: 150px;
 }
 
 .membershipContent {
@@ -2065,14 +2078,17 @@ input.qtyminus {
     padding-right: 15px;
 }
 
-
 @media (max-width: 600px) {
+
+    #termsOfMessage,
     #termsOfMembership {
         padding: 50px 15px 15px 15px;
     }
 }
 
 @media (max-width: 1100px) {
+
+    #termsOfMessage,
     #termsOfMembership {
         width: 100%;
         top: 0;
@@ -3288,6 +3304,10 @@ select.lotteryResult {
     margin: 0;
 }
 
+.amountPreviewStyle {
+    font-size: 24px;
+    color: #dd0606;
+}
 
 @media (max-width: 767px) {
     .btnBox {
@@ -3341,8 +3361,75 @@ select.lotteryResult {
 }
 
 .checkoutRadioType input[type="radio"]:disabled+label {
-    text-decoration: line-through;
+    /* text-decoration: line-through; */
     opacity: 0.5;
+}
+
+.cargoHoverStyle:hover {
+    cursor: pointer;
+    color: #e30020;
+}
+
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.cookie-banner button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.orderInfoHeader {
+    position: relative;
+    padding-top: 20px;
+}
+
+.messageMobile {
+    display: none;
+}
+
+.leave_msg {
+    position: absolute;
+    top: 30px;
+    right: 0;
+}
+
+.sendMessageButtonGroup {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.sendMessageButtonGroup .btnDef {
+    width: 300px;
+}
+
+@media (max-width:768px) {
+    .messageMobile {
+        display: contents;
+    }
+
+    .messagePC {
+        display: none;
+    }
+
+    .leave_msg {
+        top: 0;
+    }
+
+    .sendMessageButtonGroup .btnDef {
+        width: 30%;
+    }
 }
 
 /* 修改滾動條 */

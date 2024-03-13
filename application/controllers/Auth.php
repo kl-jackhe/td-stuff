@@ -63,6 +63,28 @@ class Auth extends Public_Controller
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 
+				// 訂單留言
+				$msg_buf = array();
+				if (!empty($this->data['order'])) {
+					foreach ($this->data['order'] as $self) {
+						$tmp_buf = $this->auth_model->getOrderMessage($self['order_id']);
+						if (!empty($tmp_buf)) {
+							foreach ($tmp_buf as $self) {
+								$msg_buf[] = $self;
+							}
+						}
+					}
+				}
+				$this->data['order_message'] = $msg_buf;
+
+				// echo '<pre>';
+				// print_r($this->data['order']);
+				// echo '</pre>';
+				// echo '<pre>';
+				// print_r($this->data['order_message']);
+				// echo '</pre>';
+				// return;
+
 				// 抓payname
 				$this->data['payment_name'] = $this->auth_model->getPaymentName();
 
@@ -90,18 +112,17 @@ class Auth extends Public_Controller
 
 				// 類別分類
 				$this->data['category'] = '';
-
 				// 获取当前 URL
 				$current_url = $_SERVER['REQUEST_URI'];
-
 				// 使用 parse_url() 解析 URL 获取查询字符串部分
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
-
 				// 对参数进行解码以获取您想要的内容
 				$decoded_data = $this->security_url->decryptData($query_string);
-
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
+					if (!empty($decoded_data) && !empty($decoded_data['order'])) {
+						$this->data['postOrder'] = $decoded_data['order'];
+					}
 					if (!empty($decoded_data) && !empty($decoded_data['category'])) {
 						$this->data['category'] = $decoded_data['category'];
 					}
@@ -174,6 +195,22 @@ class Auth extends Public_Controller
 		$id = $this->input->post('id');
 		$this->db->where('contid', $id);
 		$this->db->update('contact', ['state_member' => 1]);
+	}
+
+	public function uploadOrderMessage()
+	{
+		$order_id = $this->input->post('id');
+		$message = $this->input->post('message');
+		$data = array(
+			'order_id' => $order_id,
+			'user_id' => $this->session->userdata('user_id'),
+			'content' => $message,
+			'response_status' => 0,
+			'created_at' => date('Y-m-d H:i:s'),
+		);
+		$this->db->insert('guestbook', $data);
+		echo 'success';
+		return;
 	}
 
 	public function cantact_us()

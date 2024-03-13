@@ -71,11 +71,15 @@
                     this.goingToProduct();
                     return;
                 }
+                // 2切3
                 if (selected == 3 && !this.formChecking()) {
-                    console.log('return changeStep');
+                    // console.log('return changeStep');
                     return;
                 }
-                this.checkConfirmInfo();
+                // 2切3
+                else if (selected == 3 && this.selectedStep == 2) {
+                    this.checkConfirmInfo();
+                }
                 this.selectedStep = selected;
                 this.ic_step01 = (selected == 1) ? 'ic_step01o.png' : 'ic_step01.png';
                 this.ic_step02 = (selected == 2) ? 'ic_step02o.png' : 'ic_step02.png';
@@ -100,6 +104,7 @@
             // 下一步
             nextStep() {
                 if (this.selectedStep == 2 && !this.formChecking()) {
+                    // console.log('return nextStep');
                     return;
                 } else if (this.selectedStep != 3) {
                     this.checkConfirmInfo();
@@ -122,6 +127,26 @@
             // 引導至商品區
             goingToProduct() {
                 window.location.href = "<?= base_url() . 'product' ?>";
+            },
+            goingToSpecificProduct(selected) {
+                $.ajax({
+                    url: '/encode/getDataEncode/selectedProduct',
+                    type: 'post',
+                    data: {
+                        selectedProduct: selected,
+                    },
+                    success: (response) => {
+                        if (response) {
+                            if (response.result == 'success') {
+                                window.location.href = <?= json_encode(base_url()) ?> + 'product/product_detail/?' + response.src;
+                            } else {
+                                console.log('error.');
+                            }
+                        } else {
+                            console.log(response);
+                        }
+                    },
+                });
             },
             // 檢查表單
             formChecking() {
@@ -274,7 +299,9 @@
                         data += '<tr><td>取件地址</td><td>' + $('#storeaddress').val() + '</td></tr>';
                     }
                 }
-                data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
+                data += '<tr><td>發票抬頭</td><td>' + $('#order_cpname').val() + '</td></tr>';
+                data += '<tr><td>統一編號</td><td>' + $('#order_cpno').val() + '</td></tr>';
+                data += '<tr><td>備註事項</td><td>' + $('#remark').val() + '</td></tr>';
                 data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
                 data += '<tr><td>付款方式</td><td>' + checkoutPaymentLabel + '</td></tr>';
                 // if ($('#xxxxx').val() != '') {

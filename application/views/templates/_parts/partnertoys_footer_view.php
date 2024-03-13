@@ -135,7 +135,6 @@
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 <?php endif; ?>
 
-
 <script>
     // footer click link
     function encodeHFLinker(name, id) {

@@ -56,6 +56,7 @@
 </style>
 
 <body>
+    <!-- Container -->
     <div class="body h-100">
         <header id="header">
             <div id="headerApp">
@@ -201,7 +202,7 @@
                             <?php if (!empty($this->session->userdata('user_id'))) : ?>
                                 <div id="mem_login2">
                                     <i class="fas fa-user"></i>：<?= $this->session->userdata('full_name') ?>
-                                    <a href="/tw/html/member/logout.php" title="登出">登出</a>
+                                    <span class="logoutBnt" @click="confirmLogout" title="登出">登出</span>
                                 </div>
                             <?php endif; ?>
                         </ul>

@@ -92,20 +92,24 @@
             <th class="text-center">配送地址</th>
             <th class="text-center text-nowrap">配送方式</th>
             <th class="text-center text-nowrap">金額/付款方式</th>
-            <th class="text-center">匯款後五碼</th>
-            <th class="text-center">訂單狀態</th>
-
+            <? if (!$this->is_partnertoys) : ?>
+                <th class="text-center">匯款後五碼</th>
+            <? endif; ?>
             <?php if ($this->is_partnertoys) : ?>
                 <!-- 新增物流單 -->
-                <th class="text-center">物流交易編號</th>
-                <th class="text-center">寄貨編號</th>
+                <th class="text-center">處理狀態</th>
+                <th class="text-center">收款狀態</th>
+                <!-- <th class="text-center">物流交易編號</th> -->
+                <!-- <th class="text-center">寄件編號</th> -->
             <?php elseif ($this->is_liqun_food) : ?>
+                <th class="text-center">訂單狀態</th>
                 <th class="text-center">物流單號</th>
                 <th class="text-center">新增全家訂單</th>
                 <th class="text-center">物流單號(全家)</th>
                 <!-- <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th> -->
             <?php else : ?>
+                <th class="text-center">訂單狀態</th>
                 <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th>
             <?php endif; ?>
@@ -115,20 +119,20 @@
         <? if (!empty($orders)) {
             foreach ($orders as $order) {
                 $agentName = $this->agent_model->getAgentName($order['agent_id']); ?>
-                <tr class="<?= ($order['order_step'] == 'return_complete' ? 'return_complete_color' : '') ?> <?= ($order['order_step'] == 'returning' ? 'returning_color' : '') ?> <?= ($order['order_step'] == 'preparation' ? 'preparation_color' : '') ?> <?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?> <?= ($order['state'] == 0 ? 'redContent' : '') ?>">
+                <tr class="<?= ($order['order_step'] == 'return_complete' ? 'return_complete_color' : '') ?> <?= ($order['order_step'] == 'returning' ? 'returning_color' : '') ?> <?= ($order['order_step'] == 'preparation' ? 'preparation_color' : '') ?> <?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?>">
                     <td class="text-center">
                         <input type="checkbox" name="selectCheckbox" style="width: 20px;height: 20px;cursor: pointer;" value="<?= $order['order_id'] ?>">
                     </td>
-                    <td style="<?= ($order['order_step'] == 'order_cancel' ? 'text-decoration: line-through;' : '') ?>">
+                    <td class="text-center" style="<?= ($order['order_step'] == 'order_cancel' ? 'text-decoration: line-through;' : '') ?>">
                         <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
                             <?php echo $order['order_number'] ?>
                             <!-- <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i> -->
                         </a>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <?php echo $order['order_date'] ?>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <?php echo $order['customer_name'] ?>
                     </td>
                     <td class="text-center">
@@ -145,17 +149,20 @@
                         }
                         ?>
                     </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <? $attributes = array('class' => 'form-inline');
-                                echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes); ?>
-                                <input type="text" class="form-control" name="remittance_account" value="<?= $order['remittance_account'] ?>">
-                                <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
-                                <? echo form_close() ?>
-                            </span>
-                        </div>
-                    </td>
+                    <!-- 匯款 -->
+                    <? if (!$this->is_partnertoys) : ?>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <? $attributes = array('class' => 'form-inline');
+                                    echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes); ?>
+                                    <input type="text" class="form-control" name="remittance_account" value="<?= $order['remittance_account'] ?>">
+                                    <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
+                                    <? echo form_close() ?>
+                                </span>
+                            </div>
+                        </td>
+                    <? endif; ?>
                     <td>
                         <select id="order_step_<?= $order['order_id'] ?>pc" onchange="changeStep('<?= $order['order_id'] ?>','pc')" class="form-control">
                             <? foreach ($step_list as $key => $value) {
@@ -167,32 +174,30 @@
                     </td>
                     <!-- 新增物流單 -->
                     <?php if ($this->is_partnertoys) : ?>
-                        <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
-                            <!-- 自動編號 -->
-                            <td class="text-center">
-                                <span><?php echo $order['AllPayLogisticsID'] ?></span>
-                            </td>
-                            <!-- 自動單號 -->
-                            <td class="text-center">
-                                <span><?php echo $order['CVSPaymentNo'] ?></span>
-                            </td>
-                        <?php else : ?>
-                            <td class="text-center">
-                                <span>NONE</span>
-                            </td>
-                            <!-- 手動編號 -->
-                            <td class="text-center">
+                        <!-- 手動單號 -->
+                        <td class="text-center">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <?php $attributes = array('class' => 'form-inline'); ?>
+                                    <?php echo form_open('admin/order/updata_self_payment_no/' . $order['order_id'], $attributes); ?>
+                                    <input type="text" class="form-control" name="self_payment_no" placeholder="請輸入貨單號" value="<?php echo $order['CVSPaymentNo'] ?>">
+                                    <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
+                                    <?php echo form_close() ?>
+                                </span>
+                            </div>
+                        </td>
+                        <!-- 手動編號 -->
+                        <!-- <td class="text-center">
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <?php $attributes = array('class' => 'form-inline'); ?>
                                         <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
-                                        <input type="text" class="form-control" name="self_logistics" placeholder="寄貨編號" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="寄件編號" value="<?php echo $order['AllPayLogisticsID'] ?>">
                                         <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
                                         <?php echo form_close() ?>
                                     </span>
                                 </div>
-                            </td>
-                        <?php endif; ?>
+                            </td> -->
                     <?php elseif ($this->is_liqun_food) : ?>
                         <?php if (!empty($order['AllPayLogisticsID'])) : ?>
                             <!-- 自動單號 -->

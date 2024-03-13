@@ -51,12 +51,12 @@ $sub_current = $this->uri->segment(3); ?>
           <span>抽選管理</span>
         </a>
       </li>
-      <li class="<?= ($current == "mail") ? "active" : ""; ?>">
+      <!-- <li class="<?= ($current == "mail") ? "active" : ""; ?>">
         <a href="/admin/mail">
           <i class="fa-solid fa-envelopes-bulk"></i>
           <span>郵件管理</span>
         </a>
-      </li>
+      </li> -->
     <? } ?>
     <? if ($this->is_td_stuff || $this->is_liqun_food) { ?>
       <li <?= ($sub_current == "page" || $sub_current == "history") ? "class='active'" : ''; ?>>

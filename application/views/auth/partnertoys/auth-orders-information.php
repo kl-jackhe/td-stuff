@@ -77,8 +77,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th nowrap="nowrap" class="col-lg-10 col-sm-9 col-xs-7">商品金額總計</th>
-                                <td nowrap="nowrap" class="col-lg-2 col-sm-3 col-xs-5">
+                                <th class="col-lg-10 col-sm-9 col-xs-7">商品金額總計</th>
+                                <td class="col-lg-2 col-sm-3 col-xs-5">
                                     <span class="price">NT$&nbsp;{{ selectedOrder.order_total }}</span>&nbsp;元
                                 </td>
                             </tr>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="padding-top: 20px;">
+                <div class="orderInfoHeader">
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
@@ -195,7 +195,68 @@
                         </div>
                     </div>
                 </div>
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'">
+                <div class="orderInfoHeader">
+                    <div class="form-group">
+                        <div class="shippingInformation">訂單留言</div>
+                    </div>
+                    <div class="leave_msg">
+                        <a @click="toggleMessagePopup" title="我要留言" class="btn btn-warning popup-link-message">我要留言</a>
+                    </div>
+                    <table v-if="selectedOrderMessage.length > 0" id="orderMessageTable" class="table table-striped table-inquiry">
+                        <tbody class="messagePC">
+                            <tr>
+                                <th style="width: 30%;">留言時間</th>
+                                <th style="width: 70%;">留言內容</th>
+                            </tr>
+                            <tr v-for="self in selectedOrderMessage">
+                                <td>
+                                    <p><span>{{ self.created_at }}</span></p>
+                                </td>
+                                <td>
+                                    <p v-if=" self.user_id==0" class="redContent">
+                                        <span class="redContent">
+                                            <b>管理者留言：</b>
+                                        </span>
+                                        <span><br></span>
+                                        <span>{{ self.content }}</span>
+                                    </p>
+                                    <p v-if="self.user_id != 0">
+                                        <span>
+                                            <b>您的留言：</b>
+                                        </span>
+                                        <span><br></span>
+                                        <span>{{ self.content }}</span>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody class="messageMobile">
+                            <tr>
+                                <th style="width: 100%;">留言內容</th>
+                            </tr>
+                            <tr v-for="self in selectedOrderMessage">
+                                <td style="width: 100%;">
+                                    <span>{{ self.created_at }}</span>
+                                    <div>
+                                        <p v-if="self.user_id == 0" class="redContent">
+                                            <span><b>管理者留言：</b></span>
+                                            <span>{{ self.content }}</span>
+                                        </p>
+                                        <p v-if="self.user_id != 0">
+                                            <span><b>您的留言：</b></span>
+                                            <span>{{ self.content }}</span>
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div v-if="selectedOrderMessage.length == 0" class="noneOrder">
+                        <span>目前無任何留言資料</span>
+                    </div>
+                </div>
+                <!-- <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'"> -->
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS' || selectedOrder.order_payment == 'ecpay_credit')">
                     <div class="operateBtn col-6">
                         <a id="completePay" @click="completePay(selectedOrder.order_id)">繼續付款</a>
                     </div>
@@ -203,10 +264,36 @@
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
                     </div>
                 </div>
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
+                <!-- <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
                     <div class="operateBtn col-12">
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
                     </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- mfp -->
+<div id="termsPopupWrapper">
+    <div id="termsOfMessage" class="mfp-hide">
+        <div class="col-12 text-center">
+            <span class="memberTitleMember">LEAVE<span class="memberTitleLogin">&nbsp;MESSAGE</span></span>
+        </div>
+        <div class="memberTitleChinese col-12 text-center">我要留言</div>
+        <div class="membershipLine"></div>
+        <div class="membershipContent">
+            <div class="row form-group">
+                <label class="col-sm-3 control-label" for="message_content">留言內容</label>
+                <div class="col-sm-9">
+                    <textarea name="message_content" id="message_content" class="form-control" required></textarea>
+                </div>
+            </div>
+            <div class="row form-group mt-5">
+                <div class="col-sm-12 sendMessageButtonGroup">
+                    <input type="hidden" name="order_id" id="order_id" :value="selectedOrder.order_id">
+                    <button type="reset" class="btnDef black"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;清除</button>
+                    <button type="button" class="btnDef red" @click="sendMessage"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;送出</button>
                 </div>
             </div>
         </div>

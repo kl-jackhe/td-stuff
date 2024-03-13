@@ -139,4 +139,11 @@ class Auth_model extends CI_Model
         $query = $this->db->get('standard_page_list');
         return (!empty($query) ? $query->row_array() : false);
     }
+
+    function getOrderMessage($order_id)
+    {
+        $this->db->where('order_id', $order_id);
+        $query = $this->db->get('guestbook')->result_array();
+        return !empty($query) ? $query : false;
+    }
 }

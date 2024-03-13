@@ -31,7 +31,7 @@
                             <? endif; ?>
                         </td>
                         <td>
-                            <p><?php echo $items['name']; ?></p>
+                            <p><span class="cargoHoverStyle transitionAnimation" @click="goingToSpecificProduct(<?php echo $items['product_id']; ?>)"><?php echo $items['name']; ?></span></p>
                             <p>金額：$ <?php echo $items['price']; ?></p>
                             <p>
                                 數量：

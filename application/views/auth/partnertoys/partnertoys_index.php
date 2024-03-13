@@ -192,10 +192,12 @@
     const authApp = Vue.createApp({
         data() {
             return {
+                getOrder: <?php echo !empty($postOrder) ? json_encode($postOrder) : json_encode(''); ?>,
                 getCategory: <?php echo !empty($category) ? json_encode($category) : json_encode(''); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
+                order_msg: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_message)) ? json_encode($order_message) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 mail: <?= (!empty($this->session->userdata('user_id')) && !empty($mail)) ? json_encode($mail) : json_encode(''); ?>,
                 lottery: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery)) ? json_encode($lottery) : json_encode(''); ?>,
                 lottery_pool: <?= (!empty($this->session->userdata('user_id')) && !empty($lottery_pool)) ? json_encode($lottery_pool) : json_encode(''); ?>,
@@ -204,6 +206,7 @@
                 followData: '',
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
+                selectedOrderMessage: null, // 該會員被選中的訂單內容物
                 selectedMail: null, // 該會員被選中的訂單
                 authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
@@ -220,6 +223,15 @@
             this.initMagnificPopup();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
+                if (this.getOrder && this.getOrder.length > 0) {
+                    this.selectedOrder = this.order.find(self => self.order_id === this.getOrder);
+                    this.selectedOrderItem = this.order_item.filter(self => self.order_id === this.getOrder);
+                    this.selectedOrderMessage = this.order_msg.filter(self => self.order_id === this.getOrder);
+
+                    setTimeout(() => {
+                        document.getElementById('orderMessageTable').scrollIntoView();
+                    }, 300); // 延遲300毫秒以確保元素已經正確加載
+                }
                 if (this.getCategory && this.getCategory.length > 0) {
                     this.selectedCategoryId = this.getCategory;
                     const tmpSet = this.authCategory.find(self => self.sort === this.getCategory);
@@ -292,6 +304,11 @@
                     midClick: true // 允许使用中键点击
                     // 更多配置项可以根据需求添加
                 });
+                $('.popup-link-message').magnificPopup({
+                    type: 'inline',
+                    midClick: true // 允许使用中键点击
+                    // 更多配置项可以根据需求添加
+                });
             },
             toggleTermsPopup() {
                 // 获取 Magnific Popup 插件实例
@@ -304,6 +321,23 @@
                     magnificPopup.open({
                         items: {
                             src: '#termsOfMembership'
+                        },
+                        type: 'inline'
+                        // 更多 Magnific Popup 配置项可根据需要添加
+                    });
+                }
+            },
+            toggleMessagePopup() {
+                // 获取 Magnific Popup 插件实例
+                const magnificPopup = $.magnificPopup.instance;
+
+                // 切换弹窗的显示状态
+                if (magnificPopup.isOpen) {
+                    magnificPopup.close();
+                } else {
+                    magnificPopup.open({
+                        items: {
+                            src: '#termsOfMessage'
                         },
                         type: 'inline'
                         // 更多 Magnific Popup 配置项可根据需要添加
@@ -460,10 +494,12 @@
                 this.scrollToTop();
                 this.selectedOrder = selected;
                 this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
+                this.selectedOrderMessage = this.order_msg.filter(self => self.order_id === selected.order_id);
             },
             clearSelectedOrder() {
                 this.selectedOrder = null;
                 this.selectedOrderItem = null;
+                this.selectedOrderMessage = null;
             },
             showMailDetail(selected) {
                 this.scrollToTop();
@@ -579,6 +615,50 @@
                         }
                     }
                 })
+            },
+            // 訂單留言
+            sendMessage() {
+                if (confirm('貼心提醒~確認是否要送出留言。')) {
+                    var sendId = $('#order_id').val();
+                    var sendMessage = $('#message_content').val();
+                    // console.log(sendId);
+                    // console.log(sendMessage);
+                    if (sendMessage == '' || sendMessage == null) {
+                        alert('傳送失敗，留言不可為空');
+                        return;
+                    }
+                    $.ajax({
+                        url: '/auth/uploadOrderMessage',
+                        type: 'post',
+                        data: {
+                            id: sendId,
+                            message: sendMessage,
+                        },
+                        success: function(response) {
+                            if (response == 'success') {
+                                $.ajax({
+                                    url: '/encode/getMutiPostDataEncode',
+                                    type: 'post',
+                                    data: {
+                                        order: sendId,
+                                        category: this.selectedCategoryId,
+                                    },
+                                    success: (response) => {
+                                        if (response) {
+                                            if (response.result == 'success') {
+                                                window.location.href = <?= json_encode(base_url()) ?> + 'auth/?' + response.src;
+                                            } else {
+                                                console.log('error.');
+                                            }
+                                        } else {
+                                            console.log(response);
+                                        }
+                                    },
+                                });
+                            }
+                        }
+                    })
+                }
             },
             // 頁碼
             setPage(page) {
@@ -728,7 +808,7 @@
         });
         FB.AppEvents.logPageView();
         // 在這裡檢查登入狀態
-        checkLoginState();
+        // checkLoginState();
     };
 
     (function(d, s, id) {
@@ -738,8 +818,8 @@
         }
         js = d.createElement(s);
         js.id = id;
-        js.src = "//connect.facebook.net/zh_TW/sdk.js";
-        // js.src = "//connect.facebook.net/en_US/sdk.js";
+        // js.src = "//connect.facebook.net/zh_TW/sdk.js";
+        js.src = "//connect.facebook.net/en_US/sdk.js";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
@@ -755,6 +835,7 @@
         FB.login(function(response) {
             // 處理登入後的回應
             statusChangeCallback(response);
+            console.log('test');
         }, {
             scope: 'public_profile,email'
         }); // 指定權限
@@ -782,7 +863,7 @@
                 // 使用 AJAX 發送 POST 請求到後端
                 $.ajax({
                     type: 'POST',
-                    url: 'auth/FB_login',
+                    url: '/auth/FB_login',
                     contentType: 'application/json',
                     data: JSON.stringify(userData),
                     success: function(data) {

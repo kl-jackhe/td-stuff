@@ -108,7 +108,7 @@
                                     <span class="input-group-text">生日</span>
                                     <span class="input-group-text"><i class="fa-solid fa-cake-candles"></i></span>
                                 </div>
-                                <input type="date" class="form-control" name="birthday" id="birthday" value="<?php echo $user->birthday; ?>">
+                                <input type="date" class="form-control" name="birthday" id="birthday" value="<?php echo ($user->birthday != '0000-00-00') ? $user->birthday : ''; ?>">
                             </div>
                         </div>
                     </div>
