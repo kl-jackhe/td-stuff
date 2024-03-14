@@ -156,6 +156,7 @@
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
                 coupon: <?php echo (!empty($this->session->userdata('user_id')) && !empty($coupon)) ? json_encode($coupon) : json_encode(''); ?>, // 指定會員優惠券
+                pname: <?= (!empty($this->session->userdata('user_id')) && !empty($payment_name)) ? json_encode($payment_name) : json_encode(''); ?>,
                 followData: null,
                 selectedOrder: null, // 該會員被選中的訂單
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
@@ -247,6 +248,10 @@
                         // 更多 Magnific Popup 配置项可根据需要添加
                     });
                 }
+            },
+            getPayName(data) {
+                var name = this.pname.find(self => self.payment_code === data);
+                return name.payment_name;
             },
             // getCaptcha() {
             //     $.ajax({

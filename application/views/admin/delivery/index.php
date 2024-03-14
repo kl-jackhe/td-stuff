@@ -86,13 +86,13 @@
               </td>
             </tr>
           <? endforeach ?>
-        <?php else : ?>
+        <? else : ?>
           <tr>
             <td colspan="4">
               <center>對不起, 沒有資料 !</center>
             </td>
           </tr>
-        <?php endif; ?>
+        <? endif; ?>
       </table>
     </div>
   </div>

@@ -102,33 +102,24 @@
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
-                        <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                        <div class="row">
                             <div class="col-12 text-center">
-                                <h2>送貨及備註資訊</h2>
+                                <h2>收件資訊</h2>
                             </div>
-                            <div class="col-4 text-right">取貨方式：</div>
-                            <div class="col-8">超商取貨</div>
-                            <div class="col-4 text-right">超商編號：</div>
-                            <div class="col-8">{{ selectedOrder.store_id }}</div>
-                            <div class="col-4 text-right">超商名稱：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_name }}</div>
-                            <div class="col-4 text-right">超商地址：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_address }}</div>
-                        </div>
-                        <div v-else class="row">
-                            <div class="col-12 text-center">
-                                <h2>送貨及備註資訊</h2>
-                            </div>
-                            <div class="col-4 text-right">取貨方式：</div>
-                            <div class="col-8">宅配到府</div>
-                            <div class="col-4 text-right">到貨地址：</div>
-                            <div class="col-8">{{ selectedOrder.order_delivery_address }}</div>
+                            <div class="col-4 text-right">收件人：</div>
+                            <div class="col-8">{{ selectedOrder.customer_name }}</div>
+                            <div class="col-4 text-right">聯絡電話：</div>
+                            <div class="col-8">{{ selectedOrder.customer_phone }}</div>
+                            <div class="col-4 text-right">收件地址：</div>
+                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="col-8">超商取貨</div>
+                            <div v-else class="col-8">{{ selectedOrder.order_delivery_address }}</div>
                         </div>
                     </div>
                 </div>
+                <!-- 待修改 -->
                 <div class="orderInfoHeader">
                     <div class="form-group">
-                        <div class="shippingInformation">出貨資訊</div>
+                        <div class="shippingInformation"></div>
                     </div>
                     <div v-if="selectedOrder.order_step == 'order_cancel'" class="noneOrder">
                         <span>訂單已取消</span>
@@ -160,8 +151,6 @@
                                 <div class="col-12 text-center">
                                     <h2>物流資訊</h2>
                                 </div>
-                                <div class="col-4 text-right">物流交易編號：</div>
-                                <div class="col-8">NONE</div>
                                 <div class="col-4 text-right">寄貨編號：</div>
                                 <div class="col-8">{{ selectedOrder.SelfLogistics }}</div>
                             </div>
@@ -172,9 +161,7 @@
                                 <div class="col-4 text-right">物流交易編號：</div>
                                 <div class="col-8">暫無</div>
                             </div>
-                        </div>
-                        <div class="col-md-6 orderMarginBottom separator">
-                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                            <div v-if="selectedOrder.InvoiceNumber != ''" class="row">
                                 <div class="col-12 text-center">
                                     <h2>發票資訊</h2>
                                 </div>
@@ -191,6 +178,34 @@
                                 <div class="col-8">暫無</div>
                                 <div class="col-4 text-right">發票號碼：</div>
                                 <div class="col-8">暫無</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 orderMarginBottom separator">
+                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                                <div class="col-12 text-center">
+                                    <h2>送貨及備註資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">取貨方式：</div>
+                                <div class="col-8">超商取貨</div>
+                                <div v-show='selectedOrder.store_id' class="col-4 text-right">超商編號：</div>
+                                <div v-show='selectedOrder.store_id' class="col-8">{{ selectedOrder.store_id }}</div>
+                                <div v-show='selectedOrder.order_store_name' class="col-4 text-right">超商名稱：</div>
+                                <div v-show='selectedOrder.order_store_name' class="col-8">{{ selectedOrder.order_store_name }}</div>
+                                <div v-show='selectedOrder.order_store_address' class="col-4 text-right">超商地址：</div>
+                                <div v-show='selectedOrder.order_store_address' class="col-8">{{ selectedOrder.order_store_address }}</div>
+                                <div class="col-4 text-right">訂單備註：</div>
+                                <div class="col-8">{{ (selectedOrder.order_remark == '') ? '無備註資訊' : selectedOrder.order_remark }}</div>
+                            </div>
+                            <div v-else class="row">
+                                <div class="col-12 text-center">
+                                    <h2>送貨及備註資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">取貨方式：</div>
+                                <div class="col-8">宅配到府</div>
+                                <div class="col-4 text-right">到貨地址：</div>
+                                <div class="col-8">{{ selectedOrder.order_delivery_address }}</div>
+                                <div class="col-4 text-right">訂單備註：</div>
+                                <div class="col-8">{{ (selectedOrder.order_remark == '') ? '無備註資訊' : selectedOrder.order_remark }}</div>
                             </div>
                         </div>
                     </div>

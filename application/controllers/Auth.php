@@ -165,6 +165,9 @@ class Auth extends Public_Controller
 				$this->data['order'] = $this->auth_model->getOrders($id);
 				$this->data['order_item'] = $this->auth_model->getOrderItem($id);
 
+				// 抓payname
+				$this->data['payment_name'] = $this->auth_model->getPaymentName();
+
 				// 分類
 				$this->data['auth_category'] = $this->auth_model->getAuthMemberCategory();
 			}

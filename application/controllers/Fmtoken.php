@@ -11,6 +11,8 @@ class fmtoken extends Public_Controller
         $now_time = time() + 60; // 获取未来1分钟后时间的时间戳
         $tmp_token = $this->session->userdata('fm_token');
         $tmp_token_life = $this->session->userdata('fm_token_life');
+        // $tmp_token = '';
+        // $tmp_token_life = 0;
         if (empty($tmp_token) || empty($tmp_token_life) || $now_time >= $tmp_token_life) {
             $this->fm_token = '';
         } else {
@@ -366,25 +368,32 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            // echo '<pre>';
-            // print_r($res);
-            // echo '</pre>';
-            if ($res['result'][$fm_ecno]['status'] == "success") {
-                $update_data = array(
-                    'AllPayLogisticsID' => $res['result'][$fm_ecno]['logistics'],
-                );
-                $this->db->where('fm_ecno', $fm_ecno);
-                $this->db->update('orders', $update_data);
-
-                echo "<script>alert('success');window.history.back()</script>";
+            echo '<pre>';
+            print_r($options);
+            echo '</pre>';
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            if ($res['response'] == "success") {
+                if ($res['result'][$fm_ecno]['status'] == "success") {
+                    $update_data = array(
+                        'AllPayLogisticsID' => $res['result'][$fm_ecno]['logistics'],
+                    );
+                    $this->db->where('fm_ecno', $fm_ecno);
+                    $this->db->update('orders', $update_data);
+                }
+                // echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
-                echo '<pre>';
-                print_r($res);
-                echo '</pre>';
-                echo "<script>alert('error');window.history.back()</script>";
+                // echo "<script>alert('error');window.history.back()</script>";
                 return false;
             }
+        } else {
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            echo "<script>alert('error, no response.');window.history.back()</script>";
+            return false;
         }
     }
 
@@ -427,26 +436,29 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            // echo '<pre>';
-            // print_r($res);
-            // echo '</pre>';
-            // return;
-            if ($res['result'][$fm_ecno]['status'] == "success") {
-                $update_data = array(
-                    'AllPayLogisticsID' => $res['result'][$fm_ecno]['logistics'],
-                );
-                $this->db->where('fm_ecno', $fm_ecno);
-                $this->db->update('orders', $update_data);
-
-                echo "<script>alert('success');window.history.back()</script>";
+            echo '<pre>';
+            print_r($options);
+            echo '</pre>';
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            if ($res['response'] == "success") {
+                if ($res['result'][$fm_ecno]['status'] == "success") {
+                    $update_data = array(
+                        'AllPayLogisticsID' => $res['result'][$fm_ecno]['logistics'],
+                    );
+                    $this->db->where('fm_ecno', $fm_ecno);
+                    $this->db->update('orders', $update_data);
+                }
+                // echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
-                echo '<pre>';
-                print_r($res);
-                echo '</pre>';
-                echo "<script>alert('error');window.history.back()</script>";
+                // echo "<script>alert('error');window.history.back()</script>";
                 return false;
             }
+        } else {
+            echo "<script>alert('error, no response.');window.history.back()</script>";
+            return false;
         }
     }
 
@@ -492,6 +504,12 @@ class fmtoken extends Public_Controller
             echo '<pre>';
             print_r($res);
             echo '</pre>';
+        } else {
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            echo "<script>alert('error, no response.');window.history.back()</script>";
+            return false;
         }
     }
 
@@ -537,6 +555,12 @@ class fmtoken extends Public_Controller
             echo '<pre>';
             print_r($res);
             echo '</pre>';
+        } else {
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            echo "<script>alert('error, no response.');window.history.back()</script>";
+            return false;
         }
     }
 }

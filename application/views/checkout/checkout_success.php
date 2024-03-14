@@ -198,6 +198,15 @@
                                     </tr>
                                     <tr>
                                         <th>
+                                            <span class="fs-13">銀行分行</span>
+                                        </th>
+                                        <td>
+                                            <span class="fs-16 color-595757">
+                                                <?php echo get_setting_general('atm_bank_branch') ?></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
                                             <span class="fs-13">銀行帳號</span>
                                         </th>
                                         <td>

@@ -89,16 +89,48 @@
                     <div class="col-md-6 orderMarginBottom">
                         <div class="row">
                             <div class="col-12 text-center">
-                                <h2>訂購人資訊</h2>
+                                <h2>訂購資訊</h2>
                             </div>
                             <div class="col-4 text-right">訂購人：</div>
                             <div class="col-8">{{ selectedOrder.customer_name }}</div>
                             <div class="col-4 text-right">付款方式：</div>
-                            <div class="col-8">{{ (selectedOrder.order_payment == 'cash_on_delivery') ? '貨到付款' : '綠界金流' }}</div>
+                            <div v-show="selectedOrder.order_payment" class="col-8">{{ getPayName(selectedOrder.order_payment) }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
                             <div class="col-8">{{ selectedOrder.customer_email }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 orderMarginBottom separator">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>收件資訊</h2>
+                            </div>
+                            <div class="col-4 text-right">收件人：</div>
+                            <div class="col-8">{{ selectedOrder.customer_name }}</div>
+                            <div class="col-4 text-right">聯絡電話：</div>
+                            <div class="col-8">{{ selectedOrder.customer_phone }}</div>
+                            <div class="col-4 text-right">收件地址：</div>
+                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup' || selectedOrder.order_delivery == 'family_limit_5_frozen_pickup' || selectedOrder.order_delivery == 'family_limit_10_frozen_pickup'" class="col-8">超商取貨</div>
+                            <div v-else class="col-8">{{ self.order_delivery_address }}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5" id="separatorBottom">
+                    <div class="col-md-6 orderMarginBottom">
+                        <div v-show="selectedOrder.order_payment == 'bank_transfer'" class="row">
+                            <div class="col-12 text-center">
+                                <h2>付款資訊</h2>
+                            </div>
+                            <div class="col-4 text-right">付款方式：</div>
+                            <div class="col-8">ATM轉帳</div>
+                            <div class="col-4 text-right">匯款銀行：</div>
+                            <div class="col-8"><?= get_setting_general('atm_bank_code') ?></div>
+                            <div class="col-4 text-right">匯款分行：</div>
+                            <div class="col-8"><?= get_setting_general('atm_bank_branch') ?></div>
+                            <div class="col-4 text-right">匯款帳戶：</div>
+                            <div class="col-8"><?= get_setting_general('atm_bank_account') ?></div>
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
@@ -108,12 +140,14 @@
                             </div>
                             <div class="col-4 text-right">取貨方式：</div>
                             <div class="col-8">超商取貨</div>
-                            <div class="col-4 text-right">超商編號：</div>
-                            <div class="col-8">{{ selectedOrder.store_id }}</div>
-                            <div class="col-4 text-right">超商名稱：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_name }}</div>
-                            <div class="col-4 text-right">超商地址：</div>
-                            <div class="col-8">{{ selectedOrder.order_store_address }}</div>
+                            <div v-show='selectedOrder.store_id' class="col-4 text-right">超商編號：</div>
+                            <div v-show='selectedOrder.store_id' class="col-8">{{ selectedOrder.store_id }}</div>
+                            <div v-show='selectedOrder.order_store_name' class="col-4 text-right">超商名稱：</div>
+                            <div v-show='selectedOrder.order_store_name' class="col-8">{{ selectedOrder.order_store_name }}</div>
+                            <div v-show='selectedOrder.order_store_address' class="col-4 text-right">超商地址：</div>
+                            <div v-show='selectedOrder.order_store_address' class="col-8">{{ selectedOrder.order_store_address }}</div>
+                            <div class="col-4 text-right">訂單備註：</div>
+                            <div class="col-8">{{ (selectedOrder.order_remark == '') ? '無備註資訊' : selectedOrder.order_remark }}</div>
                         </div>
                         <div v-else class="row">
                             <div class="col-12 text-center">
@@ -123,10 +157,12 @@
                             <div class="col-8">宅配到府</div>
                             <div class="col-4 text-right">到貨地址：</div>
                             <div class="col-8">{{ selectedOrder.order_delivery_address }}</div>
+                            <div class="col-4 text-right">訂單備註：</div>
+                            <div class="col-8">{{ (selectedOrder.order_remark == '') ? '無備註資訊' : selectedOrder.order_remark }}</div>
                         </div>
                     </div>
                 </div>
-                <div style="padding-top: 20px;">
+                <div class="pt-2">
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
@@ -160,21 +196,26 @@
                                 <div class="col-12 text-center">
                                     <h2>物流資訊</h2>
                                 </div>
-                                <div class="col-4 text-right">物流交易編號：</div>
-                                <div class="col-8">NONE</div>
-                                <div class="col-4 text-right">寄貨編號：</div>
+                                <div class="col-4 text-right">寄貨單號：</div>
                                 <div class="col-8">{{ selectedOrder.SelfLogistics }}</div>
+                            </div>
+                            <div v-else-if="selectedOrder.AllPayLogisticsID" class="row">
+                                <div class="col-12 text-center">
+                                    <h2>物流資訊</h2>
+                                </div>
+                                <div class="col-4 text-right">寄貨單號：</div>
+                                <div class="col-8">{{ selectedOrder.AllPayLogisticsID }}</div>
                             </div>
                             <div v-else class="row">
                                 <div class="col-12 text-center">
                                     <h2>物流資訊</h2>
                                 </div>
-                                <div class="col-4 text-right">物流交易編號：</div>
+                                <div class="col-4 text-right">寄貨單號：</div>
                                 <div class="col-8">暫無</div>
                             </div>
                         </div>
                         <div class="col-md-6 orderMarginBottom separator">
-                            <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
+                            <!-- <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup'" class="row">
                                 <div class="col-12 text-center">
                                     <h2>發票資訊</h2>
                                 </div>
@@ -182,8 +223,8 @@
                                 <div class="col-8">電子發票</div>
                                 <div class="col-4 text-right">發票號碼：</div>
                                 <div class="col-8">{{ selectedOrder.InvoiceNumber }}</div>
-                            </div>
-                            <div v-else class="row">
+                            </div> -->
+                            <div class="row">
                                 <div class="col-12 text-center">
                                     <h2>發票資訊</h2>
                                 </div>
