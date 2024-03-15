@@ -369,7 +369,7 @@
                     success: function(data) {
                         if (data == 'successful') {
                             alert('刪除成功');
-                            window.location.href = <?php echo json_encode(base_url()); ?> + "auth?id=2";
+                            window.location.reload();
                         } else {
                             // console.log(data);
                         }
@@ -395,8 +395,27 @@
                 return this.lottery_pool.find(self => self.lottery_id === lottery_id);
             },
             // 指向指定商品
-            href_product(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "product/product_detail/" + id;
+            href_product(selected) {
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/selectedProduct',
+                        type: 'post',
+                        data: {
+                            selectedProduct: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'product/product_detail/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 完成付款
             completePay(id) {
@@ -835,7 +854,7 @@
         FB.login(function(response) {
             // 處理登入後的回應
             statusChangeCallback(response);
-            console.log('test');
+            // console.log('test');
         }, {
             scope: 'public_profile,email'
         }); // 指定權限
@@ -871,8 +890,11 @@
                         if (data == 'unsuccessful') {
                             alert('登入失敗，請嘗試其他方式登入。');
                             window.location.href = '/auth';
-                        } else if (data !== null) {
+                        } else if (data == 'successful') {
                             window.location.href = '/';
+                        } else {
+                            alert('登入失敗，請重新嘗試或使用其他方式登入。');
+                            window.location.href = '/auth';
                         }
                         // console.log(data);
                     },

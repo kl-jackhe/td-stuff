@@ -19,19 +19,19 @@
             <div class="col-md-12">
               <div class="form-group row">
                 <label class="col-bg-12 col-md-6 col-lg-6 required" for="old">舊密碼</label>
-                <input type="password" class="form-control" id="old" name="old" placeholder="請輸入舊密碼" required>
+                <input type="password" class="form-control inputAdjustMargin" id="old" name="old" placeholder="請輸入舊密碼" required>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group row">
                 <label class="col-bg-12 col-md-6 col-lg-6 required" for="new">新密碼</label>
-                <input type="password" class="form-control" id="new" name="new" placeholder="請輸入6~20個字元內的新密碼" required>
+                <input type="password" class="form-control inputAdjustMargin" id="new" name="new" placeholder="請輸入6~20個字元內的新密碼" required>
               </div>
             </div>
             <div class="col-md-12">
               <div class="form-group row">
                 <label class="col-bg-12 col-md-6 col-lg-6 required" for="new_confirm">新密碼</label>
-                <input type="password" class="form-control" id="new_confirm" name="new_confirm" placeholder="請再次輸入密碼" required>
+                <input type="password" class="form-control inputAdjustMargin" id="new_confirm" name="new_confirm" placeholder="請再次輸入密碼" required>
               </div>
             </div>
           </div>

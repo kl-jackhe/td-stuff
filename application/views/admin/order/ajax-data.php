@@ -226,10 +226,10 @@
                                     <select id="orderType" class="form-control">
                                         <?php if ($order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
                                             <option value="fm_add_b2c_order/cold">B2C冷凍訂單</option>
-                                            <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option>
+                                            <!-- <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option> -->
                                         <?php elseif ($order['order_delivery'] == 'family_pickup') : ?>
                                             <option value="fm_add_b2c_order/normal">B2C常溫訂單</option>
-                                            <option value="fm_add_c2c_order/normal">C2C常溫訂單</option>
+                                            <!-- <option value="fm_add_c2c_order/normal">C2C常溫訂單</option> -->
                                         <?php endif; ?>
                                     </select>
                                     <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>

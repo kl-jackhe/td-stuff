@@ -83,10 +83,14 @@
                     <div class="col-12 col-md-4">
                         <h2>聯絡我們</h2>
                         <hr>
-                        <p><i class="fa-solid fa-phone"></i>&ensp;<a href="tel:<?php echo get_setting_general('phone1'); ?>"><?php echo get_setting_general('phone1'); ?></a></p>
-                        <p><i class="fa-solid fa-envelope"></i>&ensp;<a href="mailto:<?php echo get_setting_general('email'); ?>"><?php echo get_setting_general('email'); ?></a></p>
-                        <p><i class="fa-solid fa-map-location-dot"></i>&ensp;<?php echo get_setting_general('address'); ?></p>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.4789445134197!2d120.67437757593652!3d24.15493037312489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d7ace462a2b%3A0xc2473adc0c9d6183!2zNDA05Y-w5Lit5biC5YyX5Y2A5Lit5riF6Lev5LiA5q61ODnomZ85IDEw!5e0!3m2!1szh-TW!2stw!4v1701331194617!5m2!1szh-TW!2stw" width="100%" height="auto" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <p class="fanLink">
+                            <a href="<?php echo get_setting_general('official_facebook_1'); ?>" target="_blank"><i class="fa-brands fa-facebook footerLinkIcon"></i></a>
+                            <a href="<?php echo get_setting_general('official_instagram_1'); ?>" target="_blank"><i class="fa-brands fa-instagram footerLinkIcon"></i></a>
+                        </p>
+                        <p><i class="fa-solid fa-phone"></i>&ensp;<a href="tel:<?php echo get_setting_general('phone1'); ?>" target="_blank"><?php echo get_setting_general('phone1'); ?></a></p>
+                        <p><i class="fa-solid fa-envelope"></i>&ensp;<a href="mailto:<?php echo get_setting_general('email'); ?>" target="_blank"><?php echo get_setting_general('email'); ?></a></p>
+                        <p><i class="fa-solid fa-map-location-dot"></i>&ensp;<a href="//maps.app.goo.gl/BnrgrQWit5osM9Bz8" target="_blank"><?php echo get_setting_general('address'); ?></a></p>
+                        <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3640.4789445134197!2d120.67437757593652!3d24.15493037312489!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d7ace462a2b%3A0xc2473adc0c9d6183!2zNDA05Y-w5Lit5biC5YyX5Y2A5Lit5riF6Lev5LiA5q61ODnomZ85IDEw!5e0!3m2!1szh-TW!2stw!4v1701331194617!5m2!1szh-TW!2stw" width="100%" height="auto" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                     </div>
                 </div>
             </div>
@@ -98,12 +102,12 @@
                         <span>
                             Copyright © 2023 <?php echo get_setting_general('name'); ?> All Rights Reserved.&emsp;
                         </span>
-                        <span>
+                        <!-- <span>
                             <a href="<?= get_setting_general('official_facebook_1') ?>" title="粉絲專頁" target="_blank" class="fb transitionAnimation">Facebook</a>&emsp;
                         </span>
                         <span>
                             <a href="<?= get_setting_general('official_instagram_1') ?>" title="粉絲專頁" target="_blank" class="ig transitionAnimation">Instagram</a>&emsp;
-                        </span>
+                        </span> -->
                     </div>
                 </div>
             </div>

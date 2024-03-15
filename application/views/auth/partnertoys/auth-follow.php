@@ -11,46 +11,40 @@
                     <span class="">目前無任何追蹤資料</span>
                 </div>
                 <!-- Display for screens larger than or equal to 767px -->
-                <div v-if="followData && !(followData && !followData.some(container => Object.keys(container).length > 0))" class="M_order d-none d-md-block">
+                <div v-if="followData && !(followData && !followData.some(container => Object.keys(container).length > 0))" class="d-none d-md-block">
                     <li id="orderListHeader" class="row">
-                        <ol class="col-8 align-self-center text-center">商品名稱</ol>
+                        <ol class="col-10 align-self-center text-center">商品名稱</ol>
                         <ol class="col-2 align-self-center text-center">刪除</ol>
-                        <ol class="col-2 align-self-center text-center">購買</ol>
                     </li>
-                    <a v-for="self in followData.slice(pageStart, pageEnd)" class="Information">
-                        <li v-if="self" class="row">
+                    <div v-for="(self, index) in followData.slice(pageStart, pageEnd)" class="Information">
+                        <li v-if="self" :class="{ 'row': true, 'memberLikeList': true, 'memberLikeListBackground': index % 2 !== 0 }">
                             <ol class="col-2 align-self-center text-center">
                                 <img :src="'/assets/uploads/' + self.product_image" style="width: 100%;">
                             </ol>
-                            <ol class="col-6 align-self-center">
-                                <span>{{ self.product_name }}</span>
+                            <ol class="col-8 align-self-center">
+                                <span class="trackingProduct transitionAnimation" @click="href_product(self.product_id)">{{ self.product_name }}</span>
                             </ol>
                             <ol class="col-2 align-self-center text-center">
                                 <span class="trackingButton" @click="delect_follow(self.product_id)"><i class="fa fa-trash" aria-hidden="true"></i></span>
                             </ol>
-                            <ol class="col-2 align-self-center text-center">
-                                <span class="trackingButton" @click="href_product(self.product_id)"><i class="fa fa-cart-plus" aria-hidden="true"></i></span>
-                            </ol>
                         </li>
-                    </a>
+                    </div>
                 </div>
                 <!-- Your alternative display for small screens goes here -->
                 <div v-if="followData && !(followData && !followData.some(container => Object.keys(container).length > 0))" class="d-md-none">
                     <li id="orderListHeader" class="row">
-                        <ol class="col-8 align-self-center text-center">商品名稱</ol>
-                        <ol class="col-2 align-self-center text-center">刪除</ol>
-                        <ol class="col-2 align-self-center text-center">購買</ol>
+                        <ol class="col-12 align-self-center text-center">商品資訊</ol>
                     </li>
                     <a v-for="self in followData.slice(pageStart, pageEnd)" class="Information">
                         <li v-if="self" class="row">
-                            <ol class="col-8 align-self-center">
+                            <ol class="col-3 align-self-center text-center">
+                                <img :src="'/assets/uploads/' + self.product_image" style="width: 100%;">
+                            </ol>
+                            <ol class="col-7 align-self-center">
                                 <span>{{ self.product_name }}</span>
                             </ol>
-                            <ol class="col-2 align-self-center text-center">
+                            <ol class="col-2 align-self-center">
                                 <span class="trackingButton" @click="delect_follow(self.product_id)"><i class="fa fa-trash" aria-hidden="true"></i></span>
-                            </ol>
-                            <ol class="col-2 align-self-center text-center">
-                                <span class="trackingButton" @click="href_product(self.product_id)"><i class="fa fa-cart-plus" aria-hidden="true"></i></span>
                             </ol>
                         </li>
                     </a>

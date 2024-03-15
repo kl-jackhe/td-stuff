@@ -276,12 +276,12 @@ class Auth extends Public_Controller
 			// $user_data 包含從前端傳來的使用者資訊
 			// echo json_encode($user_data);
 			if ($this->ion_auth_model->FB_acesses($user_data)) :
-				echo json_encode('successful');
+				echo 'successful';
 			else :
-				echo json_encode('unsuccessful');
+				echo 'unsuccessful';
 			endif;
 		} else {
-			echo json_encode('unsuccessful');
+			echo 'unsuccessful';
 		}
 	}
 

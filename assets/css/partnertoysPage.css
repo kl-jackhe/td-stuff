@@ -15,6 +15,10 @@ body {
     margin-top: 120px;
 }
 
+#footer p {
+    margin: 8px 0 8px 0 !important;
+}
+
 body {
     font-family: "Microsoft JhengHei", "PMingLiU", "Helvetica Neue", Helvetica, Arial, "Century Gothic", sans-serif !important;
     /* font-family: Open Sans, "Microsoft JhengHei"; */
@@ -187,8 +191,8 @@ label.required::before {
 }
 
 #mobileMenu {
-    top: 115px;
-    z-index: 99;
+    top: 108px;
+    z-index: 1001;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -203,7 +207,7 @@ label.required::before {
 }
 
 .mobileSubMenu:hover {
-    background-color: rgba(239, 132, 104, 1.0);
+    background-color: rgba(158, 158, 158, 1.0);
 }
 
 .mobileSubMenu a {
@@ -363,7 +367,7 @@ a.logBtn {
 }
 
 .nav_item_style:hover {
-    color: rgba(239, 132, 104, 1.0) !important;
+    color: rgba(78, 78, 78, 1.0) !important;
     text-decoration: none;
 }
 
@@ -373,7 +377,7 @@ a.logBtn {
 }
 
 .nav_item_mb_style.active {
-    background-color: rgba(239, 132, 104, 1.0);
+    background-color: rgba(78, 78, 78, 1.0);
 }
 
 .nav_item_mb_style .nav_item_style {
@@ -389,6 +393,10 @@ a.logBtn {
     color: #fff !important;
 }
 
+.nav_item_mb_style.active .nav_item_style {
+    color: #fff !important;
+}
+
 .navBorderBottom {
     width: 100%;
     border-bottom: 1px solid #afafaf;
@@ -396,7 +404,15 @@ a.logBtn {
 
 .fixed_icon_style {
     font-size: -webkit-xxx-large;
-    max-width: 40px;
+    max-width: 50px;
+    height: 50px;
+}
+
+@media (max-width:767px) {
+    .fixed_icon_style {
+        max-width: 30px;
+        height: 30px;
+    }
 }
 
 .header_fixed_icon {
@@ -633,6 +649,11 @@ a.logBtn {
     margin-top: 120px;
 }
 
+.sectionRejust .container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .clear-search {
     position: absolute;
     right: 35px;
@@ -645,6 +666,16 @@ a.logBtn {
     cursor: pointer;
     /* 懸停時顯示手型游標 */
     color: rgba(211, 84, 72, 1);
+}
+
+@media (max-width:991px) {
+    .productRightPadding {
+        padding-right: 5px;
+    }
+
+    .productLeftPadding {
+        padding-left: 5px;
+    }
 }
 
 .product_view_style_out a {
@@ -662,13 +693,10 @@ a.logBtn {
 }
 
 .product_view_style_out .product_name {
-    /* white-space: nowrap; */
-    /* 不換行 */
     overflow: hidden;
-    /* 超出部分隱藏 */
     text-overflow: ellipsis;
-    /* 超出部分顯示省略號 */
     padding: 10px 10px 30px 10px;
+    font-size: 14px;
 }
 
 .productTrigger {
@@ -853,6 +881,23 @@ a.logBtn {
     display: none;
 }
 
+#menu-btn h1 {
+    width: 100%;
+    height: 42px;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: 3px;
+    line-height: 42px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 3px;
+    overflow: hidden;
+    cursor: pointer;
+    /* padding: 0 10px 0 20px;
+    margin: 40px 0 0 0; */
+    background: linear-gradient(to bottom, rgba(239, 132, 104, 1) 0%, rgba(211, 84, 72, 1) 100%);
+}
+
 @media (min-width: 2300px) {
     .right-content {
         margin-top: 100px;
@@ -876,6 +921,7 @@ a.logBtn {
 
     /* 當 isNavOpen 為 true（即 nav 是打開的狀態）時，將其顯示在畫面中間 */
     .section-sidemenu.nav-open {
+        padding-bottom: 20px;
         position: relative;
         left: 0;
         opacity: 1;
@@ -893,11 +939,11 @@ a.logBtn {
     }
 
     #menu-btn {
-        border-radius: 5px;
+        /* border-radius: 5px; */
         text-align: center;
-        width: 35px;
-        border: 1px solid;
-        padding: 5px;
+        width: 100%;
+        /* border: 1px solid;
+        padding: 5px; */
         display: block;
         transition: all .3s ease-in-out;
         -moz-transition: all .3s ease-in-out;
@@ -905,22 +951,18 @@ a.logBtn {
         -o-transition: all .3s ease-in-out;
     }
 
-    #menu-btn:hover,
-    #menu-btn.active {
+    #menu-btn:hover {
         cursor: pointer;
-        /* 懸停時顯示手型游標 */
-        background-color: #d35448;
     }
 
-
-    .searchContainer {
+    /* .searchContainer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    }
+    } */
 
     .left-content {
-        margin: 3px 20px 20px 20px;
+        margin: 0px 0px 20px 0px;
     }
 
     .right-content {
@@ -950,8 +992,8 @@ a.logBtn {
     }
 }
 
-.product_view_style_out {
-    padding: 15px;
+.productsFlexPreview {
+    display: flex;
 }
 
 .product_view_style_in {
@@ -1081,6 +1123,7 @@ a.logBtn {
     color: #e30020;
     text-align: left;
     margin: 10px 0 0 0;
+    font-size: 16px;
 }
 
 .post_img {
@@ -1116,8 +1159,9 @@ a.logBtn {
 
 .touch_effect:hover {
     cursor: pointer;
+    filter: brightness(0.8);
     /* 懸停時顯示手型游標 */
-    transform: scale(1.05);
+    /* transform: scale(1.05); */
     /* -webkit-box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35);
     box-shadow: 0 10px 50px 0 rgba(84, 110, 122, .35) */
 }
@@ -1231,6 +1275,12 @@ input.qtyminus {
     padding: 20px;
 }
 
+@media (max-width: 767px) {
+    .productDetail {
+        padding: 0;
+    }
+}
+
 #postApp {
     overflow-x: hidden;
 }
@@ -1310,10 +1360,41 @@ input.qtyminus {
     background-color: #007bff;
 }
 
+#combineSelect.cargoBtn {
+    display: block;
+    width: 100%;
+    height: 36px;
+    color: #484f53;
+    font-size: 0.875rem;
+    border: 1px solid #aaa;
+    border-left: none;
+    border-right: none;
+    background-color: transparent;
+    background-image: url(/assets/images/partnertoys/ic_sizeselect.png);
+    background-size: 20px 5px;
+    background-repeat: no-repeat;
+    background-position: right center;
+    cursor: pointer;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    padding: 0;
+}
+
+.cargoTitle {
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
 @media (max-width:767px) {
     .scrollToDetailTop {
         bottom: 15px;
         right: 20px;
+    }
+
+    .cargoTitle {
+        margin-top: 30px;
     }
 }
 
@@ -1321,10 +1402,6 @@ input.qtyminus {
     font-size: 14px;
     margin: 10px 0;
     text-align: center;
-}
-
-#combineSelect.cargoBtn {
-    padding: 10px;
 }
 
 .cargoText {
@@ -1336,13 +1413,6 @@ input.qtyminus {
 
 .cargoText .paddingFixTop {
     font-size: 18px;
-}
-
-.cargoTitle {
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 10px;
-    padding: 10px;
 }
 
 .cargoDetail {
@@ -1495,7 +1565,7 @@ input.qtyminus {
 
 .link_href {
     text-align: center;
-    font-family: 'Brush Script MT', cursive;
+    font-family: "思源黑體", "Noto Sans T Chinese", "微軟正黑體";
 }
 
 .link_href a {
@@ -1504,6 +1574,12 @@ input.qtyminus {
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
+}
+
+@media (max-width:767px) {
+    .link_href {
+        font-size: 12px;
+    }
 }
 
 #phone_href {
@@ -1528,7 +1604,13 @@ input.qtyminus {
 
 #aboutImg {
     height: auto;
-    width: 60%;
+    width: 500px;
+}
+
+@media (max-width:767px) {
+    #aboutImg {
+        width: 100%;
+    }
 }
 
 #memberLoginForm {
@@ -1542,16 +1624,53 @@ input.qtyminus {
     /* border: 8px solid #efefef; */
     box-shadow: 6px 6px 20px grey;
     padding: 30px 100px;
+    margin: 50px 40px 60px 40px;
+}
+
+.memberContactUs {
+    /* border: 8px solid #efefef; */
+    box-shadow: 6px 6px 20px grey;
+    padding: 30px 100px;
     margin: 50px 10px 60px 10px;
 }
 
 @media (max-width:767px) {
-    .memberForm {
+    .memberContactUs {
         padding: 30px;
+    }
+
+    .memberForm {
+        box-shadow: none;
+        padding: 10px 0;
+        margin: 0;
+    }
+
+    #memberLoginForm {
+        box-shadow: none;
+        padding: 10px 0;
+        margin: 0;
     }
 }
 
+
+.memberTitleLogin {
+    font-weight: bold;
+    color: #e62626;
+}
+
+.memberTitleChinese {
+    font-weight: bold;
+    padding: 10px;
+    margin: 0 0 30px 0;
+}
+
 .memberTitleMember {
+    font-family: "思源黑體", "Noto Sans T Chinese", "微軟正黑體";
+    font-size: 28px;
+    color: #ff6b6b;
+}
+
+.mfpPageTitle {
     font-family: 'Brush Script MT', cursive;
     font-size: 28px;
     color: #ff6b6b;
@@ -1569,17 +1688,10 @@ input.qtyminus {
     .memberTitleMember {
         font-size: 20px;
     }
-}
 
-.memberTitleLogin {
-    font-weight: bold;
-    color: #e62626;
-}
-
-.memberTitleChinese {
-    font-weight: bold;
-    padding: 10px;
-    margin: 0 0 30px 0;
+    .mfpPageTitle {
+        font-size: 20px;
+    }
 }
 
 .separator {
@@ -1766,7 +1878,15 @@ input.qtyminus {
 #memberOrderList {
     box-shadow: 6px 6px 20px grey;
     padding: 30px 60px;
-    margin: 50px 0 60px 0;
+    margin: 50px 30px 60px 30px;
+}
+
+@media (max-width:767px) {
+    #memberOrderList {
+        box-shadow: none;
+        padding: 10px 0;
+        margin: 0;
+    }
 }
 
 .orderInformation li {
@@ -1860,6 +1980,20 @@ input.qtyminus {
 .alignItemBaseLine {
     align-items: baseline;
 }
+
+.alignItemBaseLine label {
+    text-align: start;
+    /* margin-right: 20px; */
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* @media (max-width:767px) {
+    .alignItemBaseLine label {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+} */
 
 #FBgraph {
     display: flex;
@@ -2215,7 +2349,7 @@ input.qtyminus {
     /* 添加過渡效果 */
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .product-row-container {
         width: calc((257.8px) * 12);
     }
@@ -2753,7 +2887,7 @@ input.qtyminus {
     }
 }
 
-@media (max-width:768px) {
+@media (max-width:767px) {
     .pc_lottery {
         display: none;
     }
@@ -2964,10 +3098,17 @@ select.lotteryResult {
     visibility: hidden;
 }
 
+@media (max-width:767px) {
+
+    .share {
+        margin: 20px 0 60px 0;
+    }
+}
 
 .postShare {
     display: flex;
     position: absolute;
+    right: 0;
     margin: 20px 0 0 0;
     justify-content: right;
 }
@@ -3414,7 +3555,8 @@ select.lotteryResult {
     width: 300px;
 }
 
-@media (max-width:768px) {
+
+@media (max-width:767px) {
     .messageMobile {
         display: contents;
     }
@@ -3430,6 +3572,40 @@ select.lotteryResult {
     .sendMessageButtonGroup .btnDef {
         width: 30%;
     }
+
+    .notice {
+        font-size: 12px;
+    }
+}
+
+.memberLikeList {
+    border-bottom: 1px solid #ddd;
+}
+
+.memberLikeListBackground {
+    background-color: #f9f9f9;
+}
+
+.trackingProduct:hover {
+    cursor: pointer;
+    color: #e30020;
+}
+
+.inputAdjustMargin {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.fanLink a {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.fanLink a .footerLinkIcon {
+    width: 100%;
+    height: 100%;
 }
 
 /* 修改滾動條 */

@@ -3,31 +3,23 @@
         <div class="formTi">訂購資訊</div>
     </div>
     <div class="container-fluid">
-        <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
-            <div class="input-group mb-3 col-12 col-sm-4">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">姓名</span>
-                </div>
+        <div class="form-group row p-3 pb-5 justify-content-center">
+            <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-5">
+                <label class="required" for="name">姓名</label>
                 <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
             </div>
-            <div class="input-group mb-3 col-12 col-sm-4">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">電話</span>
-                </div>
+            <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-5">
+                <label class="required" for="phone">電話</label>
                 <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
             </div>
-            <div class="input-group mb-3 col-12 col-sm-8">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Email</span>
-                </div>
+            <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-10">
+                <label class="required" for="email">Email</label>
                 <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
             </div>
-            <div class="input-group mb-3 col-12 col-sm-8">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">國家</span>
-                </div>
+            <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-10">
+                <label class="required" for="Country">國家</label>
                 <select class="form-control" name="Country" id="Country">
-                    <option value="請選擇國家" selected>請選擇國家</option>
+                    <option value="請選擇國家" disabled>請選擇國家</option>
                     <option value="臺灣" <?= ($user_data['Country'] == '臺灣') ? 'selected' : ''; ?>>臺灣</option>
                     <option value="中國" <?= ($user_data['Country'] == '中國') ? 'selected' : ''; ?>>中國</option>
                     <option value="香港" <?= ($user_data['Country'] == '香港') ? 'selected' : ''; ?>>香港</option>
@@ -36,23 +28,32 @@
                 </select>
             </div>
             <!-- zip of taiwan -->
-            <div id="twzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
+            <div id="twzipcode" class="alignItemBaseLine input-group mb-3 mt-2 col-12 col-md-12 col-lg-10" style="display: none;">
                 <div class="mb-2 col-md-4 col-12" data-role="county" data-value="<?= $user_data['county'] ?>"></div>
                 <div class="mb-2 col-md-4 col-12" data-role="district" data-value="<?= $user_data['district'] ?>"></div>
                 <div class="mb-2 col-md-4 col-12" data-role="zipcode" data-value="<?= $user_data['zipcode'] ?>"></div>
             </div>
             <!-- zip of china -->
-            <div id="cnzipcode" class="input-group mb-3 col-12 col-sm-8 row" style="display: none;">
+            <div id="cnzipcode" class="alignItemBaseLine input-group mb-3 mt-2 col-12 col-md-12 col-lg-10" style="display: none;">
                 <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="province"></div>
                 <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="county"></div>
                 <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="district"></div>
                 <div class="mb-2 col-lg-3 col-md-6 col-12" data-role="zipcode"></div>
             </div>
+            <!-- <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-10">
+                <label class="required" for="Country">國家</label>
+                <select class="form-control" name="Country" id="Country">
+                    <option value="請選擇國家" disabled>請選擇國家</option>
+                    <? if (!empty($city)) : ?>
+                        <? foreach ($city as $self) : ?>
+                            <option value="<?= $self['country'] ?>" <?= ($user_data['Country'] == $self['country']) ? 'selected' : ''; ?>><?= $self['country'] ?></option>
+                        <? endforeach; ?>
+                    <? endif; ?>
+                </select>
+            </div> -->
             <!-- 指定地點運送地址 -->
-            <div class="input-group mb-3 col-12 col-sm-8">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">詳細地址</span>
-                </div>
+            <div class="alignItemBaseLine input-group mb-3 col-12 col-md-12 col-lg-10">
+                <label class="required" for="address">詳細地址</label>
                 <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
             </div>
             <!-- 備註 -->

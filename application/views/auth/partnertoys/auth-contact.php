@@ -2,7 +2,7 @@
 <div role="main" class="main">
     <div class="container">
         <div class="justify-content-center">
-            <div class="memberForm">
+            <div class="memberContactUs">
                 <div class="row">
                     <div class="col-12 text-center">
                         <span class="memberTitleMember">CONTACT<span class="memberTitleLogin">&nbsp;US</span></span>
@@ -17,20 +17,32 @@
                     <div class="notice">
                         您可以使用電話與我們聯絡，亦可將您的寶貴意見、合作提案，以傳真、e-mail 方式通知我們，或利用以下表單來傳達您的訊息，希望您能留下大名及聯絡電話，我們將會迅速處理，謝謝您。
                     </div>
-                    <? if ($agentID == '' && get_setting_general('phone1') != '') { ?>
-                        <div class="col-6">
+                    <? if (!empty(get_setting_general('phone1'))) { ?>
+                        <div class="col-4">
                             <div id="fa-phone-square" class="my-3 icon_pointer link_href">
                                 <a id="phone_href" href="tel:<?= get_setting_general('phone1') ?>" target="_blank">
-                                    <i class="fa fa-phone-square fixed_icon_style" aria-hidden="true"></i><br>Number
+                                    <div class="iconBoxwrap"><i class="fa fa-phone-square fixed_icon_style" aria-hidden="true"></i></div>
+                                    <span>Number</span>
                                 </a>
                             </div>
                         </div>
                     <? } ?>
-                    <? if ($agentID == '' && get_setting_general('email') != '') { ?>
-                        <div class="col-6">
+                    <? if (!empty(get_setting_general('email'))) { ?>
+                        <div class="col-4">
                             <div id="fa-email-square" class="my-3 icon_pointer link_href">
                                 <a id="email_href" href="mailto:<?= get_setting_general('email') ?>" target="_blank">
-                                    <i class="fa fa-envelope fixed_icon_style" aria-hidden="true"></i><br>Email
+                                    <div class="iconBoxwrap"><i class="fas fa-envelope fixed_icon_style"></i></div>
+                                    <span>Email</span>
+                                </a>
+                            </div>
+                        </div>
+                    <? } ?>
+                    <? if (!empty(get_setting_general('message_link'))) { ?>
+                        <div class="col-4">
+                            <div id="fa-message-square" class="my-3 icon_pointer link_href">
+                                <a id="message_href" href="<?= get_setting_general('message_link') ?>" target="_blank">
+                                    <div class="iconBoxwrap"><i class="fa-brands fa-facebook-messenger fixed_icon_style"></i></div>
+                                    <span>Message</span>
                                 </a>
                             </div>
                         </div>

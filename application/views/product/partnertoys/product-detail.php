@@ -35,26 +35,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="share col-md-12">
-                                <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
-                                <ul class="reset">
-                                    <li>
-                                        <a href="https://www.facebook.com/share.php?u=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" title="分享至Facebook" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="http://line.naver.jp/R/msg/text/?<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至LINE" class="line"><i class="fa-brands fa-line"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="https://twitter.com/share" data-text="<?= $product['product_name'] ?>" data-lang="zh-tw" target="_blank" title="分享至Twitter" class="twitter"><i class="fab fa-twitter"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="https://plus.google.com/share?url=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至google-plus" class="google"><i class="fab fa-google-plus-g"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="mailto:?subject=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至E-mail" class="email"><i class="fas fa-envelope"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                         <div class="col-bg-12 col-md-6 col-lg-6">
                             <div class="row">
@@ -77,17 +57,19 @@
                                     <!--價格-->
                                     <?php if (!empty($productCombine)) : ?>
                                         <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                            <div v-if="selectedCombine" class="item">方案價:&nbsp;$&nbsp;{{ selectedCombine.cprice }}</div>
+                                            <div v-if="selectedCombine" class="item">售價:&nbsp;$&nbsp;{{ selectedCombine.cprice }}</div>
                                             <div v-else class="item">❌尚未選擇方案</div>
                                         </div>
                                         <!--商品簡介:多行文字欄位-->
                                         <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
                                         <?php $count = 0; ?>
                                         <!--方案選擇-->
-                                        <select @change="updateSelectedCombine($event)" id="combineSelect" class="custom-select cargoBtn col-bg-12 col-md-12 col-lg-12">
-                                            <option value="請選擇方案" disabled>請選擇方案</option>
-                                            <option v-for="self in combine" :key="self.id" :value="self.pname">{{ self.pname }}</option>
-                                        </select>
+                                        <div class="col-bg-12 col-md-12 col-lg-12">
+                                            <select @change="updateSelectedCombine($event)" id="combineSelect" class="cargoBtn">
+                                                <option value="請選擇方案" disabled>請選擇方案</option>
+                                                <option v-for="self in combine" :key="self.id" :value="self.pname">{{ self.pname }}</option>
+                                            </select>
+                                        </div>
                                         <!--商品數量-->
                                         <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
                                             <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
@@ -125,10 +107,29 @@
                                             </div>
                                         </div>
                                     <?php endif; ?>
-
                                     <?php if (empty($productCombine)) : ?>
                                         <?php require('product-contact.php'); ?>
                                     <?php endif; ?>
+                                    <div class="share col-md-12">
+                                        <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                                        <ul class="reset">
+                                            <li>
+                                                <a href="https://www.facebook.com/share.php?u=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" title="分享至Facebook" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="http://line.naver.jp/R/msg/text/?<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至LINE" class="line"><i class="fa-brands fa-line"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="https://twitter.com/share" data-text="<?= $product['product_name'] ?>" data-lang="zh-tw" target="_blank" title="分享至Twitter" class="twitter"><i class="fab fa-twitter"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="https://plus.google.com/share?url=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至google-plus" class="google"><i class="fab fa-google-plus-g"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="mailto:?subject=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至E-mail" class="email"><i class="fas fa-envelope"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 <?php endif; ?>
                             </div>
                         </div>

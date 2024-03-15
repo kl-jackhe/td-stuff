@@ -5,7 +5,7 @@
         <div class="container">
             <div class="section-contents-one">
                 <h1><span>{{ pageTitle }}</span></h1>
-                <div class="row mt-5">
+                <div class="row mt-5 mb-5">
                     <div class="col-sm-6 col-lg-4 text-center">
                         <span class="checkoutStepIcon" @click="changeStep(1)"><img :src="'/assets/uploads/Checkout/' + ic_step01" alt="step1"></span>
                     </div>

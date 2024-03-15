@@ -13,7 +13,7 @@
                 <div class="container">
                     <!-- Product Start -->
                     <div class="row">
-                        <div class="product_view_style_out col-6 col-md-6 col-lg-4" v-for="self in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id">
+                        <div class="product_view_style_out col-6 col-md-6 col-lg-4" v-for="(self, index) in filteredProducts.slice(pageStart, pageEnd)" :key="self.post_id" :class="{ 'productRightPadding': index % 2 === 0, 'productLeftPadding': index % 2 !== 0 }">
                             <a class="productTrigger" @click="showProductDetails(self.product_id)">
                                 <div class="product_view_style_in">
                                     <div class="productImg">
@@ -21,9 +21,10 @@
                                     </div>
                                     <div class="product_name">
                                         <span>{{ self.product_name }}</span>
-                                        <p class="price" v-if="self.sales_status === '0'">【現貨】$ {{ self.product_price }}</p>
+                                        <p class="price">$&nbsp;{{ self.product_price }}</p>
+                                        <!-- <p class="price" v-if="self.sales_status === '0'">【現貨】$ {{ self.product_price }}</p>
                                         <p class="price" v-else-if="self.sales_status === '1'">【售完】$ {{ self.product_price }}</p>
-                                        <p class="price" v-else-if="self.sales_status === '2'">【預購】$ {{ self.product_price }}</p>
+                                        <p class="price" v-else-if="self.sales_status === '2'">【預購】$ {{ self.product_price }}</p> -->
                                     </div>
                                 </div>
                             </a>
