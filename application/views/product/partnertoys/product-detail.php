@@ -252,7 +252,7 @@
         $('#languageSelect').change(function() {
             var lang = $(this).val();
             $.ajax({
-                url: '/product/language_switch', // 請替換為你的後端腳本位置
+                url: '/product/language_switch',
                 method: 'POST',
                 data: {
                     lang: lang

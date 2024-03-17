@@ -129,6 +129,7 @@ class Checkout extends Public_Controller
 			$this->data['country'] = $this->mysql_model->_select('country');
 			$this->data['region'] = $this->mysql_model->_select('region');
 			$this->data['close_count'] = count($this->data['payment']);
+			$this->data['instructions'] = $this->auth_model->getStandardPageList('ShoppingNotes_tw');
 			foreach ($this->data['payment'] as $tmp) :
 				if ($tmp['payment_status'] == 0) :
 					$this->data['close_count']--;

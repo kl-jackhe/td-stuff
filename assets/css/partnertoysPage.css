@@ -4019,16 +4019,32 @@ select.lotteryResult {
     font-size: 26px;
 }
 
-.checkoutConfirm input[type=checkbox] {
+.checkoutConfirm input[type=checkbox],
+.checkoutConfirm input[type=checkbox]::before {
     width: 26px;
     height: 26px;
     margin-right: 10px;
 }
 
-.checkoutConfirm input[type=checkbox]::before {
-    width: 26px;
-    height: 26px;
-    margin-right: 10px;
+@media (max-width:767px) {
+    .checkoutConfirm {
+        font-size: 16px;
+    }
+
+    .checkoutConfirm input[type=checkbox],
+    .checkoutConfirm input[type=checkbox]::before {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.shoppingNote {
+    color: #d35448;
+}
+
+.shoppingNote:hover {
+    cursor: pointer;
+    color: #e30020;
 }
 
 /* 修改滾動條 */

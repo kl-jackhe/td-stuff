@@ -62,8 +62,35 @@
         mounted() {
             // init step.
             this.changeStep();
+            this.initMagnificPopup();
         },
         methods: {
+            // 初始化 Magnific Popup
+            initMagnificPopup() {
+                // 使用 Magnific Popup 的初始化逻辑，例如：
+                $('.popup-link').magnificPopup({
+                    type: 'inline',
+                    midClick: true // 允许使用中键点击
+                    // 更多配置项可以根据需求添加
+                });
+            },
+            toggleTermsPopup() {
+                // 获取 Magnific Popup 插件实例
+                const magnificPopup = $.magnificPopup.instance;
+
+                // 切换弹窗的显示状态
+                if (magnificPopup.isOpen) {
+                    magnificPopup.close();
+                } else {
+                    magnificPopup.open({
+                        items: {
+                            src: '#termsOfMembership'
+                        },
+                        type: 'inline'
+                        // 更多 Magnific Popup 配置项可根据需要添加
+                    });
+                }
+            },
             // 指定步驟
             changeStep(selected = 1) {
                 if (this.cart_num == 0) {
@@ -111,6 +138,10 @@
                     this.changeStep(this.selectedStep + 1);
                 } else {
                     if (!this.formChecking()) {
+                        return;
+                    }
+                    if (!$('＃confirmShoppingNote').prop('checked')) {
+                        alert('請勾選同意購物須知條款。')
                         return;
                     }
                     $('#checkout_form').submit();
@@ -809,5 +840,28 @@
             // 設定 input 的 placeholder
             zipcodeInput.attr('placeholder', '邮政编码');
         }
+    });
+</script>
+
+<script>
+    // 語言切換
+    $(document).ready(function() {
+        $('#languageSelect').change(function() {
+            var lang = $(this).val();
+            $.ajax({
+                url: '/languageSelector/language_switch', // 請替換為你的後端腳本位置
+                method: 'POST',
+                data: {
+                    lang: lang,
+                    title: 'ShoppingNotes'
+                },
+                success: function(response) {
+                    // console.log(response);
+                    // 更新內容
+                    $('#termsOfMembership .memberTitleChinese').html(response.page_title);
+                    $('#termsOfMembership .membershipContent').html(response.page_info);
+                }
+            });
+        });
     });
 </script>
