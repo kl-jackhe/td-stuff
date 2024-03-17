@@ -4012,6 +4012,25 @@ select.lotteryResult {
     color: #d35448;
 }
 
+.checkoutConfirm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.checkoutConfirm input[type=checkbox] {
+    width: 26px;
+    height: 26px;
+    margin-right: 10px;
+}
+
+.checkoutConfirm input[type=checkbox]::before {
+    width: 26px;
+    height: 26px;
+    margin-right: 10px;
+}
+
 /* 修改滾動條 */
 ::-webkit-scrollbar {
     width: 8px;

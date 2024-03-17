@@ -18,4 +18,7 @@
             </div>
         </div>
     </div>
+    <div class="checkoutConfirm">
+        <input type="checkbox"><span>已同意<a>購物須知條款</a></span>
+    </div>
 </section>

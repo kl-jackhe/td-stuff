@@ -1,85 +1,24 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable" style="margin-top: 0px;">
-            <?php if ($this->is_partnertoys) : ?>
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#TermsOfService_tw" aria-controls="TermsOfService_tw" role="tab" data-toggle="tab" onclick="openStandardPage('TermsOfService_tw','zh_tw')"><?= $this->lang->line('TermsOfService_tw') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#TermsOfService_cn" aria-controls="TermsOfService_cn" role="tab" data-toggle="tab" onclick="openStandardPage('TermsOfService_cn','zh_cn')"><?= $this->lang->line('TermsOfService_cn') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#TermsOfService_jp" aria-controls="TermsOfService_jp" role="tab" data-toggle="tab" onclick="openStandardPage('TermsOfService_jp','ja_jp')"><?= $this->lang->line('TermsOfService_jp') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#TermsOfService_en" aria-controls="TermsOfService_en" role="tab" data-toggle="tab" onclick="openStandardPage('TermsOfService_en','en_us')"><?= $this->lang->line('TermsOfService_en') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#LogisticsAndPayment_tw" aria-controls="LogisticsAndPayment_tw" role="tab" data-toggle="tab" onclick="openStandardPage('LogisticsAndPayment_tw','zh_tw')"><?= $this->lang->line('LogisticsAndPayment_tw') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#LogisticsAndPayment_cn" aria-controls="LogisticsAndPayment_cn" role="tab" data-toggle="tab" onclick="openStandardPage('LogisticsAndPayment_cn','zh_cn')"><?= $this->lang->line('LogisticsAndPayment_cn') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#LogisticsAndPayment_jp" aria-controls="LogisticsAndPayment_jp" role="tab" data-toggle="tab" onclick="openStandardPage('LogisticsAndPayment_jp','ja_jp')"><?= $this->lang->line('LogisticsAndPayment_jp') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#LogisticsAndPayment_en" aria-controls="LogisticsAndPayment_en" role="tab" data-toggle="tab" onclick="openStandardPage('LogisticsAndPayment_en','en_us')"><?= $this->lang->line('LogisticsAndPayment_en') ?></a>
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="TermsOfService_tw"></div>
-                    <div role="tabpanel" class="tab-pane" id="TermsOfService_cn"></div>
-                    <div role="tabpanel" class="tab-pane" id="TermsOfService_jp"></div>
-                    <div role="tabpanel" class="tab-pane" id="TermsOfService_en"></div>
-                    <div role="tabpanel" class="tab-pane" id="LogisticsAndPayment_tw"></div>
-                    <div role="tabpanel" class="tab-pane" id="LogisticsAndPayment_cn"></div>
-                    <div role="tabpanel" class="tab-pane" id="LogisticsAndPayment_jp"></div>
-                    <div role="tabpanel" class="tab-pane" id="LogisticsAndPayment_en"></div>
-                </div>
-            <?php else : ?>
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
-                        <a href="#FraudPreventionInformation" aria-controls="FraudPreventionInformation" role="tab" data-toggle="tab" onclick="openStandardPage('FraudPreventionInformation','zh_tw')"><?= $this->lang->line('FraudPreventionInformation') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#TermsOfService" aria-controls="TermsOfService" role="tab" data-toggle="tab" onclick="openStandardPage('TermsOfService','zh_tw')"><?= $this->lang->line('TermsOfService') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#PrivacyPolicy" aria-controls="PrivacyPolicy" role="tab" data-toggle="tab" onclick="openStandardPage('PrivacyPolicy','zh_tw')"><?= $this->lang->line('PrivacyPolicy') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#Disclaimer" aria-controls="Disclaimer" role="tab" data-toggle="tab" onclick="openStandardPage('Disclaimer','zh_tw')"><?= $this->lang->line('Disclaimer') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#IntellectualProperty" aria-controls="IntellectualProperty" role="tab" data-toggle="tab" onclick="openStandardPage('IntellectualProperty','zh_tw')"><?= $this->lang->line('IntellectualProperty') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#LogisticsAndPayment" aria-controls="LogisticsAndPayment" role="tab" data-toggle="tab" onclick="openStandardPage('LogisticsAndPayment','zh_tw')"><?= $this->lang->line('LogisticsAndPayment') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#ReturnPolicy" aria-controls="ReturnPolicy" role="tab" data-toggle="tab" onclick="openStandardPage('ReturnPolicy','zh_tw')"><?= $this->lang->line('ReturnPolicy') ?></a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#FrequentlyQA" aria-controls="FrequentlyQA" role="tab" data-toggle="tab" onclick="openStandardPage('FrequentlyQA','zh_tw')"><?= $this->lang->line('FrequentlyQA') ?></a>
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="FraudPreventionInformation"></div>
-                    <div role="tabpanel" class="tab-pane" id="TermsOfService"></div>
-                    <div role="tabpanel" class="tab-pane" id="PrivacyPolicy"></div>
-                    <div role="tabpanel" class="tab-pane" id="Disclaimer"></div>
-                    <div role="tabpanel" class="tab-pane" id="IntellectualProperty"></div>
-                    <div role="tabpanel" class="tab-pane" id="LogisticsAndPayment"></div>
-                    <div role="tabpanel" class="tab-pane" id="ReturnPolicy"></div>
-                    <div role="tabpanel" class="tab-pane" id="FrequentlyQA"></div>
-                </div>
-            <?php endif; ?>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <? if (!empty($total_page)) : ?>
+                    <? foreach ($total_page as $value => $self) : ?>
+                        <li role="presentation" <?= ($value == 1) ? 'class="active"' : ''; ?>>
+                            <a href="<?= '#' . $self['page_name'] ?>" aria-controls="<?= $self['page_name'] ?>" role="tab" data-toggle="tab" onclick="openStandardPage(<?= $self['page_name'] ?>,<?= $self['page_lang'] ?>)"><?= $this->lang->line($self['page_name']) ?></a>
+                        </li>
+                    <? endforeach; ?>
+                <? endif; ?>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <? if (!empty($total_page)) : ?>
+                    <? foreach ($total_page as $value => $self) : ?>
+                        <div role="tabpanel" <?= ($value == 1) ? 'class="tab-pane active"' : 'class="tab-pane"'; ?> id="<?= $self['page_name'] ?>"></div>
+                    <? endforeach; ?>
+                <? endif; ?>
+            </div>
         </div>
     </div>
 </div>
@@ -107,25 +46,11 @@
             return false;
         });
 
-        <?php if ($this->is_partnertoys) : ?>
-            openStandardPage('TermsOfService_tw', 'zh_tw');
-            openStandardPage('TermsOfService_cn', 'zh_cn');
-            openStandardPage('TermsOfService_jp', 'ja_jp');
-            openStandardPage('TermsOfService_en', 'en_us');
-            openStandardPage('LogisticsAndPayment_tw', 'zh_tw');
-            openStandardPage('LogisticsAndPayment_cn', 'zh_cn');
-            openStandardPage('LogisticsAndPayment_jp', 'ja_jp');
-            openStandardPage('LogisticsAndPayment_en', 'en_us');
-        <?php else : ?>
-            openStandardPage('FraudPreventionInformation', 'zh_tw');
-            openStandardPage('TermsOfService', 'zh_tw');
-            openStandardPage('PrivacyPolicy', 'zh_tw');
-            openStandardPage('Disclaimer', 'zh_tw');
-            openStandardPage('IntellectualProperty', 'zh_tw');
-            openStandardPage('LogisticsAndPayment', 'zh_tw');
-            openStandardPage('ReturnPolicy', 'zh_tw');
-            openStandardPage('FrequentlyQA', 'zh_tw');
-        <?php endif; ?>
+        <? if (!empty($total_page)) : ?>
+            <? foreach ($total_page as $self) : ?>
+                openStandardPage(<?= json_encode($self['page_name']) ?>, <?= json_encode($self['page_lang']) ?>);
+            <? endforeach; ?>
+        <? endif; ?>
     });
 
     function openStandardPage(source, lang) {

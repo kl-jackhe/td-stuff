@@ -90,3 +90,7 @@ $lang['LogisticsAndPayment_tw'] = '運費說明';
 $lang['LogisticsAndPayment_cn'] = '运费说明';
 $lang['LogisticsAndPayment_jp'] = '配送の説明';
 $lang['LogisticsAndPayment_en'] = 'Shipping Description';
+$lang['ShoppingNotes_tw'] = '購物須知(繁體中文)';
+$lang['ShoppingNotes_cn'] = '購物須知(簡體中文)';
+$lang['ShoppingNotes_jp'] = '購物須知(日本語)';
+$lang['ShoppingNotes_en'] = '購物須知(English)';

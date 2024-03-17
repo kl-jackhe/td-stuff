@@ -10,6 +10,7 @@ class StandardPage extends Admin_Controller
     function index()
     {
         $this->data['page_title'] = '制式頁面管理';
+        $this->data['total_page'] = $this->mysql_model->_select('standard_page_list');
         $this->render('admin/standard_page/index');
     }
 
