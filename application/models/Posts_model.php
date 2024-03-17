@@ -110,4 +110,13 @@ class Posts_model extends CI_Model
         $query = $this->db->get('post_category');
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
     }
+
+    function getHomePosts()
+    {
+        $this->db->select('*');
+        $this->db->order_by('created_at', 'desc');
+        $this->db->limit(3);
+        $query = $this->db->get('posts')->result_array();
+        return !empty($query) ? $query : false;
+    }
 }

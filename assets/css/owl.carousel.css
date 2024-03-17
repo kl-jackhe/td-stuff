@@ -1,0 +1,125 @@
+.owl-carousel .owl-wrapper:after, .owl-carousel-album .owl-wrapper:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0
+}
+
+.owl-carousel, .owl-carousel-album {
+    display: none;
+    position: relative;
+    width: 103.5%;
+    -ms-touch-action: pan-y;
+}
+
+@media (max-width: 1080px) {
+    .owl-carousel, .owl-carousel-album {
+        width:102.5%;
+    }
+}
+
+@media (max-width: 800px) {
+    .owl-carousel, .owl-carousel-album {
+        width:103.2%;
+    }
+}
+
+@media (max-width: 768px) {
+    .owl-carousel, .owl-carousel-album {
+        width:104.2%;
+    }
+}
+
+@media (max-width: 604px) {
+    .owl-carousel, .owl-carousel-album {
+        width:105.8%;
+    }
+}
+
+@media (max-width: 533px) {
+    .owl-carousel, .owl-carousel-album {
+        width:106.5%;
+    }
+}
+
+@media (max-width: 480px) {
+    .owl-carousel, .owl-carousel-album {
+        width:107.5%;
+    }
+}
+
+@media (max-width: 424px) {
+    .owl-carousel, .owl-carousel-album {
+        width:108.5%;
+    }
+}
+
+@media (max-width: 384px) {
+    .owl-carousel, .owl-carousel-album {
+        width:109.5%;
+    }
+}
+
+@media (max-width: 360px) {
+    .owl-carousel, .owl-carousel-album {
+        width:110.5%;
+    }
+}
+
+@media (max-width: 320px) {
+    .owl-carousel, .owl-carousel-album {
+        width:112.5%;
+    }
+}
+
+.owl-carousel .owl-wrapper, .owl-carousel-album .owl-wrapper {
+    display: none;
+    position: relative;
+    -webkit-transform: translate3d(0px,0px,0px);
+}
+
+.owl-carousel .owl-wrapper-outer, .owl-carousel-album .owl-wrapper-outer {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.owl-carousel .owl-wrapper-outer.autoHeight, .owl-carousel-album .owl-wrapper-outer.autoHeight {
+    -webkit-transition: height 500ms ease-in-out;
+    -moz-transition: height 500ms ease-in-out;
+    -ms-transition: height 500ms ease-in-out;
+    -o-transition: height 500ms ease-in-out;
+    transition: height 500ms ease-in-out;
+}
+
+.owl-carousel .owl-item, .owl-carousel-album .owl-item {
+    float: left;
+}
+
+.owl-controls .owl-page, .owl-controls .owl-buttons div {
+    cursor: pointer;
+}
+
+.owl-controls {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.grabbing {
+    cursor: url(grabbing.png) 8 8,move
+}
+
+.owl-carousel .owl-wrapper, .owl-carousel .owl-item, .owl-carousel-album .owl-wrapper, .owl-carousel-album .owl-item {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -ms-transform: translate3d(0,0,0)
+}

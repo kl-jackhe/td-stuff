@@ -276,7 +276,7 @@
                         success: (response) => {
                             if (response) {
                                 if (response.result == 'success') {
-                                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage + '/?' + response.src;
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/' + this.currentPage + '/?' + response.src;
                                 } else {
                                     console.log('error.');
                                 }
@@ -286,7 +286,7 @@
                         },
                     });
                 } else {
-                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/index/' + this.currentPage;
+                    window.location.href = <?= json_encode(base_url()) ?> + 'posts/' + this.currentPage;
                 }
             },
             // 清除搜尋攔

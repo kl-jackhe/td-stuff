@@ -184,8 +184,87 @@
             <!-- </div> -->
         <? endif; ?>
 
+        <section id="section-content">
+            <section id="section-pro" class="bg_section-pro" style="background: #fff9f8;">
+                <div class="container">
+                    <div class="mTitle wow fadeInDown" data-wow-delay="0.1s">
+                        最新商品<small>LATEST PRODUCTS</small>
+                    </div>
+                    <div id="owl-event-album" class="owl-carousel-album wow fadeIn" data-wow-delay="0.3s">
+                        <?php if (!empty($products)) : ?>
+                            <?php $count = 0; ?>
+                            <?php foreach ($products as $self) : ?>
+                                <?php if ($count < 12) : ?>
+                                    <div class="item">
+                                        <div class="proGridBox">
+                                            <div class="imgBox">
+                                                <span class="homeToDetailEffect transitionAnimation" onclick="productDetailPage(<?= $self['product_id'] ?>)">
+                                                    <div class="pic">
+                                                        <img src="/assets/uploads/<?= $self['product_image'] ?>">
+                                                    </div>
+                                                    <div class="txt">
+                                                        <!-- <h4>PTxSPA003</h4> -->
+                                                        <h3><?= $self['product_name'] ?></h3>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="Btn_prevnext" id="count_album">
+                        <a class="btn prev transitionAnimation" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                        <a class="btn next transitionAnimation" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                    </div>
+                </div>
+            </section>
+            <section id="section-news" class="bg_section-news" style="background: #FFFFFF;">
+                <div class="container wow fadeIn">
+                    <div class="row" id="iNews">
+                        <!--最新一則訊息圖↓-->
+                        <div class="col-md-4 latestimgBox">
+                            <a class="latestImg transitionAnimation" href="::javascript" onclick="postDetailPage(<?= $posts[0]['post_id']; ?>)">
+                                <div class="pic">
+                                    <img src="/assets/uploads/<?= $posts[0]['post_image']; ?>" class="img-responsive">
+                                </div>
+                                <div class="txt">
+                                    <div class="date"><?= date('Y-m-d', strtotime($posts[0]['created_at'])); ?></div>
+                                    <h3 class="name"><?= $posts[0]['post_title']; ?></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <!--最新一則訊息圖↑-->
+                        <div class="col-md-8 newsList">
+                            <div class="row">
+                                <div class="col-md-3 leftBox">
+                                    <div class="iTitle">NEWS &amp; EVENTS</div>
+                                    <div class="iStitle">最新訊息</div>
+                                    <a href="/posts" class="more" title="Read More">Read More</a>
+                                </div>
+                                <div class="col-md-9 rightBox">
+                                    <table class="newsTab">
+                                        <tbody>
+                                            <? foreach ($posts as $self) : ?>
+                                                <tr>
+                                                    <th><?= date('Y-m-d', strtotime($self['created_at'])); ?></th>
+                                                    <td><span class="homeToDetailEffect transitionAnimation" onclick="postDetailPage(<?= $self['post_id']; ?>)"><?= $self['post_title']; ?></span></td>
+                                                </tr>
+                                            <? endforeach; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
         <!-- Second Presentation -->
-        <div class="header-second-container">
+        <!-- <div class="header-second-container">
             <div class="container">
                 <div class="homeAppear">
                     <p class="mainText">Products</p>
@@ -196,7 +275,6 @@
             <div class="product-container">
                 <div class="product-row-container">
                     <div class="product-row">
-                        <!-- 商品展示區域 -->
                         <?php if (!empty($products)) : ?>
                             <?php $count = 0; ?>
                             <?php foreach ($products as $self) : ?>
@@ -217,7 +295,6 @@
                         <?php endif; ?>
                     </div>
                 </div>
-                <!-- 左右按鈕 -->
                 <div class="nav-btn prev-btn" onclick="changeProduct(-1)">
                     <span>&lt;</span>
                 </div>
@@ -233,7 +310,7 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Third Presentation -->
         <!-- <div class="header-third-container">
             <div class="container">
@@ -274,3 +351,74 @@
         </div> -->
     </section>
 </div>
+<script src="/assets/js/owl.carousel-1.3.3.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // 初始化 Owl Carousel Album
+        var owl = $('#owl-event-album');
+        owl.owlCarousel({
+            items: 4,
+            loop: true,
+            lazyLoad: true,
+            navigation: false
+        });
+
+        // 绑定按钮点击事件
+        $('.btn.next').click(function() {
+            owl.trigger('owl.next');
+        });
+
+        $('.btn.prev').click(function() {
+            owl.trigger('owl.prev');
+        });
+    });
+</script>
+
+<!-- Encrytion Link -->
+<script>
+    function postDetailPage(selected) {
+        if (selected != null) {
+            $.ajax({
+                url: '/encode/getDataEncode/selectedPost',
+                type: 'post',
+                data: {
+                    selectedPost: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'posts/posts_detail/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+
+    function productDetailPage(selected) {
+        if (selected != null) {
+            $.ajax({
+                url: '/encode/getDataEncode/selectedProduct',
+                type: 'post',
+                data: {
+                    selectedProduct: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/product_detail/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+</script>
