@@ -38,6 +38,7 @@
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <!-- 引入 Slick Carousel 的 JavaScript -->
     <script src="/assets/slick/slick/slick.js"></script>
+    <!-- include mfp preview function -->
     <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
     <!-- Vue JS -->
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>

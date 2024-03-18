@@ -144,6 +144,73 @@
     </div>
   </div>
 </div>
+
+<!-- mfp view -->
+<script>
+  $(document).ready(function() {
+    $('.popup-link').magnificPopup({
+      type: 'inline',
+      midClick: true // 允许使用中键点击
+      // 更多配置项可以根据需求添加
+    });
+  });
+
+  function toggleTermsPopup(id) {
+    // Ajaxリクエストで注文の詳細を取得し、詳細を表示する
+    $.ajax({
+      url: '/admin/order/getOrderItem/' + id,
+      type: 'post',
+      success: function(data) {
+        const magnificPopup = $.magnificPopup.instance;
+
+        // 切り替え弾出窗口的顯示狀態
+        if (magnificPopup.isOpen) {
+          magnificPopup.close();
+        } else {
+          magnificPopup.open({
+            items: {
+              src: '#detailOrder'
+            },
+            type: 'inline'
+            // 更多 Magnific Popup 配置项可根据需要添加
+          });
+
+          // 注文の詳細を表示する
+          displayOrderDetails(data);
+        }
+      }
+    });
+  }
+
+  function displayOrderDetails(data) {
+    // データをもとに注文の詳細を表示する処理を実装する
+    // ここに注文の詳細を表示するためのコードを追加する
+    // dataは配列なので、適切にループして詳細を表示する必要があります
+    // 注文の詳細を表示するためのHTMLを構築する
+    var html = '';
+    html += '<tr>';
+    html += '<th>商品編號</th>';
+    html += '<th>商品名稱 </th>';
+    html += '<th>商品規格</th>';
+    html += '<th>數量</th>';
+    html += '</tr>';
+    
+    for (var i = 0; i < data.length; i++) {
+      var orderItem = data[i];
+      // 注文の詳細を表示するためのHTMLを生成する
+      html += '<tr>';
+      html += '<td nowrap="nowrap">' + orderItem.cargo_id + '</td>';
+      html += '<td class="remarks">' + orderItem.product_name + '</td>';
+      html += '<td class="remarks">' + orderItem.product_combine_name + '</td>';
+      html += '<td nowrap="nowrap">' + orderItem.order_item_qty + '</td>';
+      html += '</tr>';
+    }
+
+    // HTMLを挿入する
+    $('#detailOrder .orderItems').html(html);
+  }
+</script>
+
 <!-- operateModal -->
 <script>
   $('#twzipcode').twzipcode({

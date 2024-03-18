@@ -120,6 +120,7 @@ class Order extends Admin_Controller
 		$this->data['page_title'] = '訂單明細';
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
+		$this->data['guestbook'] = $this->order_model->getGuestBook($id);
 
 		// echo '<pre>';
 		// echo 'order_item = ';
@@ -134,6 +135,81 @@ class Order extends Admin_Controller
 		// $this->db->order_by('order_item_id', 'asc');
 		// $this->data['order_item'] = $this->db->get('order_item')->result_array();
 		$this->render('admin/order/view');
+	}
+
+	public function getOrderItem($id)
+	{
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->mysql_model->_select('order_item', 'order_id', $id)));
+	}
+
+	public function message_delete($id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete('guestbook');
+		$this->session->set_flashdata('message', '刪除成功');
+		echo '<script>window.history.back()</script>';
+		// redirect('admin/order/view/' . $id);
+	}
+
+	public function message_insert($id)
+	{
+		$content = $this->input->post('content');
+		$symMessage = $this->input->post('symMessage');
+		$data = array(
+			'user_id' => 0,
+			'order_id' => $id,
+			'content' => $content,
+			'created_at' => date('Y-m-d H:i:s'),
+		);
+		$new_id = $this->mysql_model->_insert('guestbook', $data);
+		$this->session->set_flashdata('message', '留言成功');
+		if ($symMessage == '1') {
+			$this->send_message_email($new_id);
+		}
+		redirect('admin/order/view/' . $id);
+	}
+
+	public function send_message_email($id)
+	{
+		$subject = '夥伴玩具有限公司 - 訂單留言回覆';
+		$guestbook = $this->mysql_model->_select('guestbook', 'id', $id, 'row');
+		$order = $this->mysql_model->_select('orders', 'order_id', $guestbook['order_id'], 'row');
+		$user = $this->mysql_model->_select('users', 'id', $order['customer_id'], 'row');
+		// 加载邮件模板文件
+		$mail_data = array(
+			'subject' => $subject,
+			'webname' => get_setting_general('name'),
+			'email' => get_setting_general('email'),
+			'tel' => get_setting_general('phone1'),
+			'cname' => $user['full_name'],
+			'content' => $guestbook['content'],
+			'created_at' => $guestbook['created_at'],
+		);
+		$body = $this->load->view('order/mail_template_guest_tw', $mail_data, true); // 将视图内容作为字符串返回
+		$this->load->library('email');
+		// 賣家資料
+		$this->email->set_smtp_host(get_setting_general('smtp_host'));
+		$this->email->set_smtp_user(get_setting_general('smtp_user'));
+		$this->email->set_smtp_pass(get_setting_general('smtp_pass'));
+		$this->email->set_smtp_port(get_setting_general('smtp_port'));
+		$this->email->set_smtp_crypto(get_setting_general('smtp_crypto'));
+		// 買家資料
+		$this->email->to($user['email']);
+		$this->email->from(get_setting_general('email'), get_setting_general('name'));
+		$this->email->subject($subject);
+		$this->email->message($body);
+
+		try {
+			if ($this->email->send()) {
+				echo "1";
+			} else {
+				throw new Exception('unknown error');
+			}
+		} catch (Exception $e) {
+			echo "0";
+		}
 	}
 
 	public function update_remittance_account($id)

@@ -17,6 +17,7 @@
 <script src="/node_modules/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/node_modules/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="/node_modules/jquery-validation/dist/localization/messages_zh_TW.js"></script>
+<script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <script>
     $.validator.setDefaults({

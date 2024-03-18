@@ -7,6 +7,10 @@
         width: 100%;
     }
 
+    .redContent {
+        color: #dd0606;
+    }
+
     .front_title {
         font-size: 14px;
         padding-top: 5px;
@@ -32,6 +36,18 @@
         box-shadow: none;
     }
 
+    .groupOfContent {
+        position: relative;
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .groupOfContent .symHint {
+        position: absolute;
+        right: 0;
+    }
+
     .border_product {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -42,6 +58,33 @@
 
     .mb_control {
         display: none;
+    }
+
+    .remarks textarea {
+        resize: none;
+        height: 150px;
+    }
+
+    .box-title {
+        margin-top: 0;
+    }
+
+    .box-body {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        padding: 10px;
+    }
+
+    .box.box-solid.box-danger {
+        border: 1px solid #dd4b39;
+    }
+
+    .box.box-solid.box-danger>.box-header {
+        color: #ffffff;
+        background: #dd4b39;
+        background-color: #dd4b39;
     }
 
     @media screen and (max-width:767px) {
@@ -74,13 +117,15 @@
                 </div>
                 <div class="col-md-3 col-sm-12" style="padding-bottom: 10px;">
                     <div class="input-group" style="width: 70%;">
-                        <span class="input-group-btn">
-                            <? $attributes = array('class' => 'form-inline');
-                            echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes); ?>
-                            <input type="text" class="form-control" name="remittance_account" value="<?= $order['remittance_account'] ?>" placeholder="匯款後五碼">
-                            <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                            <? echo form_close() ?>
-                        </span>
+                        <? if (!$this->is_partnertoys) : ?>
+                            <span class="input-group-btn">
+                                <? $attributes = array('class' => 'form-inline');
+                                echo form_open('admin/order/update_remittance_account/' . $order['order_id'], $attributes); ?>
+                                <input type="text" class="form-control" name="remittance_account" value="<?= $order['remittance_account'] ?>" placeholder="匯款後五碼">
+                                <button type="submit" class="btn btn-primary btn-sm">更新</button>
+                                <? echo form_close() ?>
+                            </span>
+                        <? endif; ?>
                     </div>
                 </div>
                 <div class="col-md-3 col-sm-12">
@@ -97,6 +142,7 @@
                 </div>
             </div>
         </div>
+        <!-- 訂單資訊 -->
         <div class="content-box-large pc_control">
             <div class="row" style="padding-left: 5px;padding-right: 5px;">
                 <div class="col-md-12">
@@ -105,9 +151,9 @@
                         <div class="col-md-4 text-center">訂單日期：<?php echo $order['order_date'] ?></div>
                         <div class="col-md-4 text-right">訂單狀態：<?php echo get_order_step($order['order_step']) ?></div>
                         <div class="col-md-12" style="padding:5px;"></div>
-                        <div class="col-md-3">客戶名稱：<?php echo $order['customer_name'] ?></div>
+                        <div class="col-md-4">客戶名稱：<?php echo $order['customer_name'] ?></div>
                         <div class="col-md-4 text-center">客戶電話：<?php echo $order['customer_phone'] ?></div>
-                        <div class="col-md-5 text-right">客戶信箱：<?php echo $order['customer_email'] ?></div>
+                        <div class="col-md-4 text-right">客戶信箱：<?php echo $order['customer_email'] ?></div>
                     </div>
                     <div class="row front_title border_style" style="background-color: #F0F0F0;">
                         <div class="col-md-1 text-center">項目</div>
@@ -185,7 +231,9 @@
                                         echo $order['order_delivery_address'];
                                     } ?>
                                 </div>
-                                <div class="col-md-12">訂單備註：<?php echo $order['order_remark']; ?></div>
+                                <div class="col-md-12">訂單備註：<?= !empty($order['order_remark']) ? $order['order_remark'] : '無'; ?></div>
+                                <div class="col-md-12">發票抬頭：<?= !empty($order['order_cpname']) ? $order['order_cpname'] : '無'; ?></div>
+                                <div class="col-md-12">統一編號：<?= !empty($order['order_cpno']) ? $order['order_cpno'] : '無'; ?></div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -199,6 +247,66 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- 訂單留言 -->
+        <div class="col-xs-12">
+            <div class="box box-danger box-solid boxpadding">
+                <div class="box-header with-border">
+                    <h3 class="box-title">留言記錄</h3>
+                </div>
+                <div class="box-body">
+                    <table id="example4" class="table table-bordered table-striped table-hover table-responsive">
+                        <tbody>
+                            <tr>
+                                <th class="text-center">序號</th>
+                                <th class="text-center">留言者</th>
+                                <th class="text-center">留言時間</th>
+                                <th class="text-center">留言內容</th>
+                                <th class="text-center nosorting mailbox-controls">編輯</th>
+                            </tr>
+                        </tbody>
+                        <tbody class="mailbox-messages">
+                            <? foreach ($guestbook as $value => $self) : ?>
+                                <tr>
+                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $value + 1; ?></td>
+                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= ($self['user_id'] == 0) ? '管理員' : '客戶'; ?></td>
+                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $self['created_at']; ?></td>
+                                    <td class="remarks<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>"><?= $self['content']; ?></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-default btn-xs" title="刪除" onclick="delete_message(<?= $self['id'] ?>)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <? endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div id="M_pagination" style="text-align:center;">
+                        <ul class="pagination">
+                        </ul>
+                        <ul>
+                        </ul>
+                    </div>
+                    <?php $attributes = array('class' => 'message_insert', 'id' => 'message_insert'); ?>
+                    <?php echo form_open('admin/order/message_insert/' . $order['order_id'], $attributes); ?>
+                    <table class="table table-bordered table-striped table-hover table-responsive">
+                        <tbody>
+                            <tr>
+                                <td class="remarks">
+                                    <div class="groupOfContent">
+                                        <span>管理者留言：</span>
+                                        <span class="symHint redContent"><input type="checkbox" id="symToCustomer" name="symToCustomer">&nbsp;同步Mail到消費者信箱</span>
+                                    </div>
+                                    <textarea class="form-control" id="content" name="content"></textarea>
+                                    <input type="hidden" id="symMessage" name="symMessage">
+                                    <button type="button" class="btn btn-primary" onclick="checkContent()">留言</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <?php echo form_close(); ?>
                 </div>
             </div>
         </div>
@@ -360,6 +468,27 @@
     </div>
 </div>
 <script>
+    function delete_message(id) {
+        if (confirm('貼心提醒～是否要刪除留言？')) {
+            window.location.href = '/admin/order/message_delete/' + id;
+        }
+    }
+
+    function checkContent() {
+        if ($('#content').val() == '') {
+            alert('無法上傳空的留言內容');
+            return;
+        }
+        if (confirm('貼心提醒～是否要送出留言？')) {
+            if ($('#symToCustomer').is(':checked')) {
+                $('#symMessage').val('1');
+            } else {
+                $('#symMessage').val('0');
+            }
+            $('#message_insert').submit();
+        }
+    }
+
     function changeStep(id, source) {
         if (confirm('訂定要變更訂單狀態？')) {
             $.ajax({

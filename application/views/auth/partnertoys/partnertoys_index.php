@@ -521,7 +521,11 @@
                 this.scrollToTop();
                 this.selectedOrder = selected;
                 this.selectedOrderItem = this.order_item.filter(self => self.order_id === selected.order_id);
-                this.selectedOrderMessage = this.order_msg.filter(self => self.order_id === selected.order_id);
+                if (this.order_msg) {
+                    this.selectedOrderMessage = this.order_msg.filter(self => self.order_id === selected.order_id);
+                } else {
+                    this.selectedOrderMessage = [];
+                }
             },
             clearSelectedOrder() {
                 this.selectedOrder = null;

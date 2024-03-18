@@ -140,7 +140,7 @@
                     if (!this.formChecking()) {
                         return;
                     }
-                    if (!$('＃confirmShoppingNote').prop('checked')) {
+                    if (!$('input[name=confirmShoppingNote]:checked')) {
                         alert('請勾選同意購物須知條款。')
                         return;
                     }

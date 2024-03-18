@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="checkoutConfirm">
-        <input type="checkbox" id="confirmShoppingNote"><span>已同意<span class="shoppingNote transitionAnimation" @click="toggleTermsPopup">購物須知條款</span></span>
+        <input type="checkbox" id="confirmShoppingNote" name="confirmShoppingNote"><span>已同意<span class="shoppingNote transitionAnimation" @click="toggleTermsPopup">購物須知條款</span></span>
     </div>
     <div id="termsPopupWrapper">
         <div id="termsOfMembership" class="mfp-hide">

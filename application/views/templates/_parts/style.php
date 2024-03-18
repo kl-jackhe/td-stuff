@@ -21,21 +21,26 @@
 <script src="/node_modules/jquery-migrate/dist/jquery-migrate.min.js"></script>
 <script src="/assets/admin/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script src="/node_modules/jquery-twzipcode/jquery.twzipcode.min.js"></script>
+<link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
 
 <style>
-	.dataTables_info{
+	.dataTables_info {
 		float: left;
 	}
-	.dataTables_filter{
+
+	.dataTables_filter {
 		float: right;
 	}
-	.dataTables_length{
+
+	.dataTables_length {
 		float: left;
 		clear: both;
 	}
-	.dataTables_paginate{
+
+	.dataTables_paginate {
 		float: right;
 	}
+
 	.tabbable {
 		margin-top: 0px;
 	}

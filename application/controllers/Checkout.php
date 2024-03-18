@@ -1123,6 +1123,13 @@ class Checkout extends Public_Controller
 		// print_r($row);
 		// echo '</pre>';
 
+		// CVS and ATM return value test
+		try {
+			$this->save_extend_info();
+		} catch (Exception $e) {
+			echo $e->getMessage();
+		}
+
 		if ($this->input->post('RtnCode') == '1' && $order_id > 0) {
 			// 更新訂單是否付款成功及付款成功後
 			$data = array(
