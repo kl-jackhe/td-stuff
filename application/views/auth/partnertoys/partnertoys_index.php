@@ -189,6 +189,14 @@
 </script>
 
 <script>
+    // 表單空格排除
+    function trimInput(element) {
+        var trimmedValue = $(element).val().replace(/\s+/g, '');
+        $(element).val(trimmedValue);
+    }
+</script>
+
+<script>
     const authApp = Vue.createApp({
         data() {
             return {

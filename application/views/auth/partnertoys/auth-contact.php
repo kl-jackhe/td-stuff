@@ -15,7 +15,7 @@
                         </div>
                     <?php } ?>
                     <div class="notice">
-                        您可以使用電話與我們聯絡，亦可將您的寶貴意見、合作提案，以傳真、e-mail 方式通知我們，希望您能留下大名及聯絡電話，我們將會迅速處理，謝謝您。
+                        您可以使用電話與我們聯絡，亦可將您的寶貴意見、合作提案，以e-mail、私訊粉專等方式通知我們，並提供您的需求內容，我們將會迅速處理，謝謝您。
                     </div>
                     <? if (!empty(get_setting_general('phone1'))) { ?>
                         <div class="col-4">
@@ -40,7 +40,7 @@
                     <? if (!empty(get_setting_general('message_link'))) { ?>
                         <div class="col-4">
                             <div id="fa-message-square" class="my-3 icon_pointer link_href">
-                                <a id="message_href" href="<?= get_setting_general('message_link') ?>" target="_blank">
+                                <a id="message_href" href="//<?= get_setting_general('message_link') ?>" target="_blank">
                                     <div class="iconBoxwrap"><i class="fa-brands fa-facebook-messenger fixed_icon_style"></i></div>
                                     <span>Message</span>
                                 </a>

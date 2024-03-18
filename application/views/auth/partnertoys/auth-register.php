@@ -29,7 +29,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="required" for="identity">行動電話 <small style="color: #C52B29;">以行動電話作為登入帳號</small></label>
-                                    <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼" value="<?php echo !empty($registerIdentity) ? $registerIdentity : ''; ?>" required>
+                                    <input type="text" class="form-control" id="identity" name="identity" oninput="trimInput(this)" pattern="^\S+$" placeholder="請輸入手機號碼" value="<?php echo !empty($registerIdentity) ? $registerIdentity : ''; ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="required" for="email">電子信箱 <small id="email_text" style="color: #C52B29;"></small></label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="請輸入E-Mail" onchange="check_email()" value="<?php echo !empty($registerEmail) ? $registerEmail : ''; ?>" required>
+                                    <input type="email" class="form-control" id="email" name="email" oninput="trimInput(this)" pattern="^\S+$" placeholder="請輸入E-Mail" onchange="check_email()" value="<?php echo !empty($registerEmail) ? $registerEmail : ''; ?>" required>
                                 </div>
                             </div>
                         </div>
@@ -61,13 +61,13 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="required" for="password">密碼</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="6-15 個字元" required>
+                                    <input type="password" class="form-control" id="password" name="password" oninput="trimInput(this)" pattern="^\S+$" placeholder="6-15 個字元" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="required" for="password_confirm">確認密碼</label>
-                                    <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="請再輸入一次密碼" required>
+                                    <input type="password" class="form-control" id="password_confirm" name="password_confirm" oninput="trimInput(this)" pattern="^\S+$" placeholder="請再輸入一次密碼" required>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">驗證碼</label>
-                                    <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入驗證碼" autocomplete="off" required>
+                                    <input type="text" class="form-control" id="checkcode" name="checkcode" oninput="trimInput(this)" pattern="^\S+$" placeholder="請輸入驗證碼" autocomplete="off" required>
                                     <a @click="randomCheckcode"><img id="randomCheckcode" src="<?php echo $imageBase64; ?>" alt="Captcha Image"></a>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                                 <div class="form-group checkbox">
                                     <label class="required">
                                         <!-- mfp click -->
-                                        <input type="checkbox" id="agree" name="agree"> 我同意<a @click="toggleTermsPopup" class="popup-link mfpMember">會員加入條款</a>
+                                        <input type="checkbox" id="agree" name="agree">&nbsp;我同意<a @click="toggleTermsPopup" class="popup-link mfpMember">會員加入條款</a>
                                     </label>
                                 </div>
                                 <label id="agree-error" class="error" for="agree"></label>

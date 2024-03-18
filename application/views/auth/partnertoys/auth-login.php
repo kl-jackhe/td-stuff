@@ -21,12 +21,12 @@
                     <?php echo form_member_login_open('auth/login', $attributes); ?>
 
                     <div class="col-12 form-group">
-                        <label class="required" for="identity">行動電話|E-MAIL</label>
-                        <input type="text" class="form-control" id="identity" name="identity" placeholder="請輸入手機號碼或E-MAIL" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>
+                        <label class="required" for="identity">行動電話｜E-MAIL</label>
+                        <input type="text" class="form-control" id="identity" name="identity" oninput="trimInput(this)" pattern="^\S+$" placeholder="請輸入手機號碼或E-MAIL" value="<?php echo (!empty($loginIdentity) ? $loginIdentity : ''); ?>" required>
                     </div>
                     <div class="col-12 form-group">
                         <label class="required" for="password">密碼</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="請輸入密碼" required>
+                        <input type="password" class="form-control" id="password" name="password" oninput="trimInput(this)" pattern="^\S+$" placeholder="請輸入密碼" required>
                     </div>
                     <div class="row" id="formBtnStyle">
                         <div class="col-6 form-group text-center">

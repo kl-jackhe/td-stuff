@@ -44,7 +44,7 @@
                                     <span class="input-group-text">電子郵件</span>
                                     <span class="input-group-text"><i class="fas fa-envelope"></i></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="email" id="email" onchange="check_email()" value="<?php echo $user->email; ?>">
+                                <input type="text" class="form-control" name="email" id="email" oninput="trimInput(this)" pattern="^\S+$" onchange="check_email()" value="<?php echo $user->email; ?>">
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                                     <span class="input-group-text">聯絡電話</span>
                                     <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
                                 </div>
-                                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user->phone; ?>">
+                                <input type="text" class="form-control" name="phone" id="phone" oninput="trimInput(this)" pattern="^\S+$" value="<?php echo $user->phone; ?>">
                             </div>
                         </div>
                     </div>

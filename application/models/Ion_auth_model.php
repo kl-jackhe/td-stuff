@@ -892,9 +892,15 @@ class Ion_auth_model extends CI_Model
 
 		$this->trigger_events('extra_where');
 
-		return $this->db->where('email', $email)
-			->limit(1)
-			->count_all_results($this->tables['users']) > 0;
+		// return $this->db->where('email', $email)
+		// 	->limit(1)
+		// 	->count_all_results($this->tables['users']) > 0;
+
+		// adjust email check
+		$this->db->where('email', $email);
+		$user = $this->db->get('users')->row_array();
+
+		return !empty($user);
 	}
 
 	/**

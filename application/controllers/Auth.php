@@ -315,7 +315,8 @@ class Auth extends Public_Controller
 				if ($this->is_partnertoys) {
 					$this->session->set_flashdata('loginMessage', $this->ion_auth->errors());
 					$this->session->set_flashdata('identity', $this->input->post('identity'));
-					redirect('auth/index?id=1', 'refresh');
+					echo '<script>window.history.back();</script>';
+					// redirect('auth/index?id=1', 'refresh');
 				} elseif ($this->is_liqun_food) {
 					$this->session->set_flashdata('loginMessage', $this->ion_auth->errors());
 					$this->session->set_flashdata('identity', $this->input->post('identity'));
@@ -344,7 +345,8 @@ class Auth extends Public_Controller
 			if ($this->is_partnertoys) {
 				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('loginMessage'));
 				$this->session->set_flashdata('identity', $this->input->post('identity'));
-				redirect('auth/index?id=1', 'refresh');
+				echo '<script>window.history.back();</script>';
+				// redirect('auth/index?id=1', 'refresh');
 			} elseif ($this->is_liqun_food) {
 				$this->session->set_flashdata('loginMessage', (validation_errors()) ? validation_errors() : $this->session->flashdata('loginMessage'));
 				$this->session->set_flashdata('identity', $this->input->post('identity'));
