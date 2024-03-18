@@ -268,19 +268,25 @@
                             </tr>
                         </tbody>
                         <tbody class="mailbox-messages">
-                            <? foreach ($guestbook as $value => $self) : ?>
+                            <? if (!empty($guestbook)) : ?>
+                                <? foreach ($guestbook as $value => $self) : ?>
+                                    <tr>
+                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $value + 1; ?></td>
+                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= ($self['user_id'] == 0) ? '管理員' : '客戶'; ?></td>
+                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $self['created_at']; ?></td>
+                                        <td class="remarks<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>"><?= $self['content']; ?></td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-default btn-xs" title="刪除" onclick="delete_message(<?= $self['id'] ?>)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <? endforeach; ?>
+                            <? else : ?>
                                 <tr>
-                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $value + 1; ?></td>
-                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= ($self['user_id'] == 0) ? '管理員' : '客戶'; ?></td>
-                                    <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $self['created_at']; ?></td>
-                                    <td class="remarks<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>"><?= $self['content']; ?></td>
-                                    <td class="text-center">
-                                        <button type="button" class="btn btn-default btn-xs" title="刪除" onclick="delete_message(<?= $self['id'] ?>)">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
+                                    <td class="text-center" colspan="5">目前無留言紀錄</td>
                                 </tr>
-                            <? endforeach; ?>
+                            <? endif; ?>
                         </tbody>
                     </table>
                     <div id="M_pagination" style="text-align:center;">
