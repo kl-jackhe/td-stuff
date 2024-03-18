@@ -468,9 +468,19 @@ class fmtoken extends Public_Controller
         $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
 
         // 准备要发送的数据
-        $data = array(
-            'Data' => [$fm_ecno],
-        );
+        // $data = array(
+        //     'Data' => [$fm_ecno],
+        // );
+        $data = array();
+        $data['Data'] = [
+            $fm_ecno,
+            $fm_ecno,
+            $fm_ecno,
+            $fm_ecno,
+            $fm_ecno,
+            $fm_ecno,
+            $fm_ecno
+        ];
 
         // 将数据编码为 JSON 格式
         $json_data = json_encode($data);
