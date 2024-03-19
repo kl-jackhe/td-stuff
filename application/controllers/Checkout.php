@@ -664,6 +664,9 @@ class Checkout extends Public_Controller
 		}
 		if ($this->is_liqun_food) {
 			$insert_data['order_weight'] = $this->input->post('weight_amount');
+			if ($insert_data['order_delivery'] == 'family_limit_5_frozen_pickup' || $insert_data['order_delivery'] == 'family_limit_10_frozen_pickup') {
+				$insert_data['fm_cold'] = 1;
+			}
 		}
 		// echo '<pre>';
 		// print_r($this->fm_b2c_frozen($insert_data));

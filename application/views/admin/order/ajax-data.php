@@ -176,9 +176,8 @@
                 <th class="text-center">訂單編號</th>
                 <th class="text-center">訂單日期</th>
                 <th class="text-center">客戶</th>
-                <th class="text-center">配送地址</th>
-                <th class="text-center text-nowrap">配送方式</th>
-                <th class="text-center text-nowrap">金額/付款方式</th>
+                <th class="text-center text-nowrap">配送資訊</th>
+                <th class="text-center text-nowrap">付款資訊</th>
                 <th class="text-center">匯款後五碼</th>
                 <th class="text-center">訂單狀態</th>
                 <th class="text-center">物流單號</th>
@@ -285,13 +284,16 @@
                         <td class="text-center">
                             <?php echo $order['customer_name'] ?>
                         </td>
-                        <!-- 配送地址 -->
-                        <td class="text-center">
-                            <?= (!empty($order['order_store_name']) ? $order['order_store_name'] : $order['order_delivery_address']) ?>
-                        </td>
-                        <!-- 配送方式 -->
-                        <td class="text-center">
-                            <?= get_delivery($order['order_delivery']) ?>
+                        <!-- 配送資訊 -->
+                        <td>
+                            <span class="spanContent">
+                                <span>配送方式：</span>
+                                <span class="spanContentFont"><?= get_delivery($order['order_delivery']) ?></span>
+                            </span>
+                            <span class="spanContent">
+                                <span>配送地址：</span>
+                                <span class="spanContentFont"><?= (!empty($order['order_store_name']) ? $order['order_store_name'] : $order['order_delivery_address']) ?></span>
+                            </span>
                         </td>
                         <!-- 訂單資訊 -->
                         <td>
@@ -309,6 +311,7 @@
                                     <span class="spanContentFont"><?= get_pay_status($order['order_pay_status']) ?></span>
                                 </span>
                             <? endif; ?>
+                            <a href="javascript:void(0)" onclick="toggleTermsPopup(<?= $order['order_id'] ?>)">顯示商品清單</a>
                         </td>
                     <? endif; ?>
 
@@ -406,12 +409,12 @@
                             <?php if (empty($order['AllPayLogisticsID']) && empty($order['fm_ecno'])) : ?>
                                 <td class="text-center">
                                     <select id="orderType" class="form-control">
-                                        <?php if ($order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
+                                        <?php if ($order['fm_cold'] == 1) : ?>
                                             <option value="fm_add_b2c_order/cold">B2C冷凍訂單</option>
-                                            <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option>
-                                        <?php elseif ($order['order_delivery'] == 'family_pickup') : ?>
+                                            <!-- <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option> -->
+                                        <?php else : ?>
                                             <option value="fm_add_b2c_order/normal">B2C常溫訂單</option>
-                                            <option value="fm_add_c2c_order/normal">C2C常溫訂單</option>
+                                            <!-- <option value="fm_add_c2c_order/normal">C2C常溫訂單</option> -->
                                         <?php endif; ?>
                                     </select>
                                     <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>

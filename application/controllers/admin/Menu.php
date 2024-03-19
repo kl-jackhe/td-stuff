@@ -193,4 +193,16 @@ class Menu extends Admin_Controller
         $this->session->set_flashdata('message', '刪除成功');
         echo '<script>window.history.back();</script>';
     }
+
+    function changePositionSort($databaseName, $id)
+    {
+        $this->db->where('id', $id);
+        $sort = $this->input->post('position_sort');
+        if (!empty($sort)) {
+            $this->db->update($databaseName, ['position_sort' => $sort]);
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
 }

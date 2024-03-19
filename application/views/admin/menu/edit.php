@@ -94,70 +94,6 @@
 </div>
 <!-- <script src="/assets/ckeditor5-build-classic/ckeditor.js"></script> -->
 <script>
-    // ajax 一定要寫在裡面不然會讀不到editor
-    // ClassicEditor
-    //     .create(document.querySelector('#editor'), {
-    //         // toolbar: [ 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', 'link'],
-    //         ckfinder: {
-    //             tokenUrl: <?= json_encode(base_url()); ?>,
-    //             uploadUrl: '/upload/'
-    //         }
-    //     })
-    //     .then(editor => {
-    //         $('#update-btn').click(function(e) {
-    //             var editid = $('#id').val();
-    //             var editName = $('#name').val();
-    //             var editSort = $('#sort').val();
-
-    //             if (editSort == 0) {
-    //                 alert('更新失敗排序不可為NULL');
-    //                 return;
-    //             }
-    //             <?php if (!empty($same_level_menu)) : ?>
-    //                 <?php foreach ($same_level_menu as $self) : ?>
-    //                     if (editSort == <?= json_encode($self['sort']) ?>) {
-    //                         if (editid != <?= json_encode($self['id']) ?>) {
-    //                             alert('更新失敗排序不可重複');
-    //                             return;
-    //                         }
-    //                     }
-    //                     if (editName == <?= json_encode($self['name']) ?>) {
-    //                         if (editid != <?= json_encode($self['id']) ?>) {
-    //                             alert('更新失敗名稱不可重複');
-    //                             return;
-    //                         }
-    //                     }
-    //                 <?php endforeach; ?>
-    //             <?php endif; ?>
-
-    //             // 更新 <textarea> 的值
-    //             editor.updateSourceElement();
-
-    //             // send ajax data to backend
-    //             e.preventDefault();
-    //             var form = $('#update');
-    //             var url = form.attr('action');
-    //             $.ajax({
-    //                 type: "POST",
-    //                 url: url,
-    //                 data: form.serialize(),
-    //                 success: function(data) {
-    //                     if (data == '更新成功') {
-    //                         location.reload(true);
-    //                     } else {
-    //                         console.log(data);
-    //                     }
-    //                 },
-    //                 error: function(data) {
-    //                     console.log('無法送出');
-    //                 }
-    //             })
-    //         });
-    //     })
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
-
     function returnSubMenu() {
         window.location.href = <?= json_encode(base_url() . 'admin/menu/' . (!empty($menu['parent_id']) ? $returnIndex . '/' . $menu['parent_id'] : '')); ?>;
     }
@@ -190,12 +126,6 @@
                 if (editSort == <?= json_encode($self['sort']) ?>) {
                     if (editid != <?= json_encode($self['id']) ?>) {
                         alert('更新失敗序列編號不可重複');
-                        return;
-                    }
-                }
-                if (editPositionSort == <?= json_encode($self['position_sort']) ?>) {
-                    if (editid != <?= json_encode($self['id']) ?>) {
-                        alert('更新失敗排序不可重複');
                         return;
                     }
                 }

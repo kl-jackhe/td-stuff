@@ -53,7 +53,9 @@
                             <td class="text-center" id="name"><?= $data['name'] ?></td>
                             <td class="text-center"><?= $data['type'] ?></td>
                             <td class="text-center" id="sort"><?= $data['sort'] ?></td>
-                            <td class="text-center" id="sort"><?= $data['position_sort'] ?></td>
+                            <td class="text-center" id="position_sort">
+                                <input type="number" class="form-control" id="ajaxPositionSort_<?php echo $data['id']; ?>" name="ajaxPositionSort_<?php echo $data['id']; ?>" value="<?= $data['position_sort'] ?>" onchange="changePositionSort('<?php echo $data['id'] ?>')">
+                            </td>
                             <td class="text-center" id="status"><?= $data['status'] == 1 ? '✔️開啟' : '❌關閉'; ?></td>
                             <td class="text-center">
                                 <a href="/admin/menu/sub_son_index/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-list" aria-hidden="true"></i></a>
@@ -85,6 +87,26 @@
 <script>
     function returnMainMenu() {
         window.location.href = <?= json_encode(base_url() . 'admin/menu/'); ?>;
+    }
+
+    function changePositionSort(id) {
+        if (id == '') {
+            alert('不明錯誤請通知程序員');
+            return;
+        }
+        $.ajax({
+            url: '/admin/menu/changePositionSort/sub_menu/' + id,
+            type: 'post',
+            data: {
+                position_sort: $('#ajaxPositionSort_' + id).val(),
+            },
+            success: function(response) {
+                if (response == 'success') {
+                    // console.log(id);
+                    // console.log(response);
+                }
+            }
+        });
     }
 
     function form_check() {

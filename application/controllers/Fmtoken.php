@@ -125,7 +125,7 @@ class fmtoken extends Public_Controller
     }
 
     // FM B2C create order
-    public function fm_add_b2c_order($type, $id)
+    public function fm_add_b2c_order($type, $id, $return = true)
     {
         // order information
         $order_info = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
@@ -205,19 +205,20 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($res);
+            // echo '</pre>';
             if (!empty($res['result'][$order_info['order_number']]['ecno'])) {
                 $update_data = array(
                     'fm_ecno' => $res['result'][$order_info['order_number']]['ecno'],
                     'fm_type' => 'b2c',
-                    'fm_cold' => ($type == 'cold') ? 1 : 0,
                 );
                 $this->db->where('order_id', $id);
                 $this->db->update('orders', $update_data);
 
-                // echo "<script>alert('success');window.history.back()</script>";
+                if ($return) {
+                    echo "<script>alert('success');window.history.back()</script>";
+                }
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
@@ -227,7 +228,7 @@ class fmtoken extends Public_Controller
     }
 
     // FM C2C create order
-    public function fm_add_c2c_order($type, $id)
+    public function fm_add_c2c_order($type, $id, $return = true)
     {
         // order information
         $order_info = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
@@ -308,9 +309,9 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($res);
+            // echo '</pre>';
             if (!empty($res['result'][$order_info['order_number']]['ecno'])) {
                 $update_data = array(
                     'fm_ecno' => $res['result'][$order_info['order_number']]['ecno'],
@@ -320,7 +321,9 @@ class fmtoken extends Public_Controller
                 $this->db->where('order_id', $id);
                 $this->db->update('orders', $update_data);
 
-                echo "<script>alert('success');window.history.back()</script>";
+                if ($return) {
+                    echo "<script>alert('success');window.history.back()</script>";
+                }
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
@@ -330,7 +333,7 @@ class fmtoken extends Public_Controller
     }
 
     // Get FM B2C logistic
-    public function fm_b2c_logistic($type, $fm_ecno)
+    public function fm_b2c_logistic($type, $fm_ecno, $return = true)
     {
         $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/index.php';
         if ($type == 'cold') {
@@ -382,7 +385,9 @@ class fmtoken extends Public_Controller
                     $this->db->where('fm_ecno', $fm_ecno);
                     $this->db->update('orders', $update_data);
                 }
-                echo "<script>alert('success');window.history.back()</script>";
+                if ($return) {
+                    echo "<script>alert('success');window.history.back()</script>";
+                }
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
@@ -398,7 +403,7 @@ class fmtoken extends Public_Controller
     }
 
     // Get FM C2C logistic
-    public function fm_c2c_logistic($type, $fm_ecno)
+    public function fm_c2c_logistic($type, $fm_ecno, $return = true)
     {
         $url = 'https://ecbypass.com.tw/api/v2/C2C/Logistic/index.php';
         if ($type == 'cold') {
@@ -450,7 +455,9 @@ class fmtoken extends Public_Controller
                     $this->db->where('fm_ecno', $fm_ecno);
                     $this->db->update('orders', $update_data);
                 }
-                echo "<script>alert('success');window.history.back()</script>";
+                if ($return) {
+                    echo "<script>alert('success');window.history.back()</script>";
+                }
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
@@ -527,6 +534,115 @@ class fmtoken extends Public_Controller
         // 准备要发送的数据
         $data = array(
             'Data' => array($fm_ecno),
+        );
+
+        // 将数据编码为 JSON 格式
+        $json_data = json_encode($data);
+
+        // 准备请求头
+        $header = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $this->get_ecb_token(),
+        );
+
+        // 设置请求选项
+        $options = array(
+            'http' => array(
+                'method' => 'POST', // 使用 POST 方法发送数据
+                'header' => implode("\r\n", $header),
+                'content' => $json_data, // 将 JSON 数据放在请求主体中
+            ),
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ),
+        );
+
+        $context = stream_context_create($options);
+
+        $res = @file_get_contents($url, false, $context);
+
+        if (!empty($res)) {
+            print_r($res);
+        } else {
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
+            // echo "<script>alert('error, no response.');window.history.back()</script>";
+            return false;
+        }
+    }
+
+    // mutiple process
+
+    // mutiple add order to familiy
+    public function muti_fm_add()
+    {
+        $order_list = $this->input->post('order_list');
+        $count = 0;
+        foreach ($order_list as $self) {
+            $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+            if ($this->fm_add_b2c_order(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['order_id'], false)) {
+                $count++;
+            }
+        }
+
+        $return_data = array(
+            'result' => 'success',
+            'success_order' => $count,
+            'error_order' => count($order_list) - $count,
+        );
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($return_data));
+    }
+
+    // mutiple logistic order
+    public function muti_fm_logistic()
+    {
+        $order_list = $this->input->post('order_list');
+        $count = 0;
+        foreach ($order_list as $self) {
+            $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+            if ($buf['fm_type'] == 'b2c') {
+                if ($this->fm_b2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false)) {
+                    $count++;
+                }
+            } elseif ($buf['fm_type'] == 'c2c') {
+                if ($this->fm_c2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false)) {
+                    $count++;
+                }
+            }
+        }
+
+        $return_data = array(
+            'result' => 'success',
+            'success_order' => $count,
+            'error_order' => count($order_list) - $count,
+        );
+
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($return_data));
+    }
+
+    // mutiple print order
+    public function muti_fm_print()
+    {
+        $order_list = $this->input->post('order_list');
+        $fm_ecno = array();
+        foreach ($order_list as $self) {
+            $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+            $fm_ecno[] = $buf['fm_ecno'];
+        }
+
+        $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
+
+        // 准备要发送的数据
+        $data = array(
+            'Data' => $fm_ecno,
         );
 
         // 将数据编码为 JSON 格式

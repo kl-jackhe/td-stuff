@@ -16,6 +16,23 @@
     width: 601px !important;
   }
 
+  .operationOrder {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  #hintWindow {
+    display: none;
+    background-color: #fff;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
   @media (max-width: 767px) {
     #product_chosen {
       width: 100% !important;
@@ -128,7 +145,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body">
-        <select class="form-control" id="selectStep">
+        <select class="form-control operationOrder" id="selectStep">
           <option value="">----選擇訂單狀態----</option>
           <? foreach ($step_list as $key => $value) {
             if ($key != '') { ?>
@@ -136,12 +153,26 @@
           <? }
           } ?>
         </select>
+        <? if ($this->is_liqun_food) : ?>
+          <button class="btn btn-primary operationOrder" onClick="fmAllOrderProcessBtn('add')">批量產生訂單(此操作只產生B2C訂單)</button>
+          <button class="btn btn-success operationOrder" onClick="fmAllOrderProcessBtn('logistic')">批量產生物流單號</button>
+          <button class="btn btn-danger operationOrder" onClick="fmAllOrderProcessBtn('print')">批量列印物流單</button>
+        <? endif; ?>
       </div>
       <div class="modal-footer">
         <span class="btn btn-primary" onclick="selectBoxChangeStep()">修改</span>
         <span class="btn btn-danger" data-dismiss="modal">關閉</span>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="hintWindow">
+  <div class="text-center">
+    <h1>
+      <span id="processingText">資料處理中請稍後</span>
+      <span id="dots"></span>
+    </h1>
   </div>
 </div>
 
@@ -194,7 +225,7 @@
     html += '<th>商品規格</th>';
     html += '<th>數量</th>';
     html += '</tr>';
-    
+
     for (var i = 0; i < data.length; i++) {
       var orderItem = data[i];
       // 注文の詳細を表示するためのHTMLを生成する
@@ -295,6 +326,7 @@
     }
   }
 </script>
+
 <!-- 產生FM訂單 -->
 <script>
   function fmOrderBtn(orderId) {
@@ -305,5 +337,68 @@
 
     // 跳转到URL
     window.location.href = url;
+  }
+
+  // Ajaxリクエストの開始時に通知を表示
+  function showNotification() {
+    // 通知の表示ロジックを実装（例：ローディングスピナーやメッセージを表示）
+    $('#hintWindow').css('display', 'block');
+  }
+
+  // Ajaxリクエストの完了時に通知を非表示にする
+  function hideNotification() {
+    // 通知の非表示ロジックを実装
+    $('#hintWindow').css('display', 'none');
+  }
+
+  // ドットを更新する関数
+  function updateDots() {
+    var dots = $('#dots').text();
+    if (dots.length >= 5) {
+      $('#dots').text('.');
+    } else {
+      $('#dots').text(dots + '.');
+    }
+  }
+
+  function fmAllOrderProcessBtn(process) {
+    var checkedInputsArray = $('input[name="selectCheckbox"]:checked').map(function() {
+      return this.value;
+    }).get();
+
+    if ($.isEmptyObject(checkedInputsArray)) {
+      alert('請選擇訂單！');
+      return;
+    }
+
+    var dotsInterval = setInterval(updateDots, 500);
+    showNotification();
+
+    $.ajax({
+      url: '/fmtoken/muti_fm_' + process,
+      type: 'post',
+      data: {
+        order_list: checkedInputsArray,
+      },
+      success: function(respond) {
+        if (respond) {
+          // console.log(respond);
+          clearInterval(dotsInterval); // ドットの更新を停止する
+          hideNotification();
+          if (process == 'print') {
+            var newWindow = window.open('', '_blank');
+            newWindow.document.write(respond);
+            newWindow.print();
+          } else {
+            if (respond.result == 'success') {
+              alert('成功 ' + respond.success_order + ' 筆，失敗 ' + respond.error_order + ' 筆');
+              window.location.reload();
+            } else {
+              alert('不明錯誤請通知程序員');
+            }
+          }
+        }
+      }
+    })
   }
 </script>
