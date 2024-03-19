@@ -386,7 +386,16 @@ class fmtoken extends Public_Controller
                     $this->db->update('orders', $update_data);
                 }
                 if ($return) {
-                    echo "<script>alert('success');window.history.back()</script>";
+                    if (!empty($res['result'][$fm_ecno]['message'])) {
+                        echo "<script>alert('" . $res['result'][$fm_ecno]['message'] . "');window.history.back()</script>";
+                        return $res['result'][$fm_ecno]['message'];
+                    } else {
+                        echo "<script>alert('success');window.history.back()</script>";
+                    }
+                } else {
+                    if (!empty($res['result'][$fm_ecno]['message'])) {
+                        return $res['result'][$fm_ecno]['message'];
+                    }
                 }
                 return true;
             } else {
@@ -456,7 +465,16 @@ class fmtoken extends Public_Controller
                     $this->db->update('orders', $update_data);
                 }
                 if ($return) {
-                    echo "<script>alert('success');window.history.back()</script>";
+                    if (!empty($res['result'][$fm_ecno]['message'])) {
+                        echo "<script>alert('" . $res['result'][$fm_ecno]['message'] . "');window.history.back()</script>";
+                        return $res['result'][$fm_ecno]['message'];
+                    } else {
+                        echo "<script>alert('success');window.history.back()</script>";
+                    }
+                } else {
+                    if (!empty($res['result'][$fm_ecno]['message'])) {
+                        return $res['result'][$fm_ecno]['message'];
+                    }
                 }
                 return true;
             } else {
@@ -604,14 +622,23 @@ class fmtoken extends Public_Controller
     {
         $order_list = $this->input->post('order_list');
         $count = 0;
+        $error_msg = '';
         foreach ($order_list as $self) {
             $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
             if ($buf['fm_type'] == 'b2c') {
-                if ($this->fm_b2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false)) {
+                $b2c_logistic = $this->fm_b2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false);
+                if ($b2c_logistic) {
+                    if ($b2c_logistic == '查無可用日期') {
+                        $error_msg = $b2c_logistic;
+                    }
                     $count++;
                 }
             } elseif ($buf['fm_type'] == 'c2c') {
-                if ($this->fm_c2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false)) {
+                $c2c_logistic = $this->fm_c2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false);
+                if ($c2c_logistic) {
+                    if ($c2c_logistic == '查無可用日期') {
+                        $error_msg = $c2c_logistic;
+                    }
                     $count++;
                 }
             }
@@ -622,6 +649,11 @@ class fmtoken extends Public_Controller
             'success_order' => $count,
             'error_order' => count($order_list) - $count,
         );
+
+        if (!empty($error_msg)) {
+            $return_data['result'] = 'error';
+            $return_data['error_msg'] = $error_msg;
+        }
 
         $this->output
             ->set_content_type('application/json')

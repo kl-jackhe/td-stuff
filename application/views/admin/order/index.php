@@ -388,13 +388,18 @@
           if (process == 'print') {
             var newWindow = window.open('', '_blank');
             newWindow.document.write(respond);
-            newWindow.print();
+            // newWindow.print();
           } else {
             if (respond.result == 'success') {
               alert('成功 ' + respond.success_order + ' 筆，失敗 ' + respond.error_order + ' 筆');
               window.location.reload();
             } else {
-              alert('不明錯誤請通知程序員');
+              if (respond.error_msg) {
+                alert(respond.error_msg);
+              } else {
+                alert('不明錯誤請通知程序員');
+              }
+              window.location.reload();
             }
           }
         }

@@ -182,7 +182,7 @@
                 <th class="text-center">訂單狀態</th>
                 <th class="text-center">物流單號</th>
                 <th class="text-center">新增全家訂單</th>
-                <th class="text-center">物流單號(全家)</th>
+                <th class="text-center">產生單號(全家)</th>
                 <!-- <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th> -->
             <? else : ?>
