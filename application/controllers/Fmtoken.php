@@ -205,9 +205,9 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            // echo '<pre>';
-            // print_r($res);
-            // echo '</pre>';
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
             if (!empty($res['result'][$order_info['order_number']]['ecno'])) {
                 $update_data = array(
                     'fm_ecno' => $res['result'][$order_info['order_number']]['ecno'],
@@ -217,10 +217,10 @@ class fmtoken extends Public_Controller
                 $this->db->where('order_id', $id);
                 $this->db->update('orders', $update_data);
 
-                echo "<script>alert('success');window.history.back()</script>";
+                // echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
-                echo "<script>alert('error');window.history.back()</script>";
+                // echo "<script>alert('error');window.history.back()</script>";
                 return false;
             }
         }
@@ -308,9 +308,9 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            // echo '<pre>';
-            // print_r($res);
-            // echo '</pre>';
+            echo '<pre>';
+            print_r($res);
+            echo '</pre>';
             if (!empty($res['result'][$order_info['order_number']]['ecno'])) {
                 $update_data = array(
                     'fm_ecno' => $res['result'][$order_info['order_number']]['ecno'],
@@ -323,16 +323,19 @@ class fmtoken extends Public_Controller
                 echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
-                echo "<script>alert('error');window.history.back()</script>";
+                // echo "<script>alert('error');window.history.back()</script>";
                 return false;
             }
         }
     }
 
     // Get FM B2C logistic
-    public function fm_b2c_logistic($fm_ecno)
+    public function fm_b2c_logistic($type, $fm_ecno)
     {
         $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/index.php';
+        if ($type == 'cold') {
+            $url = 'https://ecbypass.com.tw/api/v2/B2C/LogisticCold/index.php';
+        }
 
         // 准备要发送的数据
         $data = array(
@@ -368,12 +371,9 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            echo '<pre>';
-            print_r($options);
-            echo '</pre>';
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($res);
+            // echo '</pre>';
             if ($res['response'] == "success") {
                 if ($res['result'][$fm_ecno]['status'] == "success") {
                     $update_data = array(
@@ -382,25 +382,28 @@ class fmtoken extends Public_Controller
                     $this->db->where('fm_ecno', $fm_ecno);
                     $this->db->update('orders', $update_data);
                 }
-                // echo "<script>alert('success');window.history.back()</script>";
+                echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
+                echo '<pre>';
+                print_r($res);
+                echo '</pre>';
                 return false;
             }
         } else {
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
             echo "<script>alert('error, no response.');window.history.back()</script>";
             return false;
         }
     }
 
     // Get FM C2C logistic
-    public function fm_c2c_logistic($fm_ecno)
+    public function fm_c2c_logistic($type, $fm_ecno)
     {
         $url = 'https://ecbypass.com.tw/api/v2/C2C/Logistic/index.php';
+        if ($type == 'cold') {
+            $url = 'https://ecbypass.com.tw/api/v2/C2C/LogisticCold/index.php';
+        }
 
         // 准备要发送的数据
         $data = array(
@@ -436,12 +439,9 @@ class fmtoken extends Public_Controller
 
         if (!empty($res)) {
             $res = json_decode($res, true);
-            echo '<pre>';
-            print_r($options);
-            echo '</pre>';
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($res);
+            // echo '</pre>';
             if ($res['response'] == "success") {
                 if ($res['result'][$fm_ecno]['status'] == "success") {
                     $update_data = array(
@@ -450,10 +450,13 @@ class fmtoken extends Public_Controller
                     $this->db->where('fm_ecno', $fm_ecno);
                     $this->db->update('orders', $update_data);
                 }
-                // echo "<script>alert('success');window.history.back()</script>";
+                echo "<script>alert('success');window.history.back()</script>";
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
+                echo '<pre>';
+                print_r($res);
+                echo '</pre>';
                 return false;
             }
         } else {
@@ -463,24 +466,17 @@ class fmtoken extends Public_Controller
     }
 
     // Print FM B2C logistic
-    public function fm_b2c_print($fm_ecno)
+    public function fm_b2c_print($type, $fm_ecno)
     {
         $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
+        // if ($type == 'cold') {
+        //     $url = 'https://ecbypass.com.tw/api/v2/B2C/LogisticCold/print.php';
+        // }
 
         // 准备要发送的数据
-        // $data = array(
-        //     'Data' => [$fm_ecno],
-        // );
-        $data = array();
-        $data['Data'] = [
-            $fm_ecno,
-            $fm_ecno,
-            $fm_ecno,
-            $fm_ecno,
-            $fm_ecno,
-            $fm_ecno,
-            $fm_ecno
-        ];
+        $data = array(
+            'Data' => array($fm_ecno),
+        );
 
         // 将数据编码为 JSON 格式
         $json_data = json_encode($data);
@@ -510,27 +506,27 @@ class fmtoken extends Public_Controller
         $res = @file_get_contents($url, false, $context);
 
         if (!empty($res)) {
-            // $res = json_decode($res, true);
-            echo '<pre>';
             print_r($res);
-            echo '</pre>';
         } else {
             echo '<pre>';
             print_r($res);
             echo '</pre>';
-            echo "<script>alert('error, no response.');window.history.back()</script>";
+            // echo "<script>alert('error, no response.');window.history.back()</script>";
             return false;
         }
     }
 
     // Print FM C2C logistic
-    public function fm_c2c_print($fm_ecno)
+    public function fm_c2c_print($type, $fm_ecno)
     {
         $url = 'https://ecbypass.com.tw/api/v2/C2C/Logistic/print.php';
+        if ($type == 'cold') {
+            $url = 'https://ecbypass.com.tw/api/v2/C2C/LogisticCold/print.php';
+        }
 
         // 准备要发送的数据
         $data = array(
-            'Data' => [$fm_ecno],
+            'Data' => array($fm_ecno),
         );
 
         // 将数据编码为 JSON 格式
@@ -561,15 +557,12 @@ class fmtoken extends Public_Controller
         $res = @file_get_contents($url, false, $context);
 
         if (!empty($res)) {
-            // $res = json_decode($res, true);
-            echo '<pre>';
             print_r($res);
-            echo '</pre>';
         } else {
             echo '<pre>';
             print_r($res);
             echo '</pre>';
-            echo "<script>alert('error, no response.');window.history.back()</script>";
+            // echo "<script>alert('error, no response.');window.history.back()</script>";
             return false;
         }
     }

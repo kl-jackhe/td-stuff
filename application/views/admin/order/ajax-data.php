@@ -162,10 +162,6 @@
                 <p class="btn btn-success btn-sm" onclick="selectAll()">全選 <i class="fa-regular fa-square selectAll"></i></p>
             </th>
 
-            <? if (!$this->is_partnertoys) : ?>
-                <th class="text-center">匯款後五碼</th>
-            <? endif; ?>
-
             <? if ($this->is_partnertoys) : ?>
                 <th class="text-center">訂單編號</th>
                 <th class="text-center">客戶資訊</th>
@@ -183,6 +179,7 @@
                 <th class="text-center">配送地址</th>
                 <th class="text-center text-nowrap">配送方式</th>
                 <th class="text-center text-nowrap">金額/付款方式</th>
+                <th class="text-center">匯款後五碼</th>
                 <th class="text-center">訂單狀態</th>
                 <th class="text-center">物流單號</th>
                 <th class="text-center">新增全家訂單</th>
@@ -196,6 +193,7 @@
                 <th class="text-center">配送地址</th>
                 <th class="text-center text-nowrap">配送方式</th>
                 <th class="text-center text-nowrap">金額/付款方式</th>
+                <th class="text-center">匯款後五碼</th>
                 <th class="text-center">訂單狀態</th>
                 <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th>
@@ -387,7 +385,7 @@
                             <!-- 自動單號 -->
                             <td class="text-center">
                                 <!-- 物流單列印 -->
-                                <a href="/fmtoken/<?= ($order['fm_type'] == 'b2c') ? 'fm_b2c_print/' . $order['fm_ecno'] : 'fm_c2c_print/' . $order['fm_ecno']; ?>" target="_blank"><?php echo $order['AllPayLogisticsID'] ?></a>
+                                <a href="/fmtoken/fm_<?= $order['fm_type'] ?>_print/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>" target="_blank"><?php echo $order['AllPayLogisticsID'] ?></a>
                             </td>
                         <?php else : ?>
                             <!-- 手動單號 -->
@@ -410,10 +408,10 @@
                                     <select id="orderType" class="form-control">
                                         <?php if ($order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
                                             <option value="fm_add_b2c_order/cold">B2C冷凍訂單</option>
-                                            <!-- <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option> -->
+                                            <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option>
                                         <?php elseif ($order['order_delivery'] == 'family_pickup') : ?>
                                             <option value="fm_add_b2c_order/normal">B2C常溫訂單</option>
-                                            <!-- <option value="fm_add_c2c_order/normal">C2C常溫訂單</option> -->
+                                            <option value="fm_add_c2c_order/normal">C2C常溫訂單</option>
                                         <?php endif; ?>
                                     </select>
                                     <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
@@ -427,11 +425,7 @@
                         <!-- 產生單號 -->
                         <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>
                             <td class="text-center">
-                                <?php if ($order['fm_type'] == 'b2c') : ?>
-                                    <a class="btn btn-success" href="/fmtoken/fm_b2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
-                                <?php elseif ($order['fm_type'] == 'c2c') : ?>
-                                    <a class="btn btn-success" href="/fmtoken/fm_c2c_logistic/<?= $order['fm_ecno'] ?>">產生</a>
-                                <?php endif; ?>
+                                <a class="btn btn-success" href="/fmtoken/fm_<?= $order['fm_type'] ?>_logistic/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>">產生</a>
                             </td>
                         <?php else : ?>
                             <td class="text-center"></td>
