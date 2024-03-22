@@ -16,7 +16,7 @@
     <!-- 搜尋攔 -->
 </div>
 <div :class="{ 'section-sidemenu': true, 'nav-open': isNavOpen }">
-    <h1 class=""><span><?= !empty($page_title) ? $page_title : '' ?></span></h1>
+    <h1 class=""><span><?= !empty($page_detail_title) ? $page_detail_title : (!empty($page_title) ? $page_title : '') ?></span></h1>
     <!-- 篩選清單 -->
     <ul v-if="searchText === ''" class="menu-main">
         <div v-for="category in products_categories">

@@ -93,7 +93,16 @@
                                     <input type="text" class="form-control" id="product_price" name="product_price" required>
                                 </div>
                             </div>
+                            <? if ($this->is_partnertoys) : ?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="free" for="safe_inventory">安全庫存量</label>
+                                        <input type="text" class="form-control" id="safe_inventory" name="safe_inventory" required>
+                                    </div>
+                                </div>
+                            <? endif; ?>
                         </div>
+                        <hr>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -107,6 +116,7 @@
                             </div>
                         </div>
                         <?php if ($this->is_partnertoys) : ?>
+                            <hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -124,6 +134,7 @@
                                 </div>
                             </div>
                         <?php endif; ?>
+                        <hr>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -132,6 +143,7 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -140,22 +152,79 @@
                                 </div>
                             </div>
                         </div>
-                        <?php if ($this->is_partnertoys) : ?>
+                        <? if ($this->is_partnertoys) : ?>
+                            <hr>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="free" for="seo_title">seo設定</label>
                                         <div class="panel panel-default">
                                             <div class="panel-body M_panel-body_bg">
-                                                <input type="text" name="seo_title" value="" class="form-control" id="seo_title" placeholder="請輸入TITLE(標題)">
+                                                <input type="text" name="seo_title" class="form-control" id="seo_title" placeholder="請輸入TITLE(標題)">
                                                 <textarea name="seo_keyword" class="form-control" id="seo_keyword" rows="3" placeholder="請輸入KEYWORD(關鍵字)，每組關鍵字請用『半形逗號： , 』 隔開" style="resize:none;"></textarea>
-                                                <textarea name="seo_desc" class="form-control" id="seo_desc" rows="5" placeholder="請輸入DESCRIPTION(網站簡述)" style="resize:none;"></textarea>
+                                                <textarea name="seo_description" class="form-control" id="seo_description" rows="5" placeholder="請輸入DESCRIPTION(網站簡述)" style="resize:none;"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <?php endif; ?>
+                            <hr>
+                            <div class="row" style="margin-bottom: 20px;">
+                                <div class="col-md-12">
+                                    <label class="free" for="product_combine">方案建立</label>
+                                </div>
+                            </div>
+                            <? for ($i = 0; $i < 2; $i++) : ?>
+                                <div class="row" style="margin-bottom: 20px;">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="product_combine_name_<?= $i ?>">方案名稱</label>
+                                            <input type="text" class="form-control" id="product_combine_name_<?= $i ?>" name="product_combine_name_<?= $i ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="product_combine_cargo_id_<?= $i ?>">貨號</label>
+                                            <input type="text" class="form-control" id="product_combine_cargo_id_<?= $i ?>" name="product_combine_cargo_id_<?= $i ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label for="product_combine_price_<?= $i ?>">售價</label>
+                                            <input type="text" class="form-control" id="product_combine_price_<?= $i ?>" name="product_combine_price_<?= $i ?>" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label for="product_combine_quantity_<?= $i ?>">庫存量</label>
+                                            <input type="text" class="form-control" id="product_combine_quantity_<?= $i ?>" name="product_combine_quantity_<?= $i ?>" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="limit_enable_<?= $i ?>">限購狀態</label>
+                                        <select class="form-control" name="limit_enable_<?= $i ?>">
+                                            <option value="YES">啟用</option>
+                                            <option value="" selected>停用</option>
+                                        </select>
+                                        <input type="number" min="1" name="limit_qty_<?= $i ?>" class="form-control" placeholder="請輸入限購數量">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label for="product_combine_image_<?= $i ?>" class="control-label">商品圖片</label>
+                                            <div class="form-group">
+                                                <a href="/assets/admin/filemanager/dialog.php?type=1&field_id=add_product_combine_image_<?= $i ?>&relative_url=1" class="btn btn-primary fancybox" type="button" style="margin-top: 5px;">選擇圖片</a>
+                                            </div>
+                                            <input type="hidden" id="add_product_combine_image_<?= $i ?>" name="product_combine_image_<?= $i ?>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <img src="" id="add_product_combine_image_<?= $i ?>_preview" class="img-responsive" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            <? endfor; ?>
+                        <? endif; ?>
                     </div>
                 </div>
             </div>

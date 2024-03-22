@@ -176,9 +176,18 @@ class Product extends Admin_Controller
 			'created_at' => date('Y-m-d H:i:s'),
 			'updated_at' => date('Y-m-d H:i:s'),
 		);
+
+		if ($this->is_partnertoys) {
+			$data['safe_inventory'] = $this->input->post('safe_inventory');
+			$data['seo_title'] = $this->input->post('seo_title');
+			$data['seo_keyword'] = $this->input->post('seo_keyword');
+			$data['seo_description'] = $this->input->post('seo_description');
+		}
+
 		$product_id = $this->mysql_model->_insert('product', $data);
 
 		if ($this->is_partnertoys) {
+			// 商品輪播圖建立
 			$product_picture = $this->input->post('product_picture');
 			$product_picture_decode = json_decode($product_picture, true);
 
@@ -205,6 +214,24 @@ class Product extends Admin_Controller
 						// 其他字段的处理
 					);
 					$this->db->insert('product_img', $insert_data);
+				}
+			}
+
+			// 方案建立
+			for ($i = 0; $i < 2; $i++) {
+				if (!empty($this->input->post('product_combine_name_' . $i))) {
+					$buf_combine = array(
+						'product_id' => $product_id,
+						'cargo_id' => $this->input->post('product_combine_cargo_id_' . $i),
+						'name' => $this->input->post('product_combine_name_' . $i),
+						'quantity' => $this->input->post('product_combine_quantity_' . $i),
+						'price' => $this->input->post('product_combine_price_' . $i),
+						'current_price' => $this->input->post('product_combine_price_' . $i),
+						'limit_enable' => $this->input->post('limit_enable_' . $i),
+						'limit_qty' => $this->input->post('limit_qty_' . $i),
+						'picture' => $this->input->post('product_combine_image_' . $i),
+					);
+					$this->db->insert('product_combine', $buf_combine);
 				}
 			}
 		} else {
@@ -310,6 +337,10 @@ class Product extends Admin_Controller
 		);
 		if ($this->is_partnertoys) {
 			$data['product_category_id'] = $this->input->post('product_category');
+			$data['safe_inventory'] = $this->input->post('safe_inventory');
+			$data['seo_title'] = $this->input->post('seo_title');
+			$data['seo_keyword'] = $this->input->post('seo_keyword');
+			$data['seo_description'] = $this->input->post('seo_description');
 			if ($this->input->post('product_category') == 1) {
 				$data['booking_date'] = $this->input->post('booking_date');
 			}
@@ -588,12 +619,28 @@ class Product extends Admin_Controller
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),
+			'quantity' => $this->input->post('product_combine_quantity'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
+			'type' => $this->input->post('any_specification'),
+			'limit_enable' => $this->input->post('limit_enable'),
+			'limit_qty' => $this->input->post('limit_qty'),
 		);
-		if ($this->is_liqun_food) {
-			$data['cargo_id'] = $this->input->post('product_combine_cargo_id');
+
+		if ($this->is_partnertoys) {
+			$data = array(
+				'product_id' => $this->input->post('product_id'),
+				'cargo_id' => $this->input->post('product_combine_cargo_id'),
+				'name' => $this->input->post('product_combine_name'),
+				'price' => $this->input->post('product_combine_price'),
+				'current_price' => $this->input->post('product_combine_price'),
+				'quantity' => $this->input->post('product_combine_quantity'),
+				'picture' => $this->input->post('product_combine_image'),
+				'limit_enable' => $this->input->post('limit_enable'),
+				'limit_qty' => $this->input->post('limit_qty'),
+			);
 		}
+
 		$id = $this->mysql_model->_insert('product_combine', $data);
 
 		$qty = $this->input->post('plan_qty');
@@ -638,12 +685,18 @@ class Product extends Admin_Controller
 			'name' => $this->input->post('product_combine_name'),
 			'price' => $this->input->post('product_combine_price'),
 			'current_price' => $this->input->post('product_combine_current_price'),
+			'quantity' => $this->input->post('product_combine_quantity'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
 			'type' => $this->input->post('any_specification'),
 			'limit_enable' => $this->input->post('limit_enable'),
 			'limit_qty' => $this->input->post('limit_qty'),
 		);
+
+		if ($this->is_partnertoys) {
+			$update_data['current_price'] = $update_data['price'];
+		}
+
 		$this->db->where('id', $id);
 		$this->db->update('product_combine', $update_data);
 

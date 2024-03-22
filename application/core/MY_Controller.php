@@ -16,6 +16,8 @@ class MY_Controller extends CI_Controller
 		$this->load->model('product_model');
 		$this->lang->load('general', 'zh_tw');
 		$this->data['page_title'] = get_setting_general('name');
+		$this->data['seo_description'] = get_setting_general('meta_description');
+		$this->data['seo_keywords'] = get_setting_general('meta_keywords');
 
 		$this->is_liqun_food = (strpos(base_url(), 'liqun-food') !== false ? true : false);
 		$this->is_td_stuff = (strpos(base_url(), 'td-stuff') !== false ? true : false);

@@ -207,12 +207,21 @@
                                             </div>
                                         </div>
                                     <?php endif; ?>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label class="free" for="inventory">當前庫存量</label>
-                                            <input type="text" class="form-control" id="inventory" name="inventory" value="<?= intval($product['inventory']) ?>">
+                                    <? if ($this->is_partnertoys) : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="free" for="safe_inventory">安全庫存量</label>
+                                                <input type="text" class="form-control" id="safe_inventory" name="safe_inventory" value="<?= $product['safe_inventory'] ?>">
+                                            </div>
                                         </div>
-                                    </div>
+                                    <? else : ?>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="free" for="inventory">庫存量</label>
+                                                <input type="text" class="form-control" id="inventory" name="inventory" value="<?= intval($product['inventory']) ?>">
+                                            </div>
+                                        </div>
+                                    <? endif; ?>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="required" for="product_price">預設價格</label>
@@ -297,6 +306,20 @@
                                 </div>
                                 <div class="col-md-12">
                                     <hr>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="free" for="seo_title">seo設定</label>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body M_panel-body_bg">
+                                                <input type="text" name="seo_title" class="form-control" id="seo_title" value="<?= $product['seo_title'] ?>" placeholder="請輸入TITLE(標題)">
+                                                <textarea name="seo_keyword" class="form-control" id="seo_keyword" rows="3" placeholder="請輸入KEYWORD(關鍵字)，每組關鍵字請用『半形逗號： , 』 隔開" style="resize:none;"><?= $product['seo_keyword'] ?></textarea>
+                                                <textarea name="seo_description" class="form-control" id="seo_description" rows="5" placeholder="請輸入DESCRIPTION(網站簡述)" style="resize:none;"><?= $product['seo_description'] ?></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -442,52 +465,110 @@
                                 </div>
                                 <table class="table table-bordered" id="plan_paramsFields">
                                     <tr class="info">
-                                        <th style="width: 30%;">名稱</th>
-                                        <?php if ($this->is_liqun_food || $this->is_partnertoys) : ?>
+                                        <?php if ($this->is_partnertoys) : ?>
+                                            <th style="width: 30%;">名稱</th>
                                             <th style="width: 20%;">貨號</th>
+                                            <th style="width: 10%;">價格</th>
+                                            <th style="width: 10%;">庫存量</th>
+                                            <th style="width: 10%;">限購數量</th>
+                                            <th style="width: 10%;">圖片</th>
+                                            <th style="width: 10%;">操作</th>
+                                        <?php elseif ($this->is_liqun_food) : ?>
+                                            <th style="width: 20%;">名稱</th>
+                                            <th style="width: 10%;">貨號</th>
+                                            <th style="width: 10%;">價格</th>
+                                            <th style="width: 10%;">方案價</th>
+                                            <th style="width: 20%;">描述</th>
+                                            <th style="width: 10%;">限購數量</th>
+                                            <th style="width: 10%;">圖片</th>
+                                            <th style="width: 10%;">操作</th>
+                                        <?php elseif ($this->is_td_stuff) : ?>
+                                            <th style="width: 30%;">名稱</th>
+                                            <th style="width: 10%;">原價</th>
+                                            <th style="width: 10%;">方案價</th>
+                                            <th style="width: 30%;">描述</th>
+                                            <th style="width: 10%;">圖片</th>
+                                            <th style="width: 10%;">操作</th>
                                         <?php endif; ?>
-                                        <th style="width: 10%;">原價</th>
-                                        <th style="width: 10%;">方案價</th>
-                                        <th style="width: 10%;">限購數量</th>
-                                        <!-- <th style="width: 20%;">描述</th> -->
-                                        <th style="width: 10%;">圖片</th>
-                                        <th style="width: 10%;">操作</th>
                                     </tr>
                                     <?php if (!empty($product_combine)) {
                                         foreach ($product_combine as $row) { ?>
                                             <tr>
-                                                <td><?php echo $row['name']; ?></td>
-                                                <?php if ($this->is_liqun_food || $this->is_partnertoys) : ?>
+                                                <?php if ($this->is_partnertoys) : ?>
+                                                    <td><?php echo $row['name']; ?></td>
                                                     <td><?php echo $row['cargo_id']; ?></td>
-                                                <?php endif; ?>
-                                                <td><?php echo $row['price']; ?></td>
-                                                <td><?php echo $row['current_price']; ?></td>
-                                                <td>
-                                                    <select class="form-control" name="limit_enable[]" disabled>
-                                                        <? if (!empty($row['limit_enable'])) { ?>
-                                                            <option value="YES" selected>啟用</option>
-                                                            <option value="">停用</option>
+                                                    <td><?php echo $row['price']; ?></td>
+                                                    <td><?php echo $row['quantity']; ?></td>
+                                                    <td>
+                                                        <select class="form-control" name="limit_enable[]" disabled>
+                                                            <? if (!empty($row['limit_enable'])) { ?>
+                                                                <option value="YES" selected>啟用</option>
+                                                                <option value="">停用</option>
+                                                            <? } else { ?>
+                                                                <option value="YES">啟用</option>
+                                                                <option value="" selected>停用</option>
+                                                            <? } ?>
+                                                        </select>
+                                                        <? if ($row['limit_qty'] > 0) { ?>
+                                                            <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" value="<?= $row['limit_qty'] ?>" disabled>
                                                         <? } else { ?>
-                                                            <option value="YES">啟用</option>
-                                                            <option value="" selected>停用</option>
+                                                            <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" disabled>
                                                         <? } ?>
-                                                    </select>
-                                                    <? if ($row['limit_qty'] > 0) { ?>
-                                                        <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" value="<?= $row['limit_qty'] ?>" disabled>
-                                                    <? } else { ?>
-                                                        <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" disabled>
-                                                    <? } ?>
-                                                </td>
-                                                <!-- <td><?php echo $row['description']; ?></td> -->
-                                                <td>
-                                                    <?php if (!empty($row['picture'])) { ?>
-                                                        <img src="/assets/uploads/<?php echo $row['picture']; ?>" class="img-responsive">
-                                                    <?php } ?>
-                                                </td>
-                                                <td>
-                                                    <a href="/admin/product/edit_plan/<?php echo $row['id'] ?>" class="btn btn-primary modal-btn">編輯</a>
-                                                    <a href="/admin/product/delete_plan/<?php echo $row['id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
-                                                </td>
+                                                    </td>
+                                                    <td>
+                                                        <?php if (!empty($row['picture'])) { ?>
+                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" class="img-responsive">
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/product/edit_plan/<?php echo $row['id'] ?>" class="btn btn-primary modal-btn">編輯</a>
+                                                        <a href="/admin/product/delete_plan/<?php echo $row['id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
+                                                    </td>
+                                                <?php elseif ($this->is_liqun_food) : ?>
+                                                    <td><?php echo $row['name']; ?></td>
+                                                    <td><?php echo $row['cargo_id']; ?></td>
+                                                    <td><?php echo $row['price']; ?></td>
+                                                    <td><?php echo $row['current_price']; ?></td>
+                                                    <td><?php echo $row['description']; ?></td>
+                                                    <td>
+                                                        <select class="form-control" name="limit_enable[]" disabled>
+                                                            <? if (!empty($row['limit_enable'])) { ?>
+                                                                <option value="YES" selected>啟用</option>
+                                                                <option value="">停用</option>
+                                                            <? } else { ?>
+                                                                <option value="YES">啟用</option>
+                                                                <option value="" selected>停用</option>
+                                                            <? } ?>
+                                                        </select>
+                                                        <? if ($row['limit_qty'] > 0) { ?>
+                                                            <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" value="<?= $row['limit_qty'] ?>" disabled>
+                                                        <? } else { ?>
+                                                            <input type="number" name="limit_qty[]" class="form-control" placeholder="請輸入限購數量" disabled>
+                                                        <? } ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php if (!empty($row['picture'])) { ?>
+                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" class="img-responsive">
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/product/edit_plan/<?php echo $row['id'] ?>" class="btn btn-primary modal-btn">編輯</a>
+                                                        <a href="/admin/product/delete_plan/<?php echo $row['id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
+                                                    </td>
+                                                <?php elseif ($this->is_td_stuff) : ?>
+                                                    <td><?php echo $row['name']; ?></td>
+                                                    <td><?php echo $row['price']; ?></td>
+                                                    <td><?php echo $row['current_price']; ?></td>
+                                                    <td>
+                                                        <?php if (!empty($row['picture'])) { ?>
+                                                            <img src="/assets/uploads/<?php echo $row['picture']; ?>" class="img-responsive">
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/product/edit_plan/<?php echo $row['id'] ?>" class="btn btn-primary modal-btn">編輯</a>
+                                                        <a href="/admin/product/delete_plan/<?php echo $row['id'] ?>" class="btn btn-danger" onClick="return confirm('您確定要刪除嗎?')">刪除</a>
+                                                    </td>
+                                                <?php endif; ?>
                                             </tr>
                                     <?php }
                                     } ?>

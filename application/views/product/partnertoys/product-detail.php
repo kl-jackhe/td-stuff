@@ -13,136 +13,138 @@
                 <div class="row productDetail">
                     <?php if (!empty($product)) : ?>
                         <div class="col-bg-12 col-md-6 col-lg-6">
-                            <div class="album">
-                                <div class="big">
-                                    <div class="big-slick">
-                                        <?php foreach ($product_images as $index => $image) : ?>
-                                            <div class="productPictureBox carousel-item <?= $index === 0 ? 'active' : ''; ?>">
-                                                <img src="/assets/uploads/<?= $image['picture']; ?>" class="productImages">
-                                            </div>
-                                        <?php endforeach; ?>
+                            <?php if (!empty($product_images)) : ?>
+                                <div class="album">
+                                    <div class="big">
+                                        <div class="big-slick">
+                                            <?php foreach ($product_images as $index => $image) : ?>
+                                                <div class="productPictureBox carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                                                    <img src="/assets/uploads/<?= $image['picture']; ?>" class="productImages">
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                        <a href="javascript:;" title="" class="album-prev slick-arrow"></a>
+                                        <a href="javascript:;" title="" class="album-next slick-arrow"></a>
                                     </div>
-                                    <a href="javascript:;" title="" class="album-prev slick-arrow"></a>
-                                    <a href="javascript:;" title="" class="album-next slick-arrow"></a>
+                                    <div class="small">
+                                        <div class="small-slick">
+                                            <?php foreach ($product_images as $index => $image) : ?>
+                                                <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
+                                                    <img src="/assets/uploads/<?= $image['picture']; ?>" class="img-responsive">
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="small">
-                                    <div class="small-slick">
-                                        <?php foreach ($product_images as $index => $image) : ?>
-                                            <div class="carousel-item <?= $index === 0 ? 'active' : ''; ?>">
-                                                <img src="/assets/uploads/<?= $image['picture']; ?>" class="img-responsive">
-                                            </div>
-                                        <?php endforeach; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-bg-12 col-md-6 col-lg-6">
-                            <div class="row">
-                                <!--商品名稱-->
-                                <h2 class="cargoTitle col-sm-12 col-md-12 col-lg-12"><?= $product['product_name']; ?></h2>
-                                <?php if ($product['product_category_id'] == 6) : ?>
-                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                        <div class="item">&nbsp;$&nbsp;<?= $product['product_price'] ?></div>
-                                    </div>
-                                    <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
-                                    <!--抽選-->
-                                    <div class="cargoBtn col-md-12 col-lg-6">
-                                        <span class="cargoClick buyBtn" @click="participation"><i class="fas fa-truck"></i>參加抽選</span>
-                                    </div>
-                                    <!--運費說明-->
-                                    <div class="cargoBtn col-md-12 col-lg-6">
-                                        <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
-                                    </div>
-                                <?php else : ?>
-                                    <!--價格-->
-                                    <?php if (!empty($productCombine)) : ?>
-                                        <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                            <div v-if="selectedCombine" class="item">售價:&nbsp;$&nbsp;{{ selectedCombine.cprice }}</div>
-                                            <div v-else class="item">❌尚未選擇方案</div>
-                                        </div>
-                                        <!--商品簡介:多行文字欄位-->
-                                        <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
-                                        <?php $count = 0; ?>
-                                        <!--方案選擇-->
-                                        <div class="col-bg-12 col-md-12 col-lg-12">
-                                            <select @change="updateSelectedCombine($event)" id="combineSelect" class="cargoBtn">
-                                                <option value="請選擇方案" disabled>請選擇方案</option>
-                                                <option v-for="self in combine" :key="self.id" :value="self.pname">{{ self.pname }}</option>
-                                            </select>
-                                        </div>
-                                        <!--商品數量-->
-                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
-                                            <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                            <input class="col-8 cargoCountText" type="text" v-model="quantity">
-                                            <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                        </div>
-                                        <!--運費說明-->
-                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                            <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
-                                        </div>
-                                        <!--購買按鍵-->
-                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
-                                            <?php if ($product['sales_status'] == 0) : ?>
-                                                <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上購買</span>
-                                            <?php elseif ($product['sales_status'] == 2) : ?>
-                                                <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上預購</span>
-                                            <?php else : ?>
-                                                <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
-                                            <?php endif; ?>
-                                        </div>
-                                        <!--加入購物車-->
-                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                            <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
-                                        </div>
-                                        <!--加入追蹤清單-->
-                                        <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
-                                            <span class="cargoClick likeBtn" @click="add_like"><i class="fas fa-heart"></i>加入追蹤清單</span>
-                                        </div>
-                                    <?php else : ?>
-                                        <div class="cargoText col-sm-12 col-md-12 col-lg-12">
-                                            <div class="paddingFixTop">
-                                                <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
-                                                <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
-                                                <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
-                                            </div>
-                                        </div>
-                                    <?php endif; ?>
-                                    <?php if (empty($productCombine)) : ?>
-                                        <?php require('product-contact.php'); ?>
-                                    <?php endif; ?>
-                                    <div class="share col-md-12">
-                                        <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
-                                        <ul class="reset">
-                                            <li>
-                                                <a href="https://www.facebook.com/share.php?u=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" title="分享至Facebook" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="http://line.naver.jp/R/msg/text/?<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至LINE" class="line"><i class="fa-brands fa-line"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="https://twitter.com/share" data-text="<?= $product['product_name'] ?>" data-lang="zh-tw" target="_blank" title="分享至Twitter" class="twitter"><i class="fab fa-twitter"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="https://plus.google.com/share?url=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至google-plus" class="google"><i class="fab fa-google-plus-g"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="mailto:?subject=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至E-mail" class="email"><i class="fas fa-envelope"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                        <!-- Cargo description -->
-                        <div class="col-12 cargoDescription">
-                            <ul class="tab reset">
-                                <li class="current">
-                                    <span>商品介紹&nbsp;<i class='fas fa-angle-down'></i></span>
-                                </li>
-                            </ul>
-                            <?php echo $product['product_description']; ?>
                         </div>
                     <?php endif; ?>
+                    <div class="col-bg-12 col-md-6 col-lg-6">
+                        <div class="row">
+                            <!--商品名稱-->
+                            <h2 class="cargoTitle col-sm-12 col-md-12 col-lg-12"><?= $product['product_name']; ?></h2>
+                            <?php if ($product['product_category_id'] == 6) : ?>
+                                <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                    <div class="item">&nbsp;$&nbsp;<?= $product['product_price'] ?></div>
+                                </div>
+                                <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
+                                <!--抽選-->
+                                <div class="cargoBtn col-md-12 col-lg-6">
+                                    <span class="cargoClick buyBtn" @click="participation"><i class="fas fa-truck"></i>參加抽選</span>
+                                </div>
+                                <!--運費說明-->
+                                <div class="cargoBtn col-md-12 col-lg-6">
+                                    <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
+                                </div>
+                            <?php else : ?>
+                                <!--價格-->
+                                <?php if (!empty($productCombine)) : ?>
+                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                        <div v-if="selectedCombine" class="item">售價:&nbsp;$&nbsp;{{ selectedCombine.cprice }}</div>
+                                        <div v-else class="item">❌尚未選擇方案</div>
+                                    </div>
+                                    <!--商品簡介:多行文字欄位-->
+                                    <div v-if="selectedDescription" v-html="selectedDescription" class="cargoDetail col-bg-12 col-md-12 col-lg-12"></div>
+                                    <?php $count = 0; ?>
+                                    <!--方案選擇-->
+                                    <div class="col-bg-12 col-md-12 col-lg-12">
+                                        <select @change="updateSelectedCombine($event)" id="combineSelect" class="cargoBtn">
+                                            <option value="請選擇方案" disabled>請選擇方案</option>
+                                            <option v-for="self in combine" :key="self.id" :value="self.pname">{{ self.pname }}</option>
+                                        </select>
+                                    </div>
+                                    <!--商品數量-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="row cargoBtn col-md-12 col-lg-6">
+                                        <span class="col-2 cargoCountBtn" @click="decrement"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                                        <input class="col-8 cargoCountText" type="text" v-model="quantity">
+                                        <span class="col-2 cargoCountBtn" @click="increment"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                                    </div>
+                                    <!--運費說明-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick explainBtn" @click="toggleTermsPopup"><i class="fas fa-truck"></i>運費說明</span>
+                                    </div>
+                                    <!--購買按鍵-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-12">
+                                        <?php if ($product['sales_status'] == 0) : ?>
+                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上購買</span>
+                                        <?php elseif ($product['sales_status'] == 2) : ?>
+                                            <span class="cargoClick buyBtn" @click="add_cart('<?= base_url() . 'checkout' ?>')"><i class="fas fa-cart-plus"></i>馬上預購</span>
+                                        <?php else : ?>
+                                            <span class="cargoClick buyBtn"><i class="fas fa-cart-plus"></i>商品售完</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <!--加入購物車-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick cartBtn" @click="add_cart()"><i class="fas fa-cart-plus"></i>加入購物車</span>
+                                    </div>
+                                    <!--加入追蹤清單-->
+                                    <div v-bind:style="{ visibility: selectedCombine ? 'visible' : 'hidden' }" class="cargoBtn col-md-12 col-lg-6">
+                                        <span class="cargoClick likeBtn" @click="add_like"><i class="fas fa-heart"></i>加入追蹤清單</span>
+                                    </div>
+                                <?php else : ?>
+                                    <div class="cargoText col-sm-12 col-md-12 col-lg-12">
+                                        <div class="paddingFixTop">
+                                            <div class="item text-center">⭐該商品尚未新增方案⭐</div><br>
+                                            <div class="item text-center">⭐有任何疑問請洽客服⭐</div><br>
+                                            <div class="item text-center">⭐我們將盡速為您服務⭐</div><br>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (empty($productCombine)) : ?>
+                                    <?php require('product-contact.php'); ?>
+                                <?php endif; ?>
+                                <div class="share col-md-12">
+                                    <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                                    <ul class="reset">
+                                        <li>
+                                            <a href="https://www.facebook.com/share.php?u=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" title="分享至Facebook" target="_blank" class="fb"><i class="fab fa-facebook-f"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="http://line.naver.jp/R/msg/text/?<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至LINE" class="line"><i class="fa-brands fa-line"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="https://twitter.com/share" data-text="<?= $product['product_name'] ?>" data-lang="zh-tw" target="_blank" title="分享至Twitter" class="twitter"><i class="fab fa-twitter"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="https://plus.google.com/share?url=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至google-plus" class="google"><i class="fab fa-google-plus-g"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="mailto:?subject=<?= base_url() . 'product/product_detail/' . $product['product_id'] ?>" target="_blank" title="分享至E-mail" class="email"><i class="fas fa-envelope"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <!-- Cargo description -->
+                    <div class="col-12 cargoDescription">
+                        <ul class="tab reset">
+                            <li class="current">
+                                <span>商品介紹&nbsp;<i class='fas fa-angle-down'></i></span>
+                            </li>
+                        </ul>
+                        <?php echo $product['product_description']; ?>
+                    </div>
+                <?php endif; ?>
                 </div>
             </div>
         </div>

@@ -74,6 +74,22 @@ class Product_model extends CI_Model
 		return $result;
 	}
 
+	function getInTimeSelectedCategoryProducts($category = 0)
+	{
+		$this->db->select('p.*');
+		$this->db->distinct();
+		$this->db->from('product p');
+		$this->db->join('product_category_list pcl', 'pcl.product_id = p.product_id', 'left');
+		if (!empty($category) && $category != 0) {
+			$this->db->where('pcl.product_category_id', $category);
+		}
+		$this->db->where('p.product_status', 1);
+		$this->db->order_by('p.distribute_at', 'DESC');
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
 	function getInTimeProducts()
 	{
 		$this->db->select('*');

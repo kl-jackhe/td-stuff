@@ -35,10 +35,27 @@ class Product extends Public_Controller
 		if ($this->is_liqun_food) {
 			$this->data['page_title'] = '商品頁面';
 
-			$this->data['products'] = $this->product_model->getInTimeProducts();
+			// 塞選類別分類
+			$this->data['page'] = 1;
+			$this->data['category'] = '';
+			$current_url = $_SERVER['REQUEST_URI'];
+			$query_string = parse_url($current_url, PHP_URL_QUERY);
+			$decoded_data = $this->security_url->decryptData($query_string);
+			if (!empty($query_string)) {
+				if (!empty($decoded_data) && !empty($decoded_data['page'])) {
+					$this->data['page'] = $decoded_data['page'];
+				}
+				if (!empty($decoded_data) && !empty($decoded_data['category'])) {
+					$this->data['category'] = $decoded_data['category'];
+				}
+			}
+
+			$this->data['products'] = $this->product_model->getInTimeSelectedCategoryProducts($this->data['category']);
 			$this->data['products'] = $this->get_limit_time_products($this->data['products']);
 
 			$this->data['product_category'] = $this->product_model->get_product_category();
+
+
 
 			$this->render('product/liqun/index');
 		}
@@ -101,8 +118,8 @@ class Product extends Public_Controller
 
 	public function product_detail($product_id = null)
 	{
-		$this->data['page_title'] = '商品詳情';
-
+		$this->data['page_detail_title'] = '商品詳情';
+		// 商品類別
 		$this->data['product_category'] = $this->menu_model->getSubMenuData(0, 1);
 
 		// 获取当前 URL
@@ -128,6 +145,17 @@ class Product extends Public_Controller
 			window.history.back();
 			</script>";
 			return;
+		}
+
+		$this->data['page_title'] = $this->data['product']['product_name'];
+
+		// 若調整seo參數
+		if ($this->data['product']['seo_keyword']) {
+			$this->data['seo_keywords'] = $this->data['product']['seo_keyword'];
+		}
+
+		if ($this->data['product']['seo_description']) {
+			$this->data['seo_description'] = $this->data['product']['seo_description'];
 		}
 
 		// 商品圖
@@ -234,6 +262,15 @@ class Product extends Public_Controller
 
 	public function view($id = 0)
 	{
+		// 获取当前 URL
+		$current_url = $_SERVER['REQUEST_URI'];
+		$query_string = parse_url($current_url, PHP_URL_QUERY);
+		$decoded_data = $this->security_url->decryptData($query_string);
+		if (!empty($query_string)) {
+			if (!empty($decoded_data) && !empty($decoded_data['selectedProduct'])) {
+				$id = $decoded_data['selectedProduct'];
+			}
+		}
 		if ($id == 0) {
 			redirect(base_url() . 'product');
 		}

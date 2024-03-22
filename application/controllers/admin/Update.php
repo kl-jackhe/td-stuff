@@ -98,6 +98,8 @@ class Update extends Admin_Controller
                 $this->update_202403051354();
                 $this->update_202403131212();
                 $this->update_202403131156();
+                $this->update_202403201604();
+                $this->update_202403211521();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -828,6 +830,66 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403211521()
+    {
+        $version = '202403211521';
+        $description = '[product] create [safe_inventory]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'safe_inventory'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `safe_inventory` int(11) NOT NULL AFTER `inventory`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202403201604()
+    {
+        $version = '202403201604';
+        $description = '[product] create [seo_title][seo_keyword][seo_description]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'seo_title'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `seo_title` varchar(50) NOT NULL AFTER `product_add_on_price`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'seo_keyword'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `seo_keyword` varchar(300) NOT NULL AFTER `seo_title`;");
+            }
+
+            $query = $this->db->query("SHOW COLUMNS FROM product LIKE 'seo_description'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `product` ADD `seo_description` varchar(500) NOT NULL AFTER `seo_keyword`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

@@ -101,10 +101,10 @@
     $(document).ready(function() {
         // 初始化 cnzipcode
         $("#cnzipcode").cnzipcode({
-            provinceDefault: '<?= $user->province ?>',
-            countyDefault: '<?= $user->county ?>',
-            districtDefault: '<?= $user->district ?>',
-            zipcodeDefault: '<?= $user->zipcode ?>'
+            provinceDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->province : '' ?>',
+            countyDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->county : '' ?>',
+            districtDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->district : '' ?>',
+            zipcodeDefault: '<?= !empty($this->session->userdata('user_id')) ? $user->zipcode : '' ?>'
         });
         if ($("#Country").val() === '中國') {
             $("#cnzipcode").show();
@@ -151,7 +151,8 @@
     const authApp = Vue.createApp({
         data() {
             return {
-                getID: <?php echo json_encode($this->input->get('id', TRUE)); ?>, // 若透過header或footer篩選
+                getOrder: <?php echo !empty($postOrder) ? json_encode($postOrder) : json_encode(''); ?>,
+                getCategory: <?php echo !empty($category) ? json_encode($category) : json_encode(''); ?>, // 若透過header或footer篩選
                 pageTitle: null, // 目前標籤
                 order: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order)) ? json_encode($order) : json_encode(''); ?>, // 指定會員訂單
                 order_item: <?php echo (!empty($this->session->userdata('user_id')) && !empty($order_item)) ? json_encode($order_item) : json_encode(''); ?>, // 指定會員訂單的詳細物品
@@ -170,18 +171,23 @@
             }
         },
         mounted() {
-            // 初始化 Magnific Popup
-            // this.initMagnificPopup();
-            // init imageBase64
-            // this.getCaptcha();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
-                this.selectedCategoryId = this.authCategory[0].auth_category_id;
-                this.pageTitle = this.authCategory[0].auth_category_name;
-                if (this.getID && this.getID.length > 0) {
-                    this.selectedCategoryId = this.getID;
-                    const tmpSet = this.authCategory.find(self => self.auth_category_id === this.getID);
+                if (this.getOrder && this.getOrder.length > 0) {
+                    this.selectedOrder = this.order.find(self => self.order_id === this.getOrder);
+                    this.selectedOrderItem = this.order_item.filter(self => self.order_id === this.getOrder);
+
+                    setTimeout(() => {
+                        document.getElementById('orderMessageTable').scrollIntoView();
+                    }, 300); // 延遲300毫秒以確保元素已經正確加載
+                }
+                if (this.getCategory && this.getCategory.length > 0) {
+                    this.selectedCategoryId = this.getCategory;
+                    const tmpSet = this.authCategory.find(self => self.auth_category_id === this.getCategory);
                     this.pageTitle = tmpSet.auth_category_name;
+                } else {
+                    this.selectedCategoryId = this.authCategory[0].auth_category_id;
+                    this.pageTitle = this.authCategory[0].auth_category_name;
                 }
             }
         },
@@ -253,46 +259,28 @@
                 var name = this.pname.find(self => self.payment_code === data);
                 return name.payment_name;
             },
-            // getCaptcha() {
-            //     $.ajax({
-            //         type: 'post',
-            //         url: '/auth/get_captcha',
-            //         contentType: 'application/json',
-            //         success: (data) => {
-            //             this.imageBase64 = data;
-            //         },
-            //     })
-            // },
-            // 獲取追蹤清單
-            getFollow() {
-                $.ajax({
-                    type: 'post',
-                    url: '/product/get_like',
-                    contentType: 'application/json',
-                    success: (data) => {
-                        this.followData = data;
-                    },
-                })
-            },
-            // 刪除指定追蹤商品
-            delect_follow(id) {
-                $.ajax({
-                    type: 'post',
-                    url: '/product/delect_like/' + id,
-                    contentType: 'application/json',
-                    success: function(data) {
-                        if (data == 'successful') {
-                            alert('刪除成功');
-                            window.location.href = <?php echo json_encode(base_url()); ?> + "auth?id=2";
-                        } else {
-                            console.log(data);
-                        }
-                    },
-                })
-            },
             // 指向指定商品
-            href_product(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "product/product_detail/" + id;
+            href_product(selected) {
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/selectedProduct',
+                        type: 'post',
+                        data: {
+                            selectedProduct: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'product/view/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 完成付款
             completePay(id) {
@@ -320,17 +308,7 @@
                 }
             },
             randomCheckcode() {
-                // 获取当前页面的 URL
-                var currentPageUrl = window.location.href
-
-                // 检查是否在特定页面
-                if ((currentPageUrl.indexOf(<?= json_encode(base_url()) ?> + 'auth/index?id=2') !== -1)) {
-                    window.location.reload();
-                } else {
-                    window.location.href = <?= json_encode(base_url()) ?> + 'auth/index?id=2';
-                }
-                // this.getCaptcha();
-                // console.log(<?= json_encode($this->session->flashdata('captcha')); ?>);
+                window.location.reload();
             },
             randomCheckcodeContact() {
                 // 获取当前页面的 URL
@@ -356,14 +334,28 @@
                 this.isBtnActive = !this.isBtnActive;
             },
             filterByCategory(categoryId) {
-                window.location.href = '<?= base_url() . 'auth?id=' ?>' + categoryId;
-                // this.scrollToTop();
-                // this.currentPage = 1; // 將頁碼設置為1
-                // this.selectedOrder = null;
-                // this.selectedOrderItem = null;
-                // this.selectedCategoryId = categoryId;
-                // const selectedCategory = this.authCategory.find(category => category.auth_category_id === categoryId);
-                // this.pageTitle = selectedCategory.auth_category_name;
+                if (categoryId != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/category',
+                        type: 'post',
+                        data: {
+                            category: categoryId,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()) ?> + 'auth/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                } else {
+                    window.location.href = <?= json_encode(base_url()) ?> + 'auth' + (categoryId != null ? '?id=' + categoryId : '');
+                }
             },
             // 選中獨立訂單
             showOrderDetails(selected) {

@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="<?php echo get_setting_general('meta_description') ?>" />
-    <meta name="keywords" content="<?php echo get_setting_general('meta_keywords') ?>" />
+    <meta name="description" content="<?= $seo_description ?>" />
+    <meta name="keywords" content="<?= $seo_keywords ?>" />
     <meta property="og:locale" content="zh_TW" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?php echo $page_title; ?> | <?php echo get_setting_general('name') ?>" />

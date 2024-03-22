@@ -81,18 +81,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group checkbox">
                                     <label class="required">
-                                        <!-- mfp click -->
-                                        <!-- <input type="checkbox" id="agree" name="agree"> 我同意<a @click="toggleTermsPopup" class="popup-link mfpMember">會員加入條款</a> -->
-                                        <input type="checkbox" id="agree" name="agree"> 我同意<a class="popup-link mfpMember">會員加入條款</a>
+                                        <input type="checkbox" id="agree" name="agree"> 我同意<a @click="toggleTermsPopup" class="popup-link mfpMember">會員加入條款</a>
                                     </label>
                                 </div>
                                 <label id="agree-error" class="error" for="agree"></label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <span id="error_text" style="color: red; font-weight: bold;"></span>
                     <input type="hidden" id="email_ok" value="0">

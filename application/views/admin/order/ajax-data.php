@@ -408,19 +408,17 @@
                         <?php if ($order['order_delivery'] == 'family_pickup' || $order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
                             <?php if (empty($order['AllPayLogisticsID']) && empty($order['fm_ecno'])) : ?>
                                 <td class="text-center">
-                                    <select id="orderType" class="form-control">
-                                        <?php if ($order['fm_cold'] == 1) : ?>
-                                            <option value="fm_add_b2c_order/cold">B2C冷凍訂單</option>
-                                            <!-- <option value="fm_add_c2c_order/cold">C2C冷凍訂單</option> -->
-                                        <?php else : ?>
-                                            <option value="fm_add_b2c_order/normal">B2C常溫訂單</option>
-                                            <!-- <option value="fm_add_c2c_order/normal">C2C常溫訂單</option> -->
-                                        <?php endif; ?>
-                                    </select>
-                                    <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
+                                    <?php if ($order['fm_cold'] == 1) : ?>
+                                        <select id="orderType" class="form-control">
+                                            <option value="fm_add_b2c_order/cold">全家冷凍</option>
+                                        </select>
+                                        <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
+                                    <?php else : ?>
+                                        <span>常溫訂單</span>
+                                    <?php endif; ?>
                                 </td>
                             <?php elseif (!empty($order['fm_ecno'])) : ?>
-                                <td class="text-center"><?= ($order['fm_type'] == 'b2c') ? 'B2C' : 'C2C' ?><?= ($order['fm_cold'] == 1) ? '冷凍訂單' : '常溫訂單' ?></td>
+                                <td class="text-center" style="color:#00aaff">全家冷凍</td>
                             <?php endif; ?>
                         <?php else : ?>
                             <td class="text-center">非全家訂單</td>

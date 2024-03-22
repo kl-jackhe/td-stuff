@@ -312,7 +312,7 @@ class Checkout extends Public_Controller
 				);
 
 				$this->db->where('MerchantTradeNo', $szMerchantTradeNo);
-				$this->update('orders', $update_data);
+				$this->db->update('orders', $update_data);
 
 				print '1|OK';
 			} else {
@@ -925,9 +925,11 @@ class Checkout extends Public_Controller
 			// New -----
 			$channelId     = "2000014653"; // 通路ID
 			$channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
+			$channelImage  = 'https://td-stuff.com/assets/uploads/web_logo_td.png';
 			if ($this->is_liqun_food) {
 				$channelId     = get_setting_general('lp_channel_id'); // 通路ID
 				$channelSecret = get_setting_general('lp_channel_secret_key'); // 通路密鑰
+				$channelImage  = base_url() . '/assets/uploads/' . get_setting_general('logo');
 			}
 			// Get Base URL path without filename
 			// $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
@@ -956,7 +958,7 @@ class Checkout extends Public_Controller
 								"name" => '網購商品',
 								"quantity" => 1,
 								"price" => $order_total,
-								"imageUrl" => 'https://td-stuff.com/assets/uploads/web_logo_td.png',
+								"imageUrl" => $channelImage,
 							],
 						],
 					],

@@ -8,7 +8,7 @@
       $totalPages = ceil($totalProducts / $productsPerPage);
 
       // 获取当前页码
-      $currentpage = !empty($this->input->get('page')) ? $this->input->get('page') : 1;
+      $currentpage = $page;
       $offset = ($currentpage - 1) * $productsPerPage;
 
       // 获取当前页的产品
@@ -16,7 +16,7 @@
 
       foreach ($currentProducts as $product) : ?>
         <div class="product_view_style_out col-6 col-md-6 col-lg-4">
-          <a href="/product/view/<?= $product['product_id'] ?>">
+          <a href="javascript:void(0)" onClick="href_product(<?= $product['product_id'] ?>)">
             <div class="product_view_style_in transitionAnimation">
               <? if (!empty($product['product_image'])) { ?>
                 <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['product_image']; ?>">
@@ -41,11 +41,11 @@
 
           // 显示 "<<" 和 上一页 按钮
           if ($currentpage > 1) {
-            echo '<li class="page-item"><a href="?page=1" class="page-link">&laquo;</a></li>';
-            echo '<li class="page-item"><a href="?page=' . ($currentpage - 1) . '" class="page-link">&lsaquo;</a></li>';
+            echo '<li class="page-item"><a href="javascript:void(0)" onclick="pageShift(1)" class="page-link">&laquo;</a></li>';
+            echo '<li class="page-item"><a href="javascript:void(0)" onclick="pageShift(' . ($currentpage - 1) . ')" class="page-link">&lsaquo;</a></li>';
           } else {
-            echo '<li class="page-item disabled"><a href="?page=1" class="page-link">&laquo;</a></li>';
-            echo '<li class="page-item disabled"><a href="?page=' . ($currentpage - 1) . '" class="page-link">&lsaquo;</a></li>';
+            echo '<li class="page-item disabled"><a href="javascript:void(0)" onclick="pageShift(1)" class="page-link">&laquo;</a></li>';
+            echo '<li class="page-item disabled"><a href="javascript:void(0)" onclick="pageShift(' . ($currentpage - 1) . ')" class="page-link">&lsaquo;</a></li>';
           }
 
           // 计算开始和结束页码
@@ -60,16 +60,16 @@
           }
 
           for ($i = $start; $i <= $end; $i++) {
-            echo '<li class="page-item"><a href="?page=' . $i . '" ' . ($i == $currentpage ? 'class="page-link active"' : 'class="page-link"') . '>' . $i . '</a></li>';
+            echo '<li class="page-item"><a href="javascript:void(0)" onclick="pageShift(' . $i . ')"' . ($i == $currentpage ? 'class="page-link active"' : 'class="page-link"') . '>' . $i . '</a></li>';
           }
 
           // 显示 ">>" 和 下一页 按钮
           if ($currentpage < $totalPages) {
-            echo '<li class="page-item"><a href="?page=' . ($currentpage + 1) . '" class="page-link">&rsaquo;</a></li>';
-            echo '<li class="page-item"><a href="?page=' . $totalPages . '" class="page-link">&raquo;</a></li>';
+            echo '<li class="page-item"><a href="javascript:void(0)" onclick="pageShift(' . ($currentpage + 1) . ')" class="page-link">&rsaquo;</a></li>';
+            echo '<li class="page-item"><a href="javascript:void(0)" onclick="pageShift(' . $totalPages . ')" class="page-link">&raquo;</a></li>';
           } else {
-            echo '<li class="page-item disabled"><a href="?page=' . ($currentpage + 1) . '" class="page-link">&rsaquo;</a></li>';
-            echo '<li class="page-item disabled"><a href="?page=' . $totalPages . '" class="page-link">&raquo;</a></li>';
+            echo '<li class="page-item disabled"><a href="javascript:void(0)" onclick="pageShift(' . ($currentpage + 1) . ')" class="page-link">&rsaquo;</a></li>';
+            echo '<li class="page-item disabled"><a href="javascript:void(0)" onclick="pageShift(' . $totalPages . ')" class="page-link">&raquo;</a></li>';
           }
           ?>
         </ul>

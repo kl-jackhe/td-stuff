@@ -11,9 +11,9 @@
                         <div class="product-categories">
                             <?php if (!empty($product_category)) { ?>
                                 <?php foreach ($product_category as $row) { ?>
-                                    <span class="product_category btn col-2" id="<?php echo 'product_category_id_' . $row['product_category_id'] ?>" onClick="searchFilter(<?php echo $row['product_category_id']; ?>)"><?php echo $row['product_category_name']; ?></span>
+                                    <span class="product_category btn col-2" id="<?= 'product_category_id_' . $row['product_category_id'] ?>" onClick="categorySelected(<?= $row['product_category_id']; ?>)"><?php echo $row['product_category_name']; ?></span>
                                 <?php } ?>
-                                <!-- <span class="product_category btn col-2" onClick="searchFilter('')">全品項</span> -->
+                                <span class="product_category btn col-2" onClick="categorySelected()">全品項</span>
                             <?php } ?>
                         </div>
                     </div>
@@ -51,5 +51,97 @@
                 $('#loading').fadeOut("fast");
             }
         });
+    }
+
+    function pageShift(selected) {
+        <? if (!empty($category) && $category != '') : ?>
+            $.ajax({
+                url: '/encode/getMutiPostDataEncode',
+                type: 'post',
+                data: {
+                    page: selected,
+                    category: <?= $category ?>,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        <? else : ?>
+            $.ajax({
+                url: '/encode/getDataEncode/page',
+                type: 'post',
+                data: {
+                    page: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        <? endif; ?>
+
+    }
+
+    function categorySelected(selected = 0) {
+        if (selected == 0) {
+            window.location.href = '<?= base_url() . 'product' ?>';
+        } else {
+            $.ajax({
+                url: '/encode/getDataEncode/category',
+                type: 'post',
+                data: {
+                    category: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+
+    function href_product(selected) {
+        if (selected != null) {
+            $.ajax({
+                url: '/encode/getDataEncode/selectedProduct',
+                type: 'post',
+                data: {
+                    selectedProduct: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/view/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
     }
 </script>

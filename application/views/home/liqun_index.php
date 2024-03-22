@@ -22,7 +22,7 @@
                                 <div class="row justify-content-center" id="fridge_item">
                                     <?php if (!empty($product_tag)) : ?>
                                         <?php foreach ($product_tag as $self) : ?>
-                                            <div class="col-md-12 py-3"><a href="product_tag/index/<?= $self['id']; ?>"><?= $self['name']; ?></a></div>
+                                            <div class="col-md-12 py-3"><a href="javascript:void(0)" onclick="tagSelected(<?= $self['id']; ?>)"><?= $self['name']; ?></a></div>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </div>
@@ -52,7 +52,7 @@
                                 <?php if (!empty($hot_product)) : ?>
                                     <?php $timer = 4; ?>
                                     <?php foreach ($hot_product as $self) : ?>
-                                        <a href="product/view/<?= $self['product_id'] ?>"><?= $self['product_name'] ?></a>
+                                        <a href="javascript:void(0)" onclick="href_product(<?= $self['product_id'] ?>)"><?= $self['product_name'] ?></a>
                                         <?php if ($timer--) : ?>
                                             &nbsp;｜
                                         <?php endif; ?>
@@ -115,7 +115,7 @@
                     foreach ($main_product_category as $mpc_row) {
                         $count++; ?>
                         <div class="col-5 col-md-2 my-3">
-                            <a href="/product?cid=<?= $mpc_row['product_category_id'] ?>" style="text-decoration: none;" class="image-link-<?= $count ?>">
+                            <a href="javascript:void(0)" onclick="categorySelected(<?= $mpc_row['product_category_id'] ?>)" style="text-decoration: none;" class="image-link-<?= $count ?>">
                                 <img src="<?= $mpc_row['product_category_image'] ?>" class="img-fluid">
                             </a>
                         </div>
@@ -123,17 +123,16 @@
                 } ?>
             </div>
         </div>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-9 col-md-3 text-center pb-4 mb-4">
-                    <img src="/assets/images/liqun/index_icon_title-1.png" class="img-fluid">
-                </div>
-                <div class="col-md-12 text-center">
-                    <div class="row justify-content-center product_box_list" id="home_product">
-                        <? if (!empty($limited_time_products)) {
-                            $count = 0;
-                            foreach ($limited_time_products as $product) {
-                                if ($count < 4) { ?>
+        <? if (!empty($limited_time_products)) : ?>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-9 col-md-3 text-center pb-4 mb-4">
+                        <img src="/assets/images/liqun/index_icon_title-1.png" class="img-fluid">
+                    </div>
+                    <div class="col-md-12 text-center">
+                        <div class="row justify-content-center product_box_list" id="home_product">
+                            <? foreach ($limited_time_products as $count => $product) : ?>
+                                <? if ($count < 4) : ?>
                                     <div class="col-md-3 pb-4 ipad_w">
                                         <a href="/product/view/<?= $product['product_id'] ?>">
                                             <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= (!empty($product['picture']) ? $product['picture'] : 'Product/img-600x600.png') ?>">
@@ -149,23 +148,22 @@
                                                     <?= $product['current_price']; ?>
                                                 </span>
                                             </span>
-                                            <?php if ($product['price'] != $product['current_price'] && $product['price'] != 0) { ?>
+                                            <? if ($product['price'] != $product['current_price'] && $product['price'] != 0) : ?>
                                                 <span style="color: gray;font-size: 12px;font-style: oblique;text-decoration: line-through;">原價
                                                     <span style="color: gray;font-size: 12px;font-style: oblique;"> $
                                                         <?= $product['price']; ?>
                                                     </span>
                                                 </span>
-                                            <? } ?>
+                                            <? endif ?>
                                         </a>
                                     </div>
-                        <? }
-                                $count++;
-                            }
-                        } ?>
+                                <? endif; ?>
+                            <? endforeach; ?>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <? endif; ?>
         <div style="background-color: #f5f0e7;margin-top: 54px;margin-bottom: 54px;">
             <div class="container">
                 <div class="row justify-content-center">
@@ -179,7 +177,7 @@
                                 foreach ($product_combine as $product) {
                                     if ($count < 6) { ?>
                                         <div class="col-md-2 pb-4 ipad_w">
-                                            <a href="/product/view/<?= $product['product_id'] ?>">
+                                            <a href="javascript:void(0)" onclick="href_product(<?= $product['product_id'] ?>)">
                                                 <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= (!empty($product['picture']) ? $product['picture'] : 'Product/img-600x600.png') ?>">
                                                 <div class="product_name">
                                                     <span><?= $product['product_name']; ?></span>
@@ -218,7 +216,7 @@
                 <div class="col-12 text-justify liqunHomeCategoryOuter">
                     <?php if (!empty($product_category)) : ?>
                         <?php foreach ($product_category as $pc_row) : ?>
-                            <a href="/product?cid=<?= $pc_row['product_category_id'] ?>" style="text-decoration: none;">
+                            <a href="javascript:void(0)" onclick="categorySelected(<?= $pc_row['product_category_id'] ?>)" style="text-decoration: none;">
                                 <span class="text-center liqunHomeCategory"><?= $pc_row['product_category_name'] ?></span>
                             </a>
                         <?php endforeach; ?>
@@ -231,6 +229,80 @@
         </div>
     </section>
 </div>
+
+<script>
+    function href_product(selected) {
+        if (selected != null) {
+            $.ajax({
+                url: '/encode/getDataEncode/selectedProduct',
+                type: 'post',
+                data: {
+                    selectedProduct: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/view/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+
+    function categorySelected(selected = 0) {
+        if (selected == 0) {
+            window.location.href = '<?= base_url() . 'product' ?>';
+        } else {
+            $.ajax({
+                url: '/encode/getDataEncode/category',
+                type: 'post',
+                data: {
+                    category: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+
+    function tagSelected(selected) {
+        if (selected) {
+            $.ajax({
+                url: '/encode/getDataEncode/tag',
+                type: 'post',
+                data: {
+                    tag: selected,
+                },
+                success: (response) => {
+                    if (response) {
+                        if (response.result == 'success') {
+                            window.location.href = <?= json_encode(base_url()); ?> + 'product_tag/?' + response.src;
+                        } else {
+                            console.log('error.');
+                        }
+                    } else {
+                        console.log(response);
+                    }
+                },
+            });
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function() {
         var countdown_count = $('input[name="countdown_count[]"]').map(function() {

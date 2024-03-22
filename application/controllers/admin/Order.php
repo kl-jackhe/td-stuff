@@ -120,7 +120,9 @@ class Order extends Admin_Controller
 		$this->data['page_title'] = '訂單明細';
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
-		$this->data['guestbook'] = $this->order_model->getGuestBook($id);
+		if($this->is_partnertoys){
+			$this->data['guestbook'] = $this->order_model->getGuestBook($id);
+		}
 
 		// echo '<pre>';
 		// echo 'order_item = ';

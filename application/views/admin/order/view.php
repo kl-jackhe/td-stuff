@@ -250,72 +250,74 @@
                 </div>
             </div>
         </div>
-        <!-- 訂單留言 -->
-        <div class="col-xs-12">
-            <div class="box box-danger box-solid boxpadding">
-                <div class="box-header with-border">
-                    <h3 class="box-title">留言記錄</h3>
-                </div>
-                <div class="box-body">
-                    <table id="example4" class="table table-bordered table-striped table-hover table-responsive">
-                        <tbody>
-                            <tr>
-                                <th class="text-center">序號</th>
-                                <th class="text-center">留言者</th>
-                                <th class="text-center">留言時間</th>
-                                <th class="text-center">留言內容</th>
-                                <th class="text-center nosorting mailbox-controls">編輯</th>
-                            </tr>
-                        </tbody>
-                        <tbody class="mailbox-messages">
-                            <? if (!empty($guestbook)) : ?>
-                                <? foreach ($guestbook as $value => $self) : ?>
-                                    <tr>
-                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $value + 1; ?></td>
-                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= ($self['user_id'] == 0) ? '管理員' : '客戶'; ?></td>
-                                        <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $self['created_at']; ?></td>
-                                        <td class="remarks<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>"><?= $self['content']; ?></td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-default btn-xs" title="刪除" onclick="delete_message(<?= $self['id'] ?>)">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <? endforeach; ?>
-                            <? else : ?>
-                                <tr>
-                                    <td class="text-center" colspan="5">目前無留言紀錄</td>
-                                </tr>
-                            <? endif; ?>
-                        </tbody>
-                    </table>
-                    <div id="M_pagination" style="text-align:center;">
-                        <ul class="pagination">
-                        </ul>
-                        <ul>
-                        </ul>
+        <? if ($this->is_partnertoys) : ?>
+            <!-- 訂單留言 -->
+            <div class="col-xs-12">
+                <div class="box box-danger box-solid boxpadding">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">留言記錄</h3>
                     </div>
-                    <?php $attributes = array('class' => 'message_insert', 'id' => 'message_insert'); ?>
-                    <?php echo form_open('admin/order/message_insert/' . $order['order_id'], $attributes); ?>
-                    <table class="table table-bordered table-striped table-hover table-responsive">
-                        <tbody>
-                            <tr>
-                                <td class="remarks">
-                                    <div class="groupOfContent">
-                                        <span>管理者留言：</span>
-                                        <span class="symHint redContent"><input type="checkbox" id="symToCustomer" name="symToCustomer">&nbsp;同步Mail到消費者信箱</span>
-                                    </div>
-                                    <textarea class="form-control" id="content" name="content"></textarea>
-                                    <input type="hidden" id="symMessage" name="symMessage">
-                                    <button type="button" class="btn btn-primary" onclick="checkContent()">留言</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <?php echo form_close(); ?>
+                    <div class="box-body">
+                        <table id="example4" class="table table-bordered table-striped table-hover table-responsive">
+                            <tbody>
+                                <tr>
+                                    <th class="text-center">序號</th>
+                                    <th class="text-center">留言者</th>
+                                    <th class="text-center">留言時間</th>
+                                    <th class="text-center">留言內容</th>
+                                    <th class="text-center nosorting mailbox-controls">編輯</th>
+                                </tr>
+                            </tbody>
+                            <tbody class="mailbox-messages">
+                                <? if (!empty($guestbook)) : ?>
+                                    <? foreach ($guestbook as $value => $self) : ?>
+                                        <tr>
+                                            <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $value + 1; ?></td>
+                                            <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= ($self['user_id'] == 0) ? '管理員' : '客戶'; ?></td>
+                                            <td class="text-center<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>" nowrap="nowrap"><?= $self['created_at']; ?></td>
+                                            <td class="remarks<?= ($self['user_id'] == 0) ? ' redContent' : ''; ?>"><?= $self['content']; ?></td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-default btn-xs" title="刪除" onclick="delete_message(<?= $self['id'] ?>)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <? endforeach; ?>
+                                <? else : ?>
+                                    <tr>
+                                        <td class="text-center" colspan="5">目前無留言紀錄</td>
+                                    </tr>
+                                <? endif; ?>
+                            </tbody>
+                        </table>
+                        <div id="M_pagination" style="text-align:center;">
+                            <ul class="pagination">
+                            </ul>
+                            <ul>
+                            </ul>
+                        </div>
+                        <?php $attributes = array('class' => 'message_insert', 'id' => 'message_insert'); ?>
+                        <?php echo form_open('admin/order/message_insert/' . $order['order_id'], $attributes); ?>
+                        <table class="table table-bordered table-striped table-hover table-responsive">
+                            <tbody>
+                                <tr>
+                                    <td class="remarks">
+                                        <div class="groupOfContent">
+                                            <span>管理者留言：</span>
+                                            <span class="symHint redContent"><input type="checkbox" id="symToCustomer" name="symToCustomer">&nbsp;同步Mail到消費者信箱</span>
+                                        </div>
+                                        <textarea class="form-control" id="content" name="content"></textarea>
+                                        <input type="hidden" id="symMessage" name="symMessage">
+                                        <button type="button" class="btn btn-primary" onclick="checkContent()">留言</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <?php echo form_close(); ?>
+                    </div>
                 </div>
             </div>
-        </div>
+        <? endif; ?>
         <!-- <div class="content-box-large mb_control">
             <div class="row">
                 <div class="col-sm-12" style="padding: 5px;">

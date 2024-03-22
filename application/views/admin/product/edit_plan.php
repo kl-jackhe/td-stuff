@@ -22,56 +22,152 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="product_combine_name">方案名稱</label>
-                                    <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<? echo $product_combine['name'] ?>" required>
-                                    <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
+
+                            <? if ($this->is_td_stuff) : ?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_name">方案名稱</label>
+                                        <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<? echo $product_combine['name'] ?>" required>
+                                        <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
+                                    </div>
                                 </div>
-                            </div>
-                            <?php if ($this->is_partnertoys || $this->is_liqun_food) : ?>
                                 <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="product_combine_price">原價</label>
+                                        <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="product_combine_current_price">方案價</label>
+                                        <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label for="any_specification">開啟任意規格</label>
+                                        <? if ($product_combine['type'] == 1) { ?>
+                                            <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
+                                        <? } else { ?>
+                                            <input id="any_specification" name="any_specification" type="checkbox">
+                                        <? } ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="limit_enable">限購狀態</label>
+                                    <select class="form-control" name="limit_enable">
+                                        <? if (!empty($product_combine['limit_enable'])) { ?>
+                                            <option value="YES" selected>啟用</option>
+                                            <option value="">停用</option>
+                                        <? } else { ?>
+                                            <option value="YES">啟用</option>
+                                            <option value="" selected>停用</option>
+                                        <? } ?>
+                                    </select>
+                                    <? if (!empty($product_combine['limit_qty'])) { ?>
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量" value="<?= $product_combine['limit_qty'] ?>">
+                                    <? } else { ?>
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量">
+                                    <? } ?>
+                                </div>
+                            <? elseif ($this->is_liqun_food) : ?>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_name">方案名稱</label>
+                                        <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<? echo $product_combine['name'] ?>" required>
+                                        <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="product_combine_cargo_id">貨號</label>
                                         <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" value="<? echo $product_combine['cargo_id'] ?>" required>
                                     </div>
                                 </div>
-                            <?php endif; ?>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="product_combine_current_price">方案價</label>
-                                    <input type="hidden" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
-                                    <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="product_combine_price">原價</label>
+                                        <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="product_combine_current_price">限購狀態</label>
-                                <select class="form-control" name="limit_enable">
-                                    <? if (!empty($product_combine['limit_enable'])) { ?>
-                                        <option value="YES" selected>啟用</option>
-                                        <option value="">停用</option>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="product_combine_current_price">方案價</label>
+                                        <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label for="any_specification">開啟任意規格</label>
+                                        <? if ($product_combine['type'] == 1) { ?>
+                                            <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
+                                        <? } else { ?>
+                                            <input id="any_specification" name="any_specification" type="checkbox">
+                                        <? } ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="limit_enable">限購狀態</label>
+                                    <select class="form-control" name="limit_enable">
+                                        <? if (!empty($product_combine['limit_enable'])) { ?>
+                                            <option value="YES" selected>啟用</option>
+                                            <option value="">停用</option>
+                                        <? } else { ?>
+                                            <option value="YES">啟用</option>
+                                            <option value="" selected>停用</option>
+                                        <? } ?>
+                                    </select>
+                                    <? if (!empty($product_combine['limit_qty'])) { ?>
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量" value="<?= $product_combine['limit_qty'] ?>">
                                     <? } else { ?>
-                                        <option value="YES">啟用</option>
-                                        <option value="" selected>停用</option>
-                                    <? } ?>
-                                </select>
-                                <? if (!empty($product_combine['limit_qty'])) { ?>
-                                    <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量" value="<?= $product_combine['limit_qty'] ?>">
-                                <? } else { ?>
-                                    <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量">
-                                <? } ?>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <label for="any_specification">開啟任意規格</label>
-                                    <? if ($product_combine['type'] == 1) { ?>
-                                        <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
-                                    <? } else { ?>
-                                        <input id="any_specification" name="any_specification" type="checkbox">
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量">
                                     <? } ?>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
+                            <? elseif ($this->is_partnertoys) : ?>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="product_combine_name">方案名稱</label>
+                                        <input type="text" class="form-control" id="product_combine_name" name="product_combine_name" value="<? echo $product_combine['name'] ?>" required>
+                                        <input type="hidden" name="product_id" value="<? echo $product['product_id'] ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="product_combine_cargo_id">貨號</label>
+                                        <input type="text" class="form-control" id="product_combine_cargo_id" name="product_combine_cargo_id" value="<? echo $product_combine['cargo_id'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_price">價格</label>
+                                        <input type="text" class="form-control" id="product_combine_price" name="product_combine_price" value="<? echo $product_combine['price'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_quantity">庫存量</label>
+                                        <input type="text" class="form-control" id="product_combine_quantity" name="product_combine_quantity" value="<? echo $product_combine['quantity'] ?>" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="limit_enable">限購狀態</label>
+                                    <select class="form-control" name="limit_enable">
+                                        <? if (!empty($product_combine['limit_enable'])) { ?>
+                                            <option value="YES" selected>啟用</option>
+                                            <option value="">停用</option>
+                                        <? } else { ?>
+                                            <option value="YES">啟用</option>
+                                            <option value="" selected>停用</option>
+                                        <? } ?>
+                                    </select>
+                                    <? if (!empty($product_combine['limit_qty'])) { ?>
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量" value="<?= $product_combine['limit_qty'] ?>">
+                                    <? } else { ?>
+                                        <input type="number" min="1" name="limit_qty" class="form-control" placeholder="請輸入限購數量">
+                                    <? } ?>
+                                </div>
+                            <? endif; ?>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="product_combine_image" class="control-label">封面圖片</label>
                                     <div class="form-group">
@@ -88,68 +184,70 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="product_combine_description">方案描述</label>
-                                    <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"><? echo $product_combine['description'] ?></textarea>
+                        <? if ($this->is_liqun_food || $this->is_td_stuff) : ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="product_combine_description">方案描述</label>
+                                        <textarea class="form-control" id="product_combine_description" name="product_combine_description" cols="30" rows="3"><? echo $product_combine['description'] ?></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label onclick="add_plan_item()"><i class="fa fa-plus"></i> 商品</label>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr class="info">
-                                                <th width="30%" class="text-center">數量</th>
-                                                <th width="30%" class="text-center">單位</th>
-                                                <th width="30%" class="text-center">規格</th>
-                                                <th width="5%" class="text-center">操作</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="plan-item-list">
-                                            <? if (!empty($product_combine_item)) {
-                                                foreach ($product_combine_item as $item) { ?>
-                                                    <tr>
-                                                        <td>
-                                                            <input type="text" name="plan_qty[]" class="form-control" value="<? echo $item['qty'] ?>">
-                                                        </td>
-                                                        <td>
-                                                            <? $att = 'class="form-control"';
-                                                            $options = array();
-                                                            // $options = array("" => "單位");
-                                                            if (!empty($product_unit)) {
-                                                                foreach ($product_unit as $pu) {
-                                                                    $options[$pu['unit']] = $pu['unit'];
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label onclick="add_plan_item()"><i class="fa fa-plus"></i> 商品</label>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr class="info">
+                                                    <th width="30%" class="text-center">數量</th>
+                                                    <th width="30%" class="text-center">單位</th>
+                                                    <th width="30%" class="text-center">規格</th>
+                                                    <th width="5%" class="text-center">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="plan-item-list">
+                                                <? if (!empty($product_combine_item)) {
+                                                    foreach ($product_combine_item as $item) { ?>
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" name="plan_qty[]" class="form-control" value="<? echo $item['qty'] ?>">
+                                                            </td>
+                                                            <td>
+                                                                <? $att = 'class="form-control"';
+                                                                $options = array();
+                                                                // $options = array("" => "單位");
+                                                                if (!empty($product_unit)) {
+                                                                    foreach ($product_unit as $pu) {
+                                                                        $options[$pu['unit']] = $pu['unit'];
+                                                                    }
                                                                 }
-                                                            }
-                                                            echo form_dropdown('plan_unit[]', $options, $item['product_unit'], $att); ?>
-                                                        </td>
-                                                        <td>
-                                                            <? $att = 'class="form-control"';
-                                                            $options = array();
-                                                            // $options = array("" => "規格");
-                                                            if (!empty($product_specification)) {
-                                                                $options[''] = '請選擇...';
-                                                                foreach ($product_specification as $ps) {
-                                                                    $options[$ps['specification']] = $ps['specification'];
+                                                                echo form_dropdown('plan_unit[]', $options, $item['product_unit'], $att); ?>
+                                                            </td>
+                                                            <td>
+                                                                <? $att = 'class="form-control"';
+                                                                $options = array();
+                                                                // $options = array("" => "規格");
+                                                                if (!empty($product_specification)) {
+                                                                    $options[''] = '請選擇...';
+                                                                    foreach ($product_specification as $ps) {
+                                                                        $options[$ps['specification']] = $ps['specification'];
+                                                                    }
                                                                 }
-                                                            }
-                                                            echo form_dropdown('plan_specification[]', $options, $item['product_specification'], $att); ?>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <i class="fa-solid fa-trash x"></i>
-                                                        </td>
-                                                    </tr>
-                                            <? }
-                                            } ?>
-                                        </tbody>
-                                    </table>
+                                                                echo form_dropdown('plan_specification[]', $options, $item['product_specification'], $att); ?>
+                                                            </td>
+                                                            <td class="text-center">
+                                                                <i class="fa-solid fa-trash x"></i>
+                                                            </td>
+                                                        </tr>
+                                                <? }
+                                                } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <? endif; ?>
                     </div>
                 </div>
             </div>

@@ -33,11 +33,7 @@
                     </li>
                     <li v-for="self in selectedOrderItem" class="selectedOrderList row">
                         <ol class="col-3 align-self-center text-center">
-                            <?php if ($this->is_partnertoys) : ?>
-                                <a :href="'/product/product_detail/' + self.product_id">{{ self.product_name }}</a>
-                            <?php else : ?>
-                                <a :href="'/product/view/' + self.product_id">{{ self.product_name }}</a>
-                            <?php endif; ?>
+                            <a href="javascript:void(0)" @click="href_product(self.product_id)">{{ self.product_name }}</a>
                         </ol>
                         <ol class="col-3 align-self-center text-center">{{ self.product_combine_name }}</ol>
                         <ol class="col-2 align-self-center text-center">$&nbsp;{{ self.order_item_price }}</ol>

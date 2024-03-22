@@ -53,18 +53,16 @@
                             <span id="memberTitle"></span>
                         </div>
                         <div class="text-center">
-                            <span id="memberTxt">加入會員即可在官網自由選購或詢價商品，您可輕鬆掌握每筆訂單的最新處理狀態。</span>
+                            <span id="memberTxt">加入會員即可輕鬆掌握每筆訂單的最新處理狀態。</span>
                         </div>
                         <div class="text-center" id="addMember">
                             <a id="addMemberBtn" @click="filterByCategory('2')">
                                 <i class="fas fa-user-plus"></i>&nbsp;立即加入會員
                             </a>
                         </div>
-                        <div class="text-center" id="FBLoginPosition">
-                            <!-- <div id="fb-login-button"></div> -->
-                            <!-- <fb:login-button scope="public_profile,email" onlogin="checkLoginState();"></fb:login-button> -->
+                        <!-- <div class="text-center" id="FBLoginPosition">
                             <a id="FBgraph" onclick="customFacebookLogin()"><i class="fa-brands fa-facebook"></i>&nbsp;使用Facebook登入</a>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
