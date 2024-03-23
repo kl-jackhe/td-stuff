@@ -267,7 +267,7 @@
                     </div>
                 </div>
                 <!-- <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'"> -->
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS' || selectedOrder.order_payment == 'ecpay_credit')">
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'">
                     <div class="operateBtn col-6">
                         <a id="completePay" @click="completePay(selectedOrder.order_id)">繼續付款</a>
                     </div>

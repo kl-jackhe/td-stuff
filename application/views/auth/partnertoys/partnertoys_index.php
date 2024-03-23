@@ -426,8 +426,27 @@
                 }
             },
             // 完成付款
-            completePay(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "checkout/repay_order/" + id;
+            completePay(selected) {
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/getorders',
+                        type: 'post',
+                        data: {
+                            getorders: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/repay_order/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 取消訂單
             cancelOrder(id) {

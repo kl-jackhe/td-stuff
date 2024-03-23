@@ -350,10 +350,20 @@ class Checkout extends Public_Controller
 	}
 
 	// 重新付款
-	public function repay_order($order_id)
+	public function repay_order($order_id = 0)
 	{
 		$this->data['page_title'] = '結帳';
 		$this->load->model('checkout_model');
+
+		// 類別分類
+		$current_url = $_SERVER['REQUEST_URI'];
+		$query_string = parse_url($current_url, PHP_URL_QUERY);
+		$decoded_data = $this->security_url->fixedDecryptData($query_string);
+		if (!empty($query_string)) {
+			if (!empty($decoded_data) && !empty($decoded_data['getorders'])) {
+				$order_id = $decoded_data['getorders'];
+			}
+		}
 
 		$pay_order = $this->checkout_model->getSelectedOrder($order_id);
 		// 綠界-信用卡
