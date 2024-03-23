@@ -40,7 +40,8 @@ class Product extends Public_Controller
 			$this->data['category'] = '';
 			$current_url = $_SERVER['REQUEST_URI'];
 			$query_string = parse_url($current_url, PHP_URL_QUERY);
-			$decoded_data = $this->security_url->decryptData($query_string);
+			// $decoded_data = $this->security_url->decryptData($query_string);
+			$decoded_data = $this->security_url->fixedDecryptData($query_string);
 			if (!empty($query_string)) {
 				if (!empty($decoded_data) && !empty($decoded_data['page'])) {
 					$this->data['page'] = $decoded_data['page'];
@@ -88,7 +89,8 @@ class Product extends Public_Controller
 			$query_string = parse_url($current_url, PHP_URL_QUERY);
 
 			// 对参数进行解码以获取您想要的内容
-			$decoded_data = $this->security_url->decryptData($query_string);
+			// $decoded_data = $this->security_url->decryptData($query_string);
+			$decoded_data = $this->security_url->fixedDecryptData($query_string);
 
 			// echo '<pre>';
 			// print_r($query_string);
@@ -125,7 +127,8 @@ class Product extends Public_Controller
 		// 获取当前 URL
 		$current_url = $_SERVER['REQUEST_URI'];
 		$query_string = parse_url($current_url, PHP_URL_QUERY);
-		$decoded_data = $this->security_url->decryptData($query_string);
+		// $decoded_data = $this->security_url->decryptData($query_string);
+		$decoded_data = $this->security_url->fixedDecryptData($query_string);
 		if (!empty($query_string)) {
 			if (!empty($decoded_data) && !empty($decoded_data['selectedProduct'])) {
 				$product_id = $decoded_data['selectedProduct'];
@@ -265,7 +268,8 @@ class Product extends Public_Controller
 		// 获取当前 URL
 		$current_url = $_SERVER['REQUEST_URI'];
 		$query_string = parse_url($current_url, PHP_URL_QUERY);
-		$decoded_data = $this->security_url->decryptData($query_string);
+		// $decoded_data = $this->security_url->decryptData($query_string);
+		$decoded_data = $this->security_url->fixedDecryptData($query_string);
 		if (!empty($query_string)) {
 			if (!empty($decoded_data) && !empty($decoded_data['selectedProduct'])) {
 				$id = $decoded_data['selectedProduct'];

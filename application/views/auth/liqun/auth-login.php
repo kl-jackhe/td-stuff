@@ -53,7 +53,7 @@
                             <span id="memberTitle"></span>
                         </div>
                         <div class="text-center">
-                            <span id="memberTxt">加入會員即可輕鬆掌握每筆訂單的最新處理狀態。</span>
+                            <span id="memberTxt">加入會員即可輕鬆掌握每筆訂單的最新處理狀態。<br>加入會員可獲得100元之優惠券訂單滿399即可使用！<br>點擊加入會員即刻享受不定時之優惠！</span>
                         </div>
                         <div class="text-center" id="addMember">
                             <a id="addMemberBtn" @click="filterByCategory('2')">

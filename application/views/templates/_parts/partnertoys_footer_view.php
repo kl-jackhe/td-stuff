@@ -173,7 +173,7 @@
             'type' => 'searchIcon',
             'searchIcon' => 'true',
         );
-        $securitycode = $this->security_url->encryptData($data);
+        $securitycode = $this->security_url->fixedEncryptData($data);
         if ($_SERVER['REQUEST_URI'] !== '/product' && $_SERVER['REQUEST_URI'] !== ('/product/?' . $securitycode)) : ?>
             window.location.href = '<?= base_url() . "product/?" . $securitycode; ?>';
         <?php endif; ?>

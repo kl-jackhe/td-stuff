@@ -2,7 +2,8 @@
 class Security_url
 {
     private $ci;
-    private $url_key;
+    private $url_key; // 隨機密鑰
+    private $fixed_key = "%;2Qnp)&XuNv'P[R}&0`Bf8E9X1Vqff,"; // 固定密鑰
 
     public function __construct($params = array())
     {
@@ -108,5 +109,31 @@ class Security_url
     public function getKey()
     {
         return $this->url_key;
+    }
+
+    // 加密数据
+    public function fixedEncryptData($data)
+    {
+        // 生成 JWT，传入固定键值对
+        $jwt = $this->generateJWT($data, $this->getFixedKey());
+        return $jwt;
+    }
+
+    // 解密数据
+    public function fixedDecryptData($jwt)
+    {
+        try {
+            // 解析 JWT
+            $payload = $this->parseJWT($jwt, $this->getFixedKey());
+            return $payload;
+        } catch (Exception $e) {
+            // 解密失敗，返回空數組或其他錯誤處理
+            return array();
+        }
+    }
+
+    public function getFixedKey()
+    {
+        return $this->fixed_key;
     }
 }

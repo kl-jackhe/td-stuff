@@ -38,7 +38,8 @@ class Posts extends Public_Controller
             $this->data['category'] = '';
             $current_url = $_SERVER['REQUEST_URI'];
             $query_string = parse_url($current_url, PHP_URL_QUERY);
-            $decoded_data = $this->security_url->decryptData($query_string);
+            // $decoded_data = $this->security_url->decryptData($query_string);
+            $decoded_data = $this->security_url->fixedDecryptData($query_string);
             if (!empty($query_string)) {
                 if (!empty($decoded_data) && !empty($decoded_data['category'])) {
                     $this->data['category'] = $decoded_data['category'];
@@ -93,7 +94,8 @@ class Posts extends Public_Controller
         // 获取当前 URL
         $current_url = $_SERVER['REQUEST_URI'];
         $query_string = parse_url($current_url, PHP_URL_QUERY);
-        $decoded_data = $this->security_url->decryptData($query_string);
+        // $decoded_data = $this->security_url->decryptData($query_string);
+        $decoded_data = $this->security_url->fixedDecryptData($query_string);
         if (!empty($query_string)) {
             if (!empty($decoded_data) && !empty($decoded_data['selectedPost'])) {
                 $post_id = $decoded_data['selectedPost'];

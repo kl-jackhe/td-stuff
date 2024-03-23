@@ -14,7 +14,8 @@ class Encode extends Public_Controller
             'type' => $dataName,
             $dataName => $input,
         );
-        $src = $this->security_url->encryptData($data);
+        // $src = $this->security_url->encryptData($data);
+        $src = $this->security_url->fixedEncryptData($data);
         if (!empty($src)) {
             $return_data = array(
                 'result' => 'success',
@@ -40,7 +41,8 @@ class Encode extends Public_Controller
         foreach ($group as $self) {
             $data[$self] = $this->input->post($self);
         }
-        $src = $this->security_url->encryptData($data);
+        // $src = $this->security_url->encryptData($data);
+        $src = $this->security_url->fixedEncryptData($data);
         if (!empty($src)) {
             $return_data = array(
                 'result' => 'success',

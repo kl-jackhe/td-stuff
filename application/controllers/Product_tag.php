@@ -14,7 +14,8 @@ class Product_tag extends Public_Controller
         // 塞選類別分類
         $current_url = $_SERVER['REQUEST_URI'];
         $query_string = parse_url($current_url, PHP_URL_QUERY);
-        $decoded_data = $this->security_url->decryptData($query_string);
+        // $decoded_data = $this->security_url->decryptData($query_string);
+        $decoded_data = $this->security_url->fixedDecryptData($query_string);
         if (!empty($query_string)) {
             if (!empty($decoded_data) && !empty($decoded_data['tag'])) {
                 $id = $decoded_data['tag'];

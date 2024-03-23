@@ -21,7 +21,8 @@ class Channels extends Public_Controller
         $query_string = parse_url($current_url, PHP_URL_QUERY);
 
         // 对参数进行解码以获取您想要的内容
-        $decoded_data = $this->security_url->decryptData($query_string);
+        // $decoded_data = $this->security_url->decryptData($query_string);
+        $decoded_data = $this->security_url->fixedDecryptData($query_string);
 
         // 如果查询字符串不为空
         if (!empty($query_string)) {

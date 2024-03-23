@@ -23,6 +23,7 @@ class Auth extends Public_Controller
 			$this->load->model('menu_model');
 			$this->load->model('auth_model');
 		elseif ($this->is_liqun_food) :
+			$this->load->library('sms_mitake');
 			$this->load->model('auth_model');
 		endif;
 	}
@@ -45,7 +46,8 @@ class Auth extends Public_Controller
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
 
 				// 对参数进行解码以获取您想要的内容
-				$decoded_data = $this->security_url->decryptData($query_string);
+				// $decoded_data = $this->security_url->decryptData($query_string);
+				$decoded_data = $this->security_url->fixedDecryptData($query_string);
 
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
@@ -113,7 +115,8 @@ class Auth extends Public_Controller
 				// 使用 parse_url() 解析 URL 获取查询字符串部分
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
 				// 对参数进行解码以获取您想要的内容
-				$decoded_data = $this->security_url->decryptData($query_string);
+				// $decoded_data = $this->security_url->decryptData($query_string);
+				$decoded_data = $this->security_url->fixedDecryptData($query_string);
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
 					if (!empty($decoded_data) && !empty($decoded_data['order'])) {
@@ -145,7 +148,8 @@ class Auth extends Public_Controller
 				// 使用 parse_url() 解析 URL 获取查询字符串部分
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
 				// 对参数进行解码以获取您想要的内容
-				$decoded_data = $this->security_url->decryptData($query_string);
+				// $decoded_data = $this->security_url->decryptData($query_string);
+				$decoded_data = $this->security_url->fixedDecryptData($query_string);
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
 					if (!empty($decoded_data) && !empty($decoded_data['order'])) {
@@ -189,7 +193,8 @@ class Auth extends Public_Controller
 				// 使用 parse_url() 解析 URL 获取查询字符串部分
 				$query_string = parse_url($current_url, PHP_URL_QUERY);
 				// 对参数进行解码以获取您想要的内容
-				$decoded_data = $this->security_url->decryptData($query_string);
+				// $decoded_data = $this->security_url->decryptData($query_string);
+				$decoded_data = $this->security_url->fixedDecryptData($query_string);
 				// 如果查询字符串不为空
 				if (!empty($query_string)) {
 					if (!empty($decoded_data) && !empty($decoded_data['order'])) {
@@ -202,6 +207,17 @@ class Auth extends Public_Controller
 			}
 			$this->render('auth/liqun/liqun_index');
 		}
+	}
+
+	function sms_test()
+	{
+		$this->sms_mitake->send_message();
+	}
+
+	function sms_cul_test()
+	{
+		$this->load->library('sms_mitake');
+		$this->sms_mitake->send_cul_message();
 	}
 
 	function language_switch()
@@ -775,27 +791,28 @@ class Auth extends Public_Controller
 		// echo '<script>alert("' . $this->input->post('captcha') . '")</script>';
 		// echo '<script>alert("' . $this->input->post('sex') . '")</script>';
 
-		if ($this->is_partnertoys && empty($this->input->post('checkcode'))) {
-			$this->session->set_flashdata('form_values', $this->input->post());
-			$this->session->set_flashdata('registerMessage', '<br>【驗證碼】欄位為必填項目<br><br>');
-			echo '<script>window.history.back();</script>';
-			// redirect('auth/index?id=2', 'refresh');
-		} elseif (!empty($this->input->post('checkcode')) && !empty($this->input->post('captcha'))) {
-			$checkcode = $this->input->post('checkcode');
-			$captcha = $this->input->post('captcha');
-			if ($checkcode != $captcha) {
+		// 夥伴玩具驗證碼
+		if ($this->is_partnertoys) {
+			if (empty($this->input->post('checkcode'))) {
 				$this->session->set_flashdata('form_values', $this->input->post());
-				$this->session->set_flashdata('registerMessage', '<br>【驗證碼錯誤】請重新填寫驗證碼<br><br>');
+				$this->session->set_flashdata('registerMessage', '<br>【驗證碼】欄位為必填項目<br><br>');
 				echo '<script>window.history.back();</script>';
-				// redirect('auth/index?id=2', 'refresh');
+			} elseif (!empty($this->input->post('checkcode')) && !empty($this->input->post('captcha'))) {
+				$checkcode = $this->input->post('checkcode');
+				$captcha = $this->input->post('captcha');
+				if ($checkcode != $captcha) {
+					$this->session->set_flashdata('form_values', $this->input->post());
+					$this->session->set_flashdata('registerMessage', '<br>【驗證碼錯誤】請重新填寫驗證碼<br><br>');
+					echo '<script>window.history.back();</script>';
+				}
 			}
 		}
 
+		// 夥伴玩具性別
 		if ($this->is_partnertoys && empty($this->input->post('sex'))) {
 			$this->session->set_flashdata('form_values', $this->input->post());
 			$this->session->set_flashdata('registerMessage', '<br>【性別】欄位為必填項目<br><br>');
 			echo '<script>window.history.back();</script>';
-			// redirect('auth/index?id=2', 'refresh');
 		}
 
 		$tables = $this->config->item('tables', 'ion_auth');
