@@ -19,16 +19,6 @@ class Checkout extends Public_Controller
 			$this->load->model('coupon_model');
 		}
 
-		// Check全家API生命週期
-		$now_time = time() + 60; // 获取未来1分钟后时间的时间戳
-		$tmp_token = $this->session->userdata('fm_token');
-		$tmp_token_life = $this->session->userdata('fm_token_life');
-		if (empty($tmp_token) || empty($tmp_token_life) || $now_time >= $tmp_token_life) {
-			$this->fm_token = '';
-		} else {
-			$this->fm_token = $tmp_token;
-		}
-
 		// Check if aesKey and aesIv are already set in flashdata(userdata)
 		if (!$this->session->userdata('aesKey') || !$this->session->userdata('aesIv')) {
 			// If not set, generate new random values

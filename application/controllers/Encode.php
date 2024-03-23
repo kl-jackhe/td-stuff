@@ -35,37 +35,11 @@ class Encode extends Public_Controller
         return;
     }
 
-    function getMutiDataEncode($group)
-    {
-        $data = array();
-        foreach ($group as $self) {
-            $data[$self] = $this->input->post($self);
-        }
-        // $src = $this->security_url->encryptData($data);
-        $src = $this->security_url->fixedEncryptData($data);
-        if (!empty($src)) {
-            $return_data = array(
-                'result' => 'success',
-                'src' => $src,
-            );
-            $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode($return_data));
-        } else {
-            $return_data = array(
-                'result' => 'error',
-            );
-            $this->output
-                ->set_content_type('application/json')
-                ->set_output(json_encode($return_data));
-        }
-        return;
-    }
-
     function getMutiPostDataEncode()
     {
         $data = $this->input->post();
-        $src = $this->security_url->encryptData($data);
+        // $src = $this->security_url->encryptData($data);
+        $src = $this->security_url->fixedEncryptData($data);
         if (!empty($src)) {
             $return_data = array(
                 'result' => 'success',
