@@ -60,7 +60,7 @@
                 <select class="form-control" id="type" name="type">
                   <option value="cash">現金折扣</option>
                   <option value="percent">百分比折扣</option>
-                  <option value="free_shipping">免運費</option>
+                  <!-- <option value="free_shipping">免運費</option> -->
                 </select>
               </div>
             </div>

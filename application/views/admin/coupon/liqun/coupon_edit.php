@@ -60,7 +60,7 @@
                 <select class="form-control" id="type" name="type">
                   <option value="cash" <?= ($coupon['type'] == 'cash') ? "selected" : ""; ?>>現金折扣</option>
                   <option value="percent" <?= ($coupon['type'] == 'percent') ? "selected" : ""; ?>>百分比折扣</option>
-                  <option value="free_shipping" <?= ($coupon['type'] == 'free_shipping') ? "selected" : ""; ?>>免運費</option>
+                  <!-- <option value="free_shipping" <?= ($coupon['type'] == 'free_shipping') ? "selected" : ""; ?>>免運費</option> -->
                 </select>
               </div>
             </div>

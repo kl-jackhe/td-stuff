@@ -130,6 +130,29 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 <script defer src="/assets/fontawesome-free-6.1.1-web/js/all.js"></script>
 <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<script>
+    function linkToCoupon() {
+        $.ajax({
+            url: '/encode/getDataEncode/category',
+            type: 'post',
+            data: {
+                category: 2,
+            },
+            success: (response) => {
+                if (response) {
+                    if (response.result == 'success') {
+                        window.location.href = <?= json_encode(base_url()) ?> + 'auth/?' + response.src;
+                    } else {
+                        console.log('error.');
+                    }
+                } else {
+                    console.log(response);
+                }
+            },
+        });
+    }
+</script>
 <script>
     $(document).ready(function() {
         var isFridgeBoxOpen = true;

@@ -27,16 +27,14 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <?php if ($this->is_liqun_food) : ?>
-        <link href="/assets/css/liqunPage.css" rel="stylesheet">
-        <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
-        <!-- jquery一定要在最上面 -->
-        <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
-        <!-- <script src="https://unpkg.com/vue@next"></script> -->
-        <script src="https://unpkg.com/vue-router@4"></script>
-    <?php endif; ?>
+    <link href="/assets/css/liqunPage.css" rel="stylesheet">
+    <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
+    <!-- jquery一定要在最上面 -->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <!-- <script src="https://unpkg.com/vue@next"></script> -->
+    <script src="https://unpkg.com/vue-router@4"></script>
 </head>
 
 <body>
@@ -54,6 +52,8 @@
                                 <?php if (empty($this->session->userdata('user_id'))) { ?>
                                     <a href="/auth">會員中心</a>
                                 <? } else { ?>
+                                    <a href="javascript:void(0)" onclick="linkToCoupon()">優惠券（<span><?= get_customer_coupon_count($this->session->userdata('user_id')) ?></span>）</a>
+                                    <span> ｜ </span>
                                     <a href="/auth">會員中心</a>
                                     <span> ｜ </span>
                                     <a href="/logout">登出</a>

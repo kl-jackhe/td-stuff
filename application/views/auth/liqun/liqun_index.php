@@ -2,8 +2,8 @@
 <!-- 引入 Facebook JavaScript SDK -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-<div id="authApp">
-    <section class="sectionRejust">
+<div id="authApp" style="min-height: 80%;">
+    <section class="container sectionRejust">
         <?php require('auth-menu.php'); ?>
         <div class="section-contents">
             <div class="container">

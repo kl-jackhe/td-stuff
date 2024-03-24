@@ -100,6 +100,7 @@ class Update extends Admin_Controller
                 $this->update_202403131156();
                 $this->update_202403201604();
                 $this->update_202403211521();
+                $this->update_202403241905();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -830,6 +831,35 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403241905()
+    {
+        $version = '202403241905';
+        $description = '[delivery] create [free_shipping_enable]&[free_shipping_limit]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'free_shipping_enable'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `delivery` ADD `free_shipping_enable` tinyint(2) NOT NULL AFTER `according_cost`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'free_shipping_limit'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `delivery` ADD `free_shipping_limit` int(11) NOT NULL AFTER `free_shipping_enable`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

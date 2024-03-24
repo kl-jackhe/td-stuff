@@ -1434,11 +1434,8 @@ class Checkout extends Public_Controller
 				if ($items['product_id'] == 0) {
 					$content .= '<tr>';
 					$content .= '<td style="text-align:center">' . $i . '</td>';
-					$this->db->select('*');
-					$this->db->from('product_combine');
-					$this->db->where('id', $items['product_combine_id']);
-					$query_img = $this->db->get();
-					foreach ($query_img->result_array() as $img) {
+					$query_img = $this->mysql_model->_select('product_combine', 'id', $items['product_combine_id'], 'row');
+					foreach ($query_img as $img) {
 						$content .= '<td style="text-align:center"><img src="' . base_url() . 'assets/uploads/' . $img['picture'] . '" height="80px"></td>';
 					}
 					$content .= '<td style="text-align:left">';

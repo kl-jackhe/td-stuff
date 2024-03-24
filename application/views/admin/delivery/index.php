@@ -39,24 +39,38 @@
           <tr class="info">
             <th>配送名稱</th>
             <!-- <th>依照方式</th> -->
-            <th>運費</th>
+            <th class="text-center">免運開關</th>
+            <th class="text-center">免運門檻</th>
+            <th class="text-center">運費</th>
             <th>限制</th>
             <th>描述</th>
-            <th>狀態</th>
-            <th>操作</th>
+            <th class="text-center">狀態</th>
+            <th class="text-center">操作</th>
           </tr>
         </thead>
-        <? if (!empty($delivery)) : foreach ($delivery as $data) : ?>
+        <? if (!empty($delivery)) : ?>
+          <? foreach ($delivery as $data) : ?>
             <tr>
+              <!-- name -->
               <td><?php echo $data['delivery_name'] ?></td>
-              <!-- <td>
-            <? if (!empty($data['according_name'])) { ?>
-              <?php echo $data['according_name'] ?>
-            <? } else {
-              echo '無';
-            } ?>
-            </td> -->
-              <td>$<?php echo $data['shipping_cost'] ?></td>
+              <!-- shipping free enable -->
+              <td class="text-center">
+                <? if ($data['free_shipping_enable']) { ?>
+                  <a href="/admin/delivery/editShippingStatus/<?= $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')">
+                    <span>啟用中</span>
+                  </a>
+                <? } else { ?>
+                  <a href="/admin/delivery/editShippingStatus/<?= $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
+                    <span>停用</span></a>
+                <? } ?>
+              </td>
+              <!-- shipping free limit -->
+              <td class="text-center">
+                $<?= $data['free_shipping_limit'] ?>
+              </td>
+              <!-- shipping fee -->
+              <td class="text-center">$<?php echo $data['shipping_cost'] ?></td>
+              <!-- limit -->
               <td>
                 <?
                 $count = 0;
@@ -71,8 +85,10 @@
                   echo '材積限制：' . '長 ' . $data['limit_volume_length'] . 'cm, 寬 ' . $data['limit_volume_width'] . 'cm, 高 ' . $data['limit_volume_height'] . 'cm';
                 } ?>
               </td>
+              <!-- description -->
               <td><?php echo $data['delivery_info'] ?></td>
-              <td><? if ($data['delivery_status'] == 1) { ?>
+              <!-- status -->
+              <td class="text-center"><? if ($data['delivery_status'] == 1) { ?>
                   <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
                     <span>啟用中</span></a>
                 <? } else { ?>
@@ -80,7 +96,8 @@
                     <span>停用</span></a>
                 <? } ?>
               </td>
-              <td>
+              <!-- operation -->
+              <td class="text-center">
                 <a href="/admin/delivery/edit_delivery/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
                 <!-- <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
               </td>

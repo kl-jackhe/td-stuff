@@ -5,6 +5,10 @@ body {
     padding: 0;
 }
 
+.body {
+    min-height: 100%;
+}
+
 #wrapper {
     min-height: 100%;
     overflow: hidden;
@@ -391,9 +395,17 @@ a {
 }
 
 
+.section-sidemenu {
+    margin-right: 20px;
+    margin-bottom: 50px;
+    float: left;
+    width: 20%;
+    /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
+}
+
 .section-contents {
     float: left;
-    width: 55%;
+    width: 78%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
@@ -414,15 +426,6 @@ a {
     color: #facaa8;
     border-bottom: 2px solid #facaa8;
     padding: 0 15px;
-}
-
-.section-sidemenu {
-    margin-right: 30px;
-    margin-bottom: 50px;
-    margin-left: 14%;
-    float: left;
-    width: 15%;
-    /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
 }
 
 .section-sidemenu h1,
@@ -544,10 +547,20 @@ a {
     }
 }
 
+.redContent {
+    color: #e30020 !important;
+}
+
 .sectionRejust {
     padding-top: 25px;
     padding-bottom: 25px;
     margin-top: 50px;
+}
+
+
+.sectionRejust .container {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 #memberLoginForm {
