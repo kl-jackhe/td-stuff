@@ -138,36 +138,4 @@ class Security_url
     {
         return $this->fixed_key;
     }
-
-    // 加密實際數據
-    public function getDataEncryptReturn($data)
-    {
-        $return_data = null;
-        $src = $this->encryptData($data);
-        if (!empty($src)) {
-            $return_data = array(
-                'result' => 'success',
-                'src' => $src,
-            );
-        } else {
-            $return_data = array(
-                'result' => 'error',
-            );
-        }
-        return $return_data;
-    }
-
-    // 解密實際數據
-    public function getDataDecryptReturn()
-    {
-        $current_url = $_SERVER['REQUEST_URI'];
-        $query_string = parse_url($current_url, PHP_URL_QUERY);
-        $decoded_data = $this->decryptData($query_string);
-        if (!empty($query_string)) {
-            if (!empty($decoded_data) && !empty($decoded_data[$decoded_data['type']])) {
-                return $decoded_data[$decoded_data['type']];
-            }
-        }
-        return false;
-    }
 }

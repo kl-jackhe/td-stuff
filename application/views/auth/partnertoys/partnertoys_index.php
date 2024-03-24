@@ -437,7 +437,7 @@
                         success: (response) => {
                             if (response) {
                                 if (response.result == 'success') {
-                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/repay_order/?' + response.src;
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/ecp_repay_order/?' + response.src;
                                 } else {
                                     console.log('error.');
                                 }

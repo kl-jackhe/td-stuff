@@ -284,7 +284,7 @@
             },
             // 完成付款
             completePay(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "checkout/repay_order/" + id;
+                window.location.href = <?php echo json_encode(base_url()); ?> + "checkout/ecp_repay_order/" + id;
             },
             // 取消訂單
             cancelOrder(id) {

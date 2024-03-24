@@ -350,7 +350,7 @@ class Checkout extends Public_Controller
 	}
 
 	// 重新付款
-	public function repay_order($order_id = 0)
+	public function ecp_repay_order($order_id = 0)
 	{
 		$this->data['page_title'] = '結帳';
 		$this->load->model('checkout_model');
@@ -363,6 +363,14 @@ class Checkout extends Public_Controller
 			if (!empty($decoded_data) && !empty($decoded_data['getorders'])) {
 				$order_id = $decoded_data['getorders'];
 			}
+		}
+
+		$orders = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+		if (!empty($orders) && $orders['customer_id'] != $this->session->userdata('user_id')) {
+			echo '	<script>
+						alert("未認證操作請重新嘗試");
+						window.location.href = "' . base_url() . 'auth"
+					</script>';
 		}
 
 		$pay_order = $this->checkout_model->getSelectedOrder($order_id);

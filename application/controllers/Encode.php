@@ -7,15 +7,17 @@ class Encode extends Public_Controller
         parent::__construct();
     }
 
-    function getDataEncode($dataName)
+    function getDataEncode($dataName, $fixed = true)
     {
         $input = $this->input->post($dataName);
         $data = array(
             'type' => $dataName,
             $dataName => $input,
         );
-        // $src = $this->security_url->encryptData($data);
-        $src = $this->security_url->fixedEncryptData($data);
+        $src = $this->security_url->encryptData($data);
+        if ($fixed) {
+            $src = $this->security_url->fixedEncryptData($data);
+        }
         if (!empty($src)) {
             $return_data = array(
                 'result' => 'success',
@@ -35,11 +37,13 @@ class Encode extends Public_Controller
         return;
     }
 
-    function getMutiPostDataEncode()
+    function getMutiPostDataEncode($fixed = true)
     {
         $data = $this->input->post();
-        // $src = $this->security_url->encryptData($data);
-        $src = $this->security_url->fixedEncryptData($data);
+        $src = $this->security_url->encryptData($data);
+        if ($fixed) {
+            $src = $this->security_url->fixedEncryptData($data);
+        }
         if (!empty($src)) {
             $return_data = array(
                 'result' => 'success',
