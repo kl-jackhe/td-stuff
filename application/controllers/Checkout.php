@@ -575,7 +575,8 @@ class Checkout extends Public_Controller
 			return;
 		}
 
-		$selected_coupon = '';
+		$selected_coupon_id = 0;
+		$selected_coupon_name = '';
 
 		if (!empty($this->input->post('used_coupon'))) {
 			$coupon_custom_id = $this->input->post('used_coupon');
@@ -588,7 +589,7 @@ class Checkout extends Public_Controller
 			if (!empty($selected_custom_coupon)) {
 				$now_time = date("Y-m-d H:i:s");
 				$limit_number = (int)$selected_custom_coupon['use_limit_number'] - 1;
-				$selected_coupon = $this->mysql_model->_select('new_coupon', 'id', $selected_custom_coupon['coupon_id'], 'row');
+				$self_coupon = $this->mysql_model->_select('new_coupon', 'id', $selected_custom_coupon['coupon_id'], 'row');
 
 				if ($selected_custom_coupon['type'] == 'percent' || $selected_custom_coupon['type'] == 'cash') {
 					$check_cart_total = $this->cart->total();
@@ -621,7 +622,7 @@ class Checkout extends Public_Controller
 				}
 
 				// checking coupon used limit and exist
-				if ($limit_number < 0 || empty($selected_coupon) || $now_time < $selected_coupon['distribute_at'] || $now_time > $selected_coupon['discontinued_at']) {
+				if ($limit_number < 0 || empty($self_coupon) || $now_time < $self_coupon['distribute_at'] || $now_time > $self_coupon['discontinued_at']) {
 					echo '
 					<script>
 						alert("優惠券錯誤請重新嘗試");
@@ -629,14 +630,21 @@ class Checkout extends Public_Controller
 					</script>';
 					return;
 				}
-				$selected_coupon = $selected_coupon['name'];
+				$selected_coupon_id = $self_coupon['id'];
+				$selected_coupon_name = $self_coupon['name'];
 
-				// 在这里你需要处理要更新的字段和值，例如：
-				$data = array(
-					'use_limit_number' => $limit_number,
-				);
-				$this->db->where('id', $coupon_custom_id);
-				$this->db->update('new_coupon_custom', $data);
+				if ($limit_number) {
+					// 更新使用次數
+					$data = array(
+						'use_limit_number' => $limit_number,
+					);
+					$this->db->where('id', $coupon_custom_id);
+					$this->db->update('new_coupon_custom', $data);
+				} else {
+					// 若使用完畢自動刪除
+					$this->db->where('id', $coupon_custom_id);
+					$this->db->delete('new_coupon_custom');
+				}
 			}
 		}
 
@@ -671,16 +679,6 @@ class Checkout extends Public_Controller
 
 		// $customer_id = (isset($this->current_user->id) ? $this->current_user->id : $this->get_users_id());
 		$customer_id = (isset($this->current_user->id) ? $this->current_user->id : -1);
-
-		$delivery_cost = 0;
-		if (!empty($this->input->post('checkout_delivery'))) {
-			$self = $this->checkout_model->getDelivery($this->input->post('checkout_delivery'));
-			$delivery_cost = $self['shipping_cost'];
-		}
-
-		if ($this->input->post('shipping_amount') == 0) {
-			$delivery_cost = 0;
-		}
 
 		$order_delivery_address = '';
 		// 郵遞區號
@@ -732,6 +730,22 @@ class Checkout extends Public_Controller
 			}
 		}
 
+		$delivery_cost = 0;
+		if (!empty($this->input->post('checkout_delivery'))) {
+			$self = $this->checkout_model->getDelivery($this->input->post('checkout_delivery'));
+			if ($self['free_shipping_enable']) {
+				if ((int)$this->input->post('cart_total') >= $self['free_shipping_limit']) {
+					$delivery_cost = 0;
+				}
+			} else {
+				$delivery_cost = $self['shipping_cost'];
+			}
+		}
+
+		if ($this->input->post('shipping_amount') == 0) {
+			$delivery_cost = 0;
+		}
+
 		$order_total = intval($this->cart->total() + (int)$delivery_cost);
 		$order_discount_total = intval((int)$this->input->post('cart_total') + (int)$delivery_cost);
 		$order_discount_price = intval((int)$this->cart->total() - (int)$this->input->post('cart_total'));
@@ -744,7 +758,8 @@ class Checkout extends Public_Controller
 		$insert_data = array(
 			'order_number' => $order_number,
 			'order_date' => date("Y-m-d"),
-			'used_coupon_name' => $selected_coupon,
+			'used_coupon_id' => $selected_coupon_id,
+			'used_coupon_name' => $selected_coupon_name,
 			'customer_id' => $customer_id,
 			'customer_name' => $this->input->post('name'),
 			'customer_phone' => $this->input->post('phone'),

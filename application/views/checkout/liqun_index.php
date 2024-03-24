@@ -740,6 +740,7 @@ foreach ($this->cart->contents() as $items) {
         var cart_amount = 0;
         var cart_weight = 0.000;
         var shipping_amount = 0;
+        var initialShippingFee = 0;
         var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
         var initialCartWeight = parseFloat(<?php echo $total_weight ?>);
         cart_amount = initialCartTotal;
@@ -750,7 +751,6 @@ foreach ($this->cart->contents() as $items) {
         $('.cart_weight_display').text(' ' + cart_weight + ' KG');
 
         // 初始化整體總計
-        var initialShippingFee = 0;
         shipping_amount = parseInt(initialShippingFee);
         $('#shipping_fee').text(' $' + shipping_amount);
         $('#shipping_amount').val(shipping_amount);

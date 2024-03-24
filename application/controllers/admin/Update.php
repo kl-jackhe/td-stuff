@@ -101,6 +101,7 @@ class Update extends Admin_Controller
                 $this->update_202403201604();
                 $this->update_202403211521();
                 $this->update_202403241905();
+                $this->update_202403242109();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -831,6 +832,30 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403242109()
+    {
+        $version = '202403242109';
+        $description = '[orders] create [used_coupon_id]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'used_coupon_id'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `used_coupon_id` int(11) NOT NULL AFTER `order_date`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

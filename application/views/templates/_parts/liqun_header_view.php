@@ -47,7 +47,7 @@
                             <div class="col-12 text-right nav_item_style">
                                 <a href="/">回首頁</a>
                                 <span> ｜ </span>
-                                <a href="/product?cid=">全品項</a>
+                                <a href="/product">全品項</a>
                                 <span> ｜ </span>
                                 <?php if (empty($this->session->userdata('user_id'))) { ?>
                                     <a href="/auth">會員中心</a>
