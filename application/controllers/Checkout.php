@@ -349,11 +349,10 @@ class Checkout extends Public_Controller
 		set_cookie("user_address", $this->input->post('address'), time() + 31536000);
 	}
 
-	// 重新付款
+	// ECP pay
 	public function ecp_repay_order($order_id = 0)
 	{
 		$this->data['page_title'] = '結帳';
-		$this->load->model('checkout_model');
 
 		// 類別分類
 		$current_url = $_SERVER['REQUEST_URI'];
@@ -367,14 +366,15 @@ class Checkout extends Public_Controller
 
 		$orders = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
 		if (!empty($orders) && $orders['customer_id'] != $this->session->userdata('user_id')) {
-			echo '	<script>
-						alert("未認證操作請重新嘗試");
-						window.location.href = "' . base_url() . 'auth"
-					</script>';
+			echo '<script>
+					alert("未認證操作請重新嘗試");
+					window.location.href = "' . base_url() . 'auth"
+				  </script>';
 		}
 
 		$pay_order = $this->checkout_model->getSelectedOrder($order_id);
-		// 綠界-信用卡
+
+		// 綠界支付
 		if (!empty($pay_order) && ($pay_order['order_payment'] == 'ecpay_credit' || $pay_order['order_payment'] == 'ecpay_ATM' || $pay_order['order_payment'] == 'ecpay_CVS')) {
 			/**
 			 *    Credit信用卡付款產生訂單範例
@@ -404,11 +404,15 @@ class Checkout extends Public_Controller
 
 				//基本參數(請依系統規劃自行調整)
 				$MerchantTradeNo = $pay_order['order_number'] . substr(time(), 4, 6);
-				if ($pay_order['order_payment'] != 'ecpay_credit') {
-					$MerchantTradeNo = $pay_order['MerchantTradeNo'];
-				}
 				if (strlen($MerchantTradeNo) > 20) {
 					$MerchantTradeNo = $pay_order['order_number'] . substr(time(), 6, 4);
+				}
+
+				// 存取MerchantTradeNo編號
+				if ($this->input->post('checkout_payment') == 'ecpay_ATM' || $this->input->post('checkout_payment') == 'ecpay_CVS') {
+					// 存取MerchantTradeNo編號
+					$this->db->where('order_number', $pay_order['order_number']);
+					$this->db->update('orders', ['MerchantTradeNo' => $MerchantTradeNo]);
 				}
 
 				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
@@ -425,13 +429,13 @@ class Checkout extends Public_Controller
 					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::CVS; //付款方式
 				}
 				// POST會傳到這
-				$obj->Send['ReturnURL'] = base_url(); //付款完成通知回傳的網址
+				$obj->Send['ReturnURL'] = base_url() . "checkout/save_extend_info"; //付款完成通知回傳的網址
 				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $pay_order['order_number']; //付款完成通知回傳的網址
 				$obj->Send['ClientBackURL'] = base_url(); //付款完成後，顯示返回商店按鈕
 				$obj->Send['PaymentInfoURL'] = base_url() . "checkout/save_extend_info";
 				$obj->SendExtend['PaymentInfoURL'] = base_url() . "checkout/save_extend_info"; 	//伺服器端回傳付款相關資訊。
 
-				//$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
+				$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
 				//訂單的商品資料
 				array_push($obj->Send['Items'], array(
 					'Name' => "網購商品",
@@ -450,6 +454,105 @@ class Checkout extends Public_Controller
 			} catch (Exception $e) {
 				echo $e->getMessage();
 			}
+		}
+	}
+
+	// Line Pay
+	function line_repay_order($order_id = 0)
+	{
+		$this->data['page_title'] = '結帳';
+
+		// 類別分類
+		$current_url = $_SERVER['REQUEST_URI'];
+		$query_string = parse_url($current_url, PHP_URL_QUERY);
+		$decoded_data = $this->security_url->fixedDecryptData($query_string);
+		if (!empty($query_string)) {
+			if (!empty($decoded_data) && !empty($decoded_data['getorders'])) {
+				$order_id = $decoded_data['getorders'];
+			}
+		}
+
+		$orders = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
+		if (!empty($orders) && $orders['customer_id'] != $this->session->userdata('user_id')) {
+			echo '<script>
+					alert("未認證操作請重新嘗試");
+					window.location.href = "' . base_url() . 'auth"
+				  </script>';
+		}
+
+		$pay_order = $this->checkout_model->getSelectedOrder($order_id);
+
+		// Line Pay
+		if (!empty($pay_order) && $pay_order['order_payment'] == 'line_pay') {
+
+			// Line Pay
+			// New -----
+			$channelId     = "2000014653"; // 通路ID
+			$channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
+			$channelImage  = 'https://td-stuff.com/assets/uploads/web_logo_td.png';
+			if ($this->is_liqun_food) {
+				$channelId     = get_setting_general('lp_channel_id'); // 通路ID
+				$channelSecret = get_setting_general('lp_channel_secret_key'); // 通路密鑰
+				$channelImage  = base_url() . '/assets/uploads/' . get_setting_general('logo');
+			}
+			// Get Base URL path without filename
+			// $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
+			$input = $_POST;
+			// $input['isSandbox'] = (isset($input['isSandbox'])) ? true : false;
+			// $input['isSandbox'] = true;
+			$input['isSandbox'] = false;
+			// Create LINE Pay client
+			$linePay = new \yidas\linePay\Client([
+				'channelId' => $channelId,
+				'channelSecret' => $channelSecret,
+				'isSandbox' => $input['isSandbox'],
+			]);
+			// Create an order based on Reserve API parameters
+			$orderParams = [
+				"amount" => (int)$pay_order['order_discount_total'],
+				"currency" => 'TWD',
+				"orderId" => $pay_order['order_number'],
+				"packages" => [
+					[
+						"id" => "test1",
+						"amount" => (int)$pay_order['order_discount_total'],
+						"name" => "package name",
+						"products" => [
+							[
+								"name" => '網購商品',
+								"quantity" => 1,
+								"price" => (int)$pay_order['order_discount_total'],
+								"imageUrl" => $channelImage,
+							],
+						],
+					],
+				],
+				"redirectUrls" => [
+					"confirmUrl" => base_url() . "checkout/line_pay_confirm",
+					"cancelUrl" => base_url(),
+				],
+				"options" => [
+					"display" => [
+						"checkConfirmUrlBrowser" => true,
+					],
+				],
+			];
+			// Online Reserve API
+			$response = $linePay->request($orderParams);
+			// Check Reserve API result
+			if (!$response->isSuccessful()) {
+				die("<script>alert('ErrorCode {$response['returnCode']}: " . addslashes($response['returnMessage']) . "');history.back();</script>");
+			}
+			// Save the order info to session for confirm
+			$_SESSION['linePayOrder'] = [
+				'transactionId' => (string) $response["info"]["transactionId"],
+				'params' => $orderParams,
+				'isSandbox' => $input['isSandbox'],
+			];
+			// Save input for next process and next form
+			$_SESSION['config'] = $input;
+			// Redirect to LINE Pay payment URL
+			header('Location: ' . $response->getPaymentUrl());
 		}
 	}
 
@@ -547,7 +650,7 @@ class Checkout extends Public_Controller
 		if ($query->num_rows() > 0) {
 			$row = $query->row();
 			if ($row->last_number == null) {
-				$order_number = $y . $m . $d . '001';
+				$order_number = $y . $m . $d . '00001';
 			} else {
 				$order_number = preg_replace('/[^\d]/', '', $row->last_number);
 				$order_number++;
@@ -667,12 +770,15 @@ class Checkout extends Public_Controller
 		);
 
 		if ($this->is_partnertoys) {
+			// 抬頭&統編
 			$insert_data['order_cpname'] = !empty($this->input->post('order_cpname')) ? $this->input->post('order_cpname') : '';
 			$insert_data['order_cpno'] = !empty($this->input->post('order_cpno')) ? $this->input->post('order_cpno') : '';
 		}
 		if ($this->is_liqun_food) {
+			// 訂單重量
 			$insert_data['order_weight'] = $this->input->post('weight_amount');
 			if ($insert_data['order_delivery'] == 'family_limit_5_frozen_pickup' || $insert_data['order_delivery'] == 'family_limit_10_frozen_pickup') {
+				// 冷凍訂單
 				$insert_data['fm_cold'] = 1;
 			}
 		}
@@ -812,195 +918,19 @@ class Checkout extends Public_Controller
 		// 清除購物車
 		$this->cart->destroy();
 
-		// 綠界-信用卡
+		// payment
 		if ($this->input->post('checkout_payment') == 'ecpay_credit' || $this->input->post('checkout_payment') == 'ecpay_ATM' || $this->input->post('checkout_payment') == 'ecpay_CVS') {
 
-			/**
-			 *    Credit信用卡付款產生訂單範例
-			 */
-
-			//載入SDK(路徑可依系統規劃自行調整)
-			try {
-				// 載入綠界金流API
-				$obj = $this->ecpay_payment->load();
-				$ECPay = $this->checkout_model->getECPay();
-
-				if ($ECPay['payment_status'] == 1) :
-					// 正式環境
-					$obj->ServiceURL = "https://payment.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-					$obj->HashKey = $ECPay['HashKey'];
-					$obj->HashIV = $ECPay['HashIV'];
-					$obj->MerchantID = $ECPay['MerchantID'];
-					$obj->EncryptType = '1';
-				else :
-					// 測試環境
-					$obj->ServiceURL  = "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5"; //服務位置
-					$obj->HashKey     = '5294y06JbISpM5x9'; //測試用Hashkey，請自行帶入ECPay提供的HashKey
-					$obj->HashIV      = 'v77hoKGq4kWxNNIS'; //測試用HashIV，請自行帶入ECPay提供的HashIV
-					$obj->MerchantID  = '2000132'; //測試用MerchantID，請自行帶入ECPay提供的MerchantID
-					$obj->EncryptType = '1'; //CheckMacValue加密類型，請固定填入1，使用SHA256加密
-				endif;
-
-				//基本參數(請依系統規劃自行調整)
-				$MerchantTradeNo = $order_number . substr(time(), 4, 6);
-
-				// 存取MerchantTradeNo編號
-				if ($this->input->post('checkout_payment') == 'ecpay_ATM' || $this->input->post('checkout_payment') == 'ecpay_CVS') {
-					// 存取MerchantTradeNo編號
-					$this->db->where('order_number', $order_number);
-					$this->db->update('orders', ['MerchantTradeNo' => $MerchantTradeNo]);
-				}
-
-
-				$obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //訂單編號
-				$obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); //交易時間
-				$obj->Send['TotalAmount'] = $order_total; //交易金額
-				$obj->Send['TradeDesc'] = get_empty_remark('網站訂單: ' . $this->input->post('remark')); //交易描述
-				$obj->Send['PaymentType'] = "aio"; //交易類型 String(20) 請固定填入 aio
-				// 可以決定ATM或Credit支付
-				if ($this->input->post('checkout_payment') == 'ecpay_credit') {
-					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::Credit; //付款方式
-				} else if ($this->input->post('checkout_payment') == 'ecpay_ATM') {
-					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::ATM; //付款方式
-				} else if ($this->input->post('checkout_payment') == 'ecpay_CVS') {
-					$obj->Send['ChoosePayment'] = ECPay_PaymentMethod::CVS; //付款方式
-				}
-				// POST會傳到這
-				$obj->Send['ReturnURL'] = base_url() . "checkout/save_extend_info"; //付款完成通知回傳的網址
-				$obj->Send['OrderResultURL'] = base_url() . "checkout/check_pay/" . $order_number; //付款完成通知回傳的網址
-				$obj->Send['ClientBackURL'] = base_url(); //付款完成後，顯示返回商店按鈕
-				$obj->Send['PaymentInfoURL'] = base_url() . "checkout/save_extend_info";
-				$obj->SendExtend['PaymentInfoURL'] = base_url() . "checkout/save_extend_info"; 	//伺服器端回傳付款相關資訊。
-
-				$obj->Send['NeedExtraPaidInfo'] = ECPay_ExtraPaymentInfo::Yes;
-				//訂單的商品資料
-				array_push($obj->Send['Items'], array(
-					'Name' => "網購商品",
-					'Price' => (int)$order_total,
-					'Currency' => "元",
-					'Quantity' => (int) "1筆",
-					'URL' => "dedwed"
-				));
-				// if ($cart = $this->cart->contents()):
-				// 	foreach ($cart as $item):
-				// 		array_push($obj->Send['Items'], array(
-				// 			'Name' => get_product_name($item['id']),
-				// 			'Price' => (int) $item['price'],
-				// 			'Currency' => "元",
-				// 			'Quantity' => (int) $item['qty'],
-				// 			'URL' => "dedwed",
-				// 		));
-				// 	endforeach;
-				// endif;
-				//Credit信用卡分期付款延伸參數(可依系統需求選擇是否代入)
-				//以下參數不可以跟信用卡定期定額參數一起設定
-				$obj->SendExtend['CreditInstallment'] = 0; //分期期數，預設0(不分期)
-				$obj->SendExtend['InstallmentAmount'] = 0; //使用刷卡分期的付款金額，預設0(不分期)
-				$obj->SendExtend['Redeem'] = false; //是否使用紅利折抵，預設false
-				$obj->SendExtend['UnionPay'] = false; //是否為聯營卡，預設false;
-				//Credit信用卡定期定額付款延伸參數(可依系統需求選擇是否代入)
-				//以下參數不可以跟信用卡分期付款參數一起設定
-				// $obj->SendExtend['PeriodAmount'] = '' ;    //每次授權金額，預設空字串
-				// $obj->SendExtend['PeriodType']   = '' ;    //週期種類，預設空字串
-				// $obj->SendExtend['Frequency']    = '' ;    //執行頻率，預設空字串
-				// $obj->SendExtend['ExecTimes']    = '' ;    //執行次數，預設空字串
-
-				// // 電子發票參數
-				// $obj->Send['InvoiceMark'] = ECPay_InvoiceState::Yes;
-				// $obj->SendExtend['RelateNumber'] = "Test" . time();
-				// $obj->SendExtend['CustomerEmail'] = 'test@ecpay.com.tw';
-				// $obj->SendExtend['CustomerPhone'] = '0911222333';
-				// $obj->SendExtend['TaxType'] = ECPay_TaxType::Dutiable;
-				// $obj->SendExtend['CustomerAddr'] = '台北市南港區三重路19-2號5樓D棟';
-				// $obj->SendExtend['InvoiceItems'] = array();
-				// // 將商品加入電子發票商品列表陣列
-				// foreach ($obj->Send['Items'] as $info) {
-				// 	array_push($obj->SendExtend['InvoiceItems'], array('Name' => $info['Name'], 'Count' =>
-				// 	$info['Quantity'], 'Word' => '個', 'Price' => $info['Price'], 'TaxType' => ECPay_TaxType::Dutiable));
-				// }
-				// $obj->SendExtend['InvoiceRemark'] = '測試發票備註';
-				// $obj->SendExtend['DelayDay'] = '0';
-				// $obj->SendExtend['InvType'] = ECPay_InvType::General;
-
-				//產生訂單(auto submit至ECPay)
-				$obj->CheckOut();
-			} catch (Exception $e) {
-				echo $e->getMessage();
-			}
+			// ECP pay
+			$this->ecp_repay_order($order_id);
 		} elseif ($this->input->post('checkout_payment') == 'line_pay') {
 
-			// Line Pay
-			// New -----
-			$channelId     = "2000014653"; // 通路ID
-			$channelSecret = "af271193c5642181568b743846d72e60"; // 通路密鑰
-			$channelImage  = 'https://td-stuff.com/assets/uploads/web_logo_td.png';
-			if ($this->is_liqun_food) {
-				$channelId     = get_setting_general('lp_channel_id'); // 通路ID
-				$channelSecret = get_setting_general('lp_channel_secret_key'); // 通路密鑰
-				$channelImage  = base_url() . '/assets/uploads/' . get_setting_general('logo');
-			}
-			// Get Base URL path without filename
-			// $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]".dirname($_SERVER['PHP_SELF']);
-			$input = $_POST;
-			// $input['isSandbox'] = (isset($input['isSandbox'])) ? true : false;
-			// $input['isSandbox'] = true;
-			$input['isSandbox'] = false;
-			// Create LINE Pay client
-			$linePay = new \yidas\linePay\Client([
-				'channelId' => $channelId,
-				'channelSecret' => $channelSecret,
-				'isSandbox' => $input['isSandbox'],
-			]);
-			// Create an order based on Reserve API parameters
-			$orderParams = [
-				"amount" => $order_total,
-				"currency" => 'TWD',
-				"orderId" => $order_number,
-				"packages" => [
-					[
-						"id" => "test1",
-						"amount" => $order_total,
-						"name" => "package name",
-						"products" => [
-							[
-								"name" => '網購商品',
-								"quantity" => 1,
-								"price" => $order_total,
-								"imageUrl" => $channelImage,
-							],
-						],
-					],
-				],
-				"redirectUrls" => [
-					"confirmUrl" => base_url() . "checkout/line_pay_confirm",
-					"cancelUrl" => base_url(),
-				],
-				"options" => [
-					"display" => [
-						"checkConfirmUrlBrowser" => true,
-					],
-				],
-			];
-			// Online Reserve API
-			$response = $linePay->request($orderParams);
-			// Check Reserve API result
-			if (!$response->isSuccessful()) {
-				die("<script>alert('ErrorCode {$response['returnCode']}: " . addslashes($response['returnMessage']) . "');history.back();</script>");
-			}
-			// Save the order info to session for confirm
-			$_SESSION['linePayOrder'] = [
-				'transactionId' => (string) $response["info"]["transactionId"],
-				'params' => $orderParams,
-				'isSandbox' => $input['isSandbox'],
-			];
-			// Save input for next process and next form
-			$_SESSION['config'] = $input;
-			// Redirect to LINE Pay payment URL
-			header('Location: ' . $response->getPaymentUrl());
+			// LINE Pay
+			$this->line_repay_order($order_id);
 		} else {
-			// 貨到付款
+			// BANK Pay
+
 			// 訂單ID加密
-			// redirect(base_url() . 'checkout/success/' . $order_id);
 			redirect(base_url() . 'checkout/success/' . $this->aesEncrypt($order_id, $this->aesKey, $this->aesIv));
 		}
 	}
@@ -1061,16 +991,13 @@ class Checkout extends Public_Controller
 		// }
 
 		$this->data['page_title'] = '訂單完成';
-		// $this->cart->destroy();
+
 		// 訂單ID解密
 		// $this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
 
-		// echo "<pre>";
-		// print_r($this->data['order_item']);
-		// echo "</pre>";
 
 		if (!empty($this->data['order'])) {
 			$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');
@@ -1124,12 +1051,8 @@ class Checkout extends Public_Controller
 		// return;
 
 		// 查詢訂單資訊
-		$this->db->select('*');
-		$this->db->where('order_number', $order_number);
-		$this->db->limit(1);
-		$query = $this->db->get('orders');
-		$row = ($query->num_rows() > 0) ? $query->row_array() : "";
-		$order_id = ($row != '') ? $row['order_id'] : 0;
+		$row = $this->mysql_model->_select('orders', 'order_number', $order_number, 'row');
+		$order_id = !empty($row) ? $row['order_id'] : 0;
 
 		// 檢查顧客資料
 		// echo '<pre>';
@@ -1175,7 +1098,7 @@ class Checkout extends Public_Controller
 				$this->db->update('lottery_pool', $self_lottery_pool);
 			}
 
-			// 是否為現貨(是才開發票)
+			// 是否為現貨(是才開發票)[待修改]
 			$autoEnable = true;
 			if ($this->is_partnertoys) {
 				$odit = $this->mysql_model->_select('order_item', 'order_id', $order_id);

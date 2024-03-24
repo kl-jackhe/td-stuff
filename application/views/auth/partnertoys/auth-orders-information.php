@@ -269,7 +269,7 @@
                 <!-- <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'"> -->
                 <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && selectedOrder.order_payment == 'ecpay_credit'">
                     <div class="operateBtn col-6">
-                        <a id="completePay" @click="completePay(selectedOrder.order_id)">繼續付款</a>
+                        <a id="completePay" @click="completePay('ecp_repay_order', selectedOrder.order_id)">繼續付款</a>
                     </div>
                     <div class="operateBtn col-6">
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>

@@ -283,16 +283,33 @@
                 }
             },
             // 完成付款
-            completePay(id) {
-                window.location.href = <?php echo json_encode(base_url()); ?> + "checkout/ecp_repay_order/" + id;
+            completePay(type, selected) {
+                if (selected != null) {
+                    $.ajax({
+                        url: '/encode/getDataEncode/getorders',
+                        type: 'post',
+                        data: {
+                            getorders: selected,
+                        },
+                        success: (response) => {
+                            if (response) {
+                                if (response.result == 'success') {
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/' + type + '/?' + response.src;
+                                } else {
+                                    console.log('error.');
+                                }
+                            } else {
+                                console.log(response);
+                            }
+                        },
+                    });
+                }
             },
             // 取消訂單
             cancelOrder(id) {
                 var self = this;
 
-                var userConfirmed = confirm('確定要取消訂單嗎？');
-
-                if (userConfirmed) {
+                if (confirm('確定要取消訂單嗎？')) {
                     $.ajax({
                         type: 'POST',
                         url: '/auth/cancel_order/' + id,

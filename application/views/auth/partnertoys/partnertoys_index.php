@@ -426,7 +426,7 @@
                 }
             },
             // 完成付款
-            completePay(selected) {
+            completePay(type, selected) {
                 if (selected != null) {
                     $.ajax({
                         url: '/encode/getDataEncode/getorders',
@@ -437,7 +437,7 @@
                         success: (response) => {
                             if (response) {
                                 if (response.result == 'success') {
-                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/ecp_repay_order/?' + response.src;
+                                    window.location.href = <?= json_encode(base_url()); ?> + 'checkout/' + type + '/?' + response.src;
                                 } else {
                                     console.log('error.');
                                 }
@@ -452,9 +452,7 @@
             cancelOrder(id) {
                 var self = this;
 
-                var userConfirmed = confirm('確定要取消訂單嗎？');
-
-                if (userConfirmed) {
+                if (confirm('確定要取消訂單嗎？')) {
                     $.ajax({
                         type: 'POST',
                         url: '/auth/cancel_order/' + id,

@@ -232,9 +232,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_credit' || selectedOrder.order_payment == 'ecpay_ATM' || selectedOrder.order_payment == 'ecpay_CVS')">
+                <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_credit' || selectedOrder.order_payment == 'line_pay')">
                     <div class="operateBtn col-6">
-                        <a id="completePay" @click="completePay(selectedOrder.order_id)">完成付款</a>
+                        <a v-show="selectedOrder.order_payment == 'ecpay_credit'" id="completePay" @click="completePay('ecp_repay_order', selectedOrder.order_id)">完成付款</a>
+                        <a v-show="selectedOrder.order_payment == 'line_pay'" id="completePay" @click="completePay('line_repay_order', selectedOrder.order_id)">完成付款</a>
                     </div>
                     <div class="operateBtn col-6">
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>
