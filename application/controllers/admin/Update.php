@@ -104,6 +104,7 @@ class Update extends Admin_Controller
                 $this->update_202403242109();
                 $this->update_202403260041();
                 $this->update_202403260046();
+                $this->update_202403260246();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -834,6 +835,30 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403260246()
+    {
+        $version = '202403260246';
+        $description = '[orders] create [in_free_shipping_range]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'in_free_shipping_range'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `in_free_shipping_range` tinyint(2) NOT NULL DEFAULT 0 AFTER `used_coupon_name`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 
