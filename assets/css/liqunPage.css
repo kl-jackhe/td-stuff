@@ -404,6 +404,7 @@ a {
 }
 
 .section-contents {
+    overflow-x: hidden;
     float: left;
     width: 78%;
     /* 使兩者佔據 wrapper 的一點寬度，可以根據實際情況調整 */
@@ -584,9 +585,27 @@ a {
     margin: 50px 10px 60px 10px;
 }
 
+
+.memberForm input,
+.memberForm select,
+.memberForm textarea,
+#memberLoginForm input {
+    background: #f9f9f9;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid #e3e3e3;
+}
+
+.inputAdjustMargin {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 @media (max-width:767px) {
     .memberForm {
-        padding: 30px;
+        box-shadow: none;
+        padding: 10px 0;
+        margin: 0;
     }
 }
 
@@ -903,7 +922,15 @@ label.required::before {
     min-height: 540px;
     box-shadow: 6px 6px 20px grey;
     padding: 30px 60px;
-    margin: 50px 0 60px 0;
+    margin: 50px 30px 60px 30px;
+}
+
+@media (max-width:767px) {
+    #memberOrderList {
+        box-shadow: none;
+        padding: 10px 0;
+        margin: 0;
+    }
 }
 
 .orderInformation li {
@@ -1022,6 +1049,11 @@ label.required::before {
     -moz-transition: all .3s ease-in-out;
     -webkit-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
+}
+
+.active .page_link {
+    color: #ffffff;
+    background-color: #d35448;
 }
 
 .orderDetailButton {
@@ -1590,4 +1622,8 @@ input.qtyminus {
     #cancelOrder {
         padding: 8px 20px;
     }
+}
+
+[v-cloak] {
+    display: none;
 }

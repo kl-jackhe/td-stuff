@@ -746,6 +746,7 @@ class Checkout extends Public_Controller
 			$delivery_cost = 0;
 		}
 
+		$weight_exceed = $this->input->post('weight_exceed_amount');
 		$order_total = intval($this->cart->total() + (int)$delivery_cost);
 		$order_discount_total = intval((int)$this->input->post('cart_total') + (int)$delivery_cost);
 		$order_discount_price = intval((int)$this->cart->total() - (int)$this->input->post('cart_total'));
@@ -764,6 +765,8 @@ class Checkout extends Public_Controller
 			'customer_name' => $this->input->post('name'),
 			'customer_phone' => $this->input->post('phone'),
 			'customer_email' => $this->input->post('email'),
+			'weight_exceed_count' => ($weight_exceed / 50),
+			'weight_exceed_amount' => $weight_exceed,
 			'order_total' => $order_total,
 			'order_discount_total' => $order_discount_total,
 			'order_discount_price' => $order_discount_price,
@@ -803,6 +806,63 @@ class Checkout extends Public_Controller
 
 		// return;
 		$order_id = $this->mysql_model->_insert('orders', $insert_data);
+
+		// 阿凱的冰箱自動拆單
+		if (!empty($weight_exceed)) {
+			// 參數
+			$count = $weight_exceed / 50;
+			$main_order_number = $order_number;
+
+			// 產生空訂單
+			while ($count--) {
+				// 訂單編號
+				$date = date('Y-m-d');
+				$y = substr($date, 0, 4);
+				$m = substr($date, 5, 2);
+				$d = substr($date, 8, 2);
+				$this->db->select('MAX(order_number) as last_number');
+				$this->db->like('order_number', $y . $m . $d, 'after');
+				$query = $this->db->get('orders');
+				if ($query->num_rows() > 0) {
+					$row = $query->row();
+					if ($row->last_number == null) {
+						$sub_order_number = $y . $m . $d . '00001';
+					} else {
+						$sub_order_number = preg_replace('/[^\d]/', '', $row->last_number);
+						$sub_order_number++;
+					}
+				}
+				$exceed_data = array(
+					'order_number' => $sub_order_number,
+					'main_order_number' => $main_order_number,
+					'order_date' => date("Y-m-d"),
+					'used_coupon_id' => $selected_coupon_id,
+					'used_coupon_name' => $selected_coupon_name,
+					'customer_id' => $customer_id,
+					'customer_name' => $this->input->post('name'),
+					'customer_phone' => $this->input->post('phone'),
+					'customer_email' => $this->input->post('email'),
+					'order_total' => 0,
+					'order_discount_total' => 0,
+					'order_discount_price' => 0,
+					'order_delivery_cost' => 0,
+					'order_delivery_address' => $order_delivery_address,
+					'store_id' => get_empty($this->input->post('storeid')),
+					'order_store_name' => get_empty($this->input->post('storename')),
+					'order_store_address' => get_empty($this->input->post('storeaddress')),
+					'order_store_ReservedNo' => get_empty($this->input->post('ReservedNo')),
+					'order_delivery' => $this->input->post('checkout_delivery'),
+					'order_payment' => $this->input->post('checkout_payment'),
+					'order_pay_status' => $order_pay_status,
+					'order_step' => 'confirm',
+					'order_remark' => $this->input->post('remark'),
+					'single_sales_id' => ($this->session->userdata('single_sales_id') != '' ? $this->session->userdata('single_sales_id') : ''),
+					'agent_id' => ($this->session->userdata('agent_id') != '' ? $this->session->userdata('agent_id') : ''),
+					'created_at' => $created_at,
+				);
+				$this->db->insert('orders', $exceed_data);
+			}
+		}
 
 		foreach ($this->cart->contents() as $cart_item) :
 			// echo '<pre>';

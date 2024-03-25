@@ -253,7 +253,7 @@
         computed: {
             // 頁碼
             limitedPages() {
-                const maxPages = 2;
+                const maxPages = 3;
                 const middlePage = Math.ceil(maxPages / 2);
 
                 if (this.totalPages <= maxPages) {

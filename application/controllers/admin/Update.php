@@ -102,6 +102,8 @@ class Update extends Admin_Controller
                 $this->update_202403211521();
                 $this->update_202403241905();
                 $this->update_202403242109();
+                $this->update_202403260041();
+                $this->update_202403260046();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -832,6 +834,59 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403260046()
+    {
+        $version = '202403260046';
+        $description = '[orders] create [main_order_number]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'main_order_number'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `main_order_number` varchar(25) NOT NULL AFTER `order_number`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
+        }
+    }
+
+    function update_202403260041()
+    {
+        $version = '202403260041';
+        $description = '[orders] create [weight_exceed_count]&[weight_exceed_amount]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'weight_exceed_count'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `weight_exceed_count` int(11) NOT NULL AFTER `order_weight`;");
+            }
+            $query = $this->db->query("SHOW COLUMNS FROM orders LIKE 'weight_exceed_amount'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `orders` ADD `weight_exceed_amount` int(11) NOT NULL AFTER `weight_exceed_count`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

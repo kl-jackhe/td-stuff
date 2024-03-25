@@ -1,4 +1,4 @@
-<?php echo $this->ajax_pagination_admin->create_links(); ?>
+<?= $this->ajax_pagination_admin->create_links(); ?>
 <style>
     p {
         margin: 0px;
@@ -11,6 +11,10 @@
 
     .spanContentFont {
         color: #8a6d3b;
+    }
+
+    .spanOrderPartitionMain {
+        color: red;
     }
 
     .mb_control {
@@ -209,9 +213,19 @@
                     </td>
                     <!-- 訂單編號 -->
                     <td class="text-center" style="<?= ($order['order_step'] == 'order_cancel' ? 'text-decoration: line-through;' : '') ?>">
-                        <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank">
-                            <?php echo $order['order_number'] ?>
-                            <!-- <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i> -->
+                        <a href="/admin/order/view/<?= $order['order_id'] ?>" target="_blank">
+                            <? if (!empty($order['main_order_number'])) : ?>
+                                <span class="spanContent">
+                                    <span>主單：</span>
+                                    <span class="spanOrderPartitionMain"><?= $order['main_order_number'] ?></span>
+                                </span>
+                                <span class="spanContent">
+                                    <span>拆單：</span>
+                                    <span><?= $order['order_number'] ?></span>
+                                </span>
+                            <? else : ?>
+                                <?= $order['order_number'] ?>
+                            <? endif; ?>
                         </a>
                     </td>
                     <!-- 夥伴玩具 -->
@@ -275,14 +289,52 @@
                             <? endif; ?>
                             <a href="javascript:void(0)" onclick="toggleTermsPopup(<?= $order['order_id'] ?>)">顯示商品清單</a>
                         </td>
-                    <? else : ?>
+                    <? elseif ($this->is_liqun_food) : ?>
                         <!-- 訂單日期 -->
                         <td class="text-center">
-                            <?php echo $order['order_date'] ?>
+                            <?= $order['order_date'] ?>
                         </td>
                         <!-- 客戶資訊 -->
                         <td class="text-center">
-                            <?php echo $order['customer_name'] ?>
+                            <?= $order['customer_name'] ?>
+                        </td>
+                        <!-- 配送資訊 -->
+                        <td>
+                            <span class="spanContent">
+                                <span>配送方式：</span>
+                                <span class="spanContentFont"><?= get_delivery($order['order_delivery']) ?></span>
+                            </span>
+                            <span class="spanContent">
+                                <span>配送地址：</span>
+                                <span class="spanContentFont"><?= (!empty($order['order_store_name']) ? $order['order_store_name'] : $order['order_delivery_address']) ?></span>
+                            </span>
+                        </td>
+                        <!-- 訂單資訊 -->
+                        <td>
+                            <span class="spanContent">
+                                <span>訂單金額：</span>
+                                <span class="spanContentFont"><?= '$' . format_number($order['order_discount_total']) ?></span>
+                            </span>
+                            <span class="spanContent">
+                                <span>付款方式：</span>
+                                <span class="spanContentFont"><?= get_payment($order['order_payment']) ?></span>
+                            </span>
+                            <? if (substr($order['order_payment'], 0, 5) == 'ecpay') : ?>
+                                <span class="spanContent">
+                                    <span>付款狀態：</span>
+                                    <span class="spanContentFont"><?= get_pay_status($order['order_pay_status']) ?></span>
+                                </span>
+                            <? endif; ?>
+                            <a href="javascript:void(0)" onclick="toggleTermsPopup(<?= $order['order_id'] ?>)">顯示商品清單</a>
+                        </td>
+                    <? else : ?>
+                        <!-- 訂單日期 -->
+                        <td class="text-center">
+                            <?= $order['order_date'] ?>
+                        </td>
+                        <!-- 客戶資訊 -->
+                        <td class="text-center">
+                            <?= $order['customer_name'] ?>
                         </td>
                         <!-- 配送資訊 -->
                         <td>
@@ -344,10 +396,10 @@
                             <div class="input-group">
                                 <span class="input-group-btn">
                                     <?php $attributes = array('class' => 'form-inline'); ?>
-                                    <?php echo form_open('admin/order/updata_self_payment_no/' . $order['order_id'], $attributes); ?>
-                                    <input type="text" class="form-control" name="self_payment_no" placeholder="請輸入貨單號" value="<?php echo $order['CVSPaymentNo'] ?>">
+                                    <?= form_open('admin/order/updata_self_payment_no/' . $order['order_id'], $attributes); ?>
+                                    <input type="text" class="form-control" name="self_payment_no" placeholder="請輸入貨單號" value="<?= $order['CVSPaymentNo'] ?>">
                                     <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
-                                    <?php echo form_close() ?>
+                                    <?= form_close() ?>
                                 </span>
                             </div>
                         </td>
@@ -367,7 +419,7 @@
                         </td>
                         <!-- 編輯按鈕 -->
                         <td class="text-center">
-                            <a href="/admin/order/view/<?php echo $order['order_id'] ?>" class="btn btn-default btn-xs" target="_blank">
+                            <a href="/admin/order/view/<?= $order['order_id'] ?>" class="btn btn-default btn-xs" target="_blank">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>
@@ -388,7 +440,7 @@
                             <!-- 自動單號 -->
                             <td class="text-center">
                                 <!-- 物流單列印 -->
-                                <a href="/fmtoken/fm_<?= $order['fm_type'] ?>_print/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>" target="_blank"><?php echo $order['AllPayLogisticsID'] ?></a>
+                                <a href="/fmtoken/fm_<?= $order['fm_type'] ?>_print/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>" target="_blank"><?= $order['AllPayLogisticsID'] ?></a>
                             </td>
                         <?php else : ?>
                             <!-- 手動單號 -->
@@ -396,10 +448,10 @@
                                 <div class="input-group">
                                     <span class="input-group-btn">
                                         <?php $attributes = array('class' => 'form-inline'); ?>
-                                        <?php echo form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
-                                        <input type="text" class="form-control" name="self_logistics" placeholder="物流單號" value="<?php echo $order['SelfLogistics'] ?>">
+                                        <?= form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="物流單號" value="<?= $order['SelfLogistics'] ?>">
                                         <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
-                                        <?php echo form_close() ?>
+                                        <?= form_close() ?>
                                     </span>
                                 </div>
                             </td>
@@ -473,25 +525,25 @@
                 <tr class="<?= ($order['order_step'] == 'pay_ok' ? 'pay_ok_color' : '') ?> <?= ($order['order_step'] == 'order_cancel' ? 'order_cancel_color' : '') ?> <?= ($order['order_step'] == 'shipping' ? 'shipping_color' : '') ?> <?= ($order['order_step'] == 'complete' ? 'complete_color' : '') ?> <?= ($order['order_step'] == 'process' ? 'process_color' : '') ?> <?= ($order['order_step'] == 'invalid' ? 'invalid_color' : '') ?>">
                     <td>
                         <p>訂單編號：
-                            <a href="/admin/order/view/<?php echo $order['order_id'] ?>" target="_blank" <?= ($order['order_step'] == 'order_cancel' ? 'style="text-decoration: line-through;"' : '') ?>>
-                                <?php echo $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
+                            <a href="/admin/order/view/<?= $order['order_id'] ?>" target="_blank" <?= ($order['order_step'] == 'order_cancel' ? 'style="text-decoration: line-through;"' : '') ?>>
+                                <?= $order['order_number'] ?>&ensp;<i class="fa-solid fa-up-right-from-square"></i>
                             </a>
                         </p>
                         <p>訂單日期：
-                            <?php echo $order['order_date'] ?>
+                            <?= $order['order_date'] ?>
                         </p>
                         <p>客戶名稱：
-                            <?php echo $order['customer_name'] ?>
+                            <?= $order['customer_name'] ?>
                         </p>
                         <p>配送方式：
-                            <?php echo get_delivery($order['order_delivery']) ?>
+                            <?= get_delivery($order['order_delivery']) ?>
                         </p>
                         <p>付款方式：
-                            <?php echo get_payment($order['order_payment']) ?>
+                            <?= get_payment($order['order_payment']) ?>
                         </p>
                         <p>訂單金額：
                             <span style="color:red;font-weight: bold;">
-                                <?php echo format_number($order['order_discount_total']) ?>
+                                <?= format_number($order['order_discount_total']) ?>
                             </span>
                         </p>
                     </td>

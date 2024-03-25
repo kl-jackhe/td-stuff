@@ -134,6 +134,12 @@ class fmtoken extends Public_Controller
             return false;
         }
 
+        // partition
+        $main_order_info = '';
+        if (!empty($order_info['main_order_number'])) {
+            $main_order_info = $this->mysql_model->_select('orders', 'order_number', $order_info['main_order_number'], 'row');
+        }
+
         $data = array();
 
         if ($type == 'normal') {
@@ -145,7 +151,7 @@ class fmtoken extends Public_Controller
                     array(
                         'EshopIdOrderNo' => $order_info['order_number'],
                         'OrderDate' => date('Y-m-d H:i:s'),
-                        'OrderAmount' => $order_info['order_discount_total'],
+                        'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
                         'ReceiverPhone' => $order_info['customer_phone'],
@@ -165,7 +171,7 @@ class fmtoken extends Public_Controller
                         'OrderDate' => date('Y-m-d H:i:s'),
                         'BageSize' => ((float)$order_info['order_weight'] >= 5.000) ? 'S105' : 'S60',
                         'ShippDate' => date('Y-m-d', strtotime('+5 days')),
-                        'OrderAmount' => $order_info['order_discount_total'],
+                        'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
                         'ReceiverPhone' => $order_info['customer_phone'],
@@ -222,6 +228,9 @@ class fmtoken extends Public_Controller
                 return true;
             } else {
                 // echo "<script>alert('error');window.history.back()</script>";
+                echo '<pre>';
+                print_r($res);
+                echo '</pre>';
                 return false;
             }
         }
@@ -237,6 +246,12 @@ class fmtoken extends Public_Controller
             return false;
         }
 
+        // partition
+        $main_order_info = '';
+        if (!empty($order_info['main_order_number'])) {
+            $main_order_info = $this->mysql_model->_select('orders', 'order_number', $order_info['main_order_number'], 'row');
+        }
+
         $data = array();
 
         if ($type == 'normal') {
@@ -248,7 +263,7 @@ class fmtoken extends Public_Controller
                     array(
                         'EshopIdOrderNo' => $order_info['order_number'],
                         'OrderDate' => date('Y-m-d H:i:s'),
-                        'OrderAmount' => $order_info['order_discount_total'],
+                        'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
                         'ReceiverPhone' => $order_info['customer_phone'],
@@ -268,7 +283,7 @@ class fmtoken extends Public_Controller
                         'OrderDate' => date('Y-m-d H:i:s'),
                         'BageSize' => ((float)$order_info['order_weight'] >= 5.000) ? 'S105' : 'S60',
                         'ShippDate' => date('Y-m-d', strtotime('+5 days')),
-                        'OrderAmount' => $order_info['order_discount_total'],
+                        'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
                         'ReceiverPhone' => $order_info['customer_phone'],

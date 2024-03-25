@@ -199,7 +199,7 @@
         computed: {
             // 頁碼
             limitedPages() {
-                const maxPages = 2;
+                const maxPages = 3;
                 const middlePage = Math.ceil(maxPages / 2);
 
                 if (this.totalPages <= maxPages) {
@@ -529,25 +529,27 @@
     });
 
     function check_email() {
-        var email = document.getElementById("email").value;
-        $.ajax({
-            url: "/auth/email_check",
-            method: "get",
-            data: {
-                email: email
-            },
-            success: function(data) {
-                if (data == 0) {
-                    // alert('可以使用');
-                    $('#email_text').html('可以使用');
-                    $('#email_ok').val('1');
-                } else {
-                    // alert('此電子郵件已經被註冊過了');
-                    $('#email_text').html('此電子郵件已經被註冊過了');
-                    $('#email_ok').val('0');
+        var email = $("#email").val();
+        if (email) {
+            $.ajax({
+                url: "/auth/email_check",
+                method: "get",
+                data: {
+                    email: email
+                },
+                success: function(data) {
+                    if (data == 0) {
+                        // alert('可以使用');
+                        $('#email_text').html('可以使用');
+                        $('#email_ok').val('1');
+                    } else {
+                        // alert('此電子郵件已經被註冊過了');
+                        $('#email_text').html('此電子郵件已經被註冊過了');
+                        $('#email_ok').val('0');
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     function form_check() {

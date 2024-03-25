@@ -188,6 +188,17 @@
 
   function toggleTermsPopup(id) {
     // Ajaxリクエストで注文の詳細を取得し、詳細を表示する
+    // get order number
+    $.ajax({
+      url: '/admin/order/getOrderNumber/' + id,
+      type: 'post',
+      success: function(data) {
+        var text = '訂單編號：' + data;
+        $('#detailOrder .orderNumber').html(text);
+      }
+    });
+
+    // get order item
     $.ajax({
       url: '/admin/order/getOrderItem/' + id,
       type: 'post',

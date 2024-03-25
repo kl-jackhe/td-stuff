@@ -120,7 +120,7 @@ class Order extends Admin_Controller
 		$this->data['page_title'] = '訂單明細';
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $id);
-		if($this->is_partnertoys){
+		if ($this->is_partnertoys) {
 			$this->data['guestbook'] = $this->order_model->getGuestBook($id);
 		}
 
@@ -144,6 +144,12 @@ class Order extends Admin_Controller
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->mysql_model->_select('order_item', 'order_id', $id)));
+	}
+
+	public function getOrderNumber($id)
+	{
+		$self = $this->mysql_model->_select('orders', 'order_id', $id, 'row');
+		echo !empty($self) ? $self['order_number'] : '';
 	}
 
 	public function message_delete($id)
@@ -742,10 +748,10 @@ class Order extends Admin_Controller
 		if ($this->is_td_stuff) {
 			$api_url = 'http://erp.vei-star.com';
 		}
-		if ((strpos(base_url(), 'test01.liqun-food.com') !== false)){
+		if ((strpos(base_url(), 'test01.liqun-food.com') !== false)) {
 			$api_url = 'http://test-lichun.kuangli.tw';
 		}
-		if ((strpos(base_url(), 'akai-shop.com') !== false)){
+		if ((strpos(base_url(), 'akai-shop.com') !== false)) {
 			$api_url = 'http://system.liqun-food.com';
 		}
 

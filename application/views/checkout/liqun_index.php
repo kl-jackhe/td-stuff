@@ -194,7 +194,7 @@ foreach ($this->cart->contents() as $items) {
                     <section id="confirm_order">
                         <div class="mb-5" style="position:relative;">
                             <h3 class="mt-0">您共選擇 (<?= $count ?> 個項目)</h3>
-                            <? if ($this->session->userdata()) : ?>
+                            <? if (empty($this->session->userdata('user_id'))) : ?>
                                 <div class="checkoutHintJoinMember">
                                     <a href="javascript:void(0)" onclick="goToRegister()" class="btn btn-primary">加入會員</a>
                                 </div>
@@ -390,54 +390,56 @@ foreach ($this->cart->contents() as $items) {
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
                                     <?
-                                    $deliveryList = array();
-                                    if (!empty($product_list)) {
-                                        foreach ($product_list as $pl_row) {
-                                            if ($pl_row['product_category_id'] > 0) {
-                                                $this->db->select('delivery_id,source,source_id');
-                                                $this->db->where('source', 'ProductCategory');
-                                                $this->db->where('source_id', $pl_row['product_category_id']);
-                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                                if (!empty($drl_query)) {
-                                                    foreach ($drl_query as $drl_row) {
-                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCategory';
-                                                    }
-                                                }
-                                            }
-                                            if ($pl_row['product_id'] > 0) {
-                                                $this->db->select('delivery_id,source,source_id');
-                                                $this->db->where('source', 'Product');
-                                                $this->db->where('source_id', $pl_row['product_id']);
-                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                                if (!empty($drl_query)) {
-                                                    foreach ($drl_query as $drl_row) {
-                                                        $deliveryList[$drl_row['delivery_id']] = 'Product';
-                                                    }
-                                                }
-                                            }
-                                            if ($pl_row['product_combine_id'] > 0) {
-                                                $this->db->select('delivery_id,source,source_id');
-                                                $this->db->where('source', 'ProductCombine');
-                                                $this->db->where('source_id', $pl_row['product_combine_id']);
-                                                $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                                if (!empty($drl_query)) {
-                                                    foreach ($drl_query as $drl_row) {
-                                                        $deliveryList[$drl_row['delivery_id']] = 'ProductCombine';
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost, limit_weight');
-                                    if (!empty($deliveryList)) {
-                                        $deliveryIdList = array();
-                                        foreach ($deliveryList as $key => $value) {
-                                            $deliveryIdList[] = $key;
-                                        }
-                                        $this->db->where_in('id', $deliveryIdList);
-                                    }
-                                    $this->db->where('delivery_status', 1);
-                                    $d_query = $this->db->get('delivery')->result_array();
+                                    // $deliveryList = array();
+                                    // if (!empty($product_list)) {
+                                    //     foreach ($product_list as $pl_row) {
+                                    //         if ($pl_row['product_category_id'] > 0) {
+                                    //             $this->db->select('delivery_id,source,source_id');
+                                    //             $this->db->where('source', 'ProductCategory');
+                                    //             $this->db->where('source_id', $pl_row['product_category_id']);
+                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                    //             if (!empty($drl_query)) {
+                                    //                 foreach ($drl_query as $drl_row) {
+                                    //                     $deliveryList[$drl_row['delivery_id']] = 'ProductCategory';
+                                    //                 }
+                                    //             }
+                                    //         }
+                                    //         if ($pl_row['product_id'] > 0) {
+                                    //             $this->db->select('delivery_id,source,source_id');
+                                    //             $this->db->where('source', 'Product');
+                                    //             $this->db->where('source_id', $pl_row['product_id']);
+                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                    //             if (!empty($drl_query)) {
+                                    //                 foreach ($drl_query as $drl_row) {
+                                    //                     $deliveryList[$drl_row['delivery_id']] = 'Product';
+                                    //                 }
+                                    //             }
+                                    //         }
+                                    //         if ($pl_row['product_combine_id'] > 0) {
+                                    //             $this->db->select('delivery_id,source,source_id');
+                                    //             $this->db->where('source', 'ProductCombine');
+                                    //             $this->db->where('source_id', $pl_row['product_combine_id']);
+                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
+                                    //             if (!empty($drl_query)) {
+                                    //                 foreach ($drl_query as $drl_row) {
+                                    //                     $deliveryList[$drl_row['delivery_id']] = 'ProductCombine';
+                                    //                 }
+                                    //             }
+                                    //         }
+                                    //     }
+                                    // }
+                                    // $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost, limit_weight');
+                                    // if (!empty($deliveryList)) {
+                                    //     $deliveryIdList = array();
+                                    //     foreach ($deliveryList as $key => $value) {
+                                    //         $deliveryIdList[] = $key;
+                                    //     }
+                                    //     $this->db->where_in('id', $deliveryIdList);
+                                    // }
+                                    // $this->db->where('delivery_status', 1);
+                                    // $d_query = $this->db->get('delivery')->result_array();
+
+                                    $d_query = $this->mysql_model->_select('delivery', 'delivery_status', 1);
 
                                     foreach ($d_query as $d_row) {
                                         $frozen_limit = '';
@@ -788,6 +790,7 @@ foreach ($this->cart->contents() as $items) {
         cart_amount = initialCartTotal;
         cart_weight = initialCartWeight;
         $('#exceedView').css('display', 'none');
+        $('#weight_exceed_amount').val(selfnum);
         $('#cart_total').val(cart_amount);
         $('#weight_amount').val(cart_weight);
         $('.cart_total_display').text(' $' + cart_amount);
@@ -885,8 +888,17 @@ foreach ($this->cart->contents() as $items) {
                 var shippingFee = 0;
             }
 
+            // 訂單超重
             if (cart_weight > limitWeight) {
-                selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
+                var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val()
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                    alert('由於訂單超重故系統將自動拆單並加收超取運費箱費用，建議將訂單改為宅配免付加購運費箱～')
+                    if (delivery == '711_pickup' || delivery == 'family_pickup') {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 4)) * 50;
+                    } else {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
+                    }
+                }
                 $('#weight_exceed_amount').val(selfnum);
                 $('#exceedView').css('display', 'block');
                 $('#exceed_weight').text(' $' + selfnum);
