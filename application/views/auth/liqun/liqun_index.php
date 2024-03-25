@@ -2,7 +2,7 @@
 <!-- 引入 Facebook JavaScript SDK -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
-<div id="authApp" style="min-height: 80%;">
+<div v-cloak id="authApp" style="min-height: 80%;">
     <section class="container sectionRejust">
         <?php require('auth-menu.php'); ?>
         <div class="section-contents">
@@ -163,6 +163,10 @@
                 selectedOrderItem: null, // 該會員被選中的訂單內容物
                 authCategory: <?php echo json_encode(!empty($auth_category) ? $auth_category : ''); ?>, // 篩選標籤
                 selectedCategoryId: null, // 目前顯示頁面主題
+                getCheckcodeInterval: null, // 簡訊驗證碼計時器
+                countdownText: '取得驗證碼', // 存储倒计时文本
+                countdownInterval: null, // 存储倒计时间隔
+                isCountingDown: false, // 跟踪倒计时状态
                 isNavOpen: false, // nav搜尋標籤初始狀態為關閉
                 isBtnActive: false, // nav-btn active state
                 perpage: 5, // 一頁的資料數
@@ -171,6 +175,7 @@
             }
         },
         mounted() {
+            this.enableGetCheckcode();
             // 初始化篩選標籤
             if (this.authCategory && this.authCategory.length > 0) {
                 if (this.getOrder && this.getOrder.length > 0) {
@@ -388,6 +393,81 @@
             redirectToCargo() {
                 console.log(this.selectedOrderItem);
                 this.add_cart();
+            },
+            enableGetCheckcode() {
+                var currentTime = Math.floor(Date.now() / 1000);
+                var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
+                var timeDiff = currentTime - lastRequestTime;
+
+                if (timeDiff >= 300) {
+                    clearInterval(this.getCheckcodeInterval);
+                    $('#randomCheckcode').prop('disabled', false);
+                } else {
+                    var remaining = 300 - timeDiff;
+                    $('#randomCheckcode').text('請等待 ' + remaining + ' 秒');
+
+                    let countdown = remaining; // 倒計時初始值
+                    this.countdownInterval = setInterval(() => {
+                        countdown--;
+                        this.countdownText = `請等待 ${countdown} 秒`;
+                        if (countdown === 0) {
+                            clearInterval(this.countdownInterval);
+                            this.countdownText = '取得驗證碼';
+                            this.isCountingDown = false; // 重置倒计时状态为false
+                        }
+                    }, 1000);
+                }
+            },
+            startCountdown() {
+                this.isCountingDown = true; // 设置倒计时状态为true
+                this.countdownText = '請等待 300 秒'; // 初始化倒計時文本
+                let countdown = 300; // 倒計時初始值
+                this.countdownInterval = setInterval(() => {
+                    countdown--;
+                    this.countdownText = `請等待 ${countdown} 秒`;
+                    if (countdown === 0) {
+                        clearInterval(this.countdownInterval);
+                        this.countdownText = '取得驗證碼';
+                        this.isCountingDown = false; // 重置倒计时状态为false
+                    }
+                }, 1000);
+            },
+            getCheckcode() {
+                var currentTime = Math.floor(Date.now() / 1000);
+                var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
+                var timeDiff = currentTime - lastRequestTime;
+
+                if (timeDiff >= 300) { // 5 分鐘 = 300 秒
+                    $.ajax({
+                        url: '/auth/get_checkcode',
+                        type: 'post',
+                        success: (response) => {
+                            if (response == 'success') {
+                                // 成功取得驗證碼
+                                if (this.getCheckcodeInterval != null) {
+                                    clearInterval(this.getCheckcodeInterval);
+                                }
+                                this.startCountdown(); // 启动倒计时
+                                console.log(response);
+                            }
+                        }
+                    });
+                } else {
+                    alert('您需要等待 ' + (300 - timeDiff) + ' 秒後才能再次取得驗證碼');
+                }
+            },
+            checkcodeConfirm(code) {
+                $.ajax({
+                    url: '/auth/compare_checkcode/' + code,
+                    type: 'post',
+                    success: function(response) {
+                        if (response == 'success') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                })
             },
             add_cart() {
                 // 檢查登入

@@ -207,7 +207,7 @@
                                             </div>
                                         </div>
                                     <?php endif; ?>
-                                    <? if ($this->is_partnertoys) : ?>
+                                    <? if ($this->is_partnertoys || $this->is_liqun_food) : ?>
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="free" for="safe_inventory">安全庫存量</label>
@@ -475,10 +475,11 @@
                                             <th style="width: 10%;">操作</th>
                                         <?php elseif ($this->is_liqun_food) : ?>
                                             <th style="width: 20%;">名稱</th>
-                                            <th style="width: 10%;">貨號</th>
-                                            <th style="width: 10%;">價格</th>
+                                            <th style="width: 20%;">貨號</th>
+                                            <th style="width: 10%;">原價</th>
                                             <th style="width: 10%;">方案價</th>
-                                            <th style="width: 20%;">描述</th>
+                                            <th style="width: 10%;">庫存量</th>
+                                            <!-- <th style="width: 10%;">描述</th> -->
                                             <th style="width: 10%;">限購數量</th>
                                             <th style="width: 10%;">圖片</th>
                                             <th style="width: 10%;">操作</th>
@@ -529,7 +530,8 @@
                                                     <td><?php echo $row['cargo_id']; ?></td>
                                                     <td><?php echo $row['price']; ?></td>
                                                     <td><?php echo $row['current_price']; ?></td>
-                                                    <td><?php echo $row['description']; ?></td>
+                                                    <td><?php echo $row['quantity']; ?></td>
+                                                    <!-- <td><?php echo $row['description']; ?></td> -->
                                                     <td>
                                                         <select class="form-control" name="limit_enable[]" disabled>
                                                             <? if (!empty($row['limit_enable'])) { ?>

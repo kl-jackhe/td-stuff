@@ -182,6 +182,8 @@ class Product extends Admin_Controller
 			$data['seo_title'] = $this->input->post('seo_title');
 			$data['seo_keyword'] = $this->input->post('seo_keyword');
 			$data['seo_description'] = $this->input->post('seo_description');
+		} elseif ($this->is_liqun_food) {
+			$data['safe_inventory'] = $this->input->post('safe_inventory');
 		}
 
 		$product_id = $this->mysql_model->_insert('product', $data);
@@ -344,7 +346,10 @@ class Product extends Admin_Controller
 			if ($this->input->post('product_category') == 1) {
 				$data['booking_date'] = $this->input->post('booking_date');
 			}
+		} elseif ($this->is_liqun_food) {
+			$data['safe_inventory'] = $this->input->post('safe_inventory');
 		}
+
 		$this->db->where('product_id', $id);
 		$this->db->update('product', $data);
 
@@ -407,7 +412,7 @@ class Product extends Admin_Controller
 		$inventory_log = array(
 			'product_id' => $id,
 			'source' => 'ProductEdit',
-			'change_history' => $this->input->post('inventory'),
+			'change_history' => 0.0000,
 			'change_notes' => 'Adjustment',
 		);
 		$this->db->insert('inventory_log', $inventory_log);

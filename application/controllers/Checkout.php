@@ -850,6 +850,17 @@ class Checkout extends Public_Controller
 			);
 			$this->db->insert('order_item', $order_item);
 
+			// 計算商品方案庫存
+			if ($this->is_partnertoys || $this->is_liqun_food) {
+				$self = $this->mysql_model->_select('product_combine', 'id', $cart_item['id'], 'row');
+				$inventory_data = array(
+					'quantity' => ((int)$this_product_combine['quantity'] - (int)$cart_item['qty']),
+				);
+				$this->db->where('id', $cart_item['id']);
+				$this->db->update('product_combine', $inventory_data);
+			}
+
+
 			// liqun 熱門商品功能數量計算
 			if ($this->is_liqun_food) {
 				$tmp_cnt = $this->product_model->getSingleProduct($cart_item['product_id']);

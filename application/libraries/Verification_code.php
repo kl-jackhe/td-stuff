@@ -9,16 +9,14 @@ class Verification_code
 
     function generateVerificationCode()
     {
-        $code = '';
-        for ($i = 0; $i < 6; $i++) {
-            $code .= mt_rand(0, 9);
-        }
-        $time = time() + 600;
+        $code = sprintf("%06d", mt_rand(1, 999999));
+        $time = time() + 20;
 
         $data = array(
             'code' => $code,
             'life' => $time
         );
+
         return $data;
     }
 }

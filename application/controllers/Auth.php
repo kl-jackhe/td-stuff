@@ -23,6 +23,7 @@ class Auth extends Public_Controller
 			$this->load->model('menu_model');
 			$this->load->model('auth_model');
 		elseif ($this->is_liqun_food) :
+			$this->load->library('verification_code');
 			$this->load->library('sms_mitake');
 			$this->load->model('auth_model');
 		endif;
@@ -218,6 +219,24 @@ class Auth extends Public_Controller
 	{
 		$this->load->library('sms_mitake');
 		$this->sms_mitake->send_cul_message();
+	}
+
+	function get_checkcode()
+	{
+		$checkcode = $this->verification_code->generateVerificationCode();
+		$this->session->set_userdata('phone_code', $checkcode['code']); // 記錄驗證碼
+		$this->session->set_userdata('phone_expire', $checkcode['life']); // 記錄壽命
+		$this->session->set_userdata('last_request_time', time()); // 記錄請求時間
+
+		echo 'success';
+	}
+
+	function compare_checkcode()
+	{
+		$now = time();
+		if (!empty($this->session->userdata('phone_code')) && $this->session->userdata('phone_code') > $now) {
+		} else {
+		}
 	}
 
 	function language_switch()

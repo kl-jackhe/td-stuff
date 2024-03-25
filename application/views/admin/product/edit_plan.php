@@ -22,7 +22,6 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="general">
                         <div class="row">
-
                             <? if ($this->is_td_stuff) : ?>
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -96,14 +95,10 @@
                                         <input type="text" class="form-control" id="product_combine_current_price" name="product_combine_current_price" value="<? echo $product_combine['current_price'] ?>" required>
                                     </div>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="any_specification">開啟任意規格</label>
-                                        <? if ($product_combine['type'] == 1) { ?>
-                                            <input id="any_specification" name="any_specification" type="checkbox" value="1" checked>
-                                        <? } else { ?>
-                                            <input id="any_specification" name="any_specification" type="checkbox">
-                                        <? } ?>
+                                        <label for="product_combine_quantity">庫存量</label>
+                                        <input type="text" class="form-control" id="product_combine_quantity" name="product_combine_quantity" value="<? echo $product_combine['quantity'] ?>" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
