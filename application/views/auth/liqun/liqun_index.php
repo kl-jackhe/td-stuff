@@ -481,7 +481,7 @@
         var password = $('#password').val();
         var password_confirm = $('#password_confirm').val();
         var check_code = $('#checkcode').val();
-        var agreeCheckbox = document.getElementById('agree');
+        // var agreeCheckbox = document.getElementById('agree');
         var email_ok = $('#email_ok').val();
 
         if (identity == '') {
@@ -519,10 +519,10 @@
             return;
         }
 
-        if (!agreeCheckbox.checked) {
-            $('#error_text').html('請勾選同意網站服務條款');
-            return;
-        }
+        // if (!agreeCheckbox.checked) {
+        //     $('#error_text').html('請勾選同意網站服務條款');
+        //     return;
+        // }
 
         // 待修正
         if (password == password_confirm) {

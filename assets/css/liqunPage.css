@@ -860,6 +860,7 @@ label.required::before {
 }
 
 #memberOrderList {
+    min-height: 540px;
     box-shadow: 6px 6px 20px grey;
     padding: 30px 60px;
     margin: 50px 0 60px 0;
