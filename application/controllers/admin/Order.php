@@ -538,6 +538,17 @@ class Order extends Admin_Controller
 			}
 		}
 
+		if ($this->is_liqun_food) {
+			// if ($step == 'pay_ok' || $step == 'process' || $step == 'confirm' || $step == 'invalid') {
+			// 	$this->order_synchronize($id);
+			// } else {
+			// 	$this->order_update_synchronize($id);
+			// }
+			if ($step != 'invalid') {
+				$this->order_synchronize($id);
+			}
+		}
+
 		//庫存回補
 		if ($step == 'order_cancel' && !empty($this_order_item) && !empty($this_order)) {
 			$inventory = array();
@@ -730,6 +741,12 @@ class Order extends Admin_Controller
 		$api_url = '';
 		if ($this->is_td_stuff) {
 			$api_url = 'http://erp.vei-star.com';
+		}
+		if ((strpos(base_url(), 'test01.liqun-food.com') !== false)){
+			$api_url = 'http://test-lichun.kuangli.tw';
+		}
+		if ((strpos(base_url(), 'akai-shop.com') !== false)){
+			$api_url = 'http://system.liqun-food.com';
 		}
 
 		$this_order = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
