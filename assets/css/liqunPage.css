@@ -849,6 +849,37 @@ a {
     text-decoration: none;
 }
 
+
+#randomCheckcode.disabled-overlay {
+    cursor: none;
+    pointer-events: none;
+    /* 禁用鼠标事件 */
+}
+
+#randomCheckcode.disabled-overlay::after {
+    cursor: none;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* 半透明背景 */
+    z-index: 1;
+    /* 确保覆盖在链接之上 */
+}
+
+#checkoutRandomCheckcode:hover {
+    text-decoration: none;
+}
+
+.checkoutHintJoinMember {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .paddingFixTop {
     padding: 30px;
 }
@@ -1092,12 +1123,23 @@ label.required::before {
 
 .select_product {
     display: inline-block;
-    background-color: #f6d523;
     color: #000 !important;
     width: 50%;
     line-height: 1.8;
     padding: 0;
     margin-bottom: 10px;
+}
+
+.productSaleStatusOne {
+    background-color: #f6d523;
+}
+
+.productSaleStatusTwo {
+    background-color: #817F82;
+}
+
+.productSaleStatusThree {
+    background-color: #A60747;
 }
 
 .product_box,

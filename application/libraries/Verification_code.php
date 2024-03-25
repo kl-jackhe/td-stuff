@@ -10,7 +10,7 @@ class Verification_code
     function generateVerificationCode()
     {
         $code = sprintf("%06d", mt_rand(1, 999999));
-        $time = time() + 20;
+        $time = time() + 300;
 
         $data = array(
             'code' => $code,

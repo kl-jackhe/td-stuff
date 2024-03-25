@@ -180,7 +180,7 @@ foreach ($this->cart->contents() as $items) {
 <div role="main" class="main" id="liqun_checkout">
     <section class="form-section content_auto_h">
         <?php $attributes = array('id' => 'checkout_form'); ?>
-        <?php echo form_open('checkout/save_order', $attributes); ?>
+        <?= form_open('checkout/save_order', $attributes); ?>
         <div class="container">
             <div class="row justify-content-center" style="padding-left: 25px; padding-right: 25px;position: relative;">
                 <div class="stpes" style="width: 70%;position: absolute;top: 52px;">
@@ -192,7 +192,14 @@ foreach ($this->cart->contents() as $items) {
                 <div id="wizard" class="wizard">
                     <h3>確認訂單</h3>
                     <section id="confirm_order">
-                        <h3 style="margin-top: 0px;">您共選擇 (<?= $count ?> 個項目)</h3>
+                        <div class="mb-5" style="position:relative;">
+                            <h3 class="mt-0">您共選擇 (<?= $count ?> 個項目)</h3>
+                            <? if ($this->session->userdata()) : ?>
+                                <div class="checkoutHintJoinMember">
+                                    <a href="javascript:void(0)" onclick="goToRegister()" class="btn btn-primary">加入會員</a>
+                                </div>
+                            <? endif; ?>
+                        </div>
                         <input type="hidden" name="checking_cargos_value" id="checking_cargos_value" value="<?= $count ?>">
                         <table class="table table-hover m_table_none">
                             <thead>
@@ -203,7 +210,8 @@ foreach ($this->cart->contents() as $items) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $i = 1;
+                                <?
+                                $i = 1;
                                 $product_list = array();
                                 foreach ($this->cart->contents() as $items) :
                                     $tmp_tag_content = $this->mysql_model->_select('product_tag_content', 'product_id', $items['product_id']);
@@ -229,24 +237,24 @@ foreach ($this->cart->contents() as $items) {
                                     }
                                 ?>
                                     <tr style="border-top:1px solid dimgray;">
-                                        <td><?= $i ?></td>
+                                        <td><?= $i++ ?></td>
                                         <td>
                                             <? if ($agentID == '') { ?>
                                                 <a href="product/view/<?= $items['product_id'] ?>">
                                                     <?php $image = get_product_combine($items['id'], 'picture'); ?>
                                                     <?php if ($image != '') { ?>
-                                                        <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
+                                                        <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?= $image; ?>" alt="<?= $items['name']; ?>">
                                                     <?php } ?>
                                                 </a>
                                             <? } else { ?>
                                                 <?php $image = get_product_combine($items['id'], 'picture'); ?>
                                                 <?php if ($image != '') { ?>
-                                                    <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?php echo $image; ?>" alt="<?php echo $items['name']; ?>">
+                                                    <img id="zoomA" style="width: 100%;" src="/assets/uploads/<?= $image; ?>" alt="<?= $items['name']; ?>">
                                                 <?php } ?>
                                             <? } ?>
                                         </td>
                                         <td>
-                                            <p><?php echo $items['name']; ?></p>
+                                            <p><?= $items['name']; ?></p>
                                             <?php
                                             $this->db->where('product_combine_id', $items['id']);
                                             $query = $this->db->get('product_combine_item');
@@ -278,26 +286,25 @@ foreach ($this->cart->contents() as $items) {
                                                     </p><? }
                                                 }
                                                         ?>
-                                            <p>金額：$ <?php echo $items['price']; ?></p>
+                                            <p>金額：$ <?= $items['price']; ?></p>
                                             <p>
                                                 數量：
                                                 <span class="input-group-btn inlineBlock">
-                                                    <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>">
+                                                    <button type="button" class="btn btn-number button_border_style_l" data-type="minus" data-field="quant[<?= $items["rowid"] ?>]" data-reword-id="<?= $items["rowid"] ?>">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                 </span>
-                                                <input type="text" <?php echo $items["rowid"] ?> name="quant[<?php echo $items["rowid"] ?>]" class="input_border_style inlineBlock qtyInputBox" value="<?php echo $items['qty']; ?>" data-reword-id="<?php echo $items["rowid"] ?>" min='1' max='100'>
+                                                <input type="text" <?= $items["rowid"] ?> name="quant[<?= $items["rowid"] ?>]" class="input_border_style inlineBlock qtyInputBox" value="<?= $items['qty']; ?>" data-reword-id="<?= $items["rowid"] ?>" min='1' max='100'>
                                                 <span class="input-group-btn inlineBlock">
-                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?php echo $items["rowid"] ?>]" data-reword-id="<?php echo $items["rowid"] ?>">
+                                                    <button type="button" class="btn btn-number button_border_style_r" data-type="plus" data-weight="<?= !empty($items['options']['weight']) ? $items['options']['weight'] : 0; ?>" data-field="quant[<?= $items["rowid"] ?>]" data-reword-id="<?= $items["rowid"] ?>">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </span>
                                             </p>
-                                            <p>小計：<span id="subtotal_<?= $items["rowid"] ?>" style="color: #dd0606">$ <?php echo $items['subtotal']; ?></span></p>
+                                            <p>小計：<span id="subtotal_<?= $items["rowid"] ?>" style="color: #dd0606">$ <?= $items['subtotal']; ?></span></p>
                                         </td>
                                     </tr>
-                                    <?php $i++; ?>
-                                <?php endforeach; ?>
+                                <? endforeach; ?>
                             </tbody>
                         </table>
                         <hr>
@@ -342,6 +349,12 @@ foreach ($this->cart->contents() as $items) {
                             <br>
                             <hr>
                         <?php endif; ?>
+                        <? if ($this->session->userdata()) : ?>
+                            <span class="redContent">✳︎&nbsp;現在加入會員即可獲得一張100元優惠券，單筆訂單滿399即可使用！</span>
+                            <br>
+                            <br>
+                            <br>
+                        <? endif; ?>
                         <span style="text-align:right;">購物車小計：
                             <span class="cart_total_display" style="color: #dd0606;font-weight: bold;"> $0.00</span>
                         </span>
@@ -359,7 +372,7 @@ foreach ($this->cart->contents() as $items) {
                             <div class="col-12 row">
                                 <div class="col-12">
                                     <h3 style="margin: 0px;">購物車小計：<span class="cart_total_display" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
-                                    <!-- <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?php echo  $this->cart->total() ?></span></h3> -->
+                                    <!-- <h3 style="margin: 0px;">購物車小計：<span style="font-size:24px;color: #dd0606;">$ <?= $this->cart->total() ?></span></h3> -->
                                     <input type="hidden" id="cart_total" name="cart_total" value="">
                                 </div>
                                 <div class="col-12">
@@ -367,7 +380,7 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12">
                                     <h3 class="mt-0">購物須知</h3>
-                                    <textarea class="form-control" cols="30" rows="3" disabled><?= get_setting_general('shopping_notes') ?></textarea>
+                                    <textarea class="form-control redContent" cols="30" rows="3" disabled><?= get_setting_general('shopping_notes') ?></textarea>
                                     <!-- <p>1. 目前訂單量較多，預計3-5個工作天內出貨(不含假日)。</p>
                                     <p style="color:#dd0606;">2. 超商取貨者，請務必確認手機號碼是否正確。</p> -->
                                 </div>
@@ -415,7 +428,7 @@ foreach ($this->cart->contents() as $items) {
                                             }
                                         }
                                     }
-                                    $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost');
+                                    $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost, limit_weight');
                                     if (!empty($deliveryList)) {
                                         $deliveryIdList = array();
                                         foreach ($deliveryList as $key => $value) {
@@ -426,19 +439,14 @@ foreach ($this->cart->contents() as $items) {
                                     $this->db->where('delivery_status', 1);
                                     $d_query = $this->db->get('delivery')->result_array();
 
-                                    $delivery_count = 0;
                                     foreach ($d_query as $d_row) {
-                                        $weight_limit = '';
-                                        if (($total_weight >= 5.00 && $d_row['delivery_name_code'] == 'family_pickup') || $is_frozen && $d_row['delivery_name_code'] == 'family_pickup') {
-                                            $weight_limit = 'disabled';
-                                        } elseif ($total_weight >= 5.00 && $d_row['delivery_name_code'] == 'family_limit_5_frozen_pickup') {
-                                            $weight_limit = 'disabled';
-                                        } elseif ($total_weight >= 10.00 && $d_row['delivery_name_code'] == 'family_limit_10_frozen_pickup') {
-                                            $weight_limit = 'disabled';
+                                        $frozen_limit = '';
+                                        if ($is_frozen && ($d_row['delivery_name_code'] == '711_pickup' || $d_row['delivery_name_code'] == 'family_pickup' || $d_row['delivery_name_code'] == 'home_delivery')) {
+                                            $frozen_limit = 'disabled';
                                         }
                                     ?>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?= $weight_limit ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_delivery" id="<?= $d_row['delivery_name_code']; ?>" data-limit-weight="<?= $d_row['limit_weight'] ?>" data-shipping-fee="<?= $d_row['shipping_cost'] ?>" value="<?= $d_row['delivery_name_code']; ?>" <?= $frozen_limit ?>>
                                             <label class="form-check-label" for="checkout_delivery<?= $d_row['delivery_name_code']; ?>">
                                                 <?= $d_row['delivery_name'] ?>
                                             </label>
@@ -446,9 +454,7 @@ foreach ($this->cart->contents() as $items) {
                                                 <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $d_row['delivery_info']; ?></p>
                                             <? } ?>
                                         </div>
-                                    <?
-                                        $delivery_count++;
-                                    } ?>
+                                    <? } ?>
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
@@ -456,7 +462,7 @@ foreach ($this->cart->contents() as $items) {
                                     foreach ($payment as $row) { ?>
                                         <div class="form-check <?php // echo ($row['payment_code']=='ecpay'?'d-none':'') 
                                                                 ?>">
-                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>" <?php echo ($payment_count == 0 ? 'checked' : '') ?>>
+                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>" <?= ($payment_count == 0 ? 'checked' : '') ?>>
                                             <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
                                                 <?= $row['payment_name'] ?>
                                             </label>
@@ -471,12 +477,14 @@ foreach ($this->cart->contents() as $items) {
                                     <hr>
                                 </div>
                                 <div class="col-12">
+                                    <h3 id="exceedView" class="mt-0">超重加收：<span id="exceed_weight" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <h3 class="mt-0">運費：<span id="shipping_fee" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <h3 class="mt-0">總計：<span id="total_amount_view" style="font-size:24px;color: #dd0606;"> $0.00</span></h3>
                                     <h3 class="mt-0">計重：<span class="cart_weight_display" style="font-size:24px;color: #dd0606;"> 0.00</span></h3>
-                                    <input type="hidden" id="shipping_amount" name="shipping_amount" value="">
-                                    <input type="hidden" id="total_amount" name="total_amount" value="">
-                                    <input type="hidden" id="weight_amount" name="weight_amount" value="">
+                                    <input type="hidden" id="weight_exceed_amount" name="weight_exceed_amount">
+                                    <input type="hidden" id="shipping_amount" name="shipping_amount">
+                                    <input type="hidden" id="total_amount" name="total_amount">
+                                    <input type="hidden" id="weight_amount" name="weight_amount">
                                 </div>
                             </div>
                         </div>
@@ -489,19 +497,19 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">姓名</span>
                                     </div>
-                                    <input type="text" class="form-control" name="name" id="name" value="<?php echo $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
+                                    <input type="text" class="form-control" name="name" id="name" value="<?= $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">電話</span>
                                     </div>
-                                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
+                                    <input type="text" class="form-control" name="phone" id="phone" value="<?= $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Email</span>
                                     </div>
-                                    <input type="text" class="form-control" name="email" id="email" value="<?php echo $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
+                                    <input type="text" class="form-control" name="email" id="email" value="<?= $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
@@ -521,22 +529,23 @@ foreach ($this->cart->contents() as $items) {
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">地址</span>
                                     </div>
-                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?php echo $user_data['address'] ?>">
+                                    <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?= $user_data['address'] ?>">
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">門市編號</span>
                                     </div>
-                                    <input type="text" class="form-control" name="storeid" id="storeid" value="<?php echo $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
+                                    <input type="text" class="form-control" name="storeid" id="storeid" value="<?= $this->input->get('storeid') ?>" placeholder="門市編號" readonly>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 supermarket">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">取貨門市</span>
                                     </div>
-                                    <input type="text" class="form-control" name="storename" id="storename" value="<?php echo $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
-                                    <input type="hidden" class="form-control" name="ReservedNo" id="ReservedNo" value="<?php echo $this->input->get('ReservedNo') ?>" readonly>
+                                    <input type="text" class="form-control" name="storename" id="storename" value="<?= $this->input->get('storename') ?>" placeholder="門市名稱" readonly>
+                                    <input type="hidden" class="form-control" name="storeaddress" id="storeaddress" value="<?= $this->input->get('storeaddress') ?>" readonly>
+                                    <input type="hidden" class="form-control" name="ReservedNo" id="ReservedNo" value="<?= $this->input->get('ReservedNo') ?>" readonly>
                                     <div style="width: 100%; margin-top: 15px;">
-                                        <span class="btn btn-primary" onclick="select_fm_cvs();">選擇門市</span>
+                                        <span class="btn btn-primary" onclick="select_cvs();">選擇門市</span>
                                     </div>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
@@ -545,49 +554,57 @@ foreach ($this->cart->contents() as $items) {
                                     </div>
                                     <textarea class="form-control" name="remark" id="remark" rows="3"></textarea>
                                 </div>
-                                <div class="input-group col-12 col-sm-8 mb-3" style="display: <?= ($this->session->userdata('member_join_status') == 'IsJoin' ? 'none' : 'show') ?>;">
-                                    <div class="input-group-prepend become_member_quickly" onclick="changeBecomeMemberQuickly()" style="cursor: pointer;">
-                                        <span class="input-group-text">
-                                            <i class="fa-regular fa-square"></i>
-                                            <i class="fa-regular fa-square-check" style="display:none;"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control" value="快速成為會員" disabled>
-                                </div>
-                                <div class="input-group col-12 col-sm-8 mb-3 joinMember" style="display:none;">
-                                    <input type="hidden" value="" id="become_member_quickly" name="become_member_quickly">
-                                    <div class="input-group pb-2">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">帳號</span>
+                                <? if (empty($this->session->userdata('user_id'))) : ?>
+                                    <? if ($this->is_liqun_food) : ?>
+                                        <div style="display: block;" class="input-group mb-3 col-12 col-sm-8 text-right">
+                                            <a href="javascript:void(0)" onclick="goToRegister()" class="btn btn-primary">加入會員享優惠</a>
                                         </div>
-                                        <input type="text" class="form-control" id="account" name="account" value="" readonly>
-                                    </div>
-                                    <div>
-                                        <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
-                                    </div>
-                                    <div class="input-group pb-2">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">密碼</span>
+                                    <? else : ?>
+                                        <div class="input-group col-12 col-sm-8 mb-3" style="display: <?= ($this->session->userdata('member_join_status') == 'IsJoin' ? 'none' : 'show') ?>;">
+                                            <div class="input-group-prepend become_member_quickly" onclick="changeBecomeMemberQuickly()" style="cursor: pointer;">
+                                                <span class="input-group-text">
+                                                    <i class="fa-regular fa-square"></i>
+                                                    <i class="fa-regular fa-square-check" style="display:none;"></i>
+                                                </span>
+                                            </div>
+                                            <input type="text" class="form-control" value="快速成為會員" disabled>
                                         </div>
-                                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="請輸入密碼">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" onclick="passwordShowOrHide('password')">
-                                                <i class="fa-solid fa-eye" id="password_eye"></i>
-                                            </span>
+                                        <div class="input-group col-12 col-sm-8 mb-3 joinMember" style="display:none;">
+                                            <input type="hidden" value="" id="become_member_quickly" name="become_member_quickly">
+                                            <div class="input-group pb-2">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">帳號</span>
+                                                </div>
+                                                <input type="text" class="form-control" id="account" name="account" value="" readonly>
+                                            </div>
+                                            <div>
+                                                <span style="font-size: 16px;color: red;">※密碼請輸入 8 位(含)以上的數字或英文</span>
+                                            </div>
+                                            <div class="input-group pb-2">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">密碼</span>
+                                                </div>
+                                                <input type="password" class="form-control" id="password" name="password" value="" placeholder="請輸入密碼">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" onclick="passwordShowOrHide('password')">
+                                                        <i class="fa-solid fa-eye" id="password_eye"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="input-group pb-2">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">密碼確認</span>
+                                                </div>
+                                                <input type="password" class="form-control" id="password_confirm" name="password_confirm" value="" placeholder="請輸入密碼確認">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
+                                                        <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">密碼確認</span>
-                                        </div>
-                                        <input type="password" class="form-control" id="password_confirm" name="password_confirm" value="" placeholder="請輸入密碼確認">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text" onclick="passwordShowOrHide('password_confirm')">
-                                                <i class="fa-solid fa-eye" id="password_confirm_eye"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <? endif; ?>
+                                <? endif; ?>
                             </div>
                         </div>
                     </section>
@@ -624,11 +641,35 @@ foreach ($this->cart->contents() as $items) {
                 <? } ?>
             </div>
         </div>
-        <?php echo form_close() ?>
+        <?= form_close() ?>
     </section>
 </div>
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
+
+<script>
+    function goToRegister() {
+        $.ajax({
+            url: '/encode/getDataEncode/category',
+            type: 'post',
+            data: {
+                category: 2,
+            },
+            success: (response) => {
+                if (response) {
+                    if (response.result == 'success') {
+                        window.location.href = <?= json_encode(base_url()) ?> + 'auth/?' + response.src;
+                    } else {
+                        console.log('error.');
+                    }
+                } else {
+                    console.log(response);
+                }
+            },
+        });
+    }
+</script>
+
 <!-- 手填購物車 -->
 <script>
     $(document).ready(function() {
@@ -737,14 +778,16 @@ foreach ($this->cart->contents() as $items) {
     $(document).ready(function() {
         // 初始化購物車總計
         var coupon_type = '';
+        var selfnum = 0;
         var cart_amount = 0;
         var cart_weight = 0.000;
         var shipping_amount = 0;
         var initialShippingFee = 0;
-        var initialCartTotal = parseInt(<?php echo $this->cart->total() ?>);
-        var initialCartWeight = parseFloat(<?php echo $total_weight ?>);
+        var initialCartTotal = parseInt(<?= $this->cart->total() ?>);
+        var initialCartWeight = parseFloat(<?= $total_weight ?>);
         cart_amount = initialCartTotal;
         cart_weight = initialCartWeight;
+        $('#exceedView').css('display', 'none');
         $('#cart_total').val(cart_amount);
         $('#weight_amount').val(cart_weight);
         $('.cart_total_display').text(' $' + cart_amount);
@@ -754,8 +797,8 @@ foreach ($this->cart->contents() as $items) {
         shipping_amount = parseInt(initialShippingFee);
         $('#shipping_fee').text(' $' + shipping_amount);
         $('#shipping_amount').val(shipping_amount);
-        $('#total_amount').val(cart_amount + shipping_amount);
-        $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+        $('#total_amount').val(cart_amount + shipping_amount + selfnum);
+        $('#total_amount_view').text(' $' + (cart_amount + shipping_amount + selfnum));
 
         $('.couponTitle span').click(function() {
             // 已選COUPON
@@ -829,24 +872,37 @@ foreach ($this->cart->contents() as $items) {
                 $('#cart_total').val(cart_amount);
 
                 // 更新總計
-                $('#total_amount').val(cart_amount + shipping_amount);
-                $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+                $('#total_amount').val(cart_amount + shipping_amount + selfnum);
+                $('#total_amount_view').text(' $' + (cart_amount + shipping_amount + selfnum));
             }
         });
 
         // 更改運送方式
         $('input[name="checkout_delivery"]').change(function() {
             var shippingFee = $(this).data('shipping-fee');
+            var limitWeight = $(this).data('limit-weight');
             if (coupon_type == 'free_shipping') {
                 var shippingFee = 0;
+            }
+
+            if (cart_weight > limitWeight) {
+                selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
+                $('#weight_exceed_amount').val(selfnum);
+                $('#exceedView').css('display', 'block');
+                $('#exceed_weight').text(' $' + selfnum);
+            } else {
+                selfnum = 0;
+                $('#weight_exceed_amount').val(selfnum);
+                $('#exceedView').css('display', 'none');
+                $('#exceed_weight').text(' $' + selfnum);
             }
 
             // 当选择框改变时的逻辑
             shipping_amount = parseInt(shippingFee);
             $('#shipping_fee').text(' $' + shipping_amount);
             $('#shipping_amount').val(shipping_amount);
-            $('#total_amount').val(cart_amount + shipping_amount)
-            $('#total_amount_view').text(' $' + (cart_amount + shipping_amount));
+            $('#total_amount').val(cart_amount + shipping_amount + selfnum)
+            $('#total_amount_view').text(' $' + (cart_amount + shipping_amount + selfnum));
         });
     });
 </script>
@@ -903,8 +959,7 @@ foreach ($this->cart->contents() as $items) {
             if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
                 $('.delivery_address').hide();
                 $('.supermarket').show();
-            }
-            if (delivery == 'home_delivery') {
+            } else {
                 $('.delivery_address').show();
                 $('.supermarket').hide();
             }
@@ -1098,6 +1153,9 @@ foreach ($this->cart->contents() as $items) {
         if ($('#cart_total').val() != '') {
             data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
         }
+        if ($('#weight_exceed_amount').val() != '') {
+            data += '<tr><td>超重加收</td><td>$' + $('#weight_exceed_amount').val() + '</td></tr>';
+        }
         if ($('#shipping_amount').val() != '') {
             data += '<tr><td>運費</td><td>$' + $('#shipping_amount').val() + '</td></tr>';
         }
@@ -1171,42 +1229,66 @@ foreach ($this->cart->contents() as $items) {
         });
     });
 
-    function select_fm_cvs() {
+    // cvs map
+    function select_cvs() {
+        $('#storeid').val('');
+        $('#storename').val('');
+        $('#storeaddress').val('');
+        $('#ReservedNo').val('');
+
         set_user_data();
+
         // checked radio val
         var selectedDelivery = $("input[name='checkout_delivery']:checked").val();
+
         // 手機版cookie存取checked radio val
         document.cookie = "selectedDelivery=" + selectedDelivery;
-        // 是否為手機
-        var isMobile = <?php echo json_encode(wp_is_mobile()) ?>;
-        // 串至全家地圖
-        var route = '<?php echo base_url(); ?>fmtoken/fm_map';
-        if (selectedDelivery == 'family_limit_5_frozen_pickup') {
-            route = '<?php echo base_url(); ?>fmtoken/fm_map/true/S60';
-        } else if (selectedDelivery == 'family_limit_10_frozen_pickup') {
-            route = '<?php echo base_url(); ?>fmtoken/fm_map/true/S105';
-        }
 
-        if (isMobile) {
-            // 導入串全家地圖並給cvsmap判斷是否為mobile
-            window.open(route, "選擇門市");
+        // 是否為手機
+        var isMobile = <?= json_encode(wp_is_mobile()) ?>;
+
+        if (selectedDelivery === 'family_limit_10_frozen_pickup' || selectedDelivery === 'family_limit_5_frozen_pickup') {
+            // 串至全家地圖
+            var route = '<?= base_url(); ?>fmtoken/fm_map';
+            if (selectedDelivery === 'family_limit_5_frozen_pickup') {
+                route = '<?= base_url(); ?>fmtoken/fm_map/true/S60';
+            } else if (selectedDelivery === 'family_limit_10_frozen_pickup') {
+                route = '<?= base_url(); ?>fmtoken/fm_map/true/S105';
+            }
+
+            if (isMobile) {
+                // 導入串全家地圖並給cvsmap判斷是否為mobile
+                window.open(route, "選擇門市");
+            } else {
+                // 開新視窗串全家地圖cvsmap
+                window.open(route, "選擇門市", "width=1024,height=768");
+            }
         } else {
-            // 開新視窗串全家地圖cvsmap
-            window.open(route, "選擇門市", "width=1024,height=768");
+            // 串至綠界地圖
+            var route = '<?= base_url(); ?>checkout/cvsmap?checkout=' + selectedDelivery + '';
+
+            if (isMobile) {
+                // 導入串綠界地圖並給cvsmap判斷是否為mobile
+                window.open(route, "選擇門市");
+            } else {
+                // 開新視窗串綠界地圖cvsmap
+                window.open(route, "選擇門市", "width=1024,height=768");
+            }
         }
     }
 
     function select_store_info() {
         set_user_data();
         <?php if (wp_is_mobile()) { ?>
-            $(window).attr('location', 'https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
+            $(window).attr('location', 'https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?= 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
         <?php } else { ?>
-            window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
+            window.open("https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?= 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info.php' ?>", "選擇門市", "width=1024,height=768");
         <?php } ?>
-        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?php echo 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
+        // $(window).attr('location','https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=<?= 'https://' . $_SERVER['HTTP_HOST'] . '/get_store_info_location.php' ?>');
     }
 
-    function set_store_info(storename = '', storeaddress = '') {
+    function set_store_info(storeid = '', storename = '', storeaddress = '') {
+        $("#storeid").val(storeid);
         $("#storename").val(storename);
         $("#storeaddress").val(storeaddress);
     }

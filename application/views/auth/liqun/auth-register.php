@@ -76,13 +76,14 @@
                                 <div class="form-group" style="position:relative;">
                                     <label class="required" for="checkcode">簡訊驗證碼</label>
                                     <input type="text" class="form-control" id="checkcode" name="checkcode" placeholder="請輸入簡訊驗證碼" autocomplete="off" required <? empty($this->session->userdata('phone_code')) ? 'readonly' : '' ?>>
-                                    <a href="javascript:void(0)" @click="getCheckcode()" id="randomCheckcode" class="transitionAnimation" :disabled="isCountingDown">{{ countdownText }}</a>
+                                    <a href="javascript:void(0)" @click="getCheckcode()" id="randomCheckcode" class="transitionAnimation" :class="{ 'disabled-overlay': isCountingDown }">{{ countdownText }}</a>
                                 </div>
                             </div>
                         </div>
                         <?
                         echo '<pre>';
                         print_r($this->session->userdata());
+                        echo 'now : ' . time();
                         echo '</pre>';
                         ?>
                         <!-- <div class="row">

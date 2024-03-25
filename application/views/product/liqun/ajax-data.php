@@ -26,8 +26,8 @@
               <div class="product_content">
                 <span class="product_name"><?= $product['product_name']; ?></span><br><br>
               </div>
-              <div class="select_product text-center">
-                <span <?= ($product['sales_status'] == 0) ? '' : ($product['sales_status'] == 1 ? 'style="background: #817F82;"' : 'style="background: #A60747;"') ?>><?= ($product['sales_status'] == 0) ? '現貨' : ($product['sales_status'] == 1 ? '售完' : '預購') ?></span>
+              <div class="select_product text-center <?= ($product['sales_status'] == 0) ? 'productSaleStatusOne' : ($product['sales_status'] == 1 ? 'productSaleStatusTwo' : 'productSaleStatusThree') ?>">
+                <span><?= ($product['sales_status'] == 0) ? '現貨' : ($product['sales_status'] == 1 ? '售完' : '預購') ?></span>
               </div>
             </div>
           </a>

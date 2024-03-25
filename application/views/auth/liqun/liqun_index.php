@@ -184,7 +184,7 @@
 
                     setTimeout(() => {
                         document.getElementById('orderMessageTable').scrollIntoView();
-                    }, 300); // 延遲300毫秒以確保元素已經正確加載
+                    }, 60); // 延遲60毫秒以確保元素已經正確加載
                 }
                 if (this.getCategory && this.getCategory.length > 0) {
                     this.selectedCategoryId = this.getCategory;
@@ -399,11 +399,11 @@
                 var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
                 var timeDiff = currentTime - lastRequestTime;
 
-                if (timeDiff >= 300) {
+                if (timeDiff >= 60) {
                     clearInterval(this.getCheckcodeInterval);
-                    $('#randomCheckcode').prop('disabled', false);
                 } else {
-                    var remaining = 300 - timeDiff;
+                    this.isCountingDown = true; // 设置倒计时状态为true
+                    var remaining = 60 - timeDiff;
                     $('#randomCheckcode').text('請等待 ' + remaining + ' 秒');
 
                     let countdown = remaining; // 倒計時初始值
@@ -420,8 +420,8 @@
             },
             startCountdown() {
                 this.isCountingDown = true; // 设置倒计时状态为true
-                this.countdownText = '請等待 300 秒'; // 初始化倒計時文本
-                let countdown = 300; // 倒計時初始值
+                this.countdownText = '請等待 60 秒'; // 初始化倒計時文本
+                let countdown = 60; // 倒計時初始值
                 this.countdownInterval = setInterval(() => {
                     countdown--;
                     this.countdownText = `請等待 ${countdown} 秒`;
@@ -433,19 +433,24 @@
                 }, 1000);
             },
             getCheckcode() {
+                if ($('#identity').val() == '') {
+                    alert('請先填寫手機號碼。');
+                    return;
+                }
+
                 var currentTime = Math.floor(Date.now() / 1000);
                 var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
                 var timeDiff = currentTime - lastRequestTime;
 
-                if (timeDiff >= 300) { // 5 分鐘 = 300 秒
+                if (timeDiff >= 60) { // 1 分鐘 = 60 秒
                     $.ajax({
                         url: '/auth/get_checkcode',
                         type: 'post',
                         success: (response) => {
                             if (response == 'success') {
                                 // 成功取得驗證碼
-                                if (this.getCheckcodeInterval != null) {
-                                    clearInterval(this.getCheckcodeInterval);
+                                if (this.countdownInterval) {
+                                    clearInterval(this.countdownInterval);
                                 }
                                 this.startCountdown(); // 启动倒计时
                                 console.log(response);
@@ -453,21 +458,8 @@
                         }
                     });
                 } else {
-                    alert('您需要等待 ' + (300 - timeDiff) + ' 秒後才能再次取得驗證碼');
+                    alert('您需要等待 ' + (60 - timeDiff) + ' 秒後才能再次取得驗證碼');
                 }
-            },
-            checkcodeConfirm(code) {
-                $.ajax({
-                    url: '/auth/compare_checkcode/' + code,
-                    type: 'post',
-                    success: function(response) {
-                        if (response == 'success') {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                })
             },
             add_cart() {
                 // 檢查登入
@@ -509,7 +501,7 @@
                         // 等待3秒後執行跳轉
                         setTimeout(() => {
                             window.location.href = <?= json_encode(base_url() . 'checkout') ?>;
-                        }, 300);
+                        }, 60);
                     });
             },
             // 頁碼
@@ -530,6 +522,11 @@
             },
         },
     }).mount('#authApp');
+
+    // 非同步問題
+    $(document).ready(function() {
+        check_email();
+    });
 
     function check_email() {
         var email = document.getElementById("email").value;
@@ -594,8 +591,8 @@
             return;
         }
 
-        if (check_code != <?= json_encode($this->session->flashdata('captcha')) ?>) {
-            $('#error_text').html('驗證碼錯誤請重新確認');
+        if (check_code == '') {
+            $('#error_text').html('尚未填寫驗證碼');
             return;
         }
 
@@ -615,39 +612,6 @@
             $('#error_text').html('密碼與確認密碼不符。');
             return;
         }
-    }
-
-    function contact_check() {
-        var number = $('#number').val();
-        var name = $('#name').val();
-        var email = $('#email').val();
-        var content = $('#content').val();
-        var check_code = $('#checkcode').val();
-
-        if (number == '') {
-            $('#error_text').html('尚未填寫聯絡方式');
-            return;
-        }
-
-        if (name == '') {
-            $('#error_text').html('尚未填寫姓名');
-            return;
-        }
-        if (email == '') {
-            $('#error_text').html('尚未填寫E-MAIL');
-            return;
-        }
-        if (content == '') {
-            $('#error_text').html('尚未填寫內容');
-            return;
-        }
-
-        if (check_code != <?= json_encode($this->session->flashdata('captcha')) ?>) {
-            $('#error_text').html('驗證碼錯誤請重新填寫');
-            return;
-        }
-
-        document.getElementById("cantact_us").submit();
     }
 
     // 初始化 Facebook SDK
