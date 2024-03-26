@@ -412,7 +412,7 @@
                                 <?php else : ?>
                                     <!-- 自動產生單號 -->
                                     <div class="mb-15px">
-                                        <button class="btn" onClick="partnertoysEcpOrderBtn(<?= $order['order_id'] ?>)">產生單號</button>
+                                        <button class="btn" onClick="ecpOrderBtn(<?= $order['order_id'] ?>)">產生單號</button>
                                     </div>
                                 <?php endif; ?>
                             <?php else : ?>
@@ -508,16 +508,7 @@
                                 <? endif; ?>
                             <?php endif; ?>
                         <?php elseif ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'hi_life_pickup') : ?>
-                            <?php if (empty($order['AllPayLogisticsID']) && empty($order['CVSPaymentNo'])) : ?>
-                                <td class="text-center">
-                                    <select id="orderType" class="form-control">
-                                        <option value="ecp_add_order">綠界常溫</option>
-                                    </select>
-                                    <button class="btn" onClick="ecpOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
-                                </td>
-                            <?php else : ?>
-                                <td class="text-center" style="color:#00590c">綠界常溫</td>
-                            <?php endif; ?>
+                            <td class="text-center" style="color:#00590c">綠界常溫</td>
                         <?php else : ?>
                             <td class="text-center">宅配訂單</td>
                         <?php endif; ?>
@@ -525,6 +516,10 @@
                         <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>
                             <td class="text-center">
                                 <a class="btn btn-success" href="/fmtoken/fm_<?= $order['fm_type'] ?>_logistic/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>">產生</a>
+                            </td>
+                        <?php elseif (empty($order['AllPayLogisticsID']) && empty($order['CVSPaymentNo'])) : ?>
+                            <td class="text-center">
+                                <a href="javascript:void(0)" class="btn btn-success" onClick="ecpOrderBtn(<?= $order['order_id'] ?>)">產生</a>
                             </td>
                         <?php else : ?>
                             <td class="text-center"></td>

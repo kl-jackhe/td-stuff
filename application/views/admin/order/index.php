@@ -341,12 +341,6 @@
 <!-- 產生綠界訂單 -->
 <script>
   function ecpOrderBtn(orderId) {
-    var orderType = $('#orderType').val();
-    var url = '/ecptoken/' + orderType + '/' + orderId;
-    window.location.href = url;
-  }
-
-  function partnertoysEcpOrderBtn(orderId) {
     var url = '/ecptoken/ecp_add_order/' + orderId;
     window.location.href = url;
   }
