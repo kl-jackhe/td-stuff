@@ -20,7 +20,7 @@ class MY_Controller extends CI_Controller
 		$this->data['seo_description'] = get_setting_general('meta_description');
 		$this->data['seo_keywords'] = get_setting_general('meta_keywords');
 
-		$this->is_liqun_food = (strpos(base_url(), 'liqun-food') !== false ? true : false);
+		$this->is_liqun_food = (strpos(base_url(), 'akai-shop') !== false ? true : false);
 		$this->is_td_stuff = (strpos(base_url(), 'td-stuff') !== false ? true : false);
 		$this->is_partnertoys = (strpos(base_url(), 'partnertoys') !== false ? true : false);
 		if ($this->is_partnertoys) {
