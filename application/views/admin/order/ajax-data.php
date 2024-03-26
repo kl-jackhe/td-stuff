@@ -185,8 +185,8 @@
                 <th class="text-center">匯款後五碼</th>
                 <th class="text-center">訂單狀態</th>
                 <th class="text-center">物流單號</th>
-                <th class="text-center">新增全家訂單</th>
-                <th class="text-center">產生單號(全家)</th>
+                <th class="text-center">新增訂單</th>
+                <th class="text-center">產生單號</th>
                 <!-- <th class="text-center">銷售頁面</th>
                 <th class="text-center">代言人</th> -->
             <? else : ?>
@@ -436,8 +436,11 @@
                             </select>
                         </td>
                         <!-- 新增物流單 -->
-                        <?php if (!empty($order['AllPayLogisticsID'])) : ?>
-                            <!-- 自動單號 -->
+                        <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
+                            <!-- 綠界自動單號 -->
+                            <td class="text-center"><?= $order['AllPayLogisticsID'] ?></td>
+                        <?php elseif (!empty($order['AllPayLogisticsID'])) : ?>
+                            <!-- 全家自動單號 -->
                             <td class="text-center">
                                 <!-- 物流單列印 -->
                                 <a href="/fmtoken/fm_<?= $order['fm_type'] ?>_print/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>" target="_blank"><?= $order['AllPayLogisticsID'] ?></a>
@@ -466,14 +469,32 @@
                                         </select>
                                         <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
                                     <?php else : ?>
-                                        <span>常溫訂單</span>
+                                        <select id="orderType" class="form-control">
+                                            <option value="fm_add_c2c_order/normal">全家常溫</option>
+                                        </select>
+                                        <button class="btn" onClick="fmOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
                                     <?php endif; ?>
                                 </td>
                             <?php elseif (!empty($order['fm_ecno'])) : ?>
-                                <td class="text-center" style="color:#00aaff">全家冷凍</td>
+                                <? if ($order['fm_cold'] == 1) : ?>
+                                    <td class="text-center" style="color:#00aaff">全家冷凍</td>
+                                <? else : ?>
+                                    <td class="text-center">全家常溫</td>
+                                <? endif; ?>
+                            <?php endif; ?>
+                        <?php elseif ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'hi_life_pickup') : ?>
+                            <?php if (empty($order['AllPayLogisticsID']) && empty($order['CVSPaymentNo'])) : ?>
+                                <td class="text-center">
+                                    <select id="orderType" class="form-control">
+                                        <option value="ecp_add_order">綠界常溫</option>
+                                    </select>
+                                    <button class="btn" onClick="ecpOrderBtn(<?= $order['order_id'] ?>)">產生訂單</button>
+                                </td>
+                            <?php else : ?>
+                                <td class="text-center" style="color:#00590c">綠界常溫</td>
                             <?php endif; ?>
                         <?php else : ?>
-                            <td class="text-center">非全家訂單</td>
+                            <td class="text-center">宅配訂單</td>
                         <?php endif; ?>
                         <!-- 產生單號 -->
                         <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>

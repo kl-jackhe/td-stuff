@@ -33,7 +33,7 @@ abstract class LogisticsSubType
 	const HILIFE = 'HILIFE'; // 萊爾富
 	const FAMILY_C2C = 'FAMIC2C'; // 全家店到店
 	const UNIMART_C2C = 'UNIMARTC2C'; // 統一超商寄貨便
-	const HILIFE_C2C = 'HILIFEC2C'; // 萊爾富富店到店
+	const HILIFE_C2C = 'HILIFEC2C'; // 萊爾富店到店
 }
 /**
  *  是否代收貨款

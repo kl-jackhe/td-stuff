@@ -24,7 +24,7 @@ class Auth extends Public_Controller
 			$this->load->model('auth_model');
 		elseif ($this->is_liqun_food) :
 			$this->load->library('verification_code');
-			$this->load->library('sms_mitake');
+			$this->load->library('call_api');
 			$this->load->model('auth_model');
 		endif;
 	}
@@ -212,13 +212,21 @@ class Auth extends Public_Controller
 
 	function sms_test()
 	{
-		$this->sms_mitake->send_message();
-	}
+		// // url
+		// $url = 'https://sms2.mitake.com.tw/api/mtk/SmSend?';
+		// $url .= 'CharsetURL=UTF-8';
+		// // parameters
+		// $data = 'username=0912962950';
+		// $data .= '&password=kai53972833';
+		// // $data = 'username=53972833SMS';
+		// $data .= '&password=53972833ABC';
+		// $data .= '&dstaddr=0973221508';
+		// $data .= '&smbody=簡訊SmSend測試';
 
-	function sms_cul_test()
-	{
-		$this->load->library('sms_mitake');
-		$this->sms_mitake->send_cul_message();
+		// echo $this->call_api->callAPI('POST', $url, $data);
+		$url = 'http://smexpress.mitake.com.tw:9600/SmSendGet.asp?username=0912962950&password=kai53972833&dstaddr=0973221508&encoding=UTF8&smbody=TEST';
+
+		file_get_contents($url);
 	}
 
 	function get_checkcode()

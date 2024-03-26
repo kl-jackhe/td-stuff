@@ -28,7 +28,7 @@ class Ecptoken extends Public_Controller
             $this->aesIv = $this->session->userdata('aesIv');
         }
     }
-    function ecp_logistics($order_id)
+    function ecp_add_order($order_id)
     {
         $row = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
         if (!empty($row)) {
@@ -56,7 +56,7 @@ class Ecptoken extends Public_Controller
                 $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); // 物流單生成時間
                 $obj->Send['LogisticsType'] = LogisticsType::CVS; // 超商物流選擇
                 $obj->Send['LogisticsSubType'] = $LogisticsSubType; // 超商選擇
-                $obj->Send['GoodsAmount'] = (int)$row['TradeAmt']; // 商品總價
+                $obj->Send['GoodsAmount'] = (int)$row['order_discount_total']; // 商品總價
                 $obj->Send['GoodsName'] = 'Cargo'; // 商品名稱
                 $obj->Send['SenderName'] = get_setting_general('short_name'); // 電商名稱
                 $obj->Send['SenderPhone'] = get_setting_general('phone1'); // 電商電話

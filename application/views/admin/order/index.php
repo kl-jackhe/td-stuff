@@ -338,6 +338,15 @@
   }
 </script>
 
+<!-- 產生綠界訂單 -->
+<script>
+  function ecpOrderBtn(orderId) {
+    var orderType = $('#orderType').val();
+    var url = '/ecptoken/' + orderType + '/' + orderId;
+    window.location.href = url;
+  }
+</script>
+
 <!-- 產生FM訂單 -->
 <script>
   function fmOrderBtn(orderId) {

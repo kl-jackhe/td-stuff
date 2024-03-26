@@ -751,6 +751,23 @@ class Checkout extends Public_Controller
 		$order_discount_total = intval((int)$this->input->post('cart_total') + (int)$delivery_cost);
 		$order_discount_price = intval((int)$this->cart->total() - (int)$this->input->post('cart_total'));
 
+		// 超重額外付款
+		if (!empty($weight_exceed)) {
+			$order_discount_total += (int)$weight_exceed;
+		}
+
+		// 檢查金額是否正確
+		$check_end_discount = $order_discount_total - (int)$this->input->post('cart_total') - $delivery_cost - $weight_exceed;
+		$check_end_origin = $order_discount_total - (int)$this->cart->total() - $order_discount_price - $delivery_cost - $weight_exceed;
+		if ($check_end_discount || $check_end_origin) {
+			echo '
+			<script>
+				alert("購物車金額計算發生錯誤請重新嘗試，若嘗試多次仍無果請聯繫客服，造成您的不便敬請見諒謝謝。");
+				window.location.href = "' . base_url() . 'checkout";
+			</script>';
+			return;
+		}
+
 		$order_pay_status = 'not_paid';
 
 		$created_at = date("Y-m-d H:i:s");
@@ -1088,7 +1105,6 @@ class Checkout extends Public_Controller
 		// $this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $order_id);
 		$this->data['order'] = $this->mysql_model->_select('orders', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv), 'row');
 		$this->data['order_item'] = $this->mysql_model->_select('order_item', 'order_id', $this->aesDecrypt($order_id, $this->aesKey, $this->aesIv));
-
 
 		if (!empty($this->data['order'])) {
 			$this->data['users'] = $this->mysql_model->_select('users', 'id', $this->data['order']['customer_id'], 'row');

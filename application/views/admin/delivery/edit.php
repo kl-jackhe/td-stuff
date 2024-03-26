@@ -45,7 +45,11 @@
         <label class="free" for="delivery_info">描述</label>
         <textarea class="form-control" name="delivery_info" rows="3"><?php echo $delivery['delivery_info']; ?></textarea>
       </div>
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-6">
+        <label class="free" for="delivery_sort">排序</label>
+        <input type="text" class="form-control" name="delivery_sort" value="<?php echo $delivery['delivery_sort']; ?>">
+      </div>
+      <div class="form-group col-md-6">
         <label class="free" for="delivery_status">狀態</label>
         <select class="form-control" name="delivery_status" id="delivery_status">
           <? if ($delivery['delivery_status'] == 1) { ?>

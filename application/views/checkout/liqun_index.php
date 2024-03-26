@@ -349,7 +349,7 @@ foreach ($this->cart->contents() as $items) {
                             <br>
                             <hr>
                         <?php endif; ?>
-                        <? if ($this->session->userdata()) : ?>
+                        <? if (empty($this->session->userdata('user_id'))) : ?>
                             <span class="redContent">✳︎&nbsp;現在加入會員即可獲得一張100元優惠券，單筆訂單滿399即可使用！</span>
                             <br>
                             <br>
@@ -439,11 +439,11 @@ foreach ($this->cart->contents() as $items) {
                                     // $this->db->where('delivery_status', 1);
                                     // $d_query = $this->db->get('delivery')->result_array();
 
-                                    $d_query = $this->mysql_model->_select('delivery', 'delivery_status', 1);
+                                    $d_query = $this->delivery_model->getSortOpenDesc();
 
                                     foreach ($d_query as $d_row) {
                                         $frozen_limit = '';
-                                        if ($is_frozen && ($d_row['delivery_name_code'] == '711_pickup' || $d_row['delivery_name_code'] == 'family_pickup' || $d_row['delivery_name_code'] == 'home_delivery')) {
+                                        if ($is_frozen && ($d_row['delivery_name_code'] == '711_pickup' || $d_row['delivery_name_code'] == 'family_pickup' || $d_row['delivery_name_code'] == 'hi_life_pickup' || $d_row['delivery_name_code'] == 'ok_pickup' || $d_row['delivery_name_code'] == 'home_delivery')) {
                                             $frozen_limit = 'disabled';
                                         }
                                     ?>
@@ -825,9 +825,20 @@ foreach ($this->cart->contents() as $items) {
                 coupon_type = '';
                 cart_amount = initialCartTotal;
                 // 检查哪个运送方式被选中
+                // 超重計算
                 var selectedDelivery = $('input[name="checkout_delivery"]:checked');
                 freeLimit = selectedDelivery.data('free-shipping-limit');
                 freeEnable = selectedDelivery.data('free-shipping-enable');
+                var limitWeight = selectedDelivery.data('limit-weight');
+
+                var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val()
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                    if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup') {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 4)) * 50;
+                    } else {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
+                    }
+                }
                 if (selectedDelivery.length > 0) { // 至少有一个运送方式被选中
                     // 获取被选中的运送方式的运费
                     var shippingFee = selectedDelivery.data('shipping-fee');
@@ -861,11 +872,22 @@ foreach ($this->cart->contents() as $items) {
                 // 添加选中状态
                 $(this).addClass('active');
 
+                // 超重計算
+                var selectedDelivery = $('input[name="checkout_delivery"]:checked');
+                freeLimit = selectedDelivery.data('free-shipping-limit');
+                freeEnable = selectedDelivery.data('free-shipping-enable');
+                var limitWeight = selectedDelivery.data('limit-weight');
+                var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val()
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                    if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup') {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 4)) * 50;
+                    } else {
+                        selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
+                    }
+                }
+
                 // 更新免運
                 if (coupon_type == 'free_shipping') {
-                    var selectedDelivery = $('input[name="checkout_delivery"]:checked');
-                    freeLimit = selectedDelivery.data('free-shipping-limit');
-                    freeEnable = selectedDelivery.data('free-shipping-enable');
                     if (selectedDelivery.length > 0) { // 至少有一个运送方式被选中
                         // 获取被选中的运送方式的运费
                         var shippingFee = 0;
@@ -928,9 +950,9 @@ foreach ($this->cart->contents() as $items) {
             // 訂單超重
             if (cart_weight > limitWeight) {
                 var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val()
-                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
                     alert('由於訂單超重故系統將自動拆單並加收超取運費箱費用，建議將訂單改為宅配免付加購運費箱～')
-                    if (delivery == '711_pickup' || delivery == 'family_pickup') {
+                    if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup') {
                         selfnum = Math.ceil(((cart_weight - limitWeight) / 4)) * 50;
                     } else {
                         selfnum = Math.ceil(((cart_weight - limitWeight) / 9)) * 50;
@@ -1016,7 +1038,7 @@ foreach ($this->cart->contents() as $items) {
             // console.log(newIndex)
             // console.log(delivery);
 
-            if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+            if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
                 $('.delivery_address').hide();
                 $('.supermarket').show();
             } else {
@@ -1056,7 +1078,7 @@ foreach ($this->cart->contents() as $items) {
                     alert('請選擇付款方式');
                     return false;
                 }
-                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
+                if (delivery == '711_pickup' || delivery == 'family_pickup' || delivery == 'hi_life_pickup' || delivery == 'ok_pickup' || delivery == 'family_limit_5_frozen_pickup' || delivery == 'family_limit_10_frozen_pickup') {
                     if ($('#storeid').val() == '' || $('#storename').val() == '') {
                         alert('請選擇取貨門市');
                         return false;
@@ -1162,7 +1184,7 @@ foreach ($this->cart->contents() as $items) {
         if ($('#email').val() != '') {
             data += '<tr><td>信箱</td><td>' + $('#email').val() + '</td></tr>';
         }
-        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup' && selectedCheckoutDelivery != 'family_limit_5_frozen_pickup' && selectedCheckoutDelivery != 'family_limit_10_frozen_pickup') {
+        if (selectedCheckoutDelivery != '711_pickup' && selectedCheckoutDelivery != 'family_pickup' && selectedCheckoutDelivery != 'hi_life_pickup' && selectedCheckoutDelivery != 'ok_pickup' && selectedCheckoutDelivery != 'family_limit_5_frozen_pickup' && selectedCheckoutDelivery != 'family_limit_10_frozen_pickup') {
             if ($('#Country').val() != '') {
                 data += '<tr><td>國家</td><td>' + $('#Country').val() + '</td></tr>';
             }
@@ -1307,7 +1329,7 @@ foreach ($this->cart->contents() as $items) {
         // 是否為手機
         var isMobile = <?= json_encode(wp_is_mobile()) ?>;
 
-        if (selectedDelivery === 'family_limit_10_frozen_pickup' || selectedDelivery === 'family_limit_5_frozen_pickup') {
+        if (selectedDelivery === 'family_limit_10_frozen_pickup' || selectedDelivery === 'family_limit_5_frozen_pickup' || selectedDelivery === 'family_pickup') {
             // 串至全家地圖
             var route = '<?= base_url(); ?>fmtoken/fm_map';
             if (selectedDelivery === 'family_limit_5_frozen_pickup') {

@@ -57,6 +57,7 @@ class Delivery extends Admin_Controller
 			'limit_volume_width' => $this->input->post('limit_volume_width'),
 			'limit_volume_height' => $this->input->post('limit_volume_height'),
 			'delivery_info' => $this->input->post('delivery_info'),
+			'delivery_sort' => $this->input->post('delivery_sort'),
 			'delivery_status' => $this->input->post('delivery_status'),
 			'updated_at' => date('Y-m-d H:i:s'),
 		);

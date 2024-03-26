@@ -66,16 +66,22 @@
                                     <span class="price">{{ (selectedOrder.order_total - selectedOrder.order_delivery_cost).toFixed(2) }}</span>&nbsp;元
                                 </td>
                             </tr>
-                            <tr class="partitionLine">
+                            <tr v-if="selectedOrder.weight_exceed_amount != 0">
+                                <th class="col-lg-10 col-sm-9 col-xs-7">超重加收</th>
+                                <td class="col-lg-2 col-sm-3 col-xs-5">
+                                    <span class="price">{{ parseFloat(selectedOrder.weight_exceed_amount).toFixed(2) }}</span>&nbsp;元
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="col-lg-10 col-sm-9 col-xs-7">運費</th>
                                 <td class="col-lg-2 col-sm-3 col-xs-5">
                                     <span class="price">{{ selectedOrder.order_delivery_cost }}</span>&nbsp;元
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="partitionLine">
                                 <th nowrap="nowrap" class="col-lg-10 col-sm-9 col-xs-7">商品金額總計</th>
                                 <td nowrap="nowrap" class="col-lg-2 col-sm-3 col-xs-5">
-                                    <span class="price">NT$&nbsp;{{ selectedOrder.order_total }}</span>&nbsp;元
+                                    <span class="price">NT$&nbsp;{{ selectedOrder.order_discount_total }}</span>&nbsp;元
                                 </td>
                             </tr>
                         </tbody>
@@ -83,6 +89,7 @@
                 </div>
                 <div class="row" id="separatorBottom">
                     <div class="col-md-6 orderMarginBottom">
+                        <!-- 訂購資訊 -->
                         <div class="row">
                             <div class="col-12 text-center">
                                 <h2>訂購資訊</h2>
@@ -98,6 +105,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
+                        <!-- 收件資訊 -->
                         <div class="row">
                             <div class="col-12 text-center">
                                 <h2>收件資訊</h2>
@@ -114,13 +122,34 @@
                     </div>
                 </div>
                 <div class="row mt-5" id="separatorBottom">
+                    <!-- 付款資訊 -->
                     <div class="col-md-6 orderMarginBottom">
-                        <div v-show="selectedOrder.order_payment == 'bank_transfer'" class="row">
+                        <div v-if="selectedOrder.order_payment == 'line_pay'" class="row">
                             <div class="col-12 text-center">
                                 <h2>付款資訊</h2>
                             </div>
                             <div class="col-4 text-right">付款方式：</div>
-                            <div class="col-8">ATM轉帳</div>
+                            <div class="col-8">Line Pay</div>
+                            <div class="col-4 text-right">付款資訊：</div>
+                            <div v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid'" class="col-8">請點選下方繼續付款按鈕完成付款</div>
+                            <div v-else class="col-8">付款完成</div>
+                        </div>
+                        <div v-else-if="selectedOrder.order_payment == 'ecpay_credit'" class="row">
+                            <div class="col-12 text-center">
+                                <h2>付款資訊</h2>
+                            </div>
+                            <div class="col-4 text-right">付款方式：</div>
+                            <div class="col-8">信用卡</div>
+                            <div class="col-4 text-right">付款資訊：</div>
+                            <div v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid'" class="col-8">請點選下方繼續付款按鈕完成付款</div>
+                            <div v-else class="col-8">付款完成</div>
+                        </div>
+                        <div v-else-if="selectedOrder.order_payment == 'bank_transfer'" class="row">
+                            <div class="col-12 text-center">
+                                <h2>付款資訊</h2>
+                            </div>
+                            <div class="col-4 text-right">付款方式：</div>
+                            <div class="col-8">銀行匯款</div>
                             <div class="col-4 text-right">匯款銀行：</div>
                             <div class="col-8"><?= get_setting_general('atm_bank_code') ?></div>
                             <div class="col-4 text-right">匯款分行：</div>
@@ -129,6 +158,7 @@
                             <div class="col-8"><?= get_setting_general('atm_bank_account') ?></div>
                         </div>
                     </div>
+                    <!-- 送貨及備註資訊 -->
                     <div class="col-md-6 orderMarginBottom separator">
                         <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup' || selectedOrder.order_delivery == 'family_limit_5_frozen_pickup' || selectedOrder.order_delivery == 'family_limit_10_frozen_pickup'" class="row">
                             <div class="col-12 text-center">
@@ -159,6 +189,7 @@
                     </div>
                 </div>
                 <div class="pt-2">
+                    <!-- 出貨資訊 -->
                     <div class="form-group">
                         <div class="shippingInformation">出貨資訊</div>
                     </div>
@@ -234,8 +265,8 @@
                 </div>
                 <div class="row orderDetailButton d-flex justify-content-center" v-if="selectedOrder.order_step == 'confirm' && selectedOrder.order_pay_status == 'not_paid' && (selectedOrder.order_payment == 'ecpay_credit' || selectedOrder.order_payment == 'line_pay')">
                     <div class="operateBtn col-6">
-                        <a v-show="selectedOrder.order_payment == 'ecpay_credit'" id="completePay" @click="completePay('ecp_repay_order', selectedOrder.order_id)">完成付款</a>
-                        <a v-show="selectedOrder.order_payment == 'line_pay'" id="completePay" @click="completePay('line_repay_order', selectedOrder.order_id)">完成付款</a>
+                        <a v-show="selectedOrder.order_payment == 'ecpay_credit'" id="completePay" @click="completePay('ecp_repay_order', selectedOrder.order_id)">繼續付款</a>
+                        <a v-show="selectedOrder.order_payment == 'line_pay'" id="completePay" @click="completePay('line_repay_order', selectedOrder.order_id)">繼續付款</a>
                     </div>
                     <div class="operateBtn col-6">
                         <a id="cancelOrder" @click="cancelOrder(selectedOrder.order_id)">取消訂單</a>

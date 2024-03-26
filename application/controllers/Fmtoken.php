@@ -616,6 +616,17 @@ class fmtoken extends Public_Controller
         $count = 0;
         foreach ($order_list as $self) {
             $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+
+            // 跳過非全家物流訂單
+            if (empty($buf['store_id']) || empty($buf['order_store_name']) || empty($buf['order_store_ReservedNo'])) {
+                continue;
+            }
+
+            // 跳過已加入訂單
+            if (!empty($buf['fm_ecno']) && !empty($buf['fm_type'])) {
+                continue;
+            }
+
             if ($this->fm_add_b2c_order(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['order_id'], false)) {
                 $count++;
             }
@@ -640,6 +651,22 @@ class fmtoken extends Public_Controller
         $error_msg = '';
         foreach ($order_list as $self) {
             $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+
+            // 跳過非全家物流訂單
+            if (empty($buf['store_id']) || empty($buf['order_store_name']) || empty($buf['order_store_ReservedNo'])) {
+                continue;
+            }
+
+            // 跳過未加入訂單
+            if (empty($buf['fm_ecno']) || empty($buf['fm_type'])) {
+                continue;
+            }
+
+            // 跳過已產生物流單之訂單
+            if (!empty($buf['AllPayLogisticsID'])) {
+                continue;
+            }
+
             if ($buf['fm_type'] == 'b2c') {
                 $b2c_logistic = $this->fm_b2c_logistic(($buf['fm_cold'] == 1) ? 'cold' : 'normal', $buf['fm_ecno'], false);
                 if ($b2c_logistic) {
@@ -682,6 +709,22 @@ class fmtoken extends Public_Controller
         $fm_ecno = array();
         foreach ($order_list as $self) {
             $buf = $this->mysql_model->_select('orders', 'order_id', $self, 'row');
+
+            // 跳過非全家物流訂單
+            if (empty($buf['store_id']) || empty($buf['order_store_name']) || empty($buf['order_store_ReservedNo'])) {
+                continue;
+            }
+
+            // 跳過未加入訂單
+            if (empty($buf['fm_ecno']) || empty($buf['fm_type'])) {
+                continue;
+            }
+
+            // 跳過未產生物流單之訂單
+            if (empty($buf['AllPayLogisticsID'])) {
+                continue;
+            }
+
             $fm_ecno[] = $buf['fm_ecno'];
         }
 

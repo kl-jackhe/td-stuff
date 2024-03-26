@@ -1,11 +1,18 @@
     <?php
+    $storeType = null;
     $device = $this->input->get('device');
     $checkout = $this->input->get('checkout');
     // 選完門市後導向(手機與PC導向不同)
     $excuteUrl = ($device != 'mobile') ? 'get_store_info.php' : 'get_store_info_location.php';
     $returnUrl = base_url() . $excuteUrl;
     try {
-        $storeType = ($checkout != "711_pickup") ? LogisticsSubType::FAMILY_C2C : LogisticsSubType::UNIMART_C2C;
+        if ($checkout == "711_pickup") {
+            $storeType = LogisticsSubType::UNIMART_C2C;
+        } elseif ($checkout == "family_pickup") {
+            $storeType = LogisticsSubType::FAMILY_C2C;
+        } elseif ($checkout == "hi_life_pickup") {
+            $storeType = LogisticsSubType::HILIFE_C2C;
+        }
         $deviceType = ($device != 'mobile') ? Device::PC : Device::MOBILE;
         // controller有引入ECPay.Logistics.Integration並new物件回傳至obj
         $obj->Send = array(

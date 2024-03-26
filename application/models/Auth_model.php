@@ -72,6 +72,7 @@ class Auth_model extends CI_Model
     function getOrders($id)
     {
         $this->db->select('*');
+        $this->db->where('main_order_number', '');
         $this->db->where('customer_id', $id);
         $this->db->order_by('created_at', 'desc');
         $query = $this->db->get('orders');
