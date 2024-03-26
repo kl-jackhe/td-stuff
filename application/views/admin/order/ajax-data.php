@@ -4,6 +4,10 @@
         margin: 0px;
     }
 
+    .mb-15px {
+        margin-bottom: 15px;
+    }
+
     .spanContent {
         display: block;
         margin-bottom: 5px;
@@ -172,7 +176,7 @@
                 <th class="text-center text-nowrap">配送資訊</th>
                 <th class="text-center text-nowrap">付款資訊</th>
                 <!-- 新增物流單 -->
-                <th class="text-center">處理狀態</th>
+                <th class="text-center" style="width: 10%">處理狀態</th>
                 <th class="text-center">收款狀態</th>
                 <th class="text-center">留言</th>
                 <th class="text-center">編輯</th>
@@ -384,24 +388,45 @@
 
                     <? if ($this->is_partnertoys) : ?>
                         <!-- 處理狀態 -->
-                        <td>
-                            <select id="order_step_<?= $order['order_id'] ?>pc" onchange="changeStep('<?= $order['order_id'] ?>','pc')" class="form-control">
-                                <? foreach ($step_list as $key => $value) {
-                                    if ($key != '') { ?>
-                                        <option value="<?= $key ?>" <?= ($key == $order['order_step'] ? 'selected' : '') ?>><?= $value ?></option>
-                                <? }
-                                } ?>
-                            </select>
-                            <!-- 新增物流單 -->
-                            <div class="input-group">
-                                <span class="input-group-btn">
-                                    <?php $attributes = array('class' => 'form-inline'); ?>
-                                    <?= form_open('admin/order/updata_self_payment_no/' . $order['order_id'], $attributes); ?>
-                                    <input type="text" class="form-control" name="self_payment_no" placeholder="請輸入貨單號" value="<?= $order['CVSPaymentNo'] ?>">
-                                    <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
-                                    <?= form_close() ?>
-                                </span>
+                        <td class="text-center">
+                            <!-- 訂單狀態 -->
+                            <div class="mb-15px">
+                                <select id="order_step_<?= $order['order_id'] ?>pc" onchange="changeStep('<?= $order['order_id'] ?>','pc')" class="form-control">
+                                    <? foreach ($step_list as $key => $value) {
+                                        if ($key != '') { ?>
+                                            <option value="<?= $key ?>" <?= ($key == $order['order_step'] ? 'selected' : '') ?>><?= $value ?></option>
+                                    <? }
+                                    } ?>
+                                </select>
                             </div>
+                            <!-- 新增物流單 -->
+                            <?php if (!empty($order['store_id']) && !empty($order['order_store_name']) && !empty($order['order_store_address'])) : ?>
+                                <?php if (!empty($order['AllPayLogisticsID']) && !empty($order['CVSPaymentNo'])) : ?>
+                                    <!-- 綠界自動單號 -->
+                                    <div class="input-group mb-15px">
+                                        <span class="input-group-btn">
+                                            <input type="text" class="form-control" id="AllPayLogisticsID" name="AllPayLogisticsID" value="<?= $order['AllPayLogisticsID'] ?>" readonly>
+                                            <input type="text" class="form-control" id="CVSPaymentNo" name="CVSPaymentNo" value="<?= $order['CVSPaymentNo'] ?>" readonly>
+                                        </span>
+                                    </div>
+                                <?php else : ?>
+                                    <!-- 自動產生單號 -->
+                                    <div class="mb-15px">
+                                        <button class="btn" onClick="partnertoysEcpOrderBtn(<?= $order['order_id'] ?>)">產生單號</button>
+                                    </div>
+                                <?php endif; ?>
+                            <?php else : ?>
+                                <!-- 手動單號 -->
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <?php $attributes = array('class' => 'form-inline'); ?>
+                                        <?= form_open('admin/order/updata_self_logistics/' . $order['order_id'], $attributes); ?>
+                                        <input type="text" class="form-control" name="self_logistics" placeholder="請輸入貨單號" value="<?= $order['SelfLogistics'] ?>">
+                                        <button type="submit" class="btn btn-primary btn-sm inTopButton">更新</button>
+                                        <?= form_close() ?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
                         </td>
                         <!-- 收款狀態 -->
                         <td>

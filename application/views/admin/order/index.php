@@ -345,6 +345,11 @@
     var url = '/ecptoken/' + orderType + '/' + orderId;
     window.location.href = url;
   }
+
+  function partnertoysEcpOrderBtn(orderId) {
+    var url = '/ecptoken/ecp_add_order/' + orderId;
+    window.location.href = url;
+  }
 </script>
 
 <!-- 產生FM訂單 -->

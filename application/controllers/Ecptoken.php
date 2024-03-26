@@ -30,6 +30,7 @@ class Ecptoken extends Public_Controller
     }
     function ecp_add_order($order_id)
     {
+        $LogisticsSubType = null;
         $row = $this->mysql_model->_select('orders', 'order_id', $order_id, 'row');
         if (!empty($row)) {
             // 託運單
@@ -50,7 +51,13 @@ class Ecptoken extends Public_Controller
                     $obj->HashIV = 'v77hoKGq4kWxNNIS';
                 endif;
 
-                $LogisticsSubType = ($row['order_delivery'] != '711_pickup') ? LogisticsSubType::FAMILY_C2C : LogisticsSubType::UNIMART_C2C;
+                if ($row['order_delivery'] == "711_pickup") {
+                    $LogisticsSubType = LogisticsSubType::UNIMART_C2C;
+                } elseif ($row['order_delivery'] == "family_pickup") {
+                    $LogisticsSubType = LogisticsSubType::FAMILY_C2C;
+                } elseif ($row['order_delivery'] == "hi_life_pickup") {
+                    $LogisticsSubType = LogisticsSubType::HILIFE_C2C;
+                }
 
                 $obj->Send['MerchantTradeNo'] = $row['MerchantTradeNo']; //綠界訂單編號
                 $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); // 物流單生成時間
@@ -91,6 +98,8 @@ class Ecptoken extends Public_Controller
                 // echo '<pre>';
                 // print_r($response);
                 // echo '</pre>';
+
+                echo "<script>window.history.back();</script>";
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
