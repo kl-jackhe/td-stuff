@@ -544,7 +544,7 @@ class Order extends Admin_Controller
 			}
 		}
 
-		if ($this->is_liqun_food) {
+		if ((strpos(base_url(), 'test01.liqun-food.com') !== false) || (strpos(base_url(), 'akai-shop.com') !== false)) {
 			// if ($step == 'pay_ok' || $step == 'process' || $step == 'confirm' || $step == 'invalid') {
 			// 	$this->order_synchronize($id);
 			// } else {
