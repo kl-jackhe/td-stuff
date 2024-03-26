@@ -11,7 +11,7 @@ class Delivery extends Admin_Controller
 	public function index()
 	{
 		$this->data['page_title'] = '配送管理';
-		$this->data['delivery'] = $this->mysql_model->_select('delivery');
+		$this->data['delivery'] = $this->delivery_model->getSortDesc();
 
 		$this->render('admin/delivery/index');
 	}
@@ -103,5 +103,19 @@ class Delivery extends Admin_Controller
 		$this->db->update('delivery', ['free_shipping_enable' => !$self['free_shipping_enable']]);
 		$this->session->set_flashdata('message', '免運狀態更新成功');
 		redirect(base_url() . 'admin/delivery');
+	}
+
+	function updateSortPosition($id)
+	{
+		if (!empty($this->input->post('sort'))) {
+			$data = array(
+				'delivery_sort' => $this->input->post('sort'),
+			);
+			$this->db->where('id', $id);
+			$this->db->update('delivery', $data);
+			echo 'success';
+		} else {
+			echo 'error';
+		}
 	}
 }

@@ -1096,7 +1096,7 @@ class Checkout extends Public_Controller
 			if (!empty($this->data['users'])) {
 				if (empty($this->session->userdata('user_id'))) {
 					$query = $this->db->select('full_name, username, email, id, fb_id, password, phone, active, last_login')
-						->where('username', $this->data['order']['customer_name'])
+						->where('id', $this->data['order']['customer_id'])
 						->limit(1)
 						->order_by('id', 'desc')
 						->get($this->ion_auth_model->tables['users']);
@@ -1151,11 +1151,11 @@ class Checkout extends Public_Controller
 		// echo '</pre>';
 
 		// CVS and ATM return value test
-		try {
-			$this->save_extend_info();
-		} catch (Exception $e) {
-			echo $e->getMessage();
-		}
+		// try {
+		// 	$this->save_extend_info();
+		// } catch (Exception $e) {
+		// 	echo $e->getMessage();
+		// }
 
 		if ($this->input->post('RtnCode') == '1' && $order_id > 0) {
 			// 更新訂單是否付款成功及付款成功後
@@ -1268,6 +1268,7 @@ class Checkout extends Public_Controller
 					if ($invoice['RtnCode'] == '1') {
 						// print_r($invoice['InvoiceNumber']);
 						$data = array(
+							'invoid' => get_empty($invoice['InvoiceNumber']),
 							'InvoiceNumber' => get_empty($invoice['InvoiceNumber']),
 						);
 						$this->db->where('order_id', $order_id);

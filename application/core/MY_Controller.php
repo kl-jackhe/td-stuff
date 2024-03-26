@@ -14,6 +14,7 @@ class MY_Controller extends CI_Controller
 		$this->load->model('mysql_model');
 		$this->load->model('posts_model');
 		$this->load->model('product_model');
+		$this->load->model('delivery_model');
 		$this->lang->load('general', 'zh_tw');
 		$this->data['page_title'] = get_setting_general('name');
 		$this->data['seo_description'] = get_setting_general('meta_description');

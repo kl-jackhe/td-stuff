@@ -105,6 +105,7 @@ class Update extends Admin_Controller
                 $this->update_202403260041();
                 $this->update_202403260046();
                 $this->update_202403260246();
+                $this->update_202403261355();
                 if ($this->is_partnertoys) {
                     // $this->import_post_sql();
                     // $this->import_product_old_sql();
@@ -835,6 +836,30 @@ class Update extends Admin_Controller
             // if ($this->db->insert('update_log', $insertData)) {
             //     echo '<p>' . $version . ' - ' . $description . '</p>';
             // }
+        }
+    }
+
+    function update_202403261355()
+    {
+        $version = '202403261355';
+        $description = '[delivery] create [sort]';
+        $this->db->select('id');
+        $this->db->where('version', $version);
+        $row = $this->db->get('update_log')->row_array();
+        if (empty($row)) {
+            $query = $this->db->query("SHOW COLUMNS FROM delivery LIKE 'delivery_sort'");
+            if ($query->num_rows() > 0) {
+            } else {
+                $this->db->query("ALTER TABLE `delivery` ADD `delivery_sort` int(6) NOT NULL DEFAULT 0 AFTER `delivery_type`;");
+            }
+
+            $insertData = array(
+                'version' => $version,
+                'description' => $description,
+            );
+            if ($this->db->insert('update_log', $insertData)) {
+                echo '<p>' . $version . ' - ' . $description . '</p>';
+            }
         }
     }
 

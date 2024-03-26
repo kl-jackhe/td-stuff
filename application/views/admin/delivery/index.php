@@ -1,12 +1,12 @@
 <div class="row">
   <!-- <div class="col-md-12">
-    <a href="<?php echo base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
+    <a href="<?= base_url() . 'admin/' . $this->uri->segment(2) ?>" class="btn btn-info hidden-print">返回上一頁</a>
     <hr>
   </div> -->
   <!-- <div class="col-md-4">
     <div class="content-box-large">
     <?php $attributes = array('class' => 'delivery', 'id' => 'delivery'); ?>
-    <?php echo form_open('admin/delivery/insert_delivery', $attributes); ?>
+    <?= form_open('admin/delivery/insert_delivery', $attributes); ?>
       <div class="form-group">
         <label for="delivery_name">配送名稱</label>
         <input type="text" class="form-control" name="delivery_name">
@@ -29,7 +29,7 @@
       <div class="form-group">
         <button type="submit" class="btn btn-primary">新增配送方式</button>
       </div>
-    <?php echo form_close(); ?>
+    <?= form_close(); ?>
     </div>
   </div> -->
   <div class="col-md-12">
@@ -44,6 +44,7 @@
             <th class="text-center">運費</th>
             <th>限制</th>
             <th>描述</th>
+            <th style="width: 5%" class="text-center">排序</th>
             <th class="text-center">狀態</th>
             <th class="text-center">操作</th>
           </tr>
@@ -52,7 +53,7 @@
           <? foreach ($delivery as $data) : ?>
             <tr>
               <!-- name -->
-              <td><?php echo $data['delivery_name'] ?></td>
+              <td><?= $data['delivery_name'] ?></td>
               <!-- shipping free enable -->
               <td class="text-center">
                 <? if ($data['free_shipping_enable']) { ?>
@@ -69,7 +70,7 @@
                 $<?= $data['free_shipping_limit'] ?>
               </td>
               <!-- shipping fee -->
-              <td class="text-center">$<?php echo $data['shipping_cost'] ?></td>
+              <td class="text-center">$<?= $data['shipping_cost'] ?></td>
               <!-- limit -->
               <td>
                 <?
@@ -86,20 +87,24 @@
                 } ?>
               </td>
               <!-- description -->
-              <td><?php echo $data['delivery_info'] ?></td>
+              <td><?= $data['delivery_info'] ?></td>
+              <!-- sort -->
+              <td class="text-center">
+                <input type="number" class="form-control" id="realTimeSort_<?= $data['id'] ?>" onchange="updateSortPosition(<?= $data['id'] ?>)" value="<?= $data['delivery_sort'] ?>">
+              </td>
               <!-- status -->
               <td class="text-center"><? if ($data['delivery_status'] == 1) { ?>
-                  <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
+                  <a href="/admin/delivery/update_delivery_status/<?= $data['id'] ?>" class="btn btn-success btn-sm" onClick="return confirm('確定要停用嗎?')"></i>
                     <span>啟用中</span></a>
                 <? } else { ?>
-                  <a href="/admin/delivery/update_delivery_status/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
+                  <a href="/admin/delivery/update_delivery_status/<?= $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要啟用嗎?')"></i>
                     <span>停用</span></a>
                 <? } ?>
               </td>
               <!-- operation -->
               <td class="text-center">
-                <a href="/admin/delivery/edit_delivery/<?php echo $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                <!-- <a href="/admin/delivery/delete_delivery/<?php echo $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
+                <a href="/admin/delivery/edit_delivery/<?= $data['id'] ?>" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                <!-- <a href="/admin/delivery/delete_delivery/<?= $data['id'] ?>" class="btn btn-danger btn-sm" onClick="return confirm('確定要刪除嗎?')"><i class="fa fa-trash-o"></i></a> -->
               </td>
             </tr>
           <? endforeach ?>
@@ -114,3 +119,18 @@
     </div>
   </div>
 </div>
+
+<script>
+  function updateSortPosition(id) {
+    $.ajax({
+      url: '/admin/delivery/updateSortPosition/' + id,
+      type: 'post',
+      data: {
+        sort: $('#realTimeSort_' + id).val(),
+      },
+      success: function(response) {
+        console.response;
+      }
+    });
+  }
+</script>
