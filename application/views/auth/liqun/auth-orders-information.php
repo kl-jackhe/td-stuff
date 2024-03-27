@@ -78,6 +78,12 @@
                                     <span class="price">{{ selectedOrder.order_delivery_cost }}</span>&nbsp;元
                                 </td>
                             </tr>
+                            <tr v-if="selectedOrder.order_discount_price != 0">
+                                <th class="col-lg-10 col-sm-9 col-xs-7">優惠折抵</th>
+                                <td class="col-lg-2 col-sm-3 col-xs-5">
+                                    <span class="price">{{ parseFloat(selectedOrder.order_discount_price * -1).toFixed(2) }}</span>&nbsp;元
+                                </td>
+                            </tr>
                             <tr class="partitionLine">
                                 <th nowrap="nowrap" class="col-lg-10 col-sm-9 col-xs-7">商品金額總計</th>
                                 <td nowrap="nowrap" class="col-lg-2 col-sm-3 col-xs-5">

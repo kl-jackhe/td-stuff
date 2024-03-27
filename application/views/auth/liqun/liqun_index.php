@@ -399,11 +399,11 @@
                 var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
                 var timeDiff = currentTime - lastRequestTime;
 
-                if (timeDiff >= 60) {
+                if (timeDiff >= 120) {
                     clearInterval(this.getCheckcodeInterval);
                 } else {
                     this.isCountingDown = true; // 设置倒计时状态为true
-                    var remaining = 60 - timeDiff;
+                    var remaining = 120 - timeDiff;
                     $('#randomCheckcode').text('請等待 ' + remaining + ' 秒');
 
                     let countdown = remaining; // 倒計時初始值
@@ -420,8 +420,8 @@
             },
             startCountdown() {
                 this.isCountingDown = true; // 设置倒计时状态为true
-                this.countdownText = '請等待 60 秒'; // 初始化倒計時文本
-                let countdown = 60; // 倒計時初始值
+                this.countdownText = '請等待 120 秒'; // 初始化倒計時文本
+                let countdown = 120; // 倒計時初始值
                 this.countdownInterval = setInterval(() => {
                     countdown--;
                     this.countdownText = `請等待 ${countdown} 秒`;
@@ -438,28 +438,44 @@
                     return;
                 }
 
-                var currentTime = Math.floor(Date.now() / 1000);
-                var lastRequestTime = <?= $this->session->userdata('last_request_time') ?: 0 ?>;
-                var timeDiff = currentTime - lastRequestTime;
+                $.ajax({
+                    url: '/auth/check_member',
+                    type: 'post',
+                    data: {
+                        number: $('#identity').val(),
+                    },
+                    success: (response) => {
+                        if (response == 'exist') {
+                            alert('該手機號碼已是會員。');
+                            return;
+                        } else {
+                            var currentTime = Math.floor(Date.now() / 1000);
+                            var lastRequestTime = <?= !empty($this->session->userdata('last_request_time')) ? $this->session->userdata('last_request_time') : 0 ?>;
+                            var timeDiff = currentTime - lastRequestTime;
 
-                if (timeDiff >= 60) { // 1 分鐘 = 60 秒
-                    $.ajax({
-                        url: '/auth/get_checkcode',
-                        type: 'post',
-                        success: (response) => {
-                            if (response == 'success') {
-                                // 成功取得驗證碼
-                                if (this.countdownInterval) {
-                                    clearInterval(this.countdownInterval);
-                                }
-                                this.startCountdown(); // 启动倒计时
-                                console.log(response);
+                            if (timeDiff >= 120) { // 1 分鐘 = 60 秒
+                                $.ajax({
+                                    url: '/auth/get_checkcode',
+                                    type: 'post',
+                                    data: {
+                                        custom_number: $('#identity').val(),
+                                    },
+                                    success: (response) => {
+                                        // 成功取得驗證碼
+                                        if (this.countdownInterval) {
+                                            clearInterval(this.countdownInterval);
+                                        }
+                                        this.startCountdown(); // 启动倒计时
+                                        this.isCountingDown = true; // 设置倒计时状态为true
+                                        console.log(response);
+                                    },
+                                });
+                            } else {
+                                alert('您需要等待 ' + (120 - timeDiff) + ' 秒後才能再次取得驗證碼');
                             }
                         }
-                    });
-                } else {
-                    alert('您需要等待 ' + (60 - timeDiff) + ' 秒後才能再次取得驗證碼');
-                }
+                    }
+                });
             },
             add_cart() {
                 // 檢查登入

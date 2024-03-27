@@ -81,10 +81,10 @@
                             </div>
                         </div>
                         <?
-                        echo '<pre>';
-                        print_r($this->session->userdata());
-                        echo 'now : ' . time();
-                        echo '</pre>';
+                        // echo '<pre>';
+                        // print_r($this->session->userdata());
+                        // echo 'now : ' . time();
+                        // echo '</pre>';
                         ?>
                         <!-- <div class="row">
                             <div class="col-sm-12">

@@ -90,7 +90,9 @@ class Product extends Admin_Controller
 		$this->data['product'] = $this->product_model->getRows($conditions);
 		//update status
 		if ($conditions['search']['status'] == 1) {
-			$this->data['product'] = $this->get_limit_time_products($this->data['product']);
+			if (!empty($this->data['product'])) {
+				$this->data['product'] = $this->get_limit_time_products($this->data['product']);
+			}
 		}
 
 		if ($this->is_partnertoys) {

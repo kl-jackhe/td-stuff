@@ -513,11 +513,11 @@
                             <td class="text-center">宅配訂單</td>
                         <?php endif; ?>
                         <!-- 產生單號 -->
-                        <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno'])) : ?>
+                        <?php if (empty($order['AllPayLogisticsID']) && !empty($order['fm_ecno']) && !empty($order['fm_type'])) : ?>
                             <td class="text-center">
                                 <a class="btn btn-success" href="/fmtoken/fm_<?= $order['fm_type'] ?>_logistic/<?= ($order['fm_cold'] == 1) ? 'cold' : 'normal' ?>/<?= $order['fm_ecno'] ?>">產生</a>
                             </td>
-                        <?php elseif (empty($order['AllPayLogisticsID']) && empty($order['CVSPaymentNo'])) : ?>
+                        <?php elseif (empty($order['AllPayLogisticsID']) && empty($order['CVSPaymentNo']) && ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'hi_life_pickup' || $order['order_delivery'] == 'ok_pickup')) : ?>
                             <td class="text-center">
                                 <a href="javascript:void(0)" class="btn btn-success" onClick="ecpOrderBtn(<?= $order['order_id'] ?>)">產生</a>
                             </td>

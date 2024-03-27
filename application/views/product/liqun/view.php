@@ -1,6 +1,6 @@
 <div role="main" class="main product-view">
     <section class="form-section content_auto_h">
-        <div class="container-fluid">
+        <div class="container-fluid productView">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                     <div class="col-md-8 text-center product_description" style="margin-bottom: 35px;">
@@ -56,7 +56,7 @@
                         <p class="m-0" style="font-size: 28px;">方案選擇</p>
                     </div>
                     <input type="hidden" name="weight" id="weight" value="<?= $product_unit['weight'] ?>">
-                    <div class="col-md-8 py-3">
+                    <div class="col-md-10 py-3">
                         <div class="row justify-content-center">
                             <?php if (!empty($product_combine)) {
                                 foreach ($product_combine as $combine) {

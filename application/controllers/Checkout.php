@@ -733,9 +733,16 @@ class Checkout extends Public_Controller
 		$delivery_cost = 0;
 		if (!empty($this->input->post('checkout_delivery'))) {
 			$self = $this->checkout_model->getDelivery($this->input->post('checkout_delivery'));
-			if ($self['free_shipping_enable']) {
-				if ((int)$this->input->post('cart_total') >= $self['free_shipping_limit']) {
-					$delivery_cost = 0;
+
+			if (!empty($self)) {
+				if ($self['free_shipping_enable'] == 1) {
+					if ((int)$this->input->post('cart_total') >= $self['free_shipping_limit']) {
+						$delivery_cost = 0;
+					} else {
+						$delivery_cost = $self['shipping_cost'];
+					}
+				} else {
+					$delivery_cost = $self['shipping_cost'];
 				}
 			} else {
 				$delivery_cost = $self['shipping_cost'];
@@ -757,16 +764,16 @@ class Checkout extends Public_Controller
 		}
 
 		// 檢查金額是否正確
-		$check_end_discount = $order_discount_total - (int)$this->input->post('cart_total') - $delivery_cost - $weight_exceed;
-		$check_end_origin = $order_discount_total - (int)$this->cart->total() - $order_discount_price - $delivery_cost - $weight_exceed;
-		if ($check_end_discount || $check_end_origin) {
-			echo '
-			<script>
-				alert("購物車金額計算發生錯誤請重新嘗試，若嘗試多次仍無果請聯繫客服，造成您的不便敬請見諒謝謝。");
-				window.location.href = "' . base_url() . 'checkout";
-			</script>';
-			return;
-		}
+		// $check_end_discount = $order_discount_total - (int)$this->input->post('cart_total') - $delivery_cost - $weight_exceed;
+		// $check_end_origin = $order_discount_total - (int)$this->cart->total() - $order_discount_price - $delivery_cost - $weight_exceed;
+		// if ($check_end_discount || $check_end_origin) {
+		// 	echo '
+		// 	<script>
+		// 		alert("購物車金額計算發生錯誤請重新嘗試，若嘗試多次仍無果請聯繫客服，造成您的不便敬請見諒謝謝。");
+		// 		window.location.href = "' . base_url() . 'checkout";
+		// 	</script>';
+		// 	return;
+		// }
 
 		$order_pay_status = 'not_paid';
 

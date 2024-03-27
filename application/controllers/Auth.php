@@ -210,35 +210,77 @@ class Auth extends Public_Controller
 		}
 	}
 
-	function sms_test()
+	function sms_mitake_send($number, $code)
 	{
-		// // url
-		// $url = 'https://sms2.mitake.com.tw/api/mtk/SmSend?';
-		// $url .= 'CharsetURL=UTF-8';
-		// // parameters
-		// $data = 'username=0912962950';
-		// $data .= '&password=kai53972833';
-		// // $data = 'username=53972833SMS';
-		// $data .= '&password=53972833ABC';
-		// $data .= '&dstaddr=0973221508';
-		// $data .= '&smbody=簡訊SmSend測試';
+		$curl = curl_init();
 
-		// echo $this->call_api->callAPI('POST', $url, $data);
-		$url = 'http://smexpress.mitake.com.tw:9600/SmSendGet.asp?username=0912962950&password=kai53972833&dstaddr=0973221508&encoding=UTF8&smbody=TEST';
+		// url
+		$url = 'https://smsapi.mitake.com.tw/api/mtk/SmSend?';
+		$url .= 'CharsetURL=UTF-8';
+		// parameters
+		$data = 'username=' . get_setting_general('mitake_username');
+		$data .= '&password=' . get_setting_general('mitake_password');
+		$data .= '&dstaddr=' . $number;
+		$data .= '&smbody=【阿凱的冰箱】您於官網申請帳號的手機驗證碼為[' . $code . ']，5分鐘內有效，請勿將驗證碼提供他人以防詐騙';
 
-		file_get_contents($url);
+		// 准备请求头
+        $header = array(
+            'Content-Type: application/x-www-form-urlencoded',
+        );
+
+        // 设置请求选项
+        $options = array(
+            'http' => array(
+                'method' => 'POST', // 使用 POST 方法发送数据
+                'header' => implode("\r\n", $header),
+                'content' => $data, // 将 JSON 数据放在请求主体中
+            ),
+        );
+
+        $context = stream_context_create($options);
+
+        $res = @file_get_contents($url, false, $context);
+
+		echo $res;
+
+		// // 設定curl網址
+		// curl_setopt($curl, CURLOPT_URL, $url);
+		// // 設定Header
+		// curl_setopt(
+		// 	$curl,
+		// 	CURLOPT_HTTPHEADER,
+		// 	array("Content-type: application/x-www-form-urlencoded")
+		// );
+		// curl_setopt($curl, CURLOPT_POST, 1);
+		// curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		// curl_setopt($curl, CURLOPT_HEADER, 0);
+		// // 執行
+		// $output = curl_exec($curl);
+		// curl_close($curl);
+		// echo $output;
+		
 	}
 
 	function get_checkcode()
 	{
-		if (empty($this->session->userdata('phone_code')) || (!empty($this->session->userdata('phone_code')) && $this->session->userdata('phone_expire') <= time())) {
-			$checkcode = $this->verification_code->generateVerificationCode();
-			$this->session->set_userdata('phone_code', $checkcode['code']); // 記錄驗證碼
-			$this->session->set_userdata('phone_expire', $checkcode['life']); // 記錄壽命
-		}
+		$checkcode = $this->verification_code->generateVerificationCode();
+		$this->session->set_userdata('phone_number', $this->input->post('custom_number')); // 記錄手機號
+		$this->session->set_userdata('phone_code', $checkcode['code']); // 記錄驗證碼
+		$this->session->set_userdata('phone_expire', $checkcode['life']); // 記錄壽命
 		$this->session->set_userdata('last_request_time', time()); // 記錄請求時間
 
+		$number = $this->input->post('custom_number');
+		$code = $this->session->userdata('phone_code');
+		$this->sms_mitake_send($number, $code);
+
 		echo 'success';
+	}
+
+	function check_member()
+	{
+		$number = $this->input->post('number');
+		$self = $this->mysql_model->_select('users', 'username', $number, 'row');
+		echo !empty($self) ? 'exist' : 'inexist';
 	}
 
 	function compare_checkcode($checkcode)
@@ -811,10 +853,17 @@ class Auth extends Public_Controller
 				$this->session->set_flashdata('registerMessage', '<br>【驗證碼】欄位為必填項目<br><br>');
 				echo '<script>window.history.back();</script>';
 				return;
-			} elseif (!empty($this->input->post('checkcode')) && !empty($this->session->userdata('phone_code')) && !empty($this->session->userdata('phone_expire'))) {
+			} elseif (!empty($this->input->post('checkcode')) && !empty($this->session->userdata('phone_number')) && !empty($this->session->userdata('phone_code')) && !empty($this->session->userdata('phone_expire'))) {
 				$checkcode = $this->input->post('checkcode');
+				$number = $this->session->userdata('phone_number');
 				$captcha = $this->session->userdata('phone_code');
 				$life = $this->session->userdata('phone_expire');
+				if ($number != $this->input->post('identity')) {
+					$this->session->set_flashdata('form_values', $this->input->post());
+					$this->session->set_flashdata('registerMessage', '<br>【門號錯誤】註冊帳號需與傳送簡訊之門號相符<br><br>');
+					echo '<script>window.history.back();</script>';
+					return;
+				}
 				if ($life < time()) {
 					$this->session->set_flashdata('form_values', $this->input->post());
 					$this->session->set_flashdata('registerMessage', '<br>【驗證碼過期】請重新獲取驗證碼<br><br>');
