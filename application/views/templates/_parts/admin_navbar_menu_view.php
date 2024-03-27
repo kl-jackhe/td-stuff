@@ -71,15 +71,11 @@
       <!-- sms point -->
       <li class="hidden-sm-down">
         <a target="_blank" href="https://sms2.mitake.com.tw/member/index.jsp">
-          <?php if ((int)get_setting_general('mitake_point') > 0) : ?>
-            <span class="MailBox" style="color: #79f259; position: relative;">
+          <?php if (!empty(get_setting_general('mitake_point'))) : ?>
+            <span class="MailBox" style="<?= ((int)get_setting_general('mitake_point') > 500) ? 'color: #79f259; position: relative;' : 'color: red; position: relative;' ?>">
               <i class="fas fa-sms"></i>
               <span>&nbsp;<?= get_setting_general('mitake_point'); ?></span>
               <span>&nbsp;points</span>
-            </span>
-          <?php else : ?>
-            <span class="MailBox" style="color: white; position: relative;">
-              <i class="fas fa-sms"></i>
             </span>
           <?php endif; ?>
         </a>
