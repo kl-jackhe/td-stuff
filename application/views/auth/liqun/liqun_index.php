@@ -461,13 +461,16 @@
                                         custom_number: $('#identity').val(),
                                     },
                                     success: (response) => {
-                                        // 成功取得驗證碼
-                                        if (this.countdownInterval) {
-                                            clearInterval(this.countdownInterval);
+                                        if (response == 'success') {
+                                            // 成功取得驗證碼
+                                            if (this.countdownInterval) {
+                                                clearInterval(this.countdownInterval);
+                                            }
+                                            this.startCountdown(); // 启动倒计时
+                                            this.isCountingDown = true; // 设置倒计时状态为true
+                                        } else {
+                                            console.log(response);
                                         }
-                                        this.startCountdown(); // 启动倒计时
-                                        this.isCountingDown = true; // 设置倒计时状态为true
-                                        console.log(response);
                                     },
                                 });
                             } else {

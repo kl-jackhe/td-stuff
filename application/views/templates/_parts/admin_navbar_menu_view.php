@@ -67,6 +67,23 @@
           <?php endif; ?>
         </a>
       </li>
+    <?php elseif ($this->is_liqun_food) : ?>
+      <!-- sms point -->
+      <li class="hidden-sm-down">
+        <a target="_blank" href="https://sms2.mitake.com.tw/member/index.jsp">
+          <?php if ((int)get_setting_general('mitake_point') > 0) : ?>
+            <span class="MailBox" style="color: #79f259; position: relative;">
+              <i class="fas fa-sms"></i>
+              <span>&nbsp;<?= get_setting_general('mitake_point'); ?></span>
+              <span>&nbsp;points</span>
+            </span>
+          <?php else : ?>
+            <span class="MailBox" style="color: white; position: relative;">
+              <i class="fas fa-sms"></i>
+            </span>
+          <?php endif; ?>
+        </a>
+      </li>
     <?php endif; ?>
     <!-- END Button Notifications -->
     <?php if (!empty($this->session->userdata('user_id'))) { ?>

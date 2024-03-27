@@ -167,7 +167,6 @@ class Product extends Admin_Controller
 		$data = array(
 			'product_name' => $this->input->post('product_name'),
 			'product_price' => $this->input->post('product_price'),
-			'product_category_id' => $this->input->post('product_category'),
 			'product_sku' => $this->input->post('product_sku'),
 			'product_description' => $this->input->post('product_description'),
 			'product_note' => $this->input->post('product_note'),
@@ -180,6 +179,7 @@ class Product extends Admin_Controller
 		);
 
 		if ($this->is_partnertoys) {
+			$data['product_category_id'] = $this->input->post('product_category');
 			$data['safe_inventory'] = $this->input->post('safe_inventory');
 			$data['seo_title'] = $this->input->post('seo_title');
 			$data['seo_keyword'] = $this->input->post('seo_keyword');

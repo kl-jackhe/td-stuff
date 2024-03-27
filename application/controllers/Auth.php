@@ -210,10 +210,50 @@ class Auth extends Public_Controller
 		}
 	}
 
+	function sms_mitake_point()
+	{
+		// url
+		$url = 'https://smsapi.mitake.com.tw/api/mtk/SmQuery';
+		// parameters
+		$data = 'username=' . get_setting_general('mitake_username');
+		$data .= '&password=' . get_setting_general('mitake_password');
+
+		// 准备请求头
+		$header = array(
+			'Content-Type: application/x-www-form-urlencoded',
+		);
+
+		// 设置请求选项
+		$options = array(
+			'http' => array(
+				'method' => 'POST', // 使用 POST 方法发送数据
+				'header' => implode("\r\n", $header),
+				'content' => $data, // 将 JSON 数据放在请求主体中
+			),
+		);
+
+		$context = stream_context_create($options);
+
+		$res = @file_get_contents($url, false, $context);
+
+		// 從 API 回傳的文字中提取數字部分
+		preg_match('/\d+/', $res, $matches);
+
+		// 檢查是否有匹配到數字
+		if (!empty($matches)) {
+			// 提取到的數字存儲在 $matches[0] 中
+			$number = $matches[0];
+			// 存入 $data 陣列中
+			$data = array(
+				'setting_general_value' => $number,
+			);
+			$this->db->where('setting_general_name', 'mitake_point');
+			$this->db->update('setting_general', $data);
+		}
+	}
+
 	function sms_mitake_send($number, $code)
 	{
-		$curl = curl_init();
-
 		// url
 		$url = 'https://smsapi.mitake.com.tw/api/mtk/SmSend?';
 		$url .= 'CharsetURL=UTF-8';
@@ -224,41 +264,26 @@ class Auth extends Public_Controller
 		$data .= '&smbody=【阿凱的冰箱】您於官網申請帳號的手機驗證碼為[' . $code . ']，5分鐘內有效，請勿將驗證碼提供他人以防詐騙';
 
 		// 准备请求头
-        $header = array(
-            'Content-Type: application/x-www-form-urlencoded',
-        );
+		$header = array(
+			'Content-Type: application/x-www-form-urlencoded',
+		);
 
-        // 设置请求选项
-        $options = array(
-            'http' => array(
-                'method' => 'POST', // 使用 POST 方法发送数据
-                'header' => implode("\r\n", $header),
-                'content' => $data, // 将 JSON 数据放在请求主体中
-            ),
-        );
+		// 设置请求选项
+		$options = array(
+			'http' => array(
+				'method' => 'POST', // 使用 POST 方法发送数据
+				'header' => implode("\r\n", $header),
+				'content' => $data, // 将 JSON 数据放在请求主体中
+			),
+		);
 
-        $context = stream_context_create($options);
+		$context = stream_context_create($options);
 
-        $res = @file_get_contents($url, false, $context);
+		// 傳送要求
+		$res = @file_get_contents($url, false, $context);
 
-		echo $res;
-
-		// // 設定curl網址
-		// curl_setopt($curl, CURLOPT_URL, $url);
-		// // 設定Header
-		// curl_setopt(
-		// 	$curl,
-		// 	CURLOPT_HTTPHEADER,
-		// 	array("Content-type: application/x-www-form-urlencoded")
-		// );
-		// curl_setopt($curl, CURLOPT_POST, 1);
-		// curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-		// curl_setopt($curl, CURLOPT_HEADER, 0);
-		// // 執行
-		// $output = curl_exec($curl);
-		// curl_close($curl);
-		// echo $output;
-		
+		// 更新剩餘餘額
+		$this->sms_mitake_point();
 	}
 
 	function get_checkcode()

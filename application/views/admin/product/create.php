@@ -93,7 +93,7 @@
                                     <input type="text" class="form-control" id="product_price" name="product_price" required>
                                 </div>
                             </div>
-                            <? if ($this->is_partnertoys) : ?>
+                            <? if ($this->is_partnertoys || $this->is_liqun_food) : ?>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="free" for="safe_inventory">安全庫存量</label>
