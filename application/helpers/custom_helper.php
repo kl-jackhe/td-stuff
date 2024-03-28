@@ -548,7 +548,7 @@ function get_customer_coupon_count($user_id)
 	$CI = &get_instance();
 	$CI->db->where('custom_id', $user_id);
 	$user_coupons = $CI->db->get('new_coupon_custom')->result_array();
-	return !empty($user_coupons) ? count($user_coupons) : false;
+	return !empty($user_coupons) ? count($user_coupons) : 0;
 }
 
 function get_coupon_id_by_code($id)

@@ -236,7 +236,22 @@
                                 <p style="font-size:18px;">完成付款後，記得聯繫客服，確認付款完成！</p>
                             <?php } ?>
                             <hr>
-                            <h3>訂購人資訊</h3>
+                            <? if (!empty($this->session->userdata('user_id'))) : ?>
+                                <!-- 訂購人資訊 -->
+                                <h3 style="color: red;font-weight: bold;">訂購人資訊</h3>
+                                <p>姓名：
+                                    <?= $this->session->userdata('full_name') ?>
+                                </p>
+                                <p>聯絡電話：
+                                    <?= $this->session->userdata('phone') ?>
+                                </p>
+                                <p>E-mail：
+                                    <?= $this->session->userdata('email') ?>
+                                </p>
+                                <hr>
+                            <? endif; ?>
+                            <!-- 收件人資訊 -->
+                            <h3 style="color: red;font-weight: bold;">收件人資訊</h3>
                             <p>姓名：
                                 <?= $order['customer_name'] ?>
                             </p>
@@ -246,10 +261,13 @@
                             <p>E-mail：
                                 <?= $order['customer_email'] ?>
                             </p>
-                            <p>地址：
-                                <?= $order['order_delivery_address'] ?>
-                            </p>
+                            <? if ($order['order_delivery'] == 'home_delivery' || $order['order_delivery'] == 'home_frozen_delivery') : ?>
+                                <p>地址：
+                                    <?= $order['order_delivery_address'] ?>
+                                </p>
+                            <? endif; ?>
                             <hr>
+                            <!-- 訂單備註 -->
                             <h3>訂單備註</h3>
                             <p style="border: 1px solid gray;border-radius: 5px;margin: 0px;padding: 10px;">
                                 <?php if (!empty($order['order_remark'])) {

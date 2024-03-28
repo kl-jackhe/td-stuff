@@ -78,7 +78,7 @@ class Cart extends Public_Controller
 					echo '
 					<script>
 						alert("非活動期間");
-						window.location.href = "' . base_url() . 'auth?id=3' . '";
+						window.history.back();
 					</script>';
 				}
 				return;
@@ -94,7 +94,7 @@ class Cart extends Public_Controller
 						echo '
 						<script>
 							alert("非中獎客戶，請注意是否為中獎帳號");
-							window.location.href = "' . base_url() . 'auth?id=3' . '";
+							window.history.back();
 						</script>';
 					}
 					return;
@@ -106,7 +106,7 @@ class Cart extends Public_Controller
 						echo '
 						<script>
 							alert("抽選商品僅限購一次");
-							window.location.href = "' . base_url() . 'auth?id=3' . '";
+							window.history.back();
 						</script>';
 					}
 					return;
@@ -118,7 +118,7 @@ class Cart extends Public_Controller
 					echo '
 					<script>
 						alert("找不到使用者");
-						window.location.href = "' . base_url() . 'auth?id=3' . '";
+						window.history.back();
 					</script>';
 				}
 				return;
@@ -139,7 +139,7 @@ class Cart extends Public_Controller
 								echo '
 								<script>
 									alert("預購商品不得與其他類型商品一並選購，敬請見諒。");
-									window.location.href = "' . base_url() . 'auth?id=3' . '";
+									window.history.back();
 								</script>';
 							}
 							return;
@@ -165,7 +165,7 @@ class Cart extends Public_Controller
 								echo '
 								<script>
 									alert("抽選商品只能選購一個。");
-									window.location.href = "' . base_url() . 'auth?id=3' . '";
+									window.history.back();
 								</script>';
 							}
 							return;

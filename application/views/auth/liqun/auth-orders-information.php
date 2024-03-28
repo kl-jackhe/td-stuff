@@ -101,13 +101,13 @@
                                 <h2>訂購資訊</h2>
                             </div>
                             <div class="col-4 text-right">訂購人：</div>
-                            <div class="col-8">{{ selectedOrder.customer_name }}</div>
+                            <div class="col-8"><?= $this->session->userdata('full_name') ?></div>
                             <div class="col-4 text-right">付款方式：</div>
                             <div v-show="selectedOrder.order_payment" class="col-8">{{ getPayName(selectedOrder.order_payment) }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
-                            <div class="col-8">{{ selectedOrder.customer_phone }}</div>
+                            <div class="col-8"><?= $this->session->userdata('phone') ?></div>
                             <div class="col-4 text-right">聯絡郵箱：</div>
-                            <div class="col-8">{{ selectedOrder.customer_email }}</div>
+                            <div class="col-8"><?= $this->session->userdata('email') ?></div>
                         </div>
                     </div>
                     <div class="col-md-6 orderMarginBottom separator">
@@ -162,6 +162,8 @@
                             <div class="col-8"><?= get_setting_general('atm_bank_branch') ?></div>
                             <div class="col-4 text-right">匯款帳戶：</div>
                             <div class="col-8"><?= get_setting_general('atm_bank_account') ?></div>
+                            <div class="col-4 text-right">重要提醒：</div>
+                            <div class="col-8">匯款完成後請通知客服並提供完成付款證明～</div>
                         </div>
                     </div>
                     <!-- 送貨及備註資訊 -->
