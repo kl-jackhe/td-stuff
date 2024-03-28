@@ -1522,8 +1522,18 @@ class Checkout extends Public_Controller
             <td>
                 付款方式 : ' . get_payment($row['order_payment']) . '
             </td>
-        </tr>
-        <tr>
+        </tr>';
+		if ($row['order_payment'] == 'bank_transfer') {
+			$message .=
+				'<tr>
+					<td>
+						<div style="border: 1px solid; border-bottom: none; padding: 5px;"><span>銀行代碼 : </span><span>' . get_setting_general("atm_bank_code") . '</span></div>
+						<div style="border: 1px solid; padding: 5px;"><span>銀行分行 : </span><span>' . get_setting_general("atm_bank_branch") . '</span></div>
+						<div style="border: 1px solid; border-top: none; padding: 5px;"><span>銀行帳號 : </span><span>' . get_setting_general("atm_bank_account") . '</span></div>
+					</td>
+				</tr>';
+		}
+		$message .= '<tr>
             <td>
                 訂單狀況 : 訂單確認
             </td>
@@ -1714,11 +1724,9 @@ class Checkout extends Public_Controller
         </html>';
 
 		// echo '<pre>';
-		// print_r($query2);
 		// print_r($body);
 		// echo '</pre>';
 		// return;
-
 
 		// 寄信給賣家
 		$this->email->set_smtp_host(get_setting_general('smtp_host'));

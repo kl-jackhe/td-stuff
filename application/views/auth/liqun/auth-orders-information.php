@@ -120,6 +120,8 @@
                             <div class="col-8">{{ selectedOrder.customer_name }}</div>
                             <div class="col-4 text-right">聯絡電話：</div>
                             <div class="col-8">{{ selectedOrder.customer_phone }}</div>
+                            <div class="col-4 text-right">聯絡郵箱：</div>
+                            <div class="col-8">{{ selectedOrder.customer_email }}</div>
                             <div class="col-4 text-right">收件地址：</div>
                             <div v-if="selectedOrder.order_delivery == '711_pickup' || selectedOrder.order_delivery == 'family_pickup' || selectedOrder.order_delivery == 'family_limit_5_frozen_pickup' || selectedOrder.order_delivery == 'family_limit_10_frozen_pickup'" class="col-8">超商取貨</div>
                             <div v-else class="col-8">{{ selectedOrder.order_delivery_address }}</div>
