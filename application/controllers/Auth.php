@@ -261,7 +261,7 @@ class Auth extends Public_Controller
 		$data = 'username=' . get_setting_general('mitake_username');
 		$data .= '&password=' . get_setting_general('mitake_password');
 		$data .= '&dstaddr=' . $number;
-		$data .= '&smbody=【阿凱的冰箱】您於官網申請帳號的手機驗證碼為[' . $code . ']，5分鐘內有效，請勿將驗證碼提供他人以防詐騙';
+		$data .= '&smbody=【' . get_setting_general('short_name') . '】您於官網申請帳號的手機驗證碼為[' . $code . ']，5分鐘內有效，請勿將驗證碼提供他人以防詐騙';
 
 		// 准备请求头
 		$header = array(

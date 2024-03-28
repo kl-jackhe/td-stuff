@@ -134,7 +134,7 @@
                             <? foreach ($limited_time_products as $count => $product) : ?>
                                 <? if ($count < 4) : ?>
                                     <div class="col-md-3 pb-4 ipad_w">
-                                        <a href="/product/view/<?= $product['product_id'] ?>">
+                                        <a href="javascript:void(0)" onclick="href_product(<?= $product['product_id'] ?>)">
                                             <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= (!empty($product['picture']) ? $product['picture'] : 'Product/img-600x600.png') ?>">
                                             <div class="product_name">
                                                 <span><?= $product['product_name']; ?></span>

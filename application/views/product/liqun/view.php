@@ -1,6 +1,6 @@
 <div role="main" class="main product-view">
     <section class="form-section content_auto_h">
-        <div class="container-fluid productView">
+        <div class="container container-fluid productView">
             <div class="row justify-content-center">
                 <?php if (!empty($product)) { ?>
                     <div class="col-md-8 text-center product_description" style="margin-bottom: 35px;">
@@ -9,16 +9,12 @@
                         <? } ?>
                     </div>
                     <div class="col-md-8 text-center product_description">
-                        <p class="m-0">
-                            <span class="productViewTitle"><?= $product['product_name'] ?></span>
-                        </p>
+                        <span class="productViewTitle"><?= $product['product_name'] ?></span>
                     </div>
                     <div class="col-md-8 text-center product_description">
-                        <p>
-                            <span id="jumpToCombine" class="transitionAnimation jumpToCombine productViewTitle"><i class="fa fa-caret-square-down" aria-hidden="true"></i>&nbsp;跳至方案選擇</span>
-                        </p>
+                        <img id="productImage" class="jumpToCombine" src="/assets/images/liqun/products_bt_order_a.png" alt="">
                     </div>
-                    <div class="col-md-8 text-center product_description">
+                    <div class="col-md-8 text-left product_description">
                         <div id="dynamicCarousel" class="carousel slide carousel-fade" data-ride="carousel" data-interval="3000">
                             <div class="carousel-inner">
                                 <!-- Carousel items will be dynamically added here -->
@@ -236,7 +232,7 @@
 <script>
     $(document).ready(function() {
         // 给 span 元素添加点击事件
-        $("#jumpToCombine").on("click", function() {
+        $("#productImage").on("click", function() {
             // 使用 jQuery 动画效果滚动到目标
             $("html, body").animate({
                 scrollTop: $("#selectCombine").offset().top
@@ -250,6 +246,19 @@
     $(document).ready(function() {
         $('.carousel-control-prev, .carousel-control-next, .carousel-indicators').css('display', 'none');
     })
+</script>
+
+<!-- go to bottom -->
+<script>
+    const productImage = document.getElementById('productImage');
+
+    productImage.addEventListener('mouseover', () => {
+        productImage.src = '/assets/images/liqun/products_bt_order_b.png';
+    });
+
+    productImage.addEventListener('mouseout', () => {
+        productImage.src = '/assets/images/liqun/products_bt_order_a.png';
+    });
 </script>
 
 <script>

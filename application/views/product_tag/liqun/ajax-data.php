@@ -16,17 +16,17 @@
                     </a>
                     <a href="/product/view/<?= $product['product_id'] ?>">
                         <? if ($product['sales_status'] == 0) { ?>
-                            <div class="btn select_product">
+                            <div class="btn select_product productSaleStatusOne">
                                 <span>現貨</span>
                             </div>
                         <? } ?>
                         <? if ($product['sales_status'] == 1) { ?>
-                            <div class="btn select_product" style="background: #817F82;">
+                            <div class="btn select_product productSaleStatusTwo">
                                 <span>售完</span>
                             </div>
                         <? } ?>
                         <? if ($product['sales_status'] == 2) { ?>
-                            <div class="btn select_product" style="background: #A60747;">
+                            <div class="btn select_product productSaleStatusThree">
                                 <span>預購</span>
                             </div>
                         <? } ?>

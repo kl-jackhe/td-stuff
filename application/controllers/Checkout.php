@@ -622,7 +622,7 @@ class Checkout extends Public_Controller
 				}
 
 				// checking coupon used limit and exist
-				if ($limit_number < 0 || empty($self_coupon) || $now_time < $self_coupon['distribute_at'] || $now_time > $self_coupon['discontinued_at']) {
+				if (($limit_number < 0 && $selected_custom_coupon['use_limit_enable'] == 1) || empty($self_coupon) || $now_time < $self_coupon['distribute_at'] || $now_time > $self_coupon['discontinued_at']) {
 					echo '
 					<script>
 						alert("優惠券錯誤請重新嘗試");

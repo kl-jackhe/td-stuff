@@ -27,7 +27,7 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <link href="/assets/css/liqunPage.css" rel="stylesheet">
+    <link href="/assets/css/liqunPage.css?v=1.5" rel="stylesheet">
     <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
     <!-- jquery一定要在最上面 -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
@@ -91,6 +91,9 @@
                     <li>
                         <a href="/">回首頁</a>
                     </li>
+                    <li>
+                        <a href="/product">全品項</a>
+                    </li>
                     <?php if (!$this->ion_auth->logged_in()) { ?>
                         <li>
                             <a href="/login">登入 <i class="fa-solid fa-right-to-bracket"></i></a>
@@ -98,9 +101,6 @@
                     <? } else { ?>
                         <li>
                             <a href="/auth">會員中心</a>
-                        </li>
-                        <li>
-                            <a href="/product?cid=">全品項</a>
                         </li>
                         <li>
                             <a href="/logout">登出 <i class="fa-solid fa-right-from-bracket"></i></a>

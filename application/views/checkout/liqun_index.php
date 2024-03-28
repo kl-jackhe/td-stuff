@@ -390,55 +390,6 @@ foreach ($this->cart->contents() as $items) {
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">運送方式</h3>
                                     <?
-                                    // $deliveryList = array();
-                                    // if (!empty($product_list)) {
-                                    //     foreach ($product_list as $pl_row) {
-                                    //         if ($pl_row['product_category_id'] > 0) {
-                                    //             $this->db->select('delivery_id,source,source_id');
-                                    //             $this->db->where('source', 'ProductCategory');
-                                    //             $this->db->where('source_id', $pl_row['product_category_id']);
-                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                    //             if (!empty($drl_query)) {
-                                    //                 foreach ($drl_query as $drl_row) {
-                                    //                     $deliveryList[$drl_row['delivery_id']] = 'ProductCategory';
-                                    //                 }
-                                    //             }
-                                    //         }
-                                    //         if ($pl_row['product_id'] > 0) {
-                                    //             $this->db->select('delivery_id,source,source_id');
-                                    //             $this->db->where('source', 'Product');
-                                    //             $this->db->where('source_id', $pl_row['product_id']);
-                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                    //             if (!empty($drl_query)) {
-                                    //                 foreach ($drl_query as $drl_row) {
-                                    //                     $deliveryList[$drl_row['delivery_id']] = 'Product';
-                                    //                 }
-                                    //             }
-                                    //         }
-                                    //         if ($pl_row['product_combine_id'] > 0) {
-                                    //             $this->db->select('delivery_id,source,source_id');
-                                    //             $this->db->where('source', 'ProductCombine');
-                                    //             $this->db->where('source_id', $pl_row['product_combine_id']);
-                                    //             $drl_query = $this->db->get('delivery_range_list')->result_array();
-                                    //             if (!empty($drl_query)) {
-                                    //                 foreach ($drl_query as $drl_row) {
-                                    //                     $deliveryList[$drl_row['delivery_id']] = 'ProductCombine';
-                                    //                 }
-                                    //             }
-                                    //         }
-                                    //     }
-                                    // }
-                                    // $this->db->select('delivery_name_code,delivery_name,delivery_info, shipping_cost, limit_weight');
-                                    // if (!empty($deliveryList)) {
-                                    //     $deliveryIdList = array();
-                                    //     foreach ($deliveryList as $key => $value) {
-                                    //         $deliveryIdList[] = $key;
-                                    //     }
-                                    //     $this->db->where_in('id', $deliveryIdList);
-                                    // }
-                                    // $this->db->where('delivery_status', 1);
-                                    // $d_query = $this->db->get('delivery')->result_array();
-
                                     $d_query = $this->delivery_model->getSortOpenDesc();
 
                                     foreach ($d_query as $d_row) {
@@ -460,19 +411,25 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <h3 class="mt-0">付款方式</h3>
-                                    <? $payment_count = 0;
-                                    foreach ($payment as $row) { ?>
-                                        <div class="form-check <?php // echo ($row['payment_code']=='ecpay'?'d-none':'') 
-                                                                ?>">
-                                            <input class="form-check-input" type="radio" name="checkout_payment" id="checkout_payment<?= $payment_count ?>" value="<?= $row['payment_code']; ?>" <?= ($payment_count == 0 ? 'checked' : '') ?>>
-                                            <label class="form-check-label" for="checkout_payment<?= $row['payment_code']; ?>">
+                                    <?php
+                                    $payment_count = 0;
+                                    foreach ($payment as $row) {
+                                        $cash_on_delivery = '';
+                                        if ($row['payment_code'] == 'cash_on_delivery') {
+                                            $cash_on_delivery = 'disabled';
+                                        }
+                                    ?>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="checkout_payment" id="<?= $row['payment_code']; ?>" value="<?= $row['payment_code']; ?>" <?= ($payment_count == 0 ? 'checked' : '') ?> <?= $cash_on_delivery ?>>
+                                            <label class="form-check-label" for="<?= $row['payment_code']; ?>">
                                                 <?= $row['payment_name'] ?>
                                             </label>
-                                            <? if (!empty($row['payment_info'])) { ?>
+                                            <?php if (!empty($row['payment_info'])) { ?>
                                                 <p style="font-size:12px;color: gray;white-space: pre-wrap;"><?= $row['payment_info']; ?></p>
-                                            <? } ?>
+                                            <?php } ?>
                                         </div>
-                                    <? $payment_count++;
+                                    <?php $payment_count++;
                                     } ?>
                                 </div>
                                 <div class="col-12">
@@ -498,19 +455,19 @@ foreach ($this->cart->contents() as $items) {
                             <div class="form-group row p-3 justify-content-center" style="padding-bottom:50px !important;">
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">姓名</span>
+                                        <span class="input-group-text">收件人姓名</span>
                                     </div>
                                     <input type="text" class="form-control" name="name" id="name" value="<?= $user_data['name'] ?>" placeholder="範例：王小明" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-4">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">電話</span>
+                                        <span class="input-group-text">收件人電話</span>
                                     </div>
                                     <input type="text" class="form-control" name="phone" id="phone" value="<?= $user_data['phone'] ?>" placeholder="範例：0987654321" onchange="set_user_data()" required>
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">Email</span>
+                                        <span class="input-group-text">收件人郵箱</span>
                                     </div>
                                     <input type="text" class="form-control" name="email" id="email" value="<?= $user_data['email'] ?>" placeholder="範例：test@test.com.tw" onchange="set_user_data()" required>
                                 </div>
@@ -530,7 +487,7 @@ foreach ($this->cart->contents() as $items) {
                                 </div>
                                 <div class="input-group mb-3 col-12 col-sm-8 delivery_address">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text">地址</span>
+                                        <span class="input-group-text">詳細地址</span>
                                     </div>
                                     <input type="text" class="form-control" name="address" id="address" placeholder="請輸入詳細地址" value="<?= $user_data['address'] ?>">
                                 </div>
@@ -939,6 +896,16 @@ foreach ($this->cart->contents() as $items) {
 
         // 更改運送方式
         $('input[name="checkout_delivery"]').change(function() {
+
+            if ($(this).val() == 'home_delivery' || $(this).val() == 'home_frozen_delivery') {
+                $('#cash_on_delivery').attr('disabled', false);
+            } else {
+                if ($('#cash_on_delivery').is(':checked')) {
+                    $('#cash_on_delivery').prop('checked', false);
+                }
+                $('#cash_on_delivery').attr('disabled', true);
+            }
+
             var shippingFee = $(this).data('shipping-fee');
             var limitWeight = $(this).data('limit-weight');
             freeLimit = $(this).data('free-shipping-limit');
@@ -988,6 +955,7 @@ foreach ($this->cart->contents() as $items) {
         });
     });
 </script>
+
 <!-- 介面 -->
 <script>
     $("#wizard").steps({
@@ -1157,6 +1125,18 @@ foreach ($this->cart->contents() as $items) {
                         return false;
                     }
                 }
+
+                // check reserve person
+                <? if (!empty($this->session->userdata('user_id'))) : ?>
+                    var tmp_name = <?= json_encode($this->session->userdata('full_name')) ?>;
+                    var tmp_phone = <?= json_encode($this->session->userdata('phone')) ?>;
+                    var tmp_email = <?= json_encode($this->session->userdata('email')) ?>;
+                    if ($('#name').val() != tmp_name || $('#phone').val() != tmp_phone || $('#email').val() != tmp_email) {
+                        if (!confirm('請問收件人資訊與帳戶持有者資訊判斷為不同人是否繼續下一步呢？')) {
+                            return false;
+                        }
+                    }
+                <? endif; ?>
             }
             checkConfirmInfo();
             return true;
@@ -1171,7 +1151,7 @@ foreach ($this->cart->contents() as $items) {
         var selectedCheckoutDelivery = $('input[name="checkout_delivery"]:checked').val();
         var checkoutDeliveryLabel = $('label[for="checkout_delivery' + selectedCheckoutDelivery + '"]').text();
         var selectedCheckoutPayment = $('input[name="checkout_payment"]:checked').val();
-        var checkoutPaymentLabel = $('label[for="checkout_payment' + selectedCheckoutPayment + '"]').text();
+        var checkoutPaymentLabel = $('label[for="' + selectedCheckoutPayment + '"]').text();
         var data = '';
         data += '<table class="table table-bordered table-striped"><tbody>';
         data += '<tr><td class="text-center" colspan="3"><h2 class="m-0">訂購資訊確認</h2></td></tr>';
@@ -1229,11 +1209,14 @@ foreach ($this->cart->contents() as $items) {
         data += '<tr><td>訂單備註</td><td>' + $('#remark').val() + '</td></tr>';
         data += '<tr><td>運送方式</td><td>' + checkoutDeliveryLabel + '</td></tr>';
         data += '<tr><td>付款方式</td><td>' + checkoutPaymentLabel + '</td></tr>';
-        // if ($('#xxxxx').val() != '') {
-        //     data += '<tr><td>運費</td><td>'+$('#xxxxx').val()+'</td></tr>';
-        // }
-        if ($('#cart_total').val() != '') {
-            data += '<tr><td>購物車小計</td><td>$' + $('#cart_total').val() + '</td></tr>';
+
+        var tmp_cart = <?= (int)$this->cart->total() ?>;
+        var order_discount_price = parseInt(tmp_cart) - parseInt($('#cart_total').val());
+        if (tmp_cart != '') {
+            data += '<tr><td>購物車小計</td><td>$' + tmp_cart + '</td></tr>';
+        }
+        if (order_discount_price != 0) {
+            data += '<tr><td>優惠折抵</td><td>$-' + order_discount_price + '</td></tr>';
         }
         if ($('#weight_exceed_amount').val() != '') {
             data += '<tr><td>超重加收</td><td>$' + $('#weight_exceed_amount').val() + '</td></tr>';
