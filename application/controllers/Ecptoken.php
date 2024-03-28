@@ -59,16 +59,7 @@ class Ecptoken extends Public_Controller
                     $LogisticsSubType = LogisticsSubType::HILIFE_C2C;
                 }
 
-                //基本參數(請依系統規劃自行調整)
-                $MerchantTradeNo = $row['order_number'] . substr(time(), 4, 6);
-                if (strlen($MerchantTradeNo) > 20) {
-                    $MerchantTradeNo = $row['order_number'] . substr(time(), 6, 4);
-                }
-                if (!empty($row['MerchantTradeNo'])) {
-                    $obj->Send['MerchantTradeNo'] = $row['MerchantTradeNo']; //綠界訂單編號
-                } else {
-                    $obj->Send['MerchantTradeNo'] = $MerchantTradeNo; //綠界訂單編號
-                }
+                $obj->Send['MerchantTradeNo'] = $row['MerchantTradeNo']; //綠界訂單編號
                 $obj->Send['MerchantTradeDate'] = date('Y/m/d H:i:s'); // 物流單生成時間
                 $obj->Send['LogisticsType'] = LogisticsType::CVS; // 超商物流選擇
                 $obj->Send['LogisticsSubType'] = $LogisticsSubType; // 超商選擇
@@ -99,9 +90,6 @@ class Ecptoken extends Public_Controller
                         'AllPayLogisticsID' => get_empty($response['AllPayLogisticsID']),
                         'CVSPaymentNo' => get_empty($response['CVSPaymentNo']),
                     );
-                    if (empty($row['MerchantTradeNo'])) {
-                        $data['MerchantTradeNo'] = $MerchantTradeNo; //綠界訂單編號
-                    }
                     $this->db->where('order_id', $order_id);
                     $this->db->update('orders', $data);
                 }
