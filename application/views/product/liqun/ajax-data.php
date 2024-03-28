@@ -19,7 +19,7 @@
           <a href="javascript:void(0)" onClick="href_product(<?= $product['product_id'] ?>)">
             <div class="product_view_style_in transitionAnimation">
               <? if (!empty($product['product_image'])) { ?>
-                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['product_image']; ?>">
+                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['product_image']; ?>" onerror="this.onerror=null;this.src='/assets/uploads/Product/img-600x600.png'">
               <? } else { ?>
                 <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
               <? } ?>

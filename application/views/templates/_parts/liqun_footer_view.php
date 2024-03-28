@@ -132,6 +132,45 @@
 <script src="/assets/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <script>
+    $(document).ready(function() {
+        var watermarkUrl = '/assets/images/liqun/logo_white.png';
+
+        $('.product_img_style').each(function() {
+            var $img = $(this);
+            var $watermark = $('<img>').attr('src', watermarkUrl).addClass('watermark');
+
+            $img.parent().append($watermark);
+            $watermark.css({
+                position: 'absolute',
+                bottom: '15%',
+                left: 0,
+                width: '100%',
+                height: '100%',
+                transform: 'rotate(-45deg)',
+                opacity: 1, // 浮水印的透明度
+                pointerEvents: 'none' // 防止浮水印干扰鼠标事件
+            });
+        });
+
+        $('.product_view_img_style').each(function() {
+            var $img = $(this);
+            var $watermark = $('<img>').attr('src', watermarkUrl).addClass('watermark');
+
+            $img.parent().append($watermark);
+            $watermark.css({
+                position: 'absolute',
+                bottom: '15%',
+                left: 0,
+                width: '100%',
+                height: '100%',
+                transform: 'rotate(-45deg)',
+                opacity: 1, // 浮水印的透明度
+                pointerEvents: 'none' // 防止浮水印干扰鼠标事件
+            });
+        });
+    });
+</script>
+<script>
     function linkToCoupon() {
         $.ajax({
             url: '/encode/getDataEncode/category',

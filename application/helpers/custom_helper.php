@@ -543,6 +543,15 @@ function get_last_order_date($id)
 	}
 }
 
+function is_frozen_cargo($product_id)
+{
+	$CI = &get_instance();
+	$CI->db->where('product_id', $product_id);
+	$CI->db->where('product_tag_id', 15);
+	$self = $CI->db->get('product_tag_content')->row_array();
+	return !empty($self) ? true : false;
+}
+
 function get_customer_coupon_count($user_id)
 {
 	$CI = &get_instance();

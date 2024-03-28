@@ -135,7 +135,11 @@
                                 <? if ($count < 4) : ?>
                                     <div class="col-md-3 pb-4 ipad_w">
                                         <a href="javascript:void(0)" onclick="href_product(<?= $product['product_id'] ?>)">
-                                            <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= (!empty($product['picture']) ? $product['picture'] : 'Product/img-600x600.png') ?>">
+                                            <? if (!empty($product['picture'])) : ?>
+                                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['picture'] ?>" onerror="this.onerror=null;this.src='/assets/uploads/Product/img-600x600.png'">
+                                            <? else : ?>
+                                                <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
+                                            <? endif; ?>
                                             <div class="product_name">
                                                 <span><?= $product['product_name']; ?></span>
                                             </div>
@@ -178,7 +182,11 @@
                                     if ($count < 6) { ?>
                                         <div class="col-md-2 pb-4 ipad_w">
                                             <a href="javascript:void(0)" onclick="href_product(<?= $product['product_id'] ?>)">
-                                                <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= (!empty($product['picture']) ? $product['picture'] : 'Product/img-600x600.png') ?>">
+                                                <? if (!empty($product['picture'])) : ?>
+                                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/<?= $product['picture'] ?>" onerror="this.onerror=null;this.src='/assets/uploads/Product/img-600x600.png'">
+                                                <? else : ?>
+                                                    <img id="zoomA" class="product_img_style" src="/assets/uploads/Product/img-600x600.png">
+                                                <? endif; ?>
                                                 <div class="product_name">
                                                     <span><?= $product['product_name']; ?></span>
                                                 </div>

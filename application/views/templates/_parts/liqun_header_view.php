@@ -27,7 +27,7 @@
     <link href="/assets/jquery.steps-1.1.0/jquery.steps.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/main.css" rel="stylesheet">
     <link href="/assets/jquery.steps-1.1.0/normalize.css" rel="stylesheet">
-    <link href="/assets/css/liqunPage.css?v=1.5" rel="stylesheet">
+    <link href="/assets/css/liqunPage.css?v=1.12" rel="stylesheet">
     <link href="/assets/magnific-popup/magnific-popup.css" rel="stylesheet">
     <!-- jquery一定要在最上面 -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>

@@ -604,6 +604,17 @@ foreach ($this->cart->contents() as $items) {
         <?= form_close() ?>
     </section>
 </div>
+
+<!-- hint -->
+<div id="hintWindow">
+    <div class="text-center">
+        <h1>
+            <span id="processingText">訂單處理中請稍後</span>
+            <span id="dots"></span>
+        </h1>
+    </div>
+</div>
+
 <!-- purchase-steps -->
 <script src="/assets/jquery.steps-1.1.0/jquery.steps.min.js"></script>
 
@@ -1142,7 +1153,25 @@ foreach ($this->cart->contents() as $items) {
             return true;
         },
         onFinishing: function(event, currentIndex) {
-            form_check();
+            // dot status start
+            var dotsInterval = setInterval(updateDots, 500);
+            showNotification();
+            // 表單送出
+            form_check(function(success) {
+                if (success) {
+                    // 如果表单提交成功，设置标志变量为 true，并在5秒后隐藏提示视窗
+                    setTimeout(function() {
+                        if (hideNotificationFlag) {
+                            clearInterval(dotsInterval); // 停止更新点状态
+                            hideNotification(); // 隐藏提示视窗
+                        }
+                    }, 5000); // 5000毫秒后隐藏提示视窗
+                } else {
+                    // 如果表单提交失败，直接隐藏提示视窗
+                    clearInterval(dotsInterval); // 停止更新点状态
+                    hideNotification(); // 隐藏提示视窗
+                }
+            });
             return true;
         }
     });
@@ -1379,7 +1408,29 @@ foreach ($this->cart->contents() as $items) {
         });
     }
 
-    function form_check() {
+    // Ajaxリクエストの開始時に通知を表示
+    function showNotification() {
+        // 通知の表示ロジックを実装（例：ローディングスピナーやメッセージを表示）
+        $('#hintWindow').css('display', 'block');
+    }
+
+    // Ajaxリクエストの完了時に通知を非表示にする
+    function hideNotification() {
+        // 通知の非表示ロジックを実装
+        $('#hintWindow').css('display', 'none');
+    }
+
+    // ドットを更新する関数
+    function updateDots() {
+        var dots = $('#dots').text();
+        if (dots.length >= 5) {
+            $('#dots').text('.');
+        } else {
+            $('#dots').text(dots + '.');
+        }
+    }
+
+    function form_check(callback) {
         var delivery = $('input[name=checkout_delivery]:checked', '#checkout_form').val();
         if ($('#name').val() == '') {
             alert('請輸入收件姓名');
@@ -1399,7 +1450,9 @@ foreach ($this->cart->contents() as $items) {
                 return false;
             }
         }
+
         $('#checkout_form').submit();
+        callback(true);
     }
 
     function passwordShowOrHide(source) {

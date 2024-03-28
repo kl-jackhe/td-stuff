@@ -65,7 +65,11 @@
                                         }
                                     } ?>
                                     <div class="col-md-4 py-2 mb-5 text-center">
-                                        <img id="zoomA" class="product_view_img_style" src="/assets/uploads/<?= (!empty($combine['picture']) ? $combine['picture'] : 'Product/img-600x600.png'); ?>">
+                                        <? if (!empty($combine['picture'])) : ?>
+                                            <img id="zoomA" class="product_view_img_style" src="/assets/uploads/<?= $combine['picture']; ?>" onerror="this.onerror=null;this.src='/assets/uploads/Product/img-600x600.png'">
+                                        <? else : ?>
+                                            <img id="zoomA" class="product_view_img_style" src="/assets/uploads/Product/img-600x600.png">
+                                        <? endif; ?>
                                         <div class="pt-2" style="font-size: 16px;">
                                             <?= $combine['name']; ?>
                                         </div>
@@ -264,7 +268,7 @@
 <script>
     function add_cart(combine_id, limit_enable = 'NO', limit_qty = 0) {
         var weight = $('#weight').val();
-        console.log('weight = ' + weight);
+        // console.log('weight = ' + weight);
         var qty = document.getElementById("qty_" + combine_id).value;
         if (limit_enable == 'YES' && parseInt(qty) > parseInt(limit_qty)) {
             alert('商品數量不得超過' + limit_qty + '個');
@@ -293,7 +297,7 @@
             },
             success: function(data) {
                 if (data == 'contradiction') {
-                    alert('預購商品不得與其他類型商品一並選購，敬請見諒。');
+                    alert('冷凍類型商品不得與常溫類型商品一並選購，敬請見諒。');
                 } else if (data == 'exceed') {
                     alert('超過限制數量故無法下單，敬請見諒');
                 } else if (data == 'weight_exceed') {

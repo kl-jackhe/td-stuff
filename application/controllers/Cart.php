@@ -202,6 +202,21 @@ class Cart extends Public_Controller
 			// 	echo 'weight_exceed';
 			// 	return;
 			// }
+
+			// 冷凍商品不可與常溫並下
+			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
+				$cart_item = $this->cart->contents(true);
+				foreach ($cart_item as $self) {
+					// 是否為預購與非預購一併下訂
+					$self_frozen = is_frozen_cargo($self['product_id']);
+					$this_frozen = is_frozen_cargo($this_product['product_id']);
+					if ($self_frozen != $this_frozen) {
+						echo 'contradiction';
+						return;
+					}
+				}
+			}
+
 			// 購物車是否有該物品
 			if (!empty($this->cart->contents(true)) && $this->cart->total_items() > 0) {
 				foreach ($cart_item as $self) {
