@@ -169,8 +169,9 @@ class fmtoken extends Public_Controller
                     array(
                         'EshopIdOrderNo' => $order_info['order_number'],
                         'OrderDate' => date('Y-m-d H:i:s'),
-                        'BageSize' => ((float)$order_info['order_weight'] >= 5.000) ? 'S105' : 'S60',
-                        'ShippDate' => date('Y-m-d', strtotime('+5 days')),
+                        // 'BageSize' => "S105",
+                        'BageSize' => ((float)$order_info['order_weight'] > 4.000) ? 'S105' : 'S60',
+                        'ShippDate' => date('Y-m-d', strtotime('+3 days')),
                         'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
@@ -281,8 +282,9 @@ class fmtoken extends Public_Controller
                     array(
                         'EshopIdOrderNo' => $order_info['order_number'],
                         'OrderDate' => date('Y-m-d H:i:s'),
-                        'BageSize' => ((float)$order_info['order_weight'] >= 5.000) ? 'S105' : 'S60',
-                        'ShippDate' => date('Y-m-d', strtotime('+5 days')),
+                        // 'BageSize' => 'S105',
+                        'BageSize' => ((float)$order_info['order_weight'] > 4.000) ? 'S105' : 'S60',
+                        'ShippDate' => date('Y-m-d', strtotime('+3 days')),
                         'OrderAmount' => (!empty($main_order_info) ? (int)($main_order_info['order_discount_total'] / $main_order_info['weight_exceed_count']) : $order_info['order_discount_total']),
                         'ServiceType' => 2,
                         'ReceiverName' => $order_info['customer_name'],
@@ -401,6 +403,7 @@ class fmtoken extends Public_Controller
                     $this->db->update('orders', $update_data);
                 }
                 if ($return) {
+                    // 單取
                     if (!empty($res['result'][$fm_ecno]['message'])) {
                         echo "<script>alert('" . $res['result'][$fm_ecno]['message'] . "');window.history.back()</script>";
                         return $res['result'][$fm_ecno]['message'];
@@ -408,6 +411,7 @@ class fmtoken extends Public_Controller
                         echo "<script>alert('success');window.history.back()</script>";
                     }
                 } else {
+                    // 多取
                     if (!empty($res['result'][$fm_ecno]['message'])) {
                         return $res['result'][$fm_ecno]['message'];
                     }
@@ -480,6 +484,7 @@ class fmtoken extends Public_Controller
                     $this->db->update('orders', $update_data);
                 }
                 if ($return) {
+                    // 單取
                     if (!empty($res['result'][$fm_ecno]['message'])) {
                         echo "<script>alert('" . $res['result'][$fm_ecno]['message'] . "');window.history.back()</script>";
                         return $res['result'][$fm_ecno]['message'];
@@ -487,6 +492,7 @@ class fmtoken extends Public_Controller
                         echo "<script>alert('success');window.history.back()</script>";
                     }
                 } else {
+                    // 多取
                     if (!empty($res['result'][$fm_ecno]['message'])) {
                         return $res['result'][$fm_ecno]['message'];
                     }
@@ -509,9 +515,9 @@ class fmtoken extends Public_Controller
     public function fm_b2c_print($type, $fm_ecno)
     {
         $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
-        // if ($type == 'cold') {
-        //     $url = 'https://ecbypass.com.tw/api/v2/B2C/LogisticCold/print.php';
-        // }
+        if ($type == 'cold') {
+            $url = 'https://ecbypass.com.tw/api/v2/B2C/LogisticCold/print.php';
+        }
 
         // 准备要发送的数据
         $data = array(
@@ -725,10 +731,15 @@ class fmtoken extends Public_Controller
                 continue;
             }
 
+            // 跳過常溫之訂單
+            if ($buf['fm_cold'] == 0) {
+                continue;
+            }
+
             $fm_ecno[] = $buf['fm_ecno'];
         }
 
-        $url = 'https://ecbypass.com.tw/api/v2/B2C/Logistic/print.php';
+        $url = 'https://ecbypass.com.tw/api/v2/B2C/LogisticCold/print.php';
 
         // 准备要发送的数据
         $data = array(

@@ -629,7 +629,8 @@ class Product extends Admin_Controller
 			'quantity' => $this->input->post('product_combine_quantity'),
 			'picture' => $this->input->post('product_combine_image'),
 			'description' => $this->input->post('product_combine_description'),
-			'type' => $this->input->post('any_specification'),
+			'type' => 0,
+			// 'type' => $this->input->post('any_specification'),
 			'limit_enable' => $this->input->post('limit_enable'),
 			'limit_qty' => $this->input->post('limit_qty'),
 		);

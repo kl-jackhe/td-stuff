@@ -222,11 +222,14 @@
                     <div class="row front_title border_style">
                         <div class="col-md-8">
                             <div class="row">
+                                <!-- 優惠券 -->
+                                <? if ($order['order_discount_price'] > 0) : ?>
+                                <? endif; ?>
                                 <div class="col-md-12">付款方式：<?php echo get_payment($order['order_payment']) ?></div>
                                 <div class="col-md-12">配送方式：<?php echo get_delivery($order['order_delivery']) ?></div>
                                 <div class="col-md-12">寄送/取貨地址：
-                                    <? if (!empty($order['order_store_address'])) {
-                                        echo $order['order_store_name'] . ' ' . $order['order_store_address'];
+                                    <? if (!empty($order['store_id'])) {
+                                        echo $order['store_id'] . ' ' . $order['order_store_name'] . ' ' . $order['order_store_address'];
                                     } else {
                                         echo $order['order_delivery_address'];
                                     } ?>
@@ -242,6 +245,16 @@
                                 <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($total) ?></div>
                                 <div class="col-md-6" style="font-size: 14px;">運費：</div>
                                 <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_delivery_cost']) ?></div>
+                                <!-- 優惠券 -->
+                                <? if ($order['weight_exceed_amount'] > 0) : ?>
+                                    <div class="col-md-6" style="font-size: 14px;">超重貨運箱費：</div>
+                                    <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['weight_exceed_amount']) ?></div>
+                                <? endif; ?>
+                                <!-- 優惠券 -->
+                                <? if ($order['order_discount_price'] > 0) : ?>
+                                    <div class="col-md-6" style="font-size: 14px;">折扣：</div>
+                                    <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format(-1 * $order['order_discount_price']) ?></div>
+                                <? endif; ?>
                                 <div class="col-md-6" style="font-size: 14px;">總計：</div>
                                 <div class="col-md-6" style="color: #dd0606;font-weight: bold;font-size: 18px;"><?php echo number_format($order['order_discount_total']) ?></div>
                             </div>

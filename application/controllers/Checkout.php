@@ -819,6 +819,10 @@ class Checkout extends Public_Controller
 		if ($this->is_liqun_food) {
 			// 訂單重量
 			$insert_data['order_weight'] = $this->input->post('weight_amount');
+			// 訂單超重
+			if (!empty($weight_exceed)) {
+				$insert_data['order_weight'] = (float)$this->input->post('weight_amount') / (($weight_exceed / 50) + 1);
+			}
 			$insert_data['in_free_shipping_range'] = $this->input->post('in_free_shipping_range');
 			if ($insert_data['order_delivery'] == 'family_limit_5_frozen_pickup' || $insert_data['order_delivery'] == 'family_limit_10_frozen_pickup') {
 				// 冷凍訂單
@@ -865,6 +869,7 @@ class Checkout extends Public_Controller
 						'order_date' => date("Y-m-d"),
 						'used_coupon_id' => $selected_coupon_id,
 						'used_coupon_name' => $selected_coupon_name,
+						'order_weight' => (float)$this->input->post('weight_amount') / (($weight_exceed / 50) + 1),
 						'in_free_shipping_range' => $this->input->post('in_free_shipping_range'),
 						'customer_id' => $customer_id,
 						'customer_name' => $this->input->post('name'),
@@ -1491,12 +1496,11 @@ class Checkout extends Public_Controller
 		// $this->db->join('users', 'users.id = orders.customer_id');
 		$this->db->where('order_id', $order_id);
 		$this->db->limit(1);
-		$query = $this->db->get('orders');
-		if ($query->num_rows() > 0) {
-			$row = $query->row_array();
+		$row = $this->db->get('orders')->row_array();
+		if (!empty($row)) {
 
-			$this->db->where('order_id', $row['order_id']);
-			$query2 = $this->db->get('order_item');
+			$this->db->where('order_id', $order_id);
+			$query2 = $this->db->get('order_item')->result_array();
 		}
 
 		$subject = '非常感謝您，您的訂單已接收 - ' . get_setting_general('name');
@@ -1544,14 +1548,17 @@ class Checkout extends Public_Controller
 		$content .= '<tbody>';
 		$i = 1;
 		$total = 0;
-		if ($query2->num_rows() > 0) {
-			foreach ($query2->result_array() as $items) {
-				if ($items['product_id'] == 0) {
+
+
+
+		if (!empty($query2)) {
+			foreach ($query2 as $items) {
+				if ($items['product_id'] != 0) {
 					$content .= '<tr>';
 					$content .= '<td style="text-align:center">' . $i . '</td>';
 					$query_img = $this->mysql_model->_select('product_combine', 'id', $items['product_combine_id'], 'row');
-					foreach ($query_img as $img) {
-						$content .= '<td style="text-align:center"><img src="' . base_url() . 'assets/uploads/' . $img['picture'] . '" height="80px"></td>';
+					if (!empty($query_img)) {
+						$content .= '<td style="text-align:center"><img src="' . base_url() . 'assets/uploads/' . $query_img['picture'] . '" height="80px"></td>';
 					}
 					$content .= '<td style="text-align:left">';
 					$content .= '<div>';
@@ -1571,7 +1578,7 @@ class Checkout extends Public_Controller
 						if (!empty($product['product_specification'])) {
 							$content .= ' - ' . $product['product_specification'];
 						}
-						foreach ($query2->result_array() as $specification_item) {
+						foreach ($query2 as $specification_item) {
 							if ($specification_item['specification_id'] != 0 && $specification_item['order_item_qty'] == 0 && $items['product_combine_id'] == $specification_item['product_combine_id']) {
 								$this->db->select('*');
 								$this->db->from('product_specification');
@@ -1608,6 +1615,18 @@ class Checkout extends Public_Controller
 		$content .= '<td colspan="2"> </td>';
 		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>運費：</strong><span style="color: #dd0606;">$' . number_format($row['order_delivery_cost']) . '</sapn></td>';
 		$content .= '</tr>';
+		if ($row['weight_exceed_amount'] > 0) {
+			$content .= '<tr>';
+			$content .= '<td colspan="2"> </td>';
+			$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>超重貨運箱費：</strong><span style="color: #dd0606;">$' . number_format($row['weight_exceed_amount']) . '</sapn></td>';
+			$content .= '</tr>';
+		}
+		if ($row['order_discount_price'] > 0) {
+			$content .= '<tr>';
+			$content .= '<td colspan="2"> </td>';
+			$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>折扣：</strong><span style="color: #dd0606;">$' . number_format($row['order_discount_price'] * -1) . '</sapn></td>';
+			$content .= '</tr>';
+		}
 		$content .= '<tr>';
 		$content .= '<td colspan="2"> </td>';
 		$content .= '<td style="text-align:left;font-weight: bold;font-size: 16px;"><strong>總計：</strong><span style="color: #dd0606;">$' . number_format($row['order_discount_total']) . '</sapn></td>';
@@ -1646,7 +1665,7 @@ class Checkout extends Public_Controller
         <br>';
 
 		if (get_setting_general('mail_footer_text') != '') {
-			$information .= '<h4>' . get_setting_general('mail_footer_text') . '</h4>';
+			$information .= '<h4>' . nl2br(get_setting_general('mail_footer_text')) . '</h4>';
 		}
 
 		if (get_setting_general('official_line_1_qrcode') != '') {
@@ -1693,6 +1712,12 @@ class Checkout extends Public_Controller
             </div>
           </body>
         </html>';
+
+		// echo '<pre>';
+		// print_r($query2);
+		// print_r($body);
+		// echo '</pre>';
+		// return;
 
 
 		// 寄信給賣家

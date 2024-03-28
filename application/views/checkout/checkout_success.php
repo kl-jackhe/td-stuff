@@ -47,13 +47,13 @@
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-6">
                             <h3 class="m-0 pb-2">訂單編號：
-                                <?php echo $order['order_number'] ?>
+                                <?= $order['order_number'] ?>
                             </h3>
                             <h3 class="m-0 pb-2">下單時間：
-                                <?php echo $order['created_at'] ?>
+                                <?= $order['created_at'] ?>
                             </h3>
                             <h3 class="m-0 pb-2">訂單狀態：
-                                <?php echo get_order_step($order['order_step']) ?>
+                                <?= get_order_step($order['order_step']) ?>
                             </h3>
                             <h3 class="m-0 pb-2">訂單內容</h3>
                             <table class="table table-hover m_table_none m-0">
@@ -72,7 +72,7 @@
                                             <tbody>
                                                 <tr>
                                                     <td>
-                                                        <?php echo $count ?>
+                                                        <?= $count ?>
                                                     </td>
                                                     <td>
                                                         <? $this->db->select('*');
@@ -121,13 +121,13 @@
                                                             } ?>
                                                         </div>
                                                         <div>金額：$
-                                                            <?php echo number_format($item['order_item_price']) ?>
+                                                            <?= number_format($item['order_item_price']) ?>
                                                         </div>
                                                         <div>數量：
-                                                            <?php echo $item['order_item_qty'] ?>
+                                                            <?= $item['order_item_qty'] ?>
                                                         </div>
                                                         <div>小計：<span style="color:#dd0606;">$
-                                                                <?php echo number_format($item['order_item_qty'] * $item['order_item_price']) ?></span></div>
+                                                                <?= number_format($item['order_item_qty'] * $item['order_item_price']) ?></span></div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -138,50 +138,69 @@
                                 } ?>
                             </table>
                             <hr>
-                            <?php if ($order['order_discount_price'] != 0) : ?>
+                            <?php if (!empty($order['used_coupon_name'])) : ?>
+                                <span class="front_title">折扣券：
+                                    <span>
+                                        <?= $order['used_coupon_name'] ?>
+                                    </span>
+                                </span>
+                                <br>
+                            <?php endif; ?>
+                            <?php if ($order['order_discount_price'] > 0) : ?>
                                 <span class="front_title">折扣金額：
                                     <span class="money_size">$
-                                        <?php echo (int)$order['order_discount_price']; ?>
+                                        <?= number_format($order['order_discount_price'] * -1); ?>
                                     </span>
                                 </span>
                                 <hr>
                             <?php endif; ?>
                             <span class="front_title">小計：
                                 <span class="money_size">$
-                                    <?php echo ((int)$order['order_discount_total'] - (int)$order['order_delivery_cost']); ?>
+                                    <?= (int)($order['order_discount_total']) - (int)($order['order_delivery_cost']) - (int)($order['weight_exceed_amount']); ?>
                                 </span>
                             </span>
                             <hr>
                             <?php if (!empty($order['order_delivery'])) : ?>
-                                <?php if ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'family_pickup' || $order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
+                                <?php if ($order['order_delivery'] == '711_pickup' || $order['order_delivery'] == 'hi_life_pickup' || $order['order_delivery'] == 'family_pickup' || $order['order_delivery'] == 'family_limit_5_frozen_pickup' || $order['order_delivery'] == 'family_limit_10_frozen_pickup') : ?>
                                     <h3>取貨方式：
-                                        <?php echo get_delivery($order['order_delivery']) ?>
+                                        <?= get_delivery($order['order_delivery']) ?>
                                     </h3>
                                     <h3>取貨門市：
-                                        <?php echo $order['order_store_name']; ?>
+                                        <?= $order['order_store_name']; ?>
                                     </h3>
                                     <?php if ($this->is_partnertoys) : ?>
                                         <h3>取貨地點：
-                                            <?php echo $order['order_store_address']; ?>
+                                            <?= $order['order_store_address']; ?>
                                         </h3>
                                     <?php endif; ?>
                                 <?php else : ?>
                                     <h3>配送方式：
-                                        <?php echo get_delivery($order['order_delivery']) ?>
+                                        <?= get_delivery($order['order_delivery']) ?>
                                     </h3>
                                     <h3>配送地點：
-                                        <?php echo $order['order_delivery_address']; ?>
+                                        <?= $order['order_delivery_address']; ?>
                                     </h3>
                                 <?php endif; ?>
                             <?php endif; ?>
-                            <span class="front_title">運費：<span class="money_size"> $
-                                    <?php echo format_number($order['order_delivery_cost']) ?></span></span>
+                            <span class="front_title">運費：
+                                <span class="money_size"> $
+                                    <?= format_number($order['order_delivery_cost']) ?>
+                                </span>
+                            </span>
+                            <?php if ($order['weight_exceed_amount'] > 0) : ?>
+                                <br>
+                                <span class="front_title">超重貨運箱費：
+                                    <span class="money_size">$
+                                        <?= format_number($order['weight_exceed_amount']); ?>
+                                    </span>
+                                </span>
+                            <?php endif; ?>
                             <hr>
                             <span class="front_title">總計：<span class="money_size" style="color: #F75000;font-size: 28px;"> $
-                                    <?php echo format_number($order['order_discount_total']) ?></span></span>
+                                    <?= format_number($order['order_discount_total']) ?></span></span>
                             <hr>
                             <h3>付款方式：
-                                <?php echo get_payment($order['order_payment']) ?>
+                                <?= get_payment($order['order_payment']) ?>
                             </h3>
                             <!-- <h3>付款狀態：已付款</h3> -->
                             <?php if ($order['order_payment'] == 'bank_transfer') { ?>
@@ -193,7 +212,7 @@
                                         </th>
                                         <td>
                                             <span class="fs-16 color-595757">
-                                                <?php echo get_setting_general('atm_bank_code') ?></span>
+                                                <?= get_setting_general('atm_bank_code') ?></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -202,7 +221,7 @@
                                         </th>
                                         <td>
                                             <span class="fs-16 color-595757">
-                                                <?php echo get_setting_general('atm_bank_branch') ?></span>
+                                                <?= get_setting_general('atm_bank_branch') ?></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -210,7 +229,7 @@
                                             <span class="fs-13">銀行帳號</span>
                                         </th>
                                         <td>
-                                            <span class="fs-16 color-595757"><?php echo get_setting_general('atm_bank_account') ?></span>
+                                            <span class="fs-16 color-595757"><?= get_setting_general('atm_bank_account') ?></span>
                                         </td>
                                     </tr>
                                 </table>
@@ -219,16 +238,16 @@
                             <hr>
                             <h3>訂購人資訊</h3>
                             <p>姓名：
-                                <?php echo $order['customer_name'] ?>
+                                <?= $order['customer_name'] ?>
                             </p>
                             <p>聯絡電話：
-                                <?php echo $order['customer_phone'] ?>
+                                <?= $order['customer_phone'] ?>
                             </p>
                             <p>E-mail：
-                                <?php echo $order['customer_email'] ?>
+                                <?= $order['customer_email'] ?>
                             </p>
                             <p>地址：
-                                <?php echo $order['order_delivery_address'] ?>
+                                <?= $order['order_delivery_address'] ?>
                             </p>
                             <hr>
                             <h3>訂單備註</h3>

@@ -78,6 +78,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="product_combine_quantity">庫存量</label>
+                                        <input type="text" class="form-control" id="product_combine_quantity" name="product_combine_quantity" value="0" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <label for="limit_enable">限購狀態</label>
                                     <select class="form-control" name="limit_enable">
                                         <option value="YES">啟用</option>
@@ -230,6 +236,7 @@
             },
             error: function(data) {
                 console.log('無法送出');
+                console.log(data);
             }
         })
     });
