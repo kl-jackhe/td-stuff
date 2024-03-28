@@ -720,6 +720,8 @@ class fmtoken extends Public_Controller
         $res = @file_get_contents($url, false, $context);
 
         if (!empty($res)) {
+            echo '<style>.print-label { page-break-after: always; }</style>';
+            echo '<style>@media print { .print-label { page-break-after: always; }}</style>';
             print_r($res);
         } else {
             echo '<pre>';
